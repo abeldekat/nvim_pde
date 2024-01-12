@@ -1,0 +1,9 @@
+tt.*
+.tests
+doc/tags
+.repro
+foo.*
+*.log
+data
+.repro
+.kickstart
