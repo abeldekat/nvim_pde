@@ -24,7 +24,7 @@ return {
     "folke/tokyonight.nvim",
     lazy = true,
     keys = Utils.keys(),
-    opts = function()
+    config = function()
       local opts = {}
       Utils.add_toggle("tokyonight*", {
         name = "tokyonight",
@@ -40,7 +40,7 @@ return {
           hl.FlashLabel = { bg = c.magenta2, bold = true, fg = c.bg }
         end
       end
-      return opts
+      require("tokyonight").setup(opts)
     end,
   },
 
@@ -49,48 +49,48 @@ return {
     lazy = true,
     keys = Utils.keys(),
     name = "catppuccin",
-    opts = {
-      integrations = {
-        aerial = true,
-        alpha = false,
-        cmp = true,
-        dashboard = true,
-        flash = true,
-        gitsigns = true,
-        headlines = true,
-        illuminate = true,
-        indent_blankline = { enabled = true },
-        leap = false,
-        lsp_trouble = false,
-        mason = true,
-        markdown = true,
-        mini = true,
-        native_lsp = {
-          enabled = true,
-          underlines = {
-            errors = { "undercurl" },
-            hints = { "undercurl" },
-            warnings = { "undercurl" },
-            information = { "undercurl" },
+    config = function()
+      local opts = {
+        integrations = {
+          aerial = true,
+          alpha = false,
+          cmp = true,
+          dashboard = true,
+          flash = true,
+          gitsigns = true,
+          headlines = true,
+          illuminate = true,
+          indent_blankline = { enabled = true },
+          leap = false,
+          lsp_trouble = false,
+          mason = true,
+          markdown = true,
+          mini = true,
+          native_lsp = {
+            enabled = true,
+            underlines = {
+              errors = { "undercurl" },
+              hints = { "undercurl" },
+              warnings = { "undercurl" },
+              information = { "undercurl" },
+            },
           },
+          navic = { enabled = false },
+          neotest = true,
+          neotree = false,
+          noice = false,
+          notify = false,
+          semantic_tokens = true,
+          telescope = true,
+          treesitter = true,
+          treesitter_context = true,
+          which_key = true,
+          --
+          nvimtree = false,
+          harpoon = true,
+          dropbar = { enabled = false },
         },
-        navic = { enabled = false },
-        neotest = true,
-        neotree = false,
-        noice = false,
-        notify = false,
-        semantic_tokens = true,
-        telescope = true,
-        treesitter = true,
-        treesitter_context = true,
-        which_key = true,
-        --
-        nvimtree = false,
-        harpoon = true,
-        dropbar = { enabled = false },
-      },
-    },
-    config = function(_, opts)
+      }
       Utils.add_toggle("catppuccin*", {
         name = "catppuccin",
         flavours = { "catppuccin-frappe", "catppuccin-mocha", "catppuccin-macchiato", "catppuccin-latte" },
@@ -109,13 +109,13 @@ return {
     name = "colors_nightfox",
     main = "nightfox",
     keys = Utils.keys(),
-    opts = function()
+    config = function()
       Utils.add_toggle("*fox", {
         name = "nightfox",
         -- "carbonfox", "dayfox",
         flavours = { "nordfox", "nightfox", "duskfox", "terafox", "dawnfox" },
       })
-      return { options = { dim_inactive = true } }
+      require("nightfox").setup({ options = { dim_inactive = true } })
     end,
   },
 
@@ -133,6 +133,16 @@ return {
         variant = prefer_light and "dawn" or "moon",
         disable_italics = true,
       }
+    end,
+    config = function()
+      Utils.add_toggle("rose-pine*", {
+        name = "rose-pine",
+        flavours = { "rose-pine-moon", "rose-pine-main", "rose-pine-dawn" },
+      })
+      require("rose-pine").setup({
+        variant = prefer_light and "dawn" or "moon",
+        disable_italics = true,
+      })
     end,
   },
 }

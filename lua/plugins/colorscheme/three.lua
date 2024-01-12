@@ -1,9 +1,9 @@
 local Utils = require("misc.colorutils")
 local prefer_light = require("misc.color").prefer_light
 
-if true then
-  return {}
-end
+-- if true then
+--   return {}
+-- end
 
 return {
   { -- monokai variations
@@ -34,15 +34,15 @@ return {
     name = "colors_monokai",
     main = "monokai-pro",
     keys = Utils.keys(),
-    opts = function()
+    config = function()
       Utils.add_toggle("monokai-pro*", {
         name = "monokai-pro",
         -- "monokai-pro-default", "monokai-pro-ristretto", "monokai-pro-spectrum",
         flavours = { "monokai-pro-octagon", "monokai-pro-machine", "monokai-pro-classic" },
       })
-      return {
+      require("monokai-pro").setup({
         filter = "octagon",
-      }
+      })
     end,
   },
 
@@ -105,13 +105,13 @@ return {
     name = "colors_bamboo",
     main = "bamboo",
     keys = Utils.keys(),
-    opts = function() -- regular vulgaris greener multiplex light mode
+    config = function() -- regular vulgaris greener multiplex light mode
       vim.o.background = prefer_light and "light" or "dark"
-      return {
+      require("bamboo").setup({
         style = "vulgaris",
         toggle_style_key = "<leader>a",
         dim_inactive = true,
-      }
+      })
     end,
   },
 

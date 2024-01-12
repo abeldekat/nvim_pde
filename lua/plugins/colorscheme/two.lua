@@ -1,9 +1,9 @@
 local Utils = require("misc.colorutils")
 local prefer_light = require("misc.color").prefer_light
 
-if true then
-  return {}
-end
+-- if true then
+--   return {}
+-- end
 
 return {
 
@@ -12,12 +12,12 @@ return {
     name = "colors_onedark",
     main = "onedark",
     keys = Utils.keys(),
-    opts = function()
-      return { -- the default is dark
+    config = function()
+      require("onedark").setup({ -- the default is dark
         toggle_style_list = { "warm", "warmer", "light", "dark", "darker", "cool", "deep" },
         toggle_style_key = "<leader>a",
         style = "dark", -- ignored on startup, onedark.load must be used.
-      }
+      })
     end,
   },
 
@@ -26,7 +26,7 @@ return {
     name = "colors_gruvbox",
     main = "gruvbox",
     keys = Utils.keys(),
-    opts = function()
+    config = function()
       Utils.add_toggle("gruvbox", {
         name = "gruvbox",
         -- stylua: ignore
@@ -41,7 +41,7 @@ return {
         end,
       })
       vim.o.background = prefer_light and "light" or "dark"
-      return { contrast = "soft", italic = { strings = false } }
+      require("gruvbox").setup({ contrast = "soft", italic = { strings = false } })
     end,
   },
 
@@ -73,7 +73,7 @@ return {
     name = "colors_solarized-osaka",
     main = "solarized-osaka",
     keys = Utils.keys(),
-    opts = function()
+    config = function()
       vim.o.background = prefer_light and "light" or "dark"
     end,
   },
@@ -93,7 +93,6 @@ return {
         end,
       })
       vim.o.background = prefer_light and "light" or "dark"
-      return {}
     end,
   },
 }

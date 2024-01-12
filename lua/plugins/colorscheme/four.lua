@@ -1,9 +1,9 @@
 local Utils = require("misc.colorutils")
 local prefer_light = require("misc.color").prefer_light
 
-if true then
-  return {}
-end
+-- if true then
+--   return {}
+-- end
 
 return {
   { -- good gruvbox-like light theme
@@ -11,21 +11,23 @@ return {
     name = "colors_kanagawa",
     main = "kanagawa",
     keys = Utils.keys(),
-    opts = function()
+    config = function()
       Utils.add_toggle("kanagawa*", {
         name = "kanagawa",
         flavours = { "kanagawa-wave", "kanagawa-dragon", "kanagawa-lotus" },
       })
       vim.o.background = prefer_light and "light" or "dark"
-      -- stylua: ignore
-      return prefer_light and {
-        overrides = function(colors)
-          return { -- Improve FlashLabel:
-            -- Substitute = { fg = theme.ui.fg, bg = theme.vcs.removed },
-            Substitute = { fg = colors.theme.ui.fg_reverse, bg = colors.theme.vcs.removed },
+      local opts = prefer_light
+          and {
+            overrides = function(colors)
+              return { -- Improve FlashLabel:
+                -- Substitute = { fg = theme.ui.fg, bg = theme.vcs.removed },
+                Substitute = { fg = colors.theme.ui.fg_reverse, bg = colors.theme.vcs.removed },
+              }
+            end,
           }
-        end,
-      } or {}
+        or {}
+      require("kanagawa").setup(opts)
     end,
   },
 
@@ -34,13 +36,13 @@ return {
     name = "colors_ayu",
     main = "ayu",
     keys = Utils.keys(),
-    opts = function()
+    config = function()
       Utils.add_toggle("ayu*", {
         name = "ayu",
         flavours = { "ayu-mirage", "ayu-dark", "ayu-light" },
       })
       vim.o.background = prefer_light and "light" or "dark"
-      return { mirage = true, overrides = {} }
+      require("ayu").setup({ mirage = true, overrides = {} })
     end,
   },
 
@@ -75,7 +77,7 @@ return {
     name = "colors_leaf",
     main = "leaf",
     keys = Utils.keys(),
-    opts = function()
+    config = function()
       Utils.add_toggle("leaf", {
         name = "leaf",
         -- stylua: ignore
@@ -90,7 +92,7 @@ return {
         end,
       })
       vim.o.background = prefer_light and "light" or "dark"
-      return { contrast = "medium" }
+      require("leaf").setup({ contrast = "medium" })
     end,
   },
 
@@ -99,15 +101,15 @@ return {
     name = "colors_astrotheme",
     main = "astrotheme",
     keys = Utils.keys(),
-    opts = function()
+    config = function()
       Utils.add_toggle("astro*", {
         name = "astrotheme",
         flavours = { "astrodark", "astromars", "astrolight" },
       })
       vim.o.background = prefer_light and "light" or "dark"
-      return {
+      require("astrotheme").setup({
         palette = prefer_light and "astrolight" or "astrodark",
-      }
+      })
     end,
   },
 }
