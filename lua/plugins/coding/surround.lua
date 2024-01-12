@@ -25,7 +25,8 @@ return {
     { "cZ", desc = "Change a surrounding pair, on new lines" },
   },
   config = function()
-    require("surround").setup({
+    ---@diagnostic disable-next-line: missing-fields
+    require("nvim-surround").setup({
       -- indent_lines = false
       -- move_cursor = false
       keymaps = {
