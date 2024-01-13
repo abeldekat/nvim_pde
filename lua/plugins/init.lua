@@ -2,6 +2,18 @@ local Util = require("util")
 
 local did_init = false
 
+-- local function no_lazy_loading()
+--   local Spec = require("lazy.core.plugin").Spec
+--   local add_orig = Spec.add
+--
+--   ---@diagnostic disable-next-line: duplicate-set-field
+--   Spec.add = function(_, plugin, results)
+--     local result = add_orig(_, plugin, results)
+--     result["lazy"] = false
+--     return result
+--   end
+-- end
+
 ---@param name "autocmds" | "options" | "keymaps"
 local function load(name)
   local function _load(mod)
@@ -27,6 +39,7 @@ local function on_first_spec_imported()
     return
   end
   did_init = true
+  -- no_lazy_loading()
 
   -- load options here, before lazy init while sourcing plugin modules
   -- this is needed to make sure options will be correctly applied

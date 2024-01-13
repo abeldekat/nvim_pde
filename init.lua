@@ -3,10 +3,6 @@ Design:
 Plenary acts as LazyVim placeholder to do options, autocommands, keymappings and colorscheme
 Only one plugin fragment per spec --> specs don't need to be merged
 No plugin.opts --> opts don't need to be merged
-
-TODO: Maybe: Inject langs into Utils,
-to be able to disable a lang accross all plugings  if necessary
-
 --]]
 if vim.loader then
   vim.loader.enable()

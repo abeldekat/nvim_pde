@@ -40,31 +40,37 @@ local mason_lspconfig_ensure_installed = {
 }
 
 local function keys(_, buffer) -- client
-  local function map(mode, l, r, opts)
+  local function map(l, r, opts, mode)
+    mode = mode or "n"
     opts["buffer"] = buffer
     opts["silent"] = opts.silent ~= false
     vim.keymap.set(mode, l, r, opts)
   end
-  map("n", "<leader>cl", "<cmd>LspInfo<cr>", { desc = "Lsp info" })
-  map("n", "gd", function()
+  map("<leader>cl", "<cmd>LspInfo<cr>", { desc = "Lsp info" })
+  map("gd", function()
     require("telescope.builtin").lsp_definitions({ reuse_win = true })
   end, { desc = "Goto definition" })
-  map("n", "gr", "<cmd>Telescope lsp_references<cr>", { desc = "References" })
-  map("n", "gD", vim.lsp.buf.declaration, { desc = "Goto declaration" })
-  map("n", "gI", function()
+  map("gr", "<cmd>Telescope lsp_references<cr>", { desc = "References" })
+  map("gD", vim.lsp.buf.declaration, { desc = "Goto declaration" })
+  map("gI", function()
     require("telescope.builtin").lsp_implementations({ reuse_win = true })
   end, { desc = "Goto implementation" })
-  map("n", "gy", function()
+  map("gy", function()
     require("telescope.builtin").lsp_type_definitions({ reuse_win = true })
   end, { desc = "Goto type definition" })
-  map("n", "K", vim.lsp.buf.hover, { desc = "Hover" })
-  map("n", "gK", vim.lsp.buf.signature_help, { desc = "Signature help" })
-  map("i", "<c-k>", vim.lsp.buf.signature_help, { desc = "Signature help" })
-  map({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, { desc = "Code action" })
-  map({ "n" }, "<leader>cA", function()
+  map("K", vim.lsp.buf.hover, { desc = "Hover" })
+  map("gK", vim.lsp.buf.signature_help, { desc = "Signature help" })
+  map("<c-k>", vim.lsp.buf.signature_help, { desc = "Signature help" }, "i")
+  map("<leader>ca", vim.lsp.buf.code_action, { desc = "Code action" }, { "n", "v" })
+  map("<leader>cA", function()
     vim.lsp.buf.code_action({ context = { only = { "source" }, diagnostics = {} } })
   end, { desc = "Source action" })
-  map("n", "<leader>cr", vim.lsp.buf.rename, { desc = "Rename" })
+  map("<leader>cr", vim.lsp.buf.rename, { desc = "Rename" })
+
+  -- Also possible
+  -- local methods = vim.lsp.protocol.Methods
+  -- if client.supports_method(methods.textDocument_codeAction) then
+  -- end
 end
 
 local function mason_spec() -- also: automatically install non-lsp
