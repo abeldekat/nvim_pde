@@ -16,7 +16,7 @@ local Langs = {}
 setmetatable(Langs, {
   __index = function(t, k)
     ---@diagnostic disable-next-line: no-unknown
-    t[k] = require("ak.plugins.lsp.langs." .. k)
+    t[k] = require("ak.lazy.lsp.langs." .. k)
     return t[k]
   end,
 })
