@@ -19,4 +19,4 @@ local opts = { -- centralizing defaults subject to change
 
   flex = nil, -- require("misc.flex")({ use = false }), -- use flex=nil to not load the plugin
 }
-require("config.lazy")({}, opts)
+require("ak")({}, opts)
