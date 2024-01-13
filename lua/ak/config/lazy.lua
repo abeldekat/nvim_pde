@@ -16,20 +16,20 @@ return function(extraspec, opts)
 
   local spec = {
     opts.flex or {},
-    { import = "ak.plugins" },
-    { import = "ak.plugins.coding" },
-    { import = "ak.plugins.colorscheme" },
-    { import = "ak.plugins.editor" },
-    { import = "ak.plugins.ui" },
-    { import = "ak.plugins.util" },
-    -- langs:   ak.p
-    { import = "ak.plugins.formatting" },
-    { import = "ak.plugins.linting" },
-    { import = "ak.plugins.treesitter" },
-    { import = "ak.plugins.lsp" },
-    { import = "ak.plugins.test" },
-    { import = "ak.plugins.debug" },
-    { import = "ak.plugins.langs" },
+    { import = "ak.lazy" },
+    { import = "ak.lazy.coding" },
+    { import = "ak.lazy.colorscheme" },
+    { import = "ak.lazy.editor" },
+    { import = "ak.lazy.ui" },
+    { import = "ak.lazy.util" },
+    -- langs:   ak.lazy
+    { import = "ak.lazy.formatting" },
+    { import = "ak.lazy.linting" },
+    { import = "ak.lazy.treesitter" },
+    { import = "ak.lazy.lsp" },
+    { import = "ak.lazy.test" },
+    { import = "ak.lazy.debug" },
+    { import = "ak.lazy.langs" },
   }
 
   require("lazy").setup({
