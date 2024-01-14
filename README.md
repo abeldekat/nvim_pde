@@ -8,7 +8,7 @@ Nvim personal development environment
 
 ## Acknowledgments
 
-I used code and ideas from the following repositories:
+This repo uses code and ideas from the following repositories:
 
 - [LazyVim](https://github.com/LazyVim/LazyVim)
 - [lazy.nvim](https://github.com/folke/lazy.nvim)
@@ -16,3 +16,4 @@ I used code and ideas from the following repositories:
 - [dotfiles](https://github.com/dpetka2001/dotfiles/tree/main/dot_config/nvim) @dpetka2001
 - [dotfiles](https://github.com/lewis6991/dotfiles/tree/main/config/nvim) @lewis6991
 - [dotfiles](https://github.com/savq/dotfiles/tree/master/nvim) @savq
+- [dotfiles](https://github.com/MariaSolOs/dotfiles/tree/main/.config/nvim) @mariasolos

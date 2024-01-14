@@ -70,11 +70,10 @@ return {
         { mode = "x", keys = "z" },
       },
 
-      clues = { -- clues for triggers...
-
+      clues = {
         { mode = "n", keys = "<leader><tab>", desc = "+tabs" },
+        { mode = "n", keys = "<leader>b", desc = "+commentbox" },
         { mode = "n", keys = "<leader>c", desc = "+code" },
-        { mode = "n", keys = "<leader>C", desc = "+commentbox" },
         { mode = "n", keys = "<leader>d", desc = "+debug" },
         { mode = "n", keys = "<leader>f", desc = "+file/find" },
         { mode = "n", keys = "<leader>g", desc = "+git" },
