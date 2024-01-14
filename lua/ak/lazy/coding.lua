@@ -9,14 +9,14 @@ return {
 
   {
     "LudoPinelli/comment-box.nvim",
-    keys = { { "<leader>bb", mode = "v" }, { "<leader>bl", mode = "v" } },
+    keys = { "<leader>bb", "<leader>bl" }, -- lazy only on normal mode keys
     config = function()
       require("lua.ak.config.comment_box")
     end,
   },
 
   {
-    "numToStr/Comment.nvim", -- the plugin creates the gc and gb mappings
+    "numToStr/Comment.nvim", -- the plugin itself creates the gc and gb mappings
     keys = { { "gc", mode = { "n", "v" } }, { "gb", mode = { "n", "v" } } },
     dependencies = { "JoosepAlviste/nvim-ts-context-commentstring" },
     config = function()

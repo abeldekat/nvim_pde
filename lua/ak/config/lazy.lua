@@ -3,7 +3,7 @@ local function to_spec()
     require("ak.lazy.start"), -- responsible for options, keys, autocmds and colorscheme
     require("ak.lazy.coding"),
     { import = "ak.lazy.colorscheme" },
-    { import = "ak.lazy.editor" },
+    require("ak.lazy.editor"),
     { import = "ak.lazy.ui" },
     { import = "ak.lazy.util" },
     -- langs:   ak.lazy
