@@ -1,20 +1,20 @@
---[[
-Number of themes: 12 + 2(tokyonight and catppuccin)
-
-Best light themes:
-  tokyonight
-  catppuccin(latte is similar to tokyonight)
-  solarized8
-  gruvbox-material
-  nightfox dawnfox
-  gruvbox
-  bamboo
-  nano
-  onedarkpro
-  astrotheme
-  rose-pine
-  onedark
---]]
+--          ╭─────────────────────────────────────────────────────────╮
+--          │   Number of themes: 12 + 2(tokyonight and catppuccin)   │
+--          │                                                         │
+--          │                   Best light themes:                    │
+--          │                       tokyonight                        │
+--          │       catppuccin(latte is similar to tokyonight)        │
+--          │                       solarized8                        │
+--          │                    gruvbox-material                     │
+--          │                    nightfox dawnfox                     │
+--          │                         gruvbox                         │
+--          │                         bamboo                          │
+--          │                          nano                           │
+--          │                       onedarkpro                        │
+--          │                       astrotheme                        │
+--          │                        rose-pine                        │
+--          │                         onedark                         │
+--          ╰─────────────────────────────────────────────────────────╯
 
 local Utils = require("ak.misc.colorutils")
 local prefer_light = require("ak.misc.color").prefer_light
@@ -99,10 +99,6 @@ return {
       require("catppuccin").setup(opts)
     end,
   },
-
-  -- ---------------------------------------------
-  -- Added
-  -- ---------------------------------------------
 
   { --nightfox has themes, no flavour options...
     "EdenEast/nightfox.nvim",

@@ -1,14 +1,8 @@
---[[
-Design:
-Plenary acts as LazyVim placeholder to do options, autocommands, keymappings and colorscheme
-Only one plugin fragment per spec --> specs don't need to be merged
-No plugin.opts --> opts don't need to be merged
---]]
 if vim.loader then
   vim.loader.enable()
 end
 
-local opts = { -- centralizing defaults subject to change
+local opts = {
   debug = false,
 
   dev_patterns = {},
@@ -19,4 +13,7 @@ local opts = { -- centralizing defaults subject to change
 
   flex = nil, -- require("misc.flex")({ use = false }), -- use flex=nil to not load the plugin
 }
+
+-- Caching: Do all init in ak/init.lua
+-- This init.lua is just an entry point
 require("ak")({}, opts)
