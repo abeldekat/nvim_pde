@@ -2,6 +2,7 @@ local LazyUtil = require("lazy.core.util")
 
 -- TODO: Investigate util.root, util.terminal
 -- TODO: Refactor has, to only contain inter dependencies
+-- Fallback to lazy: try merge norm
 
 ---@class ak.util: LazyUtilCore
 ---@field ui ak.util.ui
@@ -16,10 +17,11 @@ local M = {}
 setmetatable(M, {
   __index = function(t, k)
     if LazyUtil[k] then
-      return LazyUtil[k] -- supplied by lazy.nvim
+      -- vim.print("LazyUtil: " .. vim.inspect(k))
+      return LazyUtil[k] -- fallback to lazy.nvim
     end
     ---@diagnostic disable-next-line: no-unknown
-    t[k] = require("ak.util." .. k) -- implemented here
+    t[k] = require("ak.util." .. k) -- implemented in submodule
     return t[k]
   end,
 })

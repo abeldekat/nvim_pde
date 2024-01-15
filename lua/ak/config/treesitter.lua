@@ -1,34 +1,13 @@
-local Util = require("ak.util")
+--          ╭─────────────────────────────────────────────────────────╮
+--          │             The following keys are created:             │
+--          │                                                         │
+--          │     { "<c-space>", desc = "Increment selection" },      │
+--          │  { "<bs>", desc = "Decrement selection", mode = "x" },  │
+--          │                                                         │
+--          │                See also: jump (eyeliner                 │
+--          ╰─────────────────────────────────────────────────────────╯
 
-local get_deps = function()
-  return {
-    {
-      "nvim-treesitter/nvim-treesitter-textobjects",
-      config = function()
-        -- When in diff mode, we want to use the default
-        -- vim text objects c & C instead of the treesitter ones.
-        local move = require("nvim-treesitter.textobjects.move") ---@type table<string,fun(...)>
-        local configs = require("nvim-treesitter.configs")
-        for name, fn in pairs(move) do
-          if name:find("goto") == 1 then
-            move[name] = function(q, ...)
-              if vim.wo.diff then
-                local config = configs.get_module("textobjects.move")[name] ---@type table<string,string>
-                for key, query in pairs(config or {}) do
-                  if q == query and key:find("[%]%[][cC]") then
-                    vim.cmd("normal! " .. key)
-                    return
-                  end
-                end
-              end
-              return fn(q, ...)
-            end
-          end
-        end
-      end,
-    },
-  }
-end
+local Util = require("ak.util")
 
 local get_opts = function()
   ---@type TSConfig
@@ -166,46 +145,21 @@ local function activate_repeatable_move()
   vim.keymap.set(modes, "T", ts_repeat_move.builtin_T)
 end
 
-return { -- treesitter textobjects: uses k for block, b is preserved
-  "nvim-treesitter/nvim-treesitter",
-  version = false,
-  build = ":TSUpdate",
-  event = { "LazyFile", "VeryLazy" },
-  init = function(plugin)
-    -- PERF: add nvim-treesitter queries to the rtp and it's custom query predicates early
-    -- This is needed because a bunch of plugins no longer `require("nvim-treesitter")`, which
-    -- no longer trigger the **nvim-treesitter** module to be loaded in time.
-    -- Luckily, the only things that those plugins need are the custom queries, which we make available
-    -- during startup.
-    require("lazy.core.loader").add_to_rtp(plugin)
-    require("nvim-treesitter.query_predicates")
-  end,
-  dependencies = get_deps(),
-  cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
-  keys = {
-    { "<c-space>", desc = "Increment selection" },
-    { "<bs>", desc = "Decrement selection", mode = "x" },
-  },
-  config = function()
-    local opts = get_opts()
+require("nvim-treesitter.configs").setup(get_opts())
 
-    require("nvim-treesitter.configs").setup(opts)
-
-    if Util.has("eyeliner.nvim") then
-      local use_eyeliner = true -- default, eyeliner is parsed before treesitter
-      vim.keymap.set("n", "<leader>um", function()
-        use_eyeliner = not use_eyeliner
-        if use_eyeliner then
-          pcall(vim.keymap.del, { "n", "x", "o" }, ";")
-          pcall(vim.keymap.del, { "n", "x", "o" }, ",")
-          vim.cmd("EyelinerEnable")
-        else
-          vim.cmd("EyelinerDisable")
-          activate_repeatable_move()
-        end
-      end, { desc = "Toggle treesitter repeatable move" })
+if Util.has("eyeliner.nvim") then
+  local use_eyeliner = true -- default, eyeliner is parsed before treesitter
+  vim.keymap.set("n", "<leader>um", function()
+    use_eyeliner = not use_eyeliner
+    if use_eyeliner then
+      pcall(vim.keymap.del, { "n", "x", "o" }, ";")
+      pcall(vim.keymap.del, { "n", "x", "o" }, ",")
+      vim.cmd("EyelinerEnable")
     else
+      vim.cmd("EyelinerDisable")
       activate_repeatable_move()
     end
-  end,
-}
+  end, { desc = "Toggle treesitter repeatable move" })
+else
+  activate_repeatable_move()
+end

@@ -1,14 +1,28 @@
 local autoload_clues = false
 
-return {
+--          ╭─────────────────────────────────────────────────────────╮
+--          │     Lazy keys that are not overridden in the config     │
+--          │          Example: <leader>uk, loads mini.clue.          │
+--          │   Without this function, the keystrokes "uk" would be   │
+--          │                        replayed                         │
+--          ╰─────────────────────────────────────────────────────────╯
+local function no_replay() end
 
-  {
-    "stevearc/aerial.nvim", -- event = "LazyFile",
-    keys = "<leader>cs",
-    config = function()
-      require("ak.config.aerial")
-    end,
-  },
+vim.keymap.set("n", "<leader>uK", function()
+  --          ╭─────────────────────────────────────────────────────────╮
+  --          │   Load important plugins having lazy keys in order for  │
+  --          │            the descriptions to show in mini.clue        │
+  --          ╰─────────────────────────────────────────────────────────╯
+  pcall(require, "aerial")
+  pcall(require, "mini.clue")
+  pcall(require, "spectre")
+  pcall(require, "telescope")
+  pcall(require, "todo-comments")
+  pcall(require, "trouble")
+  vim.keymap.del("n", "<leader>uK")
+end, { desc = "Load lazy editor", silent = true })
+
+return {
 
   {
     "folke/flash.nvim",
@@ -42,7 +56,8 @@ return {
   },
 
   {
-    "takac/vim-hardtime", -- lazy = false,
+    "takac/vim-hardtime",
+    -- lazy = false,
     keys = "<leader>mh",
     init = function()
       require("ak.config.hardtime").init()
@@ -63,7 +78,6 @@ return {
   {
     "RRethy/vim-illuminate",
     event = "LazyFile",
-    keys = { "]]", "[[" }, -- next and pref reference
     config = function()
       require("ak.config.illuminate")
     end,
@@ -75,7 +89,7 @@ return {
       return autoload_clues and { "VeryLazy" } or {}
     end,
     keys = function()
-      return autoload_clues and {} or { "<leader>uk" } -- activate clue
+      return autoload_clues and {} or { { "<leader>uk", no_replay } } -- activate clue
     end,
     config = function()
       require("ak.config.clue")
@@ -97,7 +111,7 @@ return {
   {
     "nvim-pack/nvim-spectre",
     build = false,
-    keys = { "<leader>sr", desc = "Spectre" },
+    keys = "<leader>sr",
     config = function()
       require("ak.config.spectre")
     end,
@@ -105,21 +119,28 @@ return {
 
   {
     "nvim-telescope/telescope.nvim",
-    cmd = "Telescope", -- used in the intro screen
+    cmd = "Telescope", -- used by the keys in the intro screen
     version = false, -- telescope did only one release, so use HEAD for now
     -- lazy: define only the keys used when starting
     keys = { "<leader><leader>", "<leader>o", "<leader>/", "<leader>e", "<leader>r" },
-    dependencies = {
+    dependencies = { -- extensions: Also uses flash!
       {
         "nvim-telescope/telescope-fzf-native.nvim",
         build = "make",
         enabled = vim.fn.executable("make") == 1,
       },
       "otavioschwanck/telescope-alternate.nvim",
-      "jvgrootveld/telescope-zoxide",
+      -- "jvgrootveld/telescope-zoxide",
+      -- {
+      --   "nvim-telescope/telescope-project.nvim",
+      --   dependencies = "nvim-telescope/telescope-file-browser.nvim",
+      -- },
       {
-        "nvim-telescope/telescope-project.nvim",
-        dependencies = "nvim-telescope/telescope-file-browser.nvim",
+        "stevearc/aerial.nvim",
+        keys = "<leader>cs", -- also load on key
+        config = function()
+          require("ak.config.aerial")
+        end,
       },
     },
     config = function()
@@ -128,7 +149,7 @@ return {
   },
 
   {
-    "folke/todo-comments.nvim", -- cmd = { "TodoTrouble", "TodoTelescope" },
+    "folke/todo-comments.nvim",
     event = "LazyFile",
     config = function()
       require("ak.config.todo_comments")
@@ -138,8 +159,6 @@ return {
   {
     "akinsho/toggleterm.nvim",
     version = "*",
-    -- cmd = { "TermExec", "ToggleTerm", "ToggleTermToggleAll", "ToggleTermSendCurrentLine",
-    --   "ToggleTermSendVisualLines", "ToggleTermSendVisualSelection", },
     keys = [[<c-_>]],
     config = function()
       require("ak.config.toggleterm")
@@ -147,7 +166,7 @@ return {
   },
 
   {
-    "folke/trouble.nvim", -- cmd = { "TroubleToggle", "Trouble" },
+    "folke/trouble.nvim",
     keys = { "<leader>xx", "<leader>xX", "<leader>xL", "<leader>xQ" },
     config = function()
       require("ak.config.trouble")

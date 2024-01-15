@@ -6,12 +6,11 @@ local opts = {
   debug = false,
 
   dev_patterns = {},
-  -- dev_patterns = { "lazyflex" },
 
   dev_path = "~/projects/lazydev",
   -- dev_path = "~/projects/clone",
 
-  flex = nil, -- require("misc.flex")({ use = false }), -- use flex=nil to not load the plugin
+  langs = { "markdown", "python" }, -- single point of lang control
 }
 
 -- Caching: Do all init in ak/init.lua

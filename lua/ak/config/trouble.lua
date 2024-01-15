@@ -1,3 +1,4 @@
+-- cmd = { "TroubleToggle", "Trouble" },
 require("trouble").setup({ use_diagnostic_signs = true })
 
 local key = vim.keymap.set

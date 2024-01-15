@@ -4,12 +4,13 @@ local function to_spec()
     require("ak.lazy.coding"),
     { import = "ak.lazy.colorscheme" },
     require("ak.lazy.editor"),
-    { import = "ak.lazy.ui" },
-    { import = "ak.lazy.util" },
+    require("ak.lazy.ui"),
+    require("ak.lazy.util"),
+
     -- langs:   ak.lazy
-    { import = "ak.lazy.formatting" },
-    { import = "ak.lazy.linting" },
-    { import = "ak.lazy.treesitter" },
+    require("ak.lazy.formatting"),
+    require("ak.lazy.linting"),
+    require("ak.lazy.treesitter"),
     { import = "ak.lazy.lsp" },
     { import = "ak.lazy.test" },
     { import = "ak.lazy.debug" },

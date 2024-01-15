@@ -1,4 +1,5 @@
 local Util = require("ak.util")
+local M = {}
 
 -- use formatter.prepend_args, not formatter.extra_args
 -- don't set opts.{ "format_on_save", "format_after_save" }
@@ -37,43 +38,36 @@ local get_opts = function()
   }
 end
 
-return {
-  "stevearc/conform.nvim",
-  cmd = "ConformInfo",
-  keys = {
-    {
-      "<leader>cF",
-      function()
-        require("conform").format({ formatters = { "injected" } })
+function M.init() -- Install the conform formatter on VeryLazy
+  Util.on_very_lazy(function()
+    Util.format.register({
+      name = "conform.nvim",
+      priority = 100,
+      primary = true,
+      format = function(buf)
+        local opts = get_opts().format
+        opts["bufnr"] = buf
+        require("conform").format(opts)
       end,
-      mode = { "n", "v" },
-      desc = "Format injected langs",
-    },
-  },
-  init = function() -- Install the conform formatter on VeryLazy
-    Util.on_very_lazy(function()
-      Util.format.register({
-        name = "conform.nvim",
-        priority = 100,
-        primary = true,
-        format = function(buf)
-          local opts = get_opts().format
-          opts["bufnr"] = buf
-          require("conform").format(opts)
-        end,
-        sources = function(buf)
-          local ret = require("conform").list_formatters(buf)
-          ---@param v conform.FormatterInfo
-          return vim.tbl_map(function(v)
-            return v.name
-          end, ret)
-        end,
-      })
-    end)
-  end,
-  config = function()
-    ---@type ConformOpts
-    local opts = get_opts()
-    require("conform").setup(opts)
-  end,
-}
+      sources = function(buf)
+        local ret = require("conform").list_formatters(buf)
+        ---@param v conform.FormatterInfo
+        return vim.tbl_map(function(v)
+          return v.name
+        end, ret)
+      end,
+    })
+  end)
+end
+
+function M.setup()
+  ---@type ConformOpts
+  local opts = get_opts()
+  require("conform").setup(opts)
+
+  vim.keymap.set({ "n", "v" }, "<leader>cF", function()
+    require("conform").format({ formatters = { "injected" } })
+  end, { desc = "Format injected langs", silent = true })
+end
+
+return M
