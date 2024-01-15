@@ -87,11 +87,11 @@ on_first_spec_imported()
 return {
   { "folke/lazy.nvim", version = "*" },
 
-  -- HACK: plenary as placeholder:
-  -- on_first_spec_imported
-  -- on_first_plugin_to_load
+  -- Plenary as placeholder:
+  -- on_first_spec_imported (lazy spec phase)
+  -- on_first_plugin_to_load (lazy start phase)
   --
-  -- Plenary does not require a setup function
+  -- Benefit: The colorscheme can be dynamic and does not need a priority
   {
     "nvim-lua/plenary.nvim",
     priority = 10000,
@@ -99,6 +99,7 @@ return {
     cond = true,
     -- version = "*",
     config = function()
+      -- Plenary does not require a setup function
       on_first_plugin_to_load()
     end,
   },
