@@ -8,12 +8,12 @@ local function to_spec()
     require("ak.lazy.util"),
 
     -- langs:   ak.lazy
+    require("ak.lazy.treesitter"),
     require("ak.lazy.formatting"),
     require("ak.lazy.linting"),
-    require("ak.lazy.treesitter"),
     { import = "ak.lazy.lsp" },
-    { import = "ak.lazy.test" },
-    { import = "ak.lazy.debug" },
+    require("ak.lazy.testing"),
+    require("ak.lazy.debugging"),
     { import = "ak.lazy.langs" },
   }
 end

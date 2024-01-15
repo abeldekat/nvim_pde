@@ -1,22 +1,20 @@
 --          ╭─────────────────────────────────────────────────────────╮
---          │           Trying to adhere to the following:            │
+--          │                 Separation of concerns                  │
+--          │                                                         │
 --          │                   The plugin manager:                   │
---          │                manages the plugins(git)                 │
---          │                    loads the plugins                    │
---          │          does not contain plugin configuration          │
+--          │                Retrieve and load plugins                │
+--          │                       See ak.lazy                       │
 --          │                                                         │
---          │         All plugins are configured in ak.config         │
---          │                                                         │
---          │   Using this approach allows for switching to another   │
---          │                     plugin manager                      │
+--          │             The configution of the plugins:             │
+--          │                      See ak.config                      │
 --          ╰─────────────────────────────────────────────────────────╯
 
 return function(extraspec, opts)
-  if vim.env.PCKR then -- experimenting...
+  if vim.env.PAQ then -- experimenting
     require("ak.config.options")
     require("ak.config.autocmds")
     require("ak.config.keymaps")
-    require("ak.config.pckr")()
+    require("ak.config.paq")()
     pcall(vim.cmd.colorscheme, "tokyonight")
   else
     require("ak.config.lazy")(extraspec, opts)

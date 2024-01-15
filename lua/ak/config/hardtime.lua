@@ -13,7 +13,7 @@ function M.setup()
   vim.g.hardtime_allow_different_key = 1
   vim.g.hardtime_motion_with_count_resets = 1
 
-  vim.keymap.set("n", "<leader>mh", "<cmd>HardTimeToggle<cr>", { desc = "Toggle hardime", silent = true })
+  vim.keymap.set("n", "<leader>uh", "<cmd>HardTimeToggle<cr>", { desc = "Toggle hardime", silent = true })
 end
 
 return M

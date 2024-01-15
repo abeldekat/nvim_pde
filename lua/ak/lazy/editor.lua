@@ -8,7 +8,7 @@ local autoload_clues = false
 --          ╰─────────────────────────────────────────────────────────╯
 local function no_replay() end
 
-vim.keymap.set("n", "<leader>uK", function()
+vim.keymap.set("n", "<leader>uk", function()
   --          ╭─────────────────────────────────────────────────────────╮
   --          │   Load important plugins having lazy keys in order for  │
   --          │            the descriptions to show in mini.clue        │
@@ -19,20 +19,13 @@ vim.keymap.set("n", "<leader>uK", function()
   pcall(require, "telescope")
   pcall(require, "todo-comments")
   pcall(require, "trouble")
-  vim.keymap.del("n", "<leader>uK")
+  vim.keymap.del("n", "<leader>uk")
 end, { desc = "Load lazy editor", silent = true })
 
 return {
 
   {
-    "folke/flash.nvim",
-    event = "VeryLazy",
-    -- stylua: ignore start
-    keys = {
-      { "s", mode = { "n", "x", "o" } }, { "S", mode = { "n", "x", "o" } },
-      { "r", mode = "o" }, { "R", mode = { "o", "x" } }, { "<c-s>", mode = { "c" } },
-    },
-    -- stylua: ignore end
+    "folke/flash.nvim", -- loads fast, maybe 3ms, always used
     dependencies = "jinh0/eyeliner.nvim",
     config = function()
       require("ak.config.jump")
@@ -57,8 +50,7 @@ return {
 
   {
     "takac/vim-hardtime",
-    -- lazy = false,
-    keys = "<leader>mh",
+    keys = "<leader>uh",
     init = function()
       require("ak.config.hardtime").init()
     end,
@@ -87,9 +79,6 @@ return {
     "echasnovski/mini.clue",
     event = function()
       return autoload_clues and { "VeryLazy" } or {}
-    end,
-    keys = function()
-      return autoload_clues and {} or { { "<leader>uk", no_replay } } -- activate clue
     end,
     config = function()
       require("ak.config.clue")

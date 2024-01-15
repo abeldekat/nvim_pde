@@ -197,7 +197,7 @@ return {
     dependencies = {
     -- stylua: ignore start
     -- don't expose the Neoconf command... First load neoconf, then nvim-lspconfig
-    { "folke/neoconf.nvim", config = function() require("neoconf").setup() end},
+    -- { "folke/neoconf.nvim", config = function() require("neoconf").setup() end},
     { "folke/neodev.nvim", config = function() require("neodev").setup() end, },
       -- stylua: ignore end
       mason_spec(),
