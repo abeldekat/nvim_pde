@@ -61,9 +61,10 @@ return {
 
   {
     "ThePrimeagen/harpoon",
-    branch = "harpoon2",
+    -- branch = "harpoon2",
     config = function()
-      require("ak.config.harpoon")
+      -- require("ak.config.harpoon")
+      require("ak.config.harpoon_one")
     end,
   },
 

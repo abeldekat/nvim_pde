@@ -15,6 +15,6 @@ return {
     "nvim-neotest/neotest-python",
   },
   config = function()
-    require("ak.config.testing")
+    require("ak.config.lang.testing")
   end,
 }

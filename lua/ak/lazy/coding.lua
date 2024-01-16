@@ -58,7 +58,9 @@ return {
 
   {
     "gbprod/substitute.nvim", -- substitute, exchange and multiply(not used often, not lazy)
-    keys = { { "gs", mode = { "n", "x" } }, { "gx", mode = { "n", "x" } } },
+    -- Optimize: define lazy keys only for normal mode
+    -- keys = { { "gs", mode = { "n", "x" } }, { "gx", mode = { "n", "x" } } },
+    keys = { "gs", "gx" },
     config = function()
       require("ak.config.substitute")
     end,

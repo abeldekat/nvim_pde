@@ -10,7 +10,7 @@ local opts = {
   dev_path = "~/projects/lazydev",
   -- dev_path = "~/projects/clone",
 
-  langs = { "markdown", "python" }, -- single point of lang control
+  langs = { "markdown", "python", "sql" }, -- TODO: single point of langs to support
 }
 
 -- Caching: Do all init in ak/init.lua

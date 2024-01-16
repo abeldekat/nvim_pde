@@ -14,9 +14,9 @@ return function(extraspec, opts)
     require("ak.config.options")
     require("ak.config.autocmds")
     require("ak.config.keymaps")
-    require("ak.config.paq")()
+    require("ak.config.boot.paq")()
     pcall(vim.cmd.colorscheme, "tokyonight")
   else
-    require("ak.config.lazy")(extraspec, opts)
+    require("ak.config.boot.lazy")(extraspec, opts)
   end
 end

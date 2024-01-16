@@ -17,6 +17,6 @@ return {
   },
   keys = { { "<leader>dL", no_replay, desc = "Load dap" } },
   config = function()
-    require("ak.config.debugging")
+    require("ak.config.lang.debugging")
   end,
 }

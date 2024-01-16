@@ -3,9 +3,9 @@ return {
   cmd = "ConformInfo",
   -- keys = { "<leader>cF", mode = { "n", "v" } }, -- format injected not needed as lazy key
   init = function()
-    require("ak.config.formatting").init()
+    require("ak.config.lang.formatting").init()
   end,
   config = function()
-    require("ak.config.formatting").setup()
+    require("ak.config.lang.formatting").setup()
   end,
 }

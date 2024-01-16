@@ -4,17 +4,16 @@ local function to_spec()
     require("ak.lazy.coding"),
     require("ak.lazy.colors"),
     require("ak.lazy.editor"),
+    require("ak.lazy.treesitter"),
     require("ak.lazy.ui"),
     require("ak.lazy.util"),
-
-    -- langs:   ak.lazy
-    require("ak.lazy.treesitter"),
-    require("ak.lazy.formatting"),
-    require("ak.lazy.linting"),
-    { import = "ak.lazy.lsp" },
-    require("ak.lazy.testing"),
-    require("ak.lazy.debugging"),
-    { import = "ak.lazy.langs" },
+    --
+    require("ak.lazy.lang.formatting"),
+    require("ak.lazy.lang.linting"),
+    require("ak.lazy.lang.lsp"),
+    require("ak.lazy.lang.testing"),
+    require("ak.lazy.lang.debugging"),
+    require("ak.lazy.lang.extra"),
   }
 end
 
