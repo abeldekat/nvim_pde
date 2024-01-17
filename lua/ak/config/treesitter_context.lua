@@ -10,6 +10,6 @@ vim.keymap.set("n", "<leader>ut", function()
   if enabled then
     Util.info("Enabled treesitter context", { title = "Option" })
   else
-    Util.warn("Disabled treesitter tontext", { title = "Option" })
+    Util.warn("Disabled treesitter context", { title = "Option" })
   end
-end, { desc = { "Toggle treesitter context" }, silent = true })
+end, { desc = "Toggle treesitter context", silent = true })

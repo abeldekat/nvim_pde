@@ -152,9 +152,6 @@ local function setup()
   require("neoconf").setup()
   require("neodev").setup()
 
-  -- ── formatter ─────────────────────────────────────────────────────────
-  Util.format.register(Util.lsp.formatter())
-
   -- ── keymaps ───────────────────────────────────────────────────────────
   Util.lsp.on_attach(function(client, buffer) -- keymaps
     keys(client, buffer) -- are always set regardles of capabilities

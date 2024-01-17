@@ -66,19 +66,11 @@ map("n", "<leader>K", "<cmd>norm! K<cr>", { desc = "Keywordprg" })
 map("v", "<", "<gv")
 map("v", ">", ">gv")
 
--- lazy
-map("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "Lazy" })
-
 map("n", "<leader>xl", "<cmd>lopen<cr>", { desc = "Location List" })
 map("n", "<leader>xq", "<cmd>copen<cr>", { desc = "Quickfix List" })
 
 map("n", "[q", vim.cmd.cprev, { desc = "Previous quickfix" })
 map("n", "]q", vim.cmd.cnext, { desc = "Next quickfix" })
-
--- formatting
-map({ "n", "v" }, "<leader>cf", function()
-  Util.format({ force = true })
-end, { desc = "Format" })
 
 -- diagnostic
 local diagnostic_goto = function(next, severity)
@@ -99,9 +91,6 @@ map("n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev warning" })
 -- stylua: ignore start
 
 -- toggle options
--- TODO: toggle format toggle
--- map("n", "<leader>uf", function() Util.format.toggle() end, { desc = "Toggle auto format (global)" })
--- map("n", "<leader>uF", function() Util.format.toggle(true) end, { desc = "Toggle auto format (buffer)" })
 map("n", "<leader>us", function() Util.toggle("spell") end, { desc = "Toggle spelling" })
 map("n", "<leader>uw", function() Util.toggle("wrap") end, { desc = "Toggle word wrap" })
 map("n", "<leader>uL", function() Util.toggle("relativenumber") end, { desc = "Toggle relative line numbers" })
@@ -135,7 +124,9 @@ map("n", "<leader><tab>d", "<cmd>tabclose<cr>", { desc = "Close tab" })
 map("n", "<leader><tab>[", "<cmd>tabprevious<cr>", { desc = "Previous tab" })
 
 
--- ADDED
+--          ╭─────────────────────────────────────────────────────────╮
+--          │                          ADDED                          │
+--          ╰─────────────────────────────────────────────────────────╯
 
 map("t", "<c-j>", "<c-\\><c-n>", { desc = "Enter normal mode" })
 map("n", "<leader>q", "<cmd>q<cr>", { desc = "Quit" })
@@ -155,7 +146,7 @@ map("n", "<leader><tab>s", "<cmd>tabs<cr>", { desc = "Show tabs" })
 -- c-n can behave like j and enter, also sometimes "next":
 map("n", "<C-N>", "<C-d>zz", { desc = "Down half page, better ctrl-d" })
 
--- Not compatible with animations:
+--
 map("n", "<C-d>", "<C-d>zz", { desc = "Better ctrl-d" })
 map("n", "<C-u>", "<C-u>zz", { desc = "Better ctrl-u" })
 

@@ -57,12 +57,14 @@ local function on_first_plugin_to_load()
   -- LazyVim: VeryLazy
   load("keymaps") --  load immediately, no need to defer
 
+  -- lazy
+  vim.keymap.set("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "Lazy", silent = true })
+
   local group = vim.api.nvim_create_augroup("AbelDeKat", { clear = true })
   vim.api.nvim_create_autocmd("User", {
     group = group,
     pattern = "VeryLazy",
     callback = function()
-      Util.format.setup()
       Util.root.setup()
     end,
   })
@@ -97,10 +99,8 @@ return {
     priority = 10000,
     lazy = false,
     cond = true,
-    -- version = "*",
     config = function()
-      -- Plenary does not require a setup function
-      on_first_plugin_to_load()
+      on_first_plugin_to_load() -- Plenary does not require a setup function
     end,
   },
 }

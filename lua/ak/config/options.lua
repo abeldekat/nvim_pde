@@ -1,9 +1,6 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
--- Enable LazyVim auto format
-vim.g.autoformat = true
-
 -- Root dir detection
 -- Each entry can be:
 -- * the name of a detector function like `lsp` or `cwd`
@@ -27,7 +24,7 @@ opt.ignorecase = true -- Ignore case
 opt.inccommand = "nosplit" -- preview incremental substitute
 opt.laststatus = 3 -- global statusline
 opt.list = true -- Show some invisible characters (tabs...
-opt.mouse = "a" -- Enable mouse mode
+opt.mouse = "" -- Disable mouse mode
 opt.number = true -- Print line number
 opt.pumblend = 10 -- Popup blend
 opt.pumheight = 10 -- Maximum number of entries in a popup
@@ -72,7 +69,6 @@ end
 
 -- Folding
 vim.opt.foldlevel = 99
-
 vim.opt.foldtext = "v:lua.require'ak.util'.ui.foldtext()"
 
 -- TODO: statuscolumn not in v0.10?
@@ -88,12 +84,12 @@ else
   vim.opt.foldmethod = "indent"
 end
 
-vim.o.formatexpr = "v:lua.require'ak.util'.format.formatexpr()"
-
 -- Fix markdown indentation settings
 vim.g.markdown_recommended_style = 0
 
--- ADDED:
+--          ╭─────────────────────────────────────────────────────────╮
+--          │                         ADDED                           │
+--          ╰─────────────────────────────────────────────────────────╯
 
 -- basic
 opt.showtabline = 0 -- never show tabs, 1 is default, 2, -- always show tabs

@@ -1,7 +1,7 @@
 return {
   "stevearc/conform.nvim",
+  event = { "LspAttach", "BufWritePre" }, -- Previously: via init on VeryLazy
   cmd = "ConformInfo",
-  -- keys = { "<leader>cF", mode = { "n", "v" } }, -- format injected not needed as lazy key
   init = function()
     require("ak.config.lang.formatting").init()
   end,

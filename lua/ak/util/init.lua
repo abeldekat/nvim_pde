@@ -1,6 +1,6 @@
 local LazyUtil = require("lazy.core.util")
 
--- TODO: Investigate util.root, util.terminal
+-- TODO: Investigate util.root
 -- TODO: Refactor has, to only contain inter dependencies
 -- Fallback to lazy: try merge norm
 
@@ -10,7 +10,6 @@ local LazyUtil = require("lazy.core.util")
 ---@field root ak.util.root
 ---@field telescope ak.util.telescope
 ---@field toggle ak.util.toggle
----@field format ak.util.format
 ---@field plugin ak.util.plugin
 local M = {}
 

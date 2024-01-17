@@ -1,73 +1,106 @@
-local Util = require("ak.util")
 local M = {}
 
--- use formatter.prepend_args, not formatter.extra_args
--- don't set opts.{ "format_on_save", "format_after_save" }
-local get_opts = function()
+---@param buf? number
+local function is_format_on_save_enabled(buf)
+  buf = (buf == nil or buf == 0) and vim.api.nvim_get_current_buf() or buf
+  local globally = vim.g.format_on_save
+  local on_buffer = vim.b[buf].format_on_save
+
+  if on_buffer ~= nil then -- use buffer when set
+    return on_buffer
+  end
+  return globally == nil or globally -- use global when set or true by default
+end
+
+---@param buf? boolean
+local function toggle_format_on_save(buf)
+  if buf then
+    ---@diagnostic disable-next-line: inject-field
+    vim.b.format_on_save = not is_format_on_save_enabled()
+  else
+    vim.g.format_on_save = not is_format_on_save_enabled()
+    ---@diagnostic disable-next-line: inject-field
+    vim.b.format_on_save = nil
+  end
+end
+
+-- The default arguments for conform.format
+-- Used directly or via conform's format_on_save
+---@param bufnr? number
+local function get_defaults(bufnr)
+  local result = {}
+  if bufnr == nil then
+    bufnr = vim.api.nvim_get_current_buf()
+    result["bufnr"] = bufnr
+  end
+
+  result["timeout_ms"] = 500 -- 3000
+  -- Use lsp formatting for certain filetypes:
+  result["lsp_fallback"] = vim.tbl_contains({ "c", "json", "jsonc", "rust" }, vim.bo[bufnr].filetype)
+  return result
+end
+
+-- Calling conform directly instead of via format_on_save:
+local function format()
+  require("conform").format(get_defaults())
+end
+
+local function add_keys()
+  local keys = vim.keymap.set
+
+  -- ── format_on_save: ───────────────────────────────────────────────────
+  keys("n", "<leader>uf", function() -- from keymaps.lua
+    toggle_format_on_save()
+  end, { desc = "Toggle auto format (global)", silent = true })
+  keys("n", "<leader>uF", function() -- from keymaps.lua
+    toggle_format_on_save(true)
+  end, { desc = "Toggle auto format (buffer)", silent = true })
+
+  -- ── format directly: ──────────────────────────────────────────────────
+  keys({ "n", "v" }, "<leader>cf", function() -- from keymaps.lua
+    format()
+  end, { desc = "Format", silent = true })
+  -- TODO: Is formatting injected langs needed:
+  --
+  -- keys({ "n", "v" }, "<leader>cF", function()
+  --   require("conform").format({ formatters = { "injected" } })
+  -- end, { desc = "Format injected langs", silent = true })
+end
+
+-- ---@type table<string, conform.FormatterConfigOverride|fun(bufnr: integer): nil|conform.FormatterConfigOverride>
+-- formatters = {
+--   injected = { options = { ignore_errors = true } }, -- TODO: No command?
+-- },
+local function get_opts()
   return {
-    -- options to use when formatting with the conform.nvim formatter
-    format = {
-      timeout_ms = 3000,
-      async = false, -- not recommended to change
-      quiet = false, -- not recommended to change
-    },
     ---@type table<string, conform.FormatterUnit[]>
     formatters_by_ft = {
       lua = { "stylua" },
       sh = { "shfmt" },
       python = { "black" },
-      sql = { "sql-formatter" },
+      sql = { "sql-formatter" }, -- TODO: unavailable no config found
     },
-    -- The options you set here will be merged with the builtin formatters.
-    -- You can also define any custom formatters here.
-    ---@type table<string, conform.FormatterConfigOverride|fun(bufnr: integer): nil|conform.FormatterConfigOverride>
-    formatters = {
-      injected = { options = { ignore_errors = true } },
-      -- # Example of using dprint only when a dprint.json file is present
-      -- dprint = {
-      --   condition = function(ctx)
-      --     return vim.fs.find({ "dprint.json" }, { path = ctx.filename, upward = true })[1]
-      --   end,
-      -- },
-      --
-      -- # Example of using shfmt with extra args
-      -- shfmt = {
-      --   prepend_args = { "-i", "2", "-ci" },
-      -- },
-    },
+    format_on_save = function(bufnr)
+      return is_format_on_save_enabled(bufnr) and get_defaults(bufnr) or nil
+    end,
   }
 end
 
-function M.init() -- Install the conform formatter on VeryLazy
-  Util.on_very_lazy(function()
-    Util.format.register({
-      name = "conform.nvim",
-      priority = 100,
-      primary = true,
-      format = function(buf)
-        local opts = get_opts().format
-        opts["bufnr"] = buf
-        require("conform").format(opts)
-      end,
-      sources = function(buf)
-        local ret = require("conform").list_formatters(buf)
-        ---@param v conform.FormatterInfo
-        return vim.tbl_map(function(v)
-          return v.name
-        end, ret)
-      end,
-    })
-  end)
+function M.init()
+  -- opt.formatoptions = "jcroqlnt" -- tcqj -- In options.lua:
+
+  -- Use conform for gq:
+  vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+  vim.g.format_on_save = true
 end
 
 function M.setup()
-  ---@type ConformOpts
-  local opts = get_opts()
-  require("conform").setup(opts)
+  require("conform").setup(get_opts())
+  add_keys()
 
-  vim.keymap.set({ "n", "v" }, "<leader>cF", function()
-    require("conform").format({ formatters = { "injected" } })
-  end, { desc = "Format injected langs", silent = true })
+  vim.api.nvim_create_user_command("Format", function()
+    format()
+  end, { desc = "Format selection or buffer" })
 end
 
 return M
