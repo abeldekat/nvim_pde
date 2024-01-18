@@ -13,9 +13,18 @@ setmetatable(M, {
   end,
 })
 
+---@type string[]
+local referenced_plugins = {}
+
+-- Register plugin names that are referenced in modules other than their own
+---@param plugins string[]
+function M.register_referenced(plugins)
+  referenced_plugins = plugins
+end
+
 ---@param plugin string
 function M.has(plugin)
-  return vim.tbl_contains({ "trouble.nvim", "flash.nvim", "eyeliner.nvim", "nvim-dap-python" }, plugin)
+  return vim.tbl_contains(referenced_plugins, plugin)
 end
 
 --          ╭─────────────────────────────────────────────────────────╮

@@ -1,4 +1,9 @@
+local Util = require("ak.util")
+local dev_patterns = {}
+local dev_path = "~/projects/lazydev"
+
 local function to_spec()
+  Util.register_referenced({ "trouble.nvim", "flash.nvim", "eyeliner.nvim", "nvim-dap-python" })
   return {
     require("ak.lazy.start"), -- responsible for options, keys, autocmds and colorscheme
     require("ak.lazy.coding"),
@@ -27,7 +32,7 @@ local function clone(owner, name)
   return path
 end
 
-return function(extraspec, opts)
+return function(extraspec, _)
   local lazypath = clone("folke", "lazy.nvim")
   vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
 
@@ -35,7 +40,7 @@ return function(extraspec, opts)
   require("lazy").setup({
     defaults = { lazy = false, version = false }, -- "*" = latest stable version
     spec = extraspec and vim.list_extend(spec, extraspec) or spec,
-    dev = { path = opts.dev_path, patterns = opts.dev_patterns },
+    dev = { path = dev_path, patterns = dev_patterns },
     install = { colorscheme = { "tokyonight", "habamax" } },
     checker = { enabled = false },
     change_detection = { enabled = false },

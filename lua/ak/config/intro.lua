@@ -10,6 +10,7 @@ function M.should_load()
 end
 
 function M.setup()
+  local has_lazy, lazy = pcall(require, "lazy")
   local opts = {
     theme = "doom",
     hide = {
@@ -50,25 +51,27 @@ function M.setup()
           key = "s",
         },
         {
-          action = "Lazy",
-          desc = " Lazy",
-          icon = "󰒲 ",
-          key = "l",
-        },
-        {
           action = "qa",
           desc = " Quit",
           icon = " ",
           key = "q",
         },
       },
-      footer = function()
-        local stats = require("lazy").stats()
-        local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
-        return { "⚡ Neovim loaded " .. stats.loaded .. "/" .. stats.count .. " plugins in " .. ms .. "ms" }
-      end,
     },
   }
+  if has_lazy then
+    table.insert(opts.config.center, {
+      action = "Lazy",
+      desc = " Lazy",
+      icon = "󰒲 ",
+      key = "l",
+    })
+    opts.config.footer = function()
+      local stats = lazy.stats()
+      local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
+      return { "⚡ Neovim loaded " .. stats.loaded .. "/" .. stats.count .. " plugins in " .. ms .. "ms" }
+    end
+  end
 
   for _, button in ipairs(opts.config.center) do
     button.desc = button.desc .. string.rep(" ", 43 - #button.desc)
@@ -98,16 +101,6 @@ function M.setup()
   local header = vim.split(logo, "\n")
   header[8] = version
   opts.config.header = header
-
-  -- local project = {
-  --   action = "Telescope project",
-  --   desc = " Projects",
-  --   icon = " ",
-  --   key = "p",
-  -- }
-  -- project.desc = project.desc .. string.rep(" ", 43 - #project.desc)
-  -- project.key_format = "  %s"
-  -- table.insert(opts.config.center, 3, project)
 
   require("dashboard").setup(opts)
 end
