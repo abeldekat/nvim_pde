@@ -44,12 +44,12 @@ local function get_opts()
   local find_files_no_ignore = function()
     local action_state = require("telescope.actions.state")
     local line = action_state.get_current_line()
-    Util.telescope("find_files", { no_ignore = true, default_text = line })()
+    require("telescope.builtin").find_files({ no_ignore = true, default_text = line })
   end
   local find_files_with_hidden = function()
     local action_state = require("telescope.actions.state")
     local line = action_state.get_current_line()
-    Util.telescope("find_files", { hidden = true, default_text = line })()
+    require("telescope.builtin").find_files({ hidden = true, default_text = line })
   end
 
   local opts = {
@@ -119,30 +119,54 @@ end
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                          Keys                           │
 --          ╰─────────────────────────────────────────────────────────╯
+-- searching: Telescope default is vim.loop.cwd. May also be relative to buffer
 local function keys()
+  local builtin = require("telescope.builtin")
+  local themes = require("telescope.themes")
+  local buffer_dir = require("telescope.utils").buffer_dir
+
+  -- top level, candidates to lazy-load:
   map("<leader>/", function()
-    require("telescope.builtin").current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
+    builtin.current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
       winblend = 10,
       previewer = false,
     }))
   end, { desc = "Search in buffer" })
-  map("<leader>o", "<cmd>Telescope buffers sort_mru=true sort_lastused=true<cr>", { desc = "Opened buffers" })
+  map("<leader>o", function()
+    builtin.buffers({ sort_mru = true, sort_lastused = true })
+  end, { desc = "Opened buffers" })
   map("<leader>e", function()
-    Util.telescope("live_grep", require("telescope.themes").get_ivy({}))()
-  end, { desc = "Grep (root dir)" })
+    builtin.live_grep(themes.get_ivy({}))
+  end, { desc = "Grep" })
   map("<leader>r", function()
-    Util.telescope("oldfiles", { cwd = vim.loop.cwd() })()
-  end, { desc = "Recent (cwd)" }) -- oldfiles, from "leader fR":
-  map("<leader>:", "<cmd>Telescope command_history<cr>", { desc = "Command history" })
-  map("<leader><leader>", Util.telescope("files"), { desc = "Find files (root dir)" })
+    builtin.oldfiles()
+  end, { desc = "Recent" })
+  map("<leader>:", function()
+    builtin.command_history()
+  end, { desc = "Command history" })
+  map("<leader><leader>", function()
+    builtin.git_files({ show_untracked = true })
+  end, { desc = "Git files" })
 
-  -- find
-  map("<leader>fb", "<cmd>Telescope buffers sort_mru=true sort_lastused=true<cr>", { desc = "Buffers" })
-  map("<leader>fc", Util.telescope.config_files(), { desc = "Find config file" })
-  map("<leader>ff", Util.telescope("files"), { desc = "Find files (root dir)" })
-  map("<leader>fF", Util.telescope("files", { cwd = false }), { desc = "Find files (cwd)" })
-  map("<leader>fr", "<cmd>Telescope oldfiles<cr>", { desc = "Recent" })
-  map("<leader>fR", Util.telescope("oldfiles", { cwd = vim.loop.cwd() }), { desc = "Recent (cwd)" })
+  -- find:
+  map("<leader>fb", function()
+    builtin.buffers({ sort_mru = true, sort_lastused = true })
+  end, { desc = "Buffers" })
+  map("<leader>fg", function()
+    builtin.git_files({ show_untracked = true })
+  end, { desc = "Git files" })
+  map("<leader>ff", function()
+    builtin.find_files()
+  end, { desc = "Find files" })
+  map("<leader>fF", function()
+    builtin.find_files({ cwd = buffer_dir() })
+  end, { desc = "Find files (rel)" })
+  map("<leader>fr", function()
+    builtin.oldfiles()
+  end, { desc = "Recent" })
+  map("<leader>fR", function()
+    builtin.oldfiles({ cwd = buffer_dir() })
+  end, { desc = "Recent (rel)" })
 
   -- git
   map("<leader>gb", "<cmd>Telescope git_bcommits<cr>", { desc = "bcommits" })
@@ -158,8 +182,12 @@ local function keys()
   map("<leader>sd", "<cmd>Telescope diagnostics bufnr=0<cr>", { desc = "Document diagnostics" })
   map("<leader>sD", "<cmd>Telescope diagnostics<cr>", { desc = "Workspace diagnostics" })
   map("<leader>si", "<cmd>Telescope<cr>", { desc = "Telescope builtin" })
-  map("<leader>sg", Util.telescope("live_grep"), { desc = "Grep (root dir)" })
-  map("<leader>sG", Util.telescope("live_grep", { cwd = false }), { desc = "Grep (cwd )" })
+  map("<leader>sg", function()
+    builtin.live_grep()
+  end, { desc = "Grep" })
+  map("<leader>sG", function()
+    builtin.live_grep({ cwd = buffer_dir() })
+  end, { desc = "Grep (rel)" })
   map("<leader>sh", "<cmd>Telescope help_tags<cr>", { desc = "Help pages" })
   map("<leader>sH", "<cmd>Telescope highlights<cr>", { desc = "Search highlight groups" })
   map("<leader>sk", "<cmd>Telescope keymaps<cr>", { desc = "Key maps" })
@@ -167,18 +195,28 @@ local function keys()
   map("<leader>sm", "<cmd>Telescope marks<cr>", { desc = "Jump to mark" })
   map("<leader>so", "<cmd>Telescope vim_options<cr>", { desc = "Options" })
   map("<leader>sR", "<cmd>Telescope resume<cr>", { desc = "Resume" })
-  map("<leader>sw", Util.telescope("grep_string", { word_match = "-w" }), { desc = "Word (root dir)" })
-  map("<leader>sW", Util.telescope("grep_string", { cwd = false, word_match = "-w" }), { desc = "Word (cwd)" })
-  map("<leader>sw", Util.telescope("grep_string", { word_match = "-w" }), { desc = "Selection (root dir)" }, "v")
-  map("<leader>sW", Util.telescope("grep_string", { cwd = false, word_match = "-w" }), { desc = "Word (cwd)" }, "v")
-  map("<leader>uC", Util.telescope("colorscheme", { enable_preview = true }), { desc = "Colorscheme with preview" })
+  map("<leader>sw", function()
+    builtin.grep_string({ word_match = "-w" })
+  end, { desc = "Word" })
+  map("<leader>sW", function()
+    builtin.grep_string({ cwd = buffer_dir(), word_match = "-w" })
+  end, { desc = "Word (rel)" })
+  map("<leader>sw", function()
+    builtin.grep_string()
+  end, { desc = "Selection" }, "v")
+  map("<leader>sW", function()
+    builtin.grep_string({ cwd = buffer_dir() })
+  end, { desc = "Selection (rel)" }, "v")
+  map("<leader>uC", function()
+    builtin.colorscheme({ enable_preview = true })
+  end, { desc = "Colorscheme with preview" })
   map("<leader>sS", function()
-    require("telescope.builtin").lsp_dynamic_workspace_symbols({
+    builtin.lsp_dynamic_workspace_symbols({
       symbols = require("ak.misc.consts").get_kind_filter(),
     })
   end, { desc = "Goto symbol (workspace)" })
   map("<leader>ss", function()
-    require("telescope.builtin").lsp_document_symbols({
+    builtin.lsp_document_symbols({
       symbols = require("ak.misc.consts").get_kind_filter(),
     })
   end, { desc = "Goto symbol" })

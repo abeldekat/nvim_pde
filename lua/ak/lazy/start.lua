@@ -45,7 +45,7 @@ local function on_first_spec_imported()
   -- this is needed to make sure options will be correctly applied
   -- after installing missing plugins
   load("options")
-  Util.plugin.setup()
+  Util.lazy_file.setup()
 end
 
 ------------------------------------------------------------------------------
@@ -59,15 +59,6 @@ local function on_first_plugin_to_load()
 
   -- lazy
   vim.keymap.set("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "Lazy", silent = true })
-
-  local group = vim.api.nvim_create_augroup("AbelDeKat", { clear = true })
-  vim.api.nvim_create_autocmd("User", {
-    group = group,
-    pattern = "VeryLazy",
-    callback = function()
-      Util.root.setup()
-    end,
-  })
 
   Util.try(function()
     local colorscheme = require("ak.misc.color").color

@@ -1,4 +1,4 @@
-local Util = require("ak.util") -- trouble.nvim
+local Util = require("ak.util")
 
 local get_opts = function()
   return {
@@ -28,7 +28,7 @@ local get_opts = function()
     output = { open_on_run = true },
     quickfix = {
       open = function()
-        if require("ak.util").has("trouble.nvim") then
+        if Util.has("trouble.nvim") then
           require("trouble").open({ mode = "quickfix", focus = false })
         else
           vim.cmd("copen")
@@ -90,7 +90,7 @@ local function setup()
     },
   }, neotest_ns)
 
-  if require("ak.util").has("trouble.nvim") then
+  if Util.has("trouble.nvim") then
     opts.consumers = opts.consumers or {}
     -- Refresh and auto close trouble after running tests
     ---@type neotest.Consumer

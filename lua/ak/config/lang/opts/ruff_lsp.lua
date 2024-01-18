@@ -1,4 +1,5 @@
 local Util = require("ak.util")
+
 return {
   server = {},
   setup = function()

@@ -1,3 +1,5 @@
+local Util = require("ak.util")
+
 return {
   server = {
     -- Have to add this for yamlls to understand that we support line folding
@@ -35,7 +37,7 @@ return {
   setup = function()
     -- Neovim < 0.10 does not have dynamic registration for formatting
     if vim.fn.has("nvim-0.10") == 0 then
-      require("ak.util").lsp.on_attach(function(client, _)
+      Util.lsp.on_attach(function(client, _)
         if client.name == "yamlls" then
           client.server_capabilities.documentFormattingProvider = true
         end

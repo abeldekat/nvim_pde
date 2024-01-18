@@ -1,3 +1,7 @@
+--          ╭─────────────────────────────────────────────────────────╮
+--          │       Almost exact copy of lazyvim.util.toggle          │
+--          ╰─────────────────────────────────────────────────────────╯
+
 local Util = require("ak.util")
 
 ---@class ak.util.toggle

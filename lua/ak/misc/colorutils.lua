@@ -28,8 +28,7 @@ function M.keys()
           end, target("", "color"))
         end
 
-        -- TODO: lazyvim.util
-        require("ak.util").telescope("colorscheme", { enable_preview = true })()
+        require("telescope.builtin").colorscheme({ enable_preview = true })
         vim.fn.getcompletion = target
       end,
       desc = "Colorscheme with preview",

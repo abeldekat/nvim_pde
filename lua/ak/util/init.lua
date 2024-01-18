@@ -1,24 +1,12 @@
-local LazyUtil = require("lazy.core.util")
-
--- TODO: Investigate util.root
--- TODO: Refactor has, to only contain inter dependencies
--- Fallback to lazy: try merge norm
-
----@class ak.util: LazyUtilCore
+---@class ak.util
 ---@field ui ak.util.ui
 ---@field lsp ak.util.lsp
----@field root ak.util.root
----@field telescope ak.util.telescope
 ---@field toggle ak.util.toggle
----@field plugin ak.util.plugin
+---@field plugin ak.util.lazy_file
 local M = {}
 
 setmetatable(M, {
   __index = function(t, k)
-    if LazyUtil[k] then
-      -- vim.print("LazyUtil: " .. vim.inspect(k))
-      return LazyUtil[k] -- fallback to lazy.nvim
-    end
     ---@diagnostic disable-next-line: no-unknown
     t[k] = require("ak.util." .. k) -- implemented in submodule
     return t[k]
@@ -27,50 +15,83 @@ setmetatable(M, {
 
 ---@param plugin string
 function M.has(plugin)
-  return require("lazy.core.config").spec.plugins[plugin] ~= nil
+  return vim.tbl_contains({ "trouble.nvim", "flash.nvim", "eyeliner.nvim", "nvim-dap-python" }, plugin)
 end
 
-function M.is_win()
-  return vim.loop.os_uname().sysname:find("Windows") ~= nil
-end
+--          ╭─────────────────────────────────────────────────────────╮
+--          │             Copied code from lazy.core.util             │
+--          ╰─────────────────────────────────────────────────────────╯
 
----@param fn fun()
-function M.on_very_lazy(fn)
-  vim.api.nvim_create_autocmd("User", {
-    pattern = "VeryLazy",
-    callback = function()
-      fn()
-    end,
+---@alias AkNotifyOpts {title?:string, level?:number, once?:boolean}
+
+---@param msg string|string[]
+---@param opts? AkNotifyOpts
+local function notify(msg, opts)
+  if vim.in_fast_event() then
+    return vim.schedule(function()
+      notify(msg, opts)
+    end)
+  end
+
+  opts = opts or {}
+  if type(msg) == "table" then
+    msg = table.concat(
+      vim.tbl_filter(function(line)
+        return line or false
+      end, msg),
+      "\n"
+    )
+  end
+  local n = opts.once and vim.notify_once or vim.notify
+  n(msg, opts.level or vim.log.levels.INFO, {
+    title = opts.title or "nvim_pde",
   })
 end
 
----@param name string
-function M.opts(name)
-  local plugin = require("lazy.core.config").plugins[name]
-  if not plugin then
-    return {}
-  end
-  local Plugin = require("lazy.core.plugin")
-  return Plugin.values(plugin, "opts", false)
+---@param msg string|string[]
+---@param opts? AkNotifyOpts
+function M.error(msg, opts)
+  opts = opts or {}
+  opts.level = vim.log.levels.ERROR
+  notify(msg, opts)
 end
 
----@param name string
----@param fn fun(name:string)
-function M.on_load(name, fn)
-  local Config = require("lazy.core.config")
-  if Config.plugins[name] and Config.plugins[name]._.loaded then
-    fn(name)
-  else
-    vim.api.nvim_create_autocmd("User", {
-      pattern = "LazyLoad",
-      callback = function(event)
-        if event.data == name then
-          fn(name)
-          return true
-        end
-      end,
-    })
+---@param msg string|string[]
+---@param opts? AkNotifyOpts
+function M.info(msg, opts)
+  opts = opts or {}
+  opts.level = vim.log.levels.INFO
+  notify(msg, opts)
+end
+
+---@param msg string|string[]
+---@param opts? AkNotifyOpts
+function M.warn(msg, opts)
+  opts = opts or {}
+  opts.level = vim.log.levels.WARN
+  notify(msg, opts)
+end
+
+---@param opts? string|{msg:string, on_error:fun(msg)}
+function M.try(fn, opts)
+  opts = type(opts) == "string" and { msg = opts } or opts or {}
+  local msg = opts.msg
+  -- error handler
+  local error_handler = function(err)
+    msg = (msg and (msg .. "\n\n") or "") .. err
+    if opts.on_error then
+      opts.on_error(msg)
+    else
+      vim.schedule(function()
+        M.error(msg)
+      end)
+    end
+    return err
   end
+
+  ---@type boolean, any
+  local ok, result = xpcall(fn, error_handler)
+  return ok and result or nil
 end
 
 return M

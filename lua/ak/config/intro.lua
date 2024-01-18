@@ -44,12 +44,6 @@ function M.setup()
           key = "g",
         },
         {
-          action = [[lua require("ak.util").telescope.config_files()()]],
-          desc = " Config",
-          icon = " ",
-          key = "c",
-        },
-        {
           action = 'lua require("persistence").load()',
           desc = " Restore Session",
           icon = " ",

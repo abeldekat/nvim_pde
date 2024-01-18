@@ -1,15 +1,16 @@
----@class ak.util.plugin
+--          ╭─────────────────────────────────────────────────────────╮
+--          │ This is the only part of the utils requiring lazy.nvim  │
+--          │                 See lazyvim.util.plugin                 │
+--          ╰─────────────────────────────────────────────────────────╯
+
+---@class ak.util.lazy_file
 local M = {}
 
-M.use_lazy_file = true
+M.use_lazy_file = false -- Testing the difference...
 M.lazy_file_events = { "BufReadPost", "BufNewFile", "BufWritePre" }
 
-function M.setup()
-  M.lazy_file()
-end
-
 -- Properly load file based plugins without blocking the UI
-function M.lazy_file()
+function M.setup()
   M.use_lazy_file = M.use_lazy_file and vim.fn.argc(-1) > 0
 
   -- Add support for the LazyFile event

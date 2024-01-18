@@ -44,6 +44,5 @@ return function(extraspec, opts)
         disabled_plugins = { "gzip", "netrwPlugin", "tarPlugin", "tohtml", "tutor", "zipPlugin" },
       },
     },
-    debug = opts.debug,
   })
 end
