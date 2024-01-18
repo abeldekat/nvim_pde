@@ -1,3 +1,4 @@
+-- See: colors.txt
 -- using sed for color and prefer_light:
 local color = 'catppuccin'
 local prefer_light = false
