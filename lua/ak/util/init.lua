@@ -2,7 +2,9 @@
 ---@field ui ak.util.ui
 ---@field lsp ak.util.lsp
 ---@field toggle ak.util.toggle
----@field plugin ak.util.lazy_file
+---@field lazyfile ak.util.lazyfile
+---@field paq ak.util.paq
+---@field color ak.util.color
 local M = {}
 
 setmetatable(M, {

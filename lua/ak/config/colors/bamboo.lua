@@ -1,4 +1,4 @@
-local prefer_light = require("ak.misc.color").prefer_light
+local prefer_light = require("ak.color").prefer_light
 
 -- regular vulgaris greener multiplex light mode
 vim.o.background = prefer_light and "light" or "dark"

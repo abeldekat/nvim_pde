@@ -212,12 +212,12 @@ local function keys()
   end, { desc = "Colorscheme with preview" })
   map("<leader>sS", function()
     builtin.lsp_dynamic_workspace_symbols({
-      symbols = require("ak.misc.consts").get_kind_filter(),
+      symbols = require("ak.consts").get_kind_filter(),
     })
   end, { desc = "Goto symbol (workspace)" })
   map("<leader>ss", function()
     builtin.lsp_document_symbols({
-      symbols = require("ak.misc.consts").get_kind_filter(),
+      symbols = require("ak.consts").get_kind_filter(),
     })
   end, { desc = "Goto symbol" })
 end

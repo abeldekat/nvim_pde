@@ -1,9 +1,9 @@
-local Utils = require("ak.misc.colorutils")
-local prefer_light = require("ak.misc.color").prefer_light
+local Utils = require("ak.util")
+local prefer_light = require("ak.color").prefer_light
 
 local opts = {}
 
-Utils.add_toggle("tokyonight*", {
+Utils.color.add_toggle("tokyonight*", {
   name = "tokyonight",
   flavours = { "tokyonight-storm", "tokyonight-moon", "tokyonight-night", "tokyonight-day" },
 })

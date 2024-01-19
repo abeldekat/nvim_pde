@@ -1,7 +1,8 @@
 -- very few colors, solarized look
-local Utils = require("ak.misc.colorutils")
-local prefer_light = require("ak.misc.color").prefer_light
-Utils.add_toggle("nano-theme", {
+local Utils = require("ak.util")
+local prefer_light = require("ak.color").prefer_light
+
+Utils.color.add_toggle("nano-theme", {
   name = "nano-theme",
   flavours = { "dark", "light" },
   toggle = function(flavour)

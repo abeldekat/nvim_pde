@@ -1,8 +1,8 @@
-local Utils = require("ak.misc.colorutils")
+local Utils = require("ak.util")
 
 -- monokai variations
 -- shusia, maia and espresso variants are modified versions of Monokai Pro
-Utils.add_toggle("sonokai", {
+Utils.color.add_toggle("sonokai", {
   name = "sonokai",
   flavours = { "andromeda", "espresso", "atlantis", "shusia", "maia", "default" },
   toggle = function(flavour)

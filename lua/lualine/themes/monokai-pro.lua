@@ -44,4 +44,4 @@ local function lualine()
 
   return monokai_pro
 end
-return require("ak.misc.lualine").transform(lualine())
+return require("ak.lualine").transform(lualine())

@@ -34,5 +34,5 @@ local function lualine()
     },
   }
 end
-local transformed = require("ak.misc.lualine").transform(lualine())
+local transformed = require("ak.lualine").transform(lualine())
 return transformed

@@ -16,7 +16,7 @@
 --          │                         onedark                         │
 --          ╰─────────────────────────────────────────────────────────╯
 
-local Utils = require("ak.misc.colorutils")
+local Util = require("ak.util")
 
 local result = {}
 
@@ -191,7 +191,7 @@ for _, group in ipairs(groups) do
   result = vim.list_extend(
     result,
     vim.tbl_map(function(color)
-      color["keys"] = Utils.keys() -- keys implies lazy loading
+      color["keys"] = Util.color.keys() -- keys implies lazy loading
       return color
     end, group())
   )

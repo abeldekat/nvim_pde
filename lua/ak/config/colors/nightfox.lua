@@ -1,6 +1,7 @@
 --nightfox has themes, no flavour options...
-local Utils = require("ak.misc.colorutils")
-Utils.add_toggle("*fox", {
+local Utils = require("ak.util")
+
+Utils.color.add_toggle("*fox", {
   name = "nightfox",
   -- "carbonfox", "dayfox",
   flavours = { "nordfox", "nightfox", "duskfox", "terafox", "dawnfox" },

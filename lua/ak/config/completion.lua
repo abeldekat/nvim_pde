@@ -43,7 +43,7 @@ local opts = {
   ---@diagnostic disable-next-line: missing-fields
   formatting = {
     format = function(_, item)
-      local icons = require("ak.misc.consts").icons.kinds
+      local icons = require("ak.consts").icons.kinds
       if icons[item.kind] then
         item.kind = icons[item.kind] .. item.kind
       end

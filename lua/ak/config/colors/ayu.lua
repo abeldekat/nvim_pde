@@ -1,8 +1,8 @@
-local Utils = require("ak.misc.colorutils")
-local prefer_light = require("ak.misc.color").prefer_light
+local Utils = require("ak.util")
+local prefer_light = require("ak.color").prefer_light
 
 -- unique colors, light is vague
-Utils.add_toggle("ayu*", {
+Utils.color.add_toggle("ayu*", {
   name = "ayu",
   flavours = { "ayu-mirage", "ayu-dark", "ayu-light" },
 })

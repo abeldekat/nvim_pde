@@ -1,7 +1,7 @@
-local Utils = require("ak.misc.colorutils")
-local prefer_light = require("ak.misc.color").prefer_light
+local Utils = require("ak.util")
+local prefer_light = require("ak.color").prefer_light
 local name = "gruvbox-material"
-Utils.add_toggle("*material", {
+Utils.color.add_toggle("*material", {
   name = name,
         -- stylua: ignore
         flavours = {

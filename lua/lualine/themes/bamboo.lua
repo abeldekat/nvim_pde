@@ -32,4 +32,4 @@ local function lualine()
   }
   return bamboo
 end
-return require("ak.misc.lualine").transform(lualine())
+return require("ak.lualine").transform(lualine())

@@ -1,8 +1,8 @@
-local Utils = require("ak.misc.colorutils")
-local prefer_light = require("ak.misc.color").prefer_light
+local Utils = require("ak.util")
+local prefer_light = require("ak.color").prefer_light
 
 -- based on Leaf KDE Plasma Theme
-Utils.add_toggle("leaf", {
+Utils.color.add_toggle("leaf", {
   name = "leaf",
         -- stylua: ignore
         flavours = {

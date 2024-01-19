@@ -1,8 +1,8 @@
-local Utils = require("ak.misc.colorutils")
-local prefer_light = require("ak.misc.color").prefer_light
+local Utils = require("ak.util")
+local prefer_light = require("ak.color").prefer_light
 
 -- lazygit colors are not always readable,  good light theme
-Utils.add_toggle("everforest", {
+Utils.color.add_toggle("everforest", {
   name = "everforest",
         -- stylua: ignore
         flavours = {

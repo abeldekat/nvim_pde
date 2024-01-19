@@ -43,4 +43,4 @@ local function lualine()
 
   return kanagawa
 end
-return require("ak.misc.lualine").transform(lualine())
+return require("ak.lualine").transform(lualine())

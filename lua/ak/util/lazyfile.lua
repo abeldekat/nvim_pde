@@ -3,7 +3,7 @@
 --          │                 See lazyvim.util.plugin                 │
 --          ╰─────────────────────────────────────────────────────────╯
 
----@class ak.util.lazy_file
+---@class ak.util.lazyfile
 local M = {}
 
 M.use_lazy_file = false -- Testing the difference...

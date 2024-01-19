@@ -1,5 +1,6 @@
+local Util = require("ak.util")
 local M = {}
-local Color = require("ak.misc.color")
+local Color = require("ak.color")
 
 local start_spec = {
   "savq/paq-nvim",
@@ -8,6 +9,7 @@ local start_spec = {
 }
 
 function M.spec()
+  Util.paq.setup()
   return start_spec
 end
 

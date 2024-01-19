@@ -1,6 +1,6 @@
-local Utils = require("ak.misc.colorutils")
-local prefer_light = require("ak.misc.color").prefer_light
-Utils.add_toggle("solarized8*", {
+local Utils = require("ak.util")
+local prefer_light = require("ak.color").prefer_light
+Utils.color.add_toggle("solarized8*", {
   name = "solarized8",
         -- stylua: ignore
         flavours = { -- solarized8_high not used

@@ -1,6 +1,6 @@
-local Utils = require("ak.misc.colorutils")
-local prefer_light = require("ak.misc.color").prefer_light
-Utils.add_toggle("melange", {
+local Utils = require("ak.util")
+local prefer_light = require("ak.color").prefer_light
+Utils.color.add_toggle("melange", {
   name = "melange",
   flavours = { "dark", "light" },
   toggle = function(flavour)

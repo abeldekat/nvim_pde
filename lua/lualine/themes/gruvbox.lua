@@ -94,6 +94,6 @@ local function lualine_light()
 end
 
 if vim.opt.background:get() == "light" then
-  return require("ak.misc.lualine").transform(lualine_light())
+  return require("ak.lualine").transform(lualine_light())
 end
-return require("ak.misc.lualine").transform(lualine_dark())
+return require("ak.lualine").transform(lualine_dark())

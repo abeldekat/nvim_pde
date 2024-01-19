@@ -1,7 +1,7 @@
-local Utils = require("ak.misc.colorutils")
-local prefer_light = require("ak.misc.color").prefer_light
+local Utils = require("ak.util")
+local prefer_light = require("ak.color").prefer_light
 
-Utils.add_toggle("edge", {
+Utils.color.add_toggle("edge", {
   name = "edge",
         -- stylua: ignore
         flavours = {

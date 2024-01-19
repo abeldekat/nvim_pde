@@ -2,7 +2,7 @@
 --          │                   See also: telescope                   │
 --          ╰─────────────────────────────────────────────────────────╯
 
-local Consts = require("ak.misc.consts")
+local Consts = require("ak.consts")
 local icons = vim.deepcopy(Consts.icons.kinds)
 
 -- HACK: fix lua's weird choice for `Package` for control

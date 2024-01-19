@@ -79,7 +79,7 @@ local function diagnostics()
     },
     severity_sort = true,
   }
-  for name, icon in pairs(require("ak.misc.consts").icons.diagnostics) do
+  for name, icon in pairs(require("ak.consts").icons.diagnostics) do
     name = "DiagnosticSign" .. name
     vim.fn.sign_define(name, { text = icon, texthl = name, numhl = "" })
   end
@@ -98,7 +98,7 @@ local function diagnostics()
   if type(opts.virtual_text) == "table" and opts.virtual_text.prefix == "icons" then
     opts.virtual_text.prefix = vim.fn.has("nvim-0.10.0") == 0 and "●"
       or function(diagnostic)
-        local icons = require("ak.misc.consts").icons.diagnostics
+        local icons = require("ak.consts").icons.diagnostics
         for d, icon in pairs(icons) do
           if diagnostic.severity == vim.diagnostic.severity[d:upper()] then
             return icon

@@ -44,4 +44,4 @@ local function lualine()
     },
   }
 end
-return require("ak.misc.lualine").transform(lualine())
+return require("ak.lualine").transform(lualine())

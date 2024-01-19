@@ -1,9 +1,9 @@
-local Utils = require("ak.misc.colorutils")
-local prefer_light = require("ak.misc.color").prefer_light
+local Utils = require("ak.util")
+local prefer_light = require("ak.color").prefer_light
 
 -- good gruvbox-like light theme
 -- light is lotus, dark is wave
-Utils.add_toggle("kanagawa*", {
+Utils.color.add_toggle("kanagawa*", {
   name = "kanagawa",
   flavours = { "kanagawa-wave", "kanagawa-dragon", "kanagawa-lotus" },
 })

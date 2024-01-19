@@ -145,7 +145,7 @@ local function setup()
   keys()
 
   vim.api.nvim_set_hl(0, "DapStoppedLine", { default = true, link = "Visual" })
-  for name, sign in pairs(require("ak.misc.consts").icons.dap) do
+  for name, sign in pairs(require("ak.consts").icons.dap) do
     sign = type(sign) == "table" and sign or { sign }
     vim.fn.sign_define(
       "Dap" .. name,

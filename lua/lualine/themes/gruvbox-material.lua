@@ -130,4 +130,4 @@ local function lualine()
 
   return theme
 end
-return require("ak.misc.lualine").transform(lualine())
+return require("ak.lualine").transform(lualine())

@@ -16,8 +16,7 @@
 --          │                         onedark                         │
 --          ╰─────────────────────────────────────────────────────────╯
 
--- local Utils = require("ak.misc.colorutils") -- one single key to load
-local Color = require("ak.misc.color")
+-- require("ak.utils").color.keys() -- one single key to load
 local M = {}
 
 local function one()

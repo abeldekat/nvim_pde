@@ -1,5 +1,6 @@
-local Utils = require("ak.misc.colorutils")
-local prefer_light = require("ak.misc.color").prefer_light
+local Utils = require("ak.util")
+local prefer_light = require("ak.color").prefer_light
+
 local opts = {
   integrations = {
     aerial = true,
@@ -41,7 +42,7 @@ local opts = {
     dropbar = { enabled = false },
   },
 }
-Utils.add_toggle("catppuccin*", {
+Utils.color.add_toggle("catppuccin*", {
   name = "catppuccin",
   flavours = { "catppuccin-frappe", "catppuccin-mocha", "catppuccin-macchiato", "catppuccin-latte" },
 })

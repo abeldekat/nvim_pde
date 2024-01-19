@@ -45,7 +45,7 @@ local function on_first_spec_imported()
   -- this is needed to make sure options will be correctly applied
   -- after installing missing plugins
   load("options")
-  Util.lazy_file.setup()
+  Util.lazyfile.setup()
 end
 
 ------------------------------------------------------------------------------
@@ -61,7 +61,7 @@ local function on_first_plugin_to_load()
   vim.keymap.set("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "Lazy", silent = true })
 
   Util.try(function()
-    local colorscheme = require("ak.misc.color").color
+    local colorscheme = require("ak.color").color
     if type(colorscheme) == "function" then
       colorscheme()
     else
