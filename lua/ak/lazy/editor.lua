@@ -89,7 +89,9 @@ return {
   {
     "stevearc/oil.nvim",
     init = function()
-      require("ak.config.oil").init()
+      if require("ak.config.oil").needs_oil() then
+        require("oil")
+      end
     end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
     keys = "mk",

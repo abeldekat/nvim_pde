@@ -41,7 +41,7 @@ function M.setup()
     require("ak.config.comment")
 
     vim.cmd("packadd dial.nvim")
-    require("ak.config.dial") -- keys
+    require("ak.config.dial")
 
     vim.cmd("packadd substitute.nvim")
     require("ak.config.substitute")
@@ -52,8 +52,8 @@ function M.setup()
 
   Util.paq.on_keys(function()
     vim.cmd("packadd comment-box.nvim")
-    require("ak.config.comment_box") -- keys
-  end, { "<leader>bb", "<leader>bl" }, "Lazy comment-box")
+    require("ak.config.comment_box")
+  end, { "<leader>bb", "<leader>bl" }, "Comment-box")
 
   require("ak.config.completion") -- cannot lazyload
 end

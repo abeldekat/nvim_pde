@@ -1,13 +1,14 @@
 local M = {}
 
-function M.init()
+function M.needs_oil()
   if vim.fn.argc() == 1 then
     ---@diagnostic disable-next-line: param-type-mismatch
     local stat = vim.loop.fs_stat(vim.fn.argv(0))
     if stat and stat.type == "directory" then
-      require("oil")
+      return true
     end
   end
+  return false
 end
 
 function M.setup()

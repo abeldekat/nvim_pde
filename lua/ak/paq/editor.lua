@@ -1,74 +1,129 @@
+--          ╭─────────────────────────────────────────────────────────╮
+--          │          Contains plugins enhancing the editor          │
+--          │           Main components: Oil and telescope            │
+--          ╰─────────────────────────────────────────────────────────╯
+
+local Util = require("ak.util")
+
 local M = {}
 
--- local function no_replay() end
--- vim.keymap.set("n", "<leader>uk", function()
---   --          ╭─────────────────────────────────────────────────────────╮
---   --          │   Load important plugins having lazy keys in order for  │
---   --          │            the descriptions to show in mini.clue        │
---   --          ╰─────────────────────────────────────────────────────────╯
---   pcall(require, "aerial")
---   pcall(require, "mini.clue")
---   pcall(require, "spectre")
---   pcall(require, "telescope")
---   pcall(require, "todo-comments")
---   pcall(require, "trouble")
---   vim.keymap.del("n", "<leader>uk")
--- end, { desc = "Load lazy editor", silent = true })
+local on_telescope_keys = { "<leader><leader>", "<leader>o", "<leader>/", "<leader>e", "<leader>r" }
+
+local function lazyfile()
+  return { "BufReadPost", "BufNewFile", "BufWritePre" }
+end
+
+local function verylazy()
+  return "UIEnter"
+end
+
+local function load_on_telescope()
+  vim.cmd("packadd nvim-spectre") -- <leader>cr
+  require("ak.config.spectre")
+
+  vim.cmd("packadd aerial.nvim") -- <leader>cs
+  require("ak.config.aerial")
+
+  -- telescope-fzf-native.nvim not lazy
+  vim.cmd("packadd telescope-alternate.nvim")
+  vim.cmd("packadd telescope.nvim")
+  require("ak.config.telescope")
+end
+
+local function load_on_lazyfile()
+  vim.cmd("packadd gitsigns.nvim")
+  require("ak.config.gitsigns")
+  vim.cmd("packadd vim-illuminate")
+  require("ak.config.illuminate")
+  vim.cmd("packadd todo-comments.nvim")
+  require("ak.config.todo_comments")
+  -- Used to be on keys: { "<leader>xx", "<leader>xX", "<leader>xL", "<leader>xQ" }
+  vim.cmd("packadd trouble.nvim")
+  require("ak.config.trouble")
+end
+
+local function load_oil()
+  vim.cmd("packadd nvim-web-devicons")
+  vim.cmd("packadd oil.nvim")
+  require("ak.config.oil").setup()
+end
 
 local editor_spec = {
-
   "jinh0/eyeliner.nvim",
-  "folke/flash.nvim", -- loads fast, maybe 3ms, always used
+  "folke/flash.nvim",
   --
-
-  -- "f-person/git-blame.nvim", -- keys = "<leader>gt",
-  "lewis6991/gitsigns.nvim",
+  { "lewis6991/gitsigns.nvim", opt = true },
+  { "RRethy/vim-illuminate", opt = true },
+  { "folke/todo-comments.nvim", opt = true },
+  { "folke/trouble.nvim", opt = true },
   --
-  "takac/vim-hardtime",
-  "RRethy/vim-illuminate",
+  { "f-person/git-blame.nvim", opt = true },
+  { "takac/vim-hardtime", opt = true },
+  { "echasnovski/mini.clue", opt = true },
+  { "akinsho/toggleterm.nvim", opt = true },
   --
-  "echasnovski/mini.clue",
+  { "nvim-tree/nvim-web-devicons", opt = true },
+  { "stevearc/oil.nvim", opt = true },
   --
-  "nvim-tree/nvim-web-devicons",
-  "stevearc/oil.nvim",
-  --
-  "nvim-pack/nvim-spectre",
-  --
+  { "nvim-pack/nvim-spectre", opt = true },
   {
     "nvim-telescope/telescope-fzf-native.nvim",
     build = "make",
   },
-  "otavioschwanck/telescope-alternate.nvim",
+  { "otavioschwanck/telescope-alternate.nvim", opt = true },
   -- "jvgrootveld/telescope-zoxide",
   -- "nvim-telescope/telescope-file-browser.nvim",
   -- "nvim-telescope/telescope-project.nvim",
-  "stevearc/aerial.nvim",
-  "nvim-telescope/telescope.nvim",
-  --
-  "folke/todo-comments.nvim",
-  "akinsho/toggleterm.nvim",
-  "folke/trouble.nvim",
+  { "stevearc/aerial.nvim", opt = true },
+  { "nvim-telescope/telescope.nvim", opt = true },
 }
+
 function M.spec()
   return editor_spec
 end
+
 function M.setup()
   require("ak.config.jump")
-  -- require("ak.config.gitblame") -- cmd
-  require("ak.config.gitsigns") -- event
-  require("ak.config.hardtime").init() -- key
-  require("ak.config.hardtime").setup()
-  require("ak.config.illuminate") -- event
-  require("ak.config.clue") -- key
-  require("ak.config.oil").init() -- key
-  require("ak.config.oil").setup()
-  require("ak.config.spectre") -- key, build = false
-  --
-  require("ak.config.aerial")
-  require("ak.config.telescope") -- cmd keys
-  --
-  require("ak.config.todo_comments") -- event
-  require("ak.config.toggleterm") -- key version *
-  require("ak.config.trouble") -- event
+
+  Util.paq.on_events(function()
+    load_on_lazyfile()
+  end, lazyfile())
+
+  Util.paq.on_events(function()
+    vim.cmd("packadd mini.clue")
+    require("ak.config.clue")
+  end, verylazy())
+
+  if require("ak.config.oil").needs_oil() then
+    load_oil()
+  else
+    Util.paq.on_keys(function()
+      load_oil()
+    end, "mk", "Oil")
+  end
+
+  Util.paq.on_keys(function()
+    load_on_telescope()
+  end, on_telescope_keys, "Telescope")
+  Util.paq.on_command(function() -- needed in intro screen
+    load_on_telescope()
+  end, "Telescope")
+
+  Util.paq.on_keys(function()
+    vim.cmd("packadd toggleterm.nvim")
+    require("ak.config.toggleterm")
+  end, [[<c-_>]], "Toggleterm")
+
+  Util.paq.on_keys(function()
+    vim.cmd("packadd git-blame.nvim")
+    require("ak.config.gitblame")
+  end, "<leader>gt", "Git-blame")
+
+  Util.paq.on_keys(function()
+    require("ak.config.hardtime").init()
+    vim.cmd("packadd vim-hardtime")
+    require("ak.config.hardtime").setup()
+  end, "<leader>uh", "Hardtime")
 end
+
 return M

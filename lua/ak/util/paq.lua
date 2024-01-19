@@ -5,15 +5,14 @@
 ---@class ak.util.paq
 local M = {}
 
-local lazy_paq = vim.api.nvim_create_augroup("ak_lazy_pac", { clear = true })
+local lazy_paq = vim.api.nvim_create_augroup("ak_lazy_paq", { clear = true })
 
 function M.setup() end
 
-function M.on_events(cb, events, pattern)
+function M.on_events(cb, events)
   vim.api.nvim_create_autocmd(events, {
     group = lazy_paq,
-    pattern = pattern,
-    desc = "ak_lazy_pac",
+    desc = "ak_lazy_paq",
     once = true,
     callback = function(ev)
       cb(ev)
@@ -30,6 +29,31 @@ function M.on_keys(cb, keys, desc)
       vim.api.nvim_input(vim.api.nvim_replace_termcodes(key, true, true, true))
     end, { desc = desc, silent = true })
   end
+end
+
+function M.on_command(cb, cmd) -- pckr.nvim, pckr.loader.cmd
+  vim.api.nvim_create_user_command(cmd, function(args)
+    vim.api.nvim_del_user_command(cmd)
+    cb()
+    vim.cmd(
+      string.format(
+        "%s %s%s%s %s",
+        args.mods or "",
+        args.line1 == args.line2 and "" or args.line1 .. "," .. args.line2,
+        cmd,
+        args.bang and "!" or "",
+        args.args
+      )
+    )
+  end, {
+    bang = true,
+    nargs = "*",
+    complete = function()
+      vim.api.nvim_del_user_command(cmd)
+      cb()
+      return vim.fn.getcompletion(cmd .. " ", "cmdline")
+    end,
+  })
 end
 
 return M
