@@ -3,10 +3,11 @@
 --          ╰─────────────────────────────────────────────────────────╯
 
 vim.api.nvim_set_hl(0, "CmpGhostText", { link = "Comment", default = true })
+
 local cmp = require("cmp")
 local defaults = require("cmp.config.default")()
 
----@type cmp.ConfigSchema
+-- ---@type cmp.ConfigSchema
 local opts = {
   completion = {
     completeopt = "menu,menuone,noinsert",
@@ -60,4 +61,4 @@ local opts = {
 for _, source in ipairs(opts.sources) do
   source.group_index = source.group_index or 1
 end
-require("cmp").setup(opts)
+cmp.setup(opts)

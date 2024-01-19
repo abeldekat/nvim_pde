@@ -1,25 +1,26 @@
+--          ╭─────────────────────────────────────────────────────────╮
+--          │            Contains plugins that modify code            │
+--          │          The majority is loaded on InsertEnter          │
+--          ╰─────────────────────────────────────────────────────────╯
+
+local Util = require("ak.util")
 local M = {}
 
 local coding_spec = {
-  "windwp/nvim-autopairs",
-  --
-  "LudoPinelli/comment-box.nvim",
-  "JoosepAlviste/nvim-ts-context-commentstring",
-  --
-  "numToStr/Comment.nvim", -- the plugin itself creates the gc and gb mappings
-  --
+  { "windwp/nvim-autopairs", opt = true },
+  { "numToStr/Comment.nvim", opt = true },
+  { "monaqa/dial.nvim", opt = true },
+  { "rafamadriz/friendly-snippets", opt = true },
+  { "L3MON4D3/LuaSnip", opt = true },
+  { "gbprod/substitute.nvim", opt = true }, -- substitute, exchange and multiply(not used often, not lazy)
+  { "kylechui/nvim-surround", opt = true }, -- TODO: version = *
+  { "LudoPinelli/comment-box.nvim", opt = true },
+  { "JoosepAlviste/nvim-ts-context-commentstring", opt = true },
   "hrsh7th/cmp-nvim-lsp",
   "hrsh7th/cmp-buffer",
   "hrsh7th/cmp-path",
   "saadparwaiz1/cmp_luasnip",
   "hrsh7th/nvim-cmp",
-  --
-  "monaqa/dial.nvim",
-  --
-  "rafamadriz/friendly-snippets",
-  "L3MON4D3/LuaSnip",
-  "gbprod/substitute.nvim", -- substitute, exchange and multiply(not used often, not lazy)
-  "kylechui/nvim-surround",
 }
 
 function M.spec()
@@ -27,14 +28,34 @@ function M.spec()
 end
 
 function M.setup()
-  require("ak.config.pairs") -- event
-  require("ak.config.comment_box") -- keys
-  require("ak.config.comment") -- keys
-  require("ak.config.completion") -- event
-  require("ak.config.dial") -- keys
-  require("ak.config.snip") -- keys
-  require("ak.config.substitute") -- keys
-  require("ak.config.surround") -- keys, version = *
+  Util.paq.on_events(function()
+    vim.cmd("packadd nvim-autopairs")
+    require("ak.config.pairs")
+
+    vim.cmd("packadd friendly-snippets")
+    vim.cmd("packadd LuaSnip")
+    require("ak.config.snip")
+
+    vim.cmd("packadd nvim-ts-context-commentstring")
+    vim.cmd("packadd Comment.nvim")
+    require("ak.config.comment")
+
+    vim.cmd("packadd dial.nvim")
+    require("ak.config.dial") -- keys
+
+    vim.cmd("packadd substitute.nvim")
+    require("ak.config.substitute")
+
+    vim.cmd("packadd nvim-surround")
+    require("ak.config.surround")
+  end, "InsertEnter")
+
+  Util.paq.on_keys(function()
+    vim.cmd("packadd comment-box.nvim")
+    require("ak.config.comment_box") -- keys
+  end, { "<leader>bb", "<leader>bl" }, "Lazy comment-box")
+
+  require("ak.config.completion") -- cannot lazyload
 end
 
 return M
