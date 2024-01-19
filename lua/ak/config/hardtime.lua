@@ -1,7 +1,7 @@
 local M = {}
 
 function M.init()
-  vim.g.hardtime_default_on = 1 -- when hardtime is not lazy this is needed
+  vim.g.hardtime_default_on = 0 -- when hardtime is not lazy this is needed
 end
 
 function M.setup()

@@ -1,6 +1,4 @@
---          ╭─────────────────────────────────────────────────────────╮
---          │                      Experimental                       │
---          ╰─────────────────────────────────────────────────────────╯
+local Util = require("ak.util")
 
 local function clone_paq()
   local path = vim.fn.stdpath("data") .. "/site/pack/paqs/start/paq-nvim"
@@ -12,34 +10,86 @@ local function clone_paq()
   end
 end
 
---          ╭─────────────────────────────────────────────────────────╮
---          │            https://github.com/savq/paq-nvim             │
---          ╰─────────────────────────────────────────────────────────╯
 local modules = {
-  require("ak.paq.start"),
+  require("ak.paq.start"), -- responsible for options, keys, autocmds and colorscheme
+  require("ak.paq.coding"),
+  require("ak.paq.colors"),
+  require("ak.paq.editor"),
+  require("ak.paq.treesitter"),
+  require("ak.paq.ui"),
+  require("ak.paq.util"),
+  --
+  require("ak.paq.lang.formatting"),
+  require("ak.paq.lang.linting"),
+  require("ak.paq.lang.lsp"),
+  -- require("ak.paq.lang.testing"),
+  -- require("ak.paq.lang.debugging"),
+  -- require("ak.paq.lang.extra"),
 }
-return function(_, _) -- extraspec, opts
-  local is_first_install = clone_paq()
-  local paq = require("paq")
 
-  -- read the spec
-  local packages = { "savq/paq-nvim" }
+local function setup_spec()
+  local packages = {}
   for _, module in ipairs(modules) do
     vim.list_extend(packages, module.spec())
   end
-  paq(packages)
+  return packages
+end
 
-  -- automatic install when headless or when starting from scratch
-  if #vim.api.nvim_list_uis() == 0 then
-    vim.cmd("autocmd User PaqDoneInstall quit")
-    paq.install() -- headless install quit when done
-  elseif is_first_install then
-    vim.notify("Installing plugins... If prompted, hit Enter to continue.")
-    paq.install()
-  end
-
-  -- setup the modules
+-- make sure the config for all plugins in the module is loaded
+local function setup_modules()
+  Util.register_referenced({ "trouble.nvim", "flash.nvim", "eyeliner.nvim", "nvim-dap-python" })
   for _, module in ipairs(modules) do
     module.setup()
   end
+end
+
+-- tohtml.vim             0.06    0.06
+-- syntax.vim             0.27    0.26 ▏
+local function setup_performance()
+  -- TODO: More plugins to disable?
+  -- disabled_plugins = { "tohtml", "tutor" },
+  for _, disable in ipairs({ "gzip", "netrwPlugin", "tarPlugin", "zipPlugin" }) do
+    vim.g["loaded_" .. disable] = 0
+  end
+end
+
+--          ╭─────────────────────────────────────────────────────────╮
+--          │                    Headless install:                    │
+--          │             nvim --headless -u NONE -c 'lua             │
+--          │            require("ak.config.boot.paq")()'             │
+--          ╰─────────────────────────────────────────────────────────╯
+-- NOTE: The build from telescope-fzf might cause errors...
+-- NOTE: Build steps: Mason fails. Do :PaqBuild mason.nvim
+return function(_, _) -- extraspec, opts
+  setup_performance()
+  local is_first_install = clone_paq()
+  local paq = require("paq")
+  paq:setup({
+    -- opt = true, -- all packages default to opt
+    -- verbose = true, -- verbose print packages that were not updated
+    -- No commits in paq-lock.json:
+    -- lock = vim.fn.stdpath("config") .. "/paq-lock.json", -- defaults to data dir
+    -- clone-args = "", -- default values: depth == 1, etc
+  })
+  paq(setup_spec())
+
+  -- automatic install when headless:
+  if #vim.api.nvim_list_uis() == 0 then
+    vim.cmd("autocmd User PaqDoneInstall quit")
+    paq.install() -- headless install quit when done
+    return
+  end
+
+  -- automatic install when starting from scratch:
+  if is_first_install then
+    Util.info("Installing plugins... If prompted, hit Enter to continue.")
+    paq.install()
+    vim.api.nvim_create_autocmd("User", {
+      pattern = "PaqDoneInstall",
+      callback = setup_modules,
+    })
+    return
+  end
+
+  setup_modules()
 end

@@ -11,7 +11,7 @@ return {
     "LudoPinelli/comment-box.nvim",
     keys = { "<leader>bb", "<leader>bl" }, -- lazy only on normal mode keys
     config = function()
-      require("lua.ak.config.comment_box")
+      require("ak.config.comment_box")
     end,
   },
 

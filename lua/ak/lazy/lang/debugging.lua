@@ -1,9 +1,3 @@
---          ╭─────────────────────────────────────────────────────────╮
---          │     Lazy keys that are not overridden in the config     │
---          │          Example: <leader>uk, loads mini.clue.          │
---          │   Without this function, the keystrokes "uk" would be   │
---          │                        replayed                         │
---          ╰─────────────────────────────────────────────────────────╯
 local function no_replay() end
 
 -- dap: one key to load...

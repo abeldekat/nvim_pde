@@ -2,7 +2,9 @@ return {
   {
     "windwp/nvim-ts-autotag",
     event = "LazyFile",
-    opts = {},
+    config = function()
+      require("nvim-ts-autotag").setup()
+    end,
   },
 
   {
@@ -17,7 +19,6 @@ return {
     "nvim-treesitter/nvim-treesitter",
     version = false,
     build = ":TSUpdate",
-    event = { "LazyFile", "VeryLazy" },
     init = function(plugin) --> Only for lazy.nvim...
       -- PERF: add nvim-treesitter queries to the rtp and it's custom query predicates early
       -- This is needed because a bunch of plugins no longer `require("nvim-treesitter")`, which
@@ -33,6 +34,7 @@ return {
         require("ak.config.treesitter_textobjects")
       end,
     },
+    event = { "LazyFile", "VeryLazy" },
     cmd = { "TSUpdate" }, -- cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
     keys = { { "<c-space>" }, { "<bs>", mode = "x" } },
     config = function()

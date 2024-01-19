@@ -1,7 +1,3 @@
---          ╭─────────────────────────────────────────────────────────╮
---          │       TODO: Activate conditionally, see init.lua        │
---          ╰─────────────────────────────────────────────────────────╯
-
 local result = {}
 
 local function markdown()

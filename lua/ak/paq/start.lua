@@ -1,17 +1,10 @@
 local M = {}
+local Color = require("ak.misc.color")
 
 local start_spec = {
-  {
-    "nvim-lua/plenary.nvim",
-  },
-  {
-    "ThePrimeagen/harpoon",
-    -- branch = "harpoon2",
-    -- config = function()
-    --   -- require("ak.config.harpoon")
-    --   require("ak.config.harpoon_one")
-    -- end,
-  },
+  "savq/paq-nvim",
+  "nvim-lua/plenary.nvim",
+  "ThePrimeagen/harpoon",
 }
 
 function M.spec()
@@ -19,6 +12,14 @@ function M.spec()
 end
 
 function M.setup()
+  require("ak.config.options")
+  require("ak.config.autocmds")
+  require("ak.config.keymaps")
+
+  vim.cmd.packadd("colors_" .. Color.color)
+  require("ak.config.colors." .. Color.color)
+  vim.cmd.colorscheme(Color.color)
+
   require("ak.config.harpoon_one")
 end
 

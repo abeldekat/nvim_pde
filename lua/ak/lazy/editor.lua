@@ -6,7 +6,7 @@ local autoload_clues = false
 --          │   Without this function, the keystrokes "uk" would be   │
 --          │                        replayed                         │
 --          ╰─────────────────────────────────────────────────────────╯
-local function no_replay() end
+-- local function no_replay() end
 
 vim.keymap.set("n", "<leader>uk", function()
   --          ╭─────────────────────────────────────────────────────────╮
