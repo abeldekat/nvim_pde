@@ -1,6 +1,6 @@
 -- NOTE: Persistence, not used at the moment
 require("persistence").setup({ options = vim.opt.sessionoptions:get() })
-vim.keymap.set("n", "<leader>ms", function()
+vim.keymap.set("n", "<leader>mR", function()
   require("persistence").load()
 end, { desc = "Restore session", silent = true })
 

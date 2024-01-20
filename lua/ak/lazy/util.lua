@@ -9,7 +9,7 @@ return {
 
   {
     "dstein64/vim-startuptime",
-    cmd = "StartupTime",
+    keys = { { "<leader>ms", desc = "Startuptime" } },
     config = function()
       require("ak.config.startuptime")
     end,

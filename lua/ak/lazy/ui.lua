@@ -1,5 +1,4 @@
 return {
-
   {
     "nvimdev/dashboard-nvim",
     event = function() -- vimenter
@@ -57,7 +56,4 @@ return {
       require("ak.config.lualine").setup()
     end,
   },
-
-  { "MunifTanjim/nui.nvim", lazy = true },
-  { "nvim-tree/nvim-web-devicons", lazy = true },
 }
