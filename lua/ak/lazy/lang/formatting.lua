@@ -1,7 +1,6 @@
-return {
+return { -- previously: via init on VeryLazy
   "stevearc/conform.nvim",
-  event = { "LspAttach", "BufWritePre" }, -- Previously: via init on VeryLazy
-  cmd = "ConformInfo",
+  event = { "LspAttach", "BufWritePre" },
   init = function()
     require("ak.config.lang.formatting").init()
   end,

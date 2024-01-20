@@ -21,28 +21,40 @@ function M.setup()
     config = {
       center = {
         {
+          action = "Telescope git_files",
+          desc = " Files(git) [leader leader]",
+          icon = " ",
+          key = "g",
+        },
+        {
           action = "Telescope find_files",
-          desc = " Find file",
+          desc = " Files [leader s f]",
           icon = " ",
           key = "f",
         },
         {
-          action = "ene | startinsert",
-          desc = " New file",
-          icon = " ",
-          key = "n",
-        },
-        {
           action = "Telescope oldfiles",
-          desc = " Recent files",
-          icon = " ",
+          desc = " Recent [leader r]",
+          icon = " ",
           key = "r",
         },
         {
+          action = "Telescope keymaps",
+          desc = " Keymaps [leader s k]",
+          icon = " ",
+          key = "y",
+        },
+        {
           action = "Telescope live_grep",
-          desc = " Find text",
+          desc = " Text [leader e]",
           icon = " ",
-          key = "g",
+          key = "e",
+        },
+        {
+          action = "lua vim.api.nvim_input('mk')",
+          desc = " Oil [mk]",
+          icon = " ",
+          key = "o",
         },
         -- {
         --   action = 'lua require("persistence").load()',
