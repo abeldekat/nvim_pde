@@ -1,11 +1,11 @@
 return {
-  {
-    "folke/persistence.nvim",
-    event = "BufReadPre",
-    config = function()
-      require("ak.config.persistence")
-    end,
-  },
+  -- {
+  --   "folke/persistence.nvim",
+  --   event = "BufReadPre",
+  --   config = function()
+  --     require("ak.config.persistence")
+  --   end,
+  -- },
 
   {
     "dstein64/vim-startuptime",

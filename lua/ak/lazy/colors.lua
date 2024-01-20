@@ -47,7 +47,7 @@ local function one()
       "rose-pine/neovim",
       name = "colors_rose-pine",
       config = function()
-        require("ak.config.colors.rose_pine")
+        require("ak.config.colors.rose-pine")
       end,
     },
   }
@@ -81,14 +81,14 @@ local function two()
       "craftzdog/solarized-osaka.nvim",
       name = "colors_solarized-osaka",
       config = function()
-        require("ak.config.colors.solarized_osaka")
+        require("ak.config.colors.solarized-osaka")
       end,
     },
     {
       "ronisbr/nano-theme.nvim",
       name = "colors_nano",
       config = function()
-        require("ak.config.colors.nano_theme")
+        require("ak.config.colors.nano-theme")
       end,
     },
   }
@@ -107,7 +107,7 @@ local function three()
       "loctvl842/monokai-pro.nvim",
       name = "colors_monokai",
       config = function()
-        require("ak.config.colors.monokai_pro")
+        require("ak.config.colors.monokai-pro")
       end,
     },
     {
@@ -121,7 +121,7 @@ local function three()
       "sainnhe/gruvbox-material",
       name = "colors_gruvbox-material",
       config = function()
-        require("ak.config.colors.gruvbox_material")
+        require("ak.config.colors.gruvbox-material")
       end,
     },
     {

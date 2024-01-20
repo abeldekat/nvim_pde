@@ -16,7 +16,7 @@
 --          │                         onedark                         │
 --          ╰─────────────────────────────────────────────────────────╯
 
--- require("ak.utils").color.keys() -- one single key to load
+local Util = require("ak.util")
 local M = {}
 
 local function one()
@@ -129,6 +129,7 @@ local groups = {
 
 function M.spec()
   local result = {}
+
   for _, group in ipairs(groups) do
     result = vim.list_extend(
       result,
@@ -138,6 +139,25 @@ function M.spec()
       end, group())
     )
   end
+
+  Util.paq.on_keys(function()
+    local function load_all()
+      for _, color in ipairs(result) do
+        vim.cmd.packadd(color.as)
+        require("ak.config.colors." .. color.as:gsub("colors_", ""))
+      end
+    end
+
+    -- Prevent <leader>uu keys to show up as input inside telescope:
+    vim.keymap.set("n", "<leader>uu", function() end, { desc = "No-op all colors", silent = true })
+    vim.schedule(function()
+      local keys = Util.color.keys()
+      load_all()
+      -- execute the function inside the only item of the list:
+      keys[1][2]()
+    end)
+  end, "<leader>uu", "Load all colors")
+
   return result
 end
 

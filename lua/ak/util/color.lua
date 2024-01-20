@@ -65,7 +65,7 @@ function M.keys()
           end, target("", "color"))
         end
 
-        require("telescope.builtin").colorscheme({ enable_preview = true })
+        vim.cmd("Telescope colorscheme enable_preview=true")
         vim.fn.getcompletion = target
       end,
       desc = "Colorscheme with preview",

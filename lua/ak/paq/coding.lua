@@ -12,16 +12,27 @@ local coding_spec = {
   { "monaqa/dial.nvim", opt = true },
   { "rafamadriz/friendly-snippets", opt = true },
   { "L3MON4D3/LuaSnip", opt = true },
-  { "gbprod/substitute.nvim", opt = true }, -- substitute, exchange and multiply(not used often, not lazy)
-  { "kylechui/nvim-surround", opt = true }, -- TODO: version = *
+  { "gbprod/substitute.nvim", opt = true },
+  { "kylechui/nvim-surround", opt = true },
   { "LudoPinelli/comment-box.nvim", opt = true },
   { "JoosepAlviste/nvim-ts-context-commentstring", opt = true },
-  "hrsh7th/cmp-nvim-lsp",
-  "hrsh7th/cmp-buffer",
-  "hrsh7th/cmp-path",
-  "saadparwaiz1/cmp_luasnip",
-  "hrsh7th/nvim-cmp",
+  { "hrsh7th/cmp-nvim-lsp", opt = false },
+  { "hrsh7th/cmp-buffer", opt = true },
+  { "hrsh7th/cmp-path", opt = true },
+  { "saadparwaiz1/cmp_luasnip", opt = true },
+  { "hrsh7th/nvim-cmp", opt = false },
 }
+
+local function load_completion()
+  vim.cmd.packadd("cmp-buffer")
+  vim.cmd.packadd("cmp-path")
+  vim.cmd.packadd("cmp_luasnip")
+
+  -- in lspconfig: pcall(require, "cmp_nvim_lsp"):
+  -- vim.cmd.packadd("cmp-nvim-lsp")
+  -- vim.cmd.packadd("nvim-cmp")
+  require("ak.config.completion")
+end
 
 function M.spec()
   return coding_spec
@@ -29,6 +40,8 @@ end
 
 function M.setup()
   Util.paq.on_events(function()
+    load_completion()
+
     vim.cmd("packadd nvim-autopairs")
     require("ak.config.pairs")
 
@@ -54,8 +67,6 @@ function M.setup()
     vim.cmd("packadd comment-box.nvim")
     require("ak.config.comment_box")
   end, { "<leader>bb", "<leader>bl" }, "Comment-box")
-
-  require("ak.config.completion") -- cannot lazyload
 end
 
 return M

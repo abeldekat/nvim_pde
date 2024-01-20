@@ -44,12 +44,12 @@ function M.setup()
           icon = " ",
           key = "g",
         },
-        {
-          action = 'lua require("persistence").load()',
-          desc = " Restore Session",
-          icon = " ",
-          key = "s",
-        },
+        -- {
+        --   action = 'lua require("persistence").load()',
+        --   desc = " Restore Session",
+        --   icon = " ",
+        --   key = "s",
+        -- },
         {
           action = "qa",
           desc = " Quit",

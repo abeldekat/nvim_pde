@@ -1,6 +1,6 @@
 --          ╭─────────────────────────────────────────────────────────╮
 --          │          Contains plugins enhancing the editor          │
---          │           Main components: Oil and telescope            │
+--          │       Main components: Harpoon, telescope and oil       │
 --          ╰─────────────────────────────────────────────────────────╯
 
 local Util = require("ak.util")
@@ -48,32 +48,29 @@ local function load_oil()
   require("ak.config.oil").setup()
 end
 
+-- "jvgrootveld/telescope-zoxide",
+-- "nvim-telescope/telescope-file-browser.nvim",
+-- "nvim-telescope/telescope-project.nvim",
 local editor_spec = {
+  "ThePrimeagen/harpoon",
   "jinh0/eyeliner.nvim",
   "folke/flash.nvim",
-  --
-  { "lewis6991/gitsigns.nvim", opt = true },
-  { "RRethy/vim-illuminate", opt = true },
-  { "folke/todo-comments.nvim", opt = true },
-  { "folke/trouble.nvim", opt = true },
-  --
-  { "f-person/git-blame.nvim", opt = true },
-  { "takac/vim-hardtime", opt = true },
-  { "echasnovski/mini.clue", opt = true },
-  { "akinsho/toggleterm.nvim", opt = true },
-  --
-  { "nvim-tree/nvim-web-devicons", opt = true },
-  { "stevearc/oil.nvim", opt = true },
-  --
-  { "nvim-pack/nvim-spectre", opt = true },
   {
     "nvim-telescope/telescope-fzf-native.nvim",
     build = "make",
   },
+  { "lewis6991/gitsigns.nvim", opt = true },
+  { "RRethy/vim-illuminate", opt = true },
+  { "folke/todo-comments.nvim", opt = true },
+  { "folke/trouble.nvim", opt = true },
+  { "f-person/git-blame.nvim", opt = true },
+  { "takac/vim-hardtime", opt = true },
+  { "echasnovski/mini.clue", opt = true },
+  { "akinsho/toggleterm.nvim", opt = true },
+  { "nvim-tree/nvim-web-devicons", opt = true },
+  { "stevearc/oil.nvim", opt = true },
+  { "nvim-pack/nvim-spectre", opt = true },
   { "otavioschwanck/telescope-alternate.nvim", opt = true },
-  -- "jvgrootveld/telescope-zoxide",
-  -- "nvim-telescope/telescope-file-browser.nvim",
-  -- "nvim-telescope/telescope-project.nvim",
   { "stevearc/aerial.nvim", opt = true },
   { "nvim-telescope/telescope.nvim", opt = true },
 }
@@ -83,6 +80,7 @@ function M.spec()
 end
 
 function M.setup()
+  require("ak.config.harpoon_one")
   require("ak.config.jump")
 
   Util.paq.on_events(function()
