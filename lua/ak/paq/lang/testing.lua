@@ -1,6 +1,6 @@
 -- Also see: telescope-alternate
--- local function no_replay() end
--- keys = { { "<leader>tL", no_replay, desc = "Load neotest" } },
+
+local Util = require("ak.util")
 
 local M = {}
 
@@ -12,7 +12,12 @@ function M.spec()
 end
 
 function M.setup()
-  -- require("ak.config.lang.testing")
+  Util.paq.on_keys(function()
+    vim.cmd.packadd("neotest-python")
+    vim.cmd.packadd("neotest")
+
+    require("ak.config.lang.testing")
+  end, "<leader>tL", "Load neotest")
 end
 
 return M

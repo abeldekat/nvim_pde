@@ -7,7 +7,7 @@ local Util = require("ak.util")
 
 local M = {}
 
-local on_telescope_keys = { "<leader><leader>", "<leader>o", "<leader>/", "<leader>e", "<leader>r" }
+local on_telescope_keys = { "<leader><leader>", "<leader>o", "<leader>/", "<leader>e", "<leader>r", "<leader>sk" }
 
 local function lazyfile()
   return { "BufReadPost", "BufNewFile", "BufWritePre" }
@@ -18,6 +18,10 @@ local function verylazy()
 end
 
 local function load_on_telescope()
+  -- Used to be on keys: { "<leader>xx", "<leader>xX", "<leader>xL", "<leader>xQ" }
+  vim.cmd("packadd trouble.nvim")
+  require("ak.config.trouble")
+
   vim.cmd("packadd nvim-spectre") -- <leader>cr
   require("ak.config.spectre")
 
@@ -37,9 +41,6 @@ local function load_on_lazyfile()
   require("ak.config.illuminate")
   vim.cmd("packadd todo-comments.nvim")
   require("ak.config.todo_comments")
-  -- Used to be on keys: { "<leader>xx", "<leader>xX", "<leader>xL", "<leader>xQ" }
-  vim.cmd("packadd trouble.nvim")
-  require("ak.config.trouble")
 end
 
 local function load_oil()

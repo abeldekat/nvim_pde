@@ -1,29 +1,6 @@
-local autoload_clues = false
-
---          ╭─────────────────────────────────────────────────────────╮
---          │     Lazy keys that are not overridden in the config     │
---          │          Example: <leader>uk, loads mini.clue.          │
---          │   Without this function, the keystrokes "uk" would be   │
---          │                        replayed                         │
---          ╰─────────────────────────────────────────────────────────╯
--- local function no_replay() end
-
-vim.keymap.set("n", "<leader>uk", function()
-  --          ╭─────────────────────────────────────────────────────────╮
-  --          │   Load important plugins having lazy keys in order for  │
-  --          │            the descriptions to show in mini.clue        │
-  --          ╰─────────────────────────────────────────────────────────╯
-  pcall(require, "aerial")
-  pcall(require, "mini.clue")
-  pcall(require, "spectre")
-  pcall(require, "telescope")
-  pcall(require, "todo-comments")
-  pcall(require, "trouble")
-  vim.keymap.del("n", "<leader>uk")
-end, { desc = "Load lazy editor", silent = true })
+local autoload_clues = true
 
 return {
-
   {
     "folke/flash.nvim", -- loads fast, maybe 3ms, always used
     dependencies = "jinh0/eyeliner.nvim",
@@ -101,15 +78,6 @@ return {
   },
 
   {
-    "nvim-pack/nvim-spectre",
-    build = false,
-    keys = "<leader>sr",
-    config = function()
-      require("ak.config.spectre")
-    end,
-  },
-
-  {
     "nvim-telescope/telescope.nvim",
     cmd = "Telescope", -- used by the keys in the intro screen
     version = false, -- telescope did only one release, so use HEAD for now
@@ -129,9 +97,24 @@ return {
       -- },
       {
         "stevearc/aerial.nvim",
-        keys = "<leader>cs", -- also load on key
+        -- keys = "<leader>cs", -- also load on key
         config = function()
           require("ak.config.aerial")
+        end,
+      },
+      { -- also load spectre on telescope
+        "nvim-pack/nvim-spectre",
+        build = false,
+        -- keys = "<leader>sr",
+        config = function()
+          require("ak.config.spectre")
+        end,
+      },
+      { -- also load trouble on telescope
+        "folke/trouble.nvim",
+        -- keys = { "<leader>xx", "<leader>xX", "<leader>xL", "<leader>xQ" },
+        config = function()
+          require("ak.config.trouble")
         end,
       },
     },
@@ -154,14 +137,6 @@ return {
     keys = [[<c-_>]],
     config = function()
       require("ak.config.toggleterm")
-    end,
-  },
-
-  {
-    "folke/trouble.nvim",
-    keys = { "<leader>xx", "<leader>xX", "<leader>xL", "<leader>xQ" },
-    config = function()
-      require("ak.config.trouble")
     end,
   },
 }

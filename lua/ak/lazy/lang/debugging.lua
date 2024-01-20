@@ -1,6 +1,3 @@
-local function no_replay() end
-
--- dap: one key to load...
 return {
   "mfussenegger/nvim-dap",
   dependencies = {
@@ -9,7 +6,7 @@ return {
     "jay-babu/mason-nvim-dap.nvim", -- dependencies = "mason.nvim",
     "mfussenegger/nvim-dap-python",
   },
-  keys = { { "<leader>dL", no_replay, desc = "Load dap" } },
+  keys = { { "<leader>dL", desc = "Load dap" } },
   config = function()
     require("ak.config.lang.debugging")
   end,

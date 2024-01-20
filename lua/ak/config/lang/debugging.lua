@@ -135,6 +135,8 @@ local function keys()
     ---@diagnostic disable-next-line: missing-fields
     require("neotest").run.run({ strategy = "dap" })
   end, { desc = "Debug nearest" })
+
+  map("<leader>dL", function() end, { desc = "No-op dap" })
 end
 
 local function setup()

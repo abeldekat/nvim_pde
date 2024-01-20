@@ -75,6 +75,8 @@ local function keys()
   map("<leader>tS", function()
     require("neotest").run.stop()
   end, { desc = "Stop" })
+
+  map("<leader>tL", function() end, { desc = "No-op neotest" })
 end
 
 local function setup()

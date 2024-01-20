@@ -21,16 +21,10 @@ function M.setup()
     config = {
       center = {
         {
-          action = "Telescope git_files",
-          desc = " Files(git) [leader leader]",
+          action = "Telescope git_files show_untracked=true",
+          desc = " Gitfiles [leader leader]",
           icon = " ",
           key = "g",
-        },
-        {
-          action = "Telescope find_files",
-          desc = " Files [leader s f]",
-          icon = " ",
-          key = "f",
         },
         {
           action = "Telescope oldfiles",

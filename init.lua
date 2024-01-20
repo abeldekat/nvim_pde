@@ -3,5 +3,4 @@ if vim.loader then
 end
 
 -- Caching: Do all init in ak/init.lua
--- This init.lua is just an entry point
 require("ak")({}, {}) -- extraspec, opts

@@ -22,8 +22,8 @@ local modules = {
   require("ak.paq.lang.formatting"),
   require("ak.paq.lang.linting"),
   require("ak.paq.lang.lsp"),
-  -- require("ak.paq.lang.testing"),
-  -- require("ak.paq.lang.debugging"),
+  require("ak.paq.lang.testing"),
+  require("ak.paq.lang.debugging"),
   -- require("ak.paq.lang.extra"),
 }
 
