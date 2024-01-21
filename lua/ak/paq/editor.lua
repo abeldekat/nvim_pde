@@ -7,31 +7,38 @@ local Util = require("ak.util")
 
 local M = {}
 
-local on_telescope_keys = { "<leader><leader>", "<leader>o", "<leader>/", "<leader>e", "<leader>r", "<leader>sk" }
-
 local function lazyfile()
   return { "BufReadPost", "BufNewFile", "BufWritePre" }
 end
 
-local function verylazy()
-  return "UIEnter"
+-- Load plugins when pressing the leader key for the first time:
+local function on_leader_key(cb, desc)
+  local key = "<leader>"
+  vim.keymap.set("n", key, function()
+    vim.keymap.del("n", key)
+    cb()
+    local escaped_key = (vim.api.nvim_replace_termcodes(key, true, true, true))
+    vim.api.nvim_feedkeys(escaped_key, "mit", false) -- mit: the i is important
+  end, { desc = desc, silent = true })
 end
 
-local function load_on_telescope()
-  -- Previously on keys: { "<leader>xx", "<leader>xX", "<leader>xL", "<leader>xQ" }
+local function load_on_leader()
   vim.cmd("packadd trouble.nvim")
   require("ak.config.trouble")
 
-  vim.cmd("packadd nvim-spectre") -- <leader>cr
+  vim.cmd("packadd nvim-spectre")
   require("ak.config.spectre")
 
-  vim.cmd("packadd aerial.nvim") -- <leader>cs
+  vim.cmd("packadd aerial.nvim")
   require("ak.config.aerial")
 
   vim.cmd.packadd("telescope-fzf-native.nvim")
   vim.cmd("packadd telescope-alternate.nvim")
   vim.cmd("packadd telescope.nvim")
   require("ak.config.telescope")
+
+  vim.cmd("packadd mini.clue")
+  require("ak.config.clue")
 end
 
 local function load_on_lazyfile()
@@ -85,14 +92,16 @@ function M.setup()
   require("ak.config.harpoon_one")
   require("ak.config.jump")
 
+  on_leader_key(function()
+    load_on_leader()
+  end, "Load editor plugins on leader")
+  Util.paq.on_command(function() -- needed in intro
+    load_on_leader()
+  end, "Telescope")
+
   Util.paq.on_events(function()
     load_on_lazyfile()
   end, lazyfile())
-
-  Util.paq.on_events(function()
-    vim.cmd("packadd mini.clue")
-    require("ak.config.clue")
-  end, verylazy())
 
   if require("ak.config.oil").needs_oil() then
     load_oil()
@@ -101,13 +110,6 @@ function M.setup()
       load_oil()
     end, "mk", "Oil")
   end
-
-  Util.paq.on_keys(function()
-    load_on_telescope()
-  end, on_telescope_keys, "Telescope")
-  Util.paq.on_command(function() -- needed in intro
-    load_on_telescope()
-  end, "Telescope")
 
   Util.paq.on_keys(function()
     vim.cmd("packadd toggleterm.nvim")
