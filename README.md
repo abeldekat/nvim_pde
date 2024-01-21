@@ -38,8 +38,8 @@ Measured by starting the editor without arguments.
 Invoke `:StartupTime` or press `<leader>ms`.
 Repeat a couple of times.
 
-[lazy.nvim]: Around 50ms
-[paq.nvim]: Around 60ms
+- [lazy.nvim]: Around 50ms
+- [paq.nvim]: Around 60ms
 
 ## Acknowledgments
 
@@ -52,6 +52,7 @@ This repo uses code and ideas from the following repositories:
 - [dotfiles](https://github.com/lewis6991/dotfiles/tree/main/config/nvim) `@lewis6991`
 - [dotfiles](https://github.com/savq/dotfiles/tree/master/nvim) `@savq`
 - [dotfiles](https://github.com/MariaSolOs/dotfiles/tree/main/.config/nvim) `@mariasolos`
+- [pckr.nvim](https://github.com/lewis6991/pckr.nvim)
 
 [paq.nvim]: https://github.com/savq/paq-nvim
 [lazy.nvim]: https://github.com/folke/lazy.nvim
