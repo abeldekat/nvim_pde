@@ -5,7 +5,7 @@
 local Consts = require("ak.consts")
 local icons = vim.deepcopy(Consts.icons.kinds)
 
--- HACK: fix lua's weird choice for `Package` for control
+-- fix lua's weird choice for `Package` for control:
 -- structures like if/else/for/etc.
 icons.lua = { Package = icons.Control }
 

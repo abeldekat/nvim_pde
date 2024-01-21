@@ -22,25 +22,25 @@ function M.setup()
       center = {
         {
           action = "Telescope git_files show_untracked=true",
-          desc = " Gitfiles [leader leader]",
+          desc = " Gitfiles [space space]",
           icon = " ",
           key = "g",
         },
         {
+          action = "Telescope find_files",
+          desc = " Files [space f f]",
+          icon = " ",
+          key = "f",
+        },
+        {
           action = "Telescope oldfiles",
-          desc = " Recent [leader r]",
+          desc = " Recent [space r]",
           icon = " ",
           key = "r",
         },
         {
-          action = "Telescope keymaps",
-          desc = " Keymaps [leader s k]",
-          icon = " ",
-          key = "y",
-        },
-        {
           action = "Telescope live_grep",
-          desc = " Text [leader e]",
+          desc = " Text [space e]",
           icon = " ",
           key = "e",
         },
@@ -79,7 +79,7 @@ function M.setup()
     end
   else
     opts.config.footer = function()
-      return {}
+      return { "Press space for the menu" }
     end
   end
 

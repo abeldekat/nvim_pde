@@ -69,11 +69,11 @@ end
 
 -- ---@type table<string, conform.FormatterConfigOverride|fun(bufnr: integer): nil|conform.FormatterConfigOverride>
 -- formatters = {
---   injected = { options = { ignore_errors = true } }, -- TODO: No command?
+--   injected = { options = { ignore_errors = true } },
 -- },
 local function get_opts()
   return {
-    ---@type table<string, conform.FormatterUnit[]>
+    -- ---@type table<string, conform.FormatterUnit[]>
     formatters_by_ft = {
       lua = { "stylua" },
       sh = { "shfmt" },

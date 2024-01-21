@@ -55,7 +55,6 @@ local function setup_performance()
   end
 end
 
--- NOTE: Headless: nvim --headless -u NONE -c 'lua require("ak.config.boot.paq")()'
 return function(_, _) -- extraspec, opts
   setup_performance()
   local is_first_install = clone_paq()

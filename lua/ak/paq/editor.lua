@@ -39,6 +39,10 @@ local function load_on_leader()
 
   vim.cmd("packadd mini.clue")
   require("ak.config.clue")
+
+  -- make sure mini clue is also activated on the dashboard:
+  local clue = require("mini.clue")
+  clue.enable_buf_triggers(vim.api.nvim_get_current_buf())
 end
 
 local function load_on_lazyfile()

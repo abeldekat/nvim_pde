@@ -1,4 +1,5 @@
--- NOTE: Persistence, not used at the moment
+-- Not used at the moment
+
 require("persistence").setup({ options = vim.opt.sessionoptions:get() })
 vim.keymap.set("n", "<leader>mR", function()
   require("persistence").load()

@@ -14,8 +14,7 @@ opts.markdown = {
   fat_headline_lower_string = "▔",
 }
 
--- PERF: schedule to prevent headlines slowing down opening a file
-vim.schedule(function()
+vim.schedule(function() -- performance, schedule
   require("headlines").setup(opts)
   require("headlines").refresh()
 end)
