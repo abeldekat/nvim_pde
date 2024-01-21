@@ -1,53 +1,84 @@
+local Util = require("ak.util")
+
 local M = {}
 
-local function markdown()
-  return {
+local markdown = {
+  spec = {
+    { "toppair/peek.nvim", build = "deno task --quiet build:fast", opt = true },
     {
       "iamcco/markdown-preview.nvim",
       build = function()
+        vim.cmd.packadd("markdown-preview.nvim")
         vim.fn["mkdp#util#install"]()
       end,
       opt = true,
     },
-    { "toppair/peek.nvim", build = "deno task --quiet build:fast", opt = true },
     { "lukas-reineke/headlines.nvim", opt = true },
-  }
-end
+  },
+  setup = function()
+    Util.paq.on_events(function()
+      vim.cmd.packadd("headlines.nvim")
+      require("ak.config.lang.markdown.headlines")
+      Util.paq.on_keys(function()
+        vim.cmd.packadd("markdown-preview.nvim")
+        require("ak.config.lang.markdown.markdown_preview")
+      end, "<leader>cp", "Markdown preview")
+      Util.paq.on_keys(function()
+        vim.cmd.packadd("peek.nvim")
+        require("ak.config.lang.markdown.peek")
+      end, "<leader>ck", "Peek preview")
+    end, "FileType", "markdown")
+  end,
+}
 
-local function python()
-  return {
+local python = {
+  spec = {
     { "linux-cultist/venv-selector.nvim", opt = true },
-  }
-end
+  },
+  setup = function()
+    Util.paq.on_events(function()
+      Util.paq.on_keys(function()
+        vim.cmd.packadd("venv_selector.nvim")
+        require("ak.config.lang.python.venv_selector")
+      end, "<leader>cv", "Venv selector")
+    end, "FileType", "python")
+  end,
+}
 
-local function sql()
-  return {
+local sql = {
+  spec = {
     { "kristijanhusak/vim-dadbod-completion", opt = true },
     { "tpope/vim-dadbod", opt = true },
-  }
-end
+  },
+  setup = function()
+    Util.paq.on_events(function()
+      Util.paq.on_keys(function()
+        vim.cmd.packadd("vim-dadbod-completion")
+        vim.cmd.packadd("vim-dadbod")
+        require("ak.config.lang.sql.dadbod") -- keys
+      end, "<leader>md", "Load dadbod")
+    end, "FileType", "sql")
+  end,
+}
+
+local langs = {
+  markdown,
+  python,
+  sql,
+}
 
 function M.spec()
   local result = {}
-  local langs = {
-    markdown,
-    python,
-    sql,
-  }
   for _, lang in ipairs(langs) do
-    result = vim.list_extend(result, lang())
+    result = vim.list_extend(result, lang.spec)
   end
   return result
 end
 
 function M.setup()
-  -- require("ak.config.lang.markdown.markdown_preview") -- cmd keys
-  -- require("ak.config.lang.markdown.peek") -- keys
-  -- require("ak.config.lang.markdown.headlines") -- ft
-  --
-  -- require("ak.config.lang.python.venv_selector") -- keys
-  --
-  -- require("ak.config.lang.sql.dadbod") -- keys
+  for _, lang in ipairs(langs) do
+    lang.setup()
+  end
 end
 
 return M

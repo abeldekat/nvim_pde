@@ -9,15 +9,19 @@ local lazy_paq = vim.api.nvim_create_augroup("ak_lazy_paq", { clear = true })
 
 function M.setup() end
 
-function M.on_events(cb, events)
-  vim.api.nvim_create_autocmd(events, {
+function M.on_events(cb, events, pattern)
+  local opts = {
     group = lazy_paq,
     desc = "ak_lazy_paq",
     once = true,
     callback = function(ev)
       cb(ev)
     end,
-  })
+  }
+  if pattern then
+    opts["pattern"] = pattern
+  end
+  vim.api.nvim_create_autocmd(events, opts)
 end
 
 function M.on_keys(cb, keys, desc)

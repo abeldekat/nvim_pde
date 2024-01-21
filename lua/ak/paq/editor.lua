@@ -18,7 +18,7 @@ local function verylazy()
 end
 
 local function load_on_telescope()
-  -- Used to be on keys: { "<leader>xx", "<leader>xX", "<leader>xL", "<leader>xQ" }
+  -- Previously on keys: { "<leader>xx", "<leader>xX", "<leader>xL", "<leader>xQ" }
   vim.cmd("packadd trouble.nvim")
   require("ak.config.trouble")
 
@@ -28,7 +28,7 @@ local function load_on_telescope()
   vim.cmd("packadd aerial.nvim") -- <leader>cs
   require("ak.config.aerial")
 
-  -- telescope-fzf-native.nvim not lazy
+  vim.cmd.packadd("telescope-fzf-native.nvim")
   vim.cmd("packadd telescope-alternate.nvim")
   vim.cmd("packadd telescope.nvim")
   require("ak.config.telescope")
@@ -59,6 +59,7 @@ local editor_spec = {
   {
     "nvim-telescope/telescope-fzf-native.nvim",
     build = "make",
+    opt = true,
   },
   { "lewis6991/gitsigns.nvim", opt = true },
   { "RRethy/vim-illuminate", opt = true },
@@ -104,7 +105,7 @@ function M.setup()
   Util.paq.on_keys(function()
     load_on_telescope()
   end, on_telescope_keys, "Telescope")
-  Util.paq.on_command(function() -- needed in intro screen
+  Util.paq.on_command(function() -- needed in intro
     load_on_telescope()
   end, "Telescope")
 

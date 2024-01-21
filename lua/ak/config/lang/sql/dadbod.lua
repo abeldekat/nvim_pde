@@ -2,22 +2,20 @@
 -- use dadbod for autocompletion, combine with vim-slime and mysql cli
 -- in .envrc construct $DATABASE_URL
 -- or in .lazy.lua: w:db b:db g:db
-local function cmp()
-  require("cmp").setup.buffer({ sources = { { name = "vim-dadbod-completion" } } })
+local function add_completion()
+  local ok, cmp = pcall(require, "cmp")
+  if ok then
+    cmp.setup.buffer({ sources = { { name = "vim-dadbod-completion" } } })
+  end
 end
 
 vim.api.nvim_create_autocmd("FileType", {
   pattern = { "sql" },
-  callback = cmp,
+  callback = add_completion,
 })
 
 vim.cmd("DBCompletionClearCache") -- current buffer completion
-cmp()
-
-local function send_paragraph()
-  vim.cmd('norm! "xyip')
-  vim.cmd("silent! db " .. vim.fn.getreg("x")) -- <cmd>silent! %db<cr>
-end
+add_completion()
 
 -- dadbod can be lazy loaded:
 vim.keymap.set("n", "md", function()

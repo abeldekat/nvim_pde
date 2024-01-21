@@ -6,13 +6,11 @@ local function lazyfile()
 end
 
 local lsp_spec = {
-
   { "folke/neoconf.nvim", opt = true },
   { "folke/neodev.nvim", opt = true },
   { "williamboman/mason.nvim", build = ":MasonUpdate", opt = true },
   { "williamboman/mason-lspconfig.nvim", opt = true },
   { "neovim/nvim-lspconfig", opt = true },
-  --
   -- Only does something when required:
   { "b0o/SchemaStore.nvim" },
 }
@@ -21,6 +19,7 @@ local function load_mason()
   vim.cmd.packadd("mason.nvim")
   require("ak.config.lang.mason")
 end
+
 function M.spec()
   Util.paq.on_command(function()
     load_mason()

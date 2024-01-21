@@ -24,7 +24,7 @@ local modules = {
   require("ak.paq.lang.lsp"),
   require("ak.paq.lang.testing"),
   require("ak.paq.lang.debugging"),
-  -- require("ak.paq.lang.extra"),
+  require("ak.paq.lang.extra"),
 }
 
 local function read_spec()
@@ -56,9 +56,6 @@ local function setup_performance()
 end
 
 -- NOTE: Headless: nvim --headless -u NONE -c 'lua require("ak.config.boot.paq")()'
--- NOTE: The build from mason might cause errors...
--- NOTE: Do :PaqBuild mason.nvim
---
 return function(_, _) -- extraspec, opts
   setup_performance()
   local is_first_install = clone_paq()
