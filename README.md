@@ -18,17 +18,42 @@ My `personal development environment` for `Neovim`
     5. color-schemes
 - `ak.util`: Shared code.
 
+## Install
+
+ > The requirements follow the requirements for [LazyVim](https://www.lazyvim.org/#%EF%B8%8F-requirements)
+ >
+ > Always review the code before installing a configuration.
+
+Clone the repository and install the plugins:
+
+```sh
+git clone https://github.com/abeldekat/nvim_pde ~/.config/ak
+```
+
+Open Neovim with this config:
+
+```sh
+NVIM_APPNAME=ak nvim
+```
+
+Remove the config:
+
+```sh
+rm -rf ~/.local/share/ak ~/.local/state/ak ~/.cache/ak
+rm -rf ~/.config/ak
+```
+
 ## Use
 
 When using both [paq.nvim] and [lazy.nvim], clone the code to two locations:
 
-- `~/.config/nvim`
-- `~/.config/nviml`
+- `~/.config/ak`
+- `~/.config/akl`
 
-Then, use the following alias for `nviml`:
+Then, use the following alias for `akl`:
 
 ```sh
-alias nviml="USE_LAZY=true NVIM_APPNAME=nviml nvim"
+alias akl="AK_BOOT=lazy NVIM_APPNAME=akl nvim"
 ```
 
 ## Performance

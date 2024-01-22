@@ -8,6 +8,7 @@
 --     end,
 --   },
 -- },
+
 require("substitute").setup({ -- range: S fails to substitute using abolish
   highlight_substituted_text = { enabled = false },
 })

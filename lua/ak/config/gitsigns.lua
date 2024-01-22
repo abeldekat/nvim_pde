@@ -21,7 +21,7 @@ local opts = {
     map("n", "<leader>ghS", gs.stage_buffer, "Stage buffer")
     map("n", "<leader>ghu", gs.undo_stage_hunk, "Undo stage hunk")
     map("n", "<leader>ghR", gs.reset_buffer, "Reset buffer")
-    map("n", "<leader>ghp", gs.preview_hunk, "Preview hunk")
+    map("n", "<leader>ghp", gs.preview_hunk_inline, "Preview hunk")
     map("n", "<leader>ghb", function()
       gs.blame_line({ full = true })
     end, "Blame line")

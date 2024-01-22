@@ -9,7 +9,6 @@ local start_spec = {
 
 function M.spec()
   require("ak.config.options") -- leader key!
-  -- Util.paq.setup() -- not needed
   return start_spec
 end
 
@@ -24,6 +23,7 @@ function M.setup()
 
     vim.cmd.packadd("colors_" .. name_or_nightfox)
     require("ak.config.colors." .. name_or_nightfox)
+
     vim.cmd.colorscheme(name)
   end, {
     msg = "Could not load your colorscheme",

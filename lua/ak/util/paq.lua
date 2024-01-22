@@ -7,8 +7,6 @@ local M = {}
 
 local lazy_paq = vim.api.nvim_create_augroup("ak_lazy_paq", { clear = true })
 
-function M.setup() end
-
 function M.on_events(cb, events, pattern)
   local opts = {
     group = lazy_paq,

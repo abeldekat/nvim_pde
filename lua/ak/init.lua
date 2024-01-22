@@ -10,7 +10,9 @@
 --          ╰─────────────────────────────────────────────────────────╯
 
 return function(extraspec, opts)
-  if vim.env.USE_LAZY then
+  local plugin_manager = vim.env.AK_BOOT
+
+  if plugin_manager == "lazy" then
     require("ak.boot.lazy")(extraspec, opts)
   else
     require("ak.boot.paq")()

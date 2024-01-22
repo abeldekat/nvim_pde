@@ -49,10 +49,10 @@ local function keys()
     for _, adapter_id in ipairs(require("neotest").run.adapters()) do
       require("neotest").run.run({ suite = true, adapter = adapter_id })
     end
-  end, { desc = "Test suite" })
+  end, { desc = "Run suite" })
   map("<leader>tl", function()
     require("neotest").run.run_last()
-  end, { desc = "Test last" })
+  end, { desc = "Run last" })
   map("<leader>tt", function()
     require("neotest").run.run(vim.fn.expand("%"))
   end, { desc = "Run file" })

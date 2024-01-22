@@ -39,17 +39,11 @@ local function keys(_, buffer) -- client
     vim.keymap.set(mode, l, r, opts)
   end
   map("<leader>cl", "<cmd>LspInfo<cr>", { desc = "Lsp info" })
-  map("gd", function()
-    require("telescope.builtin").lsp_definitions({ reuse_win = true })
-  end, { desc = "Goto definition" })
+  map("gd", "<cmd>Telescope lsp_definitions reuse_win=true<cr>", { desc = "Goto definition" })
   map("gr", "<cmd>Telescope lsp_references<cr>", { desc = "References" })
   map("gD", vim.lsp.buf.declaration, { desc = "Goto declaration" })
-  map("gI", function()
-    require("telescope.builtin").lsp_implementations({ reuse_win = true })
-  end, { desc = "Goto implementation" })
-  map("gy", function()
-    require("telescope.builtin").lsp_type_definitions({ reuse_win = true })
-  end, { desc = "Goto type definition" })
+  map("gI", "<cmd>Telescope lsp_implementations reuse_win=true<cr>", { desc = "Goto implementation" })
+  map("gy", "<cmd>Telescope lsp_type_definitions reuse_win=true<cr>", { desc = "Goto type definition" })
   map("K", vim.lsp.buf.hover, { desc = "Hover" })
   map("gK", vim.lsp.buf.signature_help, { desc = "Signature help" })
   map("<c-k>", vim.lsp.buf.signature_help, { desc = "Signature help" }, "i")
@@ -78,7 +72,16 @@ local function diagnostics()
       -- prefix = "icons",
     },
     severity_sort = true,
+    signs = {
+      text = {
+        [vim.diagnostic.severity.ERROR] = require("ak.consts").icons.diagnostics.Error,
+        [vim.diagnostic.severity.WARN] = require("ak.consts").icons.diagnostics.Warn,
+        [vim.diagnostic.severity.HINT] = require("ak.consts").icons.diagnostics.Hint,
+        [vim.diagnostic.severity.INFO] = require("ak.consts").icons.diagnostics.Info,
+      },
+    },
   }
+
   for name, icon in pairs(require("ak.consts").icons.diagnostics) do
     name = "DiagnosticSign" .. name
     vim.fn.sign_define(name, { text = icon, texthl = name, numhl = "" })
