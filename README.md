@@ -6,7 +6,6 @@ My `personal development environment` for `Neovim`
 
 - `init`: Defer to `ak.init`
 - `ak.init`: Start with either [paq.nvim] or [lazy.nvim].
- The latter is chosen when environment variable `USE_LAZY` is present
 - `ak.boot.paq`: Uses [paq.nvim] to lazy-load plugins, see the modules in `ak.paq`
 - `ak.boot.lazy`: Uses [lazy.nvim] to lazy-load plugins, see the modules in `ak.lazy`
 - `ak.config`: Invoked by the modules in either `ak.paq` or `ak.lazy`
