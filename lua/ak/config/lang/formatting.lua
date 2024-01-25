@@ -86,15 +86,12 @@ local function get_opts()
   }
 end
 
-function M.init()
+local function setup()
   -- opt.formatoptions = "jcroqlnt" -- tcqj -- In options.lua:
-
   -- Use conform for gq:
   vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
   vim.g.format_on_save = true
-end
 
-function M.setup()
   require("conform").setup(get_opts())
   add_keys()
 
@@ -102,5 +99,4 @@ function M.setup()
     format()
   end, { desc = "Format selection or buffer" })
 end
-
-return M
+setup()

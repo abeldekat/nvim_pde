@@ -1,4 +1,8 @@
+local function no_op() end
 return {
+
+  -- ── insertenter ───────────────────────────────────────────────────────
+
   {
     "windwp/nvim-autopairs",
     event = "InsertEnter",
@@ -8,25 +12,7 @@ return {
   },
 
   {
-    "LudoPinelli/comment-box.nvim",
-    keys = { "<leader>bb", "<leader>bl" }, -- lazy only on normal mode keys
-    config = function()
-      require("ak.config.comment_box")
-    end,
-  },
-
-  {
-    "numToStr/Comment.nvim", -- the plugin itself creates the gc and gb mappings
-    keys = { { "gc", mode = { "n", "v" } }, { "gb", mode = { "n", "v" } } },
-    dependencies = { "JoosepAlviste/nvim-ts-context-commentstring" },
-    config = function()
-      require("ak.config.comment")
-    end,
-  },
-
-  {
     "hrsh7th/nvim-cmp",
-    version = false, -- last release is old
     event = "InsertEnter",
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",
@@ -40,27 +26,27 @@ return {
   },
 
   {
+    "L3MON4D3/LuaSnip",
+    dependencies = { "rafamadriz/friendly-snippets" },
+    event = "InsertEnter",
+    config = function()
+      require("ak.config.snip")
+    end,
+  },
+
+  -- ── verylazy ──────────────────────────────────────────────────────────
+
+  {
     "monaqa/dial.nvim",
-    keys = { "<C-a>", "<C-x" },
+    event = "VeryLazy",
     config = function()
       require("ak.config.dial")
     end,
   },
 
   {
-    "L3MON4D3/LuaSnip",
-    dependencies = { "rafamadriz/friendly-snippets" },
-    keys = { { "<tab>", mode = { "i", "s" } }, { "<s-tab>", mode = { "i", "s" } } },
-    config = function()
-      require("ak.config.snip")
-    end,
-  },
-
-  {
-    "gbprod/substitute.nvim", -- substitute, exchange and multiply(not used often, not lazy)
-    -- Optimize: define lazy keys only for normal mode
-    -- keys = { { "gs", mode = { "n", "x" } }, { "gx", mode = { "n", "x" } } },
-    keys = { "gs", "gx" },
+    "gbprod/substitute.nvim",
+    event = "VeryLazy",
     config = function()
       require("ak.config.substitute")
     end,
@@ -69,11 +55,28 @@ return {
   {
     "kylechui/nvim-surround",
     version = "*",
-    -- Optimize: define lazy keys only for normal mode
-    -- { "<C-g>z", mode = "i" }, { "<C-g>Z", mode = "i" }, { "Z", mode = "x" }, { "gZ", mode = "x" },
-    keys = { "yz", "yzz", "yZ", "yZZ", "dz", "cz", "cZ" },
+    event = "VeryLazy",
     config = function()
       require("ak.config.surround")
+    end,
+  },
+
+  {
+    "numToStr/Comment.nvim",
+    event = "VeryLazy",
+    dependencies = { "JoosepAlviste/nvim-ts-context-commentstring" },
+    config = function()
+      require("ak.config.comment")
+    end,
+  },
+
+  -- ── on-demand ─────────────────────────────────────────────────────────
+
+  {
+    "LudoPinelli/comment-box.nvim",
+    keys = { { "<leader>bL", no_op, desc = "Load comment-box" } },
+    config = function()
+      require("ak.config.comment_box")
     end,
   },
 }

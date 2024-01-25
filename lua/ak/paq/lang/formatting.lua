@@ -6,10 +6,9 @@ function M.spec()
 end
 
 function M.setup()
-  Util.paq.on_events(function()
-    require("ak.config.lang.formatting").init()
+  Util.defer.on_events(function()
     vim.cmd.packadd("conform.nvim")
-    require("ak.config.lang.formatting").setup()
+    require("ak.config.lang.formatting")
 
     vim.defer_fn(function()
       vim.cmd("write")

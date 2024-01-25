@@ -1,3 +1,5 @@
+local function no_op() end
+
 local function map(l, r, opts, mode)
   mode = mode or "n"
   opts["silent"] = opts.silent ~= false
@@ -73,6 +75,7 @@ local function keys()
     config = vim.deepcopy(config)
     ---@cast args string[]
     config.args = function()
+      ---@diagnostic disable-next-line: redundant-parameter
       local new_args = vim.fn.input("Run with args: ", table.concat(args, " ")) --[[@as string]]
       return vim.split(vim.fn.expand(new_args) --[[@as string]], " ")
     end
@@ -136,7 +139,7 @@ local function keys()
     require("neotest").run.run({ strategy = "dap" })
   end, { desc = "Debug nearest" })
 
-  map("<leader>dL", function() end, { desc = "No-op dap" })
+  map("<leader>dL", no_op, { desc = "No-op dap" })
 end
 
 local function setup()

@@ -10,7 +10,7 @@ function M.spec()
 end
 
 function M.setup()
-  Util.paq.on_events(function()
+  Util.defer.on_events(function()
     vim.cmd.packadd("nvim-lint")
     require("ak.config.lang.linting")
   end, lazyfile())

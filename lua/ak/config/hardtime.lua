@@ -1,19 +1,11 @@
-local M = {}
+vim.g.hardtime_default_on = 0
 
-function M.init()
-  vim.g.hardtime_default_on = 0 -- when hardtime is not lazy this is needed
-end
+vim.g.hardtime_ignore_buffer_patterns = { "oil.*", "dbui.*", "dbout.*" }
+vim.g.hardtime_showmsg = 0
+vim.g.hardtime_timeout = 2000
+vim.g.hardtime_ignore_quickfix = 1
+vim.g.hardtime_maxcount = 2
+vim.g.hardtime_allow_different_key = 1
+vim.g.hardtime_motion_with_count_resets = 1
 
-function M.setup()
-  vim.g.hardtime_ignore_buffer_patterns = { "oil.*", "dbui.*", "dbout.*" }
-  vim.g.hardtime_showmsg = 0
-  vim.g.hardtime_timeout = 2000
-  vim.g.hardtime_ignore_quickfix = 1
-  vim.g.hardtime_maxcount = 2
-  vim.g.hardtime_allow_different_key = 1
-  vim.g.hardtime_motion_with_count_resets = 1
-
-  vim.keymap.set("n", "<leader>uh", "<cmd>HardTimeToggle<cr>", { desc = "Toggle hardime", silent = true })
-end
-
-return M
+vim.keymap.set("n", "<leader>uh", "<cmd>HardTimeToggle<cr>", { desc = "Toggle hardime", silent = true })

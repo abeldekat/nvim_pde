@@ -1,37 +1,18 @@
-local Util = require("ak.util")
 local M = {}
-local Color = require("ak.color")
-
-local start_spec = {
-  "savq/paq-nvim",
-  "nvim-lua/plenary.nvim",
-}
 
 function M.spec()
-  require("ak.config.options") -- leader key!
-  return start_spec
-end
-
-function M.setup()
+  require("ak.config.options")
   require("ak.config.autocmds")
   require("ak.config.keymaps")
 
-  Util.try(function()
-    local name = Color.color
-    -- nightfox has separate colorschemes:
-    local name_or_nightfox = name:find("fox", 1, true) and "nightfox" or name
+  local result = require("ak.paq.colors").spec()
+  table.insert(result, "savq/paq-nvim")
+  table.insert(result, "nvim-lua/plenary.nvim")
+  return result
+end
 
-    vim.cmd.packadd("colors_" .. name_or_nightfox)
-    require("ak.config.colors." .. name_or_nightfox)
-
-    vim.cmd.colorscheme(name)
-  end, {
-    msg = "Could not load your colorscheme",
-    on_error = function(msg)
-      Util.error(msg)
-      vim.cmd.colorscheme("habamax")
-    end,
-  })
+function M.setup()
+  require("ak.paq.colors").colorscheme()
 end
 
 return M

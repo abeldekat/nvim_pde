@@ -2,18 +2,6 @@ local Util = require("ak.util")
 
 local did_init = false
 
--- local function no_lazy_loading()
---   local Spec = require("lazy.core.plugin").Spec
---   local add_orig = Spec.add
---
---   ---@diagnostic disable-next-line: duplicate-set-field
---   Spec.add = function(_, plugin, results)
---     local result = add_orig(_, plugin, results)
---     result["lazy"] = false
---     return result
---   end
--- end
-
 ---@param name "autocmds" | "options" | "keymaps"
 local function load(name)
   local function _load(mod)
@@ -26,7 +14,6 @@ local function load(name)
   _load("ak.config." .. name)
 
   if vim.bo.filetype == "lazy" then
-    -- LazyVim may have overwritten options of the Lazy ui, so reset this here
     vim.cmd([[do VimResized]])
   end
 end
@@ -39,39 +26,25 @@ local function on_first_spec_imported()
     return
   end
   did_init = true
-  -- no_lazy_loading()
 
-  -- load options here, before lazy init while sourcing plugin modules
-  -- this is needed to make sure options will be correctly applied
-  -- after installing missing plugins
-  load("options")
   Util.lazyfile.setup()
+  load("options")
+  load("autocmds")
+  load("keymaps")
 end
 
 ------------------------------------------------------------------------------
 -- LazyVim: First plugin to load, require("lazyvim.config").setup(opts)
 ------------------------------------------------------------------------------
 local function on_first_plugin_to_load()
-  -- LazyVim: autocmds can be loaded lazily when not opening a file
-  load("autocmds") -- load immediately, no need to defer
-  -- LazyVim: VeryLazy
-  load("keymaps") --  load immediately, no need to defer
-
-  -- lazy
   vim.keymap.set("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "Lazy", silent = true })
 
   Util.try(function()
-    local colorscheme = require("ak.color").color
-    if type(colorscheme) == "function" then
-      colorscheme()
-    else
-      vim.cmd.colorscheme(colorscheme)
-    end
+    vim.cmd.colorscheme(require("ak.color").color)
   end, {
     msg = "Could not load your colorscheme",
     on_error = function(msg)
       Util.error(msg)
-      vim.cmd.colorscheme("habamax")
     end,
   })
 end
@@ -84,7 +57,7 @@ return {
   -- on_first_spec_imported (lazy spec phase)
   -- on_first_plugin_to_load (lazy start phase)
   --
-  -- Benefit: The colorscheme can be dynamic and does not need a priority
+  -- Benefit: No priorities needed on the colorschemes
   {
     "nvim-lua/plenary.nvim",
     priority = 10000,

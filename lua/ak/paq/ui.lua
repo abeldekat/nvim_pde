@@ -16,7 +16,6 @@ end
 local ui_spec = {
   { "nvimdev/dashboard-nvim", opt = true },
   { "stevearc/dressing.nvim", opt = true },
-  { "j-hui/fidget.nvim", opt = true },
   { "lukas-reineke/indent-blankline.nvim", opt = true },
   { "nvim-lualine/lualine.nvim", opt = true },
 }
@@ -26,10 +25,12 @@ function M.spec()
 end
 
 function M.setup()
-  if require("ak.config.intro").should_load() then
-    Util.paq.on_events(function()
+  require("ak.config.lualine_init")
+
+  if Util.opened_without_arguments() then
+    Util.defer.on_events(function()
       vim.cmd.packadd("dashboard-nvim")
-      require("ak.config.intro").setup()
+      require("ak.config.intro")
     end, "VimEnter")
   end
 
@@ -45,20 +46,14 @@ function M.setup()
     return vim.ui.input(...)
   end
 
-  Util.paq.on_events(function()
-    vim.cmd.packadd("fidget.nvim")
-    require("fidget").setup({})
-  end, "LspAttach")
-
-  Util.paq.on_events(function()
+  Util.defer.on_events(function()
     vim.cmd.packadd("indent-blankline.nvim")
     require("ak.config.indent_blankline")
   end, lazyfile())
 
-  Util.paq.on_events(function()
-    require("ak.config.lualine").init()
+  Util.defer.on_events(function()
     vim.cmd.packadd("lualine.nvim")
-    require("ak.config.lualine").setup()
+    require("ak.config.lualine")
   end, verylazy())
 end
 

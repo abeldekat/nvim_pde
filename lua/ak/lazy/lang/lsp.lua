@@ -7,7 +7,7 @@ return {
       "folke/neodev.nvim",
       {
         "williamboman/mason.nvim",
-        cmd = "Mason", -- keys = { { "<leader>cm", "<cmd>Mason<cr>", desc = "Mason" } },
+        cmd = "Mason",
         build = ":MasonUpdate",
         config = function()
           require("ak.config.lang.mason")
@@ -23,5 +23,12 @@ return {
     "b0o/SchemaStore.nvim",
     lazy = true,
     version = false, -- last release is old
+  },
+  {
+    "j-hui/fidget.nvim",
+    event = "LspAttach",
+    config = function()
+      require("fidget").setup({})
+    end,
   },
 }

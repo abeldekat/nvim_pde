@@ -74,7 +74,7 @@ local function two()
       name = "colors_solarized8",
       branch = "neovim",
       config = function()
-        require("ak.config.colors.solarized8_flat")
+        require("ak.config.colors.solarized8")
       end,
     },
     {
@@ -86,7 +86,7 @@ local function two()
     },
     {
       "ronisbr/nano-theme.nvim",
-      name = "colors_nano",
+      name = "colors_nano-theme",
       config = function()
         require("ak.config.colors.nano-theme")
       end,
@@ -105,7 +105,7 @@ local function three()
     },
     {
       "loctvl842/monokai-pro.nvim",
-      name = "colors_monokai",
+      name = "colors_monokai-pro",
       config = function()
         require("ak.config.colors.monokai-pro")
       end,
@@ -181,17 +181,26 @@ local function four()
   }
 end
 
+local function lazy_key()
+  return {{
+    "<leader>uu",
+    Util.color.telescope_custom_colors,
+    desc = "Telescope custom colors",
+  }}
+end
+
 local groups = {
   one,
-  -- two,
-  -- three,
-  -- four,
+  two,
+  three,
+  four,
 }
+
 for _, group in ipairs(groups) do
   result = vim.list_extend(
     result,
     vim.tbl_map(function(color)
-      color["keys"] = Util.color.keys() -- keys implies lazy loading
+      color["keys"] = lazy_key() -- keys implies lazy loading
       return color
     end, group())
   )

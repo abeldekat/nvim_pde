@@ -46,30 +46,50 @@ function M.add_toggle(pattern, toggle_opts)
   })
 end
 
-function M.keys()
+function M.telescope_custom_colors()
   -- stylua: ignore
   local builtins = { "zellner", "torte", "slate", "shine", "ron", "quiet", "peachpuff",
   "pablo", "murphy", "lunaperche", "koehler", "industry", "evening", "elflord",
   "desert", "delek", "default", "darkblue", "blue" }
 
+  local target = vim.fn.getcompletion
+
+  ---@diagnostic disable-next-line: duplicate-set-field
+  vim.fn.getcompletion = function()
+    return vim.tbl_filter(function(color)
+      return not vim.tbl_contains(builtins, color)
+    end, target("", "color"))
+  end
+
+  vim.cmd("Telescope colorscheme enable_preview=true")
+  vim.fn.getcompletion = target
+end
+
+-- Given a name, returns a table containing:
+-- color_name: The name of the color
+-- config_name: The full path of the config to require
+function M.from_package_name(package_name)
+  local name = package_name:gsub("colors_", "")
   return {
-    {
-      "<leader>uu",
-      function() -- prevent builtin colors from being displayed in the picker
-        local target = vim.fn.getcompletion
+    color_name = name,
+    config_name = "ak.config.colors." .. name,
+  }
+end
 
-        ---@diagnostic disable-next-line: duplicate-set-field
-        vim.fn.getcompletion = function()
-          return vim.tbl_filter(function(color)
-            return not vim.tbl_contains(builtins, color)
-          end, target("", "color"))
-        end
+-- Given a name, returns a table containing:
+-- package_name: The name of the package to packadd
+-- config_name: The full path of the config to require
+function M.from_color_name(color_name)
+  local name = color_name
+  if name:find("fox", 1, true) then
+    name = "nightfox" -- ie nordfox becomes nightfox
+  elseif name:find("solarized8", 1, true) then
+    name = "solarized8" -- ie solarized8_flat becomes solarized8
+  end
 
-        vim.cmd("Telescope colorscheme enable_preview=true")
-        vim.fn.getcompletion = target
-      end,
-      desc = "Colorscheme with preview",
-    },
+  return {
+    package_name = "colors_" .. name,
+    config_name = "ak.config.colors." .. name,
   }
 end
 

@@ -1,10 +1,10 @@
 ---@class ak.util
----@field ui ak.util.ui
+---@field color ak.util.color
+---@field defer ak.util.defer
+---@field lazyfile ak.util.lazyfile
 ---@field lsp ak.util.lsp
 ---@field toggle ak.util.toggle
----@field lazyfile ak.util.lazyfile
----@field paq ak.util.paq
----@field color ak.util.color
+---@field ui ak.util.ui
 local M = {}
 
 setmetatable(M, {
@@ -27,6 +27,24 @@ end
 ---@param plugin string
 function M.has(plugin)
   return vim.tbl_contains(referenced_plugins, plugin)
+end
+
+function M.opened_with_dir_argument()
+  if vim.fn.argc() == 1 then
+    ---@diagnostic disable-next-line: param-type-mismatch
+    local stat = vim.loop.fs_stat(vim.fn.argv(0))
+    if stat and stat.type == "directory" then
+      return true
+    end
+  end
+  return false
+end
+
+function M.opened_without_arguments()
+  if vim.fn.argc() > 0 then
+    return false
+  end
+  return true
 end
 
 --          ╭─────────────────────────────────────────────────────────╮

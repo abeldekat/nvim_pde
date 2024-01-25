@@ -12,7 +12,7 @@ function M.spec()
 end
 
 function M.setup()
-  Util.paq.on_keys(function()
+  Util.defer.on_keys(function()
     vim.cmd.packadd("neotest-python")
     vim.cmd.packadd("neotest")
 

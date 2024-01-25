@@ -13,7 +13,6 @@ end
 local modules = {
   require("ak.paq.start"), -- responsible for options, keys, autocmds and colorscheme
   require("ak.paq.coding"),
-  require("ak.paq.colors"),
   require("ak.paq.editor"),
   require("ak.paq.treesitter"),
   require("ak.paq.ui"),

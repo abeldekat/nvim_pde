@@ -12,18 +12,17 @@ function M.spec()
 end
 
 function M.setup()
-  Util.paq.on_keys(function()
+  Util.defer.on_keys(function()
     vim.cmd.packadd("vim-startuptime")
     require("ak.config.startuptime")
   end, "<leader>ms", "StartupTime")
 
-  Util.paq.on_keys(function()
-    require("ak.config.repl").init()
+  Util.defer.on_keys(function()
     vim.cmd.packadd("vim-slime")
-    require("ak.config.repl").setup()
+    require("ak.config.repl")
   end, "<leader>mr", "Repl")
 
-  -- Util.paq.on_events(function()
+  -- Util.defer.on_events(function()
   --   vim.cmd.packadd("persistence.nvim")
   --   require("ak.config.persistence")
   -- end, "BufReadPre")

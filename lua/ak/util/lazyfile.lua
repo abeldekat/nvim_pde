@@ -1,6 +1,10 @@
 --          ╭─────────────────────────────────────────────────────────╮
 --          │ This is the only part of the utils requiring lazy.nvim  │
 --          │                 See lazyvim.util.plugin                 │
+--          │                                                         │
+--          │  Currently, LazyFile is not activated, and falls back   │
+--          │                to the following events:                 │
+--          │       "BufReadPost", "BufNewFile", "BufWritePre"        │
 --          ╰─────────────────────────────────────────────────────────╯
 
 ---@class ak.util.lazyfile

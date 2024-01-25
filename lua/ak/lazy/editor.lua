@@ -1,8 +1,15 @@
+local Util = require("ak.util")
 local autoload_clues = true
+local with_dir = Util.opened_with_dir_argument()
 
+local function no_op() end
 return {
+
+  -- ── verylazy ──────────────────────────────────────────────────────────
+
   {
-    "folke/flash.nvim", -- loads fast, maybe 3ms, always used
+    "folke/flash.nvim",
+    event = "VeryLazy",
     dependencies = "jinh0/eyeliner.nvim",
     config = function()
       require("ak.config.jump")
@@ -10,46 +17,12 @@ return {
   },
 
   {
-    "f-person/git-blame.nvim", -- keys = "<leader>gt",
-    cmd = "GitBlameToggle",
-    config = function()
-      require("ak.config.gitblame")
-    end,
-  },
-
-  {
-    "lewis6991/gitsigns.nvim",
-    event = "LazyFile",
-    config = function()
-      require("ak.config.gitsigns")
-    end,
-  },
-
-  {
-    "takac/vim-hardtime",
-    keys = "<leader>uh",
-    init = function()
-      require("ak.config.hardtime").init()
-    end,
-    config = function()
-      require("ak.config.hardtime").setup()
-    end,
-  },
-
-  {
     "ThePrimeagen/harpoon",
     -- branch = "harpoon2",
+    event = "VeryLazy",
     config = function()
       -- require("ak.config.harpoon")
       require("ak.config.harpoon_one")
-    end,
-  },
-
-  {
-    "RRethy/vim-illuminate",
-    event = "LazyFile",
-    config = function()
-      require("ak.config.illuminate")
     end,
   },
 
@@ -66,23 +39,23 @@ return {
   {
     "stevearc/oil.nvim",
     init = function()
-      if require("ak.config.oil").needs_oil() then
+      if with_dir then
         require("oil")
       end
     end,
+    event = function()
+      return not with_dir and { "VeryLazy" } or {}
+    end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
-    keys = "mk",
     config = function()
-      require("ak.config.oil").setup()
+      require("ak.config.oil")
     end,
   },
 
   {
     "nvim-telescope/telescope.nvim",
     cmd = "Telescope", -- used by the keys in the intro screen
-    version = false, -- telescope did only one release, so use HEAD for now
-    -- lazy: define only the keys used when starting
-    keys = { "<leader><leader>", "<leader>o", "<leader>/", "<leader>e", "<leader>r" },
+    event = "VeryLazy",
     dependencies = { -- extensions: Also uses flash!
       {
         "nvim-telescope/telescope-fzf-native.nvim",
@@ -97,7 +70,6 @@ return {
       -- },
       {
         "stevearc/aerial.nvim",
-        -- keys = "<leader>cs", -- also load on key
         config = function()
           require("ak.config.aerial")
         end,
@@ -105,14 +77,12 @@ return {
       { -- also load spectre on telescope
         "nvim-pack/nvim-spectre",
         build = false,
-        -- keys = "<leader>sr",
         config = function()
           require("ak.config.spectre")
         end,
       },
       { -- also load trouble on telescope
         "folke/trouble.nvim",
-        -- keys = { "<leader>xx", "<leader>xX", "<leader>xL", "<leader>xQ" },
         config = function()
           require("ak.config.trouble")
         end,
@@ -124,6 +94,32 @@ return {
   },
 
   {
+    "akinsho/toggleterm.nvim",
+    version = "*",
+    event = "VeryLazy",
+    config = function()
+      require("ak.config.toggleterm")
+    end,
+  },
+
+  -- ── lazyfile ──────────────────────────────────────────────────────────
+
+  {
+    "lewis6991/gitsigns.nvim",
+    event = "LazyFile",
+    config = function()
+      require("ak.config.gitsigns")
+    end,
+  },
+
+  {
+    "RRethy/vim-illuminate",
+    event = "LazyFile",
+    config = function()
+      require("ak.config.illuminate")
+    end,
+  },
+  {
     "folke/todo-comments.nvim",
     event = "LazyFile",
     config = function()
@@ -131,12 +127,21 @@ return {
     end,
   },
 
+  -- ── on-demand ─────────────────────────────────────────────────────────
+
   {
-    "akinsho/toggleterm.nvim",
-    version = "*",
-    keys = [[<c-_>]],
+    "f-person/git-blame.nvim", -- toggle
+    keys = { { "<leader>gt", no_op(), desc = "Git-blame" } },
     config = function()
-      require("ak.config.toggleterm")
+      require("ak.config.gitblame")
+    end,
+  },
+
+  {
+    "takac/vim-hardtime", -- toggle
+    keys = { { "<leader>uh", no_op, desc = "Hardtime" } },
+    config = function()
+      require("ak.config.hardtime")
     end,
   },
 }

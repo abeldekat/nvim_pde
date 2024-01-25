@@ -1,16 +1,16 @@
 --          ╭─────────────────────────────────────────────────────────╮
---          │             Module containing paq utilities             │
+--          │  Module containing functions to defer loading a plugin  │
 --          ╰─────────────────────────────────────────────────────────╯
 
----@class ak.util.paq
+---@class ak.util.defer
 local M = {}
 
-local lazy_paq = vim.api.nvim_create_augroup("ak_lazy_paq", { clear = true })
+local defer_group = vim.api.nvim_create_augroup("ak_defer", { clear = true })
 
 function M.on_events(cb, events, pattern)
   local opts = {
-    group = lazy_paq,
-    desc = "ak_lazy_paq",
+    group = defer_group,
+    desc = "ak_defer",
     once = true,
     callback = function(ev)
       cb(ev)

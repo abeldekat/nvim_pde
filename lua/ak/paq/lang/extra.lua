@@ -16,14 +16,14 @@ local markdown = {
     { "lukas-reineke/headlines.nvim", opt = true },
   },
   setup = function()
-    Util.paq.on_events(function()
+    Util.defer.on_events(function()
       vim.cmd.packadd("headlines.nvim")
       require("ak.config.lang.markdown.headlines")
-      Util.paq.on_keys(function()
+      Util.defer.on_keys(function()
         vim.cmd.packadd("markdown-preview.nvim")
         require("ak.config.lang.markdown.markdown_preview")
       end, "<leader>cp", "Markdown preview")
-      Util.paq.on_keys(function()
+      Util.defer.on_keys(function()
         vim.cmd.packadd("peek.nvim")
         require("ak.config.lang.markdown.peek")
       end, "<leader>ck", "Peek preview")
@@ -36,8 +36,8 @@ local python = {
     { "linux-cultist/venv-selector.nvim", opt = true },
   },
   setup = function()
-    Util.paq.on_events(function()
-      Util.paq.on_keys(function()
+    Util.defer.on_events(function()
+      Util.defer.on_keys(function()
         vim.cmd.packadd("venv_selector.nvim")
         require("ak.config.lang.python.venv_selector")
       end, "<leader>cv", "Venv selector")
@@ -51,8 +51,8 @@ local sql = {
     { "tpope/vim-dadbod", opt = true },
   },
   setup = function()
-    Util.paq.on_events(function()
-      Util.paq.on_keys(function()
+    Util.defer.on_events(function()
+      Util.defer.on_keys(function()
         vim.cmd.packadd("vim-dadbod-completion")
         vim.cmd.packadd("vim-dadbod")
         require("ak.config.lang.sql.dadbod") -- keys

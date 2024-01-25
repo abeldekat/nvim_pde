@@ -1,3 +1,4 @@
+local Util = require("ak.util")
 local miniclue = require("mini.clue")
 
 local opts = {
@@ -62,4 +63,9 @@ local opts = {
   },
 }
 
-require("mini.clue").setup(opts)
+local clue = require("mini.clue")
+clue.setup(opts)
+if Util.opened_without_arguments() then
+  -- clues on the dashboard:
+  clue.enable_buf_triggers(vim.api.nvim_get_current_buf())
+end

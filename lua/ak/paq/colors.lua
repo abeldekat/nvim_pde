@@ -16,6 +16,7 @@
 --          │                         onedark                         │
 --          ╰─────────────────────────────────────────────────────────╯
 
+local Color = require("ak.color")
 local Util = require("ak.util")
 local M = {}
 
@@ -61,7 +62,7 @@ local function two()
     },
     {
       "ronisbr/nano-theme.nvim",
-      as = "colors_nano",
+      as = "colors_nano-theme",
     },
   }
 end
@@ -74,7 +75,7 @@ local function three()
     },
     {
       "loctvl842/monokai-pro.nvim",
-      as = "colors_monokai",
+      as = "colors_monokai-pro",
     },
     {
       "sainnhe/everforest",
@@ -122,17 +123,17 @@ end
 
 local groups = {
   one,
-  -- two,
-  -- three,
-  -- four,
+  two,
+  three,
+  four,
 }
 
 function M.spec()
-  local result = {}
+  local colors_spec = {}
 
   for _, group in ipairs(groups) do
-    result = vim.list_extend(
-      result,
+    colors_spec = vim.list_extend(
+      colors_spec,
       vim.tbl_map(function(color)
         color["opt"] = true
         return color
@@ -140,29 +141,33 @@ function M.spec()
     )
   end
 
-  Util.paq.on_keys(function()
-    local function load_all()
-      for _, color in ipairs(result) do
-        vim.cmd.packadd(color.as)
-        require("ak.config.colors." .. color.as:gsub("colors_", ""))
-      end
+  vim.keymap.set("n", "<leader>uu", function()
+    for _, color in ipairs(colors_spec) do
+      vim.cmd.packadd(color.as)
     end
 
-    -- Prevent <leader>uu keys to show up as input inside telescope:
-    vim.keymap.set("n", "<leader>uu", function() end, { desc = "No-op all colors", silent = true })
     vim.schedule(function()
-      local keys = Util.color.keys()
-      load_all()
-      -- execute the function inside the only item of the list:
-      keys[1][2]()
+      Util.color.telescope_custom_colors()
     end)
-  end, "<leader>uu", "Load all colors")
+  end, { desc = "Telescope custom colors", silent = true })
 
-  return result
+  return colors_spec
 end
 
-function M.setup()
-  -- Dummy, the colorscheme is handled in start
+function M.colorscheme()
+  Util.try(function()
+    local color_name = Color.color
+    local info = Util.color.from_color_name(color_name)
+    vim.cmd.packadd(info.package_name)
+    require(info.config_name)
+
+    vim.cmd.colorscheme(color_name)
+  end, {
+    msg = "Could not load your colorscheme",
+    on_error = function(msg)
+      Util.error(msg)
+    end,
+  })
 end
 
 return M

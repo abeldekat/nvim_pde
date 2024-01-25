@@ -30,7 +30,7 @@ local function load_treesitter()
 end
 
 function M.spec()
-  Util.paq.on_command(function()
+  Util.defer.on_command(function()
     load_treesitter()
   end, "TSUpdate")
 
@@ -38,13 +38,13 @@ function M.spec()
 end
 
 function M.setup()
-  Util.paq.on_events(function()
+  Util.defer.on_events(function()
     load_treesitter()
   end, verylazy_and_lazyfile())
 
-  Util.paq.on_events(function()
+  Util.defer.on_events(function()
     vim.cmd.packadd("nvim-ts-autotag")
-    require("nvim-ts-autotag").setup()
+    require("ak.config.treesitter_autotag")
 
     vim.cmd.packadd("nvim-treesitter-context")
     require("ak.config.treesitter_context")

@@ -39,10 +39,6 @@ local function load_on_leader()
 
   vim.cmd("packadd mini.clue")
   require("ak.config.clue")
-
-  -- make sure mini clue is also activated on the dashboard:
-  local clue = require("mini.clue")
-  clue.enable_buf_triggers(vim.api.nvim_get_current_buf())
 end
 
 local function load_on_lazyfile()
@@ -57,7 +53,7 @@ end
 local function load_oil()
   vim.cmd("packadd nvim-web-devicons")
   vim.cmd("packadd oil.nvim")
-  require("ak.config.oil").setup()
+  require("ak.config.oil")
 end
 
 -- "jvgrootveld/telescope-zoxide",
@@ -99,36 +95,35 @@ function M.setup()
   on_leader_key(function()
     load_on_leader()
   end, "Load editor plugins on leader")
-  Util.paq.on_command(function() -- needed in intro
+  Util.defer.on_command(function() -- needed in intro
     load_on_leader()
   end, "Telescope")
 
-  Util.paq.on_events(function()
+  Util.defer.on_events(function()
     load_on_lazyfile()
   end, lazyfile())
 
-  if require("ak.config.oil").needs_oil() then
+  if Util.opened_with_dir_argument() then
     load_oil()
   else
-    Util.paq.on_keys(function()
+    Util.defer.on_keys(function()
       load_oil()
     end, "mk", "Oil")
   end
 
-  Util.paq.on_keys(function()
+  Util.defer.on_keys(function()
     vim.cmd("packadd toggleterm.nvim")
     require("ak.config.toggleterm")
   end, [[<c-_>]], "Toggleterm")
 
-  Util.paq.on_keys(function()
+  Util.defer.on_keys(function()
     vim.cmd("packadd git-blame.nvim")
     require("ak.config.gitblame")
   end, "<leader>gt", "Git-blame")
 
-  Util.paq.on_keys(function()
-    require("ak.config.hardtime").init()
+  Util.defer.on_keys(function()
     vim.cmd("packadd vim-hardtime")
-    require("ak.config.hardtime").setup()
+    require("ak.config.hardtime")
   end, "<leader>uh", "Hardtime")
 end
 

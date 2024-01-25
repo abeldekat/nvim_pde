@@ -17,12 +17,9 @@ return {
 
   {
     "jpalardy/vim-slime",
-    keys = "<leader>mr",
-    init = function()
-      require("ak.config.repl").init()
-    end,
+    keys = { { "<leader>mr", desc = "Repl" } },
     config = function()
-      require("ak.config.repl").setup()
+      require("ak.config.repl")
     end,
   },
 }

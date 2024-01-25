@@ -1,15 +1,17 @@
+local Util = require("ak.util")
+
 return {
   {
     "nvimdev/dashboard-nvim",
-    event = function() -- vimenter
-      if require("ak.config.intro").should_load() then
+    event = function()
+      if Util.opened_without_arguments() then
         return { "VimEnter" }
       else
         return {}
       end
     end,
     config = function()
-      require("ak.config.intro").setup()
+      require("ak.config.intro")
     end,
   },
 
@@ -31,14 +33,6 @@ return {
   },
 
   {
-    "j-hui/fidget.nvim",
-    event = "LspAttach",
-    config = function()
-      require("fidget").setup({})
-    end,
-  },
-
-  {
     "lukas-reineke/indent-blankline.nvim",
     event = "LazyFile",
     config = function()
@@ -48,12 +42,12 @@ return {
 
   {
     "nvim-lualine/lualine.nvim",
-    event = "VeryLazy",
     init = function()
-      require("ak.config.lualine").init()
+      require("ak.config.lualine_init")
     end,
+    event = "VeryLazy",
     config = function()
-      require("ak.config.lualine").setup()
+      require("ak.config.lualine")
     end,
   },
 }

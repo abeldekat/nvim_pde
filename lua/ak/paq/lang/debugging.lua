@@ -28,8 +28,8 @@ function M.spec()
 end
 
 function M.setup()
-  Util.paq.on_events(function()
-    Util.paq.on_keys(function()
+  Util.defer.on_events(function()
+    Util.defer.on_keys(function()
       load_dap()
     end, "<leader>dL", "Load dap")
   end, lazyfile()) -- mason needs to be loaded

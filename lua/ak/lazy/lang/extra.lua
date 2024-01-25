@@ -47,7 +47,7 @@ local function sql()
   return {
     {
       "tpope/vim-dadbod",
-      keys = "<leader>md", -- ft = "sql"
+      keys = "<leader>md",
       dependencies = { "kristijanhusak/vim-dadbod-completion" },
       config = function()
         require("ak.config.lang.sql.dadbod")

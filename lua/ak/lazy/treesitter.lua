@@ -3,7 +3,7 @@ return {
     "windwp/nvim-ts-autotag",
     event = "LazyFile",
     config = function()
-      require("nvim-ts-autotag").setup()
+      require("ak.config.treesitter_autotag")
     end,
   },
 

@@ -1,4 +1,5 @@
 local Util = require("ak.util")
+local function no_op() end
 
 local get_opts = function()
   return {
@@ -76,7 +77,7 @@ local function keys()
     require("neotest").run.stop()
   end, { desc = "Stop" })
 
-  map("<leader>tL", function() end, { desc = "No-op neotest" })
+  map("<leader>tL", no_op, { desc = "No-op neotest" })
 end
 
 local function setup()
