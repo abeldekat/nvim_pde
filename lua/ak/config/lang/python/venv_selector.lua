@@ -12,4 +12,4 @@ if Util.has("nvim-dap-python") then
 end
 require("venv-selector").setup(opts)
 
-vim.keymap.set("n", "<leader>cv", "<cmd>:VenvSelect<cr>", { desc = "Select VirtualEnv", silent = true })
+vim.keymap.set("n", "<leader>cv", "<cmd>:VenvSelect<cr>", { desc = "Venv selector", silent = true })

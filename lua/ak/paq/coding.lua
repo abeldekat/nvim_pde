@@ -61,10 +61,11 @@ function M.setup()
     require("ak.config.surround")
   end, lazyfile())
 
-  Util.defer.on_keys(function()
-    vim.cmd("packadd comment-box.nvim")
-    require("ak.config.comment_box")
-  end, "<leader>bL", "Load comment-box")
+  -- duplicate tag in helpfile
+  -- Util.defer.on_keys(function()
+  --   vim.cmd("packadd comment-box.nvim")
+  --   require("ak.config.comment_box")
+  -- end, "<leader>bL", "Load comment-box")
 end
 
 return M

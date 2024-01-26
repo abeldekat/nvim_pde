@@ -1,8 +1,12 @@
 local Util = require("ak.util")
-local autoload_clues = true
 local with_dir = Util.opened_with_dir_argument()
 
+local function lazyfile()
+  return { "BufReadPost", "BufNewFile", "BufWritePre" }
+end
+
 local function no_op() end
+
 return {
 
   -- ── verylazy ──────────────────────────────────────────────────────────
@@ -28,9 +32,7 @@ return {
 
   {
     "echasnovski/mini.clue",
-    event = function()
-      return autoload_clues and { "VeryLazy" } or {}
-    end,
+    event = "VeryLazy",
     config = function()
       require("ak.config.clue")
     end,
@@ -106,7 +108,7 @@ return {
 
   {
     "lewis6991/gitsigns.nvim",
-    event = "LazyFile",
+    event = lazyfile(),
     config = function()
       require("ak.config.gitsigns")
     end,
@@ -114,14 +116,14 @@ return {
 
   {
     "RRethy/vim-illuminate",
-    event = "LazyFile",
+    event = lazyfile(),
     config = function()
       require("ak.config.illuminate")
     end,
   },
   {
     "folke/todo-comments.nvim",
-    event = "LazyFile",
+    event = lazyfile(),
     config = function()
       require("ak.config.todo_comments")
     end,

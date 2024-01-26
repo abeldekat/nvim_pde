@@ -1,7 +1,11 @@
+local function lazyfile()
+  return { "BufReadPost", "BufNewFile", "BufWritePre" }
+end
+
 return {
   {
     "mfussenegger/nvim-lint",
-    event = "LazyFile",
+    event = lazyfile(),
     config = function()
       require("ak.config.lang.linting")
     end,

@@ -1,7 +1,6 @@
 ---@class ak.util
 ---@field color ak.util.color
 ---@field defer ak.util.defer
----@field lazyfile ak.util.lazyfile
 ---@field lsp ak.util.lsp
 ---@field toggle ak.util.toggle
 ---@field ui ak.util.ui

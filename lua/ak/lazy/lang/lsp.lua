@@ -1,7 +1,11 @@
+local function lazyfile()
+  return { "BufReadPost", "BufNewFile", "BufWritePre" }
+end
+
 return {
   {
     "neovim/nvim-lspconfig",
-    event = "LazyFile",
+    event = lazyfile(),
     dependencies = {
       "folke/neoconf.nvim",
       "folke/neodev.nvim",
@@ -22,13 +26,12 @@ return {
   { -- yaml schema support
     "b0o/SchemaStore.nvim",
     lazy = true,
-    version = false, -- last release is old
   },
   {
     "j-hui/fidget.nvim",
     event = "LspAttach",
     config = function()
-      require("fidget").setup({})
+      require("ak.config.fidget")
     end,
   },
 }

@@ -15,6 +15,7 @@ local markdown = {
     },
     { "lukas-reineke/headlines.nvim", opt = true },
   },
+
   setup = function()
     Util.defer.on_events(function()
       vim.cmd.packadd("headlines.nvim")
@@ -35,6 +36,7 @@ local python = {
   spec = {
     { "linux-cultist/venv-selector.nvim", opt = true },
   },
+
   setup = function()
     Util.defer.on_events(function()
       Util.defer.on_keys(function()
@@ -50,12 +52,13 @@ local sql = {
     { "kristijanhusak/vim-dadbod-completion", opt = true },
     { "tpope/vim-dadbod", opt = true },
   },
+
   setup = function()
     Util.defer.on_events(function()
       Util.defer.on_keys(function()
         vim.cmd.packadd("vim-dadbod-completion")
         vim.cmd.packadd("vim-dadbod")
-        require("ak.config.lang.sql.dadbod") -- keys
+        require("ak.config.lang.sql.dadbod")
       end, "<leader>md", "Load dadbod")
     end, "FileType", "sql")
   end,

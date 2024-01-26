@@ -17,12 +17,6 @@ local function verylazy()
   return "UIEnter"
 end
 
-local function verylazy_and_lazyfile()
-  local result = lazyfile()
-  table.insert(result, verylazy())
-  return result
-end
-
 local function load_treesitter()
   vim.cmd.packadd("nvim-treesitter")
   vim.cmd.packadd("nvim-treesitter-textobjects")
@@ -40,7 +34,7 @@ end
 function M.setup()
   Util.defer.on_events(function()
     load_treesitter()
-  end, verylazy_and_lazyfile())
+  end, Util.opened_without_arguments() and verylazy() or lazyfile())
 
   Util.defer.on_events(function()
     vim.cmd.packadd("nvim-ts-autotag")

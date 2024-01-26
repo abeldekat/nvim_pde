@@ -182,11 +182,7 @@ local function four()
 end
 
 local function lazy_key()
-  return {{
-    "<leader>uu",
-    Util.color.telescope_custom_colors,
-    desc = "Telescope custom colors",
-  }}
+  return { { "<leader>uu", Util.color.telescope_custom_colors, desc = "Telescope custom colors" } }
 end
 
 local groups = {

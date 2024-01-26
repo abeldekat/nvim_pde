@@ -72,11 +72,11 @@ return {
 
   -- ── on-demand ─────────────────────────────────────────────────────────
 
-  {
-    "LudoPinelli/comment-box.nvim",
-    keys = { { "<leader>bL", no_op, desc = "Load comment-box" } },
-    config = function()
-      require("ak.config.comment_box")
-    end,
-  },
+  -- { -- duplicate tag in helpfile
+  --   "LudoPinelli/comment-box.nvim",
+  --   keys = { { "<leader>bL", no_op, desc = "Load comment-box" } },
+  --   config = function()
+  --     require("ak.config.comment_box")
+  --   end,
+  -- },
 }

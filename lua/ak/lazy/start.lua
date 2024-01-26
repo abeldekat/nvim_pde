@@ -18,24 +18,17 @@ local function load(name)
   end
 end
 
-------------------------------------------------------------------------------
--- LazyVim: plugins.init, require("lazyvim.config").init()
-------------------------------------------------------------------------------
 local function on_first_spec_imported()
   if did_init then
     return
   end
   did_init = true
 
-  Util.lazyfile.setup()
   load("options")
   load("autocmds")
   load("keymaps")
 end
 
-------------------------------------------------------------------------------
--- LazyVim: First plugin to load, require("lazyvim.config").setup(opts)
-------------------------------------------------------------------------------
 local function on_first_plugin_to_load()
   vim.keymap.set("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "Lazy", silent = true })
 
@@ -53,7 +46,7 @@ on_first_spec_imported()
 return {
   { "folke/lazy.nvim", version = "*" },
 
-  -- Plenary as placeholder:
+  -- Plenary as placeholder for:
   -- on_first_spec_imported (lazy spec phase)
   -- on_first_plugin_to_load (lazy start phase)
   --

@@ -4,26 +4,25 @@ local function markdown()
   return {
     {
       "iamcco/markdown-preview.nvim",
-      cmd = { "MarkdownPreviewToggle" },
+      ft = "markdown",
       build = function()
         vim.fn["mkdp#util#install"]()
       end,
-      keys = { "<leader>cp", desc = "Markdown preview" },
       config = function()
         require("ak.config.lang.markdown.markdown_preview")
       end,
     },
     {
       "toppair/peek.nvim",
+      ft = "markdown",
       build = "deno task --quiet build:fast",
-      keys = { "<leader>ck", desc = "Peek" },
       config = function()
         require("ak.config.lang.markdown.peek")
       end,
     },
     {
       "lukas-reineke/headlines.nvim",
-      ft = { "markdown" }, -- ft = { "markdown", "norg", "rmd", "org" },
+      ft = "markdown",
       config = function()
         require("ak.config.lang.markdown.headlines")
       end,
@@ -35,7 +34,7 @@ local function python()
   return {
     {
       "linux-cultist/venv-selector.nvim",
-      keys = "<leader>cv",
+      keys = { { "<leader>cv", desc = "Venv selector", ft = "python" } },
       config = function()
         require("ak.config.lang.python.venv_selector")
       end,
@@ -47,7 +46,7 @@ local function sql()
   return {
     {
       "tpope/vim-dadbod",
-      keys = "<leader>md",
+      keys = { { "<leader>md", desc = "Load dadbod", ft = "sql" } },
       dependencies = { "kristijanhusak/vim-dadbod-completion" },
       config = function()
         require("ak.config.lang.sql.dadbod")

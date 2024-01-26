@@ -1,14 +1,14 @@
 local Util = require("ak.util")
 
+local function lazyfile()
+  return { "BufReadPost", "BufNewFile", "BufWritePre" }
+end
+
 return {
   {
     "nvimdev/dashboard-nvim",
     event = function()
-      if Util.opened_without_arguments() then
-        return { "VimEnter" }
-      else
-        return {}
-      end
+      return Util.opened_without_arguments() and { "VimEnter" } or {}
     end,
     config = function()
       require("ak.config.intro")
@@ -34,7 +34,7 @@ return {
 
   {
     "lukas-reineke/indent-blankline.nvim",
-    event = "LazyFile",
+    event = lazyfile(),
     config = function()
       require("ak.config.indent_blankline")
     end,

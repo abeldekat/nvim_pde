@@ -44,7 +44,7 @@ function M.setup()
 
   Util.defer.on_events(function()
     vim.cmd.packadd("fidget.nvim")
-    require("fidget").setup({})
+    require("ak.config.fidget")
   end, "LspAttach")
 end
 return M
