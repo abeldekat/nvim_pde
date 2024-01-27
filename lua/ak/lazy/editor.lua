@@ -5,8 +5,6 @@ local function lazyfile()
   return { "BufReadPost", "BufNewFile", "BufWritePre" }
 end
 
-local function no_op() end
-
 return {
 
   -- ── verylazy ──────────────────────────────────────────────────────────
@@ -133,7 +131,7 @@ return {
 
   {
     "f-person/git-blame.nvim", -- toggle
-    keys = { { "<leader>gt", no_op(), desc = "Git-blame" } },
+    keys = { { "<leader>gt", desc = "Git-blame" } },
     config = function()
       require("ak.config.gitblame")
     end,
@@ -141,7 +139,7 @@ return {
 
   {
     "takac/vim-hardtime", -- toggle
-    keys = { { "<leader>uh", no_op, desc = "Hardtime" } },
+    keys = { { "<leader>uh", desc = "Hardtime" } },
     config = function()
       require("ak.config.hardtime")
     end,

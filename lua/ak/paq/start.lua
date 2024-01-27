@@ -5,7 +5,7 @@ function M.spec()
   require("ak.config.autocmds")
   require("ak.config.keymaps")
 
-  local result = require("ak.paq.colors").spec()
+  local result = vim.list_extend({}, require("ak.paq.colors").spec())
   table.insert(result, "savq/paq-nvim")
   table.insert(result, "nvim-lua/plenary.nvim")
   return result

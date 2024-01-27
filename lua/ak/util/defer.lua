@@ -53,6 +53,7 @@ function M.on_command(cb, cmd) -- pckr.nvim, pckr.loader.cmd
     complete = function()
       vim.api.nvim_del_user_command(cmd)
       cb()
+      ---@diagnostic disable-next-line: redundant-parameter
       return vim.fn.getcompletion(cmd .. " ", "cmdline")
     end,
   })

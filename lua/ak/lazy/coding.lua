@@ -1,4 +1,3 @@
-local function no_op() end
 return {
 
   -- ── insertenter ───────────────────────────────────────────────────────
@@ -74,7 +73,7 @@ return {
 
   -- { -- duplicate tag in helpfile
   --   "LudoPinelli/comment-box.nvim",
-  --   keys = { { "<leader>bL", no_op, desc = "Load comment-box" } },
+  --   keys = { { "<leader>bL", desc = "Load comment-box" } },
   --   config = function()
   --     require("ak.config.comment_box")
   --   end,

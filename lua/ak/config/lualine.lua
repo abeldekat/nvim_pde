@@ -12,4 +12,5 @@ local opts = {
     },
   },
 }
+
 require("lualine").setup(opts)

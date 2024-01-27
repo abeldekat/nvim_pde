@@ -142,8 +142,10 @@ function M.spec()
   end
 
   vim.keymap.set("n", "<leader>uu", function()
+    local from_package_name = Util.color.from_package_name
     for _, color in ipairs(colors_spec) do
       vim.cmd.packadd(color.as)
+      require(from_package_name(color.as).config_name)
     end
 
     vim.schedule(function()

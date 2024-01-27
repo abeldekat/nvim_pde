@@ -12,31 +12,31 @@ local opts = {
     center = {
       {
         action = "Telescope git_files show_untracked=true",
-        desc = " Gitfiles (space space)",
+        desc = " Gitfiles     ( space space )",
         icon = " ",
         key = "g",
       },
       {
         action = "Telescope find_files",
-        desc = " Files (space f f)",
+        desc = " Files        ( space f f )",
         icon = " ",
         key = "f",
       },
       {
         action = "Telescope oldfiles",
-        desc = " Recent (space r)",
+        desc = " Recent       ( space r )",
         icon = " ",
         key = "r",
       },
       {
         action = "Telescope live_grep",
-        desc = " Text (space e)",
+        desc = " Text         ( space e )",
         icon = " ",
         key = "e",
       },
       {
         action = "lua vim.api.nvim_input('mk')",
-        desc = " Oil (mk)",
+        desc = " Oil          ( mk )",
         icon = " ",
         key = "o",
       },
