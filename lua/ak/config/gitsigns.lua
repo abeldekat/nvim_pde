@@ -1,4 +1,5 @@
 local opts = {
+  attach_to_untracked = false, -- used to be true by default
   signs = {
     add = { text = "▎" },
     change = { text = "▎" },

@@ -1,8 +1,8 @@
 local Util = require("ak.util")
 
-local function lazyfile()
-  return { "BufReadPost", "BufNewFile", "BufWritePre" }
-end
+-- local function lazyfile()
+--   return { "BufReadPost", "BufNewFile", "BufWritePre" }
+-- end
 
 return {
   {
@@ -34,7 +34,8 @@ return {
 
   {
     "lukas-reineke/indent-blankline.nvim",
-    event = lazyfile(),
+    -- event = lazyfile(),
+    event = "VeryLazy",
     config = function()
       require("ak.config.indent_blankline")
     end,

@@ -59,4 +59,64 @@ function M.on_command(cb, cmd) -- pckr.nvim, pckr.loader.cmd
   })
 end
 
+--          ╭─────────────────────────────────────────────────────────╮
+--          │             Copied code from echasnovski                \
+--          ╰─────────────────────────────────────────────────────────╯
+
+local H = {}
+
+-- Various cache
+H.cache = {
+  -- Whether finish of `later()` is already scheduled
+  finish_is_scheduled = false,
+
+  -- Callback queue for `later()`
+  later_callback_queue = {},
+
+  -- Errors during execution of `later()`
+  exec_errors = {},
+}
+
+-- TODO: exec-errors
+M.later = function(f)
+  table.insert(H.cache.later_callback_queue, f)
+  H.schedule_finish()
+end
+
+H.now = function(f)
+  local ok, err = pcall(f)
+  if not ok then
+    table.insert(H.cache.exec_errors, err)
+  end
+  H.schedule_finish()
+end
+
+H.schedule_finish = function()
+  if H.cache.finish_is_scheduled then
+    return
+  end
+  vim.schedule(H.finish)
+  H.cache.finish_is_scheduled = true
+end
+
+H.finish = function()
+  local timer, step_delay = vim.loop.new_timer(), 1
+  local f = nil
+  f = vim.schedule_wrap(function()
+    local callback = H.cache.later_callback_queue[1]
+    if callback == nil then
+      H.cache.finish_is_scheduled, H.cache.later_callback_queue = false, {}
+      -- H.report_errors()
+      return
+    end
+
+    table.remove(H.cache.later_callback_queue, 1)
+
+    H.now(callback)
+
+    timer:start(step_delay, 0, f)
+  end)
+  timer:start(step_delay, 0, f)
+end
+
 return M

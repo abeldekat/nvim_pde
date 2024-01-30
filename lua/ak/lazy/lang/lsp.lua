@@ -1,11 +1,12 @@
-local function lazyfile()
-  return { "BufReadPost", "BufNewFile", "BufWritePre" }
-end
+local Util = require("ak.util")
+-- local function lazyfile()
+--   return { "BufReadPost", "BufNewFile", "BufWritePre" }
+-- end
 
 return {
   {
     "neovim/nvim-lspconfig",
-    event = lazyfile(),
+    event = "VeryLazy", -- lazyfile
     dependencies = {
       "folke/neoconf.nvim",
       "folke/neodev.nvim",
@@ -21,6 +22,11 @@ return {
     },
     config = function()
       require("ak.config.lang.lspconfig")
+
+      -- The lsp does not attach when directly opening a file:
+      if not (Util.opened_without_arguments() or Util.opened_with_dir_argument()) then
+        vim.cmd("LspStart")
+      end
     end,
   },
   { -- yaml schema support

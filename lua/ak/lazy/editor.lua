@@ -1,9 +1,9 @@
 local Util = require("ak.util")
 local with_dir = Util.opened_with_dir_argument()
 
-local function lazyfile()
-  return { "BufReadPost", "BufNewFile", "BufWritePre" }
-end
+-- local function lazyfile()
+--   return { "BufReadPost", "BufNewFile", "BufWritePre" }
+-- end
 
 return {
 
@@ -102,11 +102,11 @@ return {
     end,
   },
 
-  -- ── lazyfile ──────────────────────────────────────────────────────────
+  -- ── previously lazyfile ───────────────────────────────────────────────
 
   {
     "lewis6991/gitsigns.nvim",
-    event = lazyfile(),
+    event = "VeryLazy",
     config = function()
       require("ak.config.gitsigns")
     end,
@@ -114,14 +114,14 @@ return {
 
   {
     "RRethy/vim-illuminate",
-    event = lazyfile(),
+    event = "VeryLazy",
     config = function()
       require("ak.config.illuminate")
     end,
   },
   {
     "folke/todo-comments.nvim",
-    event = lazyfile(),
+    event = "VeryLazy",
     config = function()
       require("ak.config.todo_comments")
     end,
