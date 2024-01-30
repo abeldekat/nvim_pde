@@ -40,12 +40,6 @@
 [submodule "pack/ak_coding/opt/nvim-cmp"]
 	path = pack/ak_coding/opt/nvim-cmp
 	url = https://github.com/hrsh7th/nvim-cmp
-[submodule "pack/ak_coding/nvim-ts-context-commentstring"]
-	path = pack/ak_coding/nvim-ts-context-commentstring
-	url = https://github.com/JoosepAlviste/nvim-ts-context-commentstring
-[submodule "pack/ak_coding/comment-box.nvim"]
-	path = pack/ak_coding/comment-box.nvim
-	url = https://github.com/LudoPinelli/comment-box.nvim
 [submodule "pack/ak_coding/opt/comment-box.nvim"]
 	path = pack/ak_coding/opt/comment-box.nvim
 	url = https://github.com/LudoPinelli/comment-box.nvim
