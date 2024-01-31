@@ -80,7 +80,7 @@ Repeat a couple of times.
 - submodules: Around 45ms
 - [lazy.nvim]: Around 45ms
 
-## Acknowledgments
+## Acknowledgements
 
 This repo uses code and ideas from the following repositories:
 

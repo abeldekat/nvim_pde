@@ -44,7 +44,7 @@ end
 
 on_first_spec_imported()
 return {
-  { "folke/lazy.nvim", version = "*" },
+  { "folke/lazy.nvim", lazy = false, version = "*" },
 
   -- Plenary as placeholder for:
   -- on_first_spec_imported (lazy spec phase)

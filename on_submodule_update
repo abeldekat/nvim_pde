@@ -1,0 +1,29 @@
+#! /bin/bash
+
+function fzf() {
+	echo "--> Start -make- telescope-fzf-native"
+	cd pack/ak_editor/opt/telescope-fzf-native.nvim
+	make
+	cd -
+}
+
+function peek() {
+	echo "--> Start deno task for peek.nvim"
+	cd pack/ak_lang/opt/peek.nvim
+	deno task --quiet build:fast
+	cd -
+}
+
+function mkdp() {
+	echo "--> Start mkdp#util#install for markdown-preview"
+	nvim --headless -u NONE +"packadd markdown-preview.nvim" +"call mkdp#util#install_sync(v:true)" +qa
+}
+
+fzf
+peek
+mkdp
+
+# TODO: When updating: Is treesitter :TSUpdate needed? Mason :MasonUpdate?
+echo "--> All done...:"
+echo "Open the neovim dashboard. Mason and treesitter will update automatically"
+echo "Don't forget: helptags ALL"

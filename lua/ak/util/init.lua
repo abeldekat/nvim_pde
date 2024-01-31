@@ -46,6 +46,10 @@ function M.opened_without_arguments()
   return true
 end
 
+function M.is_headless()
+  return #vim.api.nvim_list_uis() == 0
+end
+
 --          ╭─────────────────────────────────────────────────────────╮
 --          │             Copied code from lazy.core.util             │
 --          ╰─────────────────────────────────────────────────────────╯

@@ -90,7 +90,8 @@ function M.colorscheme()
     vim.keymap.set("n", "<leader>uu", function() -- Show all custom colors in telescope
       for _, package_name in ipairs(all_colors) do
         add(package_name)
-        require(Util.color.from_package_name(package_name).config_name)
+        local to_require = Util.color.from_package_name(package_name).config_name
+        require(to_require)
       end
 
       vim.schedule(function()

@@ -181,10 +181,6 @@ local function four()
   }
 end
 
-local function lazy_key()
-  return { { "<leader>uu", Util.color.telescope_custom_colors, desc = "Telescope custom colors" } }
-end
-
 local groups = {
   one,
   two,
@@ -192,13 +188,20 @@ local groups = {
   four,
 }
 
-for _, group in ipairs(groups) do
-  result = vim.list_extend(
-    result,
-    vim.tbl_map(function(color)
-      color["keys"] = lazy_key() -- keys implies lazy loading
-      return color
-    end, group())
-  )
+for _, group in ipairs(groups) do -- Filter selected colors
+  result = vim.list_extend(result, group())
 end
+
+vim.keymap.set("n", "<leader>uu", function() -- Show all custom colors in telescope
+  for _, color_spec in ipairs(result) do
+    vim.cmd("Lazy load " .. color_spec.name)
+    local to_require = Util.color.from_package_name(color_spec.name).config_name
+    require(to_require)
+  end
+
+  vim.schedule(function()
+    Util.color.telescope_custom_colors()
+  end)
+end, { desc = "Telescope custom colors", silent = true })
+
 return result

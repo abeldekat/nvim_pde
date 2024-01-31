@@ -1,8 +1,3 @@
--- local Util = require("ak.util")
--- local function lazyfile()
---   return { "BufReadPost", "BufNewFile", "BufWritePre" }
--- end
-
 return {
   {
     "nvim-treesitter/nvim-treesitter",
@@ -15,7 +10,9 @@ return {
     },
     event = "VeryLazy",
     -- event = function()
-    --   return Util.opened_without_arguments() and { "VeryLazy" } or lazyfile()
+    --   local lazyfile = { "BufReadPost", "BufNewFile", "BufWritePre" }
+    --   local Util = require("ak.util")
+    --   return Util.opened_without_arguments() and { "VeryLazy" } or lazyfile
     -- end,
     config = function()
       require("ak.config.treesitter")
@@ -24,8 +21,7 @@ return {
 
   {
     "windwp/nvim-ts-autotag",
-    -- event = lazyfile(),
-    event = "VeryLazy",
+    event = "VeryLazy", -- event = lazyfile(),
     config = function()
       require("ak.config.treesitter_autotag")
     end,
@@ -33,8 +29,7 @@ return {
 
   {
     "nvim-treesitter/nvim-treesitter-context",
-    -- event = lazyfile(),
-    event = "VeryLazy",
+    event = "VeryLazy", -- event = lazyfile(),
     config = function()
       require("ak.config.treesitter_context")
     end,

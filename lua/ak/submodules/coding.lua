@@ -4,8 +4,9 @@
 
 local Util = require("ak.util")
 local add, later = vim.cmd.packadd, Util.defer.later
+local later_only = Util.defer.later_only
 
--- After/plugin is not loaded when using later(), which  uses vim.schedule
+-- After/plugin is not loaded when using later(), which uses vim.schedule
 -- This function is only needed when lazy-loading nvim-cmp
 local function source_after_plugin(after_path)
   vim.cmd.source(vim.fn.stdpath("config") .. "/pack/ak_coding/opt/" .. after_path)
@@ -20,11 +21,11 @@ later(function()
   add("cmp-buffer")
   add("cmp-path")
 end)
-later(function()
-  -- Does not require nvim-cmp but creates an autocmd on insertenter:
+later_only(function()
+  -- Plugin does not require nvim-cmp but creates an autocmd on insertenter:
   source_after_plugin("cmp-nvim-lsp/after/plugin/cmp_nvim_lsp.lua")
 
-  -- Requiring nvim-cmp:
+  -- Plugins requiring nvim-cmp:
   source_after_plugin("cmp_luasnip/after/plugin/cmp_luasnip.lua")
   source_after_plugin("cmp-buffer/after/plugin/cmp_buffer.lua")
   source_after_plugin("cmp-path/after/plugin/cmp_path.lua")

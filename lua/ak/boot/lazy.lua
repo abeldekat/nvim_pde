@@ -31,6 +31,9 @@ local function to_spec()
   }
 end
 
+--          ╭─────────────────────────────────────────────────────────╮
+--          │                  Default: lazy = true                   │
+--          ╰─────────────────────────────────────────────────────────╯
 return function(extraspec, _)
   local lazypath = clone("folke", "lazy.nvim")
   vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
@@ -41,11 +44,15 @@ return function(extraspec, _)
   --
   local lualine_override = vim.fn.stdpath("config") .. "/lualine_themes"
 
-  Util.register_referenced({ "trouble.nvim", "flash.nvim", "eyeliner.nvim", "nvim-dap-python" })
+  -- flash: Defined in coding, also used in editor, for telescope
+  -- eyeliner: Defined in coding, also used in treesitter, for textobjects
+  -- trouble: Defined in editor, also used in lang.testing, for neotest
+  -- nvim-dap-python: Defined in dap, also used in lang.python, for venv-selector
+  Util.register_referenced({ "flash.nvim", "eyeliner.nvim", "trouble.nvim", "nvim-dap-python" })
   local spec = to_spec()
 
   require("lazy").setup({
-    defaults = { lazy = false, version = false }, -- "*" = latest stable version
+    defaults = { lazy = true, version = false }, -- "*" = latest stable version
     spec = extraspec and vim.list_extend(spec, extraspec) or spec,
     dev = { path = dev_path, patterns = dev_patterns },
     install = { colorscheme = { "tokyonight", "habamax" } },

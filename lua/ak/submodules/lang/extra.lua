@@ -4,9 +4,9 @@ local later = Util.defer.later
 
 local function markdown()
   Util.defer.on_events(function()
-    -- add("markdown-preview.nvim")
-    -- require("ak.config.lang.markdown.markdown_preview")
     later(function()
+      add("markdown-preview.nvim")
+      require("ak.config.lang.markdown.markdown_preview")
       add("peek.nvim")
       require("ak.config.lang.markdown.peek")
       add("headlines.nvim")

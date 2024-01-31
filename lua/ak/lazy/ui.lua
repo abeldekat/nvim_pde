@@ -1,8 +1,5 @@
 local Util = require("ak.util")
-
--- local function lazyfile()
---   return { "BufReadPost", "BufNewFile", "BufWritePre" }
--- end
+-- local lazyfile = { "BufReadPost", "BufNewFile", "BufWritePre" }
 
 return {
   {
@@ -17,7 +14,6 @@ return {
 
   {
     "stevearc/dressing.nvim",
-    lazy = true,
     init = function()
       ---@diagnostic disable-next-line: duplicate-set-field
       vim.ui.select = function(...)
@@ -34,8 +30,7 @@ return {
 
   {
     "lukas-reineke/indent-blankline.nvim",
-    -- event = lazyfile(),
-    event = "VeryLazy",
+    event = "VeryLazy", -- event = lazyfile,
     config = function()
       require("ak.config.indent_blankline")
     end,

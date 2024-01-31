@@ -1,7 +1,5 @@
+-- local lazyfile = { "BufReadPost", "BufNewFile", "BufWritePre" }
 local Util = require("ak.util")
--- local function lazyfile()
---   return { "BufReadPost", "BufNewFile", "BufWritePre" }
--- end
 
 return {
   {
@@ -23,16 +21,13 @@ return {
     config = function()
       require("ak.config.lang.lspconfig")
 
-      -- The lsp does not attach when directly opening a file:
+      -- On VeryLazy, the lsp does not attach when directly opening a file:
       if not (Util.opened_without_arguments() or Util.opened_with_dir_argument()) then
         vim.cmd("LspStart")
       end
     end,
   },
-  { -- yaml schema support
-    "b0o/SchemaStore.nvim",
-    lazy = true,
-  },
+  { "b0o/SchemaStore.nvim" }, -- yaml schema support
   {
     "j-hui/fidget.nvim",
     event = "LspAttach",

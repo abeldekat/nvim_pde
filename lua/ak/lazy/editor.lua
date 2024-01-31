@@ -1,9 +1,6 @@
 local Util = require("ak.util")
 local with_dir = Util.opened_with_dir_argument()
-
--- local function lazyfile()
---   return { "BufReadPost", "BufNewFile", "BufWritePre" }
--- end
+-- local lazyfile = { "BufReadPost", "BufNewFile", "BufWritePre" }
 
 return {
 
@@ -54,7 +51,7 @@ return {
 
   {
     "nvim-telescope/telescope.nvim",
-    cmd = "Telescope", -- used by the keys in the intro screen
+    cmd = "Telescope", -- used by the menu in the intro screen
     event = "VeryLazy",
     dependencies = { -- extensions: Also uses flash!
       {

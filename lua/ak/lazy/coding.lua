@@ -1,18 +1,18 @@
 return {
 
-  -- ── insertenter ───────────────────────────────────────────────────────
+  -- ── verylazy, previously insertenter ───────────────────────────────────────────────────────
 
   {
     "windwp/nvim-autopairs",
-    event = "InsertEnter",
+    event = "VeryLazy",
     config = function()
       require("ak.config.pairs")
     end,
   },
 
-  {
+  { -- Lazy loading benefit: +-5 ms
     "hrsh7th/nvim-cmp",
-    event = "InsertEnter",
+    event = "VeryLazy",
     dependencies = {
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-buffer",
@@ -27,7 +27,7 @@ return {
   {
     "L3MON4D3/LuaSnip",
     dependencies = { "rafamadriz/friendly-snippets" },
-    event = "InsertEnter",
+    event = "VeryLazy",
     config = function()
       require("ak.config.snip")
     end,
@@ -71,11 +71,11 @@ return {
 
   -- ── on-demand ─────────────────────────────────────────────────────────
 
-  -- { -- duplicate tag in helpfile
-  --   "LudoPinelli/comment-box.nvim",
-  --   keys = { { "<leader>bL", desc = "Load comment-box" } },
-  --   config = function()
-  --     require("ak.config.comment_box")
-  --   end,
-  -- },
+  {
+    "LudoPinelli/comment-box.nvim",
+    keys = { { "<leader>bL", desc = "Load comment-box" } },
+    config = function()
+      require("ak.config.comment_box")
+    end,
+  },
 }
