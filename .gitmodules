@@ -336,12 +336,12 @@
 [submodule "pack/ak_lang/opt/mason-lspconfig.nvim"]
 	path = pack/ak_lang/opt/mason-lspconfig.nvim
 	url = https://github.com/williamboman/mason-lspconfig.nvim
-	branch = master
+	branch = main
   ignore = untracked
 [submodule "pack/ak_lang/opt/nvim-lspconfig"]
 	path = pack/ak_lang/opt/nvim-lspconfig
 	url = https://github.com/neovim/nvim-lspconfig
-	branch = main
+	branch = master
   ignore = untracked
 [submodule "pack/ak_lang/opt/fidget.nvim"]
 	path = pack/ak_lang/opt/fidget.nvim
@@ -413,18 +413,18 @@
 	url = https://github.com/lukas-reineke/headlines.nvim
 	branch = master
   ignore = untracked
-[submodule "pack/ak_lang/opt/vim-dadbod-completion"]
-	path = pack/ak_lang/opt/vim-dadbod-completion
-	url = https://github.com/kristijanhusak/vim-dadbod-completion
-	branch = master
-	ignore = untracked
 [submodule "pack/ak_lang/opt/venv-selector.nvim"]
 	path = pack/ak_lang/opt/venv-selector.nvim
-	url = https://github.com/linux-cultist/venv-selector.nvim.git
+	url = https://github.com/linux-cultist/venv-selector.nvim
 	branch = main
 	ignore = untracked
 [submodule "pack/ak_lang/opt/vim-dadbod"]
 	path = pack/ak_lang/opt/vim-dadbod
-	url = https://github.com/tpope/vim-dadbod.git
+	url = https://github.com/tpope/vim-dadbod
+	branch = master
+	ignore = untracked
+[submodule "pack/ak_lang/opt/vim-dadbod-completion"]
+	path = pack/ak_lang/opt/vim-dadbod-completion
+	url = https://github.com/kristijanhusak/vim-dadbod-completion
 	branch = master
 	ignore = untracked

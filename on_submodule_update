@@ -23,7 +23,8 @@ fzf
 peek
 mkdp
 
-# TODO: When updating: Is treesitter :TSUpdate needed? Mason :MasonUpdate?
 echo "--> All done...:"
-echo "Open the neovim dashboard. Mason and treesitter will update automatically"
+echo "Open neovim without arguments. Mason and treesitter will update automatically"
+echo " "
 echo "Don't forget: helptags ALL"
+echo "Don't forget on update: treesitter :TSUpdate, mason :MasonUpdate"
