@@ -67,10 +67,6 @@ local function add_keys()
   -- end, { desc = "Format injected langs", silent = true })
 end
 
--- ---@type table<string, conform.FormatterConfigOverride|fun(bufnr: integer): nil|conform.FormatterConfigOverride>
--- formatters = {
---   injected = { options = { ignore_errors = true } },
--- },
 local function get_opts()
   return {
     -- ---@type table<string, conform.FormatterUnit[]>
@@ -79,6 +75,10 @@ local function get_opts()
       sh = { "shfmt" },
       python = { "black" },
       sql = { "sql-formatter" }, -- TODO: unavailable no config found
+    },
+    -- https://github.com/stevearc/conform.nvim/blob/master/doc/advanced_topics.md#injected-language-formatting-code-blocks
+    formatters = {
+      injected = { options = { ignore_errors = true } },
     },
     format_on_save = function(bufnr)
       return is_format_on_save_enabled(bufnr) and get_defaults(bufnr) or nil

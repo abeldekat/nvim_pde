@@ -10,7 +10,6 @@ return {
       "folke/neodev.nvim",
       {
         "williamboman/mason.nvim",
-        cmd = "Mason",
         build = ":MasonUpdate",
         config = function()
           require("ak.config.lang.mason")

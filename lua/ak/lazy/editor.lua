@@ -51,7 +51,6 @@ return {
 
   {
     "nvim-telescope/telescope.nvim",
-    cmd = "Telescope", -- used by the menu in the intro screen
     event = "VeryLazy",
     dependencies = { -- extensions: Also uses flash!
       {

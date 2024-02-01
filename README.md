@@ -30,12 +30,20 @@ Clone the repository and install the plugins:
 
 ```sh
 git clone https://github.com/abeldekat/nvim_pde ~/.config/ak
+
+# Only when using submodules(the default):
+cd ~/.config/ak
+git submodule update --init --filter=blob:none --recursive
+#
+# Build markdown-preview and peek.nvim:
+./on_submodule_update
+# Now, open Neovim without arguments.
+# Treesitter and mason will install.
 ```
 
 Open Neovim with this config:
 
 ```sh
-git submodule update --init
 NVIM_APPNAME=ak nvim
 ```
 

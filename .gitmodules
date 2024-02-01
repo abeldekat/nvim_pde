@@ -1,430 +1,345 @@
-[submodule "pack/ak_start/start/plenary.nvim"]
+[submodule "ak_start/plenary.nvim"]
 	path = pack/ak_start/start/plenary.nvim
 	url = https://github.com/nvim-lua/plenary.nvim
-	branch = master
   ignore = untracked
-[submodule "pack/ak_colors/opt/colors_tokyonight"]
+[submodule "ak_colors/colors_tokyonight"]
 	path = pack/ak_colors/opt/colors_tokyonight
 	url = https://github.com/folke/tokyonight.nvim
-	branch = main
   ignore = untracked
-[submodule "pack/ak_coding/opt/nvim-autopairs"]
+[submodule "ak_coding/nvim-autopairs"]
 	path = pack/ak_coding/opt/nvim-autopairs
 	url = https://github.com/windwp/nvim-autopairs
-	branch = master
   ignore = untracked
-[submodule "pack/ak_coding/opt/Comment.nvim"]
+[submodule "ak_coding/Comment.nvim"]
 	path = pack/ak_coding/opt/Comment.nvim
 	url = https://github.com/numToStr/Comment.nvim
-	branch = master
   ignore = untracked
-[submodule "pack/ak_coding/opt/dial.nvim"]
+[submodule "ak_coding/dial.nvim"]
 	path = pack/ak_coding/opt/dial.nvim
 	url = https://github.com/monaqa/dial.nvim
-	branch = master
   ignore = untracked
-[submodule "pack/ak_coding/opt/friendly-snippets"]
+[submodule "ak_coding/friendly-snippets"]
 	path = pack/ak_coding/opt/friendly-snippets
 	url = https://github.com/rafamadriz/friendly-snippets
-	branch = main
   ignore = untracked
-[submodule "pack/ak_coding/opt/LuaSnip"]
+[submodule "ak_coding/LuaSnip"]
 	path = pack/ak_coding/opt/LuaSnip
 	url = https://github.com/L3MON4D3/LuaSnip
-	branch = master
   ignore = untracked
-[submodule "pack/ak_coding/opt/substitute.nvim"]
+[submodule "ak_coding/substitute.nvim"]
 	path = pack/ak_coding/opt/substitute.nvim
 	url = https://github.com/gbprod/substitute.nvim
-	branch = main
   ignore = untracked
-[submodule "pack/ak_coding/opt/nvim-surround"]
+[submodule "ak_coding/nvim-surround"]
 	path = pack/ak_coding/opt/nvim-surround
 	url = https://github.com/kylechui/nvim-surround
-	branch = main
   ignore = untracked
-[submodule "pack/ak_coding/opt/cmp-buffer"]
+[submodule "ak_coding/cmp-buffer"]
 	path = pack/ak_coding/opt/cmp-buffer
 	url = https://github.com/hrsh7th/cmp-buffer
-	branch = main
   ignore = untracked
-[submodule "pack/ak_coding/opt/cmp-path"]
+[submodule "ak_coding/cmp-path"]
 	path = pack/ak_coding/opt/cmp-path
 	url = https://github.com/hrsh7th/cmp-path
-	branch = main
   ignore = untracked
-[submodule "pack/ak_coding/opt/cmp_luasnip"]
+[submodule "ak_coding/cmp_luasnip"]
 	path = pack/ak_coding/opt/cmp_luasnip
 	url = https://github.com/saadparwaiz1/cmp_luasnip
-	branch = master
   ignore = untracked
-[submodule "pack/ak_coding/opt/cmp-nvim-lsp"]
+[submodule "ak_coding/cmp-nvim-lsp"]
 	path = pack/ak_coding/opt/cmp-nvim-lsp
 	url = https://github.com/hrsh7th/cmp-nvim-lsp
-	branch = main
   ignore = untracked
-[submodule "pack/ak_coding/opt/nvim-cmp"]
+[submodule "ak_coding/nvim-cmp"]
 	path = pack/ak_coding/opt/nvim-cmp
 	url = https://github.com/hrsh7th/nvim-cmp
-	branch = main
   ignore = untracked
-[submodule "pack/ak_coding/opt/comment-box.nvim"]
+[submodule "ak_coding/comment-box.nvim"]
 	path = pack/ak_coding/opt/comment-box.nvim
 	url = https://github.com/LudoPinelli/comment-box.nvim
-	branch = main
   ignore = untracked
-[submodule "pack/ak_coding/opt/nvim-ts-context-commentstring"]
+[submodule "ak_coding/nvim-ts-context-commentstring"]
 	path = pack/ak_coding/opt/nvim-ts-context-commentstring
 	url = https://github.com/JoosepAlviste/nvim-ts-context-commentstring
-	branch = main
   ignore = untracked
-[submodule "pack/ak_editor/opt/harpoon"]
+[submodule "ak_editor/harpoon"]
 	path = pack/ak_editor/opt/harpoon
 	url = https://github.com/ThePrimeagen/harpoon
-	branch = master
   ignore = untracked
-[submodule "pack/ak_editor/opt/eyeliner.nvim"]
+[submodule "ak_editor/eyeliner.nvim"]
 	path = pack/ak_editor/opt/eyeliner.nvim
 	url = https://github.com/jinh0/eyeliner.nvim
-	branch = main
   ignore = untracked
-[submodule "pack/ak_editor/opt/flash.nvim"]
+[submodule "ak_editor/flash.nvim"]
 	path = pack/ak_editor/opt/flash.nvim
 	url = https://github.com/folke/flash.nvim
-	branch = main
   ignore = untracked
-[submodule "pack/ak_editor/opt/telescope-fzf-native.nvim"]
+[submodule "ak_editor/telescope-fzf-native.nvim"]
 	path = pack/ak_editor/opt/telescope-fzf-native.nvim
 	url = https://github.com/nvim-telescope/telescope-fzf-native.nvim
-	branch = main
   ignore = untracked
-[submodule "pack/ak_editor/opt/gitsigns.nvim"]
+[submodule "ak_editor/gitsigns.nvim"]
 	path = pack/ak_editor/opt/gitsigns.nvim
 	url = https://github.com/lewis6991/gitsigns.nvim
-	branch = main
   ignore = untracked
-[submodule "pack/ak_editor/opt/vim-illuminate"]
+[submodule "ak_editor/vim-illuminate"]
 	path = pack/ak_editor/opt/vim-illuminate
 	url = https://github.com/RRethy/vim-illuminate
-	branch = master
   ignore = untracked
-[submodule "pack/ak_editor/opt/todo-comments.nvim"]
+[submodule "ak_editor/todo-comments.nvim"]
 	path = pack/ak_editor/opt/todo-comments.nvim
 	url = https://github.com/folke/todo-comments.nvim
-	branch = main
   ignore = untracked
-[submodule "pack/ak_editor/opt/trouble.nvim"]
+[submodule "ak_editor/trouble.nvim"]
 	path = pack/ak_editor/opt/trouble.nvim
 	url = https://github.com/folke/trouble.nvim
-	branch = main
   ignore = untracked
-[submodule "pack/ak_editor/opt/git-blame.nvim"]
+[submodule "ak_editor/git-blame.nvim"]
 	path = pack/ak_editor/opt/git-blame.nvim
 	url = https://github.com/f-person/git-blame.nvim
-	branch = master
   ignore = untracked
-[submodule "pack/ak_editor/opt/vim-hardtime"]
+[submodule "ak_editor/vim-hardtime"]
 	path = pack/ak_editor/opt/vim-hardtime
 	url = https://github.com/takac/vim-hardtime
-	branch = master
   ignore = untracked
-[submodule "pack/ak_editor/opt/mini.clue"]
+[submodule "ak_editor/mini.clue"]
 	path = pack/ak_editor/opt/mini.clue
 	url = https://github.com/echasnovski/mini.clue
-	branch = main
   ignore = untracked
-[submodule "pack/ak_editor/opt/toggleterm.nvim"]
+[submodule "ak_editor/toggleterm.nvim"]
 	path = pack/ak_editor/opt/toggleterm.nvim
 	url = https://github.com/akinsho/toggleterm.nvim
-	branch = main
   ignore = untracked
-[submodule "pack/ak_editor/opt/nvim-web-devicons"]
+[submodule "ak_editor/nvim-web-devicons"]
 	path = pack/ak_editor/opt/nvim-web-devicons
 	url = https://github.com/nvim-tree/nvim-web-devicons
-	branch = master
   ignore = untracked
-[submodule "pack/ak_editor/opt/oil.nvim"]
+[submodule "ak_editor/oil.nvim"]
 	path = pack/ak_editor/opt/oil.nvim
 	url = https://github.com/stevearc/oil.nvim
-	branch = master
   ignore = untracked
-[submodule "pack/ak_editor/opt/nvim-spectre"]
+[submodule "ak_editor/nvim-spectre"]
 	path = pack/ak_editor/opt/nvim-spectre
 	url = https://github.com/nvim-pack/nvim-spectre
-	branch = master
   ignore = dirty
-[submodule "pack/ak_editor/opt/telescope-alternate.nvim"]
+[submodule "ak_editor/telescope-alternate.nvim"]
 	path = pack/ak_editor/opt/telescope-alternate.nvim
 	url = https://github.com/otavioschwanck/telescope-alternate.nvim
-	branch = master
   ignore = untracked
-[submodule "pack/ak_editor/opt/aerial.nvim"]
+[submodule "ak_editor/aerial.nvim"]
 	path = pack/ak_editor/opt/aerial.nvim
 	url = https://github.com/stevearc/aerial.nvim
-	branch = master
   ignore = untracked
-[submodule "pack/ak_editor/opt/telescope.nvim"]
+[submodule "ak_editor/telescope.nvim"]
 	path = pack/ak_editor/opt/telescope.nvim
 	url = https://github.com/nvim-telescope/telescope.nvim
-	branch = master
   ignore = untracked
-[submodule "pack/ak_treesitter/opt/nvim-ts-autotag"]
+[submodule "ak_treesitter/nvim-ts-autotag"]
 	path = pack/ak_treesitter/opt/nvim-ts-autotag
 	url = https://github.com/windwp/nvim-ts-autotag
-	branch = main
   ignore = untracked
-[submodule "pack/ak_treesitter/opt/nvim-treesitter-context"]
+[submodule "ak_treesitter/nvim-treesitter-context"]
 	path = pack/ak_treesitter/opt/nvim-treesitter-context
 	url = https://github.com/nvim-treesitter/nvim-treesitter-context
-	branch = master
   ignore = untracked
-[submodule "pack/ak_treesitter/opt/nvim-treesitter-textobjects"]
+[submodule "ak_treesitter/nvim-treesitter-textobjects"]
 	path = pack/ak_treesitter/opt/nvim-treesitter-textobjects
 	url = https://github.com/nvim-treesitter/nvim-treesitter-textobjects
-	branch = master
   ignore = untracked
-[submodule "pack/ak_treesitter/opt/nvim-treesitter"]
+[submodule "ak_treesitter/nvim-treesitter"]
 	path = pack/ak_treesitter/opt/nvim-treesitter
 	url = https://github.com/nvim-treesitter/nvim-treesitter
-	branch = master
   ignore = untracked
-[submodule "pack/ak_ui/opt/dashboard-nvim"]
+[submodule "ak_ui/dashboard-nvim"]
 	path = pack/ak_ui/opt/dashboard-nvim
 	url = https://github.com/nvimdev/dashboard-nvim
-	branch = master
   ignore = untracked
-[submodule "pack/ak_ui/opt/dressing.nvim"]
+[submodule "ak_ui/dressing.nvim"]
 	path = pack/ak_ui/opt/dressing.nvim
 	url = https://github.com/stevearc/dressing.nvim
-	branch = master
   ignore = untracked
-[submodule "pack/ak_ui/opt/indent-blankline.nvim"]
+[submodule "ak_ui/indent-blankline.nvim"]
 	path = pack/ak_ui/opt/indent-blankline.nvim
 	url = https://github.com/lukas-reineke/indent-blankline.nvim
-	branch = master
   ignore = untracked
-[submodule "pack/ak_ui/opt/lualine.nvim"]
+[submodule "ak_ui/lualine.nvim"]
 	path = pack/ak_ui/opt/lualine.nvim
 	url = https://github.com/nvim-lualine/lualine.nvim
-	branch = master
   ignore = untracked
-[submodule "pack/ak_util/opt/vim-startuptime"]
+[submodule "ak_util/vim-startuptime"]
 	path = pack/ak_util/opt/vim-startuptime
 	url = https://github.com/dstein64/vim-startuptime
-	branch = master
   ignore = untracked
-[submodule "pack/ak_util/opt/vim-slime"]
+[submodule "ak_util/vim-slime"]
 	path = pack/ak_util/opt/vim-slime
 	url = https://github.com/jpalardy/vim-slime
-	branch = main
   ignore = untracked
-[submodule "pack/ak_util/opt/persistence.nvim"]
+[submodule "ak_util/persistence.nvim"]
 	path = pack/ak_util/opt/persistence.nvim
 	url = https://github.com/folke/persistence.nvim
-	branch = main
   ignore = untracked
-[submodule "pack/ak_colors/opt/colors_catppuccin"]
+[submodule "ak_colors/colors_catppuccin"]
 	path = pack/ak_colors/opt/colors_catppuccin
 	url = https://github.com/catppuccin/nvim
-	branch = main
   ignore = untracked
-[submodule "pack/ak_colors/opt/colors_nightfox"]
+[submodule "ak_colors/colors_nightfox"]
 	path = pack/ak_colors/opt/colors_nightfox
 	url = https://github.com/EdenEast/nightfox.nvim
-	branch = main
   ignore = untracked
-[submodule "pack/ak_colors/opt/colors_rose-pine"]
+[submodule "ak_colors/colors_rose-pine"]
 	path = pack/ak_colors/opt/colors_rose-pine
 	url = https://github.com/rose-pine/neovim
-	branch = main
   ignore = untracked
-[submodule "pack/ak_colors/opt/colors_onedark"]
+[submodule "ak_colors/colors_onedark"]
 	path = pack/ak_colors/opt/colors_onedark
 	url = https://github.com/navarasu/onedark.nvim
-	branch = master
   ignore = untracked
-[submodule "pack/ak_colors/opt/colors_gruvbox"]
+[submodule "ak_colors/colors_gruvbox"]
 	path = pack/ak_colors/opt/colors_gruvbox
 	url = https://github.com/ellisonleao/gruvbox.nvim
-	branch = main
   ignore = untracked
-[submodule "pack/ak_colors/opt/colors_solarized8"]
+[submodule "ak_colors/colors_solarized8"]
 	path = pack/ak_colors/opt/colors_solarized8
 	url = https://github.com/lifepillar/vim-solarized8
-	branch = neovim
+  branch = neovim
   ignore = untracked
-[submodule "pack/ak_colors/opt/colors_solarized-osaka"]
+[submodule "ak_colors/colors_solarized-osaka"]
 	path = pack/ak_colors/opt/colors_solarized-osaka
 	url = https://github.com/craftzdog/solarized-osaka.nvim
-	branch = main
   ignore = untracked
-[submodule "pack/ak_colors/opt/colors_nano-theme"]
+[submodule "ak_colors/colors_nano-theme"]
 	path = pack/ak_colors/opt/colors_nano-theme
 	url = https://github.com/ronisbr/nano-theme.nvim
-	branch = main
   ignore = untracked
-[submodule "pack/ak_colors/opt/colors_sonokai"]
+[submodule "ak_colors/colors_sonokai"]
 	path = pack/ak_colors/opt/colors_sonokai
 	url = https://github.com/sainnhe/sonokai
-	branch = master
   ignore = untracked
-[submodule "pack/ak_colors/opt/colors_monokai-pro"]
+[submodule "ak_colors/colors_monokai-pro"]
 	path = pack/ak_colors/opt/colors_monokai-pro
 	url = https://github.com/loctvl842/monokai-pro.nvim
-	branch = master
   ignore = untracked
-[submodule "pack/ak_colors/opt/colors_everforest"]
+[submodule "ak_colors/colors_everforest"]
 	path = pack/ak_colors/opt/colors_everforest
 	url = https://github.com/sainnhe/everforest
-	branch = master
   ignore = untracked
-[submodule "pack/ak_colors/opt/colors_gruvbox-material"]
+[submodule "ak_colors/colors_gruvbox-material"]
 	path = pack/ak_colors/opt/colors_gruvbox-material
 	url = https://github.com/sainnhe/gruvbox-material
-	branch = master
   ignore = untracked
-[submodule "pack/ak_colors/opt/colors_bamboo"]
+[submodule "ak_colors/colors_bamboo"]
 	path = pack/ak_colors/opt/colors_bamboo
 	url = https://github.com/ribru17/bamboo.nvim
-	branch = master
   ignore = untracked
-[submodule "pack/ak_colors/opt/colors_melange"]
+[submodule "ak_colors/colors_melange"]
 	path = pack/ak_colors/opt/colors_melange
 	url = https://github.com/savq/melange-nvim
-	branch = master
   ignore = untracked
-[submodule "pack/ak_colors/opt/colors_kanagawa"]
+[submodule "ak_colors/colors_kanagawa"]
 	path = pack/ak_colors/opt/colors_kanagawa
 	url = https://github.com/rebelot/kanagawa.nvim
-	branch = master
   ignore = untracked
-[submodule "pack/ak_colors/opt/colors_ayu"]
+[submodule "ak_colors/colors_ayu"]
 	path = pack/ak_colors/opt/colors_ayu
 	url = https://github.com/Shatur/neovim-ayu
-	branch = master
   ignore = untracked
-[submodule "pack/ak_colors/opt/colors_edge"]
+[submodule "ak_colors/colors_edge"]
 	path = pack/ak_colors/opt/colors_edge
 	url = https://github.com/sainnhe/edge
-	branch = master
   ignore = untracked
-[submodule "pack/ak_colors/opt/colors_leaf"]
+[submodule "ak_colors/colors_leaf"]
 	path = pack/ak_colors/opt/colors_leaf
 	url = https://github.com/daschw/leaf.nvim
-	branch = main
   ignore = untracked
-[submodule "pack/ak_colors/opt/colors_astrotheme"]
+[submodule "ak_colors/colors_astrotheme"]
 	path = pack/ak_colors/opt/colors_astrotheme
 	url = https://github.com/AstroNvim/astrotheme
-	branch = main
   ignore = untracked
-[submodule "pack/ak_lang/opt/neoconf.nvim"]
+[submodule "ak_lang/neoconf.nvim"]
 	path = pack/ak_lang/opt/neoconf.nvim
 	url = https://github.com/folke/neoconf.nvim
-	branch = main
   ignore = untracked
-[submodule "pack/ak_lang/opt/neodev.nvim"]
+[submodule "ak_lang/neodev.nvim"]
 	path = pack/ak_lang/opt/neodev.nvim
 	url = https://github.com/folke/neodev.nvim
-	branch = main
   ignore = untracked
-[submodule "pack/ak_lang/opt/mason.nvim"]
+[submodule "ak_lang/mason.nvim"]
 	path = pack/ak_lang/opt/mason.nvim
 	url = https://github.com/williamboman/mason.nvim
-	branch = main
   ignore = untracked
-[submodule "pack/ak_lang/opt/mason-lspconfig.nvim"]
+[submodule "ak_lang/mason-lspconfig.nvim"]
 	path = pack/ak_lang/opt/mason-lspconfig.nvim
 	url = https://github.com/williamboman/mason-lspconfig.nvim
-	branch = main
   ignore = untracked
-[submodule "pack/ak_lang/opt/nvim-lspconfig"]
+[submodule "ak_lang/nvim-lspconfig"]
 	path = pack/ak_lang/opt/nvim-lspconfig
 	url = https://github.com/neovim/nvim-lspconfig
-	branch = master
   ignore = untracked
-[submodule "pack/ak_lang/opt/fidget.nvim"]
+[submodule "ak_lang/fidget.nvim"]
 	path = pack/ak_lang/opt/fidget.nvim
 	url = https://github.com/j-hui/fidget.nvim
-	branch = main
   ignore = untracked
-[submodule "pack/ak_lang/opt/SchemaStore.nvim"]
+[submodule "ak_lang/SchemaStore.nvim"]
 	path = pack/ak_lang/opt/SchemaStore.nvim
 	url = https://github.com/b0o/SchemaStore.nvim
-	branch = main
   ignore = untracked
-[submodule "pack/ak_lang/opt/conform.nvim"]
+[submodule "ak_lang/conform.nvim"]
 	path = pack/ak_lang/opt/conform.nvim
 	url = https://github.com/stevearc/conform.nvim
-	branch = master
   ignore = untracked
-[submodule "pack/ak_lang/opt/nvim-lint"]
+[submodule "ak_lang/nvim-lint"]
 	path = pack/ak_lang/opt/nvim-lint
 	url = https://github.com/mfussenegger/nvim-lint
-	branch = master
   ignore = untracked
-[submodule "pack/ak_lang/opt/neotest-python"]
+[submodule "ak_lang/neotest-python"]
 	path = pack/ak_lang/opt/neotest-python
 	url = https://github.com/nvim-neotest/neotest-python
-	branch = master
   ignore = untracked
-[submodule "pack/ak_lang/opt/neotest"]
+[submodule "ak_lang/neotest"]
 	path = pack/ak_lang/opt/neotest
 	url = https://github.com/nvim-neotest/neotest
-	branch = master
   ignore = untracked
-[submodule "pack/ak_lang/opt/nvim-dap-ui"]
+[submodule "ak_lang/nvim-dap-ui"]
 	path = pack/ak_lang/opt/nvim-dap-ui
 	url = https://github.com/rcarriga/nvim-dap-ui
-	branch = master
   ignore = untracked
-[submodule "pack/ak_lang/opt/nvim-dap-virtual-text"]
+[submodule "ak_lang/nvim-dap-virtual-text"]
 	path = pack/ak_lang/opt/nvim-dap-virtual-text
 	url = https://github.com/theHamsta/nvim-dap-virtual-text
-	branch = master
   ignore = untracked
-[submodule "pack/ak_lang/opt/mason-nvim-dap.nvim"]
+[submodule "ak_lang/mason-nvim-dap.nvim"]
 	path = pack/ak_lang/opt/mason-nvim-dap.nvim
 	url = https://github.com/jay-babu/mason-nvim-dap.nvim
-	branch = main
   ignore = untracked
-[submodule "pack/ak_lang/opt/nvim-dap-python"]
+[submodule "ak_lang/nvim-dap-python"]
 	path = pack/ak_lang/opt/nvim-dap-python
 	url = https://github.com/mfussenegger/nvim-dap-python
-	branch = master
   ignore = untracked
-[submodule "pack/ak_lang/opt/nvim-dap"]
+[submodule "ak_lang/nvim-dap"]
 	path = pack/ak_lang/opt/nvim-dap
 	url = https://github.com/mfussenegger/nvim-dap
-	branch = master
   ignore = untracked
-[submodule "pack/ak_lang/opt/peek.nvim"]
+[submodule "ak_lang/peek.nvim"]
 	path = pack/ak_lang/opt/peek.nvim
 	url = https://github.com/toppair/peek.nvim
-	branch = master
   ignore = untracked
-[submodule "pack/ak_lang/opt/markdown-preview.nvim"]
+[submodule "ak_lang/markdown-preview.nvim"]
 	path = pack/ak_lang/opt/markdown-preview.nvim
 	url = https://github.com/iamcco/markdown-preview.nvim
-	branch = master
   ignore = untracked
-[submodule "pack/ak_lang/opt/headlines.nvim"]
+[submodule "ak_lang/headlines.nvim"]
 	path = pack/ak_lang/opt/headlines.nvim
 	url = https://github.com/lukas-reineke/headlines.nvim
-	branch = master
   ignore = untracked
-[submodule "pack/ak_lang/opt/venv-selector.nvim"]
+[submodule "ak_lang/venv-selector.nvim"]
 	path = pack/ak_lang/opt/venv-selector.nvim
 	url = https://github.com/linux-cultist/venv-selector.nvim
-	branch = main
 	ignore = untracked
-[submodule "pack/ak_lang/opt/vim-dadbod"]
+[submodule "ak_lang/vim-dadbod"]
 	path = pack/ak_lang/opt/vim-dadbod
 	url = https://github.com/tpope/vim-dadbod
-	branch = master
 	ignore = untracked
-[submodule "pack/ak_lang/opt/vim-dadbod-completion"]
+[submodule "ak_lang/vim-dadbod-completion"]
 	path = pack/ak_lang/opt/vim-dadbod-completion
 	url = https://github.com/kristijanhusak/vim-dadbod-completion
-	branch = master
 	ignore = untracked
