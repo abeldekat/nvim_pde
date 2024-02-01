@@ -35,8 +35,7 @@ git clone https://github.com/abeldekat/nvim_pde ~/.config/ak
 Open Neovim with this config:
 
 ```sh
-git submodule init
-git submodule update
+git submodule update --init
 NVIM_APPNAME=ak nvim
 ```
 

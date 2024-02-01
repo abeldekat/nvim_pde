@@ -251,7 +251,7 @@
 [submodule "pack/ak_colors/opt/colors_solarized8"]
 	path = pack/ak_colors/opt/colors_solarized8
 	url = https://github.com/lifepillar/vim-solarized8
-	branch = master
+	branch = neovim
   ignore = untracked
 [submodule "pack/ak_colors/opt/colors_solarized-osaka"]
 	path = pack/ak_colors/opt/colors_solarized-osaka
