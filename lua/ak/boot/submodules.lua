@@ -37,10 +37,10 @@ return function(_, _) -- extraspec, opts
   local lualine_override = vim.fn.stdpath("config") .. "/lualine_themes"
   vim.opt.rtp:append(lualine_override)
 
-  -- flash: Defined in coding, also used in editor, for telescope
-  -- eyeliner: Defined in coding, also used in treesitter, for textobjects
-  -- trouble: Defined in editor, also used in lang.testing, for neotest
-  -- nvim-dap-python: Defined in dap, also used in lang.python, for venv-selector
+  -- eyeliner: coding --> treesitter
+  -- flash: coding --> editor
+  -- trouble: editor --> lang.testing
+  -- nvim-dap-python: dap --> lang.python
   Util.register_referenced({ "trouble.nvim", "flash.nvim", "eyeliner.nvim", "nvim-dap-python" })
 
   for _, module in ipairs(modules) do

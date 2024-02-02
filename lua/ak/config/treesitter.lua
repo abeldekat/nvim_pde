@@ -15,6 +15,7 @@ local get_opts = function()
   return {
     highlight = { enable = true },
     indent = { enable = true },
+    sync_install = Util.is_headless(),
     ensure_installed = {
       "bash",
       "c",

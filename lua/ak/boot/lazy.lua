@@ -21,7 +21,6 @@ local function to_spec()
     require("ak.lazy.treesitter"),
     require("ak.lazy.ui"),
     require("ak.lazy.util"),
-    --
     require("ak.lazy.lang.formatting"),
     require("ak.lazy.lang.linting"),
     require("ak.lazy.lang.lsp"),
@@ -44,10 +43,10 @@ return function(extraspec, _)
   --
   local lualine_override = vim.fn.stdpath("config") .. "/lualine_themes"
 
-  -- flash: Defined in coding, also used in editor, for telescope
-  -- eyeliner: Defined in coding, also used in treesitter, for textobjects
-  -- trouble: Defined in editor, also used in lang.testing, for neotest
-  -- nvim-dap-python: Defined in dap, also used in lang.python, for venv-selector
+  -- eyeliner: coding --> treesitter
+  -- flash: coding --> editor
+  -- trouble: editor --> lang.testing
+  -- nvim-dap-python: dap --> lang.python
   Util.register_referenced({ "flash.nvim", "eyeliner.nvim", "trouble.nvim", "nvim-dap-python" })
   local spec = to_spec()
 
