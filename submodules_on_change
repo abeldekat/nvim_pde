@@ -1,0 +1,57 @@
+#! /bin/bash
+
+function telescope_fzf_native() {
+	echo "--> Start telescope-fzf-native.nvim"
+	cd pack/editor_ak/opt/telescope-fzf-native.nvim
+	make
+	cd -
+}
+
+# Luasnip has submodules... See its deps directory
+function luasnip_jsregexp() {
+	echo "------> Start luasnip"
+	cd pack/coding_ak/opt/LuaSnip
+	make install_jsregexp
+	cd -
+}
+
+function markdown_peek() {
+	echo "------> Start peek.nvim"
+	cd pack/lang_ak/opt/peek.nvim
+	deno task --quiet build:fast
+	cd -
+}
+
+function markdown_preview() {
+	echo "------> Start markdown-preview.nvim"
+	nvim --headless -u NONE +"packadd markdown-preview.nvim" +"call mkdp#util#install_sync(v:true)" +qa
+	echo " "
+}
+
+# Enabled: treesitter ensure_installed.
+# When treesitter itself is updated, ensure all parsers are up to date.
+function update_treesitter() {
+	echo "------> Start nvim-treesitter"
+	nvim --headless -u NONE +"packadd nvim-treesitter" +"TSUpdateSync" +qa
+	echo " "
+}
+
+# Before any packages can be used, the registry needs to be downloaded
+# Is also invoked on mason's commands and on opening the ui
+function update_mason_registry() {
+	echo "------> Start mason.nvim"
+	nvim --headless -u NONE +"packadd mason.nvim" +"lua require('mason').setup()" +"MasonUpdate" +qa
+	echo " "
+}
+
+telescope_fzf_native
+luasnip_jsregexp
+markdown_peek
+markdown_preview
+update_treesitter
+update_mason_registry
+
+echo "--> All done...:"
+echo "Open neovim without arguments. Mason and treesitter will install automatically"
+echo " "
+echo "Don't forget: helptags ALL"

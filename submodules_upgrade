@@ -1,0 +1,11 @@
+#! /bin/bash
+
+echo "------> Start updating to the latest versions."
+
+# Update to the latest versions of the remote
+git submodule update --remote --init --filter=blob:none --progress
+# Also expand the inner submodules
+git submodule update --init --filter=blob:none --progress --recursive
+
+echo "------> Done."
+echo "Now run submodules_on_change."

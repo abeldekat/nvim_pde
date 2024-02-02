@@ -1,0 +1,8 @@
+#! /bin/bash
+
+echo "------> Start initializing submodules to their saved versions."
+
+git submodule update --init --filter=blob:none --progress --recursive
+
+echo "------> Done."
+echo "Now run submodules_on_change."
