@@ -1,15 +1,14 @@
 # Neovim pde
 
-My `personal development environment` for `Neovim`
+My personal development environment for Neovim
 
 ## Design
 
 - `init`: Defer to `ak.init`
-- `ak.init`: Start with either [lazy.nvim] or `git submodules`.
-- `ak.boot.submodules`: Uses the plugins installed with git submodules.
-See [submodules] and the modules in `ak.submodules`.
-- `ak.boot.lazy`: Uses [lazy.nvim] to manage plugins, see the modules in `ak.lazy`
-- `ak.config`: Invoked by the modules in `ak.boot`
+- `ak.init`: Start with either git [submodules] or [lazy.nvim].
+- `ak.boot.submodules`: No plugin manager. Uses `ak.submodules` to boot
+- `ak.boot.lazy`: Uses [lazy.nvim] and `ak.lazy` to boot.
+- `ak.config`: All config.
 
   Contains the setup for:
     1. options
@@ -33,12 +32,8 @@ git clone https://github.com/abeldekat/nvim_pde ~/.config/ak
 
 # Only when using submodules(the default):
 cd ~/.config/ak
-git submodule update --init --filter=blob:none --recursive
-#
-# Build markdown-preview and peek.nvim:
-./on_submodule_update
-# Now, open Neovim without arguments.
-# Treesitter and mason will install.
+./submodules_init
+./submodules_on_change
 ```
 
 Open Neovim with this config:
