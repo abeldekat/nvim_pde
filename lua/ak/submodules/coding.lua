@@ -9,7 +9,7 @@ local later_only = Util.defer.later_only
 -- After/plugin is not loaded when using later(), which uses vim.schedule
 -- This function is only needed when lazy-loading nvim-cmp
 local function source_after_plugin(after_path)
-  vim.cmd.source(vim.fn.stdpath("config") .. "/pack/ak_coding/opt/" .. after_path)
+  vim.cmd.source(vim.fn.stdpath("config") .. "/pack/coding_ak/opt/" .. after_path)
 end
 
 -- Lazy loading benefit: +-5 ms

@@ -2,14 +2,21 @@
 
 function fzf() {
 	echo "--> Start -make- telescope-fzf-native"
-	cd pack/ak_editor/opt/telescope-fzf-native.nvim
+	cd pack/editor_ak/opt/telescope-fzf-native.nvim
 	make
+	cd -
+}
+
+function luasnip() {
+	echo "--> Start -make- luasnip"
+	cd pack/coding_ak/opt/LuaSnip
+	make install_jsregexp
 	cd -
 }
 
 function peek() {
 	echo "--> Start deno task for peek.nvim"
-	cd pack/ak_lang/opt/peek.nvim
+	cd pack/lang_ak/opt/peek.nvim
 	deno task --quiet build:fast
 	cd -
 }
@@ -20,6 +27,7 @@ function mkdp() {
 }
 
 fzf
+luasnip
 peek
 mkdp
 
@@ -28,3 +36,4 @@ echo "Open neovim without arguments. Mason and treesitter will update automatica
 echo " "
 echo "Don't forget: helptags ALL"
 echo "Don't forget on update: treesitter :TSUpdate, mason :MasonUpdate"
+echo "python-semshi :UpdateRemotePlugins"
