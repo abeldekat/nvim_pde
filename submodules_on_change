@@ -28,11 +28,22 @@ function markdown_preview() {
 	echo " "
 }
 
+# When using this version, on a first install, an error occurs when opening a lua file.
+# function update_treesitter() {
+# 	echo "------> Start nvim-treesitter"
+# 	nvim --headless -u NONE +"packadd nvim-treesitter" +"TSUpdateSync" +qa
+# 	echo " "
+# }
+
 # Enabled: treesitter ensure_installed.
 # When treesitter itself is updated, ensure all parsers are up to date.
 function update_treesitter() {
 	echo "------> Start nvim-treesitter"
-	nvim --headless -u NONE +"packadd nvim-treesitter" +"TSUpdateSync" +qa
+	nvim --headless -u NONE \
+		+"packadd nvim-treesitter" \
+		+"packadd nvim-treesitter-textobjects" \
+		+"lua require('ak.config.treesitter')" \
+		+"TSUpdateSync" +qa
 	echo " "
 }
 
@@ -52,6 +63,6 @@ update_treesitter
 update_mason_registry
 
 echo "--> All done...:"
-echo "Open neovim without arguments. Mason and treesitter will install automatically"
+# echo "Open neovim without arguments. Mason and treesitter will install automatically"
 echo " "
 echo "Don't forget: helptags ALL"
