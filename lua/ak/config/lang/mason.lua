@@ -11,11 +11,7 @@ require("mason").setup()
 local mr = require("mason-registry")
 mr:on("package:install:success", function()
   vim.defer_fn(function()
-    -- trigger FileType event to possibly load this newly installed LSP server
-    vim.api.nvim_exec_autocmds("FileType", {
-      buffer = vim.api.nvim_get_current_buf(),
-      modeline = false,
-    })
+    vim.cmd("LspStart") -- for each installed lsp, try to attach to the current buffer
   end, 100)
 end)
 local function ensure_installed()
@@ -27,6 +23,14 @@ local function ensure_installed()
   end
 end
 
-ensure_installed()
+-- See mason-registry.init.lua, function M.refresh(cb)
+-- The code below ensures that the mason-registry is only refreshed:
+-- 1. On first install or when the plugin needs to be build
+-- 2. When using Mason's commands
+if not require("mason-registry.sources").is_installed() and mr.refresh then
+  mr.refresh(ensure_installed)
+else
+  ensure_installed()
+end
 
 vim.keymap.set("n", "<leader>cm", "<cmd>Mason<cr>", { desc = "Mason", silent = true })
