@@ -6,12 +6,17 @@ local Util = require("ak.util")
 local add, later = vim.cmd.packadd, Util.defer.later
 local later_only = Util.defer.later_only
 
--- After/plugin is not loaded when using later(), which uses vim.schedule
--- This function is only needed when lazy-loading nvim-cmp
-local function source_after_plugin(after_path)
-  vim.cmd.source(vim.fn.stdpath("config") .. "/pack/coding_ak/opt/" .. after_path)
+if Util.submodules.is_provisioning() then
+  Util.info("------> Start provisioning coding")
+
+  vim.cmd("lcd " .. Util.submodules.file_in_pack_path("coding", { "LuaSnip" }))
+  vim.cmd("!make -s install_jsregexp")
+  vim.cmd("lcd -")
+  Util.info("NOTE: rm: cannot rm is not an error")
+  return
 end
 
+-- Completion:
 -- Lazy loading benefit: +-5 ms
 later(function()
   add("cmp-nvim-lsp") -- cmp_nvim_lsp must be present before nvim-lspconfig is added
@@ -21,14 +26,22 @@ later(function()
   add("cmp-buffer")
   add("cmp-path")
 end)
+-- After/plugin is not loaded when using later(), which uses vim.schedule
+-- This function is only needed when lazy-loading nvim-cmp:
 later_only(function()
+  ---@param path_after_opt table
+  local function source_after_plugin(path_after_opt)
+    local to_source = Util.submodules.file_in_pack_path("coding", path_after_opt)
+    vim.cmd.source(to_source)
+  end
+
   -- Plugin does not require nvim-cmp but creates an autocmd on insertenter:
-  source_after_plugin("cmp-nvim-lsp/after/plugin/cmp_nvim_lsp.lua")
+  source_after_plugin({ "cmp-nvim-lsp", "after", "plugin", "cmp_nvim_lsp.lua" })
 
   -- Plugins requiring nvim-cmp:
-  source_after_plugin("cmp_luasnip/after/plugin/cmp_luasnip.lua")
-  source_after_plugin("cmp-buffer/after/plugin/cmp_buffer.lua")
-  source_after_plugin("cmp-path/after/plugin/cmp_path.lua")
+  source_after_plugin({ "cmp_luasnip", "after", "plugin", "cmp_luasnip.lua" })
+  source_after_plugin({ "cmp-buffer", "after", "plugin", "cmp_buffer.lua" })
+  source_after_plugin({ "cmp-path", "after", "plugin", "cmp_path.lua" })
 end)
 later(function() -- and finally:
   require("ak.config.completion")

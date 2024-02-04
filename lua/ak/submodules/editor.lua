@@ -7,6 +7,15 @@ local Util = require("ak.util")
 local add, later = vim.cmd.packadd, Util.defer.later
 local with_dir = Util.opened_with_dir_argument()
 
+if Util.submodules.is_provisioning() then
+  Util.info("------> Start provisioning editor")
+
+  vim.cmd("lcd " .. Util.submodules.file_in_pack_path("editor", { "telescope-fzf-native.nvim" }))
+  vim.cmd("!make -s")
+  vim.cmd("lcd -")
+  return
+end
+
 local function oil()
   add("nvim-web-devicons")
   add("oil.nvim")

@@ -2,6 +2,17 @@ local Util = require("ak.util")
 local add = vim.cmd.packadd
 local later = Util.defer.later
 
+local function markdown_install()
+  -- markdown_preview
+  add("markdown-preview.nvim")
+  vim.fn["mkdp#util#install_sync"]("v:false") -- not async
+
+  -- peek
+  vim.cmd("lcd " .. Util.submodules.file_in_pack_path("lang", { "peek.nvim" }))
+  vim.cmd("!deno task --quiet build:fast")
+  vim.cmd("lcd -")
+end
+
 local function markdown()
   Util.defer.on_events(function()
     later(function()
@@ -34,11 +45,18 @@ local function sql()
   end, "FileType", "sql")
 end
 
-local langs = {
-  markdown,
-  python,
-  sql,
-}
-for _, lang in ipairs(langs) do
+local function langs()
+  if Util.submodules.is_provisioning() then
+    Util.info("------> Start provisioning extra")
+    return { markdown_install }
+  end
+  return {
+    markdown,
+    python,
+    sql,
+  }
+end
+
+for _, lang in ipairs(langs()) do
   lang()
 end

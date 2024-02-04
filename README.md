@@ -6,8 +6,8 @@ My personal development environment for Neovim
 
 - `init`: Defer to `ak.init`
 - `ak.init`: Start with either git [submodules] or [lazy.nvim].
-- `ak.boot.submodules`: No plugin manager. Uses `ak.submodules` to boot
-- `ak.boot.lazy`: Uses [lazy.nvim] and `ak.lazy` to boot.
+- `ak.boot.submodules`: No plugin manager. Uses the units in `ak.submodules` to boot
+- `ak.boot.lazy`: Uses [lazy.nvim] and the units in `ak.lazy` to boot.
 - `ak.config`: All config.
 
   Contains the setup for:
@@ -32,8 +32,7 @@ git clone https://github.com/abeldekat/nvim_pde ~/.config/ak
 
 # Only when using submodules(the default):
 cd ~/.config/ak
-./submodules_init
-./submodules_on_change
+make
 ```
 
 Open Neovim with this config:

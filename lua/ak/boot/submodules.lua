@@ -12,22 +12,33 @@ local function setup_performance()
   end
 end
 
-local modules = {
-  "ak.submodules.start",
-  "ak.submodules.coding",
-  "ak.submodules.editor",
-  "ak.submodules.treesitter",
-  "ak.submodules.ui",
-  "ak.submodules.util",
-  "ak.submodules.lang.formatting",
-  "ak.submodules.lang.linting",
-  "ak.submodules.lang.lsp",
-  "ak.submodules.lang.testing",
-  "ak.submodules.lang.debugging",
-  "ak.submodules.lang.extra",
-}
+local function modules()
+  if Util.submodules.is_provisioning() then
+    return {
+      "ak.submodules.coding", -- luasnip
+      "ak.submodules.editor", -- telescope
+      "ak.submodules.treesitter", -- parsers
+      "ak.submodules.lang.lsp", -- mason registry
+      "ak.submodules.lang.extra", -- markdown
+    }
+  end
+  return {
+    "ak.submodules.start",
+    "ak.submodules.coding",
+    "ak.submodules.editor",
+    "ak.submodules.treesitter",
+    "ak.submodules.ui",
+    "ak.submodules.util",
+    "ak.submodules.lang.formatting",
+    "ak.submodules.lang.linting",
+    "ak.submodules.lang.lsp",
+    "ak.submodules.lang.testing",
+    "ak.submodules.lang.debugging",
+    "ak.submodules.lang.extra",
+  }
+end
 
-return function(_, _) -- extraspec, opts
+return function(_) -- opts
   setup_performance()
 
   -- When using submodules, lualine overriding behaves differently,
@@ -43,7 +54,7 @@ return function(_, _) -- extraspec, opts
   -- nvim-dap-python: dap --> lang.python
   Util.register_referenced({ "trouble.nvim", "flash.nvim", "eyeliner.nvim", "nvim-dap-python" })
 
-  for _, module in ipairs(modules) do
+  for _, module in ipairs(modules()) do
     require(module)
   end
 end

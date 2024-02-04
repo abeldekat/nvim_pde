@@ -1,6 +1,18 @@
 local Util = require("ak.util")
 local add, later = vim.cmd.packadd, Util.defer.later
 
+if Util.submodules.is_provisioning() then
+  Util.info("------> Start provisioning lsp")
+
+  -- Before any packages can be used, the registry needs to be downloaded
+  -- Is also invoked on mason's commands and on opening the ui
+  add("mason.nvim")
+  require("mason").setup()
+  vim.cmd("MasonUpdate")
+
+  return
+end
+
 local function load()
   add("mason.nvim")
   require("ak.config.lang.mason")

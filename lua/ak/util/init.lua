@@ -2,6 +2,7 @@
 ---@field color ak.util.color
 ---@field defer ak.util.defer
 ---@field lsp ak.util.lsp
+---@field submodules ak.util.submodules
 ---@field toggle ak.util.toggle
 ---@field ui ak.util.ui
 local M = {}

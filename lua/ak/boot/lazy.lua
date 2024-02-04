@@ -33,14 +33,13 @@ end
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                  Default: lazy = true                   │
 --          ╰─────────────────────────────────────────────────────────╯
-return function(extraspec, _)
+return function(_) -- opts
   local lazypath = clone("folke", "lazy.nvim")
   vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
 
   -- When using submodules, lualine overriding behaves differently,
   -- because both the override and the lualine plugin are in the config folder
   -- See: lualine.utils.loader.lua, function load_theme, line 232
-  --
   local lualine_override = vim.fn.stdpath("config") .. "/lualine_themes"
 
   -- eyeliner: coding --> treesitter
@@ -48,11 +47,10 @@ return function(extraspec, _)
   -- trouble: editor --> lang.testing
   -- nvim-dap-python: dap --> lang.python
   Util.register_referenced({ "flash.nvim", "eyeliner.nvim", "trouble.nvim", "nvim-dap-python" })
-  local spec = to_spec()
 
   require("lazy").setup({
     defaults = { lazy = true, version = false }, -- "*" = latest stable version
-    spec = extraspec and vim.list_extend(spec, extraspec) or spec,
+    spec = to_spec(),
     dev = { path = dev_path, patterns = dev_patterns },
     install = { colorscheme = { "tokyonight", "habamax" } },
     checker = { enabled = false },
