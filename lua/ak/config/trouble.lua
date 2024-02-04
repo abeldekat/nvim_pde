@@ -1,5 +1,6 @@
--- cmd = { "TroubleToggle", "Trouble" },
+local Util = require("ak.util")
 require("trouble").setup({ use_diagnostic_signs = true })
+Util.register_referenced("trouble.nvim")
 
 local key = vim.keymap.set
 key(

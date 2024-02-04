@@ -18,10 +18,11 @@ setmetatable(M, {
 ---@type string[]
 local referenced_plugins = {}
 
--- Register plugin names that are referenced in modules other than their own
----@param plugins string[]
-function M.register_referenced(plugins)
-  referenced_plugins = plugins
+-- Register the name of a plugin that is also referenced in modules other than their own
+-- Those modules must be loaded after the plugin has registered itself.
+---@param plugin string
+function M.register_referenced(plugin)
+  table.insert(referenced_plugins, plugin)
 end
 
 ---@param plugin string

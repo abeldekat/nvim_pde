@@ -1,3 +1,4 @@
+local Util = require("ak.util")
 local function no_op() end
 
 local function map(l, r, opts, mode)
@@ -58,6 +59,7 @@ end
 local function python_dap()
   local path = require("mason-registry").get_package("debugpy"):get_install_path()
   require("dap-python").setup(path .. "/venv/bin/python")
+  Util.register_referenced("nvim-dap-python")
 
   -- keys for ft = python
   map("<leader>dPt", function()

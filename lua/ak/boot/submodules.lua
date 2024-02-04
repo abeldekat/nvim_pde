@@ -15,11 +15,11 @@ end
 local function modules()
   if Util.submodules.is_provisioning() then
     return {
-      "ak.submodules.coding", -- luasnip
-      "ak.submodules.editor", -- telescope
-      "ak.submodules.treesitter", -- parsers
-      "ak.submodules.lang.lsp", -- mason registry
-      "ak.submodules.lang.extra", -- markdown
+      "ak.submodules.coding", -- provision luasnip
+      "ak.submodules.editor", -- provision telescope
+      "ak.submodules.treesitter", -- provision parsers
+      "ak.submodules.lang.lsp", -- provision mason registry
+      "ak.submodules.lang.extra", -- provision markdown
     }
   end
   return {
@@ -47,12 +47,6 @@ return function(_) -- opts
   --
   local lualine_override = vim.fn.stdpath("config") .. "/lualine_themes"
   vim.opt.rtp:append(lualine_override)
-
-  -- eyeliner: coding --> treesitter
-  -- flash: coding --> editor
-  -- trouble: editor --> lang.testing
-  -- nvim-dap-python: dap --> lang.python
-  Util.register_referenced({ "trouble.nvim", "flash.nvim", "eyeliner.nvim", "nvim-dap-python" })
 
   for _, module in ipairs(modules()) do
     require(module)

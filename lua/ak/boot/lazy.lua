@@ -1,4 +1,3 @@
-local Util = require("ak.util")
 local dev_patterns = {}
 local dev_path = "~/projects/lazydev"
 
@@ -41,12 +40,6 @@ return function(_) -- opts
   -- because both the override and the lualine plugin are in the config folder
   -- See: lualine.utils.loader.lua, function load_theme, line 232
   local lualine_override = vim.fn.stdpath("config") .. "/lualine_themes"
-
-  -- eyeliner: coding --> treesitter
-  -- flash: coding --> editor
-  -- trouble: editor --> lang.testing
-  -- nvim-dap-python: dap --> lang.python
-  Util.register_referenced({ "flash.nvim", "eyeliner.nvim", "trouble.nvim", "nvim-dap-python" })
 
   require("lazy").setup({
     defaults = { lazy = true, version = false }, -- "*" = latest stable version

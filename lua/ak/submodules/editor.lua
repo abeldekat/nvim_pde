@@ -31,12 +31,12 @@ end
 -- "nvim-telescope/telescope-file-browser.nvim",
 -- "nvim-telescope/telescope-project.nvim",
 later(function()
-  add("harpoon")
-  require("ak.config.harpoon_one")
-
   add("eyeliner.nvim")
   add("flash.nvim")
   require("ak.config.jump")
+
+  add("harpoon")
+  require("ak.config.harpoon_one")
 
   add("trouble.nvim")
   require("ak.config.trouble")

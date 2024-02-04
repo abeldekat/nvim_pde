@@ -2,6 +2,8 @@
 --          │                   See also: telescope                   │
 --          ╰─────────────────────────────────────────────────────────╯
 
+local Util = require("ak.util")
+
 local opts = {
   search = {
     multi_window = true, -- default
@@ -21,10 +23,12 @@ local opts = {
   },
 }
 require("flash").setup(opts)
+Util.register_referenced("flash.nvim")
 require("eyeliner").setup({ -- disabled flash for fFtT
   highlight_on_key = true, -- show highlights only after keypress
   dim = true, -- dim all other characters if set to true (recommended!)
 })
+Util.register_referenced("eyeliner.nvim")
 
 local keys = vim.keymap.set
 keys({ "n", "x", "o" }, "s", function()
