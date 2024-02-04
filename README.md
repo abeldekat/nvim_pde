@@ -65,6 +65,23 @@ alias akl="AK_BOOT=lazy NVIM_APPNAME=akl nvim"
 
 ### Submodules
 
+Sync plugins to the latest remote versions:
+
+```sh
+# make sure the following git settings are applied:
+git config diff.submodule log
+git config status.submoduleSummary true
+
+# update --remote:
+make sync
+
+# Manually:
+# git status: Inspect the updates and commit
+
+# make sure inner submodules are also updated, rebuild plugins:
+make
+```
+
 Resources:
 
 - `:h packages`
@@ -79,8 +96,8 @@ Measured by starting the editor without arguments.
 Invoke `:StartupTime` or press `<leader>ms`.
 Repeat a couple of times.
 
-- submodules: Around 45ms
-- [lazy.nvim]: Around 45ms
+- submodules: Around 44ms
+- [lazy.nvim]: Around 46ms
 
 ## Acknowledgements
 

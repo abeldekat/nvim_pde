@@ -19,4 +19,4 @@ upgrade:
 
 init: update provision
 
-sync: upgrade update provision
+sync: upgrade
