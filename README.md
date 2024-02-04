@@ -4,11 +4,12 @@ My personal development environment for Neovim
 
 ## Design
 
-- `init`: Defer to `ak.init`
-- `ak.init`: Start with either git [submodules] or [lazy.nvim].
-- `ak.boot.submodules`: No plugin manager. Uses the units in `ak.submodules` to boot
+- `init`: Defers to `ak.init`.
+- `ak.init`: Starts with either git [submodules] or [lazy.nvim].
+- `ak.boot.submodules`: Operates without plugin manager.
+Uses the units in `ak.submodules` to boot.
 - `ak.boot.lazy`: Uses [lazy.nvim] and the units in `ak.lazy` to boot.
-- `ak.config`: All config.
+- `ak.config`:
 
   Contains the setup for:
     1. options
@@ -17,7 +18,7 @@ My personal development environment for Neovim
     4. color-schemes
     5. plugins
 
-- `ak.util`: Shared code. Amongst others, contains functions used for lazy-loading
+- `ak.util`: Shared code.
 
 ## Install
 
@@ -32,7 +33,7 @@ git clone https://github.com/abeldekat/nvim_pde ~/.config/ak
 
 # Only when using submodules(the default):
 cd ~/.config/ak
-make
+NVIM_APPNAME=ak make
 ```
 
 Open Neovim with this config:
