@@ -37,10 +37,20 @@ return {
   },
 
   {
+    "echasnovski/mini.statusline",
+    lazy = false,
+    cond = Util.ui.use_mini_statusline,
+    config = function()
+      require("ak.config.mini_statusline")
+    end,
+  },
+
+  {
     "nvim-lualine/lualine.nvim",
     init = function()
       require("ak.config.lualine_init")
     end,
+    cond = not Util.ui.use_mini_statusline,
     event = "VeryLazy",
     config = function()
       require("ak.config.lualine")

@@ -2,57 +2,58 @@
 --          │                      Experimental                       │
 --          ╰─────────────────────────────────────────────────────────╯
 
-local CTRL_S = vim.api.nvim_replace_termcodes("<C-S>", true, true, true)
-local CTRL_V = vim.api.nvim_replace_termcodes("<C-V>", true, true, true)
+-- TODO: shorter filename, colors for gitsigns and diagnostics
 
-local modes = setmetatable({
-  ["n"] = { long = "Normal", short = "N", hl = "MiniStatuslineModeNormal" },
-  ["v"] = { long = "Visual", short = "V", hl = "MiniStatuslineModeVisual" },
-  ["V"] = { long = "V-Line", short = "V-L", hl = "MiniStatuslineModeVisual" },
-  [CTRL_V] = { long = "V-Block", short = "V-B", hl = "MiniStatuslineModeVisual" },
-  ["s"] = { long = "Select", short = "S", hl = "MiniStatuslineModeVisual" },
-  ["S"] = { long = "S-Line", short = "S-L", hl = "MiniStatuslineModeVisual" },
-  [CTRL_S] = { long = "S-Block", short = "S-B", hl = "MiniStatuslineModeVisual" },
-  ["i"] = { long = "Insert", short = "I", hl = "MiniStatuslineModeInsert" },
-  ["R"] = { long = "Replace", short = "R", hl = "MiniStatuslineModeReplace" },
-  ["c"] = { long = "Command", short = "C", hl = "MiniStatuslineModeCommand" },
-  ["r"] = { long = "Prompt", short = "P", hl = "MiniStatuslineModeOther" },
-  ["!"] = { long = "Shell", short = "Sh", hl = "MiniStatuslineModeOther" },
-  ["t"] = { long = "Terminal", short = "T", hl = "MiniStatuslineModeOther" },
-}, {
-  -- By default return 'Unknown' but this shouldn't be needed
-  __index = function()
-    return { long = "Unknown", short = "U", hl = "%#MiniStatuslineModeOther#" }
-  end,
-})
+-- about colors:
+--https://github.com/echasnovski/mini.nvim/issues/153
 
----@return ... Section string and mode's highlight group.
-local function section_mode(args)
-  local MiniStatusline = require("mini.statusline")
-  local mode_info = modes[vim.fn.mode()]
+-- hightlighting:
+-- https://github.com/echasnovski/mini.nvim/issues/337
+-- use separate groups for each diagnotic
 
-  local mode = MiniStatusline.is_truncated(args.trunc_width) and mode_info.short or mode_info.long
+-- redrawstatus:
+-- vim.cmd('redrawstatus!') will redraw it immediately.
+-- vim.defer_fn(function() vim.cmd('redrawstatus!') end, 100) will schedule to redraw it after 100 milliseconds.
 
-  return mode, mode_info.hl
-end
+-- mini statusline in floating lazy.nvim ui:
+-- local set_active_stl = function()
+--   vim.wo.statusline = "%!v:lua.MiniStatusline.active()"
+-- end
+-- vim.api.nvim_create_autocmd("Filetype", { pattern = "lazy", callback = set_active_stl })
+
+local blocked_filetypes = {
+  ["dashboard"] = true,
+}
 
 local function active()
+  -- Customize statusline content for blocked filetypes to your liking
+  if blocked_filetypes[vim.bo.filetype] then
+    return ""
+  end
+
+  -- Continue the function
   local MiniStatusline = require("mini.statusline")
-  local mode, mode_hl = section_mode({ trunc_width = 120 })
-  local git = MiniStatusline.section_git({ trunc_width = 75 })
-  local diagnostics = MiniStatusline.section_diagnostics({ trunc_width = 75 })
+
+  -- 1 Dynamic hl
+  local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 120 })
+  -- 2 hl = "MiniStatuslineDevinfo"
+  local git = MiniStatusline.section_git({ trunc_width = 75, icon = "" })
+  local diagnostics = MiniStatusline.section_diagnostics({ trunc_width = 75, icon = "" })
+  -- 3 hl = "MiniStatuslineFilename" --> MiniStatuslineDevinfo
   local filename = MiniStatusline.section_filename({ trunc_width = 140 })
+  -- 4 hl = "MiniStatuslineFileinfo" --> MiniStatuslineDevinfo
   local fileinfo = MiniStatusline.section_fileinfo({ trunc_width = 120 })
+  -- 5 Dynamic hl
   local location = MiniStatusline.section_location({ trunc_width = 75 })
   local search = MiniStatusline.section_searchcount({ trunc_width = 75 })
 
   return MiniStatusline.combine_groups({
-    { hl = mode_hl, strings = { mode } },
-    { hl = "MiniStatuslineInactive", strings = { git, diagnostics } },
+    { hl = mode_hl, strings = { string.upper(mode) } },
+    { hl = "MiniStatuslineDevinfo", strings = { git, diagnostics } },
     "%<", -- Mark general truncate point
-    { hl = "MiniStatuslineInactive", strings = { filename } },
+    { hl = "MiniStatuslineDevinfo", strings = { filename } },
     "%=", -- End left alignment
-    { hl = "MiniStatuslineInactive", strings = { fileinfo } },
+    { hl = "MiniStatuslineDevinfo", strings = { fileinfo } },
     { hl = mode_hl, strings = { search, location } },
   })
 end

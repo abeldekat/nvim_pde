@@ -11,11 +11,11 @@ local function dashboard()
   require("ak.config.intro")
 end
 
-if Util.ui.use_mini_statusline then
+if not Util.ui.use_mini_statusline then
+  require("ak.config.lualine_init")
+else
   add("mini.statusline")
   require("ak.config.mini_statusline")
-else
-  require("ak.config.lualine_init")
 end
 
 if dashboard_now then
