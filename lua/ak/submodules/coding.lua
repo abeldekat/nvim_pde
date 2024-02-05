@@ -7,7 +7,7 @@ local add, later = vim.cmd.packadd, Util.defer.later
 local later_only = Util.defer.later_only
 
 if Util.submodules.is_provisioning() then
-  Util.info("------> Start provisioning coding")
+  Util.submodules.print_provision("coding")
 
   vim.cmd("lcd " .. Util.submodules.file_in_pack_path("coding", { "LuaSnip" }))
   vim.cmd("!make -s install_jsregexp")

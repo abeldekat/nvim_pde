@@ -29,7 +29,7 @@ return {
     "echasnovski/mini.clue",
     event = "VeryLazy",
     config = function()
-      require("ak.config.clue")
+      require("ak.config.mini_clue")
     end,
   },
 

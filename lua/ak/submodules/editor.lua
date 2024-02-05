@@ -8,7 +8,7 @@ local add, later = vim.cmd.packadd, Util.defer.later
 local with_dir = Util.opened_with_dir_argument()
 
 if Util.submodules.is_provisioning() then
-  Util.info("------> Start provisioning editor")
+  Util.submodules.print_provision("editor")
 
   vim.cmd("lcd " .. Util.submodules.file_in_pack_path("editor", { "telescope-fzf-native.nvim" }))
   vim.cmd("!make -s")
@@ -51,7 +51,7 @@ later(function()
   require("ak.config.telescope")
 
   add("mini.clue")
-  require("ak.config.clue")
+  require("ak.config.mini_clue")
 
   add("gitsigns.nvim")
   require("ak.config.gitsigns")

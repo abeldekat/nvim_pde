@@ -72,14 +72,10 @@ Sync plugins to the latest remote versions:
 git config diff.submodule log
 git config status.submoduleSummary true
 
-# update --remote:
 make sync
 
 # Manually:
-# git status: Inspect the updates and commit
-
-# make sure inner submodules are also updated, rebuild plugins:
-make
+# git status: Inspect the updates, revert or commit
 ```
 
 Resources:

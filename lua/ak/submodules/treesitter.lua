@@ -2,7 +2,7 @@ local Util = require("ak.util")
 local add, later = vim.cmd.packadd, Util.defer.later
 
 if Util.submodules.is_provisioning() then
-  Util.info("------> Start provisioning treesitter")
+  Util.submodules.print_provision("treesitter")
 
   add("nvim-treesitter")
   add("nvim-treesitter-textobjects")

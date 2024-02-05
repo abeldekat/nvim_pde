@@ -14,9 +14,10 @@ update:
 # Update to the latest versions of the remotes
 upgrade:
 	git submodule update --remote --init --filter=blob:none --progress
+	git add .
 
 #------------------  public
 
 init: update provision
 
-sync: upgrade
+sync: upgrade update provision

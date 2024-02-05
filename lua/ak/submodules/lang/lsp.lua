@@ -2,7 +2,7 @@ local Util = require("ak.util")
 local add, later = vim.cmd.packadd, Util.defer.later
 
 if Util.submodules.is_provisioning() then
-  Util.info("------> Start provisioning lsp")
+  Util.submodules.print_provision("lsp")
 
   -- Before any packages can be used, the registry needs to be downloaded
   -- Is also invoked on mason's commands and on opening the ui

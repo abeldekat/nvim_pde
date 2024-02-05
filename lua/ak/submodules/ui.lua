@@ -11,12 +11,23 @@ local function dashboard()
   require("ak.config.intro")
 end
 
-require("ak.config.lualine_init")
+if Util.ui.use_mini_statusline then
+  add("mini.statusline")
+  require("ak.config.mini_statusline")
+else
+  require("ak.config.lualine_init")
+end
+
 if dashboard_now then
   dashboard()
 end
 
 later(function()
+  if not Util.ui.use_mini_statusline then
+    add("lualine.nvim")
+    require("ak.config.lualine")
+  end
+
   local function dressing()
     add("dressing.nvim")
   end
@@ -33,7 +44,4 @@ later(function()
 
   add("indent-blankline.nvim")
   require("ak.config.indent_blankline")
-
-  add("lualine.nvim")
-  require("ak.config.lualine")
 end)

@@ -47,7 +47,7 @@ end
 
 local function langs()
   if Util.submodules.is_provisioning() then
-    Util.info("------> Start provisioning extra")
+    Util.submodules.print_provision("extra")
     return { markdown_install }
   end
   return {

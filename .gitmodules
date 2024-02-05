@@ -343,3 +343,7 @@
 	path = pack/lang_ak/opt/vim-dadbod-completion
 	url = https://github.com/kristijanhusak/vim-dadbod-completion
 	ignore = untracked
+[submodule "ui_ak/mini.statusline"]
+	path = pack/ui_ak/opt/mini.statusline
+	url = https://github.com/echasnovski/mini.statusline
+	ignore = untracked

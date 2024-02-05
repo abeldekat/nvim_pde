@@ -20,4 +20,12 @@ function M.is_provisioning()
   return vim.g.ak_provisioning
 end
 
+function M.print_provision(name)
+  -- stylua: ignore start
+  vim.print("--          ╭─────────────────────────────────────────────────────────╮")
+  vim.print("--                         Start provisioning unit " ..  name )
+  vim.print("--          ╰─────────────────────────────────────────────────────────╯")
+  -- stylua: ignore end
+end
+
 return M
