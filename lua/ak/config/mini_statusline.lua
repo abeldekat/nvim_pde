@@ -22,35 +22,34 @@
 -- end
 -- vim.api.nvim_create_autocmd("Filetype", { pattern = "lazy", callback = set_active_stl })
 
-local blocked_filetypes = {
-  ["dashboard"] = true,
-}
+local AK = {}
+local H = {}
 
-local function section_diagnostics(args)
-  --
-end
-
-local function active()
-  -- Customize statusline content for blocked filetypes to your liking
-  if blocked_filetypes[vim.bo.filetype] then
-    return ""
+-- overridden: entrypoint, passed into config
+-- TODO: section lsp
+-- local diagnostics = MiniStatusline.section_diagnostics({ trunc_width = 75, icon = "" })
+AK.active = function()
+  if H.is_blocked_filetype() then
+    return "" -- Customize statusline content for blocked filetypes to your liking
   end
-
-  -- Continue the function
   local MiniStatusline = require("mini.statusline")
 
   -- Dynamic hl
   local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 120 })
+
   -- hl = "MiniStatuslineDevinfo"
   local git = MiniStatusline.section_git({ trunc_width = 75, icon = "" })
-  local diagnostics = MiniStatusline.section_diagnostics({ trunc_width = 75, icon = "" })
+  local diagnostics = AK.section_diagnostics({ trunc_width = 75 })
+
   -- hl = "MiniStatuslineFilename" --> MiniStatuslineDevinfo
   local filename = MiniStatusline.section_filename({ trunc_width = 140 })
+
   -- hl = "MiniStatuslineFileinfo" --> MiniStatuslineDevinfo
-  local fileinfo = MiniStatusline.section_fileinfo({ trunc_width = 120 })
+  local fileinfo = AK.section_fileinfo({ trunc_width = 120 })
+
   -- Dynamic hl
-  local location = MiniStatusline.section_location({ trunc_width = 75 })
   local search = MiniStatusline.section_searchcount({ trunc_width = 75 })
+  local location = AK.section_location({ trunc_width = 75 })
 
   return MiniStatusline.combine_groups({
     { hl = mode_hl, strings = { string.upper(mode) } },
@@ -63,10 +62,135 @@ local function active()
   })
 end
 
+-- overridden: removed lsp, added color to diagnostics
+AK.section_diagnostics = function(args) -- args
+  local MiniStatusline = require("mini.statusline")
+  local dont_show = MiniStatusline.is_truncated(args.trunc_width) or H.isnt_normal_buffer()
+  if dont_show then
+    return ""
+  end
+
+  -- Construct string parts
+  local counts = H.get_diagnostic_count()
+  local severity, t = vim.diagnostic.severity, {}
+  for _, level in ipairs(H.diagnostic_levels) do
+    local n = counts[severity[level.name]] or 0
+    if n > 0 then -- Add level info only if diagnostic is present
+      table.insert(t, string.format(" %%#%s#%s%s", level.hl, level.sign, n))
+    end
+  end
+
+  if vim.tbl_count(t) == 0 then
+    return ""
+  end
+  return string.format("%s", table.concat(t, ""))
+end
+
+-- overridden: removed filesize
+AK.section_fileinfo = function(args)
+  local MiniStatusline = require("mini.statusline")
+  local filetype = vim.bo.filetype
+
+  -- Don't show anything if can't detect file type or not inside a "normal
+  -- buffer"
+  if (filetype == "") or H.isnt_normal_buffer() then
+    return ""
+  end
+
+  -- Construct output string if truncated
+  if MiniStatusline.is_truncated(args.trunc_width) then
+    return filetype
+  end
+
+  -- Construct output string with extra file info
+  local encoding = vim.bo.fileencoding or vim.bo.encoding
+  local format = vim.bo.fileformat
+  return string.format("%s %s[%s]", filetype, encoding, format)
+end
+
+-- overridden: changed delimiters
+AK.section_location = function(args)
+  local MiniStatusline = require("mini.statusline")
+
+  -- Use virtual column number to allow update when past last column
+  if MiniStatusline.is_truncated(args.trunc_width) then
+    return "%l│%2v"
+  end
+
+  -- Use `virtcol()` to correctly handle multi-byte characters
+  return '%l|%L %2v|%-2{virtcol("$") - 1}'
+end
+
+-- Utilities ------------------------------------------------------------------
+
+-- copied
+H.isnt_normal_buffer = function()
+  -- For more information see ":h buftype"
+  return vim.bo.buftype ~= ""
+end
+
+-- added
+H.make_diagnostic_hl = function()
+  local devinfo = vim.api.nvim_get_hl(0, { name = "MiniStatuslineDevinfo" })
+  local bg = devinfo.bg
+
+  local de = vim.api.nvim_get_hl(0, { name = "DiagnosticError" })
+  local dw = vim.api.nvim_get_hl(0, { name = "DiagnosticWarn" })
+  local di = vim.api.nvim_get_hl(0, { name = "DiagnosticInfo" })
+  local dh = vim.api.nvim_get_hl(0, { name = "DiagnosticHint" })
+
+  vim.api.nvim_set_hl(0, "DiagnosticErrorStatusline", { bg = bg, fg = de.fg })
+  vim.api.nvim_set_hl(0, "DiagnosticWarnStatusline", { bg = bg, fg = dw.fg })
+  vim.api.nvim_set_hl(0, "DiagnosticInfoStatusline", { bg = bg, fg = di.fg })
+  vim.api.nvim_set_hl(0, "DiagnosticHintStatusline", { bg = bg, fg = dh.fg })
+end
+
+-- added
+H.is_blocked_filetype = function()
+  local blocked_filetypes = {
+    ["dashboard"] = true,
+  }
+  return blocked_filetypes[vim.bo.filetype]
+end
+
+-- overridden: added hl
+H.diagnostic_levels = {
+  { name = "ERROR", sign = "E", hl = "DiagnosticErrorStatusline" },
+  { name = "WARN", sign = "W", hl = "DiagnosticWarnStatusline" },
+  { name = "INFO", sign = "I", hl = "DiagnosticInfoStatusline" },
+  { name = "HINT", sign = "H", hl = "DiagnosticHintStatusline" },
+}
+
+-- copied
+H.get_diagnostic_count = function()
+  local res = {}
+  for _, d in ipairs(vim.diagnostic.get(0)) do
+    res[d.severity] = (res[d.severity] or 0) + 1
+  end
+  return res
+end
+
+-- copied
+if vim.fn.has("nvim-0.10") == 1 then
+  H.get_diagnostic_count = function()
+    return vim.diagnostic.count(0)
+  end
+end
+
+--          ╭─────────────────────────────────────────────────────────╮
+--          │                          setup                          │
+--          ╰─────────────────────────────────────────────────────────╯
+
+H.make_diagnostic_hl()
+vim.api.nvim_create_autocmd("ColorScheme", {
+  pattern = "*",
+  callback = H.make_diagnostic_hl,
+})
+
 require("mini.statusline").setup({
   use_icons = false,
   set_vim_settings = false,
   content = {
-    active = active,
+    active = AK.active,
   },
 })
