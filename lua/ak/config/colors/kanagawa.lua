@@ -1,3 +1,7 @@
+--          ╭─────────────────────────────────────────────────────────╮
+--          │        kanagawa does not support mini.statusline        │
+--          ╰─────────────────────────────────────────────────────────╯
+
 local Utils = require("ak.util")
 local prefer_light = require("ak.color").prefer_light
 
@@ -7,15 +11,18 @@ Utils.color.add_toggle("kanagawa*", {
   name = "kanagawa",
   flavours = { "kanagawa-wave", "kanagawa-dragon", "kanagawa-lotus" },
 })
+
 vim.o.background = prefer_light and "light" or "dark"
-local opts = prefer_light
-    and {
-      overrides = function(colors)
-        return { -- Improve FlashLabel:
-          -- Substitute = { fg = theme.ui.fg, bg = theme.vcs.removed },
-          Substitute = { fg = colors.theme.ui.fg_reverse, bg = colors.theme.vcs.removed },
-        }
-      end,
-    }
-  or {}
+
+local opts = {
+  overrides = function(colors)
+    vim.cmd("highlight! link MiniStatuslineModeNormal StatusLine")
+
+    if prefer_light then -- improve flashlabel
+      return { Substitute = { fg = colors.theme.ui.fg_reverse, bg = colors.theme.vcs.removed } }
+    end
+    return {}
+  end,
+}
+
 require("kanagawa").setup(opts)

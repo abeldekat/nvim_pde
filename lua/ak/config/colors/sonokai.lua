@@ -1,3 +1,7 @@
+--          ╭─────────────────────────────────────────────────────────╮
+--          │            sonokai supports mini.statusline             │
+--          ╰─────────────────────────────────────────────────────────╯
+
 local Utils = require("ak.util")
 
 -- monokai variations
@@ -10,6 +14,14 @@ Utils.color.add_toggle("sonokai", {
     vim.cmd.colorscheme("sonokai")
   end,
 })
+
+vim.api.nvim_create_autocmd("Colorscheme", {
+  pattern = "sonokai",
+  callback = function()
+    vim.cmd("highlight! link MiniStatuslineModeNormal MiniStatuslineDevinfo")
+  end,
+})
+
 vim.g.sonokai_better_performance = 1
 vim.g.sonokai_enable_italic = 1
 vim.g.sonokai_disable_italic_comment = 1

@@ -162,10 +162,6 @@
 	path = pack/ui_ak/opt/indent-blankline.nvim
 	url = https://github.com/lukas-reineke/indent-blankline.nvim
   ignore = untracked
-[submodule "ui_ak/lualine.nvim"]
-	path = pack/ui_ak/opt/lualine.nvim
-	url = https://github.com/nvim-lualine/lualine.nvim
-  ignore = untracked
 [submodule "util_ak/vim-startuptime"]
 	path = pack/util_ak/opt/vim-startuptime
 	url = https://github.com/dstein64/vim-startuptime

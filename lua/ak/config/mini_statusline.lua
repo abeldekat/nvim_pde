@@ -3,6 +3,7 @@
 --          ╰─────────────────────────────────────────────────────────╯
 
 -- TODO: shorter filename, colors for gitsigns and diagnostics
+-- TODO: in terminal mode, only "zsh" is shown for the filename
 
 -- about colors:
 --https://github.com/echasnovski/mini.nvim/issues/153
@@ -25,6 +26,10 @@ local blocked_filetypes = {
   ["dashboard"] = true,
 }
 
+local function section_diagnostics(args)
+  --
+end
+
 local function active()
   -- Customize statusline content for blocked filetypes to your liking
   if blocked_filetypes[vim.bo.filetype] then
@@ -34,16 +39,16 @@ local function active()
   -- Continue the function
   local MiniStatusline = require("mini.statusline")
 
-  -- 1 Dynamic hl
+  -- Dynamic hl
   local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 120 })
-  -- 2 hl = "MiniStatuslineDevinfo"
+  -- hl = "MiniStatuslineDevinfo"
   local git = MiniStatusline.section_git({ trunc_width = 75, icon = "" })
   local diagnostics = MiniStatusline.section_diagnostics({ trunc_width = 75, icon = "" })
-  -- 3 hl = "MiniStatuslineFilename" --> MiniStatuslineDevinfo
+  -- hl = "MiniStatuslineFilename" --> MiniStatuslineDevinfo
   local filename = MiniStatusline.section_filename({ trunc_width = 140 })
-  -- 4 hl = "MiniStatuslineFileinfo" --> MiniStatuslineDevinfo
+  -- hl = "MiniStatuslineFileinfo" --> MiniStatuslineDevinfo
   local fileinfo = MiniStatusline.section_fileinfo({ trunc_width = 120 })
-  -- 5 Dynamic hl
+  -- Dynamic hl
   local location = MiniStatusline.section_location({ trunc_width = 75 })
   local search = MiniStatusline.section_searchcount({ trunc_width = 75 })
 

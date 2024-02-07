@@ -19,8 +19,8 @@ opts.on_highlights = function(hl, c)
     hl.FlashLabel = { bg = c.magenta2, bold = true, fg = c.bg }
   end
 
-  local tokyonight_normal_lualine_c = { bg = c.bg_statusline, fg = c.fg_sidebar }
-  hl.MiniStatuslineModeNormal = tokyonight_normal_lualine_c -- left and right, dynamic
-  hl.MiniStatuslineDevinfo = tokyonight_normal_lualine_c
+  local normal_lualine_c = { bg = c.bg_statusline, fg = c.fg_sidebar }
+  hl.MiniStatuslineModeNormal = normal_lualine_c -- left and right, dynamic
+  hl.MiniStatuslineDevinfo = normal_lualine_c -- all inner groups
 end
 require("tokyonight").setup(opts)

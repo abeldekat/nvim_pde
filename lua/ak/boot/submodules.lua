@@ -40,14 +40,6 @@ end
 
 return function(_) -- opts
   setup_performance()
-
-  -- When using submodules, lualine overriding behaves differently,
-  -- because both the override and the lualine plugin are in the config folder
-  -- See: lualine.utils.loader.lua, function load_theme, line 232
-  --
-  local lualine_override = vim.fn.stdpath("config") .. "/lualine_themes"
-  vim.opt.rtp:append(lualine_override)
-
   for _, module in ipairs(modules()) do
     require(module)
   end

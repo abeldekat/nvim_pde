@@ -36,11 +36,6 @@ return function(_) -- opts
   local lazypath = clone("folke", "lazy.nvim")
   vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
 
-  -- When using submodules, lualine overriding behaves differently,
-  -- because both the override and the lualine plugin are in the config folder
-  -- See: lualine.utils.loader.lua, function load_theme, line 232
-  local lualine_override = vim.fn.stdpath("config") .. "/lualine_themes"
-
   require("lazy").setup({
     defaults = { lazy = true, version = false }, -- "*" = latest stable version
     spec = to_spec(),
@@ -51,7 +46,6 @@ return function(_) -- opts
     performance = {
       rtp = { -- "matchit", "matchparen",
         disabled_plugins = { "gzip", "netrwPlugin", "tarPlugin", "tohtml", "tutor", "zipPlugin" },
-        paths = { lualine_override },
       },
     },
   })

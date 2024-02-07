@@ -5,8 +5,6 @@
 ---@class ak.util.ui
 local M = {}
 
-M.use_mini_statusline = vim.env.AK_STATUSLINE == "mini"
-
 ---@alias Sign {name:string, text:string, texthl:string, priority:number}
 
 -- Returns a list of regular and extmark signs sorted by priority (low to high)
