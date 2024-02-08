@@ -31,7 +31,14 @@ local H = {} -- helpers, copied, modified or added
 --          │                      Module setup                       │
 --          ╰─────────────────────────────────────────────────────────╯
 AK.setup = function()
-  H.create_diagnostic_hl() -- diagnostics with colors
+  -- copied
+  if vim.fn.has("nvim-0.10") == 1 then
+    H.get_diagnostic_count = function()
+      return vim.diagnostic.count(0)
+    end
+  end
+
+  H.create_diagnostic_hl() -- added diagnostics with colors
   vim.api.nvim_create_autocmd("ColorScheme", {
     pattern = "*",
     callback = H.create_diagnostic_hl,
@@ -43,6 +50,7 @@ AK.setup = function()
     content = { active = AK.active }, -- entrypoint
   })
   H.create_autocommands() -- lsp autocommands for custom lsp section
+  H.set_active() -- make sure that when events are missed the statusline still shows
 end
 
 --          ╭─────────────────────────────────────────────────────────╮
@@ -163,14 +171,20 @@ end
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                       Helper data                       │
 --          ╰─────────────────────────────────────────────────────────╯
+-- added:
+H.diagnostic_hls = {
+  error = "DiagnosticErrorStatusline",
+  warn = "DiagnosticWarnStatusline",
+  info = "DiagnosticInfoStatusline",
+  hint = "DiagnosticHintStatusline",
+}
 -- overridden: added hl
 H.diagnostic_levels = {
-  { name = "ERROR", sign = "E", hl = "DiagnosticErrorStatusline" },
-  { name = "WARN", sign = "W", hl = "DiagnosticWarnStatusline" },
-  { name = "INFO", sign = "I", hl = "DiagnosticInfoStatusline" },
-  { name = "HINT", sign = "H", hl = "DiagnosticHintStatusline" },
+  { name = "ERROR", sign = "E", hl = H.diagnostic_hls.error },
+  { name = "WARN", sign = "W", hl = H.diagnostic_hls.warn },
+  { name = "INFO", sign = "I", hl = H.diagnostic_hls.info },
+  { name = "HINT", sign = "H", hl = H.diagnostic_hls.hint },
 }
-
 -- copied
 H.n_attached_lsp = {} -- Count of attached LSP clients per buffer id
 
@@ -190,6 +204,10 @@ H.create_autocommands = function()
   local make_track_lsp = function(increment)
     return function(data)
       H.n_attached_lsp[data.buf] = (H.n_attached_lsp[data.buf] or 0) + increment
+      if increment > 0 then
+        -- slow lsp(ie marksman): the symbol only shows when moving inside the buffer:
+        H.set_active()
+      end
     end
   end
   local augroup = vim.api.nvim_create_augroup("MiniStatuslineAk", {})
@@ -203,27 +221,26 @@ end
 
 -- added
 H.create_diagnostic_hl = function()
+  local fallback = vim.api.nvim_get_hl(0, { name = "StatusLine" })
   local devinfo = vim.api.nvim_get_hl(0, { name = "MiniStatuslineDevinfo" })
-  local bg = devinfo.bg
+  local bg = devinfo and devinfo.bg or fallback.bg
+  local function fg(name)
+    local hl = vim.api.nvim_get_hl(0, { name = name })
+    return hl and hl.fg or fallback.fg
+  end
 
-  local de = vim.api.nvim_get_hl(0, { name = "DiagnosticError" })
-  local dw = vim.api.nvim_get_hl(0, { name = "DiagnosticWarn" })
-  local di = vim.api.nvim_get_hl(0, { name = "DiagnosticInfo" })
-  local dh = vim.api.nvim_get_hl(0, { name = "DiagnosticHint" })
-
-  vim.api.nvim_set_hl(0, "DiagnosticErrorStatusline", { bg = bg, fg = de.fg })
-  vim.api.nvim_set_hl(0, "DiagnosticWarnStatusline", { bg = bg, fg = dw.fg })
-  vim.api.nvim_set_hl(0, "DiagnosticInfoStatusline", { bg = bg, fg = di.fg })
-  vim.api.nvim_set_hl(0, "DiagnosticHintStatusline", { bg = bg, fg = dh.fg })
+  vim.api.nvim_set_hl(0, H.diagnostic_hls.error, { bg = bg, fg = fg("DiagnosticError") })
+  vim.api.nvim_set_hl(0, H.diagnostic_hls.warn, { bg = bg, fg = fg("DiagnosticWarn") })
+  vim.api.nvim_set_hl(0, H.diagnostic_hls.info, { bg = bg, fg = fg("DiagnosticInfo") })
+  vim.api.nvim_set_hl(0, H.diagnostic_hls.hint, { bg = bg, fg = fg("DiagnosticHint") })
 end
 
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                    Helper utilities                     │
 --          ╰─────────────────────────────────────────────────────────╯
--- copied
-H.isnt_normal_buffer = function()
-  -- For more information see ":h buftype"
-  return vim.bo.buftype ~= ""
+-- added, manually activate, lsp can be slow:
+H.set_active = function()
+  vim.wo.statusline = "%!v:lua.MiniStatusline.active()"
 end
 
 -- added
@@ -235,12 +252,9 @@ H.is_blocked_filetype = function()
 end
 
 -- copied
-H.get_diagnostic_count = function()
-  local res = {}
-  for _, d in ipairs(vim.diagnostic.get(0)) do
-    res[d.severity] = (res[d.severity] or 0) + 1
-  end
-  return res
+H.isnt_normal_buffer = function()
+  -- For more information see ":h buftype"
+  return vim.bo.buftype ~= ""
 end
 
 -- copied
@@ -249,10 +263,12 @@ H.has_no_lsp_attached = function()
 end
 
 -- copied
-if vim.fn.has("nvim-0.10") == 1 then
-  H.get_diagnostic_count = function()
-    return vim.diagnostic.count(0)
+H.get_diagnostic_count = function()
+  local res = {}
+  for _, d in ipairs(vim.diagnostic.get(0)) do
+    res[d.severity] = (res[d.severity] or 0) + 1
   end
+  return res
 end
 
 --          ╭─────────────────────────────────────────────────────────╮

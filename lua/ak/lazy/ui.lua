@@ -1,6 +1,7 @@
 local Util = require("ak.util")
 -- local lazyfile = { "BufReadPost", "BufNewFile", "BufWritePre" }
 
+vim.o.statusline = " " -- wait till mini_statusline is loaded
 return {
   {
     "nvimdev/dashboard-nvim",
@@ -38,7 +39,7 @@ return {
 
   {
     "echasnovski/mini.statusline",
-    lazy = false,
+    event = "VeryLazy",
     config = function()
       require("ak.config.mini_statusline")
     end,
