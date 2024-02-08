@@ -1,16 +1,15 @@
---          ╭─────────────────────────────────────────────────────────╮
---          │                      Experimental                       │
---          ╰─────────────────────────────────────────────────────────╯
-
--- TODO: shorter filename, colors for gitsigns and diagnostics
+-- TODO: shorter filename
 -- TODO: in terminal mode, only "zsh" is shown for the filename
 
+--          ╭─────────────────────────────────────────────────────────╮
+--          │                          Notes                          │
+--          ╰─────────────────────────────────────────────────────────╯
 -- about colors:
 --https://github.com/echasnovski/mini.nvim/issues/153
 
 -- hightlighting:
 -- https://github.com/echasnovski/mini.nvim/issues/337
--- use separate groups for each diagnotic
+-- use separate groups for each diagnostic
 
 -- redrawstatus:
 -- vim.cmd('redrawstatus!') will redraw it immediately.
@@ -22,12 +21,33 @@
 -- end
 -- vim.api.nvim_create_autocmd("Filetype", { pattern = "lazy", callback = set_active_stl })
 
-local AK = {}
-local H = {}
+--          ╭─────────────────────────────────────────────────────────╮
+--          │                    Module definition                    │
+--          ╰─────────────────────────────────────────────────────────╯
+local AK = {} -- module using MiniStatusline
+local H = {} -- helpers, copied, modified or added
 
--- overridden: entrypoint, passed into config
--- TODO: section lsp
--- local diagnostics = MiniStatusline.section_diagnostics({ trunc_width = 75, icon = "" })
+--          ╭─────────────────────────────────────────────────────────╮
+--          │                      Module setup                       │
+--          ╰─────────────────────────────────────────────────────────╯
+AK.setup = function()
+  H.create_diagnostic_hl() -- diagnostics with colors
+  vim.api.nvim_create_autocmd("ColorScheme", {
+    pattern = "*",
+    callback = H.create_diagnostic_hl,
+  }) -- recreate when changing colorscheme
+
+  require("mini.statusline").setup({
+    use_icons = false,
+    set_vim_settings = false,
+    content = { active = AK.active }, -- entrypoint
+  })
+  H.create_autocommands() -- lsp autocommands for custom lsp section
+end
+
+--          ╭─────────────────────────────────────────────────────────╮
+--          │                       Entrypoint                        │
+--          ╰─────────────────────────────────────────────────────────╯
 AK.active = function()
   if H.is_blocked_filetype() then
     return "" -- Customize statusline content for blocked filetypes to your liking
@@ -39,7 +59,8 @@ AK.active = function()
 
   -- hl = "MiniStatuslineDevinfo"
   local git = MiniStatusline.section_git({ trunc_width = 75, icon = "" })
-  local diagnostics = AK.section_diagnostics({ trunc_width = 75 })
+  local lsp = AK.section_lsp({ trunc_width = 37, icon = "" })
+  local diagnostics = AK.section_diagnostics({ trunc_width = 37 })
 
   -- hl = "MiniStatuslineFilename" --> MiniStatuslineDevinfo
   local filename = MiniStatusline.section_filename({ trunc_width = 140 })
@@ -47,13 +68,13 @@ AK.active = function()
   -- hl = "MiniStatuslineFileinfo" --> MiniStatuslineDevinfo
   local fileinfo = AK.section_fileinfo({ trunc_width = 120 })
 
-  -- Dynamic hl
+  -- Dynamic hl using the hl of section_mode
   local search = MiniStatusline.section_searchcount({ trunc_width = 75 })
   local location = AK.section_location({ trunc_width = 75 })
 
   return MiniStatusline.combine_groups({
     { hl = mode_hl, strings = { string.upper(mode) } },
-    { hl = "MiniStatuslineDevinfo", strings = { git, diagnostics } },
+    { hl = "MiniStatuslineDevinfo", strings = { git, lsp, diagnostics } },
     "%<", -- Mark general truncate point
     { hl = "MiniStatuslineDevinfo", strings = { filename } },
     "%=", -- End left alignment
@@ -61,6 +82,10 @@ AK.active = function()
     { hl = mode_hl, strings = { search, location } },
   })
 end
+
+--          ╭─────────────────────────────────────────────────────────╮
+--          │                        Sections                         │
+--          ╰─────────────────────────────────────────────────────────╯
 
 -- overridden: removed lsp, added color to diagnostics
 AK.section_diagnostics = function(args) -- args
@@ -84,6 +109,20 @@ AK.section_diagnostics = function(args) -- args
     return ""
   end
   return string.format("%s", table.concat(t, ""))
+end
+
+-- added:
+AK.section_lsp = function(args)
+  local MiniStatusline = require("mini.statusline")
+  _G.n_attached_lsp = H.n_attached_lsp
+
+  local dont_show = MiniStatusline.is_truncated(args.trunc_width) or H.isnt_normal_buffer() or H.has_no_lsp_attached()
+  if dont_show then
+    return ""
+  end
+
+  local icon = args.icon or "LSP"
+  return string.format("%s", icon)
 end
 
 -- overridden: removed filesize
@@ -121,16 +160,49 @@ AK.section_location = function(args)
   return '%l|%L %2v|%-2{virtcol("$") - 1}'
 end
 
--- Utilities ------------------------------------------------------------------
+--          ╭─────────────────────────────────────────────────────────╮
+--          │                       Helper data                       │
+--          ╰─────────────────────────────────────────────────────────╯
+-- overridden: added hl
+H.diagnostic_levels = {
+  { name = "ERROR", sign = "E", hl = "DiagnosticErrorStatusline" },
+  { name = "WARN", sign = "W", hl = "DiagnosticWarnStatusline" },
+  { name = "INFO", sign = "I", hl = "DiagnosticInfoStatusline" },
+  { name = "HINT", sign = "H", hl = "DiagnosticHintStatusline" },
+}
 
 -- copied
-H.isnt_normal_buffer = function()
-  -- For more information see ":h buftype"
-  return vim.bo.buftype ~= ""
+H.n_attached_lsp = {} -- Count of attached LSP clients per buffer id
+
+--          ╭─────────────────────────────────────────────────────────╮
+--          │                  Helper functionality                   │
+--          ╰─────────────────────────────────────────────────────────╯
+-- added: Remove the lsp autocommands and recreate them to be used here.
+H.create_autocommands = function()
+  local to_remove = vim.api.nvim_get_autocmds({
+    group = "MiniStatusline",
+    event = { "LspAttach", "LspDetach" },
+  })
+  for _, autocmd in ipairs(to_remove) do
+    vim.api.nvim_del_autocmd(autocmd.id)
+  end
+
+  local make_track_lsp = function(increment)
+    return function(data)
+      H.n_attached_lsp[data.buf] = (H.n_attached_lsp[data.buf] or 0) + increment
+    end
+  end
+  local augroup = vim.api.nvim_create_augroup("MiniStatuslineAk", {})
+
+  local au = function(event, pattern, callback, desc)
+    vim.api.nvim_create_autocmd(event, { group = augroup, pattern = pattern, callback = callback, desc = desc })
+  end
+  au("LspAttach", "*", make_track_lsp(1), "Track LSP clients")
+  au("LspDetach", "*", make_track_lsp(-1), "Track LSP clients")
 end
 
 -- added
-H.make_diagnostic_hl = function()
+H.create_diagnostic_hl = function()
   local devinfo = vim.api.nvim_get_hl(0, { name = "MiniStatuslineDevinfo" })
   local bg = devinfo.bg
 
@@ -145,6 +217,15 @@ H.make_diagnostic_hl = function()
   vim.api.nvim_set_hl(0, "DiagnosticHintStatusline", { bg = bg, fg = dh.fg })
 end
 
+--          ╭─────────────────────────────────────────────────────────╮
+--          │                    Helper utilities                     │
+--          ╰─────────────────────────────────────────────────────────╯
+-- copied
+H.isnt_normal_buffer = function()
+  -- For more information see ":h buftype"
+  return vim.bo.buftype ~= ""
+end
+
 -- added
 H.is_blocked_filetype = function()
   local blocked_filetypes = {
@@ -152,14 +233,6 @@ H.is_blocked_filetype = function()
   }
   return blocked_filetypes[vim.bo.filetype]
 end
-
--- overridden: added hl
-H.diagnostic_levels = {
-  { name = "ERROR", sign = "E", hl = "DiagnosticErrorStatusline" },
-  { name = "WARN", sign = "W", hl = "DiagnosticWarnStatusline" },
-  { name = "INFO", sign = "I", hl = "DiagnosticInfoStatusline" },
-  { name = "HINT", sign = "H", hl = "DiagnosticHintStatusline" },
-}
 
 -- copied
 H.get_diagnostic_count = function()
@@ -171,6 +244,11 @@ H.get_diagnostic_count = function()
 end
 
 -- copied
+H.has_no_lsp_attached = function()
+  return (H.n_attached_lsp[vim.api.nvim_get_current_buf()] or 0) == 0
+end
+
+-- copied
 if vim.fn.has("nvim-0.10") == 1 then
   H.get_diagnostic_count = function()
     return vim.diagnostic.count(0)
@@ -178,19 +256,6 @@ if vim.fn.has("nvim-0.10") == 1 then
 end
 
 --          ╭─────────────────────────────────────────────────────────╮
---          │                          setup                          │
+--          │                        Activate                         │
 --          ╰─────────────────────────────────────────────────────────╯
-
-H.make_diagnostic_hl()
-vim.api.nvim_create_autocmd("ColorScheme", {
-  pattern = "*",
-  callback = H.make_diagnostic_hl,
-})
-
-require("mini.statusline").setup({
-  use_icons = false,
-  set_vim_settings = false,
-  content = {
-    active = AK.active,
-  },
-})
+AK.setup()
