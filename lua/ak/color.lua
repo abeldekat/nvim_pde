@@ -1,6 +1,6 @@
 -- See: colors.txt
 -- using sed for color and prefer_light:
-local color = 'tokyonight'
+local color = "tokyonight"
 local prefer_light = false
 -- end using sed
 
