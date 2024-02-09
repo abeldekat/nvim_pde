@@ -1,4 +1,7 @@
---nightfox has themes, no flavour options...
+--          ╭─────────────────────────────────────────────────────────╮
+--          │               mini.statusline: supported                │
+--          │       nightfox has themes instead of flavours...        │
+--          ╰─────────────────────────────────────────────────────────╯
 local Utils = require("ak.util")
 
 Utils.color.add_toggle("*fox", {
@@ -11,22 +14,10 @@ local opts = {
   dim_inactive = true,
 }
 
-local function groups()
-  local function per_style(style)
-    local s = require("nightfox.spec").load(style)
-    local normal_lualine_c = { bg = s.bg0, fg = s.fg2 }
-    return {
-      MiniStatuslineModeNormal = normal_lualine_c, -- left and right, dynamic
-      MiniStatuslineDevinfo = normal_lualine_c, -- all inner groups
-    }
-  end
-  return {
-    nordfox = per_style("nordfox"),
-    nightfox = per_style("nightfox"),
-    duskfox = per_style("duskfox"),
-    terafox = per_style("terafox"),
-    dawnfox = per_style("dawnfox"),
-  }
-end
-
-require("nightfox").setup({ options = opts, groups = groups() })
+require("nightfox").setup({
+  options = opts,
+  groups = {
+    -- left and right, dynamic
+    all = { MiniStatuslineModeNormal = { link = "MiniStatuslineFilename" } },
+  },
+})

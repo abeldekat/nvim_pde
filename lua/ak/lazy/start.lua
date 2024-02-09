@@ -1,5 +1,12 @@
-local Util = require("ak.util")
+--          ╭─────────────────────────────────────────────────────────╮
+--          │               Plenary as placeholder for:               │
+--          │        on_first_spec_imported (lazy spec phase)         │
+--          │       on_first_plugin_to_load (lazy start phase)        │
+--          │                                                         │
+--          │    Benefit: No priorities needed on the colorschemes    │
+--          ╰─────────────────────────────────────────────────────────╯
 
+local Util = require("ak.util")
 local did_init = false
 
 ---@param name "autocmds" | "options" | "keymaps"
@@ -45,12 +52,6 @@ end
 on_first_spec_imported()
 return {
   { "folke/lazy.nvim", lazy = false, version = "*" },
-
-  -- Plenary as placeholder for:
-  -- on_first_spec_imported (lazy spec phase)
-  -- on_first_plugin_to_load (lazy start phase)
-  --
-  -- Benefit: No priorities needed on the colorschemes
   {
     "nvim-lua/plenary.nvim",
     priority = 10000,

@@ -1,6 +1,10 @@
+--          ╭─────────────────────────────────────────────────────────╮
+--          │          Contains plugins enhancing the editor          │
+--          │       Main components: Harpoon, telescope and oil       │
+--          ╰─────────────────────────────────────────────────────────╯
+
 local Util = require("ak.util")
 local with_dir = Util.opened_with_dir_argument()
--- local lazyfile = { "BufReadPost", "BufNewFile", "BufWritePre" }
 
 return {
 
@@ -99,6 +103,7 @@ return {
   },
 
   -- ── previously lazyfile ───────────────────────────────────────────────
+  -- local lazyfile = { "BufReadPost", "BufNewFile", "BufWritePre" }
 
   {
     "lewis6991/gitsigns.nvim",

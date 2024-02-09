@@ -1,23 +1,4 @@
---          ╭─────────────────────────────────────────────────────────╮
---          │   Number of themes: 12 + 2(tokyonight and catppuccin)   │
---          │                                                         │
---          │                   Best light themes:                    │
---          │                       tokyonight                        │
---          │       catppuccin(latte is similar to tokyonight)        │
---          │                       solarized8                        │
---          │                    gruvbox-material                     │
---          │                    nightfox dawnfox                     │
---          │                         gruvbox                         │
---          │                         bamboo                          │
---          │                          nano                           │
---          │                       onedarkpro                        │
---          │                       astrotheme                        │
---          │                        rose-pine                        │
---          │                         onedark                         │
---          ╰─────────────────────────────────────────────────────────╯
-
 local Util = require("ak.util")
-
 local result = {}
 
 local function one()
@@ -63,18 +44,17 @@ local function two()
       end,
     },
     {
-      "ellisonleao/gruvbox.nvim",
-      name = "colors_gruvbox",
+      "sainnhe/gruvbox-material",
+      name = "colors_gruvbox-material",
       config = function()
-        require("ak.config.colors.gruvbox")
+        require("ak.config.colors.gruvbox-material")
       end,
     },
     {
-      "lifepillar/vim-solarized8",
-      name = "colors_solarized8",
-      branch = "neovim",
+      "sainnhe/sonokai",
+      name = "colors_sonokai",
       config = function()
-        require("ak.config.colors.solarized8")
+        require("ak.config.colors.sonokai")
       end,
     },
     {
@@ -97,20 +77,6 @@ end
 local function three()
   return {
     {
-      "sainnhe/sonokai",
-      name = "colors_sonokai",
-      config = function()
-        require("ak.config.colors.sonokai")
-      end,
-    },
-    {
-      "loctvl842/monokai-pro.nvim",
-      name = "colors_monokai-pro",
-      config = function()
-        require("ak.config.colors.monokai-pro")
-      end,
-    },
-    {
       "sainnhe/everforest",
       name = "colors_everforest",
       config = function()
@@ -118,10 +84,18 @@ local function three()
       end,
     },
     {
-      "sainnhe/gruvbox-material",
-      name = "colors_gruvbox-material",
+      "ellisonleao/gruvbox.nvim",
+      name = "colors_gruvbox",
       config = function()
-        require("ak.config.colors.gruvbox-material")
+        require("ak.config.colors.gruvbox")
+      end,
+    },
+    {
+      "lifepillar/vim-solarized8",
+      name = "colors_solarized8",
+      branch = "neovim",
+      config = function()
+        require("ak.config.colors.solarized8")
       end,
     },
     {
@@ -129,13 +103,6 @@ local function three()
       name = "colors_bamboo",
       config = function()
         require("ak.config.colors.bamboo")
-      end,
-    },
-    {
-      "savq/melange-nvim",
-      name = "colors_melange",
-      config = function()
-        require("ak.config.colors.melange")
       end,
     },
   }
@@ -151,13 +118,6 @@ local function four()
       end,
     },
     {
-      "Shatur/neovim-ayu",
-      name = "colors_ayu",
-      config = function()
-        require("ak.config.colors.ayu")
-      end,
-    },
-    {
       "sainnhe/edge",
       name = "colors_edge",
       config = function()
@@ -165,10 +125,10 @@ local function four()
       end,
     },
     {
-      "daschw/leaf.nvim",
-      name = "colors_leaf",
+      "Shatur/neovim-ayu",
+      name = "colors_ayu",
       config = function()
-        require("ak.config.colors.leaf")
+        require("ak.config.colors.ayu")
       end,
     },
     {

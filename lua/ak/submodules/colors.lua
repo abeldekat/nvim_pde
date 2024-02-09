@@ -1,3 +1,19 @@
+--          ╭─────────────────────────────────────────────────────────╮
+--          │                   Best light themes:                    │
+--          │                       tokyonight                        │
+--          │       catppuccin(latte is similar to tokyonight)        │
+--          │                       solarized8                        │
+--          │                    gruvbox-material                     │
+--          │                    nightfox dawnfox                     │
+--          │                         gruvbox                         │
+--          │                         bamboo                          │
+--          │                          nano                           │
+--          │                       onedarkpro                        │
+--          │                       astrotheme                        │
+--          │                        rose-pine                        │
+--          │                         onedark                         │
+--          ╰─────────────────────────────────────────────────────────╯
+
 local Util = require("ak.util")
 local Color = require("ak.color")
 local add, later = vim.cmd.packadd, Util.defer.later
@@ -16,8 +32,8 @@ local colors = {
   two = function()
     return {
       "colors_onedark",
-      "colors_gruvbox",
-      "colors_solarized8",
+      "colors_gruvbox-material",
+      "colors_sonokai",
       "colors_solarized-osaka",
       "colors_nano-theme",
     }
@@ -25,21 +41,18 @@ local colors = {
 
   three = function()
     return {
-      "colors_sonokai",
-      "colors_monokai-pro",
       "colors_everforest",
-      "colors_gruvbox-material",
+      "colors_gruvbox",
+      "colors_solarized8",
       "colors_bamboo",
-      "colors_melange",
     }
   end,
 
   four = function()
     return {
       "colors_kanagawa",
-      "colors_ayu",
       "colors_edge",
-      "colors_leaf",
+      "colors_ayu",
       "colors_astrotheme",
     }
   end,

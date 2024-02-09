@@ -1,7 +1,7 @@
 --          ╭─────────────────────────────────────────────────────────╮
+--          │             mini.statusline: not supported              │
 --          │              gruvbox has no lualine theme               │
 --          │         lualine itself provides a gruvbox theme         │
---          │            mini.statusline is not supported             │
 --          ╰─────────────────────────────────────────────────────────╯
 
 local Utils = require("ak.util")
@@ -26,15 +26,14 @@ Utils.color.add_toggle("gruvbox", {
 vim.api.nvim_create_autocmd("Colorscheme", {
   pattern = "gruvbox",
   callback = function()
-    local set_default_hl = function(name, data)
-      data.default = true
+    local set_hl = function(name, data)
       vim.api.nvim_set_hl(0, name, data)
     end
     -- colors taken from lualine theme, normal c:
     local fg = prefer_light and "#7c6f64" or "#a89984"
     local bg = prefer_light and "#ebdbb2" or "#3c3836"
-    set_default_hl("MiniStatuslineModeNormal", { fg = fg, bg = bg })
-    set_default_hl("MiniStatuslineDevinfo", { fg = fg, bg = bg })
+    set_hl("MiniStatuslineModeNormal", { fg = fg, bg = bg })
+    set_hl("MiniStatuslineFilename", { fg = fg, bg = bg })
   end,
 })
 

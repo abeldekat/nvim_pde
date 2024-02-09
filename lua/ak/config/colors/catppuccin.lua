@@ -1,5 +1,5 @@
 --          ╭─────────────────────────────────────────────────────────╮
---          │           catppuccin supports mini.statusline           │
+--          │               mini.statusline: supported                │
 --          ╰─────────────────────────────────────────────────────────╯
 
 local Utils = require("ak.util")
@@ -13,16 +13,8 @@ Utils.color.add_toggle("catppuccin*", {
 local opts = {
   flavour = prefer_light and "latte" or "frappe",
   custom_highlights = function()
-    -- see catppuccin.utils.lualine
-    local C = require("catppuccin.palettes").get_palette()
-    local O = require("catppuccin").options
-    local transparent_bg = O.transparent_background and "NONE" or C.mantle
-
-    local normal_lualine_c = { bg = transparent_bg, fg = C.text }
-    return {
-      MiniStatuslineModeNormal = normal_lualine_c, -- left and right, dynamic
-      MiniStatuslineDevinfo = normal_lualine_c, -- all inner groups
-    }
+    -- left and right, dynamic
+    return { MiniStatuslineModeNormal = { link = "MiniStatuslineFilename" } }
   end,
   integrations = {
     aerial = true,

@@ -1,13 +1,15 @@
-local Util = require("ak.util")
--- local lazyfile = { "BufReadPost", "BufNewFile", "BufWritePre" }
+--          ╭─────────────────────────────────────────────────────────╮
+--          │                   Contains UI plugins                   │
+--          ╰─────────────────────────────────────────────────────────╯
 
-vim.o.statusline = " " -- wait till mini_statusline is loaded
+local Util = require("ak.util")
+local dashboard_now = Util.opened_without_arguments()
+
+vim.o.statusline = " " -- wait till statusline plugin is loaded
 return {
   {
     "nvimdev/dashboard-nvim",
-    event = function()
-      return Util.opened_without_arguments() and { "VimEnter" } or {}
-    end,
+    lazy = not dashboard_now,
     config = function()
       require("ak.config.intro")
     end,
@@ -45,41 +47,14 @@ return {
     end,
   },
 
-  --          ╭─────────────────────────────────────────────────────────╮
-  --          │     lualine has been replaced with mini.statusline      │
-  --          │         keep the config to compare if necessary         │
-  --          ╰─────────────────────────────────────────────────────────╯
   -- {
   --   "nvim-lualine/lualine.nvim",
-  --   init = function()
-  --     --          ╭─────────────────────────────────────────────────────────╮
-  --     --          │   no statusline on dashboard, empty statusline until    │
-  --     --          │                    lualine is loaded                    │
-  --     --          ╰─────────────────────────────────────────────────────────╯
-  --     if vim.fn.argc(-1) > 0 then
-  --       vim.o.statusline = " "
-  --     else
-  --       vim.o.laststatus = 0
-  --     end
-  --   end,
   --   event = "VeryLazy",
   --   config = function()
-  --     local opts = {
-  --       options = {
-  --         icons_enabled = false,
-  --         globalstatus = true,
-  --         component_separators = "|",
-  --         section_separators = "",
-  --         disabled_filetypes = { statusline = { "dashboard" } },
-  --       },
-  --       sections = {
-  --         lualine_c = {
-  --           { "filename", path = 1, shortening_target = 40, symbols = { unnamed = "" } },
-  --         },
-  --       },
-  --     }
-  --
-  --     require("lualine").setup(opts)
+  --     local df = { statusline = { "dashboard" } }
+  --     require("lualine").setup({
+  --       options = { globalstatus = true, disabled_filetypes = df },
+  --     })
   --   end,
   -- },
 }

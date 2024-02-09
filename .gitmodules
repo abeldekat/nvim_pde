@@ -211,10 +211,6 @@
 	path = pack/colors_ak/opt/colors_sonokai
 	url = https://github.com/sainnhe/sonokai
   ignore = untracked
-[submodule "colors_ak/colors_monokai-pro"]
-	path = pack/colors_ak/opt/colors_monokai-pro
-	url = https://github.com/loctvl842/monokai-pro.nvim
-  ignore = untracked
 [submodule "colors_ak/colors_everforest"]
 	path = pack/colors_ak/opt/colors_everforest
 	url = https://github.com/sainnhe/everforest
@@ -227,10 +223,6 @@
 	path = pack/colors_ak/opt/colors_bamboo
 	url = https://github.com/ribru17/bamboo.nvim
   ignore = untracked
-[submodule "colors_ak/colors_melange"]
-	path = pack/colors_ak/opt/colors_melange
-	url = https://github.com/savq/melange-nvim
-  ignore = untracked
 [submodule "colors_ak/colors_kanagawa"]
 	path = pack/colors_ak/opt/colors_kanagawa
 	url = https://github.com/rebelot/kanagawa.nvim
@@ -242,10 +234,6 @@
 [submodule "colors_ak/colors_edge"]
 	path = pack/colors_ak/opt/colors_edge
 	url = https://github.com/sainnhe/edge
-  ignore = untracked
-[submodule "colors_ak/colors_leaf"]
-	path = pack/colors_ak/opt/colors_leaf
-	url = https://github.com/daschw/leaf.nvim
   ignore = untracked
 [submodule "colors_ak/colors_astrotheme"]
 	path = pack/colors_ak/opt/colors_astrotheme

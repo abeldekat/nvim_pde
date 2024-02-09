@@ -1,4 +1,3 @@
--- local lazyfile = { "BufReadPost", "BufNewFile", "BufWritePre" }
 local Util = require("ak.util")
 
 return {

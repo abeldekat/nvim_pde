@@ -1,7 +1,6 @@
 --          ╭─────────────────────────────────────────────────────────╮
---          │       rose-pine does not support mini.statusline        │
+--          │             mini.statusline: not supported              │
 --          ╰─────────────────────────────────────────────────────────╯
-
 local Utils = require("ak.util")
 local prefer_light = require("ak.color").prefer_light
 
@@ -20,7 +19,7 @@ local current_nc = "#16141f"
 
 local hl_config = {
   -- all inner groups, same as lualine c
-  MiniStatuslineDevinfo = { bg = "base", fg = "text", current = current_nc },
+  MiniStatuslineFilename = { bg = "base", fg = "text", current = current_nc },
   -- left and right, dynamic, same as lualine c
   MiniStatuslineModeNormal = { bg = "base", fg = "text", current = current_nc },
 

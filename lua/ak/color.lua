@@ -1,4 +1,6 @@
+-- See: https://github.com/abeldekat/scripts.git, vim_menu_owns
 -- See: colors.txt
+
 -- using sed for color and prefer_light:
 local color = "tokyonight"
 local prefer_light = false

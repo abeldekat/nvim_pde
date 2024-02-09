@@ -9,9 +9,6 @@ everforest
 gruvbox
 gruvbox-material
 kanagawa
-leaf
-melange
-monokai-pro
 nano-theme
 nightfox
 nordfox

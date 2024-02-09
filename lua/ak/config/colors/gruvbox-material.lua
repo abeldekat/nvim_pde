@@ -1,9 +1,10 @@
 --          ╭─────────────────────────────────────────────────────────╮
---          │        gruvbox-material supports mini.statusline        │
+--          │               mini.statusline: supported                │
 --          ╰─────────────────────────────────────────────────────────╯
-
 local Utils = require("ak.util")
+local prefer_light = require("ak.color").prefer_light
 local name = "gruvbox-material"
+
 Utils.color.add_toggle("*material", {
   name = name,
   -- stylua: ignore
@@ -21,11 +22,10 @@ Utils.color.add_toggle("*material", {
 vim.api.nvim_create_autocmd("Colorscheme", {
   pattern = "gruvbox-material",
   callback = function()
-    vim.cmd("highlight! link MiniStatuslineModeNormal MiniStatuslineDevinfo")
+    vim.api.nvim_set_hl(0, "MiniStatuslineModeNormal", { link = "MiniStatuslineFilename" })
   end,
 })
 
-local prefer_light = require("ak.color").prefer_light
 vim.g.gruvbox_material_foreground = "material" -- "mix", "original"
 vim.g.gruvbox_material_better_performance = 1
 vim.g.gruvbox_material_background = "soft"

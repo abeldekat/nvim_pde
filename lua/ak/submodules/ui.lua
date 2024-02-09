@@ -6,7 +6,7 @@ local Util = require("ak.util")
 local add, later = vim.cmd.packadd, Util.defer.later
 local dashboard_now = Util.opened_without_arguments()
 
-vim.o.statusline = " " -- wait till mini_statusline is loaded
+vim.o.statusline = " " -- wait till statusline plugin is loaded
 if dashboard_now then
   add("dashboard-nvim")
   require("ak.config.intro")

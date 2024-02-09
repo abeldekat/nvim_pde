@@ -1,5 +1,5 @@
 --          ╭─────────────────────────────────────────────────────────╮
---          │           everforest supports mini.statusline           │
+--          │               mini.statusline: supported                │
 --          ╰─────────────────────────────────────────────────────────╯
 
 local Utils = require("ak.util")
@@ -23,7 +23,7 @@ Utils.color.add_toggle(name, {
 vim.api.nvim_create_autocmd("Colorscheme", {
   pattern = "everforest",
   callback = function()
-    vim.cmd("highlight! link MiniStatuslineModeNormal MiniStatuslineDevinfo")
+    vim.api.nvim_set_hl(0, "MiniStatuslineModeNormal", { link = "MiniStatuslineFilename" })
   end,
 })
 

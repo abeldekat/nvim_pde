@@ -4,6 +4,12 @@
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                          Notes                          │
 --          ╰─────────────────────────────────────────────────────────╯
+-- Lualine:
+-- The intent of MiniStatuslineFilename is the same as lualine_c
+
+-- ie rose-pine: no support for mini.statusline, so the hls are created in ak.config
+-- However: What happens when switching to a color with incomplete hls?
+
 -- about colors:
 --https://github.com/echasnovski/mini.nvim/issues/153
 
@@ -62,31 +68,31 @@ AK.active = function()
   end
   local MiniStatusline = require("mini.statusline")
 
-  -- Dynamic hl
+  -- 1 Dynamic hl
   local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 120 })
 
-  -- hl = "MiniStatuslineDevinfo"
+  -- 2 hl = "MiniStatuslineDevinfo" --> MiniStatuslineFilename
   local git = MiniStatusline.section_git({ trunc_width = 75, icon = "" })
-  local lsp = AK.section_lsp({ trunc_width = 37, icon = "" })
-  local diagnostics = AK.section_diagnostics({ trunc_width = 37 })
+  local lsp = AK.section_lsp({ trunc_width = 75, icon = "" })
+  local diagnostics = AK.section_diagnostics({ trunc_width = 75 })
 
-  -- hl = "MiniStatuslineFilename" --> MiniStatuslineDevinfo
+  -- 3 hl = "MiniStatuslineFilename"
   local filename = MiniStatusline.section_filename({ trunc_width = 140 })
 
-  -- hl = "MiniStatuslineFileinfo" --> MiniStatuslineDevinfo
+  -- 4 hl = "MiniStatuslineFileinfo" --> MiniStatuslineFilename
   local fileinfo = AK.section_fileinfo({ trunc_width = 120 })
 
-  -- Dynamic hl using the hl of section_mode
+  -- 5 Dynamic hl using the hl of section_mode
   local search = MiniStatusline.section_searchcount({ trunc_width = 75 })
   local location = AK.section_location({ trunc_width = 75 })
 
   return MiniStatusline.combine_groups({
     { hl = mode_hl, strings = { string.upper(mode) } },
-    { hl = "MiniStatuslineDevinfo", strings = { git, lsp, diagnostics } },
+    { hl = "MiniStatuslineFilename", strings = { git, lsp, diagnostics } },
     "%<", -- Mark general truncate point
-    { hl = "MiniStatuslineDevinfo", strings = { filename } },
+    { hl = "MiniStatuslineFilename", strings = { filename } },
     "%=", -- End left alignment
-    { hl = "MiniStatuslineDevinfo", strings = { fileinfo } },
+    { hl = "MiniStatuslineFilename", strings = { fileinfo } },
     { hl = mode_hl, strings = { search, location } },
   })
 end
@@ -222,10 +228,13 @@ end
 -- added
 H.create_diagnostic_hl = function()
   local fallback = vim.api.nvim_get_hl(0, { name = "StatusLine" })
-  local devinfo = vim.api.nvim_get_hl(0, { name = "MiniStatuslineDevinfo" })
+  local devinfo = vim.api.nvim_get_hl(0, { name = "MiniStatuslineFilename" })
   local bg = devinfo and devinfo.bg or fallback.bg
   local function fg(name)
     local hl = vim.api.nvim_get_hl(0, { name = name })
+    if hl.link then -- ie gruvbox
+      hl = vim.api.nvim_get_hl(0, { name = hl.link })
+    end
     return hl and hl.fg or fallback.fg
   end
 

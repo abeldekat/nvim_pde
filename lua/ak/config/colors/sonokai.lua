@@ -1,7 +1,6 @@
 --          ╭─────────────────────────────────────────────────────────╮
---          │            sonokai supports mini.statusline             │
+--          │               mini.statusline: supported                │
 --          ╰─────────────────────────────────────────────────────────╯
-
 local Utils = require("ak.util")
 
 -- monokai variations
@@ -18,7 +17,8 @@ Utils.color.add_toggle("sonokai", {
 vim.api.nvim_create_autocmd("Colorscheme", {
   pattern = "sonokai",
   callback = function()
-    vim.cmd("highlight! link MiniStatuslineModeNormal MiniStatuslineDevinfo")
+    -- the fg color is dimmed compared to lualine_c
+    vim.api.nvim_set_hl(0, "MiniStatuslineModeNormal", { link = "MiniStatuslineFilename" })
   end,
 })
 

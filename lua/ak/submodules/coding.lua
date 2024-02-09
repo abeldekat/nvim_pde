@@ -1,5 +1,5 @@
 --          ╭─────────────────────────────────────────────────────────╮
---          │            Contains plugins that modify code            │
+--          │          Contains plugins for code modificaton          │
 --          ╰─────────────────────────────────────────────────────────╯
 
 local Util = require("ak.util")
