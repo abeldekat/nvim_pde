@@ -23,8 +23,8 @@ require("ayu").setup({
       MiniStatusLineModeInsert = { fg = c.bg, bg = c.string },
       MiniStatusLineModeReplace = { fg = c.bg, bg = c.markup },
       MiniStatusLineModeVisual = { fg = c.bg, bg = c.accent },
-      MiniStatusLineModeCommand = { fg = c.bg, bg = c.markup }, -- added, see replace
-      MiniStatusLineModeOther = { fg = c.bg, bg = c.markup }, -- added, see replace
+      MiniStatusLineModeCommand = { fg = c.bg, bg = c.string }, -- added, same as insert
+      MiniStatusLineModeOther = { fg = c.bg, bg = c.string }, -- added, same as insert
     }
   end,
 })

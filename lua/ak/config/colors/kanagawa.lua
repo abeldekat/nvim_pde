@@ -24,7 +24,7 @@ local opts = {
       MiniStatusLineModeReplace = { fg = c.theme.ui.bg, bg = c.theme.syn.constant },
       MiniStatusLineModeVisual = { fg = c.theme.ui.bg, bg = c.theme.syn.keyword },
       MiniStatusLineModeCommand = { fg = c.theme.ui.bg, bg = c.theme.syn.operator },
-      MiniStatusLineModeOther = { fg = c.theme.ui.bg, bg = c.theme.syn.operator }, -- added
+      MiniStatusLineModeOther = { fg = c.theme.ui.bg, bg = c.theme.diag.ok }, -- added, same as insert
     }
 
     if prefer_light then -- improve flashlabel

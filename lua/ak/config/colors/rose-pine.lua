@@ -30,7 +30,7 @@ local hl_config = {
 
   -- same as insert, the approach taken in tokyonight's lualine
   MiniStatuslineModeOther = { bg = "foam", fg = "base", current = current_nc }, -- ie terminal
-  -- MiniStatuslineInactive = {}, using the default
+  MiniStatuslineInactive = { bg = "base", fg = "muted", current = current_nc },
 }
 
 --          ╭─────────────────────────────────────────────────────────╮
