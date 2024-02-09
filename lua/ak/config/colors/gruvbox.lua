@@ -29,11 +29,18 @@ vim.api.nvim_create_autocmd("Colorscheme", {
     local set_hl = function(name, data)
       vim.api.nvim_set_hl(0, name, data)
     end
+    set_hl("MiniStatuslineInactive", { link = "StatusLineNC" })
     -- colors taken from lualine theme, normal c:
     local fg = prefer_light and "#7c6f64" or "#a89984"
     local bg = prefer_light and "#ebdbb2" or "#3c3836"
-    set_hl("MiniStatuslineModeNormal", { fg = fg, bg = bg })
     set_hl("MiniStatuslineFilename", { fg = fg, bg = bg })
+    set_hl("MiniStatuslineModeNormal", { fg = fg, bg = bg })
+    --
+    set_hl("MiniStatuslineModeInsert", { link = "DiffChange" })
+    set_hl("MiniStatuslineModeVisual", { link = "DiffAdd" })
+    set_hl("MiniStatuslineModeReplace", { link = "DiffDelete" })
+    set_hl("MiniStatuslineModeCommand", { link = "DiffText" })
+    set_hl("MiniStatuslineModeOther", { link = "IncSearch" })
   end,
 })
 
