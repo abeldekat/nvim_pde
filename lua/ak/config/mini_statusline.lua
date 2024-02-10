@@ -1,14 +1,8 @@
--- TODO: shorter filename
--- TODO: in terminal mode, only "zsh" is shown for the filename
-
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                          Notes                          │
 --          ╰─────────────────────────────────────────────────────────╯
 -- Lualine:
 -- The intent of MiniStatuslineFilename is the same as lualine_c
-
--- ie rose-pine: no support for mini.statusline, so the hls are created in ak.config
--- However: What happens when switching to a color with incomplete hls?
 
 -- about colors:
 --https://github.com/echasnovski/mini.nvim/issues/153
@@ -16,10 +10,6 @@
 -- hightlighting:
 -- https://github.com/echasnovski/mini.nvim/issues/337
 -- use separate groups for each diagnostic
-
--- redrawstatus:
--- vim.cmd('redrawstatus!') will redraw it immediately.
--- vim.defer_fn(function() vim.cmd('redrawstatus!') end, 100) will schedule to redraw it after 100 milliseconds.
 
 -- mini statusline in floating lazy.nvim ui:
 -- local set_active_stl = function()
@@ -56,7 +46,7 @@ AK.setup = function()
     content = { active = AK.active }, -- entrypoint
   })
   H.create_autocommands() -- lsp autocommands for custom lsp section
-  H.set_active() -- make sure that when events are missed the statusline still shows
+  H.set_active() -- lazy loading, missing events, still show statusline
 end
 
 --          ╭─────────────────────────────────────────────────────────╮
@@ -77,7 +67,7 @@ AK.active = function()
   local diagnostics = AK.section_diagnostics({ trunc_width = 75 })
 
   -- 3 hl = "MiniStatuslineFilename"
-  local filename = MiniStatusline.section_filename({ trunc_width = 140 })
+  local filename = AK.section_filename({ trunc_width = 140 })
 
   -- 4 hl = "MiniStatuslineFileinfo" --> MiniStatuslineFilename
   local fileinfo = AK.section_fileinfo({ trunc_width = 120 })
@@ -123,6 +113,25 @@ AK.section_diagnostics = function(args) -- args
     return ""
   end
   return string.format("%s", table.concat(t, ""))
+end
+
+-- overridden: in terminal, use full name. Use relative path if file is in cwd
+AK.section_filename = function(args)
+  local function is_in_cwd()
+    local cwd = vim.fn.getcwd()
+    local full_path = vim.fn.expand("%:p")
+    local separator = package.config:sub(1, 1)
+    return full_path:find(cwd .. separator, 1, true) == 1
+  end
+  local MiniStatusline = require("mini.statusline")
+  local full_fmt = "%F%m%r" -- modified and readonly flags
+  local relative_fmt = "%f%m%r" -- modified and readonly flags
+
+  if MiniStatusline.is_truncated(args.trunc_width) then
+    return relative_fmt
+  else
+    return is_in_cwd() and relative_fmt or full_fmt
+  end
 end
 
 -- added:
