@@ -4,9 +4,6 @@
 -- Lualine:
 -- The intent of MiniStatuslineFilename is the same as lualine_c
 
--- about colors:
---https://github.com/echasnovski/mini.nvim/issues/153
-
 -- hightlighting:
 -- https://github.com/echasnovski/mini.nvim/issues/337
 -- use separate groups for each diagnostic
@@ -29,9 +26,7 @@ local H = {} -- helpers, copied, modified or added
 AK.setup = function()
   -- copied
   if vim.fn.has("nvim-0.10") == 1 then
-    H.get_diagnostic_count = function()
-      return vim.diagnostic.count(0)
-    end
+    H.get_diagnostic_count = function() return vim.diagnostic.count(0) end --
   end
 
   H.create_diagnostic_hl() -- added diagnostics with colors
@@ -53,11 +48,10 @@ end
 --          │                       Entrypoint                        │
 --          ╰─────────────────────────────────────────────────────────╯
 AK.active = function()
-  if H.is_blocked_filetype() then
-    return "" -- Customize statusline content for blocked filetypes to your liking
-  end
+  -- Customize statusline content for blocked filetypes to your liking
+  if H.is_blocked_filetype() then return "" end
+
   local MiniStatusline = require("mini.statusline")
-  local fixed_hl = "MiniStatuslineFilename"
 
   -- 1
   local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 120 })
@@ -77,12 +71,12 @@ AK.active = function()
 
   return MiniStatusline.combine_groups({
     { hl = mode_hl, strings = { string.upper(mode) } }, -- Dynamic mode_hl
-    { hl = fixed_hl, strings = { git, lsp, diagnostics } }, -- "..Devinfo"
+    { hl = H.fixed_hl, strings = { git, lsp, diagnostics } }, -- "..Devinfo"
     "%<", -- Mark general truncate point
-    { hl = fixed_hl, strings = { filename } }, -- "..Filename"
+    { hl = H.fixed_hl, strings = { filename } }, -- "..Filename"
     "%=", -- End left alignment
     { hl = "MiniStatuslineModeCommand", strings = { macro } }, -- "..ModeCommand", added
-    { hl = fixed_hl, strings = { fileinfo } }, -- "..Fileinfo"
+    { hl = H.fixed_hl, strings = { fileinfo } }, -- "..Fileinfo"
     { hl = mode_hl, strings = { search, location } }, -- Dynamic mode_hl
   })
 end
@@ -91,15 +85,13 @@ end
 --          │                        Sections                         │
 --          ╰─────────────────────────────────────────────────────────╯
 
--- added:
+-- added: removed from section_diagnostics
 AK.section_lsp = function(args)
   local MiniStatusline = require("mini.statusline")
   _G.n_attached_lsp = H.n_attached_lsp
 
   local dont_show = MiniStatusline.is_truncated(args.trunc_width) or H.isnt_normal_buffer() or H.has_no_lsp_attached()
-  if dont_show then
-    return ""
-  end
+  if dont_show then return "" end
 
   local icon = args.icon or "LSP"
   return string.format("%s", icon)
@@ -109,9 +101,7 @@ end
 AK.section_diagnostics = function(args) -- args
   local MiniStatusline = require("mini.statusline")
   local dont_show = MiniStatusline.is_truncated(args.trunc_width) or H.isnt_normal_buffer()
-  if dont_show then
-    return ""
-  end
+  if dont_show then return "" end
 
   -- Construct string parts
   local counts = H.get_diagnostic_count()
@@ -123,9 +113,7 @@ AK.section_diagnostics = function(args) -- args
     end
   end
 
-  if vim.tbl_count(t) == 0 then
-    return ""
-  end
+  if vim.tbl_count(t) == 0 then return "" end
   return string.format("%s", table.concat(t, ""))
 end
 
@@ -151,9 +139,7 @@ end
 -- added: show when recording a macro
 AK.section_macro = function(args)
   local MiniStatusline = require("mini.statusline")
-  if MiniStatusline.is_truncated(args.trunc_width) then
-    return ""
-  end
+  if MiniStatusline.is_truncated(args.trunc_width) then return "" end
 
   local reg = vim.fn.reg_recording()
   return reg == "" and reg or "recording @" .. reg
@@ -164,16 +150,11 @@ AK.section_fileinfo = function(args)
   local MiniStatusline = require("mini.statusline")
   local filetype = vim.bo.filetype
 
-  -- Don't show anything if can't detect file type or not inside a "normal
-  -- buffer"
-  if (filetype == "") or H.isnt_normal_buffer() then
-    return ""
-  end
+  -- Only show when filetype is detected in normal buffer
+  if (filetype == "") or H.isnt_normal_buffer() then return "" end
 
   -- Construct output string if truncated
-  if MiniStatusline.is_truncated(args.trunc_width) then
-    return filetype
-  end
+  if MiniStatusline.is_truncated(args.trunc_width) then return filetype end
 
   -- Construct output string with extra file info
   local encoding = vim.bo.fileencoding or vim.bo.encoding
@@ -186,9 +167,7 @@ AK.section_location = function(args)
   local MiniStatusline = require("mini.statusline")
 
   -- Use virtual column number to allow update when past last column
-  if MiniStatusline.is_truncated(args.trunc_width) then
-    return "%l│%2v"
-  end
+  if MiniStatusline.is_truncated(args.trunc_width) then return "%l│%2v" end
 
   -- Use `virtcol()` to correctly handle multi-byte characters
   return '%l|%L %2v|%-2{virtcol("$") - 1}'
@@ -204,6 +183,12 @@ H.diagnostic_hls = {
   info = "DiagnosticInfoStatusline",
   hint = "DiagnosticHintStatusline",
 }
+
+-- added. Colors only appear:
+--   for diagnostics
+--   in any mode except normal mode
+--   when recording a macro
+H.fixed_hl = "MiniStatuslineFilename"
 
 -- overridden: added hl
 H.diagnostic_levels = {
@@ -250,8 +235,8 @@ end
 -- added
 H.create_diagnostic_hl = function()
   local fallback = vim.api.nvim_get_hl(0, { name = "StatusLine" })
-  local devinfo = vim.api.nvim_get_hl(0, { name = "MiniStatuslineFilename" })
-  local bg = devinfo and devinfo.bg or fallback.bg
+  local fixed_hl = vim.api.nvim_get_hl(0, { name = H.fixed_hl })
+  local bg = fixed_hl and fixed_hl.bg or fallback.bg
   local function fg(name)
     local hl = vim.api.nvim_get_hl(0, { name = name })
     if hl.link then -- ie gruvbox
@@ -270,9 +255,7 @@ end
 --          │                    Helper utilities                     │
 --          ╰─────────────────────────────────────────────────────────╯
 -- added, manually activate, lsp can be slow:
-H.set_active = function()
-  vim.wo.statusline = "%!v:lua.MiniStatusline.active()"
-end
+H.set_active = function() vim.wo.statusline = "%!v:lua.MiniStatusline.active()" end
 
 -- added
 H.is_blocked_filetype = function()
@@ -287,9 +270,7 @@ H.isnt_normal_buffer = function()
 end
 
 -- copied
-H.has_no_lsp_attached = function()
-  return (H.n_attached_lsp[vim.api.nvim_get_current_buf()] or 0) == 0
-end
+H.has_no_lsp_attached = function() return (H.n_attached_lsp[vim.api.nvim_get_current_buf()] or 0) == 0 end
 
 -- copied
 H.get_diagnostic_count = function()
