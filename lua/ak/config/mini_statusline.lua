@@ -20,7 +20,7 @@
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                    Module definition                    │
 --          ╰─────────────────────────────────────────────────────────╯
-local AK = {} -- module using MiniStatusline
+local AK = {} -- module using the structure of MiniStatusline
 local H = {} -- helpers, copied, modified or added
 
 --          ╭─────────────────────────────────────────────────────────╮
@@ -57,39 +57,53 @@ AK.active = function()
     return "" -- Customize statusline content for blocked filetypes to your liking
   end
   local MiniStatusline = require("mini.statusline")
+  local fixed_hl = "MiniStatuslineFilename"
 
-  -- 1 Dynamic hl
+  -- 1
   local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 120 })
-
-  -- 2 hl = "MiniStatuslineDevinfo" --> MiniStatuslineFilename
+  -- 2
   local git = MiniStatusline.section_git({ trunc_width = 75, icon = "" })
   local lsp = AK.section_lsp({ trunc_width = 75, icon = "" })
   local diagnostics = AK.section_diagnostics({ trunc_width = 75 })
-
-  -- 3 hl = "MiniStatuslineFilename"
+  -- 3
   local filename = AK.section_filename({ trunc_width = 140 })
-
-  -- 4 hl = "MiniStatuslineFileinfo" --> MiniStatuslineFilename
+  -- 4 added:
+  local macro = AK.section_macro({ trunc_width = 120 })
+  -- 5
   local fileinfo = AK.section_fileinfo({ trunc_width = 120 })
-
-  -- 5 Dynamic hl using the hl of section_mode
+  -- 6
   local search = MiniStatusline.section_searchcount({ trunc_width = 75 })
   local location = AK.section_location({ trunc_width = 75 })
 
   return MiniStatusline.combine_groups({
-    { hl = mode_hl, strings = { string.upper(mode) } },
-    { hl = "MiniStatuslineFilename", strings = { git, lsp, diagnostics } },
+    { hl = mode_hl, strings = { string.upper(mode) } }, -- Dynamic mode_hl
+    { hl = fixed_hl, strings = { git, lsp, diagnostics } }, -- "..Devinfo"
     "%<", -- Mark general truncate point
-    { hl = "MiniStatuslineFilename", strings = { filename } },
+    { hl = fixed_hl, strings = { filename } }, -- "..Filename"
     "%=", -- End left alignment
-    { hl = "MiniStatuslineFilename", strings = { fileinfo } },
-    { hl = mode_hl, strings = { search, location } },
+    { hl = "MiniStatuslineModeCommand", strings = { macro } }, -- "..ModeCommand", added
+    { hl = fixed_hl, strings = { fileinfo } }, -- "..Fileinfo"
+    { hl = mode_hl, strings = { search, location } }, -- Dynamic mode_hl
   })
 end
 
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                        Sections                         │
 --          ╰─────────────────────────────────────────────────────────╯
+
+-- added:
+AK.section_lsp = function(args)
+  local MiniStatusline = require("mini.statusline")
+  _G.n_attached_lsp = H.n_attached_lsp
+
+  local dont_show = MiniStatusline.is_truncated(args.trunc_width) or H.isnt_normal_buffer() or H.has_no_lsp_attached()
+  if dont_show then
+    return ""
+  end
+
+  local icon = args.icon or "LSP"
+  return string.format("%s", icon)
+end
 
 -- overridden: removed lsp, added color to diagnostics
 AK.section_diagnostics = function(args) -- args
@@ -134,18 +148,15 @@ AK.section_filename = function(args)
   end
 end
 
--- added:
-AK.section_lsp = function(args)
+-- added: show when recording a macro
+AK.section_macro = function(args)
   local MiniStatusline = require("mini.statusline")
-  _G.n_attached_lsp = H.n_attached_lsp
-
-  local dont_show = MiniStatusline.is_truncated(args.trunc_width) or H.isnt_normal_buffer() or H.has_no_lsp_attached()
-  if dont_show then
+  if MiniStatusline.is_truncated(args.trunc_width) then
     return ""
   end
 
-  local icon = args.icon or "LSP"
-  return string.format("%s", icon)
+  local reg = vim.fn.reg_recording()
+  return reg == "" and reg or "recording @" .. reg
 end
 
 -- overridden: removed filesize
@@ -193,6 +204,7 @@ H.diagnostic_hls = {
   info = "DiagnosticInfoStatusline",
   hint = "DiagnosticHintStatusline",
 }
+
 -- overridden: added hl
 H.diagnostic_levels = {
   { name = "ERROR", sign = "E", hl = H.diagnostic_hls.error },
@@ -200,6 +212,7 @@ H.diagnostic_levels = {
   { name = "INFO", sign = "I", hl = H.diagnostic_hls.info },
   { name = "HINT", sign = "H", hl = H.diagnostic_hls.hint },
 }
+
 -- copied
 H.n_attached_lsp = {} -- Count of attached LSP clients per buffer id
 
@@ -263,9 +276,7 @@ end
 
 -- added
 H.is_blocked_filetype = function()
-  local blocked_filetypes = {
-    ["dashboard"] = true,
-  }
+  local blocked_filetypes = { ["dashboard"] = true }
   return blocked_filetypes[vim.bo.filetype]
 end
 
