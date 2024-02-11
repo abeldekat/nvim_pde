@@ -9,7 +9,7 @@ return {
   {
     "windwp/nvim-autopairs",
     event = "VeryLazy",
-    config = function() require("ak.config.condig.autopairs") end,
+    config = function() require("ak.config.coding.autopairs") end,
   },
 
   { -- Lazy loading benefit: +-5 ms
