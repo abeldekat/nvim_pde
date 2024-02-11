@@ -1,14 +1,16 @@
 # Neovim pde
 
-My personal development environment for Neovim
+My *personal development environment* for Neovim
 
 ## Design
 
 - `init`: Defers to `ak.init`.
 - `ak.init`: Starts with either git [submodules] or [lazy.nvim].
-- `ak.boot.submodules`: Operates without plugin manager.
-Uses the units in `ak.submodules` to boot.
-- `ak.boot.lazy`: Uses [lazy.nvim] and the units in `ak.lazy` to boot.
+- `ak.boot`
+
+    1. `submodules`: Uses the units in `ak.submodules` to boot.
+    2. `lazy`: Uses [lazy.nvim] and the units in `ak.lazy` to boot.
+
 - `ak.config`:
 
   Contains the setup for:
