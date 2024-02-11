@@ -22,9 +22,7 @@ key("n", "[q", function()
     require("trouble").previous({ skip_groups = true, jump = true })
   else
     local ok, err = pcall(vim.cmd.cprev)
-    if not ok then
-      vim.notify(err, vim.log.levels.ERROR)
-    end
+    if not ok then vim.notify(err, vim.log.levels.ERROR) end
   end
 end, { desc = "Previous trouble/quickfix item", silent = true })
 key("n", "]q", function()
@@ -33,6 +31,7 @@ key("n", "]q", function()
   else
     local ok, err = pcall(vim.cmd.cnext)
     if not ok then
+      ---@diagnostic disable-next-line: param-type-mismatch
       vim.notify(err, vim.log.levels.ERROR)
     end
   end

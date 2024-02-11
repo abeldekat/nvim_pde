@@ -1,5 +1,3 @@
-local M = {}
-
 local has_lazy, lazy = pcall(require, "lazy")
 local opts = {
   theme = "doom",
@@ -68,9 +66,7 @@ if has_lazy then
     return { "⚡ Neovim loaded " .. stats.loaded .. "/" .. stats.count .. " plugins in " .. ms .. "ms" }
   end
 else
-  opts.config.footer = function()
-    return { "Press space for the menu" }
-  end
+  opts.config.footer = function() return { "Press space for the menu" } end
 end
 
 for _, button in ipairs(opts.config.center) do
@@ -83,9 +79,7 @@ if vim.o.filetype == "lazy" then
   vim.cmd.close()
   vim.api.nvim_create_autocmd("User", {
     pattern = "DashboardLoaded",
-    callback = function()
-      require("lazy").show()
-    end,
+    callback = function() require("lazy").show() end,
   })
 end
 

@@ -10,9 +10,7 @@ return {
   {
     "nvimdev/dashboard-nvim",
     lazy = not dashboard_now,
-    config = function()
-      require("ak.config.intro")
-    end,
+    config = function() require("ak.config.ui.dashboard") end,
   },
 
   {
@@ -34,17 +32,13 @@ return {
   {
     "lukas-reineke/indent-blankline.nvim",
     event = "VeryLazy", -- event = lazyfile,
-    config = function()
-      require("ak.config.indent_blankline")
-    end,
+    config = function() require("ak.config.ui.indent_blankline") end,
   },
 
   {
     "echasnovski/mini.statusline",
     event = "VeryLazy",
-    config = function()
-      require("ak.config.mini_statusline")
-    end,
+    config = function() require("ak.config.ui.mini_statusline") end,
   },
 
   -- {

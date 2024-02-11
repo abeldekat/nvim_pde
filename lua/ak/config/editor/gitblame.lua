@@ -6,5 +6,5 @@ require("gitblame").setup({
 })
 
 vim.keymap.set("n", "<leader>gt", function()
-  vim.cmd("GitBlameToggle")
+  vim.cmd("GitBlameToggle") --
 end, { desc = "Toggle gitblame", silent = true })

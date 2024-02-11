@@ -21,9 +21,7 @@ Utils.color.add_toggle("*material", {
 
 vim.api.nvim_create_autocmd("Colorscheme", {
   pattern = "gruvbox-material",
-  callback = function()
-    vim.api.nvim_set_hl(0, "MiniStatuslineModeNormal", { link = "MiniStatuslineFilename" })
-  end,
+  callback = function() vim.api.nvim_set_hl(0, "MiniStatuslineModeNormal", { link = "MiniStatuslineFilename" }) end,
 })
 
 vim.g.gruvbox_material_foreground = "material" -- "mix", "original"

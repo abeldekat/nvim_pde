@@ -48,9 +48,11 @@ local function keys(_, buffer) -- client
   map("gK", vim.lsp.buf.signature_help, { desc = "Signature help" })
   map("<c-k>", vim.lsp.buf.signature_help, { desc = "Signature help" }, "i")
   map("<leader>ca", vim.lsp.buf.code_action, { desc = "Code action" }, { "n", "v" })
-  map("<leader>cA", function()
-    vim.lsp.buf.code_action({ context = { only = { "source" }, diagnostics = {} } })
-  end, { desc = "Source action" })
+  map(
+    "<leader>cA",
+    function() vim.lsp.buf.code_action({ context = { only = { "source" }, diagnostics = {} } }) end,
+    { desc = "Source action" }
+  )
   map("<leader>cr", vim.lsp.buf.rename, { desc = "Rename" })
 
   -- Also possible
@@ -103,9 +105,7 @@ local function diagnostics()
       or function(diagnostic)
         local icons = require("ak.consts").icons.diagnostics
         for d, icon in pairs(icons) do
-          if diagnostic.severity == vim.diagnostic.severity[d:upper()] then
-            return icon
-          end
+          if diagnostic.severity == vim.diagnostic.severity[d:upper()] then return icon end
         end
       end
   end
@@ -128,9 +128,7 @@ local function handler(global_capabilities)
   return function(server_name)
     -- The lsp is installed but removed from mason_lspconfig_ensure_installed
     -- Mason's handler would be activated:
-    if not vim.tbl_contains(mason_lspconfig_ensure_installed, server_name) then
-      return
-    end
+    if not vim.tbl_contains(mason_lspconfig_ensure_installed, server_name) then return end
 
     local server_opts = Opts[server_name]["server"] or {}
     server_opts = vim.tbl_deep_extend("force", {

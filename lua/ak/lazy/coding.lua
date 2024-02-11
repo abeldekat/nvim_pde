@@ -9,9 +9,7 @@ return {
   {
     "windwp/nvim-autopairs",
     event = "VeryLazy",
-    config = function()
-      require("ak.config.pairs")
-    end,
+    config = function() require("ak.config.condig.autopairs") end,
   },
 
   { -- Lazy loading benefit: +-5 ms
@@ -23,18 +21,14 @@ return {
       "hrsh7th/cmp-path",
       "saadparwaiz1/cmp_luasnip",
     },
-    config = function()
-      require("ak.config.completion")
-    end,
+    config = function() require("ak.config.coding.cmp") end,
   },
 
   {
     "L3MON4D3/LuaSnip",
     dependencies = { "rafamadriz/friendly-snippets" },
     event = "VeryLazy",
-    config = function()
-      require("ak.config.snip")
-    end,
+    config = function() require("ak.config.coding.LuaSnip") end,
   },
 
   -- ── verylazy ──────────────────────────────────────────────────────────
@@ -42,35 +36,27 @@ return {
   {
     "monaqa/dial.nvim",
     event = "VeryLazy",
-    config = function()
-      require("ak.config.dial")
-    end,
+    config = function() require("ak.config.coding.dial") end,
   },
 
   {
     "gbprod/substitute.nvim",
     event = "VeryLazy",
-    config = function()
-      require("ak.config.substitute")
-    end,
+    config = function() require("ak.config.coding.substitute") end,
   },
 
   {
     "kylechui/nvim-surround",
     version = "*",
     event = "VeryLazy",
-    config = function()
-      require("ak.config.surround")
-    end,
+    config = function() require("ak.config.coding.surround") end,
   },
 
   {
     "numToStr/Comment.nvim",
     event = "VeryLazy",
     dependencies = { "JoosepAlviste/nvim-ts-context-commentstring" },
-    config = function()
-      require("ak.config.comment")
-    end,
+    config = function() require("ak.config.coding.comment") end,
   },
 
   -- ── on-demand ─────────────────────────────────────────────────────────
@@ -78,8 +64,6 @@ return {
   {
     "LudoPinelli/comment-box.nvim",
     keys = { { "<leader>bL", desc = "Load comment-box" } },
-    config = function()
-      require("ak.config.comment_box")
-    end,
+    config = function() require("ak.config.coding.comment_box") end,
   },
 }

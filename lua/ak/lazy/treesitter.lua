@@ -2,36 +2,20 @@ return {
   {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
-    dependencies = {
-      "nvim-treesitter/nvim-treesitter-textobjects",
-      config = function()
-        require("ak.config.treesitter_textobjects")
-      end,
-    },
+    dependencies = "nvim-treesitter/nvim-treesitter-textobjects",
     event = "VeryLazy",
-    -- event = function()
-    --   local lazyfile = { "BufReadPost", "BufNewFile", "BufWritePre" }
-    --   local Util = require("ak.util")
-    --   return Util.opened_without_arguments() and { "VeryLazy" } or lazyfile
-    -- end,
-    config = function()
-      require("ak.config.treesitter")
-    end,
+    config = function() require("ak.config.treesitter.treesitter") end,
   },
 
   {
     "windwp/nvim-ts-autotag",
     event = "VeryLazy", -- event = lazyfile(),
-    config = function()
-      require("ak.config.treesitter_autotag")
-    end,
+    config = function() require("ak.config.treesitter.autotag") end,
   },
 
   {
     "nvim-treesitter/nvim-treesitter-context",
     event = "VeryLazy", -- event = lazyfile(),
-    config = function()
-      require("ak.config.treesitter_context")
-    end,
+    config = function() require("ak.config.treesitter.context") end,
   },
 }

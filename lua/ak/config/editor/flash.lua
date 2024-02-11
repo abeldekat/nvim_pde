@@ -22,8 +22,10 @@ local opts = {
     },
   },
 }
+
 require("flash").setup(opts)
 Util.register_referenced("flash.nvim")
+
 require("eyeliner").setup({ -- disabled flash for fFtT
   highlight_on_key = true, -- show highlights only after keypress
   dim = true, -- dim all other characters if set to true (recommended!)
@@ -31,6 +33,7 @@ require("eyeliner").setup({ -- disabled flash for fFtT
 Util.register_referenced("eyeliner.nvim")
 
 local keys = vim.keymap.set
+-- stylua: ignore start
 keys({ "n", "x", "o" }, "s", function()
   require("flash").jump()
 end, { desc = "Flash", silent = true })
@@ -46,3 +49,4 @@ end, { desc = "Treesitter search", silent = true })
 keys("c", "<c-s>", function()
   require("flash").toggle() -- in command mode
 end, { desc = "Treesitter flash search", silent = true })
+-- stylua: ignore end

@@ -23,9 +23,7 @@ Utils.color.add_toggle("solarized8*", {
 vim.api.nvim_create_autocmd("Colorscheme", {
   pattern = "solarized8*",
   callback = function()
-    local set_hl = function(name, data)
-      vim.api.nvim_set_hl(0, name, data)
-    end
+    local set_hl = function(name, data) vim.api.nvim_set_hl(0, name, data) end
     set_hl("MiniStatuslineInactive", { link = "StatusLineNC" })
     -- colors taken from lualine theme, normal c:
     local fg = prefer_light and "#586e75" or "#93a1a1"

@@ -9,16 +9,14 @@ local dashboard_now = Util.opened_without_arguments()
 vim.o.statusline = " " -- wait till statusline plugin is loaded
 if dashboard_now then
   add("dashboard-nvim")
-  require("ak.config.intro")
+  require("ak.config.ui.dashboard")
 end
 
 later(function()
   add("mini.statusline")
-  require("ak.config.mini_statusline")
+  require("ak.config.ui.mini_statusline")
 
-  local function dressing()
-    add("dressing.nvim")
-  end
+  local function dressing() add("dressing.nvim") end
   ---@diagnostic disable-next-line: duplicate-set-field
   vim.ui.select = function(...)
     dressing()
@@ -31,5 +29,5 @@ later(function()
   end
 
   add("indent-blankline.nvim")
-  require("ak.config.indent_blankline")
+  require("ak.config.ui.indent_blankline")
 end)

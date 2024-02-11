@@ -4,9 +4,7 @@
 -- or in .lazy.lua: w:db b:db g:db
 local function add_completion()
   local ok, cmp = pcall(require, "cmp")
-  if ok then
-    cmp.setup.buffer({ sources = { { name = "vim-dadbod-completion" } } })
-  end
+  if ok then cmp.setup.buffer({ sources = { { name = "vim-dadbod-completion" } } }) end
 end
 
 vim.api.nvim_create_autocmd("FileType", {
@@ -18,9 +16,7 @@ vim.cmd("DBCompletionClearCache") -- current buffer completion
 add_completion()
 
 -- dadbod can be lazy loaded:
-vim.keymap.set("n", "md", function()
-  vim.print("Loaded dadbod")
-end, { desc = "Load dadbod", silent = true })
+vim.keymap.set("n", "md", function() vim.print("Loaded dadbod") end, { desc = "Load dadbod", silent = true })
 
 -- execute a query without vim-slime and the mysql cli:
 vim.keymap.set("n", "mq", function()

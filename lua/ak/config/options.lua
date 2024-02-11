@@ -56,9 +56,7 @@ opt.fillchars = {
   eob = " ",
 }
 
-if vim.fn.has("nvim-0.10") == 1 then
-  opt.smoothscroll = true
-end
+if vim.fn.has("nvim-0.10") == 1 then opt.smoothscroll = true end
 
 -- Folding
 vim.opt.foldlevel = 99

@@ -1,5 +1,6 @@
 -- cmd = { "TermExec", "ToggleTerm", "ToggleTermToggleAll", "ToggleTermSendCurrentLine",
 --   "ToggleTermSendVisualLines", "ToggleTermSendVisualSelection", },
+
 require("toggleterm").setup({
   size = 15,
   open_mapping = [[<c-_>]],

@@ -22,9 +22,7 @@ Utils.color.add_toggle(name, {
 
 vim.api.nvim_create_autocmd("Colorscheme", {
   pattern = "everforest",
-  callback = function()
-    vim.api.nvim_set_hl(0, "MiniStatuslineModeNormal", { link = "MiniStatuslineFilename" })
-  end,
+  callback = function() vim.api.nvim_set_hl(0, "MiniStatuslineModeNormal", { link = "MiniStatuslineFilename" }) end,
 })
 
 local prefer_light = require("ak.color").prefer_light

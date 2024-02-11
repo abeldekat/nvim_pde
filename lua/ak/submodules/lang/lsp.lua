@@ -26,11 +26,11 @@ local function load()
   add("SchemaStore.nvim")
 
   add("fidget.nvim")
-  require("ak.config.fidget")
+  require("ak.config.lang.fidget")
 
   -- The lsp does not attach when directly opening a file:
   if not (Util.opened_without_arguments() or Util.opened_with_dir_argument()) then
-    vim.cmd("LspStart")
+    vim.cmd("LspStart") --
   end
 end
 

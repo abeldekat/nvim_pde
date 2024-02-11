@@ -1,5 +1,3 @@
-local M = {}
-
 ---@param buf? number
 local function is_format_on_save_enabled(buf)
   buf = (buf == nil or buf == 0) and vim.api.nvim_get_current_buf() or buf
@@ -41,9 +39,7 @@ local function get_defaults(bufnr)
 end
 
 -- Calling conform directly instead of via format_on_save:
-local function format()
-  require("conform").format(get_defaults())
-end
+local function format() require("conform").format(get_defaults()) end
 
 local function add_keys()
   local keys = vim.keymap.set
@@ -80,9 +76,7 @@ local function get_opts()
     formatters = {
       injected = { options = { ignore_errors = true } },
     },
-    format_on_save = function(bufnr)
-      return is_format_on_save_enabled(bufnr) and get_defaults(bufnr) or nil
-    end,
+    format_on_save = function(bufnr) return is_format_on_save_enabled(bufnr) and get_defaults(bufnr) or nil end,
   }
 end
 
@@ -95,8 +89,6 @@ local function setup()
   require("conform").setup(get_opts())
   add_keys()
 
-  vim.api.nvim_create_user_command("Format", function()
-    format()
-  end, { desc = "Format selection or buffer" })
+  vim.api.nvim_create_user_command("Format", function() format() end, { desc = "Format selection or buffer" })
 end
 setup()

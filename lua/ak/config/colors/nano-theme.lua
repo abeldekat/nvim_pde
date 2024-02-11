@@ -19,9 +19,7 @@ vim.api.nvim_create_autocmd("Colorscheme", {
   pattern = "nano-theme",
   callback = function()
     local c = require("nano-theme.colors").get()
-    local set_hl = function(name, data)
-      vim.api.nvim_set_hl(0, name, data)
-    end
+    local set_hl = function(name, data) vim.api.nvim_set_hl(0, name, data) end
     set_hl("MiniStatuslineInactive", { fg = c.nano_faded_color, bg = c.nano_subtle_color })
     -- colors taken from lualine theme, normal c:
     set_hl("MiniStatuslineFilename", { fg = c.nano_foreground_color, bg = c.nano_subtle_color })

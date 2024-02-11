@@ -14,9 +14,7 @@ return {
     "folke/flash.nvim",
     event = "VeryLazy",
     dependencies = "jinh0/eyeliner.nvim",
-    config = function()
-      require("ak.config.jump")
-    end,
+    config = function() require("ak.config.editor.flash") end,
   },
 
   {
@@ -25,32 +23,24 @@ return {
     event = "VeryLazy",
     config = function()
       -- require("ak.config.harpoon")
-      require("ak.config.harpoon_one")
+      require("ak.config.editor.harpoon_one")
     end,
   },
 
   {
     "echasnovski/mini.clue",
     event = "VeryLazy",
-    config = function()
-      require("ak.config.mini_clue")
-    end,
+    config = function() require("ak.config.editor.mini_clue") end,
   },
 
   {
     "stevearc/oil.nvim",
     init = function()
-      if with_dir then
-        require("oil")
-      end
+      if with_dir then require("oil") end
     end,
-    event = function()
-      return not with_dir and { "VeryLazy" } or {}
-    end,
+    event = function() return not with_dir and { "VeryLazy" } or {} end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
-    config = function()
-      require("ak.config.oil")
-    end,
+    config = function() require("ak.config.editor.oil") end,
   },
 
   {
@@ -70,36 +60,26 @@ return {
       -- },
       {
         "stevearc/aerial.nvim",
-        config = function()
-          require("ak.config.aerial")
-        end,
+        config = function() require("ak.config.editor.aerial") end,
       },
       { -- also load spectre on telescope
         "nvim-pack/nvim-spectre",
         build = false,
-        config = function()
-          require("ak.config.spectre")
-        end,
+        config = function() require("ak.config.editor.spectre") end,
       },
       { -- also load trouble on telescope
         "folke/trouble.nvim",
-        config = function()
-          require("ak.config.trouble")
-        end,
+        config = function() require("ak.config.editor.trouble") end,
       },
     },
-    config = function()
-      require("ak.config.telescope")
-    end,
+    config = function() require("ak.config.editor.telescope") end,
   },
 
   {
     "akinsho/toggleterm.nvim",
     version = "*",
     event = "VeryLazy",
-    config = function()
-      require("ak.config.toggleterm")
-    end,
+    config = function() require("ak.config.editor.toggleterm") end,
   },
 
   -- ── previously lazyfile ───────────────────────────────────────────────
@@ -108,24 +88,18 @@ return {
   {
     "lewis6991/gitsigns.nvim",
     event = "VeryLazy",
-    config = function()
-      require("ak.config.gitsigns")
-    end,
+    config = function() require("ak.config.editor.gitsigns") end,
   },
 
   {
     "RRethy/vim-illuminate",
     event = "VeryLazy",
-    config = function()
-      require("ak.config.illuminate")
-    end,
+    config = function() require("ak.config.editor.illuminate") end,
   },
   {
     "folke/todo-comments.nvim",
     event = "VeryLazy",
-    config = function()
-      require("ak.config.todo_comments")
-    end,
+    config = function() require("ak.config.editor.todo_comments") end,
   },
 
   -- ── on-demand ─────────────────────────────────────────────────────────
@@ -133,16 +107,12 @@ return {
   {
     "f-person/git-blame.nvim", -- toggle
     keys = { { "<leader>gt", desc = "Git-blame" } },
-    config = function()
-      require("ak.config.gitblame")
-    end,
+    config = function() require("ak.config.editor.gitblame") end,
   },
 
   {
     "takac/vim-hardtime", -- toggle
     keys = { { "<leader>uh", desc = "Hardtime" } },
-    config = function()
-      require("ak.config.hardtime")
-    end,
+    config = function() require("ak.config.editor.hardtime") end,
   },
 }

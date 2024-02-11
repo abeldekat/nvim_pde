@@ -1,6 +1,6 @@
 return {
   server = {
-    ---@type LazyKeysSpec[]
+    -- ---@type LazyKeysSpec[]
     -- keys = {},
 
     ---@type lspconfig.options

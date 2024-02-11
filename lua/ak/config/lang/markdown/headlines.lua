@@ -9,6 +9,7 @@ for _, ft in ipairs({ "markdown", "norg", "rmd", "org" }) do
     table.insert(opts[ft].headline_highlights, hl)
   end
 end
+
 opts.markdown = {
   -- https://github.com/lukas-reineke/headlines.nvim/issues/41#issuecomment-1556334775
   fat_headline_lower_string = "▔",

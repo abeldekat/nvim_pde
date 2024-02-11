@@ -3,9 +3,7 @@ local Util = require("ak.util")
 local function map(mode, lhs, rhs, opts)
   opts = opts or {}
   opts.silent = opts.silent ~= false
-  if opts.remap and not vim.g.vscode then
-    opts.remap = nil
-  end
+  if opts.remap and not vim.g.vscode then opts.remap = nil end
   vim.keymap.set(mode, lhs, rhs, opts)
 end
 
@@ -76,9 +74,7 @@ map("n", "]q", vim.cmd.cnext, { desc = "Next quickfix" })
 local diagnostic_goto = function(next, severity)
   local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
   severity = severity and vim.diagnostic.severity[severity] or nil
-  return function()
-    go({ severity = severity })
-  end
+  return function() go({ severity = severity }) end
 end
 map("n", "<leader>cd", vim.diagnostic.open_float, { desc = "Line diagnostics" })
 map("n", "]d", diagnostic_goto(true), { desc = "Next diagnostic" })
@@ -88,24 +84,34 @@ map("n", "[e", diagnostic_goto(false, "ERROR"), { desc = "Prev error" })
 map("n", "]w", diagnostic_goto(true, "WARN"), { desc = "Next warning" })
 map("n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev warning" })
 
--- stylua: ignore start
-
 -- toggle options
 map("n", "<leader>us", function() Util.toggle("spell") end, { desc = "Toggle spelling" })
 map("n", "<leader>uw", function() Util.toggle("wrap") end, { desc = "Toggle word wrap" })
 map("n", "<leader>uL", function() Util.toggle("relativenumber") end, { desc = "Toggle relative line numbers" })
 map("n", "<leader>ul", function() Util.toggle.number() end, { desc = "Toggle line numbers" })
 map("n", "<leader>ud", function() Util.toggle.diagnostics() end, { desc = "Toggle diagnostics" })
+
 local conceallevel = vim.o.conceallevel > 0 and vim.o.conceallevel or 3
-map("n", "<leader>uc", function() Util.toggle("conceallevel", false, {0, conceallevel}) end, { desc = "Toggle conceal" })
+map(
+  "n",
+  "<leader>uc",
+  function() Util.toggle("conceallevel", false, { 0, conceallevel }) end,
+  { desc = "Toggle conceal" }
+)
 if vim.lsp.buf.inlay_hint or vim.lsp.inlay_hint then
-  map( "n", "<leader>uh", function() Util.toggle.inlay_hints() end, { desc = "Toggle inlay hints" })
+  map("n", "<leader>uh", function() Util.toggle.inlay_hints() end, { desc = "Toggle inlay hints" })
 end
-map("n", "<leader>uT", function() if vim.b.ts_highlight then vim.treesitter.stop() else vim.treesitter.start() end end, { desc = "Toggle treesitter highlight" })
+map("n", "<leader>uT", function()
+  ---@diagnostic disable-next-line: undefined-field
+  if vim.b.ts_highlight then
+    vim.treesitter.stop()
+  else
+    vim.treesitter.start()
+  end --
+end, { desc = "Toggle treesitter highlight" })
 
 -- highlights under cursor
 map("n", "<leader>ui", vim.show_pos, { desc = "Inspect pos" })
-
 
 -- Terminal Mappings
 map("t", "<C-/>", "<cmd>close<cr>", { desc = "Hide terminal" })
@@ -122,7 +128,6 @@ map("n", "<leader><tab><tab>", "<cmd>tabnew<cr>", { desc = "New tab" })
 map("n", "<leader><tab>]", "<cmd>tabnext<cr>", { desc = "Next tab" })
 map("n", "<leader><tab>d", "<cmd>tabclose<cr>", { desc = "Close tab" })
 map("n", "<leader><tab>[", "<cmd>tabprevious<cr>", { desc = "Previous tab" })
-
 
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                          ADDED                          │
@@ -149,11 +154,6 @@ map("n", "<C-N>", "<C-d>zz", { desc = "Down half page, better ctrl-d" })
 --
 map("n", "<C-d>", "<C-d>zz", { desc = "Better ctrl-d" })
 map("n", "<C-u>", "<C-u>zz", { desc = "Better ctrl-u" })
-
--- ThePrimeagen
--- nnoremap("<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
--- override native scroll windown n pages down. Use ctrl-d
--- map("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
 
 -- https://www.reddit.com/r/neovim/comments/mbj8m5/how_to_setup_ctrlshiftkey_mappings_in_neovim_and/
 -- TODO: Modify alacritty.yml. See harpoon setup

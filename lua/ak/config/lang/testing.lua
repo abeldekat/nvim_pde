@@ -51,31 +51,22 @@ local function keys()
       require("neotest").run.run({ suite = true, adapter = adapter_id })
     end
   end, { desc = "Run suite" })
-  map("<leader>tl", function()
-    require("neotest").run.run_last()
-  end, { desc = "Run last" })
-  map("<leader>tt", function()
-    require("neotest").run.run(vim.fn.expand("%"))
-  end, { desc = "Run file" })
-  map("<leader>tT", function()
-    require("neotest").run.run(vim.loop.cwd())
-  end, { desc = "Run All Test Files" })
-  -- { "<leader>tr", function() require("neotest").run.run() end, desc = "Run Nearest" },
-  map("<leader>tr", function()
-    require("neotest").run.run({ extra_args = { "-s", "-vvv" } })
-  end, { desc = "Run nearest" })
-  map("<leader>ts", function()
-    require("neotest").summary.toggle()
-  end, { desc = "Toggle summary" })
-  map("<leader>to", function()
-    require("neotest").output.open({ enter = true, auto_close = true })
-  end, { desc = "Show output" })
-  map("<leader>tO", function()
-    require("neotest").output_panel.toggle()
-  end, { desc = "Toggle output panel" })
-  map("<leader>tS", function()
-    require("neotest").run.stop()
-  end, { desc = "Stop" })
+  map("<leader>tl", function() require("neotest").run.run_last() end, { desc = "Run last" })
+  map("<leader>tt", function() require("neotest").run.run(vim.fn.expand("%")) end, { desc = "Run file" })
+  map("<leader>tT", function() require("neotest").run.run(vim.loop.cwd()) end, { desc = "Run All Test Files" })
+  map(
+    "<leader>tr",
+    function() require("neotest").run.run({ extra_args = { "-s", "-vvv" } }) end,
+    { desc = "Run nearest" }
+  )
+  map("<leader>ts", function() require("neotest").summary.toggle() end, { desc = "Toggle summary" })
+  map(
+    "<leader>to",
+    function() require("neotest").output.open({ enter = true, auto_close = true }) end,
+    { desc = "Show output" }
+  )
+  map("<leader>tO", function() require("neotest").output_panel.toggle() end, { desc = "Toggle output panel" })
+  map("<leader>tS", function() require("neotest").run.stop() end, { desc = "Stop" })
 
   map("<leader>tL", no_op, { desc = "No-op neotest" })
 end
@@ -96,27 +87,21 @@ local function setup()
   if Util.has("trouble.nvim") then
     opts.consumers = opts.consumers or {}
     -- Refresh and auto close trouble after running tests
-    ---@type neotest.Consumer
+    -- ---@type neotest.Consumer
     opts.consumers.trouble = function(client)
       client.listeners.results = function(adapter_id, results, partial)
-        if partial then
-          return
-        end
+        if partial then return end
         local tree = assert(client:get_position(nil, { adapter = adapter_id }))
 
         local failed = 0
         for pos_id, result in pairs(results) do
-          if result.status == "failed" and tree:get_key(pos_id) then
-            failed = failed + 1
-          end
+          if result.status == "failed" and tree:get_key(pos_id) then failed = failed + 1 end
         end
         vim.schedule(function()
           local trouble = require("trouble")
           if trouble.is_open() then
             trouble.refresh()
-            if failed == 0 then
-              trouble.close()
-            end
+            if failed == 0 then trouble.close() end
           end
         end)
         return {}
@@ -128,9 +113,7 @@ local function setup()
     local adapters = {}
     for name, config in pairs(opts.adapters or {}) do
       if type(name) == "number" then
-        if type(config) == "string" then
-          config = require(config)
-        end
+        if type(config) == "string" then config = require(config) end
         adapters[#adapters + 1] = config
       elseif config ~= false then
         local adapter = require(name)
@@ -153,4 +136,5 @@ local function setup()
   require("neotest").setup(opts)
   keys()
 end
+
 setup()

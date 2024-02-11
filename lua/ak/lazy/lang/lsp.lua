@@ -10,9 +10,7 @@ return {
       {
         "williamboman/mason.nvim",
         build = ":MasonUpdate",
-        config = function()
-          require("ak.config.lang.mason")
-        end,
+        config = function() require("ak.config.lang.mason") end,
       },
       "williamboman/mason-lspconfig.nvim",
     },
@@ -21,7 +19,7 @@ return {
 
       -- On VeryLazy, the lsp does not attach when directly opening a file:
       if not (Util.opened_without_arguments() or Util.opened_with_dir_argument()) then
-        vim.cmd("LspStart")
+        vim.cmd("LspStart") --
       end
     end,
   },
@@ -29,8 +27,6 @@ return {
   {
     "j-hui/fidget.nvim",
     event = "LspAttach",
-    config = function()
-      require("ak.config.fidget")
-    end,
+    config = function() require("ak.config.lang.fidget") end,
   },
 }

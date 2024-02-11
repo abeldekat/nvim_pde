@@ -44,33 +44,33 @@ later_only(function()
   source_after_plugin({ "cmp-path", "after", "plugin", "cmp_path.lua" })
 end)
 later(function() -- and finally:
-  require("ak.config.completion")
+  require("ak.config.coding.cmp")
 end)
 
 later(function()
   add("nvim-autopairs")
-  require("ak.config.pairs")
+  require("ak.config.coding.autopairs")
 
   add("friendly-snippets")
   add("LuaSnip")
-  require("ak.config.snip")
+  require("ak.config.coding.LuaSnip")
 
   add("nvim-ts-context-commentstring")
   add("Comment.nvim")
-  require("ak.config.comment")
+  require("ak.config.coding.comment")
 
   add("dial.nvim")
-  require("ak.config.dial")
+  require("ak.config.coding.dial")
 
   add("substitute.nvim")
-  require("ak.config.substitute")
+  require("ak.config.coding.substitute")
 
   add("nvim-surround")
-  require("ak.config.surround")
+  require("ak.config.coding.surround")
 
   -- duplicate tag in helpfile
   Util.defer.on_keys(function()
     add("comment-box.nvim")
-    require("ak.config.comment_box")
+    require("ak.config.coding.comment_box")
   end, "<leader>bL", "Load comment-box")
 end)

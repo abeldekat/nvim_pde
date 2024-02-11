@@ -7,6 +7,10 @@
 --          │                See also: jump (eyeliner                 │
 --          ╰─────────────────────────────────────────────────────────╯
 
+--          ╭─────────────────────────────────────────────────────────╮
+--          │treesitter textobjects: uses k for block, b is preserved │
+--          ╰─────────────────────────────────────────────────────────╯
+
 local Util = require("ak.util")
 
 local get_opts = function()
@@ -146,9 +150,7 @@ local function activate_repeatable_move()
   vim.keymap.set(modes, "T", ts_repeat_move.builtin_T)
 end
 
-require("nvim-treesitter.configs").setup(get_opts())
-
-if Util.has("eyeliner.nvim") then
+local function eyeliner_and_repeatable_move()
   local use_eyeliner = true -- default, eyeliner is parsed before treesitter
   vim.keymap.set("n", "<leader>um", function()
     use_eyeliner = not use_eyeliner
@@ -161,6 +163,34 @@ if Util.has("eyeliner.nvim") then
       activate_repeatable_move()
     end
   end, { desc = "Toggle treesitter repeatable move" })
+end
+
+local function textobjects_in_diff_mode()
+  -- In diff mode, use the default vim text objects c & C instead of the treesitter ones.
+  local move = require("nvim-treesitter.textobjects.move") ---@type table<string,fun(...)>
+  local configs = require("nvim-treesitter.configs")
+  for name, fn in pairs(move) do
+    if name:find("goto") == 1 then
+      move[name] = function(q, ...)
+        if vim.wo.diff then
+          local config = configs.get_module("textobjects.move")[name] ---@type table<string,string>
+          for key, query in pairs(config or {}) do
+            if q == query and key:find("[%]%[][cC]") then
+              vim.cmd("normal! " .. key)
+              return
+            end
+          end
+        end
+        return fn(q, ...)
+      end
+    end
+  end
+end
+
+if Util.has("eyeliner.nvim") then
+  eyeliner_and_repeatable_move()
 else
   activate_repeatable_move()
 end
+textobjects_in_diff_mode()
+require("nvim-treesitter.configs").setup(get_opts())
