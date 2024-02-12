@@ -29,13 +29,9 @@ function M.on_events(cb, events, pattern)
     group = defer_group,
     desc = "ak_defer",
     once = true,
-    callback = function(ev)
-      cb(ev)
-    end,
+    callback = function(ev) cb(ev) end,
   }
-  if pattern then
-    opts["pattern"] = pattern
-  end
+  if pattern then opts["pattern"] = pattern end
   vim.api.nvim_create_autocmd(events, opts)
 end
 
@@ -102,22 +98,16 @@ M.later = function(f)
 end
 
 -- Indicating usage only needed when using later
-M.later_only = function(f)
-  M.later(f)
-end
+M.later_only = function(f) M.later(f) end
 
 H.now = function(f)
   local ok, err = pcall(f)
-  if not ok then
-    table.insert(H.cache.exec_errors, err)
-  end
+  if not ok then table.insert(H.cache.exec_errors, err) end
   H.schedule_finish()
 end
 
 H.schedule_finish = function()
-  if H.cache.finish_is_scheduled then
-    return
-  end
+  if H.cache.finish_is_scheduled then return end
   vim.schedule(H.finish)
   H.cache.finish_is_scheduled = true
 end
@@ -144,9 +134,7 @@ H.finish = function()
 end
 
 H.report_errors = function()
-  if #H.cache.exec_errors == 0 then
-    return
-  end
+  if #H.cache.exec_errors == 0 then return end
   -- vim.api.nvim_echo(H.cache.exec_errors, true, {})
   for _, msg in ipairs(H.cache.exec_errors) do
     error(msg)

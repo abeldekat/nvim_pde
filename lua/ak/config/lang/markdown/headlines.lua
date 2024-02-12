@@ -1,5 +1,10 @@
+--          ╭─────────────────────────────────────────────────────────╮
+--          │               not using norg rmd and org                │
+--          ╰─────────────────────────────────────────────────────────╯
 local opts = {}
-for _, ft in ipairs({ "markdown", "norg", "rmd", "org" }) do
+
+-- for _, ft in ipairs({ "markdown", "norg", "rmd", "org" }) do
+for _, ft in ipairs({ "markdown" }) do
   opts[ft] = {
     headline_highlights = {},
   }
@@ -15,7 +20,5 @@ opts.markdown = {
   fat_headline_lower_string = "▔",
 }
 
-vim.schedule(function() -- performance, schedule
-  require("headlines").setup(opts)
-  require("headlines").refresh()
-end)
+require("headlines").setup(opts)
+require("headlines").refresh()
