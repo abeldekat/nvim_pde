@@ -138,7 +138,7 @@ in combination with the forefinger of the left hand
 
 #### Oil
 
-- `ml`("rolling fingers"), opens oil
+- `ml`("rolling fingers"), opening oil
 - `h` up one level
 - `l` down one level, open file
 

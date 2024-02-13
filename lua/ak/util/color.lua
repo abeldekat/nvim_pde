@@ -7,11 +7,6 @@ local M = {}
 
 local Toggle = {}
 
-function M.setup()
-  Toggle.name = nil
-  Toggle.current = 1
-end
-
 function Toggle.add_toggle(opts)
   if Toggle.name and Toggle.name == opts.name then return end
 
