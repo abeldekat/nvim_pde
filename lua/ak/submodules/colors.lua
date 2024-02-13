@@ -1,14 +1,14 @@
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                   Best light themes:                    │
---          │                       tokyonight                        │
 --          │       catppuccin(latte is similar to tokyonight)        │
+--          │                       tokyonight                        │
+--          │                         bamboo                          │
+--          │                     solarized-osaka                     │
 --          │                       solarized8                        │
 --          │                    gruvbox-material                     │
 --          │                    nightfox dawnfox                     │
 --          │                         gruvbox                         │
---          │                         bamboo                          │
 --          │                          nano                           │
---          │                       onedarkpro                        │
 --          │                       astrotheme                        │
 --          │                        rose-pine                        │
 --          │                         onedark                         │
@@ -79,9 +79,7 @@ local function color_apply(color_name, config_name)
     vim.cmd.colorscheme(color_name)
   end, {
     msg = "Could not load your colorscheme",
-    on_error = function(msg)
-      Util.error(msg)
-    end,
+    on_error = function(msg) Util.error(msg) end,
   })
 end
 
@@ -107,9 +105,7 @@ function M.colorscheme()
         require(to_require)
       end
 
-      vim.schedule(function()
-        Util.color.telescope_custom_colors()
-      end)
+      vim.schedule(function() Util.color.telescope_custom_colors() end)
     end, { desc = "Telescope custom colors", silent = true })
   end)
 end
