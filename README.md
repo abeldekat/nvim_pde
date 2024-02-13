@@ -67,45 +67,13 @@ Note: For [peek.nvim], [deno] needs to be installed.
 
 ### Dual boot
 
-Both versions can be used independently.
+Both methods can be used independently.
 Aliases are convenient:
 
 ```sh
 alias ak="NVIM_APPNAME=ak nvim" # using submodules
 alias akl="AK_BOOT=lazy NVIM_APPNAME=ak nvim" # using lazy.nvim
 ```
-
-### Submodules
-
-Sync plugins to the latest remote versions:
-
-```sh
-cd ~/.config/ak
-
-# make sure the following git settings are applied, local or global:
-git config diff.submodule log
-git config status.submoduleSummary true
-
-NVIM_APPNAME=ak make sync
-
-# Manually:
-# git status: Inspect the updates, revert or commit
-```
-
-Remove a plugin:
-
-```sh
-cd ~/.config/ak
-git rm pack/opt/colors_ak/some_color
-rm -rf .git/modules/colors_ak/some_color
-```
-
-Resources:
-
-- `:h packages`
-- [medium](https://medium.com/@porteneuve/mastering-git-submodules-34c65e940407)
-- [reddit](https://www.reddit.com/r/neovim/comments/15b1gco/what_plugin_manager_are_you_currently_using/)
-- [blog](https://hiphish.github.io/blog/2021/12/05/managing-vim-plugins-without-plugin-manager/)
 
 ## Performance
 
@@ -118,6 +86,51 @@ Repeat a couple of times.
 - [lazy.nvim]: Around 46ms
 
 System: `12th Gen Intel(R) Core(TM) i5-1235U` (12 cores), `7.40G` ram
+
+## On lazy loading
+
+**Purpose**:
+
+- Show the code as fast as possible(startup-time)
+- Load clusters of plugins on demand(testing, debugging, filetype specific)
+
+Plugins loaded using vim.schedule do not add to the startup-time:
+
+- `VeryLazy`, [lazy.nvim]. Uses `vim.schedule` only after `UIEnter`
+- `later()`, [mini.deps]. Uses vim.schedule immediately
+
+Most of the plugins can be loaded this way. Tweaks are sometimes necessary.
+For example, `nvim-lspconfig` on `VeryLazy` misses the `FileType` event.
+In that case, the solution is to invoke `LspStart` after the setup.
+
+Any code written to make lazy-loading possible *does* add to the startup-time.
+For example, consider the [telescope] configuration in `LazyVim`.
+The spec defines lots of keys to lazy-load on.
+These keys need to be created by [lazy.nvim], adding to the startup-time.
+
+Neovim **distributions** tend to have multiple specs for the same plugin,
+allowing the distribution to be modular. Users can add their own version.
+However, those specs need to be merged into one definition,
+again adding to the startup-time.
+
+An important question to be answered when lazy-loading:
+How often is the plugin needed when opening Neovim?
+
+For example, in `LazyVim`, the `cmp` cluster is loaded on `InsertEnter`.
+One can also load `cmp` on `VeryLazy`,
+considering that the startup-time is not affected,
+and `cmp` is used often.
+
+The same goes for [telescope]. In a **personal** config,
+one can avoid all lazy-keys by loading on `VeryLazy`,
+simplifying the plugin spec as a side effect.
+
+The [lazy.nvim] part of this config only uses `VeryLazy`, with exceptions.
+The [submodules] part uses the `later()` mechanism copied from [mini.deps],
+adding two extra [lazy methods]:
+
+- `on_events`
+- `on_keys`
 
 ## Workflow
 
@@ -176,50 +189,44 @@ Change color-schemes:
 - telescope, [leader uu], loads all colors, does not show builtin color-schemes
 - change the palette of the current color-scheme using [leader a]
 
-## On lazy loading
+Script `vim_menu_owns` writes to `lua.ak.colors`.
+Ignoring changes to that file:
 
-**Purpose**:
+```sh
+git update-index --assume-unchanged lua/ak/colors.lua
+```
 
-- Show the code as fast as possible(startup-time)
-- Load clusters of plugins on demand(testing, debugging, filetype specific)
+## Submodules
 
-Plugins loaded using vim.schedule do not add to the startup-time:
+Sync plugins to the latest remote versions:
 
-- `VeryLazy`, [lazy.nvim]. Uses `vim.schedule` only after `UIEnter`
-- `later()`, [mini.deps]. Uses vim.schedule immediately
+```sh
+cd ~/.config/ak
 
-Most of the plugins can be loaded this way. Tweaks are sometimes necessary.
-For example, `nvim-lspconfig` on `VeryLazy` misses the `FileType` event.
-In that case, the solution is to invoke `LspStart` after the setup.
+# make sure the following git settings are applied, local or global:
+git config diff.submodule log
+git config status.submoduleSummary true
 
-Any code written to make lazy-loading possible *does* add to the startup-time.
-For example, consider the [telescope] configuration in `LazyVim`.
-The spec defines lots of keys to lazy-load on.
-These keys need to be created by [lazy.nvim], adding to the startup-time.
+NVIM_APPNAME=ak make sync
 
-Neovim **distributions** tend to have multiple specs for the same plugin,
-allowing the distribution to be modular. Users can add their own version.
-However, those specs need to be merged into one definition,
-again adding to the startup-time.
+# Manually:
+# git status: Inspect the updates, revert or commit
+```
 
-An important question to be answered when lazy-loading:
-How often is the plugin needed when opening Neovim?
+Remove a plugin:
 
-For example, in `LazyVim`, the `cmp` cluster is loaded on `InsertEnter`.
-One can also load `cmp` on `VeryLazy`,
-considering that the startup-time is not affected,
-and `cmp` is used often.
+```sh
+cd ~/.config/ak
+git rm pack/opt/colors_ak/some_color
+rm -rf .git/modules/colors_ak/some_color
+```
 
-The same goes for [telescope]. In a **personal** config,
-one can avoid all lazy-keys by loading on `VeryLazy`,
-simplifying the plugin spec as a side effect.
+Resources:
 
-The [lazy.nvim] part of this config only uses `VeryLazy`, with exceptions.
-The [submodules] part uses the `later()` mechanism copied from [mini.deps],
-adding two extra [lazy methods]:
-
-- `on_events`
-- `on_keys`
+- `:h packages`
+- [medium](https://medium.com/@porteneuve/mastering-git-submodules-34c65e940407)
+- [reddit](https://www.reddit.com/r/neovim/comments/15b1gco/what_plugin_manager_are_you_currently_using/)
+- [blog](https://hiphish.github.io/blog/2021/12/05/managing-vim-plugins-without-plugin-manager/)
 
 ## Environment
 
