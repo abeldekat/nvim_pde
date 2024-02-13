@@ -4,23 +4,35 @@ My *personal development environment* for Neovim
 
 ## Design
 
-- `init`: Defers to `ak.init`.
+### Structure
+
+- `init`: Defers to `ak.init`. Uses `:h vim.loader`.
 - `ak.init`: Starts with either git [submodules] or [lazy.nvim].
 - [ak.boot]
 
     1. `submodules`: Uses the units in [ak.submodules] to boot.
     2. `lazy`: Uses [lazy.nvim] and the units in [ak.lazy] to boot.
 
-- [ak.config]:
-
-  Contains the setup for:
-    1. options
-    2. key-mappings
-    3. auto-commands
-    4. color-schemes
-    5. plugins
+- [ak.config]: Contains all setup for options, key-mappings, auto-commands,
+color-schemes and plugins.
 
 - [ak.util]: Shared code.
+
+### Grouping
+
+Modules `ak.submodules` and `ak.lazy` use the same grouping
+for clusters of plugins, making it easy to compare the code.
+
+For example, configuring `harpoon`:
+
+- `ak.submodules.editor`
+- `ak.lazy.editor`
+- `ak.config.editor.harpoon`
+
+Harpoon can be found in:
+
+- `~/.config/ak/pack/editor_ak/opts` using submodules
+- `~/.local/share/ak/lazy` using [lazy.nvim]
 
 ## Install
 
@@ -55,16 +67,12 @@ Note: For [peek.nvim], [deno] needs to be installed.
 
 ### Dual boot
 
-When using both `lazy.nvim` and `git submodules`,
-clone the repo into multiple locations. For example:
-
-- `~/.config/ak`, defaults to `submodules`
-- `~/.config/akl`, append AK_BOOT=lazy
-
-Then, use the following alias when booting with `lazy.nvim`:
+Both versions can be used independently.
+Aliases are convenient:
 
 ```sh
-alias akl="AK_BOOT=lazy NVIM_APPNAME=akl nvim"
+alias ak="NVIM_APPNAME=ak nvim" # using submodules
+alias akl="AK_BOOT=lazy NVIM_APPNAME=ak nvim" # using lazy.nvim
 ```
 
 ### Submodules
@@ -117,11 +125,12 @@ Due to a left hand disability,
 I touch type using the right hand
 in combination with the forefinger of the left hand
 
+Leader: `space`
+
 ### Navigation
 
-- harpoon
-- oil
-- telescope
+- Main plugins: harpoon, oil and telescope.
+- Menu: `mini.clue`
 
 #### Harpoon
 
@@ -130,7 +139,7 @@ in combination with the forefinger of the left hand
 - ui: `<leader>j` ("strongest finger")
 - add: `<leader>h`
 
-#### Windows
+Window navigation:
 
 - `<c-w>hjkl`
 - `mw`(next window)
@@ -147,7 +156,7 @@ in combination with the forefinger of the left hand
 - [tmux-sessionizer], inspired by @ThePrimeagen
 - workspaces at the top of the screen,  using [tmuxp]
 - leader: `ctrl space`
-- no Neovim plugin:
+- not using a plugin for Neovim:
   - switch sessions: leader j
   - switch window: leader l
   - switch pane: leader o
@@ -164,7 +173,7 @@ in combination with the forefinger of the left hand
 Change color-schemes:
 
 - on each startup, see [scripts], `vim_menu_owns`
-- telescope, [leader uu], loads all, does not show builtin color-schemes
+- telescope, [leader uu], loads all colors, does not show builtin color-schemes
 - change the palette of the current color-scheme using [leader a]
 
 ## On lazy loading
@@ -188,23 +197,24 @@ For example, consider the [telescope] configuration in `LazyVim`.
 The spec defines lots of keys to lazy-load on.
 These keys need to be created by [lazy.nvim], adding to the startup-time.
 
-Neovim distributions tend to have multiple specs for the same plugin,
+Neovim **distributions** tend to have multiple specs for the same plugin,
 allowing the distribution to be modular. Users can add their own version.
 However, those specs need to be merged into one definition,
 again adding to the startup-time.
 
 An important question to be answered when lazy-loading:
-How often will I need the plugin when opening Neovim?
+How often is the plugin needed when opening Neovim?
 
 For example, in `LazyVim`, the `cmp` cluster is loaded on `InsertEnter`.
 One can also load `cmp` on `VeryLazy`,
 considering that the startup-time is not affected,
 and `cmp` is used often.
+
 The same goes for [telescope]. In a **personal** config,
 one can avoid all lazy-keys by loading on `VeryLazy`,
 simplifying the plugin spec as a side effect.
 
-The [lazy.nvim] part of this config only uses "VeryLazy", with exceptions.
+The [lazy.nvim] part of this config only uses `VeryLazy`, with exceptions.
 The [submodules] part uses the `later()` mechanism copied from [mini.deps],
 adding two extra [lazy methods]:
 
