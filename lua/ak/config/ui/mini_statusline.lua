@@ -234,14 +234,11 @@ end
 
 -- added
 H.create_diagnostic_hl = function()
-  local fallback = vim.api.nvim_get_hl(0, { name = "StatusLine" })
-  local fixed_hl = vim.api.nvim_get_hl(0, { name = H.fixed_hl })
+  local fallback = vim.api.nvim_get_hl(0, { name = "StatusLine", link = false })
+  local fixed_hl = vim.api.nvim_get_hl(0, { name = H.fixed_hl, link = false })
   local bg = fixed_hl and fixed_hl.bg or fallback.bg
   local function fg(name)
-    local hl = vim.api.nvim_get_hl(0, { name = name })
-    if hl.link then -- ie gruvbox
-      hl = vim.api.nvim_get_hl(0, { name = hl.link })
-    end
+    local hl = vim.api.nvim_get_hl(0, { name = name, link = false })
     return hl and hl.fg or fallback.fg
   end
 

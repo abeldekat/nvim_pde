@@ -46,9 +46,7 @@ function M.get_signs(buf, lnum)
   end
 
   -- Sort by priority
-  table.sort(signs, function(a, b)
-    return (a.priority or 0) < (b.priority or 0)
-  end)
+  table.sort(signs, function(a, b) return (a.priority or 0) < (b.priority or 0) end)
 
   return signs
 end
@@ -85,14 +83,7 @@ function M.foldtext()
   end
   table.insert(ret, { " " .. require("ak.consts").icons.misc.dots })
 
-  if not vim.treesitter.foldtext then
-    return table.concat(
-      vim.tbl_map(function(line)
-        return line[1]
-      end, ret),
-      " "
-    )
-  end
+  if not vim.treesitter.foldtext then return table.concat(vim.tbl_map(function(line) return line[1] end, ret), " ") end
   return ret
 end
 
@@ -115,9 +106,7 @@ function M.statuscolumn()
         left = s
       end
     end
-    if vim.v.virtnum ~= 0 then
-      left = nil
-    end
+    if vim.v.virtnum ~= 0 then left = nil end
     vim.api.nvim_win_call(win, function()
       if vim.fn.foldclosed(vim.v.lnum) >= 0 then
         fold = { text = vim.opt.fillchars:get().foldclose or "", texthl = "Folded" }
@@ -147,8 +136,7 @@ end
 
 function M.fg(name)
   ---@type {foreground?:number}?
-  ---@diagnostic disable-next-line: deprecated
-  local hl = vim.api.nvim_get_hl and vim.api.nvim_get_hl(0, { name = name }) or vim.api.nvim_get_hl_by_name(name, true)
+  local hl = vim.api.nvim_get_hl and vim.api.nvim_get_hl(0, { name = name, link = false })
   ---@diagnostic disable-next-line: undefined-field
   local fg = hl and (hl.fg or hl.foreground)
   return fg and { fg = string.format("#%06x", fg) } or nil
@@ -162,26 +150,18 @@ function M.foldexpr()
   local buf = vim.api.nvim_get_current_buf()
 
   -- still in the same tick and no parser
-  if M.skip_foldexpr[buf] then
-    return "0"
-  end
+  if M.skip_foldexpr[buf] then return "0" end
 
   -- don't use treesitter folds for non-file buffers
-  if vim.bo[buf].buftype ~= "" then
-    return "0"
-  end
+  if vim.bo[buf].buftype ~= "" then return "0" end
 
   -- as long as we don't have a filetype, don't bother
   -- checking if treesitter is available (it won't)
-  if vim.bo[buf].filetype == "" then
-    return "0"
-  end
+  if vim.bo[buf].filetype == "" then return "0" end
 
   local ok = pcall(vim.treesitter.get_parser, buf)
 
-  if ok then
-    return vim.treesitter.foldexpr()
-  end
+  if ok then return vim.treesitter.foldexpr() end
 
   -- no parser available, so mark it as skip
   -- in the next tick, all skip marks will be reset

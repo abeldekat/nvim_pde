@@ -6,12 +6,12 @@ My *personal development environment* for Neovim
 
 - `init`: Defers to `ak.init`.
 - `ak.init`: Starts with either git [submodules] or [lazy.nvim].
-- `ak.boot`
+- [ak.boot]
 
-    1. `submodules`: Uses the units in `ak.submodules` to boot.
-    2. `lazy`: Uses [lazy.nvim] and the units in `ak.lazy` to boot.
+    1. `submodules`: Uses the units in [ak.submodules] to boot.
+    2. `lazy`: Uses [lazy.nvim] and the units in [ak.lazy] to boot.
 
-- `ak.config`:
+- [ak.config]:
 
   Contains the setup for:
     1. options
@@ -20,7 +20,7 @@ My *personal development environment* for Neovim
     4. color-schemes
     5. plugins
 
-- `ak.util`: Shared code.
+- [ak.util]: Shared code.
 
 ## Install
 
@@ -51,7 +51,7 @@ rm -rf ~/.local/share/ak ~/.local/state/ak ~/.cache/ak
 rm -rf ~/.config/ak
 ```
 
-### Boot methods
+### Boot
 
 When testing `lazy.nvim` and `git submodules`,
 clone the repo into multiple locations. For example:
@@ -70,14 +70,24 @@ alias akl="AK_BOOT=lazy NVIM_APPNAME=akl nvim"
 Sync plugins to the latest remote versions:
 
 ```sh
-# make sure the following git settings are applied:
+cd ~/.config/ak
+
+# make sure the following git settings are applied, local or global:
 git config diff.submodule log
 git config status.submoduleSummary true
 
-make sync
+NVIM_APPNAME=ak make sync
 
 # Manually:
 # git status: Inspect the updates, revert or commit
+```
+
+Remove a plugin:
+
+```sh
+cd ~/.config/ak
+git rm pack/opt/colors_ak/some_color
+rm -rf .git/modules/colors_ak/some_color
 ```
 
 Resources:
@@ -97,19 +107,36 @@ Repeat a couple of times.
 - submodules: Around 44ms
 - [lazy.nvim]: Around 46ms
 
+System: `12th Gen Intel(R) Core(TM) i5-1235U` (12 cores), `7.40G` ram
+
+## Environment
+
+[tmux](https://github.com/abeldekat/tmux)
+[alacritty](https://github.com/abeldekat/alacritty)
+[zsh](https://github.com/abeldekat/zsh)
+[scripts](https://github.com/abeldekat/scripts)
+[awesome](https://github.com/abeldekat/awesome)
+[arch linux](https://archlinux.org/)
+
 ## Acknowledgements
 
 This repo uses code and ideas from the following repositories:
 
 - [LazyVim](https://github.com/LazyVim/LazyVim)
 - [lazy.nvim](https://github.com/folke/lazy.nvim)
+- [mini.deps](https://github.com/echasnovski/mini.deps)
+- [pckr.nvim](https://github.com/lewis6991/pckr.nvim)
 - [nvim](https://github.com/echasnovski/nvim) `@echasnovski`
 - [dotfiles](https://github.com/folke/dot/tree/master/nvim) `@folke`
 - [dotfiles](https://github.com/dpetka2001/dotfiles/tree/main/dot_config/nvim) `@dpetka2001`
 - [dotfiles](https://github.com/lewis6991/dotfiles/tree/main/config/nvim) `@lewis6991`
 - [dotfiles](https://github.com/savq/dotfiles/tree/master/nvim) `@savq`
 - [dotfiles](https://github.com/MariaSolOs/dotfiles/tree/main/.config/nvim) `@mariasolos`
-- [pckr.nvim](https://github.com/lewis6991/pckr.nvim)
 
 [lazy.nvim]: https://github.com/folke/lazy.nvim
 [submodules]: #submodules
+[ak.boot]: lua/ak/boot
+[ak.submodules]: lua/ak/submodules
+[ak.lazy]: lua/ak/lazy
+[ak.config]: lua/ak/config
+[ak.util]: lua/ak/util
