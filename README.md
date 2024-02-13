@@ -161,7 +161,7 @@ Window navigation:
   - switch window: leader l
   - switch pane: leader o
 
-### Ui
+### UI
 
 - `mini.statusline`, no colors, except on:
   - mode change
