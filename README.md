@@ -51,9 +51,11 @@ rm -rf ~/.local/share/ak ~/.local/state/ak ~/.cache/ak
 rm -rf ~/.config/ak
 ```
 
-### Boot
+Note: For [peek.nvim], [deno] needs to be installed.
 
-When testing `lazy.nvim` and `git submodules`,
+### Dual boot
+
+When using both `lazy.nvim` and `git submodules`,
 clone the repo into multiple locations. For example:
 
 - `~/.config/ak`, defaults to `submodules`
@@ -109,6 +111,106 @@ Repeat a couple of times.
 
 System: `12th Gen Intel(R) Core(TM) i5-1235U` (12 cores), `7.40G` ram
 
+## Workflow
+
+Due to a left hand disability,
+I touch type using the right hand
+in combination with the forefinger of the left hand
+
+### Navigation
+
+- harpoon
+- oil
+- telescope
+
+*Harpoon*:
+
+- Using the shortcuts for window navigation:
+`c-j`, `<c-k>`,`<c-l>`,`<c-h>`, corresponding to file 1-4
+- ui: `<leader>j` ("strongest finger")
+- add: `<leader>h`
+
+*Windows*:
+
+- `<c-w>hjkl`
+- `mw`(next window)
+- `me`(last accessed window)
+
+*Oil*:
+
+- `ml`("rolling fingers"), opens oil
+- `h` up one level
+- `l` down one level, open file
+
+*Tmux*:
+
+- [tmux-sessionizer], inspired by @ThePrimeagen
+- workspaces at the top of the screen,  using [tmuxp]
+- leader: `ctrl space`
+- no Neovim plugin:
+  - switch sessions: leader j
+  - switch window: leader l
+  - switch pane: leader o
+
+### Ui
+
+- `mini.statusline`, no colors, except on:
+  - mode change
+  - diagnostics
+  - macro recording
+- lots of color-schemes
+- `cmdheight` 0, no pop-ups
+
+Change color-schemes:
+
+- on each startup, see [scripts], `vim_menu_owns`
+- telescope, [leader uu], loads all, does not show builtin color-schemes
+- change the palette of the current color-scheme using [leader a]
+
+## On lazy loading
+
+**Purpose**:
+
+- Show the code as fast as possible(startup-time)
+- Load clusters of plugins on demand(testing, debugging, filetype specific)
+
+Plugins loaded using vim.schedule do not add to the startup-time:
+
+- `VeryLazy`, [lazy.nvim]. Uses `vim.schedule` only after `UIEnter`
+- `later()`, [mini.deps]. Uses vim.schedule immediately
+
+Most of the plugins can be loaded this way. Tweaks are sometimes necessary.
+For example, `nvim-lspconfig` on `VeryLazy` misses the `FileType` event.
+In that case, the solution is to invoke `LspStart` after the setup.
+
+Any code written to make lazy-loading possible *does* add to the startup-time.
+For example, consider the [telescope] configuration in `LazyVim`.
+The spec defines lots of keys to lazy-load on.
+These keys need to be created by [lazy.nvim], adding to the startup-time.
+
+Neovim distributions tend to have multiple specs for the same plugin,
+allowing the distribution to be modular. Users can add their own version.
+However, those specs need to be merged into one definition,
+again adding to the startup-time.
+
+An important question to be answered when lazy-loading:
+How often will I need the plugin when opening Neovim?
+
+For example, in `LazyVim`, the `cmp` cluster is loaded on `InsertEnter`.
+One can also load `cmp` on `VeryLazy`,
+considering that the startup-time is not affected,
+and `cmp` is used often.
+The same goes for [telescope]. In a **personal** config,
+one can avoid all lazy-keys by loading on `VeryLazy`,
+simplifying the plugin spec as a side effect.
+
+The [lazy.nvim] part of this config only uses "VeryLazy", with exceptions.
+The [submodules] part uses the `later()` mechanism copied from [mini.deps],
+adding two extra [lazy methods]:
+
+- `on_events`
+- `on_keys`
+
 ## Environment
 
 [tmux](https://github.com/abeldekat/tmux)
@@ -135,8 +237,16 @@ This repo uses code and ideas from the following repositories:
 
 [lazy.nvim]: https://github.com/folke/lazy.nvim
 [submodules]: #submodules
+[peek.nvim]: https://github.com/toppair/peek.nvim
+[deno]: https://deno.land
+[tmuxp]: https://github.com/tmux-python/tmuxp
+[tmux-sessionizer]: https://github.com/abeldekat/scripts/blob/main/tmux-sessionizer
+[telescope]: https://github.com/LazyVim/LazyVim/blob/a50f92f7550fb6e9f21c0852e6cb190e6fcd50f5/lua/lazyvim/plugins/editor.lua#L135
 [ak.boot]: lua/ak/boot
 [ak.submodules]: lua/ak/submodules
 [ak.lazy]: lua/ak/lazy
 [ak.config]: lua/ak/config
 [ak.util]: lua/ak/util
+[leader uu]: lua/ak/util/color.lua
+[leader a]: lua/ak/util/color.lua
+[lazy methods]: lua/ak/util/defer.lua

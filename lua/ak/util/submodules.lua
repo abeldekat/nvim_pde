@@ -1,7 +1,7 @@
 ---@class ak.util.submodules
 local M = {}
 
--- Give a unit and a subpath, returns the full path of the file in pack
+-- Given a unit and a subpath, returns the full path of the plugin in the pack folder
 ---@param unit string
 ---@param path_after_opt string[]
 ---@return string
@@ -16,9 +16,7 @@ end
 -- Neovim is started in provisioning mode
 -- The aim is to build plugins
 -- This is comparable to lazy.nvim's plugin.build property
-function M.is_provisioning()
-  return vim.g.ak_provisioning
-end
+function M.is_provisioning() return vim.g.ak_provisioning end
 
 function M.print_provision(name)
   -- stylua: ignore start

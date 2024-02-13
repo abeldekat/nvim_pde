@@ -13,9 +13,7 @@ function M.setup()
 end
 
 function Toggle.add_toggle(opts)
-  if Toggle.name and Toggle.name == opts.name then
-    return
-  end
+  if Toggle.name and Toggle.name == opts.name then return end
 
   Toggle.name = opts.name
   Toggle.current = 1
@@ -40,9 +38,7 @@ end
 function M.add_toggle(pattern, toggle_opts)
   vim.api.nvim_create_autocmd("ColorScheme", {
     pattern = type(pattern) == string and { pattern } or pattern,
-    callback = function()
-      Toggle.add_toggle(toggle_opts)
-    end,
+    callback = function() Toggle.add_toggle(toggle_opts) end,
   })
 end
 
@@ -56,9 +52,7 @@ function M.telescope_custom_colors()
 
   ---@diagnostic disable-next-line: duplicate-set-field
   vim.fn.getcompletion = function()
-    return vim.tbl_filter(function(color)
-      return not vim.tbl_contains(builtins, color)
-    end, target("", "color"))
+    return vim.tbl_filter(function(color) return not vim.tbl_contains(builtins, color) end, target("", "color"))
   end
 
   vim.cmd("Telescope colorscheme enable_preview=true")
