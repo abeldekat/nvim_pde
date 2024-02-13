@@ -123,26 +123,26 @@ in combination with the forefinger of the left hand
 - oil
 - telescope
 
-*Harpoon*:
+#### Harpoon
 
 - Using the shortcuts for window navigation:
 `c-j`, `<c-k>`,`<c-l>`,`<c-h>`, corresponding to file 1-4
 - ui: `<leader>j` ("strongest finger")
 - add: `<leader>h`
 
-*Windows*:
+#### Windows
 
 - `<c-w>hjkl`
 - `mw`(next window)
 - `me`(last accessed window)
 
-*Oil*:
+#### Oil
 
 - `ml`("rolling fingers"), opens oil
 - `h` up one level
 - `l` down one level, open file
 
-*Tmux*:
+#### Tmux
 
 - [tmux-sessionizer], inspired by @ThePrimeagen
 - workspaces at the top of the screen,  using [tmuxp]
@@ -158,8 +158,8 @@ in combination with the forefinger of the left hand
   - mode change
   - diagnostics
   - macro recording
-- lots of color-schemes
 - `cmdheight` 0, no pop-ups
+- lots of color-schemes
 
 Change color-schemes:
 
@@ -236,10 +236,12 @@ This repo uses code and ideas from the following repositories:
 - [dotfiles](https://github.com/MariaSolOs/dotfiles/tree/main/.config/nvim) `@mariasolos`
 
 [lazy.nvim]: https://github.com/folke/lazy.nvim
+[mini.deps]: https://github.com/echasnovski/mini.deps
 [submodules]: #submodules
 [peek.nvim]: https://github.com/toppair/peek.nvim
 [deno]: https://deno.land
 [tmuxp]: https://github.com/tmux-python/tmuxp
+[scripts]: https://github.com/abeldekat/scripts
 [tmux-sessionizer]: https://github.com/abeldekat/scripts/blob/main/tmux-sessionizer
 [telescope]: https://github.com/LazyVim/LazyVim/blob/a50f92f7550fb6e9f21c0852e6cb190e6fcd50f5/lua/lazyvim/plugins/editor.lua#L135
 [ak.boot]: lua/ak/boot
