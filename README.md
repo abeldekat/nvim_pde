@@ -134,7 +134,6 @@ adding two extra [lazy methods]:
 
 ## Workflow
 
-Due to a left hand disability,
 I touch type using the right hand
 in combination with the forefinger of the left hand
 
