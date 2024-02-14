@@ -112,6 +112,11 @@ For example, consider the [telescope] configuration in `LazyVim`.
 The spec defines lots of keys to lazy-load on.
 These keys need to be created by [lazy.nvim], adding to the startup-time.
 
+In a **personal** config, as [telescope] is used often,
+one can remove all `lazy` keys
+and load [telescope] on `VeryLazy`.
+This approach has the additional benefit of simplifying the plugin spec.
+
 Neovim **distributions** tend to have multiple specs for the same plugin,
 allowing the distribution to be modular. Users can add their own version.
 However, those specs need to be merged into one definition,
@@ -119,15 +124,6 @@ again adding to the startup-time.
 
 An important question to be answered when lazy-loading:
 How often is the plugin needed when opening Neovim?
-
-For example, in `LazyVim`, the `cmp` cluster is loaded on `InsertEnter`.
-One can also load `cmp` on `VeryLazy`,
-considering that the startup-time is not affected,
-and `cmp` is used often.
-
-The same goes for [telescope]. In a **personal** config,
-one can avoid all lazy-keys by loading on `VeryLazy`,
-simplifying the plugin spec as a side effect.
 
 The [lazy.nvim] part of this config only uses `VeryLazy`, with exceptions.
 The [submodules] part uses the `later()` mechanism copied from [mini.deps],
