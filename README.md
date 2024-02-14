@@ -2,6 +2,10 @@
 
 My *personal development environment* for Neovim
 
+
+https://github.com/abeldekat/nvim_pde/assets/58370433/953b0e7b-9217-4fd7-8372-b6521c071a59
+
+
 ## Design
 
 ### Structure
