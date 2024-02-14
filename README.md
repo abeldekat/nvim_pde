@@ -165,12 +165,14 @@ Window navigation:
 
 #### Tmux
 
-- [tmux-sessionizer], inspired by @ThePrimeagen
+- [tmux-sessionizer] inspired by @ThePrimeagen
 - workspaces at the top of the screen,  using [tmuxp]
 - leader: `ctrl space`
-- not using a plugin for Neovim:
-  - switch sessions: leader j
-  - switch window: leader l
+- navigation:
+  - `tmux-sessionizer`: leader h
+  - previous session: leader j
+  - previous window: leader l
+  - existing sessions: leader k
   - switch pane: leader o
 
 ### UI
@@ -179,8 +181,8 @@ Window navigation:
   - mode change
   - diagnostics
   - macro recording
-- `cmdheight` 0, no pop-ups
-- lots of color-schemes
+- `cmdheight 0`, no pop-ups
+- many color-schemes
 
 Change color-schemes:
 
