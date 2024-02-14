@@ -31,7 +31,7 @@ For example, configuring `harpoon`:
 
 Harpoon can be found in:
 
-- `~/.config/ak/pack/editor_ak/opts` using submodules
+- `~/.config/ak/pack/editor_ak/opt` using submodules
 - `~/.local/share/ak/lazy` using [lazy.nvim]
 
 ## Install
@@ -217,7 +217,7 @@ Remove a plugin:
 
 ```sh
 cd ~/.config/ak
-git rm pack/opt/colors_ak/some_color
+git rm pack/colors_ak/opt/some_color
 rm -rf .git/modules/colors_ak/some_color
 ```
 

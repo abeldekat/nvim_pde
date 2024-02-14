@@ -12,7 +12,7 @@ Utils.color.add_toggle("tokyonight*", {
 -- Tokyonight has a day-brightness, default 0.3
 local opts = {
   dim_inactive = true,
-  style = prefer_light and "day" or "moon",
+  style = prefer_light and "day" or "storm",
   on_highlights = function(hl, c)
     if prefer_light then
       -- only needed for light theme. Normal darktheme shows white as fg:
