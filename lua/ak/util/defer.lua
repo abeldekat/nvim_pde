@@ -8,6 +8,8 @@ local use_defer = true -- set to false when testing without lazy loading
 ---@class ak.util.defer
 local M = {}
 
+-- NOTE: Might be useful for neotest, see:
+-- https://github.com/nvim-neotest/neotest/issues/303
 if not use_defer then
   local N = {}
 
