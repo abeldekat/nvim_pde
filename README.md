@@ -4,9 +4,7 @@ My *personal development environment* for Neovim
 
 ## Demo
 
-<https://github.com/abeldekat/nvim_pde/assets/58370433/953b0e7b-9217-4fd7-8372-b6521c071a59>
-
-## Design
+<https://github.com/abeldekat/nvim_pde/assets/58370433/30630481-4b33-44c4-bdb8-825e21144c52>
 
 ### Structure
 
