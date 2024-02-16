@@ -68,7 +68,6 @@ later(function()
   add("nvim-surround")
   require("ak.config.coding.surround")
 
-  -- duplicate tag in helpfile
   Util.defer.on_keys(function()
     add("comment-box.nvim")
     require("ak.config.coding.comment_box")

@@ -7,6 +7,11 @@ local function map(mode, lhs, rhs, opts)
   vim.keymap.set(mode, lhs, rhs, opts)
 end
 
+-- quit, write
+-- added:
+map("n", "<leader>q", "<cmd>q<cr>", { desc = "Quit" })
+map("n", "<leader>w", "<cmd>w<cr><esc>", { desc = "Write" })
+
 -- better up/down
 map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 map({ "n", "x" }, "<Down>", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
@@ -113,9 +118,9 @@ end, { desc = "Toggle treesitter highlight" })
 -- highlights under cursor
 map("n", "<leader>ui", vim.show_pos, { desc = "Inspect pos" })
 
--- Terminal Mappings
-map("t", "<C-/>", "<cmd>close<cr>", { desc = "Hide terminal" })
-map("t", "<c-_>", "<cmd>close<cr>", { desc = "which_key_ignore" })
+-- terminal mappings: esc is slow when using vi-mode in the terminal
+-- added:
+map("t", "<c-j>", "<c-\\><c-n>", { desc = "Enter normal mode" })
 
 -- windows
 map("n", "<leader>-", "<C-W>s", { desc = "Split window below", remap = true })
@@ -128,32 +133,26 @@ map("n", "<leader><tab><tab>", "<cmd>tabnew<cr>", { desc = "New tab" })
 map("n", "<leader><tab>]", "<cmd>tabnext<cr>", { desc = "Next tab" })
 map("n", "<leader><tab>d", "<cmd>tabclose<cr>", { desc = "Close tab" })
 map("n", "<leader><tab>[", "<cmd>tabprevious<cr>", { desc = "Previous tab" })
-
---          ╭─────────────────────────────────────────────────────────╮
---          │                          ADDED                          │
---          ╰─────────────────────────────────────────────────────────╯
-
-map("t", "<c-j>", "<c-\\><c-n>", { desc = "Enter normal mode" })
-map("n", "<leader>q", "<cmd>q<cr>", { desc = "Quit" })
-map("n", "<leader>w", "<cmd>w<cr><esc>", { desc = "Write" })
-
--- Windows, combining right and left hand
-map("n", "me", "<C-W>p", { desc = "Last accessed window", remap = true })
-map("n", "mw", "<C-W>w", { desc = "Next window", remap = true })
-
--- Switch tabs
+-- added:
 map("n", "<leader>1", "1gt", { desc = "Move to tab 1" })
 map("n", "<leader>2", "2gt", { desc = "Move to tab 2" })
 map("n", "<leader>3", "3gt", { desc = "Move to tab 3" })
 map("n", "<leader><tab>s", "<cmd>tabs<cr>", { desc = "Show tabs" })
 
--- right hand improvement:
--- c-n can behave like j and enter, also sometimes "next":
-map("n", "<C-N>", "<C-d>zz", { desc = "Down half page, better ctrl-d" })
+--          ╭─────────────────────────────────────────────────────────╮
+--          │                          ADDED                          │
+--          ╰─────────────────────────────────────────────────────────╯
 
+-- Window navigation combining right and left hand
+map("n", "me", "<C-W>p", { desc = "Last accessed window", remap = true })
+map("n", "mw", "<C-W>w", { desc = "Next window", remap = true })
 --
 map("n", "<C-d>", "<C-d>zz", { desc = "Better ctrl-d" })
 map("n", "<C-u>", "<C-u>zz", { desc = "Better ctrl-u" })
+
+-- Down half page combining left and right hand:
+-- c-n can behave like j and enter, also sometimes "next":
+map("n", "<C-N>", "<C-d>zz", { desc = "Down half page, better ctrl-d" })
 
 -- https://www.reddit.com/r/neovim/comments/mbj8m5/how_to_setup_ctrlshiftkey_mappings_in_neovim_and/
 -- TODO: Modify alacritty.yml. See harpoon setup
