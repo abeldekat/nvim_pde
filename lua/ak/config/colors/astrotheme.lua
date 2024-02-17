@@ -7,7 +7,7 @@ vim.o.background = prefer_light and "light" or "dark"
 
 Utils.color.add_toggle("astro*", {
   name = "astrotheme",
-  flavours = { "astrodark", "astromars", "astrolight" },
+  flavours = { "astrodark", "astromars", "astrolight", "astrojupiter" },
 })
 
 local function highlights(hl, c)

@@ -9,7 +9,7 @@ provision:
 # Initialize submodules and clone to the versions saved in this repo
 # Also expand inner submodules(ie LuaSnip)
 update:
-	git submodule update --jobs 8 --init --filter=blob:none --progress --recursive
+	git submodule update --init --filter=blob:none --progress --recursive
 
 # Update to the latest versions of the remotes
 upgrade:
