@@ -1,13 +1,11 @@
 -- TODO: REPL?
+-- CAVEATS - Having multiple terminals with different directions open at the same time is unsupported.
 
-local Terminal = require("toggleterm.terminal").Terminal
-
--- https://github.com/LazyVim/LazyVim/discussions/2559
 -- c-/ works in alacritty, kitty and xterm, but not in tmux
--- c-_ works only in tmux
+-- c-_ works only in tmux,
 local open_mapping = vim.env.TMUX and [[<c-_>]] or [[<c-/>]]
+local direction = "horizontal"
 
--- 1 default horizontal in cwd
 require("toggleterm").setup({
   size = function(term)
     if term.direction == "horizontal" then
@@ -17,27 +15,39 @@ require("toggleterm").setup({
     end
   end,
   open_mapping = open_mapping,
+  -- start_in_insert = false,
   shading_factor = 2,
-  direction = "horizontal",
-  persist_size = false,
+  direction = direction,
+  persist_size = false, -- temporarily change window position must be possible
   persist_mode = true,
 })
 
--- 2 vertical in cwd
-vim.keymap.set("n", 2 .. open_mapping, function() require("toggleterm").toggle(2, 0, vim.loop.cwd(), "vertical") end, {
-  desc = "Toggle Terminal Vertical",
+--          ╭─────────────────────────────────────────────────────────╮
+--          │                         Keymaps                         │
+--          ╰─────────────────────────────────────────────────────────╯
+
+-- tab, lazygit, full-screen
+-- hidden = true, does not toggle, press q for lazygit
+local lazygit =
+  require("toggleterm.terminal").Terminal:new({ cmd = "lazygit", count = 99, hidden = true, direction = "tab" })
+vim.keymap.set("n", "<leader>gg", function() lazygit:toggle() end, { noremap = true, silent = true })
+
+vim.keymap.set("n", "<leader>mt", function() vim.cmd("ToggleTermToggleAll") end, {
+  desc = "ToggleTerm all",
   silent = true,
 })
 
--- 3 horizontal in dir of file
--- This directory only changes after the terminal is exited!
-local in_dir = Terminal:new({ count = 3 })
-vim.keymap.set("n", 3 .. open_mapping, function()
-  in_dir.dir = vim.fn.expand("%:p:h")
-  in_dir:toggle()
-end, { noremap = true, silent = true })
-
--- 4 tab, lazygit
--- hidden = true, does not toggle, press q for lazygit
-local lazygit = Terminal:new({ cmd = "lazygit", count = 4, hidden = true, direction = "tab" })
-vim.keymap.set("n", "<leader>gg", function() lazygit:toggle() end, { noremap = true, silent = true })
+-- TEST:
+-- see :h filename-modifiers
+-- in normal mode, in a toggle term, cd to dir of alternate file
+-- toggle first to update the alternate file...
+vim.keymap.set("n", "<leader>mc", function()
+  local terminal = require("toggleterm.terminal")
+  local id = terminal.get_focused_id()
+  local target = terminal.get(id)
+  local alternate_dir = vim.fn.expand("#:~:h")
+  if target and alternate_dir then target:send("cd " .. alternate_dir) end
+end, {
+  desc = "ToggleTerm #cd",
+  silent = true,
+})

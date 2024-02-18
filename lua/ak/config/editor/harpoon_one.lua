@@ -14,10 +14,10 @@ end
 local function next()
   require("harpoon.ui").nav_next()
 end
-local function to_terminal()
-  local num = tonumber(vim.fn.input("Terminal window number: "))
-  require("harpoon.term").gotoTerminal(num)
-end
+-- local function to_terminal()
+--   local num = tonumber(vim.fn.input("Terminal window number: "))
+--   require("harpoon.term").gotoTerminal(num)
+-- end
 -- stylua: ignore end
 
 require("harpoon").setup({ tabline = false })
@@ -31,4 +31,4 @@ vim.keymap.set("n", "<c-j>", function() select(1) end, { desc = "Harpoon 1", sil
 vim.keymap.set("n", "<c-k>", function() select(2) end, { desc = "Harpoon 2", silent = true })
 vim.keymap.set("n", "<c-l>", function() select(3) end, { desc = "Harpoon 3", silent = true })
 vim.keymap.set("n", "<c-h>", function() select(4) end, { desc = "Harpoon 4", silent = true })
-vim.keymap.set("n", "<leader>fh", to_terminal, { desc = "Harpoon terminal", silent = true })
+-- vim.keymap.set("n", "<leader>fh", to_terminal, { desc = "Harpoon terminal", silent = true })
