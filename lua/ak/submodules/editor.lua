@@ -10,7 +10,7 @@ local with_dir = Util.opened_with_dir_argument()
 if Util.submodules.is_provisioning() then
   Util.submodules.print_provision("editor")
 
-  vim.cmd("lcd " .. Util.submodules.file_in_pack_path("editor", { "telescope-fzf-native.nvim" }))
+  vim.cmd("lcd " .. Util.submodules.plugin_path("telescope-fzf-native.nvim", "editor"))
   vim.cmd("!make -s")
   vim.cmd("lcd -")
   return

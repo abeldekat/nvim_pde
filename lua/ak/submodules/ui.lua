@@ -33,11 +33,4 @@ later(function()
   require("ak.config.ui.indent_blankline")
 end)
 
-later_only(function()
-  ---@param path_after_opt table
-  local function source_after_plugin(path_after_opt)
-    local to_source = Util.submodules.file_in_pack_path("ui", path_after_opt)
-    vim.cmd.source(to_source)
-  end
-  source_after_plugin({ "indent-blankline.nvim", "after", "plugin", "commands.lua" })
-end)
+later_only(function() Util.submodules.source_after("indent-blankline.nvim", "ui") end)

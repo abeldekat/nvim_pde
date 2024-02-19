@@ -1,16 +1,25 @@
 ---@class ak.util.submodules
 local M = {}
+local pack_path = vim.fn.stdpath("config") .. "/pack"
 
 -- Given a unit and a subpath, returns the full path of the plugin in the pack folder
+---@param plugin_name string
 ---@param unit string
----@param path_after_opt string[]
 ---@return string
-function M.file_in_pack_path(unit, path_after_opt)
-  -- stylua: ignore
-  local filename = require("plenary.path"):new(
-    vim.list_extend({ vim.fn.stdpath("config"), "pack", unit .. "_ak", "opt" }, path_after_opt)
-  ).filename
-  return filename
+function M.plugin_path(plugin_name, unit)
+  local plugin_dir = string.format("%s/%s_ak/opt/%s", pack_path, unit, plugin_name)
+  return plugin_dir
+end
+
+-- Execute 'after/' scripts if not during startup (when they will be sourced
+-- automatically), as `:packadd` only sources plain 'plugin/' files.
+-- See https://github.com/vim/vim/issues/1994.
+function M.source_after(plugin_name, unit)
+  local plugin_dir = M.plugin_path(plugin_name, unit)
+  local after_paths = vim.fn.glob(plugin_dir .. "/after/plugin/**/*.{vim,lua}", false, true)
+  vim.tbl_map(function(p)
+    vim.cmd("source " .. vim.fn.fnameescape(p)) --
+  end, after_paths)
 end
 
 -- Neovim is started in provisioning mode

@@ -8,7 +8,7 @@ local function markdown_install()
   vim.fn["mkdp#util#install_sync"]("v:false") -- not async
 
   -- peek
-  vim.cmd("lcd " .. Util.submodules.file_in_pack_path("lang", { "peek.nvim" }))
+  vim.cmd("lcd " .. Util.submodules.plugin_path("peek.nvim", "lang"))
   vim.cmd("!deno task --quiet build:fast")
   vim.cmd("lcd -")
 end

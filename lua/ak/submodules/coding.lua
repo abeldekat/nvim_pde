@@ -9,39 +9,27 @@ local later_only = Util.defer.later_only
 if Util.submodules.is_provisioning() then
   Util.submodules.print_provision("coding")
 
-  vim.cmd("lcd " .. Util.submodules.file_in_pack_path("coding", { "LuaSnip" }))
+  vim.cmd("lcd " .. Util.submodules.plugin_path("LuaSnip", "coding"))
   vim.cmd("!make -s install_jsregexp")
   vim.cmd("lcd -")
   Util.info("NOTE: rm: cannot rm is not an error")
   return
 end
 
--- Completion:
--- Lazy loading benefit: +-5 ms
+-- Completion: Lazy loading benefit: +-5 ms
 later(function()
-  add("cmp-nvim-lsp") -- cmp_nvim_lsp must be present before nvim-lspconfig is added
-
   add("nvim-cmp")
+  add("cmp-nvim-lsp") -- cmp_nvim_lsp must be present before nvim-lspconfig is added
   add("cmp_luasnip")
   add("cmp-buffer")
   add("cmp-path")
 end)
--- After/plugin is not loaded when using later(), which uses vim.schedule
--- This function is only needed when lazy-loading nvim-cmp:
+-- After/plugin is not loaded when using later()
 later_only(function()
-  ---@param path_after_opt table
-  local function source_after_plugin(path_after_opt)
-    local to_source = Util.submodules.file_in_pack_path("coding", path_after_opt)
-    vim.cmd.source(to_source)
+  -- Plugin cmp-nvim-lsp does not require nvim-cmp but creates an autocmd on insertenter
+  for _, name in ipairs({ "cmp-nvim-lsp", "cmp_luasnip", "cmp-buffer", "cmp-path" }) do
+    Util.submodules.source_after(name, "coding")
   end
-
-  -- Plugin does not require nvim-cmp but creates an autocmd on insertenter:
-  source_after_plugin({ "cmp-nvim-lsp", "after", "plugin", "cmp_nvim_lsp.lua" })
-
-  -- Plugins requiring nvim-cmp:
-  source_after_plugin({ "cmp_luasnip", "after", "plugin", "cmp_luasnip.lua" })
-  source_after_plugin({ "cmp-buffer", "after", "plugin", "cmp_buffer.lua" })
-  source_after_plugin({ "cmp-path", "after", "plugin", "cmp_path.lua" })
 end)
 later(function() -- and finally:
   require("ak.config.coding.cmp")
