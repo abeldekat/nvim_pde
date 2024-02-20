@@ -13,7 +13,7 @@ My *personal development environment* for Neovim
 - [ak.boot]
 
     1. `submodules`: Uses the units in [ak.submodules] to boot.
-    2. `deps`: Uses [mini.deps] and the units in [ak.lazy] to boot.
+    2. `deps`: Uses [mini.deps] and the units in [ak.deps] to boot.
     3. `lazy`: Uses [lazy.nvim] and the units in [ak.lazy] to boot.
 
 - [ak.config]: Contains all setup for options, key-mappings, auto-commands,
@@ -296,6 +296,7 @@ This repo uses code and ideas from the following repositories:
 [telescope]: https://github.com/LazyVim/LazyVim/blob/a50f92f7550fb6e9f21c0852e6cb190e6fcd50f5/lua/lazyvim/plugins/editor.lua#L135
 [ak.boot]: lua/ak/boot
 [ak.submodules]: lua/ak/submodules
+[ak.deps]: lua/ak/deps
 [ak.lazy]: lua/ak/lazy
 [ak.config]: lua/ak/config
 [ak.util]: lua/ak/util
