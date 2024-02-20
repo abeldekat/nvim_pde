@@ -75,7 +75,7 @@ Note: For [peek.nvim], [deno] needs to be installed.
 
 ### Multi boot
 
-The package managers can be used independently.
+The variants in `ak.boot` can be used independently.
 Aliases are convenient:
 
 ```sh
@@ -142,9 +142,9 @@ adding two extra [lazy methods]:
 
 In order to use submodules and [mini.deps] in the same nvim installation,
 the packpath is modified in both `ak.boot.submodules` and `ak.boot.deps`.
-This is not needed for [lazy.vim], because `lazy` empties the packpath.
+This is not needed for [lazy.nvim], because `lazy` empties the packpath.
 
-### Submodules
+### Submodule packpath
 
 ```lua
   -- The packpath should not contain ie ~/.local/share/nvim/site
@@ -154,7 +154,7 @@ This is not needed for [lazy.vim], because `lazy` empties the packpath.
   vim.opt.pp:remove(to_remove_from_pp .. "/after")
 ```
 
-### Deps
+### Deps packpath
 
 ```lua
   -- The packpath should not contain ie ~/.config/nvim
