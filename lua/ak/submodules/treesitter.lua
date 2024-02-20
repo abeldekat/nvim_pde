@@ -1,5 +1,5 @@
 local Util = require("ak.util")
-local add, later = vim.cmd.packadd, Util.defer.later
+local add, later = vim.cmd.packadd, Util.submodules.later
 
 if Util.submodules.is_provisioning() then
   Util.submodules.print_provision("treesitter")

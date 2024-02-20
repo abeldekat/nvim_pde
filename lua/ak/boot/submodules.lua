@@ -39,6 +39,12 @@ local function modules()
 end
 
 return function(_) -- opts
+  -- The packpath should not contain ie ~/.local/share/nvim/site
+  -- that location contains the plugins for ak.deps
+  local to_remove_from_pp = vim.fn.stdpath("data") .. "/site"
+  vim.opt.pp:remove(to_remove_from_pp)
+  vim.opt.pp:remove(to_remove_from_pp .. "/after")
+
   setup_performance()
   for _, module in ipairs(modules()) do
     require(module)

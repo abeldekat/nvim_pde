@@ -16,7 +16,7 @@
 
 local Util = require("ak.util")
 local Color = require("ak.color")
-local add, later = vim.cmd.packadd, Util.defer.later
+local add, later = vim.cmd.packadd, Util.submodules.later
 local M = {}
 
 local colors = {

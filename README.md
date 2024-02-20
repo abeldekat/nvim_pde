@@ -9,11 +9,12 @@ My *personal development environment* for Neovim
 ### Structure
 
 - `init`: Defers to `ak.init`. Uses `:h vim.loader`.
-- `ak.init`: Starts with either git [submodules] or [lazy.nvim].
+- `ak.init`: Starts with either git [submodules], [mini.deps] or [lazy.nvim].
 - [ak.boot]
 
     1. `submodules`: Uses the units in [ak.submodules] to boot.
-    2. `lazy`: Uses [lazy.nvim] and the units in [ak.lazy] to boot.
+    2. `deps`: Uses [mini.deps] and the units in [ak.lazy] to boot.
+    3. `lazy`: Uses [lazy.nvim] and the units in [ak.lazy] to boot.
 
 - [ak.config]: Contains all setup for options, key-mappings, auto-commands,
 color-schemes and plugins.
@@ -22,18 +23,23 @@ color-schemes and plugins.
 
 ### Grouping
 
-Modules `ak.submodules` and `ak.lazy` use the same grouping
+Modules `ak.submodules`, `ak.deps` and `ak.lazy` use the same grouping
 for clusters of plugins, making it easy to compare the code.
 
-For example, configuring `harpoon`:
+For example, when configuring the loading of `harpoon`:
 
 - `ak.submodules.editor`
+- `ak.deps.editor`
 - `ak.lazy.editor`
+
+Harpoon's config:
+
 - `ak.config.editor.harpoon`
 
-Harpoon can be found in:
+The plugin can be found in:
 
 - `~/.config/ak/pack/editor_ak/opt` using submodules
+- `~/.local/share/ak/site/pack/deps/opt` using [mini.deps]
 - `~/.local/share/ak/lazy` using [lazy.nvim]
 
 ## Install
@@ -67,13 +73,14 @@ rm -rf ~/.config/ak
 
 Note: For [peek.nvim], [deno] needs to be installed.
 
-### Dual boot
+### Multi boot
 
-Both methods can be used independently.
+The package managers can be used independently.
 Aliases are convenient:
 
 ```sh
 alias ak="NVIM_APPNAME=ak nvim" # using submodules
+alias akd="AK_BOOT=deps NVIM_APPNAME=ak nvim" # using mini.deps
 alias akl="AK_BOOT=lazy NVIM_APPNAME=ak nvim" # using lazy.nvim
 ```
 
@@ -85,6 +92,7 @@ Invoke `:StartupTime` or press `<leader>ms`.
 Repeat a couple of times.
 
 - submodules: Around 44ms
+- [mini.deps]: Around 45ms
 - [lazy.nvim]: Around 46ms
 
 System: `12th Gen Intel(R) Core(TM) i5-1235U` (12 cores), `7.40G` ram
@@ -129,6 +137,32 @@ adding two extra [lazy methods]:
 
 - `on_events`
 - `on_keys`
+
+## Packpath
+
+In order to use submodules and [mini.deps] in the same nvim installation,
+the packpath is modified in both `ak.boot.submodules` and `ak.boot.deps`.
+This is not needed for [lazy.vim], because `lazy` empties the packpath.
+
+### Submodules
+
+```lua
+  -- The packpath should not contain ie ~/.local/share/nvim/site
+  -- that location contains the plugins for ak.deps
+  local to_remove_from_pp = vim.fn.stdpath("data") .. "/site"
+  vim.opt.pp:remove(to_remove_from_pp)
+  vim.opt.pp:remove(to_remove_from_pp .. "/after")
+```
+
+### Deps
+
+```lua
+  -- The packpath should not contain ie ~/.config/nvim
+  -- that location contains the plugins for ak.submodules
+  local to_remove_from_pp = vim.fn.stdpath("config")
+  vim.opt.pp:remove(to_remove_from_pp)
+  vim.opt.pp:remove(to_remove_from_pp .. "/after")
+```
 
 ## Workflow
 

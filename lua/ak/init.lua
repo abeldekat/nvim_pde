@@ -14,6 +14,8 @@ return function(opts)
 
   if plugin_manager == "lazy" then
     require("ak.boot.lazy")(opts)
+  elseif plugin_manager == "deps" then
+    require("ak.boot.deps")(opts)
   else
     require("ak.boot.submodules")(opts)
   end

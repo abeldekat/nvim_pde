@@ -4,7 +4,7 @@
 --          ╰─────────────────────────────────────────────────────────╯
 
 local Util = require("ak.util")
-local add, later = vim.cmd.packadd, Util.defer.later
+local add, later = vim.cmd.packadd, Util.submodules.later
 local with_dir = Util.opened_with_dir_argument()
 
 if Util.submodules.is_provisioning() then
@@ -38,30 +38,31 @@ later(function()
   add("harpoon")
   require("ak.config.editor.harpoon_one")
 
+  add("mini.clue")
+  require("ak.config.editor.mini_clue")
+
   add("trouble.nvim")
   require("ak.config.editor.trouble")
   add("nvim-spectre")
   require("ak.config.editor.spectre")
   add("aerial.nvim")
   require("ak.config.editor.aerial")
-
   add("telescope-fzf-native.nvim")
   add("telescope-alternate.nvim")
   add("telescope.nvim")
   require("ak.config.editor.telescope")
 
-  add("mini.clue")
-  require("ak.config.editor.mini_clue")
+  add("toggleterm.nvim")
+  require("ak.config.editor.toggleterm")
 
-  add("gitsigns.nvim")
-  require("ak.config.editor.gitsigns")
   add("vim-illuminate")
   require("ak.config.editor.illuminate")
+
   add("todo-comments.nvim")
   require("ak.config.editor.todo_comments")
 
-  add("toggleterm.nvim")
-  require("ak.config.editor.toggleterm")
+  add("gitsigns.nvim")
+  require("ak.config.editor.gitsigns")
 
   Util.defer.on_keys(function()
     add("git-blame.nvim")

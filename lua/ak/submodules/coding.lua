@@ -3,8 +3,8 @@
 --          ╰─────────────────────────────────────────────────────────╯
 
 local Util = require("ak.util")
-local add, later = vim.cmd.packadd, Util.defer.later
-local later_only = Util.defer.later_only
+local add, later = vim.cmd.packadd, Util.submodules.later
+local later_only = Util.submodules.later_only
 
 if Util.submodules.is_provisioning() then
   Util.submodules.print_provision("coding")

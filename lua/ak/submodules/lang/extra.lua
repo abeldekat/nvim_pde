@@ -1,6 +1,6 @@
 local Util = require("ak.util")
 local add = vim.cmd.packadd
-local later = Util.defer.later
+local later = Util.submodules.later
 
 local function markdown_install()
   -- markdown_preview

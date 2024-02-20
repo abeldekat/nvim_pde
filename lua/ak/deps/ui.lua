@@ -3,21 +3,26 @@
 --          ╰─────────────────────────────────────────────────────────╯
 
 local Util = require("ak.util")
-local add, later = vim.cmd.packadd, Util.submodules.later
-local later_only = Util.submodules.later_only
+local MiniDeps = require("mini.deps")
+local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 local dashboard_now = Util.opened_without_arguments()
 
 vim.o.statusline = " " -- wait till statusline plugin is loaded
-if dashboard_now then
-  add("dashboard-nvim")
-  require("ak.config.ui.dashboard")
-end
+now(function()
+  if dashboard_now then
+    add("nvimdev/dashboard-nvim")
+    require("ak.config.ui.dashboard")
+  else
+    add("nvimdev/dashboard-nvim", { bang = true }) -- register
+  end
+end)
 
 later(function()
-  add("mini.statusline")
   require("ak.config.ui.mini_statusline")
 
-  local function dressing() add("dressing.nvim") end
+  add("stevearc/dressing.nvim", { bang = true }) -- register
+  local function dressing() add("stevearc/dressing.nvim") end
+
   ---@diagnostic disable-next-line: duplicate-set-field
   vim.ui.select = function(...)
     dressing()
@@ -29,8 +34,6 @@ later(function()
     return vim.ui.input(...)
   end
 
-  add("indent-blankline.nvim")
+  add("lukas-reineke/indent-blankline.nvim")
   require("ak.config.ui.indent_blankline")
 end)
-
-later_only(function() Util.submodules.source_after("indent-blankline.nvim", "ui") end)

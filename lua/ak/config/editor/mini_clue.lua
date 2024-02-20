@@ -49,6 +49,7 @@ local opts = {
     { mode = "n", keys = "<leader>gh", desc = "+hunks" },
     { mode = "n", keys = "<leader>m", desc = "+misc" },
     { mode = "n", keys = "<leader>s", desc = "+search" },
+    { mode = "n", keys = "<leader>sn", desc = "+notify" },
     { mode = "n", keys = "<leader>t", desc = "+test" },
     { mode = "n", keys = "<leader>u", desc = "+ui" },
     { mode = "n", keys = "<leader>x", desc = "+diagnostics/quickfix" },
