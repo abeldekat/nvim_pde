@@ -2,7 +2,7 @@
 --          │                 Separation of concerns                  │
 --          │                   The plugin section:                   │
 --          │                Retrieve and load plugins                │
---          │              See ak.boot [ak.submodules, ak.lazy]       │
+--          │                       See ak.boot                       │
 --          │                                                         │
 --          │                   The config section:                   │
 --          │                        All setup                        │
@@ -12,11 +12,11 @@
 return function(opts)
   local plugin_manager = vim.env.AK_BOOT
 
-  if plugin_manager == "lazy" then
-    require("ak.boot.lazy")(opts)
-  elseif plugin_manager == "deps" then
-    require("ak.boot.deps")(opts)
-  else
+  if plugin_manager == "submodules" then
     require("ak.boot.submodules")(opts)
+  elseif plugin_manager == "lazy" then
+    require("ak.boot.lazy")(opts)
+  else
+    require("ak.boot.deps")(opts)
   end
 end

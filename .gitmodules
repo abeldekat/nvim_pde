@@ -1,5 +1,5 @@
 [submodule "start_ak/plenary.nvim"]
-	path = pack/start_ak/start/plenary.nvim
+	path = pack/start_ak/opt/plenary.nvim
 	url = https://github.com/nvim-lua/plenary.nvim
   ignore = untracked
 [submodule "colors_ak/colors_tokyonight"]
@@ -101,10 +101,6 @@
 [submodule "editor_ak/vim-hardtime"]
 	path = pack/editor_ak/opt/vim-hardtime
 	url = https://github.com/takac/vim-hardtime
-  ignore = untracked
-[submodule "editor_ak/mini.clue"]
-	path = pack/editor_ak/opt/mini.clue
-	url = https://github.com/echasnovski/mini.clue
   ignore = untracked
 [submodule "editor_ak/toggleterm.nvim"]
 	path = pack/editor_ak/opt/toggleterm.nvim
@@ -327,7 +323,7 @@
 	path = pack/lang_ak/opt/vim-dadbod-completion
 	url = https://github.com/kristijanhusak/vim-dadbod-completion
 	ignore = untracked
-[submodule "ui_ak/mini.statusline"]
-	path = pack/ui_ak/opt/mini.statusline
-	url = https://github.com/echasnovski/mini.statusline
+[submodule "pack/start_ak/start/mini.nvim"]
+	path = pack/start_ak/start/mini.nvim
+	url = https://github.com/echasnovski/mini.nvim
 	ignore = untracked

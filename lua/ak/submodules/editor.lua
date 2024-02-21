@@ -38,7 +38,6 @@ later(function()
   add("harpoon")
   require("ak.config.editor.harpoon_one")
 
-  add("mini.clue")
   require("ak.config.editor.mini_clue")
 
   add("trouble.nvim")

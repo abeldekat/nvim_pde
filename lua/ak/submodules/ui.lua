@@ -14,7 +14,6 @@ if dashboard_now then
 end
 
 later(function()
-  add("mini.statusline")
   require("ak.config.ui.mini_statusline")
 
   local function dressing() add("dressing.nvim") end

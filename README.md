@@ -9,11 +9,11 @@ My *personal development environment* for Neovim
 ### Structure
 
 - `init`: Defers to `ak.init`. Uses `:h vim.loader`.
-- `ak.init`: Starts with either git [submodules], [mini.deps] or [lazy.nvim].
+- `ak.init`: Starts with either [mini.deps], git [submodules] or [lazy.nvim].
 - [ak.boot]
 
-    1. `submodules`: Uses the units in [ak.submodules] to boot.
-    2. `deps`: Uses [mini.deps] and the units in [ak.deps] to boot.
+    1. `deps`: Uses [mini.deps] and the units in [ak.deps] to boot.
+    2. `submodules`: Uses the units in [ak.submodules] to boot.
     3. `lazy`: Uses [lazy.nvim] and the units in [ak.lazy] to boot.
 
 - [ak.config]: Contains all setup for options, key-mappings, auto-commands,
@@ -23,13 +23,13 @@ color-schemes and plugins.
 
 ### Grouping
 
-Modules `ak.submodules`, `ak.deps` and `ak.lazy` use the same grouping
+Modules `ak.deps`, `ak.submodules` and `ak.lazy` use the same grouping
 for clusters of plugins, making it easy to compare the code.
 
 For example, when configuring the loading of `harpoon`:
 
-- `ak.submodules.editor`
 - `ak.deps.editor`
+- `ak.submodules.editor`
 - `ak.lazy.editor`
 
 Harpoon's config:
@@ -38,8 +38,8 @@ Harpoon's config:
 
 The plugin can be found in:
 
-- `~/.config/ak/pack/editor_ak/opt` using submodules
 - `~/.local/share/ak/site/pack/deps/opt` using [mini.deps]
+- `~/.config/ak/pack/editor_ak/opt` using submodules
 - `~/.local/share/ak/lazy` using [lazy.nvim]
 
 ## Install
@@ -53,7 +53,7 @@ Clone the repository and install the plugins:
 ```sh
 git clone https://github.com/abeldekat/nvim_pde ~/.config/ak
 
-# Only when using submodules(the default):
+# Only when using submodules:
 cd ~/.config/ak
 NVIM_APPNAME=ak make
 ```
@@ -61,6 +61,7 @@ NVIM_APPNAME=ak make
 Open Neovim with this config:
 
 ```sh
+# The default uses [mini.deps].
 NVIM_APPNAME=ak nvim
 ```
 
@@ -79,8 +80,8 @@ The variants in `ak.boot` can be used independently.
 Aliases are convenient:
 
 ```sh
-alias ak="NVIM_APPNAME=ak nvim" # using submodules
-alias akd="AK_BOOT=deps NVIM_APPNAME=ak nvim" # using mini.deps
+alias ak="NVIM_APPNAME=ak nvim" # using mini.deps
+alias aks="AK_BOOT=submodules NVIM_APPNAME=ak nvim" # using git submodules
 alias akl="AK_BOOT=lazy NVIM_APPNAME=ak nvim" # using lazy.nvim
 ```
 
@@ -132,15 +133,15 @@ An important question to be answered when lazy-loading:
 How often is the plugin needed when opening Neovim?
 
 The [lazy.nvim] part of this config only uses `VeryLazy`, with exceptions.
-The [submodules] part uses the `later()` mechanism copied from [mini.deps],
-adding two extra [lazy methods]:
+The [submodules] part uses the `later()` mechanism copied from [mini.deps].
+Both [mini.deps] and [submodules] use two extra [lazy methods]:
 
 - `on_events`
 - `on_keys`
 
 ## Packpath
 
-In order to use submodules and [mini.deps] in the same nvim installation,
+In order to use [mini.deps] and submodules in the same nvim installation,
 the packpath is modified in both `ak.boot.submodules` and `ak.boot.deps`.
 This is not needed for [lazy.nvim], because `lazy` empties the packpath.
 

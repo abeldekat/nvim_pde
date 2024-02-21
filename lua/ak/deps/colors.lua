@@ -28,7 +28,7 @@ local colors = {
     return {
       { source = "sainnhe/everforest", name = "colors_everforest" },
       { source = "ellisonleao/gruvbox.nvim", name = "colors_gruvbox" },
-      { source = "lifepillar/vim-solarized8", name = "colors_solarized8", branch = "neovim" },
+      { source = "lifepillar/vim-solarized8", name = "colors_solarized8", checkout = "neovim" },
       { source = "ribru17/bamboo.nvim", name = "colors_bamboo" },
     }
   end,
