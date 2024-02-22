@@ -2,16 +2,15 @@
 --          │                   UI plugins                   │
 --          ╰────────────────────────────────────────────────╯
 
+local Util = require("ak.util")
 vim.o.statusline = " " -- wait till statusline plugin is loaded
+
 return {
 
   {
     "nvimdev/dashboard-nvim",
-    event = "VimEnter",
-    config = function()
-      if vim.o.filetype == "lazy" then vim.cmd.close() end
-      require("ak.config.ui.dashboard")
-    end,
+    event = function() return Util.opened_without_arguments() and "VimEnter" or {} end,
+    config = function() require("ak.config.ui.dashboard") end,
   },
 
   {

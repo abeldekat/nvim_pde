@@ -1,17 +1,15 @@
 local Util = require("ak.util")
 local did_init = false
+local group = vim.api.nvim_create_augroup("lazy_ak", { clear = true })
 
 local function load(mod)
   Util.try(function() require(mod) end, { msg = "Failed loading " .. mod })
 end
 
-local group = vim.api.nvim_create_augroup("lazy_ak", { clear = true })
-
---          ╭─────────────────────────────────────────────────────────╮
---          │  When VeryLazy fires, the code below is executed first  │
---          │                Load autocmds and keymaps                │
---          ╰─────────────────────────────────────────────────────────╯
 vim.api.nvim_create_autocmd("User", {
+  --          ╭─────────────────────────────────────────────────────────╮
+  --          │   When VeryLazy fires, this autocmd is executed first   │
+  --          ╰─────────────────────────────────────────────────────────╯
   group = group,
   pattern = "VeryLazy",
   callback = function()
@@ -30,11 +28,6 @@ if did_init then return end
 did_init = true
 load("ak.config.options")
 
---          ╭─────────────────────────────────────────────────────────╮
---          │       LazyVim: On setup or on VeryLazy(dashboard)       │
---          ╰─────────────────────────────────────────────────────────╯
-load("ak.config.autocmds")
-
 return {
   { "folke/lazy.nvim", lazy = false, version = "*" },
 
@@ -46,10 +39,23 @@ return {
     lazy = false,
     cond = true,
     config = function()
-      -- Advantage: No priorities needed on the various colorschemes:
+      load("ak.config.autocmds") -- Could also load on VeryLazy(dashboard)
+
+      -- No priorities needed on the various colorschemes:
       Util.try(function() vim.cmd.colorscheme(require("ak.color").color) end, {
         msg = "Could not load your colorscheme",
         on_error = function(msg) Util.error(msg) end,
+      })
+
+      -- Close the lazy ui(install/update) on VimEnter:
+      -- In LazyVim, this is done in the config of the dashboard
+      -- Note: lazy.nvim creates an autocmd on VimEnter,
+      -- in lazy.view.float, method M:focus()
+      vim.api.nvim_create_autocmd("VimEnter", {
+        group = "lazy_ak",
+        callback = function()
+          if vim.o.filetype == "lazy" then vim.cmd.close() end
+        end,
       })
     end,
   },
