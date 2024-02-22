@@ -1,64 +1,58 @@
---          ╭─────────────────────────────────────────────────────────╮
---          │               Plenary as placeholder for:               │
---          │        on_first_spec_imported (lazy spec phase)         │
---          │       on_first_plugin_to_load (lazy start phase)        │
---          │                                                         │
---          │    Benefit: No priorities needed on the colorschemes    │
---          ╰─────────────────────────────────────────────────────────╯
-
 local Util = require("ak.util")
 local did_init = false
 
----@param name "autocmds" | "options" | "keymaps"
-local function load(name)
-  local function _load(mod)
-    if require("lazy.core.cache").find(mod)[1] then
-      Util.try(function()
-        require(mod)
-      end, { msg = "Failed loading " .. mod })
-    end
-  end
-  _load("ak.config." .. name)
-
-  if vim.bo.filetype == "lazy" then
-    vim.cmd([[do VimResized]])
-  end
+local function load(mod)
+  Util.try(function() require(mod) end, { msg = "Failed loading " .. mod })
 end
 
-local function on_first_spec_imported()
-  if did_init then
-    return
-  end
-  did_init = true
+local group = vim.api.nvim_create_augroup("lazy_ak", { clear = true })
 
-  load("options")
-  load("autocmds")
-  load("keymaps")
-end
+--          ╭─────────────────────────────────────────────────────────╮
+--          │  When VeryLazy fires, the code below is executed first  │
+--          │                Load autocmds and keymaps                │
+--          ╰─────────────────────────────────────────────────────────╯
+vim.api.nvim_create_autocmd("User", {
+  group = group,
+  pattern = "VeryLazy",
+  callback = function()
+    load("ak.config.keymaps")
 
-local function on_first_plugin_to_load()
-  vim.keymap.set("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "Lazy", silent = true })
+    vim.api.nvim_create_user_command("LazyHealth", function()
+      vim.cmd([[Lazy! load all]])
+      vim.cmd([[checkhealth]])
+    end, { desc = "Load all plugins and run :checkhealth" })
 
-  Util.try(function()
-    vim.cmd.colorscheme(require("ak.color").color)
-  end, {
-    msg = "Could not load your colorscheme",
-    on_error = function(msg)
-      Util.error(msg)
-    end,
-  })
-end
+    vim.keymap.set("n", "<leader>l", "<cmd>Lazy<cr>", { desc = "Lazy", silent = true })
+  end,
+})
 
-on_first_spec_imported()
+if did_init then return end
+did_init = true
+load("ak.config.options")
+
+--          ╭─────────────────────────────────────────────────────────╮
+--          │       LazyVim: On setup or on VeryLazy(dashboard)       │
+--          ╰─────────────────────────────────────────────────────────╯
+load("ak.config.autocmds")
+
 return {
   { "folke/lazy.nvim", lazy = false, version = "*" },
-  {
-    "nvim-lua/plenary.nvim",
+
+  { -- mini.nvim is a good plugin to load on start
+    -- the plugin does nothing when loaded
+    -- each mini component needs to be activated separately
+    "echasnovski/mini.nvim",
     priority = 10000,
     lazy = false,
     cond = true,
     config = function()
-      on_first_plugin_to_load() -- Plenary does not require a setup function
+      -- Advantage: No priorities needed on the various colorschemes:
+      Util.try(function() vim.cmd.colorscheme(require("ak.color").color) end, {
+        msg = "Could not load your colorscheme",
+        on_error = function(msg) Util.error(msg) end,
+      })
     end,
   },
+
+  { "nvim-lua/plenary.nvim", lazy = true },
 }

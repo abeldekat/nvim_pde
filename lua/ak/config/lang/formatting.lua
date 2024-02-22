@@ -56,11 +56,13 @@ local function add_keys()
   keys({ "n", "v" }, "<leader>cf", function() -- from keymaps.lua
     format()
   end, { desc = "Format", silent = true })
-  -- TODO: Is formatting injected langs needed:
-  --
-  -- keys({ "n", "v" }, "<leader>cF", function()
-  --   require("conform").format({ formatters = { "injected" } })
-  -- end, { desc = "Format injected langs", silent = true })
+
+  keys(
+    { "n", "v" },
+    "<leader>cF",
+    function() require("conform").format({ formatters = { "injected" } }) end,
+    { desc = "Format injected langs", silent = true }
+  )
 end
 
 local function get_opts()
@@ -70,7 +72,7 @@ local function get_opts()
       lua = { "stylua" },
       sh = { "shfmt" },
       python = { "black" },
-      sql = { "sql-formatter" }, -- TODO: unavailable no config found
+      sql = { "sql-formatter" },
     },
     -- https://github.com/stevearc/conform.nvim/blob/master/doc/advanced_topics.md#injected-language-formatting-code-blocks
     formatters = {

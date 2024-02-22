@@ -8,12 +8,16 @@ local mason_ensure_installed = {
 }
 require("mason").setup()
 
+local function trigger_filetype() -- possibly load newly installed LSP
+  vim.api.nvim_exec_autocmds("FileType", {
+    buffer = vim.api.nvim_get_current_buf(),
+    modeline = false,
+    data = {},
+  })
+end
 local mr = require("mason-registry")
-mr:on("package:install:success", function()
-  vim.defer_fn(function()
-    vim.cmd("LspStart") -- for each installed lsp, try to attach to the current buffer
-  end, 100)
-end)
+mr:on("package:install:success", function() vim.defer_fn(trigger_filetype, 100) end)
+
 local function ensure_installed()
   for _, tool in ipairs(mason_ensure_installed) do
     local p = mr.get_package(tool)

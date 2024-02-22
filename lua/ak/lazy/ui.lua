@@ -1,16 +1,32 @@
---          ╭─────────────────────────────────────────────────────────╮
---          │                   Contains UI plugins                   │
---          ╰─────────────────────────────────────────────────────────╯
-
-local Util = require("ak.util")
-local dashboard_now = Util.opened_without_arguments()
+--          ╭────────────────────────────────────────────────╮
+--          │                   UI plugins                   │
+--          ╰────────────────────────────────────────────────╯
 
 vim.o.statusline = " " -- wait till statusline plugin is loaded
 return {
+
   {
     "nvimdev/dashboard-nvim",
-    lazy = not dashboard_now,
-    config = function() require("ak.config.ui.dashboard") end,
+    event = "VimEnter",
+    config = function()
+      if vim.o.filetype == "lazy" then vim.cmd.close() end
+      require("ak.config.ui.dashboard")
+    end,
+  },
+
+  {
+    "lukas-reineke/indent-blankline.nvim",
+    event = "VeryLazy", -- event = lazyfile,
+    config = function()
+      require("ak.config.ui.indent_blankline")
+
+      --          ╭─────────────────────────────────────────────────────────╮
+      --          │  Efficiency: Also setup startup-plugin mini.statusline  │
+      --          │                     and mini.notify                     │
+      --          ╰─────────────────────────────────────────────────────────╯
+      require("ak.config.ui.mini_notify")
+      require("ak.config.ui.mini_statusline")
+    end,
   },
 
   {
@@ -28,27 +44,4 @@ return {
       end
     end,
   },
-
-  {
-    "lukas-reineke/indent-blankline.nvim",
-    event = "VeryLazy", -- event = lazyfile,
-    config = function() require("ak.config.ui.indent_blankline") end,
-  },
-
-  {
-    "echasnovski/mini.statusline",
-    event = "VeryLazy",
-    config = function() require("ak.config.ui.mini_statusline") end,
-  },
-
-  -- {
-  --   "nvim-lualine/lualine.nvim",
-  --   event = "VeryLazy",
-  --   config = function()
-  --     local df = { statusline = { "dashboard" } }
-  --     require("lualine").setup({
-  --       options = { globalstatus = true, disabled_filetypes = df },
-  --     })
-  --   end,
-  -- },
 }

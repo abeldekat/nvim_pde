@@ -29,7 +29,7 @@ local function load()
   require("ak.config.lang.fidget")
 
   -- The lsp does not attach when directly opening a file:
-  if not (Util.opened_without_arguments() or Util.opened_with_dir_argument()) then
+  if Util.opened_with_file_argument() then
     vim.cmd("LspStart") --
   end
 end

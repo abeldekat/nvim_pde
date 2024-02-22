@@ -14,7 +14,14 @@ return {
     "folke/flash.nvim",
     event = "VeryLazy",
     dependencies = "jinh0/eyeliner.nvim",
-    config = function() require("ak.config.editor.flash") end,
+    config = function()
+      require("ak.config.editor.flash")
+
+      --          ╭─────────────────────────────────────────────────────────╮
+      --          │     Efficiency: Also setup startup-plugin mini.clue     │
+      --          ╰─────────────────────────────────────────────────────────╯
+      require("ak.config.editor.mini_clue")
+    end,
   },
 
   {
@@ -25,12 +32,6 @@ return {
       -- require("ak.config.harpoon")
       require("ak.config.editor.harpoon_one")
     end,
-  },
-
-  {
-    "echasnovski/mini.clue",
-    event = "VeryLazy",
-    config = function() require("ak.config.editor.mini_clue") end,
   },
 
   {

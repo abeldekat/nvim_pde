@@ -1,4 +1,3 @@
--- TODO: REPL?
 -- CAVEATS - Having multiple terminals with different directions open at the same time is unsupported.
 
 -- c-/ works in alacritty, kitty and xterm, but not in tmux

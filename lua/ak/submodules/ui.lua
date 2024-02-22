@@ -14,7 +14,11 @@ if dashboard_now then
 end
 
 later(function()
+  require("ak.config.ui.mini_notify")
   require("ak.config.ui.mini_statusline")
+
+  add("indent-blankline.nvim")
+  require("ak.config.ui.indent_blankline")
 
   local function dressing() add("dressing.nvim") end
   ---@diagnostic disable-next-line: duplicate-set-field
@@ -27,9 +31,6 @@ later(function()
     dressing()
     return vim.ui.input(...)
   end
-
-  add("indent-blankline.nvim")
-  require("ak.config.ui.indent_blankline")
 end)
 
 later_only(function() Util.submodules.source_after("indent-blankline.nvim", "ui") end)

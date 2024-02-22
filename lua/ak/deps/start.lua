@@ -3,7 +3,10 @@ local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 
 now(function()
   require("ak.config.options")
+
+  -- Needed for a smooth installation process:
   require("ak.config.ui.mini_notify") -- mini.nvim in pack start
+
   require("ak.deps.colors").colorscheme()
 end)
 later(function()

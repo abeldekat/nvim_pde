@@ -19,6 +19,10 @@ end)
 
 later(function()
   require("ak.config.ui.mini_statusline")
+  -- mini.notify is used in ak.deps.start
+
+  add("lukas-reineke/indent-blankline.nvim")
+  require("ak.config.ui.indent_blankline")
 
   add("stevearc/dressing.nvim", { bang = true }) -- register
   local function dressing() add("stevearc/dressing.nvim") end
@@ -33,7 +37,4 @@ later(function()
     dressing()
     return vim.ui.input(...)
   end
-
-  add("lukas-reineke/indent-blankline.nvim")
-  require("ak.config.ui.indent_blankline")
 end)

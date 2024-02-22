@@ -1,19 +1,18 @@
 local MiniDeps = require("mini.deps")
 local add, later = MiniDeps.add, MiniDeps.later
-
 later(function()
-  add({
+  local ts_spec = {
     source = "nvim-treesitter/nvim-treesitter",
-    -- Use 'master' while monitoring updates in 'main'
     checkout = "master",
-    monitor = "main",
+    -- -- Use 'master' while monitoring updates in 'main'
+    -- monitor = "main",
     -- Perform action after every checkout
     hooks = { post_checkout = function() vim.cmd("TSUpdate") end },
-  })
-  -- not in depends of treesitter due to plugin/nvim-treesitter-textobjects.vim:
-  add("nvim-treesitter/nvim-treesitter-textobjects")
+  }
+  add({ source = "nvim-treesitter/nvim-treesitter-textobjects", depends = { ts_spec } })
   require("ak.config.treesitter.treesitter")
-
+end)
+later(function()
   add("windwp/nvim-ts-autotag")
   require("ak.config.treesitter.autotag")
 

@@ -26,6 +26,7 @@ function M.register_referenced(plugin) table.insert(referenced_plugins, plugin) 
 ---@param plugin string
 function M.has(plugin) return vim.tbl_contains(referenced_plugins, plugin) end
 
+-- This indicates that oil.nvim should be shown
 function M.opened_with_dir_argument()
   if vim.fn.argc() == 1 then
     ---@diagnostic disable-next-line: param-type-mismatch
@@ -35,9 +36,15 @@ function M.opened_with_dir_argument()
   return false
 end
 
+-- This indicates that the dashboard should be shown.
 function M.opened_without_arguments()
   if vim.fn.argc() > 0 then return false end
   return true
+end
+
+-- This indicates that some lazy plugins might have missed an event
+function M.opened_with_file_argument()
+  return not (M.opened_without_arguments() or M.opened_with_dir_argument()) --
 end
 
 function M.is_headless() return #vim.api.nvim_list_uis() == 0 end

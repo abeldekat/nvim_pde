@@ -12,6 +12,10 @@ local function clone(owner, name)
 end
 
 local function to_spec()
+  --          ╭─────────────────────────────────────────────────────────╮
+  --          │  Note: On start and install, the lazy UI is closed in   │
+  --          │           the dashboard config in ak.lazy.ui            │
+  --          ╰─────────────────────────────────────────────────────────╯
   return {
     require("ak.lazy.start"),
     require("ak.lazy.coding"),
