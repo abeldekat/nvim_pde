@@ -14,7 +14,9 @@ if dashboard_now then
 end
 
 later(function()
-  require("ak.config.ui.mini_notify")
+  --          ╭─────────────────────────────────────────────────────────╮
+  --          │       Mini.notify is used in ak.submodules.start        │
+  --          ╰─────────────────────────────────────────────────────────╯
   require("ak.config.ui.mini_statusline")
 
   add("indent-blankline.nvim")

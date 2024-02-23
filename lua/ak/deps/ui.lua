@@ -18,8 +18,10 @@ now(function()
 end)
 
 later(function()
+  --          ╭─────────────────────────────────────────────────────────╮
+  --          │       Mini.notify is used in ak.submodules.start        │
+  --          ╰─────────────────────────────────────────────────────────╯
   require("ak.config.ui.mini_statusline")
-  -- mini.notify is used in ak.deps.start
 
   add("lukas-reineke/indent-blankline.nvim")
   require("ak.config.ui.indent_blankline")

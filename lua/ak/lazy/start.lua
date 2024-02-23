@@ -27,6 +27,7 @@ vim.api.nvim_create_autocmd("User", {
 if did_init then return end
 did_init = true
 load("ak.config.options")
+load("ak.config.autocmds") -- Could also load on VeryLazy(dashboard)
 
 return {
   { "folke/lazy.nvim", lazy = false, version = "*" },
@@ -39,7 +40,8 @@ return {
     lazy = false,
     cond = true,
     config = function()
-      load("ak.config.autocmds") -- Could also load on VeryLazy(dashboard)
+      -- Needed for a smoother installation process:
+      require("ak.config.ui.mini_notify")
 
       -- No priorities needed on the various colorschemes:
       Util.try(function() vim.cmd.colorscheme(require("ak.color").color) end, {

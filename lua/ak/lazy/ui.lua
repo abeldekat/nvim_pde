@@ -21,9 +21,8 @@ return {
 
       --          ╭─────────────────────────────────────────────────────────╮
       --          │  Efficiency: Also setup startup-plugin mini.statusline  │
-      --          │                     and mini.notify                     │
+      --          │          Mini.notify is used in ak.lazy.start           │
       --          ╰─────────────────────────────────────────────────────────╯
-      require("ak.config.ui.mini_notify")
       require("ak.config.ui.mini_statusline")
     end,
   },
