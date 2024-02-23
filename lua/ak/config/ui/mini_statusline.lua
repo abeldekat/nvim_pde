@@ -19,6 +19,7 @@
 --          ╰─────────────────────────────────────────────────────────╯
 local AK = {} -- module using the structure of MiniStatusline
 local H = {} -- helpers, copied, modified or added
+local MiniStatusline = require("mini.statusline")
 
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                      Module setup                       │
@@ -35,7 +36,7 @@ AK.setup = function()
     callback = H.create_diagnostic_hl,
   }) -- recreate when changing colorscheme
 
-  require("mini.statusline").setup({
+  MiniStatusline.setup({
     use_icons = false,
     set_vim_settings = false,
     content = { active = AK.active }, -- entrypoint
@@ -50,8 +51,6 @@ end
 AK.active = function()
   -- Customize statusline content for blocked filetypes to your liking
   if H.is_blocked_filetype() then return "" end
-
-  local MiniStatusline = require("mini.statusline")
 
   -- 1
   local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 120 })
@@ -87,7 +86,6 @@ end
 
 -- added: removed from section_diagnostics
 AK.section_lsp = function(args)
-  local MiniStatusline = require("mini.statusline")
   _G.n_attached_lsp = H.n_attached_lsp
 
   local dont_show = MiniStatusline.is_truncated(args.trunc_width) or H.isnt_normal_buffer() or H.has_no_lsp_attached()
@@ -99,7 +97,6 @@ end
 
 -- overridden: removed lsp, added color to diagnostics
 AK.section_diagnostics = function(args) -- args
-  local MiniStatusline = require("mini.statusline")
   local dont_show = MiniStatusline.is_truncated(args.trunc_width) or H.isnt_normal_buffer()
   if dont_show then return "" end
 
@@ -125,7 +122,6 @@ AK.section_filename = function(args)
     local separator = package.config:sub(1, 1)
     return full_path:find(cwd .. separator, 1, true) == 1
   end
-  local MiniStatusline = require("mini.statusline")
   local full_fmt = "%F%m%r" -- modified and readonly flags
   local relative_fmt = "%f%m%r" -- modified and readonly flags
 
@@ -138,7 +134,6 @@ end
 
 -- added: show when recording a macro
 AK.section_macro = function(args)
-  local MiniStatusline = require("mini.statusline")
   if MiniStatusline.is_truncated(args.trunc_width) then return "" end
 
   local reg = vim.fn.reg_recording()
@@ -147,7 +142,6 @@ end
 
 -- overridden: removed filesize
 AK.section_fileinfo = function(args)
-  local MiniStatusline = require("mini.statusline")
   local filetype = vim.bo.filetype
 
   -- Only show when filetype is detected in normal buffer
@@ -164,8 +158,6 @@ end
 
 -- overridden: changed delimiters
 AK.section_location = function(args)
-  local MiniStatusline = require("mini.statusline")
-
   -- Use virtual column number to allow update when past last column
   if MiniStatusline.is_truncated(args.trunc_width) then return "%l│%2v" end
 
