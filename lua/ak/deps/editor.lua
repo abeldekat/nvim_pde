@@ -1,6 +1,7 @@
 local Util = require("ak.util")
 local MiniDeps = require("mini.deps")
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
+local register = Util.deps.register
 local with_dir = Util.opened_with_dir_argument()
 
 now(function()
@@ -68,7 +69,7 @@ later(function()
   add("lewis6991/gitsigns.nvim")
   require("ak.config.editor.gitsigns")
 
-  add("f-person/git-blame.nvim", { bang = true })
+  register("f-person/git-blame.nvim")
   Util.defer.on_keys(function()
     now(function()
       add("f-person/git-blame.nvim")
@@ -76,7 +77,7 @@ later(function()
     end)
   end, "<leader>gt", "Git-blame")
 
-  add("takac/vim-hardtime", { bang = true })
+  register("takac/vim-hardtime")
   Util.defer.on_keys(function()
     now(function()
       add("takac/vim-hardtime")

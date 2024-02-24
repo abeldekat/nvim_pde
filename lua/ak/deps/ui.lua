@@ -5,15 +5,15 @@
 local Util = require("ak.util")
 local MiniDeps = require("mini.deps")
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
-local dashboard_now = Util.opened_without_arguments()
+local register = Util.deps.register
 
 vim.o.statusline = " " -- wait till statusline plugin is loaded
 now(function()
-  if dashboard_now then
+  if Util.opened_without_arguments() then
     add("nvimdev/dashboard-nvim")
     require("ak.config.ui.dashboard")
   else
-    add("nvimdev/dashboard-nvim", { bang = true }) -- register
+    later(function() register("nvimdev/dashboard-nvim") end)
   end
 end)
 
@@ -26,7 +26,7 @@ later(function()
   add("lukas-reineke/indent-blankline.nvim")
   require("ak.config.ui.indent_blankline")
 
-  add("stevearc/dressing.nvim", { bang = true }) -- register
+  register("stevearc/dressing.nvim")
   local function dressing() add("stevearc/dressing.nvim") end
 
   ---@diagnostic disable-next-line: duplicate-set-field

@@ -1,9 +1,10 @@
 local Util = require("ak.util")
 local MiniDeps = require("mini.deps")
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
+local register = Util.deps.register
 
 later(function()
-  add("dstein64/vim-startuptime", { bang = true })
+  register("dstein64/vim-startuptime")
   Util.defer.on_keys(function()
     now(function()
       add("dstein64/vim-startuptime")
@@ -11,7 +12,7 @@ later(function()
     end)
   end, "<leader>ms", "StartupTime")
 
-  add("jpalardy/vim-slime", { bang = true })
+  register("jpalardy/vim-slime")
   Util.defer.on_keys(function()
     now(function()
       add("jpalardy/vim-slime")
@@ -19,7 +20,7 @@ later(function()
     end)
   end, "<leader>mr", "Repl")
 
-  -- add("folke/persistence.nvim", { bang = true })
+  -- register("folke/persistence.nvim")
   -- Util.defer.on_events(function()
   --   now(function()
   --     add("persistence.nvim")

@@ -2,6 +2,7 @@ local Util = require("ak.util")
 local Color = require("ak.color")
 local MiniDeps = require("mini.deps")
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
+local register = Util.deps.register
 local M = {}
 
 local colors = {
@@ -82,7 +83,7 @@ function M.colorscheme()
         color_apply(color_name, info.config_name)
       end)
     else
-      later(function() add(spec, { bang = true }) end) -- register
+      later(function() register(spec) end)
     end
   end)
 

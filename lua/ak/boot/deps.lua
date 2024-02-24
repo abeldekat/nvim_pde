@@ -1,3 +1,5 @@
+local Util = require("ak.util")
+
 local function setup_performance()
   -- tohtml.vim             0.06    0.06
   -- syntax.vim             0.27    0.26 ▏
@@ -12,15 +14,19 @@ end
 
 ---@diagnostic disable:assign-type-mismatch
 local function clone()
+  local has_cloned = false
   local path_package = vim.fn.stdpath("data") .. "/site/"
   local mini_path = path_package .. "pack/deps/start/mini.nvim"
+
   if not vim.loop.fs_stat(mini_path) then
     vim.cmd('echo "Installing `mini.nvim`" | redraw')
     local clone_cmd = { "git", "clone", "--filter=blob:none", "https://github.com/echasnovski/mini.nvim", mini_path }
     vim.fn.system(clone_cmd)
     vim.cmd("packadd mini.nvim | helptags ALL")
+    has_cloned = true
   end
-  return path_package
+
+  return has_cloned, path_package
 end
 
 local modules = {
@@ -39,17 +45,36 @@ local modules = {
 }
 
 return function(_) -- opts
-  -- The packpath should not contain ie ~/.config/nvim
-  -- that location contains the plugins for ak.submodules
+  --          ╭─────────────────────────────────────────────────────────╮
+  --          │     Multi-boot: The packpath should not contain ie      │
+  --          │                     ~/.config/nvim                      │
+  --          │  that location contains the plugins for ak.submodules   │
+  --          ╰─────────────────────────────────────────────────────────╯
   local to_remove_from_pp = vim.fn.stdpath("config")
   vim.opt.pp:remove(to_remove_from_pp)
   vim.opt.pp:remove(to_remove_from_pp .. "/after")
 
   setup_performance()
-  local path_package = clone()
+  local is_initial_install, path_package = clone()
 
-  require("mini.deps").setup({ path = { package = path_package } })
+  --          ╭─────────────────────────────────────────────────────────╮
+  --          │  Patch MiniDeps to always include optional plugins on   │
+  --          │                 the following commands:                 │
+  --          │    DepsClean, DepsUpdate, DepsSnapLoad, DepsSnapSave    │
+  --          ╰─────────────────────────────────────────────────────────╯
+  Util.deps.patch()
+
+  local MiniDepsPatched = require("mini.deps")
+  MiniDepsPatched.setup({ path = { package = path_package } })
   for _, module in ipairs(modules) do
     require(module)
+  end
+  if is_initial_install then
+    --          ╭─────────────────────────────────────────────────────────╮
+    --          │On an initial install, the install should be reproducible│
+    --          │              Last step in the later chain:              │
+    --          │  Restore all plugins to the versions in mini-deps-snap  │
+    --          ╰─────────────────────────────────────────────────────────╯
+    MiniDepsPatched.later(function() vim.cmd("DepsSnapLoad") end) --
   end
 end

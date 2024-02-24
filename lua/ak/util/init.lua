@@ -1,6 +1,7 @@
 ---@class ak.util
 ---@field color ak.util.color
 ---@field defer ak.util.defer
+---@field deps ak.util.deps
 ---@field lsp ak.util.lsp
 ---@field submodules ak.util.submodules
 ---@field toggle ak.util.toggle

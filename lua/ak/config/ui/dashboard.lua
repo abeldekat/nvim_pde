@@ -12,13 +12,13 @@ local opts = {
         action = "Telescope git_files show_untracked=true",
         desc = " Gitfiles     ( space space )",
         icon = " ",
-        key = "g",
+        key = "f",
       },
       {
         action = "Telescope find_files",
         desc = " Files        ( space f f )",
         icon = " ",
-        key = "f",
+        key = "F",
       },
       {
         action = "Telescope oldfiles",

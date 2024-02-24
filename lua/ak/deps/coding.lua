@@ -1,6 +1,7 @@
 local Util = require("ak.util")
 local MiniDeps = require("mini.deps")
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
+local register = Util.deps.register
 
 -- Lazy loading benefit: +-5 ms
 later(function()
@@ -46,7 +47,7 @@ later(function()
   add("kylechui/nvim-surround")
   require("ak.config.coding.surround")
 
-  later(function() add("LudoPinelli/comment-box.nvim", { bang = true }) end) -- register
+  later(function() register("LudoPinelli/comment-box.nvim") end)
   Util.defer.on_keys(function()
     now(function()
       add("LudoPinelli/comment-box.nvim")

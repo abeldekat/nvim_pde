@@ -1,6 +1,7 @@
 local Util = require("ak.util")
 local MiniDeps = require("mini.deps")
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
+local register = Util.deps.register
 
 ---@param source string
 ---@param to_require string
@@ -14,7 +15,7 @@ local function add_md(source, to_require, hook)
     add(_source)
     require("ak.config.lang.markdown." .. to_require)
   end
-  add(_source, { bang = true })
+  register(_source)
   Util.defer.on_events(function() later(load) end, "FileType", "markdown")
 end
 
@@ -43,7 +44,7 @@ local function python()
     add(spec)
     require("ak.config.lang.python.venv_selector")
   end
-  add(spec, { bang = true })
+  register(spec)
   Util.defer.on_events(function()
     Util.defer.on_keys(function() now(load) end, "<leader>cv", "Venv selector")
   end, "FileType", "python")
@@ -56,7 +57,7 @@ local function sql()
     add(spec)
     require("ak.config.lang.sql.dadbod")
   end
-  add(spec, { bang = true })
+  register(spec)
   Util.defer.on_events(function()
     Util.defer.on_keys(function() now(load) end, "<leader>md", "Load dadbod")
   end, "FileType", "sql")
