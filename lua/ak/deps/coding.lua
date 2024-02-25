@@ -47,7 +47,7 @@ later(function()
   add("kylechui/nvim-surround")
   require("ak.config.coding.surround")
 
-  later(function() register("LudoPinelli/comment-box.nvim") end)
+  register("LudoPinelli/comment-box.nvim")
   Util.defer.on_keys(function()
     now(function()
       add("LudoPinelli/comment-box.nvim")

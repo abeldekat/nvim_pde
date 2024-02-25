@@ -8,9 +8,8 @@ local later_only = Util.submodules.later_only
 
 vim.o.statusline = " " -- wait till statusline plugin is loaded
 
-if Util.opened_without_arguments() then -- dashboard loads on UIEnter...
-  add("dashboard-nvim")
-  require("ak.config.ui.dashboard").setup({}, function() return { "Press space for the menu" } end)
+if Util.opened_without_arguments() then
+  require("ak.config.ui.mini_starter").setup({}, function() return "Press space for the menu" end)
 end
 
 later(function()

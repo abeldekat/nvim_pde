@@ -11,23 +11,18 @@ vim.o.statusline = " " -- wait till statusline plugin is loaded
 
 now(function()
   if Util.opened_without_arguments() then -- dashboard loads on UIEnter...
-    add("nvimdev/dashboard-nvim")
-    require("ak.config.ui.dashboard").setup({
+    require("ak.config.ui.mini_starter").setup({
       {
         action = "DepsUpdate",
-        desc = " Update",
-        icon = "",
-        key = "u",
+        name = "Update",
+        section = "Deps",
       },
       {
         action = "DepsSnapSave",
-        desc = " SnapSave",
-        icon = "",
-        key = "U",
+        name = "SnapSave",
+        section = "Deps",
       },
-    }, function() return { "Press space for the menu" } end)
-  else
-    later(function() register("nvimdev/dashboard-nvim") end)
+    }, function() return "Press space for the menu" end)
   end
 end)
 

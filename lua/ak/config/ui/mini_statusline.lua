@@ -248,7 +248,7 @@ H.set_active = function() vim.wo.statusline = "%!v:lua.MiniStatusline.active()" 
 
 -- added
 H.is_blocked_filetype = function()
-  local blocked_filetypes = { ["dashboard"] = true }
+  local blocked_filetypes = { ["dashboard"] = true, ["starter"] = true }
   return blocked_filetypes[vim.bo.filetype]
 end
 

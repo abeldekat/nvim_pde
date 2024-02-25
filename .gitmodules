@@ -146,10 +146,6 @@
 	path = pack/treesitter_ak/opt/nvim-treesitter
 	url = https://github.com/nvim-treesitter/nvim-treesitter
   ignore = untracked
-[submodule "ui_ak/dashboard-nvim"]
-	path = pack/ui_ak/opt/dashboard-nvim
-	url = https://github.com/nvimdev/dashboard-nvim
-  ignore = untracked
 [submodule "ui_ak/dressing.nvim"]
 	path = pack/ui_ak/opt/dressing.nvim
 	url = https://github.com/stevearc/dressing.nvim
