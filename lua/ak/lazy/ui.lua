@@ -16,7 +16,7 @@ local function load_mini_starter()
     local stats = require("lazy").stats()
     local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
     local menu_clue = "Press space for the menu"
-    local lazy_report = string.format("Neovim loaded %s/%s plugins in %sms", stats.loaded, stats.count, ms)
+    local lazy_report = string.format("⚡ Neovim loaded %s/%s plugins in %sms", stats.loaded, stats.count, ms)
     return string.format("%s\n%s", lazy_report, menu_clue)
   end)
 end
