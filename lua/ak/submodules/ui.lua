@@ -5,12 +5,12 @@
 local Util = require("ak.util")
 local add, later = vim.cmd.packadd, Util.submodules.later
 local later_only = Util.submodules.later_only
-local dashboard_now = Util.opened_without_arguments()
 
 vim.o.statusline = " " -- wait till statusline plugin is loaded
-if dashboard_now then
+
+if Util.opened_without_arguments() then -- dashboard loads on UIEnter...
   add("dashboard-nvim")
-  require("ak.config.ui.dashboard")
+  require("ak.config.ui.dashboard").setup({}, function() return { "Press space for the menu" } end)
 end
 
 later(function()

@@ -1,90 +1,88 @@
-local has_lazy, lazy = pcall(require, "lazy")
-local opts = {
-  theme = "doom",
-  hide = {
-    -- this is taken care of by lualine
-    -- enabling this messes up the actual laststatus setting after loading a file
-    statusline = false,
-  },
-  config = {
-    center = {
-      {
-        action = "Telescope git_files show_untracked=true",
-        desc = " Gitfiles     ( space space )",
-        icon = " ",
-        key = "f",
-      },
-      {
-        action = "Telescope find_files",
-        desc = " Files        ( space f f )",
-        icon = " ",
-        key = "F",
-      },
-      {
-        action = "Telescope oldfiles",
-        desc = " Recent       ( space r )",
-        icon = " ",
-        key = "r",
-      },
-      {
-        action = "Telescope live_grep",
-        desc = " Text         ( space e )",
-        icon = " ",
-        key = "e",
-      },
-      {
-        action = "lua vim.api.nvim_input('mk')",
-        desc = " Oil          ( mk )",
-        icon = " ",
-        key = "o",
-      },
-      -- {
-      --   action = 'lua require("persistence").load()',
-      --   desc = " Restore Session",
-      --   icon = " ",
-      --   key = "s",
-      -- },
-      {
-        action = "qa",
-        desc = " Quit",
-        icon = " ",
-        key = "q",
+local M = {}
+
+local function make_header()
+  local versioninfo = vim.version() or {}
+  local major = versioninfo.major or ""
+  local minor = versioninfo.minor or ""
+  local patch = versioninfo.patch or ""
+  local prerelease = versioninfo.api_prerelease and "-dev" or ""
+
+  local header = vim.split(string.rep("\n", 10), "\n")
+  header[8] = string.format("NVIM v%s.%s.%s%s", major, minor, patch, prerelease)
+  return header
+end
+
+local function format_center(opts)
+  for _, button in ipairs(opts.config.center) do
+    button.desc = button.desc .. string.rep(" ", 43 - #button.desc)
+    button.key_format = "  %s"
+  end
+end
+
+local function get_opts()
+  local opts = {
+    theme = "doom",
+    hide = { statusline = false },
+    config = {
+      header = make_header(),
+      center = {
+        {
+          action = "Telescope git_files show_untracked=true",
+          desc = " Gitfiles     ( space space )",
+          icon = " ",
+          key = "f",
+        },
+        {
+          action = "Telescope find_files",
+          desc = " Files        ( space f f )",
+          icon = " ",
+          key = "F",
+        },
+        {
+          action = "Telescope oldfiles",
+          desc = " Recent       ( space r )",
+          icon = " ",
+          key = "r",
+        },
+        {
+          action = "Telescope live_grep",
+          desc = " Text         ( space e )",
+          icon = " ",
+          key = "e",
+        },
+        {
+          action = "lua vim.api.nvim_input('mk')",
+          desc = " Oil          ( mk )",
+          icon = " ",
+          key = "o",
+        },
+        -- {
+        --   action = 'lua require("persistence").load()',
+        --   desc = " Restore Session",
+        --   icon = " ",
+        --   key = "s",
+        -- },
+        {
+          action = "qa",
+          desc = " Quit",
+          icon = " ",
+          key = "q",
+        },
       },
     },
-  },
-}
-if has_lazy then
-  table.insert(opts.config.center, {
-    action = "Lazy",
-    desc = " Lazy",
-    icon = "󰒲 ",
-    key = "l",
-  })
-  opts.config.footer = function()
-    local stats = lazy.stats()
-    local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
-    return { "⚡ Neovim loaded " .. stats.loaded .. "/" .. stats.count .. " plugins in " .. ms .. "ms" }
-  end
-else
-  opts.config.footer = function() return { "Press space for the menu" } end
+  }
+
+  return opts
 end
 
-for _, button in ipairs(opts.config.center) do
-  button.desc = button.desc .. string.rep(" ", 43 - #button.desc)
-  button.key_format = "  %s"
+function M.setup(extra_center, footer_cb)
+  local opts = get_opts()
+
+  vim.list_extend(opts.config.center, extra_center or {})
+  format_center(opts)
+
+  opts.config.footer = footer_cb -- important: evaluated on UIEnter
+  require("dashboard").setup(opts)
 end
 
-local versioninfo = vim.version() or {}
-local major = versioninfo.major or ""
-local minor = versioninfo.minor or ""
-local patch = versioninfo.patch or ""
-local prerelease = versioninfo.api_prerelease and "-dev" or ""
-local version = string.format("NVIM v%s.%s.%s%s", major, minor, patch, prerelease)
-local logo = [[ ]]
-
-logo = string.rep("\n", 8) .. logo .. "\n\n"
-local header = vim.split(logo, "\n")
-header[8] = version
-opts.config.header = header
-
-require("dashboard").setup(opts)
+return M

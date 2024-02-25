@@ -8,10 +8,24 @@ local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 local register = Util.deps.register
 
 vim.o.statusline = " " -- wait till statusline plugin is loaded
+
 now(function()
-  if Util.opened_without_arguments() then
+  if Util.opened_without_arguments() then -- dashboard loads on UIEnter...
     add("nvimdev/dashboard-nvim")
-    require("ak.config.ui.dashboard")
+    require("ak.config.ui.dashboard").setup({
+      {
+        action = "DepsUpdate",
+        desc = " Update",
+        icon = "",
+        key = "u",
+      },
+      {
+        action = "DepsSnapSave",
+        desc = " SnapSave",
+        icon = "",
+        key = "U",
+      },
+    }, function() return { "Press space for the menu" } end)
   else
     later(function() register("nvimdev/dashboard-nvim") end)
   end
