@@ -8,10 +8,6 @@ My *personal development environment* for Neovim
 
 ### Structure
 
-> [!NOTE]
-> I removed `git submodules` in favor of [mini.deps].
-> The [with_submodules] tag references the version containing `git submodules`.
-
 - `init`: Defers to `ak.init`. Uses `:h vim.loader`.
 - `ak.init`: Starts with either [mini.deps] or [lazy.nvim].
 - [ak.boot]:
@@ -23,6 +19,10 @@ My *personal development environment* for Neovim
 color-schemes and plugins.
 
 - [ak.util]: Shared code.
+
+> [!NOTE]
+> I removed `git submodules` in favor of [mini.deps].
+> The [with_submodules] tag references the version containing `git submodules`.
 
 ### Grouping
 
