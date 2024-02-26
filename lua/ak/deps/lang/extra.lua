@@ -69,5 +69,5 @@ local langs = {
   sql,
 }
 for _, lang in ipairs(langs) do
-  later(lang)
+  now(lang)
 end

@@ -9,13 +9,12 @@ My *personal development environment* for Neovim
 ### Structure
 
 > [!NOTE]
-> `git submodules` has been replaced with [mini.deps].
-> The config containing `git submodules`
-> can be found under the [with_submodules] tag
+> I removed `git submodules` in favor of [mini.deps].
+> The [with_submodules] tag references the version containing `git submodules`.
 
 - `init`: Defers to `ak.init`. Uses `:h vim.loader`.
 - `ak.init`: Starts with either [mini.deps] or [lazy.nvim].
-- [ak.boot]
+- [ak.boot]:
 
     1. `deps`: Uses [mini.deps] and the units in [ak.deps] to boot.
     2. `lazy`: Uses [lazy.nvim] and the units in [ak.lazy] to boot.
