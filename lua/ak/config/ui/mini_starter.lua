@@ -42,37 +42,37 @@ local function make_items()
   -- - Function: should return one of these three categories.
   -- - Array: elements of these three types (i.e. item, array, function).
   -- If `nil` (default), default items will be used (see |mini.starter|).
+  local section = "Navigation"
   return {
     {
       action = "Telescope oldfiles",
-      name = "1 Recent ( space r )",
-      section = "Navigation",
+      name = "Recent ( space r )",
+      section = section,
     },
     {
       action = "Oil",
-      name = "2 Oil ( mk )",
-      section = "Navigation",
+      name = "Oil ( mk )",
+      section = section,
     },
-
-    {
+    { -- The "g" query is not working in combination with mini.clue
       action = "Telescope git_files show_untracked=true",
-      name = "3 Gitfiles ( space space )",
-      section = "Navigation",
+      name = "1 Gitfiles ( space space )",
+      section = section,
     },
     {
       action = "Telescope find_files",
-      name = "4 Files ( space f f )",
-      section = "Navigation",
+      name = "2 Files ( space f f )",
+      section = section,
     },
     {
       action = "Telescope live_grep",
-      name = "5 Text ( space e )",
-      section = "Navigation",
+      name = "Text ( space e )",
+      section = section,
     },
     {
       action = "qa",
       name = "Quit",
-      section = "Navigation",
+      section = section,
     },
   }
 end
@@ -81,28 +81,28 @@ local function make_content_hooks()
   -- Array  of functions to be applied consecutively to initial content.
   -- Each function should take and return content for 'Starter' buffer (see
   -- |mini.starter| and |MiniStarter.get_content()| for more details).
-  return nil --
+  return nil -- the default
 end
 
 local function get_opts()
   local config = {
-    -- Whether to open starter buffer on VimEnter. Not opened if Neovim was
-    -- started with intent to show something else.
+    -- Whether to open starter buffer conditionally on VimEnter.
     autoopen = false, -- default true
     -- Whether to evaluate action of single active item
     evaluate_single = true, -- default false
 
     items = make_items(),
     header = make_header(),
-    footer = nil,
+    footer = nil, -- set later
     content_hooks = make_content_hooks(),
 
     -- Characters to update query. Each character will have special buffer
     -- mapping overriding your global ones. Be careful to not add `:` as it
     -- allows you to go into command mode.
-    query_updaters = "lqsu12345",
+    query_updaters = "eloqrstu12",
+
     -- Whether to disable showing non-error feedback
-    silent = false, -- default false
+    -- silent = false, -- default false
   }
   return config
 end
