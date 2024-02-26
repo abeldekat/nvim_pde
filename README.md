@@ -8,6 +8,11 @@ My *personal development environment* for Neovim
 
 ### Structure
 
+> [!NOTE]
+> `git submodules` has been replaced with [mini.deps].
+> The config containing `git submodules`
+> can be found under the [with_submodules] tag
+
 - `init`: Defers to `ak.init`. Uses `:h vim.loader`.
 - `ak.init`: Starts with either [mini.deps] or [lazy.nvim].
 - [ak.boot]
@@ -234,3 +239,4 @@ This repo uses code and ideas from the following repositories:
 [leader uu]: lua/ak/util/color.lua
 [leader a]: lua/ak/util/color.lua
 [lazy methods]: lua/ak/util/defer.lua
+[with_submodules]: https://github.com/abeldekat/nvim_pde/tree/with_submodules
