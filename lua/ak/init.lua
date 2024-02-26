@@ -12,9 +12,7 @@
 return function(opts)
   local plugin_manager = vim.env.AK_BOOT
 
-  if plugin_manager == "submodules" then
-    require("ak.boot.submodules")(opts)
-  elseif plugin_manager == "lazy" then
+  if plugin_manager == "lazy" then
     require("ak.boot.lazy")(opts)
   else
     require("ak.boot.deps")(opts)

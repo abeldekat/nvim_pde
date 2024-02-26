@@ -1,23 +1,79 @@
-.DEFAULT_GOAL = init
+.DEFAULT_GOAL = has
 
 #------------------ internal
 
-# Build the plugins if needed
-provision:
-	nvim --headless -u init_provision.lua
+#-- if not set, default to nvim
+NVIM_APPNAME?=nvim
 
-# Initialize submodules and clone to the versions saved in this repo
-# Also expand inner submodules(ie LuaSnip)
-update:
-	git submodule update --init --filter=blob:none --progress --recursive
+CACHE=~/.cache/${NVIM_APPNAME}
+DATA=~/.local/share/${NVIM_APPNAME}
+STATE=~/.local/state/${NVIM_APPNAME}
+DEPS_DATA=~/.local/share/${NVIM_APPNAME}/site/pack/deps
+DEPS_BACKUP=~/.local/share/${NVIM_APPNAME}/deps_bak
+LAZY_DATA=~/.local/share/${NVIM_APPNAME}/lazy
+LAZY_BACKUP=~/.local/share/${NVIM_APPNAME}/lazy_bak
 
-# Update to the latest versions of the remotes
-upgrade:
-	git submodule update --remote --init --filter=blob:none --progress
-	git add .
+clean_cache:
+	@if [ -d ${CACHE} ]; then \
+		rm -rf ${CACHE}; \
+		echo "clean cache done"; \
+	fi
+
+
+backup_lazy:
+	@if [ -d ${LAZY_DATA} ]; then \
+		mv ${LAZY_DATA} ${LAZY_BACKUP}; \
+		echo "backup lazy done"; \
+	fi
+
+restore_lazy:
+	@if [ -d ${LAZY_BACKUP} ]; then \
+		mv ${LAZY_BACKUP} ${LAZY_DATA}; \
+		echo "restore lazy done"; \
+	fi
+
+backup_deps:
+	@if [ -d ${DEPS_DATA} ]; then \
+		mv ${DEPS_DATA} ${DEPS_BACKUP}; \
+		echo "backup deps done"; \
+	fi
+
+restore_deps:
+	@if [ -d ${DEPS_BACKUP} ]; then \
+		mv ${DEPS_BACKUP} ${DEPS_DATA}; \
+		echo "restore deps done"; \
+	fi
 
 #------------------  public
 
-init: update provision
+clean: clean_cache
+	@rm -rf ${DATA} ${STATE}
+	echo "clean done";
 
-sync: upgrade update provision
+#----------------- Backup/restore
+has:
+	@echo "--> List data dir:"
+	@ls ${DATA}
+	@echo ""
+	@echo "--> List pack dir:"
+	@ls ${DATA}/site/pack
+	@echo ""
+	@if [ -d ${DEPS_DATA} ]; then \
+		echo "--> deps installed <--"; \
+		echo "--> # opt plugins"; \
+		ls ${DEPS_DATA}/opt | wc -l; \
+		echo "--> # start plugins"; \
+		ls ${DEPS_DATA}/start | wc -l; \
+	  echo ""; \
+	fi
+	@if [ -d ${LAZY_DATA} ]; then \
+		echo "--> lazy installed <--"; \
+		echo "--> #plugins"; \
+		ls ${LAZY_DATA} | wc -l; \
+	fi
+
+deps_only: clean_cache backup_lazy restore_deps has
+
+lazy_only: clean_cache backup_deps restore_lazy has
+
+use_both: clean_cache restore_deps restore_lazy has

@@ -28,7 +28,7 @@ end)
 
 later(function()
   --          ╭─────────────────────────────────────────────────────────╮
-  --          │       Mini.notify is used in ak.submodules.start        │
+  --          │       Mini.notify is used in ak.deps.start              │
   --          ╰─────────────────────────────────────────────────────────╯
   require("ak.config.ui.mini_statusline")
 

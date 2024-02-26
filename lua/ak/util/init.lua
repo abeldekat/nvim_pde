@@ -3,7 +3,6 @@
 ---@field defer ak.util.defer
 ---@field deps ak.util.deps
 ---@field lsp ak.util.lsp
----@field submodules ak.util.submodules
 ---@field toggle ak.util.toggle
 ---@field ui ak.util.ui
 local M = {}
@@ -11,7 +10,7 @@ local M = {}
 setmetatable(M, {
   __index = function(t, k)
     ---@diagnostic disable-next-line: no-unknown
-    t[k] = require("ak.util." .. k) -- implemented in submodule
+    t[k] = require("ak.util." .. k)
     return t[k]
   end,
 })

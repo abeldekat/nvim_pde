@@ -34,7 +34,6 @@ end
 --          ╰─────────────────────────────────────────────────────────╯
 return function(_) -- opts
   -- Note: lazy.nvim removes the packpath...
-
   local lazypath = clone("folke", "lazy.nvim")
   vim.opt.rtp:prepend(vim.env.LAZY or lazypath)
 

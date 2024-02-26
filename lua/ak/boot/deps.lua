@@ -45,15 +45,6 @@ local modules = {
 }
 
 return function(_) -- opts
-  --          ╭─────────────────────────────────────────────────────────╮
-  --          │     Multi-boot: The packpath should not contain ie      │
-  --          │                     ~/.config/nvim                      │
-  --          │  that location contains the plugins for ak.submodules   │
-  --          ╰─────────────────────────────────────────────────────────╯
-  local to_remove_from_pp = vim.fn.stdpath("config")
-  vim.opt.pp:remove(to_remove_from_pp)
-  vim.opt.pp:remove(to_remove_from_pp .. "/after")
-
   setup_performance()
   local is_initial_install, path_package = clone()
 

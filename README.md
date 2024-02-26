@@ -9,12 +9,11 @@ My *personal development environment* for Neovim
 ### Structure
 
 - `init`: Defers to `ak.init`. Uses `:h vim.loader`.
-- `ak.init`: Starts with either [mini.deps], git [submodules] or [lazy.nvim].
+- `ak.init`: Starts with either [mini.deps] or [lazy.nvim].
 - [ak.boot]
 
     1. `deps`: Uses [mini.deps] and the units in [ak.deps] to boot.
-    2. `submodules`: Uses the units in [ak.submodules] to boot.
-    3. `lazy`: Uses [lazy.nvim] and the units in [ak.lazy] to boot.
+    2. `lazy`: Uses [lazy.nvim] and the units in [ak.lazy] to boot.
 
 - [ak.config]: Contains all setup for options, key-mappings, auto-commands,
 color-schemes and plugins.
@@ -23,13 +22,12 @@ color-schemes and plugins.
 
 ### Grouping
 
-Modules `ak.deps`, `ak.submodules` and `ak.lazy` use the same grouping
+Modules `ak.deps` and `ak.lazy` use the same grouping
 for clusters of plugins, making it easy to compare the code.
 
 For example, when configuring the loading of `harpoon`:
 
 - `ak.deps.editor`
-- `ak.submodules.editor`
 - `ak.lazy.editor`
 
 Harpoon's config:
@@ -39,7 +37,6 @@ Harpoon's config:
 The plugin can be found in:
 
 - `~/.local/share/ak/site/pack/deps/opt` using [mini.deps]
-- `~/.config/ak/pack/editor_ak/opt` using submodules
 - `~/.local/share/ak/lazy` using [lazy.nvim]
 
 ## Install
@@ -48,17 +45,13 @@ The plugin can be found in:
  >
  > Always review the code before installing a configuration.
 
-Clone the repository and install the plugins:
+Clone the repository:
 
 ```sh
 git clone https://github.com/abeldekat/nvim_pde ~/.config/ak
-
-# Only when using submodules:
-cd ~/.config/ak
-NVIM_APPNAME=ak make
 ```
 
-Open Neovim with this config:
+Open Neovim with this config, installing the plugins:
 
 ```sh
 # The default uses [mini.deps].
@@ -81,7 +74,6 @@ Aliases are convenient:
 
 ```sh
 alias ak="NVIM_APPNAME=ak nvim" # using mini.deps
-alias aks="AK_BOOT=submodules NVIM_APPNAME=ak nvim" # using git submodules
 alias akl="AK_BOOT=lazy NVIM_APPNAME=ak nvim" # using lazy.nvim
 ```
 
@@ -92,7 +84,6 @@ Measured by starting the editor without arguments.
 Invoke `:StartupTime` or press `<leader>ms`.
 Repeat a couple of times.
 
-- submodules: Around 44ms
 - [mini.deps]: Around 45ms
 - [lazy.nvim]: Around 46ms
 
@@ -133,37 +124,10 @@ An important question to be answered when lazy-loading:
 How often is the plugin needed when opening Neovim?
 
 The [lazy.nvim] part of this config only uses `VeryLazy`, with exceptions.
-The [submodules] part uses the `later()` mechanism copied from [mini.deps].
-Both [mini.deps] and [submodules] use two extra [lazy methods]:
+The [mini.deps] part uses two extra [lazy methods]:
 
 - `on_events`
 - `on_keys`
-
-## Packpath
-
-In order to use [mini.deps] and submodules in the same nvim installation,
-the packpath is modified in both `ak.boot.submodules` and `ak.boot.deps`.
-This is not needed for [lazy.nvim], because `lazy` empties the packpath.
-
-### Submodule packpath
-
-```lua
-  -- The packpath should not contain ie ~/.local/share/nvim/site
-  -- that location contains the plugins for ak.deps
-  local to_remove_from_pp = vim.fn.stdpath("data") .. "/site"
-  vim.opt.pp:remove(to_remove_from_pp)
-  vim.opt.pp:remove(to_remove_from_pp .. "/after")
-```
-
-### Deps packpath
-
-```lua
-  -- The packpath should not contain ie ~/.config/nvim
-  -- that location contains the plugins for ak.submodules
-  local to_remove_from_pp = vim.fn.stdpath("config")
-  vim.opt.pp:remove(to_remove_from_pp)
-  vim.opt.pp:remove(to_remove_from_pp .. "/after")
-```
 
 ## Workflow
 
@@ -230,38 +194,6 @@ Ignoring changes to that file:
 git update-index --assume-unchanged lua/ak/colors.lua
 ```
 
-## Submodules
-
-Sync plugins to the latest remote versions:
-
-```sh
-cd ~/.config/ak
-
-# make sure the following git settings are applied, local or global:
-git config diff.submodule log
-git config status.submoduleSummary true
-
-NVIM_APPNAME=ak make sync
-
-# Manually:
-# git status: Inspect the updates, revert or commit
-```
-
-Remove a plugin:
-
-```sh
-cd ~/.config/ak
-git rm pack/colors_ak/opt/some_color
-rm -rf .git/modules/colors_ak/some_color
-```
-
-Resources:
-
-- `:h packages`
-- [medium](https://medium.com/@porteneuve/mastering-git-submodules-34c65e940407)
-- [reddit](https://www.reddit.com/r/neovim/comments/15b1gco/what_plugin_manager_are_you_currently_using/)
-- [blog](https://hiphish.github.io/blog/2021/12/05/managing-vim-plugins-without-plugin-manager/)
-
 ## Environment
 
 [tmux](https://github.com/abeldekat/tmux)
@@ -288,7 +220,6 @@ This repo uses code and ideas from the following repositories:
 
 [lazy.nvim]: https://github.com/folke/lazy.nvim
 [mini.deps]: https://github.com/echasnovski/mini.deps
-[submodules]: #submodules
 [peek.nvim]: https://github.com/toppair/peek.nvim
 [deno]: https://deno.land
 [tmuxp]: https://github.com/tmux-python/tmuxp
@@ -296,7 +227,6 @@ This repo uses code and ideas from the following repositories:
 [tmux-sessionizer]: https://github.com/abeldekat/scripts/blob/main/tmux-sessionizer
 [telescope]: https://github.com/LazyVim/LazyVim/blob/a50f92f7550fb6e9f21c0852e6cb190e6fcd50f5/lua/lazyvim/plugins/editor.lua#L135
 [ak.boot]: lua/ak/boot
-[ak.submodules]: lua/ak/submodules
 [ak.deps]: lua/ak/deps
 [ak.lazy]: lua/ak/lazy
 [ak.config]: lua/ak/config

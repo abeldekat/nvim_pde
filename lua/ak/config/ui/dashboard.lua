@@ -28,14 +28,6 @@
 -- end)
 
 --          ╭─────────────────────────────────────────────────────────╮
---          │                    ak.submodules.ui:                    │
---          ╰─────────────────────────────────────────────────────────╯
--- if Util.opened_without_arguments() then -- dashboard loads on UIEnter...
---   add("dashboard-nvim")
---   require("ak.config.ui.dashboard").setup({}, function() return { "Press space for the menu" } end)
--- end
-
---          ╭─────────────────────────────────────────────────────────╮
 --          │                       ak.lazy.ui:                       │
 --          ╰─────────────────────────────────────────────────────────╯
 -- {
