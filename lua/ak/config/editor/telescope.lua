@@ -133,7 +133,7 @@ local function keys()
   map(
     "<leader>o",
     function() builtin.buffers({ sort_mru = true, sort_lastused = true }) end,
-    { desc = "Opened buffers" }
+    { desc = "Other buffers" }
   )
   map("<leader>e", function() builtin.live_grep(themes.get_ivy({})) end, { desc = "Grep" })
   map("<leader>r", function() builtin.oldfiles() end, { desc = "Recent" })

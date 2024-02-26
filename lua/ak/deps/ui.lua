@@ -22,7 +22,7 @@ now(function()
         name = "SnapSave",
         section = "Deps",
       },
-    }, function() return "Press space for the menu" end)
+    }, function() return "  Press space for the menu" end)
   end
 end)
 
