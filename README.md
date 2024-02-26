@@ -6,6 +6,10 @@ My *personal development environment* for Neovim
 
 <https://github.com/abeldekat/nvim_pde/assets/58370433/30630481-4b33-44c4-bdb8-825e21144c52>
 
+[!NOTE]
+I removed `git submodules` in favor of [mini.deps].
+Tag [with_submodules] references the version containing `git submodules`.
+
 ### Structure
 
 - `init`: Defers to `ak.init`. Uses `:h vim.loader`.
@@ -17,12 +21,7 @@ My *personal development environment* for Neovim
 
 - [ak.config]: Contains all setup for options, key-mappings, auto-commands,
 color-schemes and plugins.
-
 - [ak.util]: Shared code.
-
-> [!NOTE]
-> I removed `git submodules` in favor of [mini.deps].
-> The [with_submodules] tag references the version containing `git submodules`.
 
 ### Grouping
 
@@ -182,7 +181,7 @@ Window navigation:
   - mode change
   - diagnostics
   - macro recording
-- `cmdheight 0`, no pop-ups
+- `cmdheight 0`
 - many color-schemes
 
 Change color-schemes:
