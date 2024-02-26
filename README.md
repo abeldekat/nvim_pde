@@ -6,9 +6,9 @@ My *personal development environment* for Neovim
 
 <https://github.com/abeldekat/nvim_pde/assets/58370433/30630481-4b33-44c4-bdb8-825e21144c52>
 
-[!NOTE]
-I removed `git submodules` in favor of [mini.deps].
-Tag [with_submodules] references the version containing `git submodules`.
+> [!NOTE]
+> I removed `git submodules` in favor of [mini.deps].
+> Tag [with_submodules] references the version containing `git submodules`.
 
 ### Structure
 
