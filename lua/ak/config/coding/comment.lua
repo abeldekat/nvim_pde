@@ -1,3 +1,24 @@
+--          ╭─────────────────────────────────────────────────────────╮
+--          │          DEPRECATED in favor of mini.comment            │
+--          ╰─────────────────────────────────────────────────────────╯
+
+--          ╭─────────────────────────────────────────────────────────╮
+--          │                        lazy.nvim                        │
+--          ╰─────────────────────────────────────────────────────────╯
+-- {
+--   "numToStr/Comment.nvim",
+--   event = "VeryLazy",
+--   dependencies = { "JoosepAlviste/nvim-ts-context-commentstring" },
+--   config = function() require("ak.config.coding.comment") end,
+-- },
+
+--          ╭─────────────────────────────────────────────────────────╮
+--          │                        mini.deps                        │
+--          ╰─────────────────────────────────────────────────────────╯
+
+-- add({ source = "numToStr/Comment.nvim", depends = { "JoosepAlviste/nvim-ts-context-commentstring" } })
+-- require("ak.config.coding.comment")
+
 -- the plugin itself creates the gc and gb mappings
 
 ---@diagnostic disable-next-line: missing-fields

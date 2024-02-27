@@ -1,5 +1,4 @@
 return {
-  ["Comment.nvim"] = "0236521ea582747b58869cb72f70ccfa967d2e89",
   LuaSnip = "f3b3d3446bcbfa62d638b1903ff00a78b2b730a1",
   ["SchemaStore.nvim"] = "a93078f016d3216f4ab4e4c65306b65212314d8d",
   ["aerial.nvim"] = "3748e87a316a68754341cdffcef44fee61dee51c",
@@ -59,7 +58,6 @@ return {
   ["nvim-treesitter-context"] = "b8d1ffe58a88e0356da56b167373e89c4579ce15",
   ["nvim-treesitter-textobjects"] = "7f00d94543f1fd37cab2afa2e9a6cd54e1c6b9ef",
   ["nvim-ts-autotag"] = "531f48334c422222aebc888fd36e7d109cb354cd",
-  ["nvim-ts-context-commentstring"] = "7ab799a9792f7cf3883cf28c6a00ad431f3d382a",
   ["nvim-web-devicons"] = "0bb67ef952ea3eb7b1bac9c011281471d99a27bc",
   ["oil.nvim"] = "132b4ea0740c417b9d717411cab4cf187e1fd095",
   ["peek.nvim"] = "c6ab252ff874e1597e27f865dcfc68b15cae0cff",

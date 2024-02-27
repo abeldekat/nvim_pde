@@ -38,10 +38,8 @@ later(function()
   add("kylechui/nvim-surround")
   require("ak.config.coding.surround")
 
+  require("ak.config.coding.mini_comment")
   require("ak.config.coding.mini_operators")
-
-  add({ source = "numToStr/Comment.nvim", depends = { "JoosepAlviste/nvim-ts-context-commentstring" } })
-  require("ak.config.coding.comment")
 
   add("monaqa/dial.nvim")
   require("ak.config.coding.dial")

@@ -40,17 +40,11 @@ return {
     config = function()
       require("ak.config.coding.surround")
       --          ╭─────────────────────────────────────────────────────────╮
-      --          │  Efficiency: Also setup startup-plugin mini.operators   │
+      --          │           Efficiency: Also setup mini plugins           │
       --          ╰─────────────────────────────────────────────────────────╯
+      require("ak.config.coding.mini_comment")
       require("ak.config.coding.mini_operators")
     end,
-  },
-
-  {
-    "numToStr/Comment.nvim",
-    event = "VeryLazy",
-    dependencies = { "JoosepAlviste/nvim-ts-context-commentstring" },
-    config = function() require("ak.config.coding.comment") end,
   },
 
   {
