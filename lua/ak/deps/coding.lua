@@ -35,17 +35,16 @@ later(function()
   })
   require("ak.config.coding.LuaSnip")
 
+  add("kylechui/nvim-surround")
+  require("ak.config.coding.surround")
+
+  require("ak.config.coding.mini_operators")
+
   add({ source = "numToStr/Comment.nvim", depends = { "JoosepAlviste/nvim-ts-context-commentstring" } })
   require("ak.config.coding.comment")
 
   add("monaqa/dial.nvim")
   require("ak.config.coding.dial")
-
-  add("gbprod/substitute.nvim")
-  require("ak.config.coding.substitute")
-
-  add("kylechui/nvim-surround")
-  require("ak.config.coding.surround")
 
   register("LudoPinelli/comment-box.nvim")
   Util.defer.on_keys(function()

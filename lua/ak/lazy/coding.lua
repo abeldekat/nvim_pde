@@ -34,22 +34,16 @@ return {
   -- ── verylazy ──────────────────────────────────────────────────────────
 
   {
-    "monaqa/dial.nvim",
-    event = "VeryLazy",
-    config = function() require("ak.config.coding.dial") end,
-  },
-
-  {
-    "gbprod/substitute.nvim",
-    event = "VeryLazy",
-    config = function() require("ak.config.coding.substitute") end,
-  },
-
-  {
     "kylechui/nvim-surround",
     version = "*",
     event = "VeryLazy",
-    config = function() require("ak.config.coding.surround") end,
+    config = function()
+      require("ak.config.coding.surround")
+      --          ╭─────────────────────────────────────────────────────────╮
+      --          │  Efficiency: Also setup startup-plugin mini.operators   │
+      --          ╰─────────────────────────────────────────────────────────╯
+      require("ak.config.coding.mini_operators")
+    end,
   },
 
   {
@@ -57,6 +51,12 @@ return {
     event = "VeryLazy",
     dependencies = { "JoosepAlviste/nvim-ts-context-commentstring" },
     config = function() require("ak.config.coding.comment") end,
+  },
+
+  {
+    "monaqa/dial.nvim",
+    event = "VeryLazy",
+    config = function() require("ak.config.coding.dial") end,
   },
 
   -- ── on-demand ─────────────────────────────────────────────────────────
