@@ -101,6 +101,11 @@ local function get_opts()
         },
       },
     },
+    extensions = {
+      ["ui-select"] = {
+        require("telescope.themes").get_dropdown(),
+      },
+    },
   }
 
   if Util.has("flash.nvim") then
@@ -209,6 +214,7 @@ end
 --          ╰─────────────────────────────────────────────────────────╯
 local function extensions()
   require("telescope").load_extension("fzf")
+  require("telescope").load_extension("ui-select")
 
   -- ── alternate ─────────────────────────────────────────────────────────
 

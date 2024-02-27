@@ -48,6 +48,7 @@ return {
     "nvim-telescope/telescope.nvim",
     event = "VeryLazy",
     dependencies = { -- extensions: Also uses flash!
+      "nvim-telescope/telescope-ui-select.nvim", -- replacing dressing.nvim
       {
         "nvim-telescope/telescope-fzf-native.nvim",
         build = "make",

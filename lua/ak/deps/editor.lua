@@ -45,6 +45,7 @@ later(function()
   add({
     source = "nvim-telescope/telescope.nvim",
     depends = {
+      "nvim-telescope/telescope-ui-select.nvim", -- replacing dressing.nvim
       "otavioschwanck/telescope-alternate.nvim",
       {
         source = "nvim-telescope/telescope-fzf-native.nvim",
