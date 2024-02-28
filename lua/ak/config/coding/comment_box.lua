@@ -13,6 +13,12 @@ map("<leader>bb", function()
   require("comment-box").ccbox() -- a centered fixed size box with the text centered
 end, { desc = "Commentbox box" }, { "n", "v" })
 
+-- Delete
+map("<leader>bd", function()
+  ---@diagnostic disable-next-line: missing-parameter
+  require("comment-box").dbox()
+end, { desc = "Commentbox delete" }, { "n", "v" })
+
 -- Line
 -- map("<leader>Cl", "<cmd>CBllline<cr>", { desc = "Commentbox titled line" }, "v") -- , { "n", "v" })
 map("<leader>bl", function()

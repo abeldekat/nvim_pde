@@ -35,9 +35,7 @@ later(function()
   })
   require("ak.config.coding.LuaSnip")
 
-  add("kylechui/nvim-surround")
-  require("ak.config.coding.surround")
-
+  require("ak.config.coding.mini_surround")
   require("ak.config.coding.mini_comment")
   require("ak.config.coding.mini_operators")
 

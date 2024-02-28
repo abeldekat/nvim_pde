@@ -1,3 +1,7 @@
+--          ╭─────────────────────────────────────────────────────────╮
+--          │        Favor this plugin over mini.indentscope          │
+--          ╰─────────────────────────────────────────────────────────╯
+
 local opts = {
   indent = {
     char = "│",
@@ -16,6 +20,7 @@ local opts = {
     filetypes = {
       "help",
       "dashboard",
+      "starter",
       "Trouble",
       "trouble",
       "lazy",

@@ -34,23 +34,18 @@ return {
   -- ── verylazy ──────────────────────────────────────────────────────────
 
   {
-    "kylechui/nvim-surround",
-    version = "*",
+    "monaqa/dial.nvim",
     event = "VeryLazy",
     config = function()
-      require("ak.config.coding.surround")
+      require("ak.config.coding.dial")
+
       --          ╭─────────────────────────────────────────────────────────╮
       --          │           Efficiency: Also setup mini plugins           │
       --          ╰─────────────────────────────────────────────────────────╯
+      require("ak.config.coding.mini_surround")
       require("ak.config.coding.mini_comment")
       require("ak.config.coding.mini_operators")
     end,
-  },
-
-  {
-    "monaqa/dial.nvim",
-    event = "VeryLazy",
-    config = function() require("ak.config.coding.dial") end,
   },
 
   -- ── on-demand ─────────────────────────────────────────────────────────
