@@ -14,10 +14,7 @@ map("<leader>bb", function()
 end, { desc = "Commentbox box" }, { "n", "v" })
 
 -- Delete
-map("<leader>bd", function()
-  ---@diagnostic disable-next-line: missing-parameter
-  require("comment-box").dbox()
-end, { desc = "Commentbox delete" }, { "n", "v" })
+map("<leader>bd", function() vim.cmd("CBd") end, { desc = "Commentbox delete" }, { "n", "v" })
 
 -- Line
 -- map("<leader>Cl", "<cmd>CBllline<cr>", { desc = "Commentbox titled line" }, "v") -- , { "n", "v" })

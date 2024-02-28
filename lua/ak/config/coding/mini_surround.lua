@@ -37,6 +37,9 @@ local function get_opts()
 
     --          ╭─────────────────────────────────────────────────────────╮
     --          │   the s is already taken by flash, and gs is too long   │
+    --          │  use m in combination with four adjacent keys: a(add)   │
+    --          │                     s(substitute),                      │
+    --          │                   d(delete), f(find)                    │
     --          ╰─────────────────────────────────────────────────────────╯
 
     -- Module mappings. Use `''` (empty string) to disable one.
@@ -46,7 +49,7 @@ local function get_opts()
       find = "mf", -- Find surrounding (to the right)
       find_left = "mF", -- Find surrounding (to the left)
       highlight = "mh", -- Highlight surrounding
-      replace = "mr", -- Replace surrounding
+      replace = "ms", -- Substitute surrounding(aka change, replace)
       update_n_lines = "mn", -- Update `n_lines`
 
       suffix_last = "l", -- Suffix to search with "prev" method
