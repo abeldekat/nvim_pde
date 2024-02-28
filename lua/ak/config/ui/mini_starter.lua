@@ -99,7 +99,7 @@ local function get_opts()
     -- Characters to update query. Each character will have special buffer
     -- mapping overriding your global ones. Be careful to not add `:` as it
     -- allows you to go into command mode.
-    query_updaters = "eloqrstu12",
+    query_updaters = "celoqrstu12",
 
     -- Whether to disable showing non-error feedback
     -- silent = false, -- default false

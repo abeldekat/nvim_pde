@@ -73,7 +73,6 @@ return {
   ["vim-dadbod"] = "acb78e078dc4fe1e997ebf006be17aa3766d2ef4",
   ["vim-dadbod-completion"] = "c920cb0ba3dff4b1b0ed373e1c0b3007dec696c2",
   ["vim-hardtime"] = "91177392e9372a1cf09a4b9b79532d2490bd405f",
-  ["vim-illuminate"] = "305bf07b919ac526deb5193280379e2f8b599926",
   ["vim-slime"] = "1feef68f237cb840a7220f83c24b6c60bf914eb5",
   ["vim-startuptime"] = "308b0088a864c4711a96e45b6734cf9294074f65"
 }

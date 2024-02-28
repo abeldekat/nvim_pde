@@ -90,14 +90,16 @@ return {
   {
     "lewis6991/gitsigns.nvim",
     event = "VeryLazy",
-    config = function() require("ak.config.editor.gitsigns") end,
+    config = function()
+      require("ak.config.editor.gitsigns")
+
+      --          ╭─────────────────────────────────────────────────────────╮
+      --          │  Efficiency: Also setup startup-plugin mini.cursorword  │
+      --          ╰─────────────────────────────────────────────────────────╯
+      require("ak.config.editor.mini_cursorword")
+    end,
   },
 
-  {
-    "RRethy/vim-illuminate",
-    event = "VeryLazy",
-    config = function() require("ak.config.editor.illuminate") end,
-  },
   {
     "folke/todo-comments.nvim",
     event = "VeryLazy",

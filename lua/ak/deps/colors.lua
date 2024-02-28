@@ -1,3 +1,13 @@
+--          ╭─────────────────────────────────────────────────────────╮
+--          │                    colors mini.nvim:                    │
+--          │   - `randomhue` - random background and foreground of   │
+--          │          the same hue with medium saturation.           │
+--          │  - `minicyan` - cyan and grey main colors with medium   │
+--          │            contrast and saturation palette.             │
+--          │ - `minischeme` - blue and yellow main colors with high  │
+--          │            contrast and saturation palette.             │
+--          ╰─────────────────────────────────────────────────────────╯
+
 local Util = require("ak.util")
 local Color = require("ak.color")
 local MiniDeps = require("mini.deps")

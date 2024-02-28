@@ -25,10 +25,10 @@ later(function()
   add("folke/flash.nvim")
   require("ak.config.editor.flash")
 
+  require("ak.config.editor.mini_clue")
+
   add("ThePrimeagen/harpoon")
   require("ak.config.editor.harpoon_one")
-
-  require("ak.config.editor.mini_clue")
 
   add("folke/trouble.nvim")
   require("ak.config.editor.trouble")
@@ -61,14 +61,13 @@ later(function()
   add("akinsho/toggleterm.nvim")
   require("ak.config.editor.toggleterm")
 
-  add("RRethy/vim-illuminate")
-  require("ak.config.editor.illuminate")
+  add("lewis6991/gitsigns.nvim")
+  require("ak.config.editor.gitsigns")
+
+  require("ak.config.editor.mini_cursorword")
 
   add("folke/todo-comments.nvim")
   require("ak.config.editor.todo_comments")
-
-  add("lewis6991/gitsigns.nvim")
-  require("ak.config.editor.gitsigns")
 
   register("f-person/git-blame.nvim")
   Util.defer.on_keys(function()

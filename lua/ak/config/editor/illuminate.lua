@@ -1,3 +1,23 @@
+--          ╭─────────────────────────────────────────────────────────╮
+--          │          DEPRECATED in favor of mini.cursorword         │
+--          ╰─────────────────────────────────────────────────────────╯
+
+--          ╭─────────────────────────────────────────────────────────╮
+--          │                          deps:                          │
+--          ╰─────────────────────────────────────────────────────────╯
+
+-- add("RRethy/vim-illuminate")
+-- require("ak.config.editor.illuminate")
+
+--          ╭─────────────────────────────────────────────────────────╮
+--          │                          lazy:                          │
+--          ╰─────────────────────────────────────────────────────────╯
+-- {
+--     "RRethy/vim-illuminate",
+--     event = "VeryLazy",
+--     config = function() require("ak.config.editor.illuminate") end,
+--   }
+
 require("illuminate").configure({
   delay = 200,
   large_file_cutoff = 2000,

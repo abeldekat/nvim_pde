@@ -12,13 +12,18 @@ now(function()
   if Util.opened_without_arguments() then -- dashboard loads on UIEnter...
     require("ak.config.ui.mini_starter").setup({
       {
-        action = "DepsUpdate",
-        name = "Update",
+        action = "DepsClean",
+        name = "Clean",
         section = "Deps",
       },
       {
         action = "DepsSnapSave",
         name = "SnapSave",
+        section = "Deps",
+      },
+      {
+        action = "DepsUpdate",
+        name = "Update",
         section = "Deps",
       },
     }, function() return "  Press space for the menu" end)
