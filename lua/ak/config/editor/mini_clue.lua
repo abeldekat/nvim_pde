@@ -4,7 +4,7 @@ local miniclue = require("mini.clue")
 local opts = {
   window = {
     config = { width = "auto" },
-    -- delay = 0,
+    delay = 2000, -- 1000
   },
 
   triggers = {

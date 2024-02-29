@@ -45,28 +45,28 @@ local function make_items()
   local section = "Navigation"
   return {
     {
-      action = "Telescope oldfiles",
-      name = "Recent ( space r )",
-      section = section,
-    },
-    {
-      action = "Oil",
-      name = "Oil ( mk )",
-      section = section,
-    },
-    { -- The "g" query is not working in combination with mini.clue
-      action = "Telescope git_files show_untracked=true",
-      name = "1 Gitfiles ( space space )",
-      section = section,
-    },
-    {
       action = "Telescope find_files",
-      name = "2 Files ( space f f )",
+      name = "Files",
       section = section,
     },
     {
       action = "Telescope live_grep",
-      name = "Text ( space e )",
+      name = "Live grep",
+      section = section,
+    },
+    {
+      action = "Telescope keymaps",
+      name = "Keymaps",
+      section = section,
+    },
+    {
+      action = "Telescope oldfiles",
+      name = "Recent files",
+      section = section,
+    },
+    {
+      action = "Oil",
+      name = "Oil(mk)",
       section = section,
     },
     {
@@ -99,7 +99,7 @@ local function get_opts()
     -- Characters to update query. Each character will have special buffer
     -- mapping overriding your global ones. Be careful to not add `:` as it
     -- allows you to go into command mode.
-    query_updaters = "celoqrstu12",
+    query_updaters = "fkloqr123",
 
     -- Whether to disable showing non-error feedback
     -- silent = false, -- default false

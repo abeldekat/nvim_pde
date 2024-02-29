@@ -45,6 +45,7 @@ return {
       require("ak.config.coding.mini_surround")
       require("ak.config.coding.mini_comment")
       require("ak.config.coding.mini_operators")
+      require("ak.config.coding.mini_move")
     end,
   },
 

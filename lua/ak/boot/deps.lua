@@ -23,6 +23,7 @@ local function clone()
     local clone_cmd = { "git", "clone", "--filter=blob:none", "https://github.com/echasnovski/mini.nvim", mini_path }
     vim.fn.system(clone_cmd)
     vim.cmd("packadd mini.nvim | helptags ALL")
+    vim.cmd('echo "Installed `mini.nvim`" | redraw')
     has_cloned = true
   end
 

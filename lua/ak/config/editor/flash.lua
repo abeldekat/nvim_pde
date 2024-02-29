@@ -1,4 +1,28 @@
 --          ╭─────────────────────────────────────────────────────────╮
+--          │               DEPRECATED in favor of leap               │
+--          ╰─────────────────────────────────────────────────────────╯
+
+--          ╭─────────────────────────────────────────────────────────╮
+--          │                          deps:                          │
+--          ╰─────────────────────────────────────────────────────────╯
+-- add("folke/flash.nvim")
+-- require("ak.config.editor.flash")
+-- add("jinh0/eyeliner.nvim")
+-- require("ak.config.editor.eyeliner")
+
+--          ╭─────────────────────────────────────────────────────────╮
+--          │                          lazy:                          │
+--          ╰─────────────────────────────────────────────────────────╯
+-- {
+--     "folke/flash.nvim",
+--     event = "VeryLazy",
+--     dependencies = "jinh0/eyeliner.nvim",
+--     config = function()
+--       require("ak.config.editor.flash")
+--     end,
+--   }
+
+--          ╭─────────────────────────────────────────────────────────╮
 --          │                   See also: telescope                   │
 --          ╰─────────────────────────────────────────────────────────╯
 
@@ -25,12 +49,6 @@ local opts = {
 
 require("flash").setup(opts)
 Util.register_referenced("flash.nvim")
-
-require("eyeliner").setup({ -- disabled flash for fFtT
-  highlight_on_key = true, -- show highlights only after keypress
-  dim = true, -- dim all other characters if set to true (recommended!)
-})
-Util.register_referenced("eyeliner.nvim")
 
 local keys = vim.keymap.set
 -- stylua: ignore start

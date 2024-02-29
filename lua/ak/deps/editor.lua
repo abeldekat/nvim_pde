@@ -21,9 +21,13 @@ end)
 -- "nvim-telescope/telescope-file-browser.nvim",
 -- "nvim-telescope/telescope-project.nvim",
 later(function()
+  add("tpope/vim-repeat")
+  add("ggandor/leap.nvim")
+  add("ggandor/leap-spooky.nvim")
+  require("ak.config.editor.leap")
+
   add("jinh0/eyeliner.nvim")
-  add("folke/flash.nvim")
-  require("ak.config.editor.flash")
+  require("ak.config.editor.eyeliner")
 
   require("ak.config.editor.mini_clue")
 

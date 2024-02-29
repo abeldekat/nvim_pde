@@ -10,13 +10,32 @@ return {
 
   -- ── verylazy ──────────────────────────────────────────────────────────
 
-  {
-    "folke/flash.nvim",
-    event = "VeryLazy",
-    dependencies = "jinh0/eyeliner.nvim",
-    config = function()
-      require("ak.config.editor.flash")
+  -- {
+  --   "folke/flash.nvim",
+  --   event = "VeryLazy",
+  --   dependencies = "jinh0/eyeliner.nvim",
+  --   config = function()
+  --     require("ak.config.editor.flash")
+  --     require("ak.config.editor.eyeliner")
+  --
+  --     --          ╭─────────────────────────────────────────────────────────╮
+  --     --          │     Efficiency: Also setup startup-plugin mini.clue     │
+  --     --          ╰─────────────────────────────────────────────────────────╯
+  --     require("ak.config.editor.mini_clue")
+  --   end,
+  -- },
 
+  {
+    "ggandor/leap.nvim",
+    event = "VeryLazy",
+    dependencies = {
+      "tpope/vim-repeat",
+      "ggandor/leap-spooky.nvim",
+      "jinh0/eyeliner.nvim",
+    },
+    config = function()
+      require("ak.config.editor.leap")
+      require("ak.config.editor.eyeliner")
       --          ╭─────────────────────────────────────────────────────────╮
       --          │     Efficiency: Also setup startup-plugin mini.clue     │
       --          ╰─────────────────────────────────────────────────────────╯

@@ -13,17 +13,17 @@ now(function()
     require("ak.config.ui.mini_starter").setup({
       {
         action = "DepsClean",
-        name = "Clean",
+        name = "1. Clean",
         section = "Deps",
       },
-      {
+      { -- the s query is not working with leap
         action = "DepsSnapSave",
-        name = "SnapSave",
+        name = "2. SnapSave",
         section = "Deps",
       },
       {
         action = "DepsUpdate",
-        name = "Update",
+        name = "3. Update",
         section = "Deps",
       },
     }, function() return "  Press space for the menu" end)

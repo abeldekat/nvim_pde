@@ -9,7 +9,7 @@ local function load_mini_starter()
   require("ak.config.ui.mini_starter").setup({
     {
       action = "Lazy",
-      name = "Lazy",
+      name = "1. Lazy",
       section = "Lazy",
     },
   }, function()
