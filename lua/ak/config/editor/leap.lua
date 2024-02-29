@@ -109,4 +109,5 @@ vim.keymap.set({ "x", "o" }, "\\", H.leap_ts)
 require("leap-spooky").setup({
   extra_text_objects = nil, -- the default
   prefix = true, -- yriw instead of yirw
+  paste_on_remote_yank = false, -- the default
 })

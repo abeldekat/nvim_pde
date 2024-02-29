@@ -29,10 +29,11 @@ later(function()
   add("jinh0/eyeliner.nvim")
   require("ak.config.editor.eyeliner")
 
-  require("ak.config.editor.mini_clue")
-
   add("ThePrimeagen/harpoon")
   require("ak.config.editor.harpoon_one")
+
+  require("ak.config.editor.mini_clue")
+  require("ak.config.editor.mini_misc")
 
   add("folke/trouble.nvim")
   require("ak.config.editor.trouble")

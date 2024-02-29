@@ -17,11 +17,6 @@ return {
   --   config = function()
   --     require("ak.config.editor.flash")
   --     require("ak.config.editor.eyeliner")
-  --
-  --     --          ╭─────────────────────────────────────────────────────────╮
-  --     --          │     Efficiency: Also setup startup-plugin mini.clue     │
-  --     --          ╰─────────────────────────────────────────────────────────╯
-  --     require("ak.config.editor.mini_clue")
   --   end,
   -- },
 
@@ -36,10 +31,6 @@ return {
     config = function()
       require("ak.config.editor.leap")
       require("ak.config.editor.eyeliner")
-      --          ╭─────────────────────────────────────────────────────────╮
-      --          │     Efficiency: Also setup startup-plugin mini.clue     │
-      --          ╰─────────────────────────────────────────────────────────╯
-      require("ak.config.editor.mini_clue")
     end,
   },
 
@@ -50,6 +41,12 @@ return {
     config = function()
       -- require("ak.config.harpoon")
       require("ak.config.editor.harpoon_one")
+
+      --          ╭─────────────────────────────────────────────────────────╮
+      --          │          Efficiency: Also setup mini plugins:           │
+      --          ╰─────────────────────────────────────────────────────────╯
+      require("ak.config.editor.mini_clue")
+      require("ak.config.editor.mini_misc") -- zoom buffer
     end,
   },
 
