@@ -15,11 +15,11 @@ local function load()
   add({
     source = "neovim/nvim-lspconfig",
     depends = {
-      "folke/neoconf.nvim",
       "folke/neodev.nvim",
       "williamboman/mason-lspconfig.nvim",
     },
   })
+  require("ak.config.lang.diagnostics")
   require("ak.config.lang.lspconfig")
 
   add("b0o/SchemaStore.nvim")

@@ -4,7 +4,6 @@ return {
     "neovim/nvim-lspconfig",
     event = "VeryLazy", -- lazyfile
     dependencies = {
-      "folke/neoconf.nvim",
       "folke/neodev.nvim",
       {
         "williamboman/mason.nvim",
@@ -14,6 +13,7 @@ return {
       "williamboman/mason-lspconfig.nvim",
     },
     config = function()
+      require("ak.config.lang.diagnostics")
       require("ak.config.lang.lspconfig")
 
       -- On VeryLazy, the lsp does not attach when directly opening a file:

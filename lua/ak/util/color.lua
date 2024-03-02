@@ -47,6 +47,7 @@ function M.telescope_custom_colors()
 
   ---@diagnostic disable-next-line: duplicate-set-field
   vim.fn.getcompletion = function()
+    ---@diagnostic disable-next-line: redundant-parameter
     return vim.tbl_filter(function(color) return not vim.tbl_contains(builtins, color) end, target("", "color"))
   end
 

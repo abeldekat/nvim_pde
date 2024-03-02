@@ -41,7 +41,6 @@ return {
   ["mason-nvim-dap.nvim"] = "3614a39aae98ccd34124b072939d6283853b3dd2",
   ["mason.nvim"] = "3b5068f0fc565f337d67a2d315d935f574848ee7",
   ["mini.nvim"] = "f24747266a047617d06605a2316aa6c071662fa2",
-  ["neoconf.nvim"] = "98980b5300e7a5e7f93e8dbf81c98cc3daa55df7",
   ["neodev.nvim"] = "84e0290f5600e8b89c0dfcafc864f45496a53400",
   neotest = "4440cc2227894c2ae9b0673a30e6cc6f1836e8c2",
   ["neotest-python"] = "2e83d2bc00acbcc1fd529dbf0a0e677cabfe6b50",
