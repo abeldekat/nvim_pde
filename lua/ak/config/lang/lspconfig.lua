@@ -55,26 +55,45 @@ function H.keys(_, buffer) -- client
 end
 
 function H.lua_ls()
-  -- Reference to LazyVim:
-  -- Enable this to enable the builtin LSP inlay hints on Neovim >= 0.10.0
-  -- Be aware that you also will need to properly configure your LSP server to
-  -- provide the inlay hints.
-  -- if opts.inlay_hints.enabled then
-  --   Util.lsp.on_attach(function(client, buffer)
-  --     if client.supports_method("textDocument/inlayHint") then
-  --       Util.toggle.inlay_hints(buffer, true)
-  --     end
-  --   end)
-  -- end
-
   return {
+    on_init = function(client) -- BUG: undefined global nvim!
+      local path = client.workspace_folders[1].name
+
+      local fs_stat = vim.loop.fs_stat
+      if fs_stat(path .. "/.luarc.json") or fs_stat(path .. "/.luarc.jsonc") then
+        return true -- opt out
+      end
+
+      local config = client.config
+      config.settings = vim.tbl_deep_extend("force", config.settings, {
+        Lua = {
+          runtime = {
+            version = "LuaJIT",
+          },
+          workspace = { -- Make the server aware of Neovim runtime files
+            checkThirdParty = false,
+            library = {
+              vim.env.VIMRUNTIME,
+              vim.env.VIMRUNTIME .. "/lua",
+              -- Depending on the usage, you might want to add additional paths here.
+              -- E.g.: For using `vim.*` functions, add vim.env.VIMRUNTIME/lua.
+              -- "${3rd}/luv/library"
+              -- "${3rd}/busted/library",
+            },
+            -- or pull in all of 'runtimepath'. NOTE: this is a lot slower
+            -- library = vim.api.nvim_get_runtime_file("", true)
+          },
+        },
+      })
+      return true
+    end,
     settings = {
       Lua = {
-        workspace = {
-          checkThirdParty = false,
-        },
         completion = {
           callSnippet = "Replace",
+        },
+        workspace = {
+          checkThirdParty = false,
         },
       },
     },
@@ -168,8 +187,6 @@ end
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                          Setup                          │
 --          ╰─────────────────────────────────────────────────────────╯
-require("neodev").setup({})
-
 Util.lsp.on_attach(function(client, buffer) -- keymaps
   H.keys(client, buffer) -- are always set regardles of capabilities
 end)

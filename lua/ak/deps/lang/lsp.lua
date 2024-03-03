@@ -15,7 +15,6 @@ local function load()
   add({
     source = "neovim/nvim-lspconfig",
     depends = {
-      "folke/neodev.nvim",
       "williamboman/mason-lspconfig.nvim",
     },
   })

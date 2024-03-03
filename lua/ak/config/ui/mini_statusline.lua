@@ -27,7 +27,7 @@ local MiniStatusline = require("mini.statusline")
 AK.setup = function()
   -- copied
   if vim.fn.has("nvim-0.10") == 1 then
-    H.get_diagnostic_count = function() return vim.diagnostic.count(0) end --
+    H.diagnostic_get_count = function() return vim.diagnostic.count(0) end --
   end
 
   H.create_diagnostic_hl() -- added diagnostics with colors
@@ -98,10 +98,10 @@ end
 -- overridden: removed lsp, added color to diagnostics
 AK.section_diagnostics = function(args) -- args
   local dont_show = MiniStatusline.is_truncated(args.trunc_width) or H.isnt_normal_buffer()
-  if dont_show then return "" end
+  if dont_show or H.diagnostic_is_disabled() then return "" end
 
   -- Construct string parts
-  local counts = H.get_diagnostic_count()
+  local counts = H.diagnostic_get_count()
   local severity, t = vim.diagnostic.severity, {}
   for _, level in ipairs(H.diagnostic_levels) do
     local n = counts[severity[level.name]] or 0
@@ -262,13 +262,14 @@ end
 H.has_no_lsp_attached = function() return (H.n_attached_lsp[vim.api.nvim_get_current_buf()] or 0) == 0 end
 
 -- copied
-H.get_diagnostic_count = function()
+H.diagnostic_get_count = function()
   local res = {}
   for _, d in ipairs(vim.diagnostic.get(0)) do
     res[d.severity] = (res[d.severity] or 0) + 1
   end
   return res
 end
+H.diagnostic_is_disabled = function() return vim.diagnostic.is_disabled(0) end
 
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                        Activate                         │

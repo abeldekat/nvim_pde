@@ -4,7 +4,6 @@ return {
     "neovim/nvim-lspconfig",
     event = "VeryLazy", -- lazyfile
     dependencies = {
-      "folke/neodev.nvim",
       {
         "williamboman/mason.nvim",
         build = ":MasonUpdate",
