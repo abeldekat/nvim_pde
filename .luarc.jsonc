@@ -1,0 +1,32 @@
+{
+  "$schema": "https://raw.githubusercontent.com/LuaLS/vscode-lua/master/setting/schema.json",
+  "runtime": {
+    "version": "LuaJIT",
+    // "path": [
+    //   "?.lua",
+    //   "?/init.lua"
+    // ],
+    // Important setting:
+    "pathStrict": true
+  },
+  "workspace": {
+    "library": [
+      // No need to append /lua:
+      "$VIMRUNTIME",
+      //
+      "${3rd}/luv/library",
+      "${3rd}/busted/library",
+      // Include some plugins for API completion.
+      //
+      "$XDG_DATA_HOME/nvim/site/pack/deps/start/mini.nvim/lua",
+      // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/conform.nvim/lua",
+      "$XDG_DATA_HOME/nvim/site/pack/deps/opt/harpoon/lua",
+      "$XDG_DATA_HOME/nvim/site/pack/deps/opt/LuaSnip/lua",
+      "$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-cmp/lua",
+      // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-lint/lua",
+      "$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-lspconfig/lua"
+      // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/telescope.nvim/lua"
+    ],
+    "checkThirdParty": false
+  }
+}
