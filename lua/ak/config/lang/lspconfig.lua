@@ -56,7 +56,7 @@ end
 
 function H.lua_ls()
   return {
-    on_init = function(client) -- BUG: undefined global nvim!
+    on_init = function(client) -- TODO: undefined global vim!
       local path = client.workspace_folders[1].name
 
       local fs_stat = vim.loop.fs_stat
@@ -74,7 +74,7 @@ function H.lua_ls()
             checkThirdParty = false,
             library = {
               vim.env.VIMRUNTIME,
-              vim.env.VIMRUNTIME .. "/lua",
+              vim.env.VIMRUNTIME .. "/lua", -- not needed?
               -- Depending on the usage, you might want to add additional paths here.
               -- E.g.: For using `vim.*` functions, add vim.env.VIMRUNTIME/lua.
               -- "${3rd}/luv/library"
@@ -95,6 +95,7 @@ function H.lua_ls()
         workspace = {
           checkThirdParty = false,
         },
+        -- diagnostics = { globals = { "vim" } }, -- should not be necessary?
       },
     },
   }
