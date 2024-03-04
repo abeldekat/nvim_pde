@@ -55,36 +55,30 @@ function H.keys(_, buffer) -- client
 end
 
 function H.lua_ls()
+  local settings = {
+    Lua = {
+      runtime = {
+        version = "LuaJIT",
+      },
+      workspace = { -- Make the server aware of Neovim runtime files
+        checkThirdParty = false,
+        library = {
+          vim.env.VIMRUNTIME,
+          "${3rd}/luv/library",
+          -- "${3rd}/busted/library",
+        },
+      },
+    },
+  }
   return {
-    on_init = function(client) -- TODO: undefined global vim!
+    on_init = function(client)
       local path = client.workspace_folders[1].name
 
       local fs_stat = vim.loop.fs_stat
       if fs_stat(path .. "/.luarc.json") or fs_stat(path .. "/.luarc.jsonc") then
         return true -- opt out
       end
-
-      local config = client.config
-      config.settings = vim.tbl_deep_extend("force", config.settings, {
-        Lua = {
-          runtime = {
-            version = "LuaJIT",
-          },
-          workspace = { -- Make the server aware of Neovim runtime files
-            checkThirdParty = false,
-            library = {
-              vim.env.VIMRUNTIME,
-              vim.env.VIMRUNTIME .. "/lua", -- not needed?
-              -- Depending on the usage, you might want to add additional paths here.
-              -- E.g.: For using `vim.*` functions, add vim.env.VIMRUNTIME/lua.
-              -- "${3rd}/luv/library"
-              -- "${3rd}/busted/library",
-            },
-            -- or pull in all of 'runtimepath'. NOTE: this is a lot slower
-            -- library = vim.api.nvim_get_runtime_file("", true)
-          },
-        },
-      })
+      client.config.settings = vim.tbl_deep_extend("force", client.config.settings, settings)
       return true
     end,
     settings = {
@@ -92,10 +86,6 @@ function H.lua_ls()
         completion = {
           callSnippet = "Replace",
         },
-        workspace = {
-          checkThirdParty = false,
-        },
-        -- diagnostics = { globals = { "vim" } }, -- should not be necessary?
       },
     },
   }
