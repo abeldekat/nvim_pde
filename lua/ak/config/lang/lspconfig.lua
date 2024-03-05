@@ -56,29 +56,28 @@ end
 
 function H.lua_ls()
   local settings = {
-    Lua = {
-      runtime = {
-        version = "LuaJIT",
-      },
-      workspace = { -- Make the server aware of Neovim runtime files
-        checkThirdParty = false,
-        library = {
-          vim.env.VIMRUNTIME,
-          "${3rd}/luv/library",
-          -- "${3rd}/busted/library",
-        },
+    runtime = {
+      version = "LuaJIT",
+    },
+    workspace = { -- Make the server aware of Neovim runtime files
+      checkThirdParty = false,
+      library = {
+        vim.env.VIMRUNTIME,
+        "${3rd}/luv/library",
+        -- "${3rd}/busted/library",
       },
     },
   }
   return {
     on_init = function(client)
       local path = client.workspace_folders[1].name
-
       local fs_stat = vim.loop.fs_stat
       if fs_stat(path .. "/.luarc.json") or fs_stat(path .. "/.luarc.jsonc") then
         return true -- opt out
       end
-      client.config.settings = vim.tbl_deep_extend("force", client.config.settings, settings)
+
+      -- neovim 0.10: one can use client.settings...
+      client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, settings)
       return true
     end,
     settings = {
