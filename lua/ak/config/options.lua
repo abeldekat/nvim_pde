@@ -29,7 +29,7 @@ opt.shiftround = true -- Round indent
 opt.shiftwidth = 2 -- Size of an indent
 opt.shortmess:append({ W = true, I = true, c = true, C = true })
 opt.showmode = false -- Dont show mode since we have a statusline
-opt.sidescrolloff = 8 -- Columns of context
+opt.sidescrolloff = 6 -- Columns of context, used to be 8
 opt.signcolumn = "yes" -- Always show the signcolumn, otherwise it would shift the text each time
 opt.smartcase = true -- Don't ignore case with capitals
 opt.smartindent = true -- Insert indents automatically
@@ -61,17 +61,11 @@ if vim.fn.has("nvim-0.10") == 1 then opt.smoothscroll = true end
 
 -- Folding
 vim.opt.foldlevel = 99
-vim.opt.foldtext = "v:lua.require'ak.util'.ui.foldtext()"
-
-vim.opt.statuscolumn = [[%!v:lua.require'ak.util'.ui.statuscolumn()]]
-
--- HACK: causes freezes on <= 0.9, so only enable on >= 0.10 for now
-if vim.fn.has("nvim-0.10") == 1 then
-  vim.opt.foldmethod = "expr"
-  vim.opt.foldexpr = "v:lua.require'ak.util'.ui.foldexpr()"
-else
-  vim.opt.foldmethod = "indent"
-end
+-- vim.opt.foldtext = "v:lua.require'ak.util'.ui.foldtext()"
+-- vim.opt.statuscolumn = [[%!v:lua.require'ak.util'.ui.statuscolumn()]]
+vim.opt.foldmethod = "expr"
+-- vim.opt.foldexpr = "v:lua.require'ak.util'.ui.foldexpr()"
+vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 
 -- Fix markdown indentation settings
 vim.g.markdown_recommended_style = 0

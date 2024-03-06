@@ -4,7 +4,6 @@
 ---@field deps ak.util.deps
 ---@field lsp ak.util.lsp
 ---@field toggle ak.util.toggle
----@field ui ak.util.ui
 local M = {}
 
 setmetatable(M, {

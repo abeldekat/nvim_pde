@@ -1,32 +1,100 @@
 {
   "$schema": "https://raw.githubusercontent.com/LuaLS/vscode-lua/master/setting/schema.json",
   "runtime": {
-    "version": "LuaJIT",
-    // "path": [
+    // "path": [ not needed
     //   "?.lua",
     //   "?/init.lua"
     // ],
-    // Important setting:
-    "pathStrict": true
+    // Faster? But:
+    // vim.treesitter does not complete:
+    // cmp does not complete because of ak.config.coding.cmp
+    "pathStrict": true,
+    "version": "LuaJIT"
   },
   "workspace": {
+    "checkThirdParty": false,
     "library": [
-      // No need to append /lua:
       "$VIMRUNTIME",
       //
       "${3rd}/luv/library",
       "${3rd}/busted/library",
       // Include some plugins for API completion.
       //
+      // --> mini cluster
       "$XDG_DATA_HOME/nvim/site/pack/deps/start/mini.nvim/lua",
-      // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/conform.nvim/lua",
+      //
+      "$XDG_DATA_HOME/nvim/site/pack/deps/opt/aerial.nvim/lua",
+      //
+      // --> color cluster: Not used
+      //
+      // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/comment-box.nvim/lua",
+      "$XDG_DATA_HOME/nvim/site/pack/deps/opt/conform.nvim/lua",
+      "$XDG_DATA_HOME/nvim/site/pack/deps/opt/dial.nvim/lua",
+      "$XDG_DATA_HOME/nvim/site/pack/deps/opt/eyeliner.nvim/lua",
+      "$XDG_DATA_HOME/nvim/site/pack/deps/opt/fidget.nvim/lua",
+      "$XDG_DATA_HOME/nvim/site/pack/deps/opt/friendly-snippets/lua",
+      // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/git-blame.nvim/lua",
+      "$XDG_DATA_HOME/nvim/site/pack/deps/opt/gitsigns.nvim/lua",
       "$XDG_DATA_HOME/nvim/site/pack/deps/opt/harpoon/lua",
+      "$XDG_DATA_HOME/nvim/site/pack/deps/opt/headlines.nvim/lua",
+      "$XDG_DATA_HOME/nvim/site/pack/deps/opt/indent-blankline.nvim/lua",
+      "$XDG_DATA_HOME/nvim/site/pack/deps/opt/leap-spooky.nvim/lua",
+      "$XDG_DATA_HOME/nvim/site/pack/deps/opt/leap.nvim/lua",
       "$XDG_DATA_HOME/nvim/site/pack/deps/opt/LuaSnip/lua",
+      // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/markdown-preview.nvim",
+      //
+      // --> mason cluster
+      "$XDG_DATA_HOME/nvim/site/pack/deps/opt/mason-lspconfig.nvim/lua",
+      "$XDG_DATA_HOME/nvim/site/pack/deps/opt/mason-nvim-dap.nvim/lua",
+      "$XDG_DATA_HOME/nvim/site/pack/deps/opt/mason.nvim/lua",
+      //
+      // // --> test cluster
+      // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/neotest/lua",
+      // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/neotest-python/lua",
+      //
+      "$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-autopairs/lua",
+      //
+      // cmp cluster(other plugins not included)
       "$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-cmp/lua",
-      // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-lint/lua",
-      "$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-lspconfig/lua"
-      // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/telescope.nvim/lua"
-    ],
-    "checkThirdParty": false
+      //
+      // // dap cluster
+      // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-dap/lua",
+      // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-dap-python/lua",
+      // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-dap-ui/lua",
+      // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-dap-virtual-text/lua",
+      //
+      "$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-lint/lua",
+      "$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-lspconfig/lua",
+      "$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-spectre/lua",
+      //
+      // treesitter cluster
+      "$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-treesitter/lua",
+      "$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-treesitter-context/lua",
+      "$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-treesitter-textobjects/lua",
+      "$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-ts-autotag/lua",
+      //
+      // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-web-devicons/lua",
+      "$XDG_DATA_HOME/nvim/site/pack/deps/opt/oil.nvim/lua",
+      "$XDG_DATA_HOME/nvim/site/pack/deps/opt/peek.nvim/lua",
+      "$XDG_DATA_HOME/nvim/site/pack/deps/opt/plenary.nvim/lua",
+      // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/SchemaStore.nvim/lua",
+      //
+      // telescope cluster
+      "$XDG_DATA_HOME/nvim/site/pack/deps/opt/telescope-alternate.nvim/lua",
+      "$XDG_DATA_HOME/nvim/site/pack/deps/opt/telescope-fzf-native.nvim/lua",
+      "$XDG_DATA_HOME/nvim/site/pack/deps/opt/telescope-ui-select.nvim/lua",
+      "$XDG_DATA_HOME/nvim/site/pack/deps/opt/telescope.nvim/lua",
+      //
+      // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/todo-comments.nvim/lua",
+      "$XDG_DATA_HOME/nvim/site/pack/deps/opt/toggleterm.nvim/lua",
+      "$XDG_DATA_HOME/nvim/site/pack/deps/opt/trouble.nvim/lua"
+      // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/venv-selector.nvim/lua",
+      // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/vim-dadbod",
+      // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/vim-dadbod-completion/lua",
+      // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/vim-hardtime",
+      // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/vim-repeat",
+      // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/vim-slime",
+      // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/vim-startuptime/lua"
+    ]
   }
 }
