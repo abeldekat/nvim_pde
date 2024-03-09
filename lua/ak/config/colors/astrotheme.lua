@@ -21,6 +21,11 @@ local function highlights(hl, c)
   hl.MiniStatuslineModeVisual = { fg = c.ui.base, bg = c.ui.purple }
   hl.MiniStatuslineModeCommand = { fg = c.ui.base, bg = c.ui.yellow }
   hl.MiniStatuslineModeOther = { fg = c.ui.base, bg = c.ui.orange }
+
+  hl.MiniHipatternsFixme = { fg = c.ui.base, bg = c.ui.red, bold = true }
+  hl.MiniHipatternsHack = { fg = c.ui.base, bg = c.ui.yellow, bold = true }
+  hl.MiniHipatternsTodo = { fg = c.ui.base, bg = c.ui.blue, bold = true }
+  hl.MiniHipatternsNote = { fg = c.ui.base, bg = c.ui.cyan, bold = true }
 end
 
 local opts = {

@@ -12,9 +12,16 @@ Utils.color.add_toggle("catppuccin*", {
 
 local opts = {
   flavour = prefer_light and "latte" or "frappe",
-  custom_highlights = function()
-    -- left and right, dynamic
-    return { MiniStatuslineModeNormal = { link = "MiniStatuslineFilename" } }
+  custom_highlights = function(colors)
+    return { -- left and right, dynamic
+      MiniStatuslineModeNormal = { link = "MiniStatuslineFilename" },
+
+      -- See "DiagnosticError" etc
+      MiniHipatternsFixme = { fg = colors.base, bg = colors.red, style = { "bold" } },
+      MiniHipatternsHack = { fg = colors.base, bg = colors.yellow, style = { "bold" } },
+      MiniHipatternsNote = { fg = colors.base, bg = colors.teal, style = { "bold" } },
+      MiniHipatternsTodo = { fg = colors.base, bg = colors.sky, style = { "bold" } },
+    }
   end,
   integrations = {
     aerial = true,

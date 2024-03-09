@@ -25,11 +25,16 @@ local opts = {
       MiniStatusLineModeVisual = { fg = c.theme.ui.bg, bg = c.theme.syn.keyword },
       MiniStatusLineModeCommand = { fg = c.theme.ui.bg, bg = c.theme.syn.operator },
       MiniStatusLineModeOther = { fg = c.theme.ui.bg, bg = c.theme.diag.ok }, -- added, same as insert
+
+      MiniHipatternsFixme = { bg = c.theme.diag.error, fg = c.theme.ui.bg, bold = true },
+      MiniHipatternsHack = { bg = c.theme.diag.warning, fg = c.theme.ui.bg, bold = true },
+      MiniHipatternsTodo = { bg = c.theme.diag.info, fg = c.theme.ui.bg, bold = true },
+      MiniHipatternsNote = { bg = c.theme.diag.hint, fg = c.theme.ui.bg, bold = true },
     }
 
-    if prefer_light then -- improve flashlabel
-      result["Substitute"] = { fg = c.theme.ui.fg_reverse, bg = c.theme.vcs.removed }
-    end
+    -- if prefer_light then -- improve flashlabel
+    --   result["Substitute"] = { fg = c.theme.ui.fg_reverse, bg = c.theme.vcs.removed }
+    -- end
     return result
   end,
 }

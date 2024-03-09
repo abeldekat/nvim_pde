@@ -31,6 +31,11 @@ local hl_config = {
   -- same as insert, the approach taken in tokyonight's lualine
   MiniStatuslineModeOther = { bg = "foam", fg = "base", current = current_nc }, -- ie terminal
   MiniStatuslineInactive = { bg = "base", fg = "muted", current = current_nc },
+
+  MiniHipatternsFixme = { bg = "love", fg = "base", bold = true, current = current_nc },
+  MiniHipatternsHack = { bg = "gold", fg = "base", bold = true, current = current_nc },
+  MiniHipatternsTodo = { bg = "foam", fg = "base", bold = true, current = current_nc },
+  MiniHipatternsNote = { bg = "iris", fg = "base", bold = true, current = current_nc },
 }
 
 --          ╭─────────────────────────────────────────────────────────╮
@@ -38,12 +43,14 @@ local hl_config = {
 --          │            see lualine.themes.rose-pine.lua             │
 --          ╰─────────────────────────────────────────────────────────╯
 
--- create the highlights for mini.statusline
+-- create the highlights for mini.statusline and mini.hlpatterns
 local function groups()
   local palette = require("rose-pine.palette")
   local result = {}
   for hl_name, config in pairs(hl_config) do
-    result[hl_name] = { bg = palette[config.bg], fg = palette[config.fg] }
+    local new_config = { bg = palette[config.bg], fg = palette[config.fg] }
+    if config.bold then new_config.bold = config.bold end
+    result[hl_name] = new_config
   end
   return result
 end
@@ -54,6 +61,7 @@ local function before_highlight(group, highlight, palette)
   if config and config.current ~= palette._nc then
     highlight.bg = palette[config.bg]
     highlight.fg = palette[config.fg]
+    if config.bold then highlight.bold = config.bold end
     config.current = palette._nc
   end
 end

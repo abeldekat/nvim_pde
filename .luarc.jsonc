@@ -18,7 +18,7 @@
       "$VIMRUNTIME/lua",
       //
       "${3rd}/luv/library",
-      // "${3rd}/busted/library",
+      "${3rd}/busted/library",
       // Include some plugins for API completion.
       //
       // --> mini cluster
@@ -84,9 +84,8 @@
       // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/telescope-alternate.nvim/lua",
       // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/telescope-fzf-native.nvim/lua",
       // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/telescope-ui-select.nvim/lua",
-      // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/telescope.nvim/lua",
+      "$XDG_DATA_HOME/nvim/site/pack/deps/opt/telescope.nvim/lua",
       //
-      // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/todo-comments.nvim/lua",
       // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/toggleterm.nvim/lua",
       // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/trouble.nvim/lua",
       // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/venv-selector.nvim/lua",

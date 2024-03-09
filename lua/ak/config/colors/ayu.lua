@@ -25,6 +25,11 @@ require("ayu").setup({
       MiniStatusLineModeVisual = { fg = c.bg, bg = c.accent },
       MiniStatusLineModeCommand = { fg = c.bg, bg = c.string }, -- added, same as insert
       MiniStatusLineModeOther = { fg = c.bg, bg = c.string }, -- added, same as insert
+
+      MiniHipatternsFixme = { fg = c.bg, bg = c.error, bold = true },
+      MiniHipatternsHack = { fg = c.bg, bg = c.keyword, bold = true },
+      MiniHipatternsTodo = { fg = c.bg, bg = c.tag, bold = true },
+      MiniHipatternsNote = { fg = c.bg, bg = c.regexp, bold = true },
     }
   end,
 })

@@ -110,17 +110,18 @@ return {
       require("ak.config.editor.gitsigns")
 
       --          ╭─────────────────────────────────────────────────────────╮
-      --          │  Efficiency: Also setup startup-plugin mini.cursorword  │
+      --          │          Efficiency: Also setup mini plugins:           │
       --          ╰─────────────────────────────────────────────────────────╯
       require("ak.config.editor.mini_cursorword")
+      require("ak.config.editor.mini_hipatterns")
     end,
   },
 
-  {
-    "folke/todo-comments.nvim",
-    event = "VeryLazy",
-    config = function() require("ak.config.editor.todo_comments") end,
-  },
+  -- {
+  --   "folke/todo-comments.nvim",
+  --   event = "VeryLazy",
+  --   config = function() require("ak.config.editor.todo_comments") end,
+  -- },
 
   -- ── on-demand ─────────────────────────────────────────────────────────
 

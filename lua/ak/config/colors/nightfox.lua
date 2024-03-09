@@ -17,7 +17,14 @@ local opts = {
 require("nightfox").setup({
   options = opts,
   groups = {
-    -- left and right, dynamic
-    all = { MiniStatuslineModeNormal = { link = "MiniStatuslineFilename" } },
+    all = {
+      -- left and right, dynamic
+      MiniStatuslineModeNormal = { link = "MiniStatuslineModeNormal" },
+
+      MiniHipatternsFixme = { bg = "diag.error", fg = "bg", style = "bold" },
+      MiniHipatternsHack = { bg = "diag.warn", fg = "bg", style = "bold" },
+      MiniHipatternsTodo = { bg = "diag.info", fg = "bg", style = "bold" },
+      MiniHipatternsNote = { bg = "diag.hint", fg = "bg", style = "bold" },
+    },
   },
 })

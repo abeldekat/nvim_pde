@@ -70,9 +70,7 @@ later(function()
   require("ak.config.editor.gitsigns")
 
   require("ak.config.editor.mini_cursorword")
-
-  add("folke/todo-comments.nvim")
-  require("ak.config.editor.todo_comments")
+  require("ak.config.editor.mini_hipatterns")
 
   register("f-person/git-blame.nvim")
   Util.defer.on_keys(function()

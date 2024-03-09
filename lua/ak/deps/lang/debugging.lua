@@ -11,6 +11,7 @@ later(function()
       "rcarriga/nvim-dap-ui",
       "theHamsta/nvim-dap-virtual-text",
       "mfussenegger/nvim-dap-python",
+      "jbyuki/one-small-step-for-vimkind", -- lua
     },
   }
   local function load()

@@ -1,4 +1,6 @@
 local Util = require("ak.util")
+local dap = require("dap")
+
 local function no_op() end
 
 local function map(l, r, opts, mode)
@@ -12,7 +14,6 @@ local function ui()
 
   -- setup dap config by VsCode launch.json file
   -- require("dap.ext.vscode").load_launchjs()
-  local dap = require("dap")
   local dapui = require("dapui")
   dapui.setup(opts)
   dap.listeners.after.event_initialized["dapui_config"] = function() dapui.open({}) end
@@ -54,6 +55,31 @@ local function python_dap()
   map("<leader>dPc", function() require("dap-python").test_class() end, { desc = "Python debug class" })
 end
 
+local function lua_dap()
+  dap.adapters.nlua = function(callback, conf)
+    local adapter = { type = "server", host = conf.host or "127.0.0.1", port = conf.port or 8086 }
+    if conf.start_neovim then
+      local dap_run = dap.run
+      dap.run = function(c)
+        adapter.port = c.port
+        adapter.host = c.host
+      end
+      require("osv").run_this()
+      dap.run = dap_run
+    end
+    callback(adapter)
+  end
+  dap.configurations.lua = {
+    { type = "nlua", request = "attach", name = "Run this file", start_neovim = {} },
+    {
+      type = "nlua",
+      request = "attach",
+      name = "Attach to running Neovim instance (port = 8086)",
+      port = 8086,
+    },
+  }
+end
+
 local function keys()
   ---@param config {args?:string[]|fun():string[]?}
   local function get_args(config)
@@ -72,21 +98,21 @@ local function keys()
     function() require("dap").set_breakpoint(vim.fn.input("Breakpoint condition: ")) end,
     { desc = "Breakpoint condition" }
   )
-  map("<leader>db", function() require("dap").toggle_breakpoint() end, { desc = "Toggle breakpoint" })
-  map("<leader>dc", function() require("dap").continue() end, { desc = "Continue" })
-  map("<leader>da", function() require("dap").continue({ before = get_args }) end, { desc = "Run with args" })
-  map("<leader>dC", function() require("dap").run_to_cursor() end, { desc = "Run to cursor" })
-  map("<leader>dg", function() require("dap").goto_() end, { desc = "Go to line (no execute)" })
-  map("<leader>di", function() require("dap").step_into() end, { desc = "Step into" })
-  map("<leader>dj", function() require("dap").down() end, { desc = "down" })
-  map("<leader>dk", function() require("dap").up() end, { desc = "Up" })
-  map("<leader>dl", function() require("dap").run_last() end, { desc = "Run last" })
-  map("<leader>do", function() require("dap").step_out() end, { desc = "Step out" })
-  map("<leader>dO", function() require("dap").step_over() end, { desc = "Step over" })
-  map("<leader>dp", function() require("dap").pause() end, { desc = "Pause" })
-  map("<leader>dr", function() require("dap").repl.toggle() end, { desc = "Toggle REPL" })
-  map("<leader>ds", function() require("dap").session() end, { desc = "Session" })
-  map("<leader>dt", function() require("dap").terminate() end, { desc = "Terminate" })
+  map("<leader>db", function() dap.toggle_breakpoint() end, { desc = "Toggle breakpoint" })
+  map("<leader>dc", function() dap.continue() end, { desc = "Continue" })
+  map("<leader>da", function() dap.continue({ before = get_args }) end, { desc = "Run with args" })
+  map("<leader>dC", function() dap.run_to_cursor() end, { desc = "Run to cursor" })
+  map("<leader>dg", function() dap.goto_() end, { desc = "Go to line (no execute)" })
+  map("<leader>di", function() dap.step_into() end, { desc = "Step into" })
+  map("<leader>dj", function() dap.down() end, { desc = "down" })
+  map("<leader>dk", function() dap.up() end, { desc = "Up" })
+  map("<leader>dl", function() dap.run_last() end, { desc = "Run last" })
+  map("<leader>do", function() dap.step_out() end, { desc = "Step out" })
+  map("<leader>dO", function() dap.step_over() end, { desc = "Step over" })
+  map("<leader>dp", function() dap.pause() end, { desc = "Pause" })
+  map("<leader>dr", function() dap.repl.toggle() end, { desc = "Toggle REPL" })
+  map("<leader>ds", function() dap.session() end, { desc = "Session" })
+  map("<leader>dt", function() dap.terminate() end, { desc = "Terminate" })
   map("<leader>dw", function() require("dap.ui.widgets").hover() end, { desc = "Widgets" })
 
   -- neotest
@@ -95,19 +121,21 @@ local function keys()
     require("neotest").run.run({ strategy = "dap" })
   end, { desc = "Debug nearest" })
 
+  -- override lazy loading key
   map("<leader>dL", no_op, { desc = "No-op dap" })
 end
 
 local function setup()
+  mason_dap()
   ui()
   virtual_text()
-  mason_dap()
   python_dap()
+  lua_dap()
   keys()
 
   vim.api.nvim_set_hl(0, "DapStoppedLine", { default = true, link = "Visual" })
   for name, sign in pairs(require("ak.consts").icons.dap) do
-    sign = type(sign) == "table" and sign or { sign }
+    sign = type(sign) == "table" and sign or { sign } --[[ @as table]]
     vim.fn.sign_define(
       "Dap" .. name,
       { text = sign[1], texthl = sign[2] or "DiagnosticInfo", linehl = sign[3], numhl = sign[3] }

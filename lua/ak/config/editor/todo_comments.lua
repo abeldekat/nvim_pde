@@ -1,3 +1,6 @@
+--          ╭─────────────────────────────────────────────────────────╮
+--          │         DEPRECATED in favor of mini.hipatterns          │
+--          ╰─────────────────────────────────────────────────────────╯
 require("todo-comments").setup()
 
 local keys = vim.keymap.set

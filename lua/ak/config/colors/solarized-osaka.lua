@@ -25,6 +25,11 @@ local opts = {
     -- Use the lualine variant:
     hl.MiniStatuslineModeNormal = { bg = c.bg_statusline, fg = c.fg_sidebar } -- left and right, dynamic
     hl.MiniStatuslineFilename = { bg = c.bg_statusline, fg = c.fg_sidebar } -- all inner groups
+
+    hl.MiniHipatternsFixme = { bg = hl.DiagnosticError.fg, fg = c.bg, bold = true }
+    hl.MiniHipatternsHack = { bg = hl.DiagnosticWarn.fg, fg = c.bg, bold = true }
+    hl.MiniHipatternsTodo = { bg = hl.DiagnosticInfo.fg, fg = c.bg, bold = true }
+    hl.MiniHipatternsNote = { bg = hl.DiagnosticHint.fg, fg = c.bg, bold = true }
   end,
 }
 

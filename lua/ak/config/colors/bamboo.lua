@@ -10,6 +10,11 @@ local function highlights()
   return {
     MiniStatuslineModeNormal = { fg = "$fg", bg = "$bg1" }, -- left and right, dynamic
     MiniStatuslineFilename = { fg = "$fg", bg = "$bg1" }, -- left and right, dynamic
+
+    MiniHipatternsFixme = { fg = "$bg1", bg = "$red", fmt = "bold" },
+    MiniHipatternsHack = { fg = "$bg1", bg = "$yellow", fmt = "bold" },
+    MiniHipatternsTodo = { fg = "$bg1", bg = "$cyan", fmt = "bold" },
+    MiniHipatternsNote = { fg = "$bg1", bg = "$purple", fmt = "bold" },
   }
 end
 
