@@ -38,15 +38,25 @@ local function markdown()
 end
 
 local function python()
-  local spec = "linux-cultist/venv-selector.nvim"
+  local selector = "linux-cultist/venv-selector.nvim"
+  register(selector)
 
-  local function load()
-    add(spec)
-    require("ak.config.lang.python.venv_selector")
-  end
-  register(spec)
+  local on_semshi = function() vim.cmd("packadd semshi | runtime! plugin/rplugin.vim | silent! UpdateRemotePlugins") end
+  local semshi = { source = "wookayin/semshi", hooks = { post_install = on_semshi, post_checkout = on_semshi } }
+  register(semshi)
+
   Util.defer.on_events(function()
-    Util.defer.on_keys(function() now(load) end, "<leader>cv", "Venv selector")
+    local function load_selector()
+      add(selector)
+      require("ak.config.lang.python.venv_selector") -- selector
+    end
+    Util.defer.on_keys(function() now(load_selector) end, "<leader>cv", "Venv selector")
+
+    now(function()
+      require("ak.config.lang.python.semshi") -- before adding...
+      add(semshi)
+      vim.cmd("Semshi enable")
+    end)
   end, "FileType", "python")
 end
 

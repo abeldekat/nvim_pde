@@ -172,6 +172,7 @@ function H.ruff_lsp()
     -- Disable hover in favor of Pyright
     client.server_capabilities.hoverProvider = false
   end)
+  return {}
 end
 
 --          ╭─────────────────────────────────────────────────────────╮
