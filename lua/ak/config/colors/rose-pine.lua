@@ -14,12 +14,13 @@ Utils.color.add_toggle("rose-pine*", {
 --          │                see rose-pine.palette.lua                │
 --          ╰─────────────────────────────────────────────────────────╯
 
--- The colorscheme starts with main_nc:
+-- Before setup, the palette is set to main_nc:
 local current_nc = "#16141f"
 
 local hl_config = {
   -- all inner groups, same as lualine c
   MiniStatuslineFilename = { bg = "base", fg = "text", current = current_nc },
+
   -- left and right, dynamic, same as lualine c
   MiniStatuslineModeNormal = { bg = "base", fg = "text", current = current_nc },
 
@@ -45,9 +46,12 @@ local hl_config = {
 
 -- create the highlights for mini.statusline and mini.hlpatterns
 local function groups()
+  -- Initially, force rose-pine to return the correct palette:
+  vim.o.background = prefer_light and "light" or "dark"
   local palette = require("rose-pine.palette")
+
   local result = {}
-  for hl_name, config in pairs(hl_config) do
+  for hl_name, config in pairs(hl_config) do -- use palette for actual colors
     local new_config = { bg = palette[config.bg], fg = palette[config.fg] }
     if config.bold then new_config.bold = config.bold end
     result[hl_name] = new_config
@@ -72,6 +76,7 @@ end
 
 local opts = {
   variant = prefer_light and "dawn" or "moon",
+  dark_variant = "moon",
   disable_italics = true,
   highlight_groups = groups(),
   before_highlight = before_highlight,

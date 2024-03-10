@@ -35,6 +35,7 @@ later(function()
   })
   require("ak.config.coding.LuaSnip")
 
+  require("ak.config.coding.mini_basics") -- copied a selection...
   require("ak.config.coding.mini_surround")
   require("ak.config.coding.mini_comment")
   require("ak.config.coding.mini_operators")
