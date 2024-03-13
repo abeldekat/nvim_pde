@@ -4,7 +4,7 @@
 -- Lualine:
 -- The intent of MiniStatuslineFilename is the same as lualine_c
 
--- hightlighting:
+-- highlighting:
 -- https://github.com/echasnovski/mini.nvim/issues/337
 -- use separate groups for each diagnostic
 
@@ -20,6 +20,10 @@
 local AK = {} -- module using the structure of MiniStatusline
 local H = {} -- helpers, copied, modified or added
 local MiniStatusline = require("mini.statusline")
+local Util = require("ak.util")
+
+---@class AkHarpoonState
+local harpoon_state = Util.harpoon.state
 
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                      Module setup                       │
@@ -62,6 +66,7 @@ AK.active = function()
   local filename = AK.section_filename({ trunc_width = 140 })
   -- 4 added:
   local macro = AK.section_macro({ trunc_width = 120 })
+  local harpoon = AK.section_harpoon({ trunc_width = 75 })
   -- 5
   local fileinfo = AK.section_fileinfo({ trunc_width = 120 })
   -- 6
@@ -74,7 +79,8 @@ AK.active = function()
     "%<", -- Mark general truncate point
     { hl = H.fixed_hl, strings = { filename } }, -- "..Filename"
     "%=", -- End left alignment
-    { hl = "MiniStatuslineModeCommand", strings = { macro } }, -- "..ModeCommand", added
+    { hl = "MiniStatuslineModeCommand", strings = { macro } }, -- added
+    { hl = harpoon_state.idx > 0 and "MiniHipatternsHack" or H.fixed_hl, strings = { harpoon } }, -- added
     { hl = H.fixed_hl, strings = { fileinfo } }, -- "..Fileinfo"
     { hl = mode_hl, strings = { search, location } }, -- Dynamic mode_hl
   })
@@ -112,6 +118,18 @@ AK.section_diagnostics = function(args) -- args
 
   if vim.tbl_count(t) == 0 then return "" end
   return string.format("%s", table.concat(t, ""))
+end
+
+AK.section_harpoon = function(args)
+  if MiniStatusline.is_truncated(args.trunc_width) or H.isnt_normal_buffer() then return "" end
+  if harpoon_state.list_length == 0 then return "" end
+
+  local s = harpoon_state
+  if s.idx > 0 then
+    return string.format(" %s[%s/%d]", s.list_name, s.idx, s.list_length)
+  else -- 󱡅
+    return string.format(" %s[%d]", s.list_name, s.list_length)
+  end
 end
 
 -- overridden: in terminal, use full name. Use relative path if file is in cwd

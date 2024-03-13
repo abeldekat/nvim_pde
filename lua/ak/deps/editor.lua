@@ -29,8 +29,8 @@ later(function()
   add("jinh0/eyeliner.nvim")
   require("ak.config.editor.eyeliner")
 
-  add("ThePrimeagen/harpoon")
-  require("ak.config.editor.harpoon_one")
+  add({ source = "ThePrimeagen/harpoon", checkout = "harpoon2" })
+  require("ak.config.editor.harpoon")
 
   require("ak.config.editor.mini_clue")
   require("ak.config.editor.mini_misc")

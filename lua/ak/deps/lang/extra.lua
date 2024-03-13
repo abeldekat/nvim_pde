@@ -44,6 +44,7 @@ local function python()
   local on_semshi = function() vim.cmd("packadd semshi | runtime! plugin/rplugin.vim | silent! UpdateRemotePlugins") end
   local semshi = { source = "wookayin/semshi", hooks = { post_install = on_semshi, post_checkout = on_semshi } }
   register(semshi)
+  require("ak.config.lang.python.semshi")
 
   Util.defer.on_events(function()
     local function load_selector()
@@ -53,7 +54,6 @@ local function python()
     Util.defer.on_keys(function() now(load_selector) end, "<leader>cv", "Venv selector")
 
     now(function()
-      require("ak.config.lang.python.semshi") -- before adding...
       add(semshi)
       vim.cmd("Semshi enable")
     end)

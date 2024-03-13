@@ -36,11 +36,10 @@ return {
 
   {
     "ThePrimeagen/harpoon",
-    -- branch = "harpoon2",
+    branch = "harpoon2",
     event = "VeryLazy",
     config = function()
-      -- require("ak.config.harpoon")
-      require("ak.config.editor.harpoon_one")
+      require("ak.config.editor.harpoon")
 
       --          ╭─────────────────────────────────────────────────────────╮
       --          │          Efficiency: Also setup mini plugins:           │
