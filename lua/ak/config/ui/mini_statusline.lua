@@ -56,15 +56,15 @@ AK.active = function()
   -- 1
   local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 120 })
   -- 2
-  local git = MiniStatusline.section_git({ trunc_width = 75, icon = "" })
   local lsp = AK.section_lsp({ trunc_width = 75, icon = "" })
+  local git = MiniStatusline.section_git({ trunc_width = 75, icon = "" })
   local diagnostics = AK.section_diagnostics({ trunc_width = 75 })
-  -- 3
+  -- 3 added:
+  local harpoon_data = AK.section_harpoon({ trunc_width = 75 })
+  -- 4
   local filename = AK.section_filename({ trunc_width = 140 })
-  -- 4 added:
-  local macro = AK.section_macro({ trunc_width = 120 })
   -- 5 added:
-  local harpoon_info = AK.section_harpoon({ trunc_width = 75 })
+  local macro = AK.section_macro({ trunc_width = 120 })
   -- 6
   local fileinfo = AK.section_fileinfo({ trunc_width = 120 })
   -- 7
@@ -75,10 +75,10 @@ AK.active = function()
     { hl = mode_hl, strings = { string.upper(mode) } }, -- Dynamic mode_hl
     { hl = H.fixed_hl, strings = { git, lsp, diagnostics } }, -- "..Devinfo"
     "%<", -- Mark general truncate point
+    { hl = H.harpoon_highlight(), strings = { harpoon_data } }, -- added
     { hl = H.fixed_hl, strings = { filename } }, -- "..Filename"
     "%=", -- End left alignment
     { hl = "MiniStatuslineModeCommand", strings = { macro } }, -- added
-    { hl = H.harpoon_highlight(), strings = { harpoon_info } }, -- added
     { hl = H.fixed_hl, strings = { fileinfo } }, -- "..Fileinfo"
     { hl = mode_hl, strings = { search, location } }, -- Dynamic mode_hl
   })
@@ -96,7 +96,7 @@ AK.section_lsp = function(args)
   if dont_show then return "" end
 
   local icon = args.icon or "LSP"
-  return string.format("%s", icon)
+  return string.format("%s ", icon)
 end
 
 -- overridden: removed lsp, added color to diagnostics
@@ -115,18 +115,18 @@ AK.section_diagnostics = function(args) -- args
   end
 
   if vim.tbl_count(t) == 0 then return "" end
-  return string.format("%s", table.concat(t, ""))
+  return string.format("%s ", table.concat(t, ""))
 end
 
 AK.section_harpoon = function(args)
   if MiniStatusline.is_truncated(args.trunc_width) or H.isnt_normal_buffer() then return "" end
-  local harpoon = H.harpoon_state()
-  if not harpoon then return "" end
+  local data = H.harpoon_data()
+  if not data then return "" end
 
-  if harpoon.idx > 0 then
-    return string.format(" %s[%s/%d]", harpoon.list_name, harpoon.idx, harpoon.list_length)
+  if data.idx > 0 then
+    return string.format(" %s[%s/%d]", data.list_name, data.idx, data.list_length)
   else -- 󱡅
-    return string.format(" %s[%d]", harpoon.list_name, harpoon.list_length)
+    return string.format(" %s[%d]", data.list_name, data.list_length)
   end
 end
 
@@ -238,6 +238,12 @@ H.create_autocommands = function()
   end
   au("LspAttach", "*", make_track_lsp(1), "Track LSP clients")
   au("LspDetach", "*", make_track_lsp(-1), "Track LSP clients")
+
+  vim.api.nvim_create_autocmd("User", {
+    group = "MiniStatuslineAk",
+    pattern = "HarpoonStateChanged",
+    callback = function() H.set_active() end,
+  })
 end
 
 -- added
@@ -288,11 +294,11 @@ end
 H.diagnostic_is_disabled = function() return vim.diagnostic.is_disabled(0) end
 
 -- added
-H.harpoon_state = function() return Util.harpoon.state end
+H.harpoon_data = function() return Util.harpoon.state end
 
 -- added
 H.harpoon_highlight = function()
-  local harpoon = H.harpoon_state()
+  local harpoon = H.harpoon_data()
   return harpoon and harpoon.idx > 0 and "MiniHipatternsHack" or H.fixed_hl
 end
 

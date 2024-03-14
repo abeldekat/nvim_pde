@@ -6,7 +6,6 @@
 local Harpoon = require("harpoon")
 local Extensions = require("harpoon.extensions")
 local Util = require("ak.util")
-local E = {} -- extensions used
 local A = {} -- actions used
 local H = {} -- helpers
 
@@ -39,7 +38,6 @@ function H.buffer_idx()
   local not_found = -1
   if vim.bo.buftype ~= "" then return not_found end -- not a normal buffer
 
-  -- local filename = vim.fn.expand("%:p:.")
   -- local current_file = vim.api.nvim_buf_get_name(0):gsub(vim.fn.getcwd() .. "/", "")
   local current_file = vim.fn.expand("%:p:.")
   local marks = H.get_list().items
@@ -52,50 +50,24 @@ end
 function H.update_state()
   H.state.list_length = H.get_list():length()
   H.state.idx = H.buffer_idx()
-end
-
-vim.api.nvim_create_autocmd({ "BufEnter" }, {
-  pattern = "*",
-  callback = function() H.state.idx = H.buffer_idx() end,
-})
-
-function E.on_setup_called() H.update_state() end
-function E.on_remove()
-  H.state.list_length = H.state.list_length - 1 --
-end
-
-local function add_listeners()
-  -- local function notify(name) return function() vim.notify(name) end end
-  local e = {
-    { [Extensions.event_names.SETUP_CALLED] = E.on_setup_called },
-    { [Extensions.event_names.REMOVE] = E.on_remove },
-    -- { [Extensions.event_names.ADD] = notify("ADD") },
-    -- { [Extensions.event_names.REORDER] = notify("REORDER") },
-    -- { [Extensions.event_names.LIST_CREATED] = notify("LIST_CREATED") },
-    -- { [Extensions.event_names.LIST_READ] = notify("LIST_READ") },
-    -- { [Extensions.event_names.SELECT] = notify("SELECT") },
-    ---- Extensions.event_names.UI_CREATE:
-    -- Extensions.builtins.navigate_with_number(),
-    -- Extensions.event_names.NAVIGATE:
-    -- harpoon:extend(extensions.builtins.command_on_nav("echom 'hello'"))
-  }
-  for _, extension in ipairs(e) do
-    Harpoon:extend(extension)
-  end
+  vim.api.nvim_exec_autocmds("User", {
+    pattern = "HarpoonStateChanged",
+    modeline = false,
+  })
 end
 
 function A.append()
   H.get_list():append()
   H.update_state()
 end
-function A.ui() Harpoon.ui:toggle_quick_menu(H.get_list()) end
-function A.prev() H.get_list():prev() end
-function A.next() H.get_list():next() end
-function A.select(index) H.get_list():select(index) end
 function A.switch_list()
   H.state.list_name = H.name_of_next_list()
   H.update_state()
 end
+function A.ui() Harpoon.ui:toggle_quick_menu(H.get_list()) end
+function A.prev() H.get_list():prev() end
+function A.next() H.get_list():next() end
+function A.select(index) H.get_list():select(index) end
 
 local function add_keys()
   vim.keymap.set("n", "<leader>J", A.switch_list, { desc = "Switch harpoon list", silent = true })
@@ -124,8 +96,13 @@ local opts = {
   [H.lists[2]] = {},
 }
 
-add_listeners()
 add_keys()
+Harpoon:extend({ [Extensions.event_names.SETUP_CALLED] = H.update_state }) --
+
 ---@diagnostic disable-next-line: redundant-parameter
 Harpoon:setup(opts)
 Util.harpoon.setup(H.state)
+vim.api.nvim_create_autocmd({ "BufEnter" }, {
+  pattern = "*",
+  callback = H.update_state,
+})
