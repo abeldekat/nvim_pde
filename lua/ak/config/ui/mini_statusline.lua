@@ -22,9 +22,6 @@ local H = {} -- helpers, copied, modified or added
 local MiniStatusline = require("mini.statusline")
 local Util = require("ak.util")
 
----@class AkHarpoonState
-local harpoon_state = Util.harpoon.state
-
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                      Module setup                       │
 --          ╰─────────────────────────────────────────────────────────╯
@@ -66,10 +63,11 @@ AK.active = function()
   local filename = AK.section_filename({ trunc_width = 140 })
   -- 4 added:
   local macro = AK.section_macro({ trunc_width = 120 })
-  local harpoon = AK.section_harpoon({ trunc_width = 75 })
-  -- 5
-  local fileinfo = AK.section_fileinfo({ trunc_width = 120 })
+  -- 5 added:
+  local harpoon_info = AK.section_harpoon({ trunc_width = 75 })
   -- 6
+  local fileinfo = AK.section_fileinfo({ trunc_width = 120 })
+  -- 7
   local search = MiniStatusline.section_searchcount({ trunc_width = 75 })
   local location = AK.section_location({ trunc_width = 75 })
 
@@ -80,7 +78,7 @@ AK.active = function()
     { hl = H.fixed_hl, strings = { filename } }, -- "..Filename"
     "%=", -- End left alignment
     { hl = "MiniStatuslineModeCommand", strings = { macro } }, -- added
-    { hl = harpoon_state.idx > 0 and "MiniHipatternsHack" or H.fixed_hl, strings = { harpoon } }, -- added
+    { hl = H.harpoon_highlight(), strings = { harpoon_info } }, -- added
     { hl = H.fixed_hl, strings = { fileinfo } }, -- "..Fileinfo"
     { hl = mode_hl, strings = { search, location } }, -- Dynamic mode_hl
   })
@@ -122,13 +120,13 @@ end
 
 AK.section_harpoon = function(args)
   if MiniStatusline.is_truncated(args.trunc_width) or H.isnt_normal_buffer() then return "" end
-  if harpoon_state.list_length == 0 then return "" end
+  local harpoon = H.harpoon_state()
+  if not harpoon then return "" end
 
-  local s = harpoon_state
-  if s.idx > 0 then
-    return string.format(" %s[%s/%d]", s.list_name, s.idx, s.list_length)
+  if harpoon.idx > 0 then
+    return string.format(" %s[%s/%d]", harpoon.list_name, harpoon.idx, harpoon.list_length)
   else -- 󱡅
-    return string.format(" %s[%d]", s.list_name, s.list_length)
+    return string.format(" %s[%d]", harpoon.list_name, harpoon.list_length)
   end
 end
 
@@ -288,6 +286,15 @@ H.diagnostic_get_count = function()
   return res
 end
 H.diagnostic_is_disabled = function() return vim.diagnostic.is_disabled(0) end
+
+-- added
+H.harpoon_state = function() return Util.harpoon.state end
+
+-- added
+H.harpoon_highlight = function()
+  local harpoon = H.harpoon_state()
+  return harpoon and harpoon.idx > 0 and "MiniHipatternsHack" or H.fixed_hl
+end
 
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                        Activate                         │

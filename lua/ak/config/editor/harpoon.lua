@@ -59,19 +59,6 @@ vim.api.nvim_create_autocmd({ "BufEnter" }, {
   callback = function() H.state.idx = H.buffer_idx() end,
 })
 
-function A.append()
-  H.get_list():append()
-  H.update_state()
-end
-function A.ui() Harpoon.ui:toggle_quick_menu(H.get_list()) end
-function A.prev() H.get_list():prev() end
-function A.next() H.get_list():next() end
-function A.select(index) H.get_list():select(index) end
-function A.switch_list()
-  H.state.list_name = H.name_of_next_list()
-  H.update_state()
-end
-
 function E.on_setup_called() H.update_state() end
 function E.on_remove()
   H.state.list_length = H.state.list_length - 1 --
@@ -95,6 +82,19 @@ local function add_listeners()
   for _, extension in ipairs(e) do
     Harpoon:extend(extension)
   end
+end
+
+function A.append()
+  H.get_list():append()
+  H.update_state()
+end
+function A.ui() Harpoon.ui:toggle_quick_menu(H.get_list()) end
+function A.prev() H.get_list():prev() end
+function A.next() H.get_list():next() end
+function A.select(index) H.get_list():select(index) end
+function A.switch_list()
+  H.state.list_name = H.name_of_next_list()
+  H.update_state()
 end
 
 local function add_keys()

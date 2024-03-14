@@ -2,7 +2,7 @@
 local M = {}
 
 ---@class AkHarpoonState
-M.state = {}
+M.state = nil
 
 function M.setup(state) M.state = state end
 

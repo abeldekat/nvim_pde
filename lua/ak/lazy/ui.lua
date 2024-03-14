@@ -35,13 +35,13 @@ return {
     "lukas-reineke/indent-blankline.nvim",
     event = "VeryLazy", -- event = lazyfile,
     config = function()
-      require("ak.config.ui.indent_blankline")
-
       --          ╭─────────────────────────────────────────────────────────╮
       --          │  Efficiency: Also setup startup-plugin mini.statusline  │
       --          │          Mini.notify is used in ak.lazy.start           │
       --          ╰─────────────────────────────────────────────────────────╯
       require("ak.config.ui.mini_statusline")
+
+      require("ak.config.ui.indent_blankline")
     end,
   },
 }
