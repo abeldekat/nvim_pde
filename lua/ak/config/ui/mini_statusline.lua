@@ -20,7 +20,6 @@
 local AK = {} -- module using the structure of MiniStatusline
 local H = {} -- helpers, copied, modified or added
 local MiniStatusline = require("mini.statusline")
-local Util = require("ak.util")
 
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                      Module setup                       │
@@ -44,6 +43,8 @@ AK.setup = function()
   })
   H.create_autocommands() -- lsp autocommands for custom lsp section
   H.set_active() -- lazy loading, missing events, still show statusline
+
+  vim.api.nvim_exec_autocmds("User", { pattern = "MiniStatuslineReady", modeline = false })
 end
 
 --          ╭─────────────────────────────────────────────────────────╮
@@ -120,14 +121,18 @@ end
 
 AK.section_harpoon = function(args)
   if MiniStatusline.is_truncated(args.trunc_width) or H.isnt_normal_buffer() then return "" end
-  local data = H.harpoon_data()
+
+  ---@class AkHarpoonState
+  local data = H.harpoon_data
   if not data then return "" end
 
-  if data.idx > 0 then
-    return string.format(" %s[%s/%d]", data.list_name, data.idx, data.list_length)
-  else -- 󱡅
-    return string.format(" %s[%d]", data.list_name, data.list_length)
-  end
+  local info = string.format( -- 󱡅
+    " %s[%s%d]",
+    data.list_name,
+    data.idx > 0 and string.format("%s|", data.idx) or "",
+    data.list_length
+  )
+  return info
 end
 
 -- overridden: in terminal, use full name. Use relative path if file is in cwd
@@ -242,7 +247,10 @@ H.create_autocommands = function()
   vim.api.nvim_create_autocmd("User", {
     group = "MiniStatuslineAk",
     pattern = "HarpoonStateChanged",
-    callback = function() H.set_active() end,
+    callback = function(event)
+      H.harpoon_data = event.data
+      H.set_active()
+    end,
   })
   vim.api.nvim_create_autocmd("User", {
     group = "MiniStatuslineAk",
@@ -299,11 +307,11 @@ end
 H.diagnostic_is_disabled = function() return vim.diagnostic.is_disabled(0) end
 
 -- added
-H.harpoon_data = function() return Util.harpoon.state end
+H.harpoon_data = nil
 
 -- added
 H.harpoon_highlight = function()
-  local harpoon = H.harpoon_data()
+  local harpoon = H.harpoon_data
   return harpoon and harpoon.idx > 0 and "MiniHipatternsHack" or H.fixed_hl
 end
 

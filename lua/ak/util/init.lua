@@ -2,7 +2,6 @@
 ---@field color ak.util.color
 ---@field defer ak.util.defer
 ---@field deps ak.util.deps
----@field harpoon ak.util.harpoon
 ---@field lsp ak.util.lsp
 ---@field toggle ak.util.toggle
 local M = {}

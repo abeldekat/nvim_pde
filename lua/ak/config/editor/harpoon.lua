@@ -4,7 +4,9 @@
 -- TODO: Telescope for files across lists
 
 local Harpoon = require("harpoon")
-local Util = require("ak.util")
+local update_when = { "MiniStatuslineReady" }
+local augrp = vim.api.nvim_create_augroup("HarpoonAk", {})
+
 local A = {} -- actions used
 local H = {} -- helpers
 
@@ -52,6 +54,7 @@ function H.update_state()
   vim.api.nvim_exec_autocmds("User", {
     pattern = "HarpoonStateChanged",
     modeline = false,
+    data = H.state,
   })
 end
 
@@ -99,9 +102,17 @@ add_keys()
 
 ---@diagnostic disable-next-line: redundant-parameter
 Harpoon:setup(opts)
-H.update_state()
-Util.harpoon.setup(H.state)
-vim.api.nvim_create_autocmd({ "BufEnter" }, {
+
+for _, event in ipairs(update_when) do -- example: MiniStatusline activated
+  vim.api.nvim_create_autocmd("User", {
+    group = augrp,
+    once = true,
+    pattern = event,
+    callback = H.update_state,
+  })
+end
+vim.api.nvim_create_autocmd({ "BufEnter" }, { -- update state on bufenter
+  group = augrp,
   pattern = "*",
   callback = H.update_state,
 })

@@ -5,7 +5,7 @@
 ---@class ak.util.defer
 local M = {}
 
-local defer_group = vim.api.nvim_create_augroup("ak_defer", { clear = true })
+local defer_group = vim.api.nvim_create_augroup("ak_defer", {})
 
 function M.on_events(cb, events, pattern)
   local opts = {
