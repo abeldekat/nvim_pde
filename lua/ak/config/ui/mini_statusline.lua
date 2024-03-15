@@ -26,11 +26,11 @@ local Util = require("ak.util")
 --          │                      Module setup                       │
 --          ╰─────────────────────────────────────────────────────────╯
 AK.setup = function()
-  -- copied
+  -- -- copied
   if vim.fn.has("nvim-0.10") == 1 then
     H.diagnostic_get_count = function() return vim.diagnostic.count(0) end --
   end
-
+  --
   H.create_diagnostic_hl() -- added diagnostics with colors
   vim.api.nvim_create_autocmd("ColorScheme", {
     pattern = "*",
@@ -242,6 +242,11 @@ H.create_autocommands = function()
   vim.api.nvim_create_autocmd("User", {
     group = "MiniStatuslineAk",
     pattern = "HarpoonStateChanged",
+    callback = function() H.set_active() end,
+  })
+  vim.api.nvim_create_autocmd("User", {
+    group = "MiniStatuslineAk",
+    pattern = "GitSignsUpdate",
     callback = function() H.set_active() end,
   })
 end

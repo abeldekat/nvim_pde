@@ -4,7 +4,6 @@
 -- TODO: Telescope for files across lists
 
 local Harpoon = require("harpoon")
-local Extensions = require("harpoon.extensions")
 local Util = require("ak.util")
 local A = {} -- actions used
 local H = {} -- helpers
@@ -97,10 +96,10 @@ local opts = {
 }
 
 add_keys()
-Harpoon:extend({ [Extensions.event_names.SETUP_CALLED] = H.update_state }) --
 
 ---@diagnostic disable-next-line: redundant-parameter
 Harpoon:setup(opts)
+H.update_state()
 Util.harpoon.setup(H.state)
 vim.api.nvim_create_autocmd({ "BufEnter" }, {
   pattern = "*",
