@@ -4,72 +4,40 @@
 -- TODO: Telescope for files across lists
 
 local Harpoon = require("harpoon")
-local update_when = { "MiniStatuslineReady" }
-local augrp = vim.api.nvim_create_augroup("HarpoonAk", {})
+local has_harpoon_line, HarpoonLine = pcall(require, "harpoon_line")
 
-local A = {} -- actions used
-local H = {} -- helpers
+local A = {} -- actions triggered by keys
+local H = {} -- helper functionality
 
----@class AkHarpoonState
-H.state = {
-  list_name = "-",
-  list_length = 0,
-  idx = -1, -- position of current buff in the list
-}
--- "-" is a custom label for harpoon's default list
-H.lists = { "-", "dev" }
+H.current_list_placeholder = "default" -- the default harpoon list is nil...
+H.current_list = H.current_list_placeholder
+H.lists = { H.current_list_placeholder }
 
-function H.get_list()
-  local name = H.state.list_name
-  return Harpoon:list(name ~= "-" and name or nil)
+H.harpoon_list = function()
+  return H.current_list ~= H.current_list_placeholder and H.current_list or nil --
 end
-
-function H.name_of_next_list()
+H.get_list = function()
+  return Harpoon:list(H.harpoon_list()) --
+end
+H.name_of_next_list = function()
   local function current_idx()
     for idx, name in ipairs(H.lists) do
-      if name == H.state.list_name then return idx end
+      if name == H.current_list then return idx end
     end
   end
   local idx = current_idx()
   return H.lists[idx == #H.lists and 1 or idx + 1]
 end
 
-function H.buffer_idx()
-  -- For more information see ":h buftype"
-  local not_found = -1
-  if vim.bo.buftype ~= "" then return not_found end -- not a normal buffer
-
-  -- local current_file = vim.api.nvim_buf_get_name(0):gsub(vim.fn.getcwd() .. "/", "")
-  local current_file = vim.fn.expand("%:p:.")
-  local marks = H.get_list().items
-  for idx, item in ipairs(marks) do
-    if item.value == current_file then return idx end
-  end
-  return not_found
+A.switch_list = function()
+  H.current_list = H.name_of_next_list()
+  if has_harpoon_line then HarpoonLine.change_list(H.harpoon_list()) end
 end
-
-function H.update_state()
-  H.state.list_length = H.get_list():length()
-  H.state.idx = H.buffer_idx()
-  vim.api.nvim_exec_autocmds("User", {
-    pattern = "HarpoonStateChanged",
-    modeline = false,
-    data = H.state,
-  })
-end
-
-function A.append()
-  H.get_list():append()
-  H.update_state()
-end
-function A.switch_list()
-  H.state.list_name = H.name_of_next_list()
-  H.update_state()
-end
-function A.ui() Harpoon.ui:toggle_quick_menu(H.get_list()) end
-function A.prev() H.get_list():prev() end
-function A.next() H.get_list():next() end
-function A.select(index) H.get_list():select(index) end
+A.append = function() H.get_list():append() end
+A.ui = function() Harpoon.ui:toggle_quick_menu(H.get_list()) end
+A.prev = function() H.get_list():prev() end
+A.next = function() H.get_list():next() end
+A.select = function(index) H.get_list():select(index) end
 
 local function add_keys()
   vim.keymap.set("n", "<leader>J", A.switch_list, { desc = "Switch harpoon list", silent = true })
@@ -84,35 +52,30 @@ local function add_keys()
   vim.keymap.set("n", "<c-h>", function() A.select(4) end, { desc = "Harpoon 4", silent = true })
 end
 
-local opts = {
-  settings = {
-    save_on_toggle = true, -- default false,
-    sync_on_ui_close = false,
-    key = function() return vim.loop.cwd() end,
-  },
-  -- default = {}, -- ...it is simply a file harpoon
+local function setup()
+  local extra_lists = { "dev" }
+  local extra_list_configs = { {} }
+
+  local opts = {
+    settings = {
+      save_on_toggle = true, -- default false,
+      sync_on_ui_close = false,
+      key = function() return vim.loop.cwd() end,
+    },
+    -- default = {}, -- ...it is simply a file harpoon
+  }
   --          ╭─────────────────────────────────────────────────────────╮
   --          │ Named list configs. Merged with default overriding any  │
   --          │                        behavior                         │
   --          ╰─────────────────────────────────────────────────────────╯
-  [H.lists[2]] = {},
-}
+  for idx, list in ipairs(extra_lists) do
+    opts[list] = extra_list_configs[idx]
+  end
+  add_keys()
 
-add_keys()
-
----@diagnostic disable-next-line: redundant-parameter
-Harpoon:setup(opts)
-
-for _, event in ipairs(update_when) do -- example: MiniStatusline activated
-  vim.api.nvim_create_autocmd("User", {
-    group = augrp,
-    once = true,
-    pattern = event,
-    callback = H.update_state,
-  })
+  ---@diagnostic disable-next-line: redundant-parameter
+  Harpoon:setup(opts)
+  if has_harpoon_line then HarpoonLine:setup() end
+  H.lists = vim.list_extend(H.lists, extra_lists)
 end
-vim.api.nvim_create_autocmd({ "BufEnter" }, { -- update state on bufenter
-  group = augrp,
-  pattern = "*",
-  callback = H.update_state,
-})
+setup()
