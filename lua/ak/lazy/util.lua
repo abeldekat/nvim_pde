@@ -1,12 +1,4 @@
 return {
-  -- {
-  --   "folke/persistence.nvim",
-  --   event = "BufReadPre",
-  --   config = function()
-  --     require("ak.config.util.persistence")
-  --   end,
-  -- },
-
   {
     "dstein64/vim-startuptime",
     keys = { { "<leader>ms", desc = "Startuptime" } },
@@ -18,4 +10,24 @@ return {
     keys = { { "<leader>mr", desc = "Repl" } },
     config = function() require("ak.config.util.slime") end,
   },
+
+  {
+    "danymat/neogen",
+    --          ╭─────────────────────────────────────────────────────────╮
+    --          │             Efficiency: Also setup mini.doc             │
+    --          ╰─────────────────────────────────────────────────────────╯
+    keys = { { "<leader>ms", desc = "Document" }, { "<leader>md", desc = "Generate plugin doc" } },
+    config = function()
+      require("ak.config.util.neogen")
+      require("ak.config.util.mini_doc")
+    end,
+  },
+
+  -- {
+  --   "folke/persistence.nvim",
+  --   event = "BufReadPre",
+  --   config = function()
+  --     require("ak.config.util.persistence")
+  --   end,
+  -- },
 }

@@ -20,6 +20,19 @@ later(function()
     end)
   end, "<leader>mr", "Repl")
 
+  -- Documentation generator
+  register("danymat/neogen")
+  Util.defer.on_keys(function()
+    now(function()
+      add("danymat/neogen")
+      require("ak.config.util.neogen")
+    end)
+  end, "<leader>mn", "Document")
+
+  Util.defer.on_keys(function()
+    now(function() require("ak.config.util.mini_doc") end)
+  end, "<leader>md", "Generate plugin doc")
+
   -- register("folke/persistence.nvim")
   -- Util.defer.on_events(function()
   --   now(function()

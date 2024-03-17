@@ -27,7 +27,7 @@ return {
   ["conform.nvim"] = "67ee2258e08ccb91345d52f62484b657feccef25",
   ["dial.nvim"] = "27eb570085db2ef44bff4f620d3806039184651c",
   ["eyeliner.nvim"] = "c540d58bf52aa979d4cca639c60387ae0c0ccf88",
-  ["fidget.nvim"] = "60404ba67044c6ab01894dd5bf77bd64ea5e09aa",
+  ["fidget.nvim"] = "910104a2d0a831ba8ac662cd23d3f1c685401cf6",
   ["friendly-snippets"] = "dcd4a586439a1c81357d5b9d26319ae218cc9479",
   ["git-blame.nvim"] = "a0282d05adbee80aaf4e2ff35b81b52940b67bed",
   ["gitsigns.nvim"] = "4e348641b8206c3b8d23080999e3ddbe4ca90efc",
@@ -42,6 +42,7 @@ return {
   ["mason-nvim-dap.nvim"] = "67210c0e775adec55de9826b038e8b62de554afc",
   ["mason.nvim"] = "3b5068f0fc565f337d67a2d315d935f574848ee7",
   ["mini.nvim"] = "9968f6e221ae7bdac57a910c5bf2026186aa023c",
+  neogen = "b95347a588401a755eadd17482edc1662876bd58",
   neotest = "4440cc2227894c2ae9b0673a30e6cc6f1836e8c2",
   ["neotest-python"] = "2e83d2bc00acbcc1fd529dbf0a0e677cabfe6b50",
   ["nvim-autopairs"] = "c6139ca0d5ad7af129ea6c89cb4c56093f2c034a",
@@ -75,5 +76,5 @@ return {
   ["vim-hardtime"] = "91177392e9372a1cf09a4b9b79532d2490bd405f",
   ["vim-repeat"] = "24afe922e6a05891756ecf331f39a1f6743d3d5a",
   ["vim-slime"] = "1feef68f237cb840a7220f83c24b6c60bf914eb5",
-  ["vim-startuptime"] = "308b0088a864c4711a96e45b6734cf9294074f65"
+  ["vim-startuptime"] = "ac2cccb5be617672add1f4f3c0a55ce99ba34e01"
 }
