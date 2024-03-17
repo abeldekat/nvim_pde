@@ -1,4 +1,4 @@
-local dev_patterns = {}
+local dev_patterns = {} -- { "harpoonline" }
 local dev_path = "~/projects/lazydev"
 
 ---@diagnostic disable:assign-type-mismatch

@@ -50,7 +50,8 @@ return {
     event = "VeryLazy",
     dependencies = {
       {
-        "letieu/harpoon-lualine",
+        -- "letieu/harpoon-lualine",
+        "abeldekat/harpoonline",
       },
     },
     init = function()
@@ -64,6 +65,9 @@ return {
       end
     end,
     config = function()
+      local Harpoonline = require("harpoonline").setup()
+      local lualine_c = { Harpoonline.format, "filename" }
+
       require("lualine").setup({
         options = {
           theme = "auto",
@@ -71,7 +75,7 @@ return {
           disabled_filetypes = { statusline = { "dashboard", "alpha", "starter" } },
         },
         sections = {
-          lualine_c = { "harpoon2" },
+          lualine_c = lualine_c,
         },
       })
     end,

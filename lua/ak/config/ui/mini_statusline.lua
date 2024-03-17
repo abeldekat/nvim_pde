@@ -20,6 +20,9 @@
 local AK = {} -- module using the structure of MiniStatusline
 local H = {} -- helpers, copied, modified or added
 local MiniStatusline = require("mini.statusline")
+local Harpoonline = require("harpoonline").setup({
+  on_update = function() H.set_active() end,
+})
 
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                      Module setup                       │
@@ -43,8 +46,6 @@ AK.setup = function()
   })
   H.create_autocommands() -- lsp autocommands for custom lsp section
   H.set_active() -- lazy loading, missing events, still show statusline
-
-  vim.api.nvim_exec_autocmds("User", { pattern = "HarpoonLineListenerReady", modeline = false })
 end
 
 --          ╭─────────────────────────────────────────────────────────╮
@@ -120,39 +121,8 @@ AK.section_diagnostics = function(args) -- args
 end
 
 AK.section_harpoon = function(args)
-  local symbols = { "󰀱", "", "󱡅" }
-  local symbol_idx = 2
-
-  local formatters = {
-    simpel = function(data)
-      return string.format(
-        "%s %s[%s%d]",
-        symbols[symbol_idx],
-        data.list_name and data.list_name or "",
-        data.buffer_idx > 0 and string.format("%s|", data.buffer_idx) or "",
-        data.list_length
-      )
-    end,
-    extended = function(data) -- credits letieu/harpoon-lualine
-      local name = string.format("%s %s", symbols[symbol_idx], data.list_name and data.list_name or "")
-      if data.list_length == 0 then return name end
-
-      local indicators = { "j", "k", "l", "h" }
-      local length = math.min(data.list_length, #indicators)
-      local status = {}
-      for i = 1, length do
-        local indicator = indicators[i]
-        if data.buffer_idx == i then indicator = string.upper(indicator) end
-        table.insert(status, indicator)
-      end
-      return name .. " " .. table.concat(status, " ")
-    end,
-  }
-  local formatter_idx = "extended"
-
-  if MiniStatusline.is_truncated(args.trunc_width) or H.isnt_normal_buffer() or not H.harpoon_data then return "" end
-
-  return formatters[formatter_idx](H.harpoon_data)
+  if MiniStatusline.is_truncated(args.trunc_width) or H.isnt_normal_buffer() then return "" end
+  return Harpoonline.format()
 end
 
 -- overridden: in terminal, use full name. Use relative path if file is in cwd
@@ -266,14 +236,6 @@ H.create_autocommands = function()
 
   vim.api.nvim_create_autocmd("User", {
     group = "MiniStatuslineAk",
-    pattern = "HarpoonLineChanged",
-    callback = function(event)
-      H.harpoon_data = event.data
-      H.set_active()
-    end,
-  })
-  vim.api.nvim_create_autocmd("User", {
-    group = "MiniStatuslineAk",
     pattern = "GitSignsUpdate",
     callback = function() H.set_active() end,
   })
@@ -327,13 +289,7 @@ end
 H.diagnostic_is_disabled = function() return vim.diagnostic.is_disabled(0) end
 
 -- added
-H.harpoon_data = nil
-
--- added
-H.harpoon_highlight = function()
-  local harpoon = H.harpoon_data
-  return harpoon and harpoon.buffer_idx > 0 and "MiniHipatternsHack" or H.fixed_hl
-end
+H.harpoon_highlight = function() return Harpoonline.is_buffer_harpooned() and "MiniHipatternsHack" or H.fixed_hl end
 
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                        Activate                         │

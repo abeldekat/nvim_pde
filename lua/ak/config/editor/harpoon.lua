@@ -4,7 +4,6 @@
 -- TODO: Telescope for files across lists
 
 local Harpoon = require("harpoon")
-local has_harpoon_line, HarpoonLine = pcall(require, "harpoon_line")
 
 local A = {} -- actions triggered by keys
 local H = {} -- helper functionality
@@ -13,11 +12,11 @@ H.current_list_placeholder = "default" -- the default harpoon list is nil...
 H.current_list = H.current_list_placeholder
 H.lists = { H.current_list_placeholder }
 
-H.harpoon_list = function()
+H.harpoon_name = function()
   return H.current_list ~= H.current_list_placeholder and H.current_list or nil --
 end
 H.get_list = function()
-  return Harpoon:list(H.harpoon_list()) --
+  return Harpoon:list(H.harpoon_name()) --
 end
 H.name_of_next_list = function()
   local function current_idx()
@@ -31,7 +30,7 @@ end
 
 A.switch_list = function()
   H.current_list = H.name_of_next_list()
-  if has_harpoon_line then HarpoonLine.change_list(H.harpoon_list()) end
+  vim.api.nvim_exec_autocmds("User", { pattern = "HarpoonSwitchedList", modeline = false, data = H.harpoon_name() })
 end
 A.append = function() H.get_list():append() end
 A.ui = function() Harpoon.ui:toggle_quick_menu(H.get_list()) end
@@ -71,11 +70,11 @@ local function setup()
   for idx, list in ipairs(extra_lists) do
     opts[list] = extra_list_configs[idx]
   end
+  H.lists = vim.list_extend(H.lists, extra_lists)
+
   add_keys()
 
   ---@diagnostic disable-next-line: redundant-parameter
   Harpoon:setup(opts)
-  if has_harpoon_line then HarpoonLine:setup() end
-  H.lists = vim.list_extend(H.lists, extra_lists)
 end
 setup()
