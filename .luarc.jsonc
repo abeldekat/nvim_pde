@@ -37,6 +37,7 @@
       // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/git-blame.nvim/lua",
       "$XDG_DATA_HOME/nvim/site/pack/deps/opt/gitsigns.nvim/lua",
       "$XDG_DATA_HOME/nvim/site/pack/deps/opt/harpoon/lua",
+      "$XDG_DATA_HOME/nvim/site/pack/deps/opt/harpoonline/lua",
       // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/headlines.nvim/lua",
       // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/indent-blankline.nvim/lua",
       // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/leap-spooky.nvim/lua",
@@ -95,6 +96,8 @@
       // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/vim-repeat",
       // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/vim-slime",
       // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/vim-startuptime/lua"
+      //
+      // "$XDG_DATA_HOME/nvim/lazy/lualine.nvim",
       //
       "$XDG_CONFIG_HOME/nvim/lua"
     ]

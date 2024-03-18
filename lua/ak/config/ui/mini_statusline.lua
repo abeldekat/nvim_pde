@@ -20,9 +20,59 @@
 local AK = {} -- module using the structure of MiniStatusline
 local H = {} -- helpers, copied, modified or added
 local MiniStatusline = require("mini.statusline")
+--          ╭─────────────────────────────────────────────────────────╮
+--          │                Harpoonline test no setup                │
+--          ╰─────────────────────────────────────────────────────────╯
+
+-- local Harpoonline = require("harpoonline") -- Without setup, return empty string
+
+--          ╭─────────────────────────────────────────────────────────╮
+--          │                Harpoonline test builtin:                │
+--          ╰─────────────────────────────────────────────────────────╯
+
+-- -- Short
+-- local Harpoonline = require("harpoonline").setup({
+--   formatter = "short",
+--   on_update = function() H.set_active() end,
+-- })
+
+-- Extended
 local Harpoonline = require("harpoonline").setup({
   on_update = function() H.set_active() end,
 })
+
+--          ╭─────────────────────────────────────────────────────────╮
+--          │               Harpoonline test override:                │
+--          ╰─────────────────────────────────────────────────────────╯
+
+-- local Harpoonline = require("harpoonline")
+-- Harpoonline.setup({  -- Override builtin "extended":
+--   custom_formatter = Harpoonline.gen_override("extended", {
+--     indicators = { "j", "k", "l", "h" },
+--     active_indicators = { "J", "K", "L", "H" },
+--   }),
+--   on_update = function() H.set_active() end,
+-- })
+
+--          ╭─────────────────────────────────────────────────────────╮
+--          │                Harpoonline test custom:                 │
+--          ╰─────────────────────────────────────────────────────────╯
+
+-- local Harpoonline = require("harpoonline")
+-- Harpoonline.setup({
+--   custom_formatter = Harpoonline.gen_formatter(
+--     function(data, _)
+--       return string.format(
+--         "%s%s%s",
+--         "➡️ ",
+--         data.list_name and string.format("%s ", data.list_name) or "",
+--         data.buffer_idx and string.format("%d", data.buffer_idx) or "-"
+--       )
+--     end,
+--     {}
+--   ),
+--   on_update = function() H.set_active() end,
+-- })
 
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                      Module setup                       │
