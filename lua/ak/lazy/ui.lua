@@ -31,53 +31,58 @@ end
 
 return {
 
+  { -- setup in ak.config.ui.mini_statusline
+    "abeldekat/harpoonline", -- load on require
+    version = "*",
+  },
+
   {
     "lukas-reineke/indent-blankline.nvim",
-    event = "VeryLazy", -- event = lazyfile,
+    event = "VeryLazy",
     config = function()
       --          ╭─────────────────────────────────────────────────────────╮
       --          │  Efficiency: Also setup startup-plugin mini.statusline  │
       --          │          Mini.notify is used in ak.lazy.start           │
       --          ╰─────────────────────────────────────────────────────────╯
-      -- require("ak.config.ui.mini_statusline")
+      require("ak.config.ui.mini_statusline")
 
       require("ak.config.ui.indent_blankline")
     end,
   },
 
-  {
-    "nvim-lualine/lualine.nvim",
-    event = "VeryLazy",
-    dependencies = {
-      {
-        -- "letieu/harpoon-lualine",
-        "abeldekat/harpoonline",
-      },
-    },
-    init = function()
-      vim.g.lualine_laststatus = vim.o.laststatus
-      if vim.fn.argc(-1) > 0 then
-        -- set an empty statusline till lualine loads
-        vim.o.statusline = " "
-      else
-        -- hide the statusline on the starter page
-        vim.o.laststatus = 0
-      end
-    end,
-    config = function()
-      local Harpoonline = require("harpoonline").setup()
-      local lualine_c = { Harpoonline.format, "filename" }
-
-      require("lualine").setup({
-        options = {
-          theme = "auto",
-          globalstatus = true,
-          disabled_filetypes = { statusline = { "dashboard", "alpha", "starter" } },
-        },
-        sections = {
-          lualine_c = lualine_c,
-        },
-      })
-    end,
-  },
+  -- {
+  --   "nvim-lualine/lualine.nvim",
+  --   event = "VeryLazy",
+  --   dependencies = {
+  --     {
+  --       -- "letieu/harpoon-lualine",
+  --       "abeldekat/harpoonline",
+  --     },
+  --   },
+  --   init = function()
+  --     vim.g.lualine_laststatus = vim.o.laststatus
+  --     if vim.fn.argc(-1) > 0 then
+  --       -- set an empty statusline till lualine loads
+  --       vim.o.statusline = " "
+  --     else
+  --       -- hide the statusline on the starter page
+  --       vim.o.laststatus = 0
+  --     end
+  --   end,
+  --   config = function()
+  --     local Harpoonline = require("harpoonline").setup()
+  --     local lualine_c = { Harpoonline.format, "filename" }
+  --
+  --     require("lualine").setup({
+  --       options = {
+  --         theme = "auto",
+  --         globalstatus = true,
+  --         disabled_filetypes = { statusline = { "dashboard", "alpha", "starter" } },
+  --       },
+  --       sections = {
+  --         lualine_c = lualine_c,
+  --       },
+  --     })
+  --   end,
+  -- },
 }

@@ -8,6 +8,7 @@ later(function()
     source = "mfussenegger/nvim-dap",
     depends = {
       "jay-babu/mason-nvim-dap.nvim",
+      "nvim-neotest/nvim-nio", -- dependency for dap ui
       "rcarriga/nvim-dap-ui",
       "theHamsta/nvim-dap-virtual-text",
       "mfussenegger/nvim-dap-python",

@@ -2,7 +2,7 @@ local Util = require("ak.util")
 return {
   {
     "neovim/nvim-lspconfig",
-    event = "VeryLazy", -- lazyfile
+    event = "VeryLazy",
     dependencies = {
       {
         "williamboman/mason.nvim",
