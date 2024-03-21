@@ -30,27 +30,33 @@ local MiniStatusline = require("mini.statusline")
 --          │                Harpoonline test builtin:                │
 --          ╰─────────────────────────────────────────────────────────╯
 
+-- Extended
+local Harpoonline = require("harpoonline").setup({
+  on_update = function() H.set_active() end,
+})
+
 -- -- Short
 -- local Harpoonline = require("harpoonline").setup({
 --   formatter = "short",
 --   on_update = function() H.set_active() end,
 -- })
 
--- Extended
-local Harpoonline = require("harpoonline").setup({
-  on_update = function() H.set_active() end,
-})
-
 --          ╭─────────────────────────────────────────────────────────╮
 --          │               Harpoonline test override:                │
 --          ╰─────────────────────────────────────────────────────────╯
 
 -- local Harpoonline = require("harpoonline")
--- Harpoonline.setup({  -- Override builtin "extended":
---   custom_formatter = Harpoonline.gen_override("extended", {
---     indicators = { "j", "k", "l", "h" },
---     active_indicators = { "J", "K", "L", "H" },
---   }),
+-- ---@type HarpoonlineBuiltinOptionsExtended
+-- local opts = {
+--   -- indicators = { "j", "k", "l", "h" },
+--   -- active_indicators = { "<j>", "<k>", "<l>", "<h>" },
+--   -- separator = " ",
+--   -- empty_slot = "",
+--   -- more_marks_indicator = "",
+--   -- more_marks_active_indicator = "",
+-- }
+-- Harpoonline.setup({
+--   custom_formatter = Harpoonline.gen_override("extended", opts),
 --   on_update = function() H.set_active() end,
 -- })
 
@@ -61,15 +67,16 @@ local Harpoonline = require("harpoonline").setup({
 -- local Harpoonline = require("harpoonline")
 -- Harpoonline.setup({
 --   custom_formatter = Harpoonline.gen_formatter(
---     function(data, _)
+--     ---@param data HarpoonLineData
+--     ---@return string
+--     function(data)
 --       return string.format(
 --         "%s%s%s",
 --         "➡️ ",
 --         data.list_name and string.format("%s ", data.list_name) or "",
 --         data.buffer_idx and string.format("%d", data.buffer_idx) or "-"
 --       )
---     end,
---     {}
+--     end
 --   ),
 --   on_update = function() H.set_active() end,
 -- })
@@ -105,29 +112,29 @@ AK.active = function()
   -- Customize statusline content for blocked filetypes to your liking
   if H.is_blocked_filetype() then return "" end
 
-  -- 1
   local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 120 })
-  -- 2
-  local lsp = AK.section_lsp({ trunc_width = 75, icon = "" })
+  --
+  -- Block:
   local git = MiniStatusline.section_git({ trunc_width = 75, icon = "" })
+  local lsp = AK.section_lsp({ trunc_width = 75, icon = "" })
   local diagnostics = AK.section_diagnostics({ trunc_width = 75 })
-  -- 3 added:
-  local harpoon_data = AK.section_harpoon({ trunc_width = 75 })
-  -- 4
+  --
   local filename = AK.section_filename({ trunc_width = 140 })
-  -- 5 added:
-  local macro = AK.section_macro({ trunc_width = 120 })
-  -- 6
   local fileinfo = AK.section_fileinfo({ trunc_width = 120 })
-  -- 7
+  --
+  -- Block:
   local search = MiniStatusline.section_searchcount({ trunc_width = 75 })
   local location = AK.section_location({ trunc_width = 75 })
+  --
+  -- Added:
+  local macro = AK.section_macro({ trunc_width = 120 })
+  local harpoon_data = AK.section_harpoon({ trunc_width = 75 })
 
   return MiniStatusline.combine_groups({
     { hl = mode_hl, strings = { string.upper(mode) } }, -- Dynamic mode_hl
+    { hl = H.harpoon_highlight(), strings = { harpoon_data } }, -- added
     { hl = H.fixed_hl, strings = { git, lsp, diagnostics } }, -- "..Devinfo"
     "%<", -- Mark general truncate point
-    { hl = H.harpoon_highlight(), strings = { harpoon_data } }, -- added
     { hl = H.fixed_hl, strings = { filename } }, -- "..Filename"
     "%=", -- End left alignment
     { hl = "MiniStatuslineModeCommand", strings = { macro } }, -- added
@@ -198,7 +205,7 @@ AK.section_macro = function(args)
   if MiniStatusline.is_truncated(args.trunc_width) then return "" end
 
   local reg = vim.fn.reg_recording()
-  return reg == "" and reg or "recording @" .. reg
+  return reg == "" and reg or "REC @" .. reg
 end
 
 -- overridden: removed filesize
