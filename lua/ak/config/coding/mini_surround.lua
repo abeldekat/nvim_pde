@@ -36,7 +36,7 @@ local function get_opts()
     -- highlight_duration = 500,
 
     --          ╭─────────────────────────────────────────────────────────╮
-    --          │   the s is already taken by flash, and gs is too long   │
+    --          │   the s is already taken by leap, and gs is too long   │
     --          │  use m in combination with four adjacent keys: a(add)   │
     --          │                     s(substitute),                      │
     --          │                   d(delete), f(find)                    │

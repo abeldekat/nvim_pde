@@ -13,7 +13,7 @@ function Toggle.add_toggle(opts)
   Toggle.name = opts.name
   Toggle.current = 1
 
-  vim.keymap.set("n", opts.key and opts.key or "<leader>a", function()
+  vim.keymap.set("n", opts.key and opts.key or "<leader>h", function()
     Toggle.current = Toggle.current == #opts.flavours and 1 or (Toggle.current + 1)
     local flavour = opts.flavours[Toggle.current]
 
@@ -27,7 +27,7 @@ function Toggle.add_toggle(opts)
       local info = string.format("Using %s[%s]", opts.name, vim.inspect(flavour))
       vim.api.nvim_echo({ { info, "InfoMsg" } }, true, {})
     end, 250)
-  end, { desc = "Alternate colors" })
+  end, { desc = "Change hue" })
 end
 
 function M.add_toggle(pattern, toggle_opts)

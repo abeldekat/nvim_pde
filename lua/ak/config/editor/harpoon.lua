@@ -40,7 +40,7 @@ A.select = function(index) H.get_list():select(index) end
 
 local function add_keys()
   vim.keymap.set("n", "<leader>J", A.switch_list, { desc = "Switch harpoon list", silent = true })
-  vim.keymap.set("n", "<leader>h", A.append, { desc = "Harpoon append", silent = true })
+  vim.keymap.set("n", "<leader>a", A.append, { desc = "Harpoon append", silent = true })
   vim.keymap.set("n", "<leader>j", A.ui, { desc = "Harpoon ui", silent = true })
   vim.keymap.set("n", "<leader>n", A.next, { desc = "Harpoon next", silent = true })
   vim.keymap.set("n", "<leader>p", A.prev, { desc = "Harpoon prev", silent = true })

@@ -146,14 +146,17 @@ Leader: `space`
 
 #### Harpoon
 
+- Switch active list: `<leader>J`
+- Info in statusline: `abeldekat/harpoonline`
 - Using the shortcuts for window navigation:
 `c-j`, `<c-k>`,`<c-l>`,`<c-h>`, corresponding to file 1-4
 - ui: `<leader>j` ("strongest finger")
-- add: `<leader>h`
+- add: `<leader>a`
+- next/prev: `<leader>n` / `<leader>p`
 
 Window navigation:
 
-- `<c-w>hjkl`
+- `<c-w>hjkl` (stock `Neovim`)
 - `mw`(next window)
 - `me`(last accessed window)
 
@@ -180,6 +183,7 @@ Window navigation:
 - `mini.statusline`, no colors, except on:
   - mode change
   - diagnostics
+  - current buffer is harpooned
   - macro recording
 - `cmdheight 0`
 - many color-schemes
@@ -188,7 +192,7 @@ Change color-schemes:
 
 - on each startup, see [scripts], `vim_menu_owns`
 - telescope, [leader uu], loads all colors, does not show builtin color-schemes
-- change the palette of the current color-scheme using [leader a]
+- change the palette of the current color-scheme using [leader h], aka "hue"
 
 Script `vim_menu_owns` writes to `lua.ak.colors`.
 Ignoring changes to that file:
@@ -196,6 +200,24 @@ Ignoring changes to that file:
 ```sh
 git update-index --assume-unchanged lua/ak/colors.lua
 ```
+
+### Key conflicts
+
+*Surrounding*:
+
+Using [mini.surround]. Suggested keys: `sa sd sr sf sF sh sn`
+
+The "s" is already used by [leap.nvim].
+Solution: Use the `m` key in combination with `asdf`,
+adjacent keys on a qwerty keyboard.
+Key `ms` is a mnemonic for `surround substitute`, performing a surround replace.
+
+*Operators*:
+
+Using [mini.operators]. Suggested key `gr`("go replace")
+is already used by the `lsp`("go references").
+Solution: Use `gs`, mnemonic for "go substitute".
+Change suggested key `gs`("go sort") into `gS`.
 
 ## Environment
 
@@ -235,6 +257,9 @@ This repo uses code and ideas from the following repositories:
 [ak.config]: lua/ak/config
 [ak.util]: lua/ak/util
 [leader uu]: lua/ak/util/color.lua
-[leader a]: lua/ak/util/color.lua
+[leader h]: lua/ak/util/color.lua
 [lazy methods]: lua/ak/util/defer.lua
 [with_submodules]: https://github.com/abeldekat/nvim_pde/tree/with_submodules
+[mini.surround]: https://github.com/echasnovski/mini.surround
+[mini.operators]: https://github.com/echasnovski/mini.operators
+[leap.nvim]: https://github.com/ggandor/leap.nvim
