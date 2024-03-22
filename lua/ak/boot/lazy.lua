@@ -5,7 +5,7 @@ local dev_path = "~/projects/lazydev"
 local function clone(owner, name)
   local url = string.format("%s/%s/%s.git", "https://github.com", owner, name)
   local path = vim.fn.stdpath("data") .. "/lazy/" .. name
-  if not vim.loop.fs_stat(path) then
+  if not vim.uv.fs_stat(path) then
     vim.fn.system({ "git", "clone", "--filter=blob:none", url, "--branch=stable", path })
   end
   return path

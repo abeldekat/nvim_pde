@@ -53,7 +53,7 @@ local function keys()
   end, { desc = "Run suite" })
   map("<leader>tl", function() require("neotest").run.run_last() end, { desc = "Run last" })
   map("<leader>tt", function() require("neotest").run.run(vim.fn.expand("%")) end, { desc = "Run file" })
-  map("<leader>tT", function() require("neotest").run.run(vim.loop.cwd()) end, { desc = "Run All Test Files" })
+  map("<leader>tT", function() require("neotest").run.run(vim.uv.cwd()) end, { desc = "Run All Test Files" })
   map(
     "<leader>tr",
     function() require("neotest").run.run({ extra_args = { "-s", "-vvv" } }) end,

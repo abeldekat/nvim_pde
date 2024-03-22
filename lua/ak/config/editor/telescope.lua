@@ -118,7 +118,7 @@ end
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                          Keys                           │
 --          ╰─────────────────────────────────────────────────────────╯
--- searching: Telescope default is vim.loop.cwd. May also be relative to buffer
+-- searching: Telescope default is vim.uv.cwd. May also be relative to buffer
 local function keys()
   local builtin = require("telescope.builtin")
   local themes = require("telescope.themes")

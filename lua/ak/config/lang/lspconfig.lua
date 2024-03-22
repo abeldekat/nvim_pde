@@ -72,7 +72,7 @@ function H.lua_ls()
   return {
     on_init = function(client)
       local path = client.workspace_folders[1].name
-      local fs_stat = vim.loop.fs_stat
+      local fs_stat = vim.uv.fs_stat
       if fs_stat(path .. "/.luarc.json") or fs_stat(path .. "/.luarc.jsonc") then
         return true -- opt out
       end

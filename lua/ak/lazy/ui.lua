@@ -62,10 +62,11 @@ return {
       end
     end,
     config = function()
-      local Harpoonline = require("harpoonline").setup()
+      local Harpoonline = require("harpoonline")
+      Harpoonline.setup({ on_update = function() require("lualine").refresh() end })
       local lualine_c = { Harpoonline.format, "filename" }
-      -- local lualine_c = { "harpoon2", "filename" }
 
+      -- local lualine_c = { "harpoon2", "filename" }
       require("lualine").setup({
         options = {
           theme = "auto",

@@ -29,7 +29,7 @@ function M.has(plugin) return vim.tbl_contains(referenced_plugins, plugin) end
 function M.opened_with_dir_argument()
   if vim.fn.argc() == 1 then
     ---@diagnostic disable-next-line: param-type-mismatch
-    local stat = vim.loop.fs_stat(vim.fn.argv(0))
+    local stat = vim.uv.fs_stat(vim.fn.argv(0))
     if stat and stat.type == "directory" then return true end
   end
   return false

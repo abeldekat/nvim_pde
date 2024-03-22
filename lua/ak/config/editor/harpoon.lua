@@ -59,7 +59,7 @@ local function setup()
     settings = {
       save_on_toggle = true, -- default false,
       sync_on_ui_close = false,
-      key = function() return vim.loop.cwd() end,
+      key = function() return vim.uv.cwd() end,
     },
     -- default = {}, -- ...it is simply a file harpoon
   }

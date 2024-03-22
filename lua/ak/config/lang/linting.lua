@@ -1,7 +1,7 @@
 local Util = require("ak.util") -- only for warn...
 
 local function debounce(ms, fn)
-  local timer = vim.loop.new_timer()
+  local timer = vim.uv.new_timer()
   return function(...)
     local argv = { ... }
     timer:start(ms, 0, function()
