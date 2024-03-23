@@ -32,9 +32,11 @@ function H.keys(_, buffer) -- client
     "<cmd>Telescope lsp_implementations reuse_win=true<cr>", { desc = "Goto implementation" })
   map("gy",
     "<cmd>Telescope lsp_type_definitions reuse_win=true<cr>", { desc = "Goto type definition" })
-  -- the Nvim LSP client sets K to show LSP "hover" feature. lsp-defaults
-  -- map("K",
-  --   vim.lsp.buf.hover, { desc = "Hover" })
+  if vim.fn.has("nvim-0.10") == 0 then
+    -- the Nvim LSP client sets K to show LSP "hover" feature. lsp-defaults
+    map("K",
+      vim.lsp.buf.hover, { desc = "Hover" })
+  end
   map("gK",
     vim.lsp.buf.signature_help, { desc = "Signature help" })
   map("<c-k>",
