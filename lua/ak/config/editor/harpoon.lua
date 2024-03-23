@@ -33,8 +33,7 @@ end
 ---@param list_item HarpoonListItem
 ---@return string
 L.display = function(list_item) return vim.fs.basename(list_item.value) .. "  " .. list_item.value end
--- Set cursor on mark of current file if possible
--- Highlight the line of that mark
+-- Set cursor on mark of current file if possible. Highlight
 L.on_ui_create = function(args) -- HarpoonToggleOptions
   -- --@type number
   -- local bufnr = args.bufnr -- or 0 on error
@@ -55,8 +54,8 @@ L.on_ui_create = function(args) -- HarpoonToggleOptions
   -- NOTE: See harpoon buffer.lua setup_autocmds_and_keymaps(bufnr)
   -- The autocmd on Filetype harpoon fails to match, because path is empty
   vim.fn.clearmatches()
-  -- vim.fn.matchadd("CursorLine", file_normalized)
-  vim.fn.matchadd("MiniHipatternsHack", file_normalized)
+  -- Highlights the filename on the left and in the path on the right:
+  vim.fn.matchadd("DiagnosticWarn", vim.fs.basename(file_normalized))
 end
 
 A.switch_list = function()
