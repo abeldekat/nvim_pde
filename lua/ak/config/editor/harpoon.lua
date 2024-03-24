@@ -3,6 +3,10 @@
 -- https://github.com/ThePrimeagen/harpoon/issues/523
 -- https://github.com/ThePrimeagen/harpoon/issues/352
 
+-- Selecting files with the same name in a different dir can fail:
+-- TODO: For now, use fork abeldekat...
+-- https://github.com/ThePrimeagen/harpoon/pull/503/commits/dfd4cd8233539e8942893a525df9553cc73c46a0
+
 local Harpoon = require("harpoon")
 local Extensions = require("harpoon.extensions")
 local Path = require("plenary.path")
@@ -14,6 +18,7 @@ local L = {} -- harpoon config functions
 H.current_list_placeholder = "default" -- the default harpoon list is nil...
 H.current_list = H.current_list_placeholder
 H.lists = { H.current_list_placeholder }
+-- H.ui_column_delimiter = "  "
 
 H.to_harpoon_name = function()
   return H.current_list ~= H.current_list_placeholder and H.current_list or nil --
@@ -29,17 +34,18 @@ H.name_of_next_list = function()
   return H.lists[idx == #H.lists and 1 or idx + 1]
 end
 
--- Display filename only, two spaces and normalized filename
----@param list_item HarpoonListItem
----@return string
-L.display = function(list_item) return vim.fs.basename(list_item.value) .. "  " .. list_item.value end
+-- -- TODO: revisit
+-- -- Display filename only, two spaces and normalized filename
+-- ---@param list_item HarpoonListItem
+-- ---@return string
+-- L.display = function(list_item)
+--   --
+--   return vim.fs.basename(list_item.value) .. H.ui_column_delimiter .. list_item.value
+-- end
+
 -- Set cursor on mark of current file if possible. Highlight
 L.on_ui_create = function(args) -- HarpoonToggleOptions
-  -- --@type number
-  -- local bufnr = args.bufnr -- or 0 on error
-  -- --@type number
-  -- local win_id = args.win_id -- or 0 on error
-  --@type string
+  -- args.bufnr -- or 0 on error,  args.win_id -- or 0 on error
   local current_file = args.current_file
   local file_normalized = Path:new(current_file):normalize()
 
@@ -54,8 +60,26 @@ L.on_ui_create = function(args) -- HarpoonToggleOptions
   -- NOTE: See harpoon buffer.lua setup_autocmds_and_keymaps(bufnr)
   -- The autocmd on Filetype harpoon fails to match, because path is empty
   vim.fn.clearmatches()
-  -- Highlights the filename on the left and in the path on the right:
-  vim.fn.matchadd("DiagnosticWarn", vim.fs.basename(file_normalized))
+  -- -- Highlight the second "column" on the right
+  -- local pattern_col2 = H.ui_column_delimiter .. file_normalized .. "$"
+  -- vim.fn.matchadd("MiniHipatternsNote", pattern_col2)
+  -- -- Highlight the first "column" containing the file name:
+  -- local col1_pattern = "^" .. vim.fs.basename(file_normalized) .. H.ui_column_delimiter
+  -- vim.fn.matchadd("DiagnosticWarn", col1_pattern)
+
+  -- -- Highlight the line
+  -- local pattern_line = "^" .. file_normalized .. "$"
+  -- vim.fn.matchadd("Constant", pattern_line, 11)
+  -- -- Override highlight for the basename part
+  -- local basename = vim.fs.basename(file_normalized)
+  -- local pattern_basename = basename .. "$"
+  -- vim.fn.matchadd("String", pattern_basename, 12)
+
+  local pattern_line = "^" .. file_normalized .. "$"
+  vim.fn.matchadd("MiniHipatternsHack", pattern_line, 11)
+
+  -- Disable cursorword hightlighting
+  vim.b.minicursorword_disable = true
 end
 
 A.switch_list = function()
@@ -88,7 +112,7 @@ local function setup()
   local opts = {
     settings = { save_on_toggle = true, sync_on_ui_close = false },
     -- ...it is simply a file harpoon:
-    default = { display = L.display },
+    -- default = { display = L.display },
   }
   --          ╭─────────────────────────────────────────────────────────╮
   --          │ Named list configs. Merged with default overriding any  │
@@ -103,6 +127,6 @@ local function setup()
 
   ---@diagnostic disable-next-line: redundant-parameter
   Harpoon:setup(opts)
-  Harpoon:extend({ [Extensions.event_names.UI_CREATE] = L.on_ui_create }) --
+  Harpoon:extend({ [Extensions.event_names.UI_CREATE] = L.on_ui_create })
 end
 setup()

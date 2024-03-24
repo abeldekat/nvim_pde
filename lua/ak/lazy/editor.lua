@@ -10,16 +10,6 @@ return {
 
   -- ── verylazy ──────────────────────────────────────────────────────────
 
-  -- {
-  --   "folke/flash.nvim",
-  --   event = "VeryLazy",
-  --   dependencies = "jinh0/eyeliner.nvim",
-  --   config = function()
-  --     require("ak.config.editor.flash")
-  --     require("ak.config.editor.eyeliner")
-  --   end,
-  -- },
-
   {
     "ggandor/leap.nvim",
     event = "VeryLazy",
@@ -115,12 +105,6 @@ return {
       require("ak.config.editor.mini_hipatterns")
     end,
   },
-
-  -- {
-  --   "folke/todo-comments.nvim",
-  --   event = "VeryLazy",
-  --   config = function() require("ak.config.editor.todo_comments") end,
-  -- },
 
   -- ── on-demand ─────────────────────────────────────────────────────────
 
