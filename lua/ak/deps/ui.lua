@@ -35,6 +35,9 @@ later(function()
   --          │       Mini.notify is used in ak.deps.start              │
   --          ╰─────────────────────────────────────────────────────────╯
   add({ source = "abeldekat/harpoonline", checkout = "stable" })
+  add({ source = "abeldekat/grappleline" })
+  require("ak.config.ui.harpoonline")
+  -- require("ak.config.ui.grappleline")
   require("ak.config.ui.mini_statusline")
 
   add("lukas-reineke/indent-blankline.nvim")

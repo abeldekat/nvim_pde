@@ -2,12 +2,11 @@
 --          │                    Exploring Grapple                    │
 --          ╰─────────────────────────────────────────────────────────╯
 
--- TODO: shift-enter does not work?
 -- TODO: in grapple ui, highlight the line for the active buffer
 
 local Grapple = require("grapple")
 local P = require("grapple.path")
-local H = {}
+local H = {} -- helper functions
 
 -- local default_order = { "global", "cwd", "git", "git_branch", "lsp" }
 -- It's possible to use git and git_branch in the same way as two harpoon lists
@@ -65,7 +64,7 @@ local opts = {
     end,
   },
   win_opts = {
-    style = "", --minimal disables a lot
+    style = "", --"minimal" Disables a lot. Make it look like harpoon
   },
 }
 

@@ -25,7 +25,7 @@ return {
   },
 
   -- {
-  --   "ThePrimeagen/harpoon",
+  --   "abeldekat/harpoon", -- "ThePrimeagen/harpoon",
   --   branch = "harpoon2",
   --   event = "VeryLazy",
   --   config = function()
