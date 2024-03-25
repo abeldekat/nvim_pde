@@ -14,7 +14,7 @@ Grappleline.setup({
 -- -- Short
 -- Grappleline.setup({
 --   formatter = "short",
---   on_update = on_update
+--   on_update = on_update,
 -- })
 
 --          ╭─────────────────────────────────────────────────────────╮
@@ -41,7 +41,7 @@ Grappleline.setup({
 
 -- Grappleline.setup({
 --   custom_formatter = Grappleline.gen_formatter(
---     ---@param data HarpoonLineData
+--     ---@param data GrapplelineData
 --     ---@return string
 --     function(data)
 --       return string.format(

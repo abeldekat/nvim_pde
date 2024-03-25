@@ -61,10 +61,32 @@ return {
       end
     end,
     config = function()
-      -- require("ak.config.ui.harpoonline")
-      require("ak.config.ui.grappleline")
+      --          ╭─────────────────────────────────────────────────────────╮
+      --          │                    Default lualine_c                    │
+      --          ╰─────────────────────────────────────────────────────────╯
       -- local lualine_c = { "filename" }
+
+      --          ╭─────────────────────────────────────────────────────────╮
+      --          │                  Using grapple builtin                  │
+      --          ╰─────────────────────────────────────────────────────────╯
+      -- local lualine_b = { "grapple" } -- first grapple example
+      -- local lualine_b = {
+      --   {
+      --     require("grapple").name_or_index,
+      --     cond = require("grapple").exists,
+      --   },
+      -- } -- second grapple example does not work?
+
+      --          ╭─────────────────────────────────────────────────────────╮
+      --          │                    Using harpoonline                    │
+      --          ╰─────────────────────────────────────────────────────────╯
+      -- require("ak.config.ui.harpoonline")
       -- local lualine_c = { require("harpoonline").format, "filename" }
+
+      --          ╭─────────────────────────────────────────────────────────╮
+      --          │                    Using grappleline                    │
+      --          ╰─────────────────────────────────────────────────────────╯
+      require("ak.config.ui.grappleline")
       local lualine_c = { require("grappleline").format, "filename" }
 
       require("lualine").setup({
