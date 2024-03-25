@@ -8,6 +8,7 @@ local on_update = function() require("lualine").refresh() end
 
 -- Extended
 Grappleline.setup({
+  override_scope_names = { git = "", git_branch = "dev" },
   on_update = on_update,
 })
 
