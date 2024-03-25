@@ -31,7 +31,7 @@ end
 
 return {
 
-  { "abeldekat/harpoonline", version = "*" },
+  -- { "abeldekat/harpoonline", version = "*" },
 
   {
     "lukas-reineke/indent-blankline.nvim",

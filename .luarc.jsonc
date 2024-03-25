@@ -36,6 +36,7 @@
       // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/friendly-snippets/lua",
       // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/git-blame.nvim/lua",
       // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/gitsigns.nvim/lua",
+      "$XDG_DATA_HOME/nvim/site/pack/deps/opt/grapple.nvim/lua",
       "$XDG_DATA_HOME/nvim/site/pack/deps/opt/harpoon/lua",
       "$XDG_DATA_HOME/nvim/site/pack/deps/opt/harpoonline/lua",
       // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/headlines.nvim/lua",

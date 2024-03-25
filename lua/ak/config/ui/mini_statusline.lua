@@ -20,66 +20,72 @@
 local AK = {} -- module using the structure of MiniStatusline
 local H = {} -- helpers, copied, modified or added
 local MiniStatusline = require("mini.statusline")
+
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                Harpoonline test no setup                │
 --          ╰─────────────────────────────────────────────────────────╯
 
--- local Harpoonline = require("harpoonline") -- Without setup, return empty string
+local has_harpoonline, Harpoonline = pcall(require, "harpoonline") -- Without setup, return empty string
+
+if has_harpoonline then
+  --          ╭─────────────────────────────────────────────────────────╮
+  --          │                Harpoonline test builtin:                │
+  --          ╰─────────────────────────────────────────────────────────╯
+
+  -- Extended
+  Harpoonline.setup({
+    on_update = function() H.set_active() end,
+  })
+
+  -- -- Short
+  -- Harpoonline.setup({
+  --   formatter = "short",
+  --   on_update = function() H.set_active() end,
+  -- })
+
+  --          ╭─────────────────────────────────────────────────────────╮
+  --          │               Harpoonline test override:                │
+  --          ╰─────────────────────────────────────────────────────────╯
+
+  -- ---@type HarpoonlineBuiltinOptionsExtended
+  -- local opts = {
+  --   -- indicators = { "j", "k", "l", "h" },
+  --   -- active_indicators = { "<j>", "<k>", "<l>", "<h>" },
+  --   -- separator = " ",
+  --   -- empty_slot = "",
+  --   -- more_marks_indicator = "",
+  --   -- more_marks_active_indicator = "",
+  -- }
+  -- Harpoonline.setup({
+  --   custom_formatter = Harpoonline.gen_override("extended", opts),
+  --   on_update = function() H.set_active() end,
+  -- })
+
+  --          ╭─────────────────────────────────────────────────────────╮
+  --          │                Harpoonline test custom:                 │
+  --          ╰─────────────────────────────────────────────────────────╯
+
+  -- Harpoonline.setup({
+  --   custom_formatter = Harpoonline.gen_formatter(
+  --     ---@param data HarpoonLineData
+  --     ---@return string
+  --     function(data)
+  --       return string.format(
+  --         "%s%s%s",
+  --         "➡️ ",
+  --         data.list_name and string.format("%s ", data.list_name) or "",
+  --         data.buffer_idx and string.format("%d", data.buffer_idx) or "-"
+  --       )
+  --     end
+  --   ),
+  --   on_update = function() H.set_active() end,
+  -- })
+end
 
 --          ╭─────────────────────────────────────────────────────────╮
---          │                Harpoonline test builtin:                │
+--          │                      Test Grapple                       │
 --          ╰─────────────────────────────────────────────────────────╯
-
--- Extended
-local Harpoonline = require("harpoonline").setup({
-  on_update = function() H.set_active() end,
-})
-
--- -- Short
--- local Harpoonline = require("harpoonline").setup({
---   formatter = "short",
---   on_update = function() H.set_active() end,
--- })
-
---          ╭─────────────────────────────────────────────────────────╮
---          │               Harpoonline test override:                │
---          ╰─────────────────────────────────────────────────────────╯
-
--- local Harpoonline = require("harpoonline")
--- ---@type HarpoonlineBuiltinOptionsExtended
--- local opts = {
---   -- indicators = { "j", "k", "l", "h" },
---   -- active_indicators = { "<j>", "<k>", "<l>", "<h>" },
---   -- separator = " ",
---   -- empty_slot = "",
---   -- more_marks_indicator = "",
---   -- more_marks_active_indicator = "",
--- }
--- Harpoonline.setup({
---   custom_formatter = Harpoonline.gen_override("extended", opts),
---   on_update = function() H.set_active() end,
--- })
-
---          ╭─────────────────────────────────────────────────────────╮
---          │                Harpoonline test custom:                 │
---          ╰─────────────────────────────────────────────────────────╯
-
--- local Harpoonline = require("harpoonline")
--- Harpoonline.setup({
---   custom_formatter = Harpoonline.gen_formatter(
---     ---@param data HarpoonLineData
---     ---@return string
---     function(data)
---       return string.format(
---         "%s%s%s",
---         "➡️ ",
---         data.list_name and string.format("%s ", data.list_name) or "",
---         data.buffer_idx and string.format("%d", data.buffer_idx) or "-"
---       )
---     end
---   ),
---   on_update = function() H.set_active() end,
--- })
+local has_grapple, Grapple = pcall(require, "grapple")
 
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                      Module setup                       │
@@ -129,10 +135,12 @@ AK.active = function()
   -- Added:
   local macro = AK.section_macro({ trunc_width = 120 })
   local harpoon_data = AK.section_harpoon({ trunc_width = 75 })
+  local grapple_data = AK.section_grapple({ trunc_width = 75 })
 
   return MiniStatusline.combine_groups({
     { hl = mode_hl, strings = { string.upper(mode) } }, -- Dynamic mode_hl
     { hl = H.harpoon_highlight(), strings = { harpoon_data } }, -- added
+    { hl = H.grapple_highlight(), strings = { grapple_data } }, -- added
     { hl = H.fixed_hl, strings = { git, lsp, diagnostics } }, -- "..Devinfo"
     "%<", -- Mark general truncate point
     { hl = H.fixed_hl, strings = { filename } }, -- "..Filename"
@@ -179,7 +187,16 @@ end
 
 AK.section_harpoon = function(args)
   if MiniStatusline.is_truncated(args.trunc_width) or H.isnt_normal_buffer() then return "" end
+  if not has_harpoonline then return "" end
+
   return Harpoonline.format()
+end
+
+AK.section_grapple = function(args)
+  if MiniStatusline.is_truncated(args.trunc_width) or H.isnt_normal_buffer() then return "" end
+  if not has_grapple then return "" end
+
+  return Grapple.statusline({})
 end
 
 -- overridden: in terminal, use full name. Use relative path if file is in cwd
@@ -346,7 +363,16 @@ end
 H.diagnostic_is_disabled = function() return vim.diagnostic.is_disabled(0) end
 
 -- added
-H.harpoon_highlight = function() return Harpoonline.is_buffer_harpooned() and "MiniHipatternsHack" or H.fixed_hl end
+H.harpoon_highlight = function()
+  --
+  return has_harpoonline and Harpoonline.is_buffer_harpooned() and "MiniHipatternsHack" or H.fixed_hl
+end
+
+-- added
+H.grapple_highlight = function()
+  --
+  return has_grapple and Grapple.exists() and "MiniHipatternsHack" or H.fixed_hl
+end
 
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                        Activate                         │

@@ -24,12 +24,26 @@ return {
     end,
   },
 
+  -- {
+  --   "ThePrimeagen/harpoon",
+  --   branch = "harpoon2",
+  --   event = "VeryLazy",
+  --   config = function()
+  --     require("ak.config.editor.harpoon")
+  --
+  --     --          ╭─────────────────────────────────────────────────────────╮
+  --     --          │          Efficiency: Also setup mini plugins:           │
+  --     --          ╰─────────────────────────────────────────────────────────╯
+  --     require("ak.config.editor.mini_clue")
+  --     require("ak.config.editor.mini_misc") -- zoom buffer
+  --   end,
+  -- },
+
   {
-    "ThePrimeagen/harpoon",
-    branch = "harpoon2",
+    "cbochs/grapple.nvim",
     event = "VeryLazy",
     config = function()
-      require("ak.config.editor.harpoon")
+      require("ak.config.editor.grapple")
 
       --          ╭─────────────────────────────────────────────────────────╮
       --          │          Efficiency: Also setup mini plugins:           │

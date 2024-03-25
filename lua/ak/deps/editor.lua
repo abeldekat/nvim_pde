@@ -29,9 +29,12 @@ later(function()
   add("jinh0/eyeliner.nvim")
   require("ak.config.editor.eyeliner")
 
-  -- add({ source = "ThePrimeagen/harpoon", checkout = "harpoon2" })
+  -- -- add({ source = "ThePrimeagen/harpoon", checkout = "harpoon2" })
   add({ source = "abeldekat/harpoon", checkout = "harpoon2" })
   require("ak.config.editor.harpoon")
+
+  -- add("cbochs/grapple.nvim")
+  -- require("ak.config.editor.grapple")
 
   require("ak.config.editor.mini_clue")
   require("ak.config.editor.mini_misc")
