@@ -21,13 +21,8 @@ local AK = {} -- module using the structure of MiniStatusline
 local H = {} -- helpers, copied, modified or added
 local MiniStatusline = require("mini.statusline")
 
+-- local has_harpoonline, Harpoonline = pcall(require, "grappleline")
 local has_harpoonline, Harpoonline = pcall(require, "harpoonline")
-if not has_harpoonline then -- currently, boot.lazy only has grapple.nvim
-  --          ╭─────────────────────────────────────────────────────────╮
-  --          │     test GrappleLine, same interface as Harpoonline     │
-  --          ╰─────────────────────────────────────────────────────────╯
-  has_harpoonline, Harpoonline = pcall(require, "grappleline")
-end
 
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                      Module setup                       │

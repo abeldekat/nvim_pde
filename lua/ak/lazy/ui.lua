@@ -62,32 +62,33 @@ return {
     end,
     config = function()
       --          ╭─────────────────────────────────────────────────────────╮
-      --          │                    Default lualine_c                    │
+      --          │                    Default lualine_b                    │
       --          ╰─────────────────────────────────────────────────────────╯
-      -- local lualine_c = { "filename" }
-
-      --          ╭─────────────────────────────────────────────────────────╮
-      --          │                  Using grapple builtin                  │
-      --          ╰─────────────────────────────────────────────────────────╯
-      -- local lualine_b = { "grapple" } -- first grapple example
-      -- local lualine_b = {
-      --   {
-      --     require("grapple").name_or_index,
-      --     cond = require("grapple").exists,
-      --   },
-      -- } -- second grapple example does not work?
+      -- local lualine_b = { 'branch', 'diff', 'diagnostics' }
 
       --          ╭─────────────────────────────────────────────────────────╮
       --          │                    Using harpoonline                    │
       --          ╰─────────────────────────────────────────────────────────╯
       -- require("ak.config.ui.harpoonline")
-      -- local lualine_c = { require("harpoonline").format, "filename" }
+      -- local lualine_b = { require("harpoonline").format, "branch", "diff", "diagnostics" }
+
+      --          ╭─────────────────────────────────────────────────────────╮
+      --          │                  Using grapple builtin                  │
+      --          ╰─────────────────────────────────────────────────────────╯
+      -- local lualine_b = { "grapple, "branch", "diff", "diagnostics" } -- first grapple example
+      -- local lualine_b = {
+      --   {
+      --     require("grapple").name_or_index,
+      --     cond = require("grapple").exists,
+      --   },
+      --   "branch", "diff", "diagnostics"
+      -- } -- second grapple example does not work?
 
       --          ╭─────────────────────────────────────────────────────────╮
       --          │                    Using grappleline                    │
       --          ╰─────────────────────────────────────────────────────────╯
       require("ak.config.ui.grappleline")
-      local lualine_c = { require("grappleline").format, "filename" }
+      local lualine_b = { require("grappleline").format, "branch", "diff", "diagnostics" }
 
       require("lualine").setup({
         options = {
@@ -96,7 +97,7 @@ return {
           disabled_filetypes = { statusline = { "dashboard", "alpha", "starter" } },
         },
         sections = {
-          lualine_c = lualine_c,
+          lualine_b = lualine_b,
         },
       })
     end,

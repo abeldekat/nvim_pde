@@ -60,14 +60,17 @@ H.basename = function(entity, _)
   }
 end
 
+-- TODO: from astronvim:
+-- maps.n[prefix .. "t"] = { "<Cmd>Grapple toggle_tags<CR>", desc = "Toggle a file" }
+-- maps.n[prefix .. "e"] = { "<Cmd>Grapple toggle_scopes<CR>", desc = "Select from tags" }
+-- maps.n[prefix .. "s"] = { "<Cmd>Grapple toggle_loaded<CR>", desc = "Select a project scope" }
+-- maps.n[prefix .. "x"] = { "<Cmd>Grapple reset<CR>", desc = "Clear tags from current project" }
 for _, key in ipairs({
-  -- { "<leader>J", "<cmd>Grapple toggle_scopes<cr>", desc = "Grapple toggle scopes" },
   { "<leader>J", H.use_scope, desc = "Use next or first scope" },
 
   { "<leader>a", "<cmd>Grapple toggle<cr>", desc = "Tag a file" },
   { "<leader>j", "<cmd>Grapple toggle_tags<cr>", desc = "Toggle tags menu" },
 
-  -- { "<c-j>", function() G.select({ index = 1, scope = H.scope }) end, desc = "Select first tag" },
   { "<c-j>", "<cmd>Grapple select index=1<cr>", desc = "Select first tag" },
   { "<c-k>", "<cmd>Grapple select index=2<cr>", desc = "Select second tag" },
   { "<c-l>", "<cmd>Grapple select index=3<cr>", desc = "Select third tag" },
