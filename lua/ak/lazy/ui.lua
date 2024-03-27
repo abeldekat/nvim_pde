@@ -61,6 +61,9 @@ return {
       end
     end,
     config = function()
+      -- local on_update = function() vim.wo.statusline = "%!v:lua.MiniStatusline.active()" end
+      local on_update = function() require("lualine").refresh() end
+
       --          ╭─────────────────────────────────────────────────────────╮
       --          │                    Default lualine_b                    │
       --          ╰─────────────────────────────────────────────────────────╯
@@ -69,7 +72,7 @@ return {
       --          ╭─────────────────────────────────────────────────────────╮
       --          │                    Using harpoonline                    │
       --          ╰─────────────────────────────────────────────────────────╯
-      -- require("ak.config.ui.harpoonline")
+      -- require("ak.config.ui.harpoonline").setup(on_update)
       -- local lualine_b = { require("harpoonline").format, "branch", "diff", "diagnostics" }
 
       --          ╭─────────────────────────────────────────────────────────╮
@@ -87,7 +90,7 @@ return {
       --          ╭─────────────────────────────────────────────────────────╮
       --          │                    Using grappleline                    │
       --          ╰─────────────────────────────────────────────────────────╯
-      require("ak.config.ui.grappleline")
+      require("ak.config.ui.grappleline").setup(on_update)
       local lualine_b = { require("grappleline").format, "branch", "diff", "diagnostics" }
 
       require("lualine").setup({

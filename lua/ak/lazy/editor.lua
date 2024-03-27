@@ -24,33 +24,20 @@ return {
     end,
   },
 
-  -- {
-  --   "abeldekat/harpoon", -- "ThePrimeagen/harpoon",
-  --   branch = "harpoon2",
-  --   event = "VeryLazy",
-  --   config = function()
-  --     require("ak.config.editor.harpoon")
-  --
-  --     --          ╭─────────────────────────────────────────────────────────╮
-  --     --          │          Efficiency: Also setup mini plugins:           │
-  --     --          ╰─────────────────────────────────────────────────────────╯
-  --     require("ak.config.editor.mini_clue")
-  --     require("ak.config.editor.mini_misc") -- zoom buffer
-  --   end,
-  -- },
-
+  --          ╭─────────────────────────────────────────────────────────╮
+  --          │  Have both harpoon and grapple installed, but use only  │
+  --          │                         one...                          │
+  --          ╰─────────────────────────────────────────────────────────╯
+  {
+    "abeldekat/harpoon", -- "ThePrimeagen/harpoon",
+    branch = "harpoon2",
+    -- event = "VeryLay",
+    -- config = function() require("ak.config.editor.harpoon") end,
+  },
   {
     "cbochs/grapple.nvim",
     event = "VeryLazy",
-    config = function()
-      require("ak.config.editor.grapple")
-
-      --          ╭─────────────────────────────────────────────────────────╮
-      --          │          Efficiency: Also setup mini plugins:           │
-      --          ╰─────────────────────────────────────────────────────────╯
-      require("ak.config.editor.mini_clue")
-      require("ak.config.editor.mini_misc") -- zoom buffer
-    end,
+    config = function() require("ak.config.editor.grapple") end,
   },
 
   {
@@ -60,7 +47,15 @@ return {
     end,
     event = function() return not with_dir and { "VeryLazy" } or {} end,
     dependencies = { "nvim-tree/nvim-web-devicons" },
-    config = function() require("ak.config.editor.oil") end,
+    config = function()
+      require("ak.config.editor.oil")
+
+      --     --          ╭─────────────────────────────────────────────────────────╮
+      --     --          │          Efficiency: Also setup mini plugins:           │
+      --     --          ╰─────────────────────────────────────────────────────────╯
+      --     require("ak.config.editor.mini_clue")
+      --     require("ak.config.editor.mini_misc") -- zoom buffer
+    end,
   },
 
   {

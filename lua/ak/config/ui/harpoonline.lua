@@ -1,55 +1,67 @@
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                       Harpoonline                       │
 --          ╰─────────────────────────────────────────────────────────╯
+local M = {}
 local Harpoonline = require("harpoonline")
 
-local on_update = function() vim.wo.statusline = "%!v:lua.MiniStatusline.active()" end
+local function extended(on_update)
+  Harpoonline.setup({
+    on_update = on_update,
+  })
+end
 
--- Extended
-Harpoonline.setup({
-  on_update = on_update,
-})
+local function short(on_update)
+  Harpoonline.setup({
+    formatter = "short",
+    on_update = on_update,
+  })
+end
 
--- -- Short
--- Harpoonline.setup({
---   formatter = "short",
---   on_update = on_update
--- })
+local function override(on_update)
+  ---@type HarpoonlineBuiltinOptionsExtended
+  local opts = {
+    indicators = { "j", "k", "l", "h" },
+    active_indicators = { "<j>", "<k>", "<l>", "<h>" },
+    separator = " ",
+    empty_slot = "",
+    more_marks_indicator = "",
+    more_marks_active_indicator = "",
+  }
+  Harpoonline.setup({
+    custom_formatter = Harpoonline.gen_override("extended", opts),
+    on_update = on_update,
+  })
+end
 
---          ╭─────────────────────────────────────────────────────────╮
---          │               Harpoonline test override:                │
---          ╰─────────────────────────────────────────────────────────╯
+local function custom(on_update)
+  Harpoonline.setup({
+    custom_formatter = Harpoonline.gen_formatter(
+      ---@param data HarpoonLineData
+      ---@return string
+      function(data)
+        return string.format(
+          "%s%s%s",
+          "➡️ ",
+          data.list_name and string.format("%s ", data.list_name) or "",
+          data.buffer_idx and string.format("%d", data.buffer_idx) or "-"
+        )
+      end
+    ),
+    on_update = on_update,
+  })
+end
 
--- ---@type HarpoonlineBuiltinOptionsExtended
--- local opts = {
---   -- indicators = { "j", "k", "l", "h" },
---   -- active_indicators = { "<j>", "<k>", "<l>", "<h>" },
---   -- separator = " ",
---   -- empty_slot = "",
---   -- more_marks_indicator = "",
---   -- more_marks_active_indicator = "",
--- }
--- Harpoonline.setup({
---   custom_formatter = Harpoonline.gen_override("extended", opts),
---   on_update = on_update
--- })
+local flavors = {
+  extended = extended,
+  short = short,
+  override = override,
+  custom = custom,
+}
 
---          ╭─────────────────────────────────────────────────────────╮
---          │                Harpoonline test custom:                 │
---          ╰─────────────────────────────────────────────────────────╯
+---@param on_update function
+function M.setup(on_update)
+  --
+  flavors.extended(on_update)
+end
 
--- Harpoonline.setup({
---   custom_formatter = Harpoonline.gen_formatter(
---     ---@param data HarpoonLineData
---     ---@return string
---     function(data)
---       return string.format(
---         "%s%s%s",
---         "➡️ ",
---         data.list_name and string.format("%s ", data.list_name) or "",
---         data.buffer_idx and string.format("%d", data.buffer_idx) or "-"
---       )
---     end
---   ),
---   on_update = on_update
--- })
+return M

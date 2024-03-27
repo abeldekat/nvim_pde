@@ -21,7 +21,8 @@ local AK = {} -- module using the structure of MiniStatusline
 local H = {} -- helpers, copied, modified or added
 local MiniStatusline = require("mini.statusline")
 
--- local has_harpoonline, Harpoonline = pcall(require, "grappleline")
+-- Testing: add both. Choose in ak.lazy and ak.deps(editor and ui)
+local has_grappleline, Grappleline = pcall(require, "grappleline")
 local has_harpoonline, Harpoonline = pcall(require, "harpoonline")
 
 --          ╭─────────────────────────────────────────────────────────╮
@@ -72,12 +73,12 @@ AK.active = function()
   -- Added:
   local macro = AK.section_macro({ trunc_width = 120 })
   local harpoon_data = AK.section_harpoon({ trunc_width = 75 })
-  -- local grapple_data = AK.section_grapple({ trunc_width = 75 })
+  local grapple_data = AK.section_grapple({ trunc_width = 75 })
 
   return MiniStatusline.combine_groups({
     { hl = mode_hl, strings = { string.upper(mode) } }, -- Dynamic mode_hl
     { hl = H.harpoon_highlight(), strings = { harpoon_data } }, -- added
-    -- { hl = H.grapple_highlight(), strings = { grapple_data } }, -- added
+    { hl = H.grapple_highlight(), strings = { grapple_data } }, -- added
     { hl = H.fixed_hl, strings = { git, lsp, diagnostics } }, -- "..Devinfo"
     "%<", -- Mark general truncate point
     { hl = H.fixed_hl, strings = { filename } }, -- "..Filename"
@@ -129,12 +130,12 @@ AK.section_harpoon = function(args)
   return Harpoonline.format()
 end
 
--- AK.section_grapple = function(args)
---   if MiniStatusline.is_truncated(args.trunc_width) or H.isnt_normal_buffer() then return "" end
---   if not has_grapple then return "" end
---
---   return Grapple.statusline({})
--- end
+AK.section_grapple = function(args)
+  if MiniStatusline.is_truncated(args.trunc_width) or H.isnt_normal_buffer() then return "" end
+  if not has_grappleline then return "" end
+
+  return Grappleline.format()
+end
 
 -- overridden: in terminal, use full name. Use relative path if file is in cwd
 AK.section_filename = function(args)
@@ -306,10 +307,10 @@ H.harpoon_highlight = function()
 end
 
 -- added
--- H.grapple_highlight = function()
---   --
---   return has_grapple and Grapple.exists() and "MiniHipatternsHack" or H.fixed_hl
--- end
+H.grapple_highlight = function()
+  --
+  return has_grappleline and Grappleline.is_buffer_tagged() and "MiniHipatternsHack" or H.fixed_hl
+end
 
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                        Activate                         │

@@ -29,14 +29,23 @@ later(function()
   add("jinh0/eyeliner.nvim")
   require("ak.config.editor.eyeliner")
 
-  add({
+  --          ╭─────────────────────────────────────────────────────────╮
+  --          │ Have both harpoon and grapple installed, but "packadd"  │
+  --          │                       only one...                       │
+  --          ╰─────────────────────────────────────────────────────────╯
+  local harpoon_spec = {
     source = "abeldekat/harpoon", -- "ThePrimeagen/harpoon"
     checkout = "harpoon2",
-  })
-  require("ak.config.editor.harpoon")
-
-  add("cbochs/grapple.nvim")
-  -- require("ak.config.editor.grapple") -- deps, use harpoon for the moment
+  }
+  local grapple_spec = "cbochs/grapple.nvim"
+  --
+  register(harpoon_spec)
+  -- add(harpoon_spec)
+  -- require("ak.config.editor.harpoon")
+  --
+  -- register(grapple_spec)
+  add(grapple_spec)
+  require("ak.config.editor.grapple")
 
   require("ak.config.editor.mini_clue")
   require("ak.config.editor.mini_misc")
