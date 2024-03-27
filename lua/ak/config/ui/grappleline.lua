@@ -50,11 +50,20 @@ local function custom(on_update)
   })
 end
 
+local function grapple(on_update)
+  Grappleline.setup({
+    -- formatter = "grapple_name_or_index",
+    formatter = "grapple", -- the statusline function in grapple.nvim
+    on_update = on_update,
+  })
+end
+
 local flavors = {
   extended = extended,
   short = short,
   override = override,
   custom = custom,
+  grapple = grapple,
 }
 
 ---@param on_update function

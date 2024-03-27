@@ -32,7 +32,7 @@
   "git-blame.nvim": { "branch": "master", "commit": "a0282d05adbee80aaf4e2ff35b81b52940b67bed" },
   "gitsigns.nvim": { "branch": "main", "commit": "078041e9d060a386b0c9d3a8c7a7b019a35d3fb0" },
   "grapple.nvim": { "branch": "main", "commit": "5d96868a6e9791b7a8ee51a9eef43fc408b9650e" },
-  "grappleline": { "branch": "main", "commit": "18e75927d7ec138bc09e1deff9763b1c115957a5" },
+  "grappleline": { "branch": "main", "commit": "9ee22ad809f62697778174ea4065ff08272cf7d6" },
   "harpoon": { "branch": "harpoon2", "commit": "c6446e971f1a34c46deee1a22d06049ea2de0603" },
   "headlines.nvim": { "branch": "master", "commit": "618ef1b2502c565c82254ef7d5b04402194d9ce3" },
   "indent-blankline.nvim": { "branch": "master", "commit": "3d08501caef2329aba5121b753e903904088f7e6" },

@@ -32,7 +32,7 @@ return {
   ["git-blame.nvim"] = "a0282d05adbee80aaf4e2ff35b81b52940b67bed",
   ["gitsigns.nvim"] = "078041e9d060a386b0c9d3a8c7a7b019a35d3fb0",
   ["grapple.nvim"] = "5d96868a6e9791b7a8ee51a9eef43fc408b9650e",
-  grappleline = "18e75927d7ec138bc09e1deff9763b1c115957a5",
+  grappleline = "9ee22ad809f62697778174ea4065ff08272cf7d6",
   harpoon = "c6446e971f1a34c46deee1a22d06049ea2de0603",
   harpoonline = "b55648d903e33236bd47fc9f9892b14c4cfea749",
   ["headlines.nvim"] = "618ef1b2502c565c82254ef7d5b04402194d9ce3",

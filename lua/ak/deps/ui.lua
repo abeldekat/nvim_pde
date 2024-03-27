@@ -36,7 +36,7 @@ later(function()
   --          ╰─────────────────────────────────────────────────────────╯
   local on_update = function() vim.wo.statusline = "%!v:lua.MiniStatusline.active()" end
   add({ source = "abeldekat/harpoonline", checkout = "stable" })
-  add({ source = "abeldekat/grappleline" })
+  add({ source = "abeldekat/grappleline", checkout = "stable" })
   -- require("ak.config.ui.harpoonline").setup(on_update)
   require("ak.config.ui.grappleline").setup(on_update)
   require("ak.config.ui.mini_statusline")

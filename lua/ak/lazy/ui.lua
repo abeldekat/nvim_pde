@@ -48,8 +48,8 @@ return {
   {
     "nvim-lualine/lualine.nvim",
     event = "VeryLazy",
-    --   dependencies = { "abeldekat/harpoonline", branch = "stable " },
-    dependencies = { "abeldekat/grappleline" },
+    --   dependencies = { "abeldekat/harpoonline", version = "*" },
+    dependencies = { "abeldekat/grappleline", version = "*" },
     init = function()
       vim.g.lualine_laststatus = vim.o.laststatus
       if vim.fn.argc(-1) > 0 then
@@ -63,18 +63,15 @@ return {
     config = function()
       -- local on_update = function() vim.wo.statusline = "%!v:lua.MiniStatusline.active()" end
       local on_update = function() require("lualine").refresh() end
-
       --          ╭─────────────────────────────────────────────────────────╮
       --          │                    Default lualine_b                    │
       --          ╰─────────────────────────────────────────────────────────╯
       -- local lualine_b = { 'branch', 'diff', 'diagnostics' }
-
       --          ╭─────────────────────────────────────────────────────────╮
       --          │                    Using harpoonline                    │
       --          ╰─────────────────────────────────────────────────────────╯
       -- require("ak.config.ui.harpoonline").setup(on_update)
       -- local lualine_b = { require("harpoonline").format, "branch", "diff", "diagnostics" }
-
       --          ╭─────────────────────────────────────────────────────────╮
       --          │                  Using grapple builtin                  │
       --          ╰─────────────────────────────────────────────────────────╯
@@ -82,11 +79,12 @@ return {
       -- local lualine_b = {
       --   {
       --     require("grapple").name_or_index,
-      --     cond = require("grapple").exists,
+      --     -- cond = require("grapple").exists,
       --   },
-      --   "branch", "diff", "diagnostics"
+      --   "branch",
+      --   "diff",
+      --   "diagnostics",
       -- } -- second grapple example does not work?
-
       --          ╭─────────────────────────────────────────────────────────╮
       --          │                    Using grappleline                    │
       --          ╰─────────────────────────────────────────────────────────╯
