@@ -75,16 +75,16 @@ return {
       --          ╭─────────────────────────────────────────────────────────╮
       --          │                  Using grapple builtin                  │
       --          ╰─────────────────────────────────────────────────────────╯
-      -- local lualine_b = { "grapple, "branch", "diff", "diagnostics" } -- first grapple example
+      -- local lualine_b = { "grapple", "branch", "diff", "diagnostics" } -- first grapple example
       -- local lualine_b = {
       --   {
-      --     require("grapple").name_or_index,
-      --     -- cond = require("grapple").exists,
+      --     function() return require("grapple").name_or_index() end,
+      --     cond = require("grapple").exists,
       --   },
       --   "branch",
       --   "diff",
       --   "diagnostics",
-      -- } -- second grapple example does not work?
+      -- } -- second grapple example
       --          ╭─────────────────────────────────────────────────────────╮
       --          │                    Using grappleline                    │
       --          ╰─────────────────────────────────────────────────────────╯

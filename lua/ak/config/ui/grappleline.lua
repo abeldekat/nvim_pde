@@ -20,14 +20,14 @@ local function short(on_update)
 end
 
 local function override(on_update)
-  ---@type GrapplelineBuiltinOptionsExtended
-  local opts = {
-    indicators = { " j ", " k ", " l ", " h " },
-    active_indicators = { "<j>", "<k>", "<l>", "<h>" },
-    empty_slot = " · ",
-  }
   Grappleline.setup({
-    custom_formatter = Grappleline.gen_override("extended", opts),
+    formatter_opts = {
+      extended = { -- customize the extended builtin
+        indicators = { " j ", " k ", " l ", " h " },
+        active_indicators = { "<j>", "<k>", "<l>", "<h>" },
+        empty_slot = " · ",
+      },
+    },
     on_update = on_update,
   })
 end
