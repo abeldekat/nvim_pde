@@ -19,7 +19,7 @@ local function short(on_update)
   })
 end
 
-local function override(on_update)
+local function old_override_example(on_update)
   Grappleline.setup({
     formatter_opts = {
       extended = { -- customize the extended builtin
@@ -47,7 +47,7 @@ local function extended_shortened(on_update)
   })
 end
 
-local function custom(on_update)
+local function custom_formatter(on_update)
   Grappleline.setup({
     custom_formatter = Grappleline.gen_formatter(
       ---@param data GrapplelineData
@@ -65,7 +65,7 @@ local function custom(on_update)
   })
 end
 
-local function grapple(on_update)
+local function defer_to_grapple(on_update)
   Grappleline.setup({
     -- formatter = "grapple_name_or_index",
     formatter = "grapple", -- the statusline function in grapple.nvim
@@ -91,7 +91,7 @@ local function very_conditional(on_update)
   local function conditional_formatter(data, builtin)
     -- the current scope has tags:
     if data.number_of_tags > 0 then return builtin(data) end
-    -- there are tags in all scopes of interest:
+    -- tags exist in all scopes of interest:
     if nr_of_tags() > 0 then return builtin(data) end
     return "" -- no tags, don't show anything
   end
@@ -108,20 +108,21 @@ local function very_conditional(on_update)
   })
 end
 
+-- Each key belongs to a function doing a custom Grappleline setup
 local flavors = {
   extended = extended,
   short = short,
-  override = override,
+  old_override_example = old_override_example,
+  custom_formatter = custom_formatter,
+  defer_to_grapple = defer_to_grapple,
   extended_shortened = extended_shortened,
-  custom = custom,
-  grapple = grapple,
   very_conditional = very_conditional,
 }
 
 ---@param on_update function
 function M.setup(on_update)
-  --
-  flavors.very_conditional(on_update)
+  -- current favorite:
+  flavors.extended_shortened(on_update)
 end
 
 return M
