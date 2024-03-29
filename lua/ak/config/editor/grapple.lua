@@ -79,7 +79,7 @@ for _, key in ipairs({
   { "<leader>n", "<cmd>Grapple cycle forward<cr>", desc = "Grapple cycle forward" },
   { "<leader>p", "<cmd>Grapple cycle backward<cr>", desc = "Grapple cycle backward" },
 }) do
-  H.map(key[1], key[2], key[3])
+  H.map(key[1], key[2], key["desc"])
 end
 
 Grapple.setup({

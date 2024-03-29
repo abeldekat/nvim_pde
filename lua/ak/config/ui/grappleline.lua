@@ -32,6 +32,21 @@ local function override(on_update)
   })
 end
 
+local function extended_shortened(on_update)
+  Grappleline.setup({
+    override_scope_names = { git = "", git_branch = "dev" },
+    formatter_opts = {
+      extended = { -- remove all spaces....
+        indicators = { "1", "2", "3", "4" },
+        empty_slot = "·",
+        more_marks_indicator = "…", -- horizontal elipsis. Disable with empty string
+        more_marks_active_indicator = "[…]", -- Disable with empty string
+      },
+    },
+    on_update = on_update,
+  })
+end
+
 local function custom(on_update)
   Grappleline.setup({
     custom_formatter = Grappleline.gen_formatter(
@@ -62,6 +77,7 @@ local flavors = {
   extended = extended,
   short = short,
   override = override,
+  extended_shortened = extended_shortened,
   custom = custom,
   grapple = grapple,
 }
@@ -69,7 +85,7 @@ local flavors = {
 ---@param on_update function
 function M.setup(on_update)
   --
-  flavors.extended(on_update)
+  flavors.extended_shortened(on_update)
 end
 
 return M

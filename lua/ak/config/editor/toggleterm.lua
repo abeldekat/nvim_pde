@@ -29,7 +29,7 @@ require("toggleterm").setup({
 -- hidden = true, does not toggle, press q for lazygit
 local lazygit =
   require("toggleterm.terminal").Terminal:new({ cmd = "lazygit", count = 99, hidden = true, direction = "tab" })
-vim.keymap.set("n", "<leader>gg", function() lazygit:toggle() end, { noremap = true, silent = true })
+vim.keymap.set("n", "<leader>gg", function() lazygit:toggle() end, { desc = "Lazygit", noremap = true, silent = true })
 
 vim.keymap.set("n", "<leader>mt", function() vim.cmd("ToggleTermToggleAll") end, {
   desc = "ToggleTerm all",

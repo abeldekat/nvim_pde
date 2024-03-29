@@ -12,10 +12,11 @@ later(function()
     end)
   end, "<leader>ms", "StartupTime")
 
-  register("jpalardy/vim-slime")
+  -- TODO: newest commits for vim-slime: terminal not found
+  register({ source = "jpalardy/vim-slime", checkout = "a532203bcd7af7f5e571c07b60bba7287076dc19" })
   Util.defer.on_keys(function()
     now(function()
-      add("jpalardy/vim-slime")
+      add({ source = "jpalardy/vim-slime", checkout = "a532203bcd7af7f5e571c07b60bba7287076dc19" })
       require("ak.config.util.slime")
     end)
   end, "<leader>mr", "Repl")
