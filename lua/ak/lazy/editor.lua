@@ -8,8 +8,6 @@ local with_dir = Util.opened_with_dir_argument()
 
 return {
 
-  -- ── verylazy ──────────────────────────────────────────────────────────
-
   {
     "ggandor/leap.nvim",
     event = "VeryLazy",
@@ -50,11 +48,13 @@ return {
     config = function()
       require("ak.config.editor.oil")
 
-      --     --          ╭─────────────────────────────────────────────────────────╮
-      --     --          │          Efficiency: Also setup mini plugins:           │
-      --     --          ╰─────────────────────────────────────────────────────────╯
-      --     require("ak.config.editor.mini_clue")
-      --     require("ak.config.editor.mini_misc") -- zoom buffer
+      --          ╭─────────────────────────────────────────────────────────╮
+      --          │          Efficiency: Also setup mini plugins:           │
+      --          ╰─────────────────────────────────────────────────────────╯
+      require("ak.config.editor.mini_clue")
+      require("ak.config.editor.mini_misc") -- zoom buffer
+      require("ak.config.editor.mini_cursorword")
+      require("ak.config.editor.mini_hipatterns")
     end,
   },
 
@@ -78,12 +78,12 @@ return {
         "stevearc/aerial.nvim",
         config = function() require("ak.config.editor.aerial") end,
       },
-      { -- also load spectre on telescope
+      {
         "nvim-pack/nvim-spectre",
         build = false,
         config = function() require("ak.config.editor.spectre") end,
       },
-      { -- also load trouble on telescope
+      {
         "folke/trouble.nvim",
         config = function() require("ak.config.editor.trouble") end,
       },
@@ -99,20 +99,11 @@ return {
   },
 
   -- ── previously lazyfile ───────────────────────────────────────────────
-  -- local lazyfile = { "BufReadPost", "BufNewFile", "BufWritePre" }
 
   {
     "lewis6991/gitsigns.nvim",
     event = "VeryLazy",
-    config = function()
-      require("ak.config.editor.gitsigns")
-
-      --          ╭─────────────────────────────────────────────────────────╮
-      --          │          Efficiency: Also setup mini plugins:           │
-      --          ╰─────────────────────────────────────────────────────────╯
-      require("ak.config.editor.mini_cursorword")
-      require("ak.config.editor.mini_hipatterns")
-    end,
+    config = function() require("ak.config.editor.gitsigns") end,
   },
 
   -- ── on-demand ─────────────────────────────────────────────────────────

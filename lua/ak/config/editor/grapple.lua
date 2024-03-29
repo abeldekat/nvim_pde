@@ -60,24 +60,23 @@ H.basename = function(entity, _)
   }
 end
 
--- TODO: from astronvim:
--- maps.n[prefix .. "t"] = { "<Cmd>Grapple toggle_tags<CR>", desc = "Toggle a file" }
--- maps.n[prefix .. "e"] = { "<Cmd>Grapple toggle_scopes<CR>", desc = "Select from tags" }
--- maps.n[prefix .. "s"] = { "<Cmd>Grapple toggle_loaded<CR>", desc = "Select a project scope" }
--- maps.n[prefix .. "x"] = { "<Cmd>Grapple reset<CR>", desc = "Clear tags from current project" }
 for _, key in ipairs({
-  { "<leader>J", H.use_scope, desc = "Use next or first scope" },
+  { "<leader>J", H.use_scope, desc = "Grapple next scope" },
 
-  { "<leader>a", "<cmd>Grapple toggle<cr>", desc = "Tag a file" },
-  { "<leader>j", "<cmd>Grapple toggle_tags<cr>", desc = "Toggle tags menu" },
+  { "<leader>j", "<cmd>Grapple toggle_tags<cr>", desc = "Grapple tags" },
+  { "<leader>n", "<cmd>Grapple cycle forward<cr>", desc = "Grapple next" },
+  { "<leader>p", "<cmd>Grapple cycle backward<cr>", desc = "Grapple prev" },
 
-  { "<c-j>", "<cmd>Grapple select index=1<cr>", desc = "Select first tag" },
-  { "<c-k>", "<cmd>Grapple select index=2<cr>", desc = "Select second tag" },
-  { "<c-l>", "<cmd>Grapple select index=3<cr>", desc = "Select third tag" },
-  { "<c-h>", "<cmd>Grapple select index=4<cr>", desc = "Select fourth tag" },
+  { "<leader>A", "<cmd>Grapple reset<cr>", desc = "Grapple reset" },
+  { "<leader>a", "<cmd>Grapple toggle<cr>", desc = "Grapple tag" },
 
-  { "<leader>n", "<cmd>Grapple cycle forward<cr>", desc = "Grapple cycle forward" },
-  { "<leader>p", "<cmd>Grapple cycle backward<cr>", desc = "Grapple cycle backward" },
+  { "<c-j>", "<cmd>Grapple select index=1<cr>", desc = "Grapple 1" },
+  { "<c-k>", "<cmd>Grapple select index=2<cr>", desc = "Grapple 2" },
+  { "<c-l>", "<cmd>Grapple select index=3<cr>", desc = "Grapple 3" },
+  { "<c-h>", "<cmd>Grapple select index=4<cr>", desc = "Grapple 4" },
+
+  { "<leader>mg", "<cmd>Grapple toggle_scopes<cr>", desc = "Grapple scopes" },
+  { "<leader>mG", "<cmd>Grapple toggle_loaded<cr>", desc = "Grapple loaded" },
 }) do
   H.map(key[1], key[2], key["desc"])
 end
