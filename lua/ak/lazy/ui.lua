@@ -48,8 +48,8 @@ return {
   {
     "nvim-lualine/lualine.nvim",
     event = "VeryLazy",
-    dependencies = { "abeldekat/harpoonline", version = "*" },
-    -- dependencies = { "abeldekat/grappleline", version = "*" },
+    -- dependencies = { "abeldekat/harpoonline", version = "*" },
+    dependencies = { "abeldekat/grappleline", version = "*" },
     init = function()
       vim.g.lualine_laststatus = vim.o.laststatus
       if vim.fn.argc(-1) > 0 then
@@ -70,8 +70,8 @@ return {
       --          ╭─────────────────────────────────────────────────────────╮
       --          │                    Using harpoonline                    │
       --          ╰─────────────────────────────────────────────────────────╯
-      require("ak.config.ui.harpoonline").setup(on_update)
-      local lualine_b = { require("harpoonline").format, "branch", "diff", "diagnostics" }
+      -- require("ak.config.ui.harpoonline").setup(on_update)
+      -- local lualine_b = { require("harpoonline").format, "branch", "diff", "diagnostics" }
       --          ╭─────────────────────────────────────────────────────────╮
       --          │                  Using grapple builtin                  │
       --          ╰─────────────────────────────────────────────────────────╯
@@ -84,12 +84,12 @@ return {
       --   "branch",
       --   "diff",
       --   "diagnostics",
-      -- } -- second grapple example
+      -- } -- second grapple example, modified with wrapped function
       --          ╭─────────────────────────────────────────────────────────╮
       --          │                    Using grappleline                    │
       --          ╰─────────────────────────────────────────────────────────╯
-      -- require("ak.config.ui.grappleline").setup(on_update)
-      -- local lualine_b = { require("grappleline").format, "branch", "diff", "diagnostics" }
+      require("ak.config.ui.grappleline").setup(on_update)
+      local lualine_b = { require("grappleline").format, "branch", "diff", "diagnostics" }
 
       require("lualine").setup({
         options = {

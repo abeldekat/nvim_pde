@@ -31,13 +31,13 @@ return {
   {
     "abeldekat/harpoon", -- "ThePrimeagen/harpoon",
     branch = "harpoon2",
-    event = "VeryLazy",
-    config = function() require("ak.config.editor.harpoon") end,
+    -- event = "VeryLazy",
+    -- config = function() require("ak.config.editor.harpoon") end,
   },
   {
     "cbochs/grapple.nvim",
-    -- event = "VeryLazy",
-    -- config = function() require("ak.config.editor.grapple") end,
+    event = "VeryLazy",
+    config = function() require("ak.config.editor.grapple") end,
   },
 
   {

@@ -39,13 +39,13 @@ later(function()
   }
   local grapple_spec = "cbochs/grapple.nvim"
   --
-  register(harpoon_spec)
-  -- add(harpoon_spec)
-  -- require("ak.config.editor.harpoon")
+  -- register(harpoon_spec)
+  add(harpoon_spec)
+  require("ak.config.editor.harpoon")
   --
-  -- register(grapple_spec)
-  add(grapple_spec)
-  require("ak.config.editor.grapple")
+  register(grapple_spec)
+  -- add(grapple_spec)
+  -- require("ak.config.editor.grapple")
 
   require("ak.config.editor.mini_clue")
   require("ak.config.editor.mini_misc")
