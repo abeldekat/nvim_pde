@@ -76,7 +76,7 @@ end
 -- Completely hide the line when there are no tags in some predefined scopes
 local function very_conditional(on_update)
   local Grapple = require("grapple")
-  local scopes = { "git", "git_branch" } -- assuming no override_scope_names
+  local scopes = { "git", "git_branch" }
 
   local function nr_of_tags()
     local result = 0
