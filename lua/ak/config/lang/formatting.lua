@@ -60,7 +60,7 @@ local function add_keys()
   keys(
     { "n", "v" },
     "<leader>cF",
-    function() require("conform").format({ formatters = { "injected" } }) end,
+    function() require("conform").format({ formatters = { "injected" }, timeout_ms = 3000 }) end,
     { desc = "Format injected langs", silent = true }
   )
 end

@@ -4,10 +4,12 @@ local function debounce(ms, fn)
   local timer = vim.uv.new_timer()
   return function(...)
     local argv = { ... }
-    timer:start(ms, 0, function()
-      timer:stop()
-      vim.schedule_wrap(fn)(unpack(argv))
-    end)
+    if timer then
+      timer:start(ms, 0, function()
+        timer:stop()
+        vim.schedule_wrap(fn)(unpack(argv))
+      end)
+    end
   end
 end
 
@@ -49,6 +51,7 @@ local function get_opts()
       -- ['*'] = { 'global linter' },
       -- Use the "_" filetype to run linters on filetypes that don't have other linters configured.
       -- ['_'] = { 'fallback linter' },
+      -- ["*"] = { "typos" },
     },
     -- LazyVim extension to easily override linter options
     -- or add custom linters.

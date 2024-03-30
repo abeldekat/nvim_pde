@@ -75,15 +75,12 @@ end
 
 -- Completely hide the line when there are no tags in some predefined scopes
 local function very_conditional(on_update)
-  local Grapple = require("grapple")
-  local scopes = { "git", "git_branch" }
+  local app = require("grapple.app")
 
-  local function nr_of_tags()
-    local result = 0
-    for _, scopename in ipairs(scopes) do
-      result = result + #Grapple.tags({ scope = scopename })
-    end
-    return result
+  local function has_tags_somewhere_else()
+    local containers = vim.tbl_values(app.get().tag_manager.containers)
+    local tbl_with_tags = vim.tbl_filter(function(k) return not vim.tbl_isempty(k.tags) end, containers)
+    return not vim.tbl_isempty(tbl_with_tags)
   end
 
   ---@param data GrapplelineData
@@ -91,8 +88,7 @@ local function very_conditional(on_update)
   local function conditional_formatter(data, builtin)
     -- the current scope has tags:
     if data.number_of_tags > 0 then return builtin(data) end
-    -- tags exist in all scopes of interest:
-    if nr_of_tags() > 0 then return builtin(data) end
+    if has_tags_somewhere_else() then return builtin(data) end
     return "" -- no tags, don't show anything
   end
 
@@ -103,9 +99,7 @@ local function very_conditional(on_update)
       return conditional_formatter(data, builtin) -- closure on builtin!
     end)
   end
-  Grappleline.setup({ -- formatter = "extended" -- or any other builtin...
-    on_update = on_update,
-  })
+  Grappleline.setup({ on_update = on_update })
 end
 
 -- Each key belongs to a function doing a custom Grappleline setup

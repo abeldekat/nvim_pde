@@ -1,5 +1,6 @@
 ---@class ak.util
 ---@field color ak.util.color
+---@field color_lazygit ak.util.color_lazygit
 ---@field defer ak.util.defer
 ---@field deps ak.util.deps
 ---@field lsp ak.util.lsp

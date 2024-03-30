@@ -5,7 +5,11 @@ local opt = vim.opt
 
 opt.autowrite = true -- Enable auto write
 opt.breakindent = true
-opt.clipboard = "unnamedplus" -- Sync with system clipboard
+if not vim.env.SSH_TTY then
+  -- only set clipboard if not in ssh, to make sure the OSC 52
+  -- integration works automatically. Requires Neovim >= 0.10.0
+  opt.clipboard = "unnamedplus" -- Sync with system clipboard
+end
 opt.completeopt = "menu,menuone,noselect"
 opt.conceallevel = 2 -- Hide * markup for bold and italic, but not markers with substitutions
 opt.confirm = true -- Confirm to save changes before exiting modified buffer
@@ -60,12 +64,11 @@ opt.fillchars = {
 if vim.fn.has("nvim-0.10") == 1 then opt.smoothscroll = true end
 
 -- Folding
-vim.opt.foldlevel = 99
--- vim.opt.foldtext = "v:lua.require'ak.util'.ui.foldtext()"
--- vim.opt.statuscolumn = [[%!v:lua.require'ak.util'.ui.statuscolumn()]]
-vim.opt.foldmethod = "expr"
--- vim.opt.foldexpr = "v:lua.require'ak.util'.ui.foldexpr()"
-vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+opt.foldlevel = 99
+opt.foldmethod = "expr"
+opt.foldexpr = "nvim_treesitter#foldexpr()"
+opt.foldtext = ""
+opt.fillchars = "fold: " -- overriding earlier fillchars?
 
 -- Fix markdown indentation settings
 vim.g.markdown_recommended_style = 0

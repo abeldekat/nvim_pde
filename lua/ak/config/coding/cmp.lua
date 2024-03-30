@@ -2,6 +2,8 @@
 --          │                   Also see: snip, lsp                   │
 --          ╰─────────────────────────────────────────────────────────╯
 
+-- NOTE: For now, skipped the autobrackets example for pyton in LazyVim
+
 vim.api.nvim_set_hl(0, "CmpGhostText", { link = "Comment", default = true })
 
 local cmp = require("cmp")
@@ -13,9 +15,7 @@ local opts = {
     completeopt = "menu,menuone,noinsert",
   },
   snippet = {
-    expand = function(args)
-      require("luasnip").lsp_expand(args.body)
-    end,
+    expand = function(args) require("luasnip").lsp_expand(args.body) end,
   },
   mapping = cmp.mapping.preset.insert({
     ["<C-n>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
@@ -45,9 +45,7 @@ local opts = {
   formatting = {
     format = function(_, item)
       local icons = require("ak.consts").icons.kinds
-      if icons[item.kind] then
-        item.kind = icons[item.kind] .. item.kind
-      end
+      if icons[item.kind] then item.kind = icons[item.kind] .. item.kind end
       return item
     end,
   },

@@ -30,6 +30,19 @@ function Toggle.add_toggle(opts)
   end, { desc = "Change hue" })
 end
 
+-- TODO: LazyVim-util-ui-color. Returns a color highlight string
+---@param name string
+---@param bg? boolean
+---@return string?
+function M.color_hl(name, bg)
+  local hl = vim.api.nvim_get_hl(0, { name = name, link = false })
+  local color = nil
+  if hl then
+    color = bg and hl.bg or hl.fg -- hl.background hl.foreground undefined
+  end
+  return color and string.format("#%06x", color) or nil
+end
+
 function M.add_toggle(pattern, toggle_opts)
   vim.api.nvim_create_autocmd("ColorScheme", {
     pattern = type(pattern) == string and { pattern } or pattern,

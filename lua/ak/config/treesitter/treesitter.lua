@@ -51,6 +51,7 @@ local get_opts = function()
       "json5", -- json
       "ninja", -- python
       "rst", -- python
+      "rasi", -- rofi
     },
     incremental_selection = {
       enable = true,
