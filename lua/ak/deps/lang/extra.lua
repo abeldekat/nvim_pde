@@ -41,10 +41,10 @@ local function python()
   local selector = "linux-cultist/venv-selector.nvim"
   register(selector)
 
-  local on_semshi = function() vim.cmd("packadd semshi | runtime! plugin/rplugin.vim | silent! UpdateRemotePlugins") end
-  local semshi = { source = "wookayin/semshi", hooks = { post_install = on_semshi, post_checkout = on_semshi } }
-  register(semshi)
-  require("ak.config.lang.python.semshi")
+  -- local on_semshi = function() vim.cmd("packadd semshi | runtime! plugin/rplugin.vim | silent! UpdateRemotePlugins") end
+  -- local semshi = { source = "wookayin/semshi", hooks = { post_install = on_semshi, post_checkout = on_semshi } }
+  -- register(semshi)
+  -- require("ak.config.lang.python.semshi")
 
   Util.defer.on_events(function()
     local function load_selector()
@@ -53,10 +53,10 @@ local function python()
     end
     Util.defer.on_keys(function() now(load_selector) end, "<leader>cv", "Venv selector")
 
-    now(function()
-      add(semshi)
-      vim.cmd("Semshi enable")
-    end)
+    -- now(function()
+    --   add(semshi)
+    --   vim.cmd("Semshi enable")
+    -- end)
   end, "FileType", "python")
 end
 

@@ -72,7 +72,6 @@ local function get_opts()
       lua = { "stylua" },
       sh = { "shfmt" },
       python = { "black" },
-      sql = { "sql-formatter" },
     },
     -- https://github.com/stevearc/conform.nvim/blob/master/doc/advanced_topics.md#injected-language-formatting-code-blocks
     formatters = {

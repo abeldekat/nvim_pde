@@ -61,7 +61,7 @@ return {
       end
     end,
     config = function()
-      -- local on_update = function() vim.wo.statusline = "%!v:lua.MiniStatusline.active()" end
+      -- local on_update = function() vim.wo.statusline = "%{%v:lua.MiniStatusline.active()%}" end
       local on_update = function() require("lualine").refresh() end
       --          ╭─────────────────────────────────────────────────────────╮
       --          │                    Default lualine_b                    │

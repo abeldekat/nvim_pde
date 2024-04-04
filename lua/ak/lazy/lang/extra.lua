@@ -63,12 +63,12 @@ local function python()
       keys = { { "<leader>cv", desc = "Venv selector", ft = "python" } },
       config = function() require("ak.config.lang.python.venv_selector") end,
     },
-    {
-      "wookayin/semshi", -- "numiras/semshi" -- use a maintained fork
-      ft = "python",
-      build = ":UpdateRemotePlugins",
-      init = function() require("ak.config.lang.python.semshi") end,
-    },
+    -- {
+    --   "wookayin/semshi", -- "numiras/semshi" -- use a maintained fork
+    --   ft = "python",
+    --   build = ":UpdateRemotePlugins",
+    --   init = function() require("ak.config.lang.python.semshi") end,
+    -- },
   }
 end
 

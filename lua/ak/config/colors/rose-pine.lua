@@ -1,5 +1,5 @@
 --          ╭─────────────────────────────────────────────────────────╮
---          │             mini.statusline: not supported              │
+--          │               mini.statusline: supported                │
 --          ╰─────────────────────────────────────────────────────────╯
 local Utils = require("ak.util")
 local prefer_light = require("ak.color").prefer_light
@@ -18,20 +18,8 @@ Utils.color.add_toggle("rose-pine*", {
 local current_nc = "#16141f"
 
 local hl_config = {
-  -- all inner groups, same as lualine c
-  MiniStatuslineFilename = { bg = "base", fg = "text", current = current_nc },
-
-  -- left and right, dynamic, same as lualine c
-  MiniStatuslineModeNormal = { bg = "base", fg = "text", current = current_nc },
-
-  MiniStatuslineModeInsert = { bg = "foam", fg = "base", current = current_nc },
-  MiniStatuslineModeVisual = { bg = "iris", fg = "base", current = current_nc },
-  MiniStatuslineModeReplace = { bg = "pine", fg = "base", current = current_nc },
-  MiniStatuslineModeCommand = { bg = "love", fg = "base", current = current_nc },
-
-  -- same as insert, the approach taken in tokyonight's lualine
-  MiniStatuslineModeOther = { bg = "foam", fg = "base", current = current_nc }, -- ie terminal
-  MiniStatuslineInactive = { bg = "base", fg = "muted", current = current_nc },
+  -- Use MiniStatuslineFilename for  mode normal:
+  MiniStatuslineModeNormal = { fg = "muted", bg = "surface", current = current_nc },
 
   MiniHipatternsFixme = { bg = "love", fg = "base", bold = true, current = current_nc },
   MiniHipatternsHack = { bg = "gold", fg = "base", bold = true, current = current_nc },

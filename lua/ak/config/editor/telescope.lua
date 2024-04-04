@@ -135,11 +135,9 @@ local function keys()
     end,
     { desc = "Search in buffer" }
   )
-  map(
-    "<leader>o",
-    function() builtin.buffers({ sort_mru = true, sort_lastused = true }) end,
-    { desc = "Other buffers" }
-  )
+  map("<leader>o", function()
+    builtin.buffers({ sort_mru = true }) -- removed sort_lastused
+  end, { desc = "Other buffers" })
   map("<leader>e", function() builtin.live_grep(themes.get_ivy({})) end, { desc = "Grep" })
   map("<leader>r", function() builtin.oldfiles() end, { desc = "Recent" })
   map("<leader>:", function() builtin.command_history() end, { desc = "Command history" })

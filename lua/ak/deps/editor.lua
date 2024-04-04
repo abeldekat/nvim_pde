@@ -34,18 +34,18 @@ later(function()
   --          │                       only one...                       │
   --          ╰─────────────────────────────────────────────────────────╯
   local harpoon_spec = {
-    source = "abeldekat/harpoon", -- "ThePrimeagen/harpoon"
+    source = "ThePrimeagen/harpoon",
     checkout = "harpoon2",
   }
   local grapple_spec = "cbochs/grapple.nvim"
   --
-  register(harpoon_spec)
-  -- add(harpoon_spec)
-  -- require("ak.config.editor.harpoon")
+  -- register(harpoon_spec)
+  add(harpoon_spec)
+  require("ak.config.editor.harpoon")
   --
-  -- register(grapple_spec)
-  add(grapple_spec)
-  require("ak.config.editor.grapple")
+  register(grapple_spec)
+  -- add(grapple_spec)
+  -- require("ak.config.editor.grapple")
 
   require("ak.config.editor.mini_clue")
   require("ak.config.editor.mini_misc")
@@ -81,9 +81,9 @@ later(function()
   add("akinsho/toggleterm.nvim")
   require("ak.config.editor.toggleterm")
 
-  -- add("lewis6991/gitsigns.nvim")
-  -- require("ak.config.editor.gitsigns")
-  require("ak.config.editor.mini_diff")
+  add("lewis6991/gitsigns.nvim")
+  require("ak.config.editor.gitsigns")
+  -- require("ak.config.editor.mini_diff")
 
   require("ak.config.editor.mini_cursorword")
   require("ak.config.editor.mini_hipatterns")

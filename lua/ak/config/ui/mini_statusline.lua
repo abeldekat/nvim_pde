@@ -273,7 +273,7 @@ end
 --          │                    Helper utilities                     │
 --          ╰─────────────────────────────────────────────────────────╯
 -- added, manually activate, lsp can be slow:
-H.set_active = function() vim.wo.statusline = "%!v:lua.MiniStatusline.active()" end
+H.set_active = function() vim.wo.statusline = "%{%v:lua.MiniStatusline.active()%}" end
 
 -- added
 H.is_blocked_filetype = function()

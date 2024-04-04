@@ -27,7 +27,7 @@ return {
   --          │                         one...                          │
   --          ╰─────────────────────────────────────────────────────────╯
   {
-    "abeldekat/harpoon", -- "ThePrimeagen/harpoon",
+    "ThePrimeagen/harpoon",
     branch = "harpoon2",
     -- event = "VeryLazy",
     -- config = function() require("ak.config.editor.harpoon") end,

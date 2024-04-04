@@ -156,12 +156,13 @@ map("n", "<leader><tab>s", "<cmd>tabs<cr>", { desc = "Show tabs" })
 map("n", "me", "<C-W>p", { desc = "Last accessed window", remap = true })
 map("n", "mw", "<C-W>w", { desc = "Next window", remap = true })
 --
-map("n", "<C-d>", "<C-d>zz", { desc = "Better ctrl-d" })
-map("n", "<C-u>", "<C-u>zz", { desc = "Better ctrl-u" })
+-- The disadvantage of combining with zz: Less number of lines per movement
+-- map("n", "<C-d>", "<C-d>zz", { desc = "Better ctrl-d" })
+-- map("n", "<C-u>", "<C-u>zz", { desc = "Better ctrl-u" })
 
 -- Down half page combining left and right hand:
 -- c-n can behave like j and enter, also sometimes "next":
-map("n", "<C-N>", "<C-d>zz", { desc = "Down half page, better ctrl-d" })
+map("n", "<C-N>", "<C-d>", { desc = "Down half page, better ctrl-d" })
 
 -- https://www.reddit.com/r/neovim/comments/mbj8m5/how_to_setup_ctrlshiftkey_mappings_in_neovim_and/
 -- TODO: Modify alacritty.yml. See harpoon setup
