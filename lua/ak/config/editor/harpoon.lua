@@ -76,7 +76,7 @@ L.on_ui_create = function(args) -- HarpoonToggleOptions
   -- vim.fn.matchadd("String", pattern_basename, 12)
 
   local pattern_line = "^" .. file_normalized .. "$"
-  vim.fn.matchadd("MiniHipatternsHack", pattern_line, 11)
+  vim.fn.matchadd("CursorLine", pattern_line, 11)
 
   -- Disable cursorword hightlighting
   vim.b.minicursorword_disable = true
@@ -86,7 +86,7 @@ A.switch_list = function()
   H.current_list = H.name_of_next_list()
   vim.api.nvim_exec_autocmds("User", { pattern = "HarpoonSwitchedList", modeline = false, data = H.to_harpoon_name() })
 end
-A.append = function() H.get_current_list():append() end
+A.append = function() H.get_current_list():add() end
 A.ui = function() Harpoon.ui:toggle_quick_menu(H.get_current_list()) end
 A.prev = function() H.get_current_list():prev() end
 A.next = function() H.get_current_list():next() end
@@ -94,7 +94,7 @@ A.select = function(index) H.get_current_list():select(index) end
 
 local function add_keys()
   vim.keymap.set("n", "<leader>J", A.switch_list, { desc = "Harpoon next list", silent = true })
-  vim.keymap.set("n", "<leader>a", A.append, { desc = "Harpoon append", silent = true })
+  vim.keymap.set("n", "<leader>a", A.append, { desc = "Harpoon add", silent = true })
   vim.keymap.set("n", "<leader>j", A.ui, { desc = "Harpoon ui", silent = true })
   vim.keymap.set("n", "<leader>n", A.next, { desc = "Harpoon next", silent = true })
   vim.keymap.set("n", "<leader>p", A.prev, { desc = "Harpoon prev", silent = true })
