@@ -34,7 +34,7 @@ H.name_of_next_list = function()
   return H.lists[idx == #H.lists and 1 or idx + 1]
 end
 
--- -- TODO: revisit
+-- -- TODO: revisit this code later
 -- -- Display filename only, two spaces and normalized filename
 -- ---@param list_item HarpoonListItem
 -- ---@return string
@@ -86,7 +86,7 @@ A.switch_list = function()
   H.current_list = H.name_of_next_list()
   vim.api.nvim_exec_autocmds("User", { pattern = "HarpoonSwitchedList", modeline = false, data = H.to_harpoon_name() })
 end
-A.append = function() H.get_current_list():add() end
+A.add = function() H.get_current_list():add() end
 A.ui = function() Harpoon.ui:toggle_quick_menu(H.get_current_list()) end
 A.prev = function() H.get_current_list():prev() end
 A.next = function() H.get_current_list():next() end
@@ -94,7 +94,7 @@ A.select = function(index) H.get_current_list():select(index) end
 
 local function add_keys()
   vim.keymap.set("n", "<leader>J", A.switch_list, { desc = "Harpoon next list", silent = true })
-  vim.keymap.set("n", "<leader>a", A.append, { desc = "Harpoon add", silent = true })
+  vim.keymap.set("n", "<leader>a", A.add, { desc = "Harpoon add", silent = true })
   vim.keymap.set("n", "<leader>j", A.ui, { desc = "Harpoon ui", silent = true })
   vim.keymap.set("n", "<leader>n", A.next, { desc = "Harpoon next", silent = true })
   vim.keymap.set("n", "<leader>p", A.prev, { desc = "Harpoon prev", silent = true })
