@@ -1,5 +1,5 @@
-local dev_patterns = {} -- { "grappleline", "harpoonline" }
-local dev_path = "~/projects/lazydev"
+local dev_patterns = {} -- { "grappleline", "grapple.nvim" }
+local dev_path = "~/projects/plugins"
 
 ---@diagnostic disable:assign-type-mismatch
 local function clone(owner, name)

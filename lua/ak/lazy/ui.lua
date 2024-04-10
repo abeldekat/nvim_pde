@@ -75,21 +75,23 @@ return {
       --          ╭─────────────────────────────────────────────────────────╮
       --          │                  Using grapple builtin                  │
       --          ╰─────────────────────────────────────────────────────────╯
-      -- local lualine_b = { "grapple", "branch", "diff", "diagnostics" } -- first grapple example
+      local lualine_b = { "grapple", "branch", "diff", "diagnostics" } -- first grapple example
+
       -- local lualine_b = {
       --   {
       --     function() return require("grapple").name_or_index() end,
-      --     cond = require("grapple").exists,
+      --     cond = function() return package.loaded["grapple"] and require("grapple").exists() end,
       --   },
       --   "branch",
       --   "diff",
       --   "diagnostics",
       -- } -- second grapple example, modified with wrapped function
+
       --          ╭─────────────────────────────────────────────────────────╮
       --          │                    Using grappleline                    │
       --          ╰─────────────────────────────────────────────────────────╯
-      require("ak.config.ui.grappleline").setup(on_update)
-      local lualine_b = { require("grappleline").format, "branch", "diff", "diagnostics" }
+      -- require("ak.config.ui.grappleline").setup(on_update)
+      -- local lualine_b = { require("grappleline").format, "branch", "diff", "diagnostics" }
 
       require("lualine").setup({
         options = {

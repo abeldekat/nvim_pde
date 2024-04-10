@@ -64,11 +64,11 @@ for _, key in ipairs({
   { "<leader>J", H.use_scope, desc = "Grapple next scope" },
 
   { "<leader>j", "<cmd>Grapple toggle_tags<cr>", desc = "Grapple tags" },
-  { "<leader>n", "<cmd>Grapple cycle forward<cr>", desc = "Grapple next" },
-  { "<leader>p", "<cmd>Grapple cycle backward<cr>", desc = "Grapple prev" },
+  { "<leader>n", "<cmd>Grapple cycle_tags next<cr>", desc = "Grapple next" },
+  { "<leader>p", "<cmd>Grapple cycle_tags prev<cr>", desc = "Grapple prev" },
 
   { "<leader>A", "<cmd>Grapple reset<cr>", desc = "Grapple reset" },
-  { "<leader>a", "<cmd>Grapple toggle<cr>", desc = "Grapple tag" },
+  { "<leader>a", "<cmd>Grapple toggle<cr>", desc = "Grapple toggle" },
 
   { "<c-j>", "<cmd>Grapple select index=1<cr>", desc = "Grapple 1" },
   { "<c-k>", "<cmd>Grapple select index=2<cr>", desc = "Grapple 2" },
