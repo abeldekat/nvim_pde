@@ -37,7 +37,8 @@ later(function()
     source = "ThePrimeagen/harpoon",
     checkout = "harpoon2",
   }
-  local grapple_spec = "cbochs/grapple.nvim"
+  -- local grapple_spec = "cbochs/grapple.nvim"
+  local grapple_spec = "abeldekat/grapple.nvim"
   --
   register(harpoon_spec)
   -- add(harpoon_spec)
@@ -45,7 +46,7 @@ later(function()
   --
   -- register(grapple_spec)
   add(grapple_spec)
-  require("ak.config.editor.grapple")
+  require("ak.config.editor.grapple_pr") -- testing the pr
 
   require("ak.config.editor.mini_clue")
   require("ak.config.editor.mini_misc")

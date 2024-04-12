@@ -1,5 +1,8 @@
+---@diagnostic disable: undefined-field, undefined-doc-name
+
 --          ╭─────────────────────────────────────────────────────────╮
---          │                       Grappleline                       │
+--          │ TODO: Remove when grapple.nvim PR is accepted. Archive  │
+--          │                       the plugin                        │
 --          ╰─────────────────────────────────────────────────────────╯
 local M = {}
 local Grappleline = require("grappleline")

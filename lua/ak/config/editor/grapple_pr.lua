@@ -1,3 +1,50 @@
+local function custom_formatter(opts_in, data)
+  local opts = { -- condensed line showing 4 slots and an optional extra slot
+    max_slots = 4,
+    inactive = "%s",
+    active = "[%s]",
+    empty_slot = "·", -- #slots > #tags, middledot
+    more_marks_indicator = "…", -- #slots < #tags, horizontal elipsis
+  }
+  if data.scope_name == "git" then
+    data.scope_name = ""
+  elseif data.scope_name == "git_branch" then
+    data.scope_name = "dev"
+  end
+
+  local status = {} -- build slots:
+  local max_tags = #data.tags
+  local current_path = data.current and data.current.path or nil
+  for i = 1, opts.max_slots do
+    local tag_fmt = opts.inactive
+    local tag_str = "" .. i
+    if i > max_tags then -- more slots then ...
+      tag_str = opts.empty_slot
+    else
+      local tag = data.tags[i]
+      if current_path == tag.path then tag_fmt = opts.active end
+    end
+    table.insert(status, string.format(tag_fmt, tag_str))
+  end
+  if max_tags > opts.max_slots then -- more marks then... One indicator
+    local tag_fmt = opts.inactive
+    local tag_str = opts.more_marks_indicator
+    if current_path then
+      for i = opts.max_slots + 1, max_tags do
+        local tag = data.tags[i]
+        if current_path == tag.path then
+          tag_fmt = opts.active
+          break
+        end
+      end
+    end
+    table.insert(status, string.format(tag_fmt, tag_str))
+  end
+
+  local prefix = string.format("%s%s%s", opts_in.icon, data.scope_name == "" and "" or " ", data.scope_name)
+  return prefix .. " " .. table.concat(status)
+end
+
 local Grapple = require("grapple")
 local P = require("grapple.path")
 local H = {} -- helper functions
@@ -82,4 +129,7 @@ Grapple.setup({
   styles = { basename = H.basename },
   --"minimal" style disables a lot. Make it look like harpoon...
   win_opts = { style = "" },
+  statusline = {
+    formatter = custom_formatter,
+  },
 })

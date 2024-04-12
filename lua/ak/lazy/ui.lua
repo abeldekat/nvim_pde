@@ -49,7 +49,6 @@ return {
     "nvim-lualine/lualine.nvim",
     event = "VeryLazy",
     -- dependencies = { "abeldekat/harpoonline", version = "*" },
-    dependencies = { "abeldekat/grappleline", version = "*" },
     init = function()
       vim.g.lualine_laststatus = vim.o.laststatus
       if vim.fn.argc(-1) > 0 then
@@ -61,8 +60,6 @@ return {
       end
     end,
     config = function()
-      -- local on_update = function() vim.wo.statusline = "%{%v:lua.MiniStatusline.active()%}" end
-      local on_update = function() require("lualine").refresh() end
       --          ╭─────────────────────────────────────────────────────────╮
       --          │                    Default lualine_b                    │
       --          ╰─────────────────────────────────────────────────────────╯
@@ -70,6 +67,7 @@ return {
       --          ╭─────────────────────────────────────────────────────────╮
       --          │                    Using harpoonline                    │
       --          ╰─────────────────────────────────────────────────────────╯
+      -- local on_update = function() require("lualine").refresh() end
       -- require("ak.config.ui.harpoonline").setup(on_update)
       -- local lualine_b = { require("harpoonline").format, "branch", "diff", "diagnostics" }
       --          ╭─────────────────────────────────────────────────────────╮
@@ -86,12 +84,6 @@ return {
       --   "diff",
       --   "diagnostics",
       -- } -- second grapple example, modified with wrapped function
-
-      --          ╭─────────────────────────────────────────────────────────╮
-      --          │                    Using grappleline                    │
-      --          ╰─────────────────────────────────────────────────────────╯
-      -- require("ak.config.ui.grappleline").setup(on_update)
-      -- local lualine_b = { require("grappleline").format, "branch", "diff", "diagnostics" }
 
       require("lualine").setup({
         options = {

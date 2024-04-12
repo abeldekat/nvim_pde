@@ -22,8 +22,16 @@ local H = {} -- helpers, copied, modified or added
 local MiniStatusline = require("mini.statusline")
 
 -- Testing: add both. Choose in ak.lazy and ak.deps(editor and ui)
-local has_grappleline, Grappleline = pcall(require, "grappleline")
-local has_harpoonline, Harpoonline = pcall(require, "harpoonline")
+--
+local has_harpoonline = false -- , _ = pcall(require, "harpoonline")
+local Harpoonline
+if has_harpoonline then Harpoonline = require("harpoonline") end
+--
+-- Testing grapple PR:
+-- local has_grapple, Grappleline = pcall(require, "grappleline")
+local has_grapple, Grappleline = pcall(require, "grapple.statusline")
+local grappleline
+if has_grapple then grappleline = Grappleline.get() end
 
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                      Module setup                       │
@@ -132,9 +140,9 @@ end
 
 AK.section_grapple = function(args)
   if MiniStatusline.is_truncated(args.trunc_width) or H.isnt_normal_buffer() then return "" end
-  if not has_grappleline then return "" end
+  if not has_grapple then return "" end
 
-  return Grappleline.format()
+  return grappleline:format()
 end
 
 -- overridden: in terminal, use full name. Use relative path if file is in cwd
@@ -309,7 +317,7 @@ end
 -- added
 H.grapple_highlight = function()
   --
-  return has_grappleline and Grappleline.is_buffer_tagged() and "MiniHipatternsHack" or H.fixed_hl
+  return has_grapple and grappleline:is_current_buffer_tagged() and "MiniHipatternsHack" or H.fixed_hl
 end
 
 --          ╭─────────────────────────────────────────────────────────╮

@@ -33,6 +33,7 @@ return {
     -- config = function() require("ak.config.editor.harpoon") end,
   },
   {
+    -- "abeldekat/grapple.nvim",
     "cbochs/grapple.nvim",
     event = "VeryLazy",
     config = function() require("ak.config.editor.grapple") end,
