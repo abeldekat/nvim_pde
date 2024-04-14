@@ -8,4 +8,4 @@ vim.g.hardtime_maxcount = 2
 vim.g.hardtime_allow_different_key = 1
 vim.g.hardtime_motion_with_count_resets = 1
 
-vim.keymap.set("n", "<leader>uh", "<cmd>HardTimeToggle<cr>", { desc = "Toggle hardime", silent = true })
+vim.keymap.set("n", "<leader>uH", "<cmd>HardTimeToggle<cr>", { desc = "Toggle hardime", silent = true })

@@ -62,6 +62,7 @@ return {
   {
     "nvim-telescope/telescope.nvim",
     event = "VeryLazy",
+    -- branch = "0.1.x",  -- kickstart
     dependencies = { -- extensions: Also uses flash!
       "nvim-telescope/telescope-ui-select.nvim", -- replacing dressing.nvim
       {
@@ -117,7 +118,7 @@ return {
 
   {
     "takac/vim-hardtime", -- toggle
-    keys = { { "<leader>uh", desc = "Hardtime" } },
+    keys = { { "<leader>uH", desc = "Hardtime" } },
     config = function() require("ak.config.editor.hardtime") end,
   },
 }

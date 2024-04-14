@@ -12,6 +12,28 @@
 local Util = require("ak.util")
 local H = {}
 
+function H.inlay_hints()
+  if vim.lsp.inlay_hint then
+    Util.lsp.on_attach(function(client, buffer) -- set to false by default
+      if client.supports_method("textDocument/inlayHint") then Util.toggle.inlay_hints(buffer, false) end
+    end)
+  end
+end
+
+function H.codelens()
+  if vim.lsp.codelens then
+    Util.lsp.on_attach(function(client, buffer)
+      if client.supports_method("textDocument/codeLens") then
+        vim.lsp.codelens.refresh()
+        vim.api.nvim_create_autocmd({ "BufEnter", "InsertLeave" }, { --  "CursorHold"
+          buffer = buffer,
+          callback = vim.lsp.codelens.refresh,
+        })
+      end
+    end)
+  end
+end
+
 function H.keys(_, buffer) -- client
   local function map(l, r, opts, mode)
     mode = mode or "n"
@@ -19,37 +41,27 @@ function H.keys(_, buffer) -- client
     opts["silent"] = opts.silent ~= false
     vim.keymap.set(mode, l, r, opts)
   end
-  -- stylua: ignore start
-  map("<leader>cl",
-    "<cmd>LspInfo<cr>", { desc = "Lsp info" })
-  map("gd",
-    "<cmd>Telescope lsp_definitions reuse_win=true<cr>", { desc = "Goto definition" })
-  map("gr",
-    "<cmd>Telescope lsp_references<cr>", { desc = "References" })
-  map("gD",
-    vim.lsp.buf.declaration, { desc = "Goto declaration" })
-  map("gI",
-    "<cmd>Telescope lsp_implementations reuse_win=true<cr>", { desc = "Goto implementation" })
-  map("gy",
-    "<cmd>Telescope lsp_type_definitions reuse_win=true<cr>", { desc = "Goto type definition" })
+  map("<leader>cl", "<cmd>LspInfo<cr>", { desc = "Lsp info" })
+  map("gd", "<cmd>Telescope lsp_definitions reuse_win=true<cr>", { desc = "Goto definition" })
+  map("gr", "<cmd>Telescope lsp_references<cr>", { desc = "References" })
+  map("gD", vim.lsp.buf.declaration, { desc = "Goto declaration" })
+  map("gI", "<cmd>Telescope lsp_implementations reuse_win=true<cr>", { desc = "Goto implementation" })
+  map("gy", "<cmd>Telescope lsp_type_definitions reuse_win=true<cr>", { desc = "Goto type definition" })
   if vim.fn.has("nvim-0.10") == 0 then
     -- the Nvim LSP client sets K to show LSP "hover" feature. lsp-defaults
-    map("K",
-      vim.lsp.buf.hover, { desc = "Hover" })
+    map("K", vim.lsp.buf.hover, { desc = "Hover" })
   end
-  map("gK",
-    vim.lsp.buf.signature_help, { desc = "Signature help" })
-  map("<c-k>",
-    vim.lsp.buf.signature_help, { desc = "Signature help" }, "i")
-  map("<leader>ca",
-    vim.lsp.buf.code_action, { desc = "Code action" }, { "n", "v" })
-  map( "<leader>cA",
+  map("gK", vim.lsp.buf.signature_help, { desc = "Signature help" })
+  map("<c-k>", vim.lsp.buf.signature_help, { desc = "Signature help" }, "i")
+  map("<leader>ca", vim.lsp.buf.code_action, { desc = "Code action" }, { "n", "v" })
+  map(
+    "<leader>cA",
     function() vim.lsp.buf.code_action({ context = { only = { "source" }, diagnostics = {} } }) end,
     { desc = "Source action" }
   )
-  map("<leader>cr",
-    vim.lsp.buf.rename, { desc = "Rename" })
-  -- stylua: ignore end
+  map("<leader>cr", vim.lsp.buf.rename, { desc = "Rename" })
+  map("<leader>cc", vim.lsp.codelens.run, { desc = "Run Codelens" }, { "n", "v" })
+  map("<leader>cC", vim.lsp.codelens.refresh, { desc = "Refresh & Display Codelens" })
 
   -- Also possible
   -- local methods = vim.lsp.protocol.Methods
@@ -87,6 +99,13 @@ function H.lua_ls()
       Lua = {
         completion = {
           callSnippet = "Replace",
+        },
+        codeLens = {
+          enable = true,
+        },
+        hint = {
+          enable = true,
+          arrayIndex = "Disable",
         },
       },
     },
@@ -184,6 +203,9 @@ end
 Util.lsp.on_attach(function(client, buffer) -- keymaps
   H.keys(client, buffer) -- are always set regardles of capabilities
 end)
+
+H.inlay_hints()
+-- H.codelens() -- needs a toggle....
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 local has_cmp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")

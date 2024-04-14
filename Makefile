@@ -77,3 +77,10 @@ deps_only: clean_cache backup_lazy restore_deps has
 lazy_only: clean_cache backup_deps restore_lazy has
 
 use_both: clean_cache restore_deps restore_lazy has
+
+to_gh:
+	@cp lazy-lock.json mini-deps-snap stylua.toml colors.txt .luarc.jsonc .gitignore init.lua Makefile ../nvimak
+	@rm -rf ../nvimak/after
+	@rsync -av after ../nvimak
+	@rm -rf ../nvimak/lua
+	@rsync -av lua ../nvimak

@@ -4,14 +4,17 @@
 
 return {
 
-  -- ── verylazy, previously insertenter ───────────────────────────────────────────────────────
-
   {
     "windwp/nvim-autopairs",
     event = "VeryLazy",
     config = function() require("ak.config.coding.autopairs") end,
   },
 
+  {
+    "L3MON4D3/LuaSnip",
+    dependencies = { "rafamadriz/friendly-snippets" },
+    -- event = "VeryLazy",
+  },
   { -- Lazy loading benefit: +-5 ms
     "hrsh7th/nvim-cmp",
     event = "VeryLazy",
@@ -21,17 +24,8 @@ return {
       "hrsh7th/cmp-path",
       "saadparwaiz1/cmp_luasnip",
     },
-    config = function() require("ak.config.coding.cmp") end,
+    config = function() require("ak.config.coding.cmp") end, -- including luasnip
   },
-
-  {
-    "L3MON4D3/LuaSnip",
-    dependencies = { "rafamadriz/friendly-snippets" },
-    event = "VeryLazy",
-    config = function() require("ak.config.coding.LuaSnip") end,
-  },
-
-  -- ── verylazy ──────────────────────────────────────────────────────────
 
   {
     "monaqa/dial.nvim",

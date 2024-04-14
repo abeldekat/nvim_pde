@@ -90,6 +90,8 @@ local diagnostic_goto = function(next, severity)
   severity = severity and vim.diagnostic.severity[severity] or nil
   return function() go({ severity = severity }) end
 end
+-- kickstart:
+-- map('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 map("n", "<leader>cd", vim.diagnostic.open_float, { desc = "Line diagnostics" })
 map("n", "]d", diagnostic_goto(true), { desc = "Next diagnostic" })
 map("n", "[d", diagnostic_goto(false), { desc = "Prev diagnostic" })
@@ -112,9 +114,11 @@ map(
   function() Util.toggle("conceallevel", false, { 0, conceallevel }) end,
   { desc = "Toggle conceal" }
 )
+
 if vim.lsp.buf.inlay_hint or vim.lsp.inlay_hint then
   map("n", "<leader>uh", function() Util.toggle.inlay_hints() end, { desc = "Toggle inlay hints" })
 end
+
 map("n", "<leader>uT", function()
   ---@diagnostic disable-next-line: undefined-field
   if vim.b.ts_highlight then

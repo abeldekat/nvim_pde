@@ -5,17 +5,6 @@ local register = Util.deps.register
 
 -- Lazy loading benefit: +-5 ms
 later(function()
-  add({
-    source = "hrsh7th/nvim-cmp",
-    depends = {
-      "hrsh7th/cmp-nvim-lsp",
-      "saadparwaiz1/cmp_luasnip",
-      "hrsh7th/cmp-buffer",
-      "hrsh7th/cmp-path",
-    },
-  })
-  require("ak.config.coding.cmp")
-
   add("windwp/nvim-autopairs")
   require("ak.config.coding.autopairs")
 
@@ -33,7 +22,16 @@ later(function()
     },
     depends = { "rafamadriz/friendly-snippets" },
   })
-  require("ak.config.coding.LuaSnip")
+  add({
+    source = "hrsh7th/nvim-cmp",
+    depends = {
+      "hrsh7th/cmp-nvim-lsp",
+      "saadparwaiz1/cmp_luasnip",
+      "hrsh7th/cmp-buffer",
+      "hrsh7th/cmp-path",
+    },
+  })
+  require("ak.config.coding.cmp") -- including luasnip
 
   require("ak.config.coding.mini_basics") -- copied a selection...
   require("ak.config.coding.mini_surround")

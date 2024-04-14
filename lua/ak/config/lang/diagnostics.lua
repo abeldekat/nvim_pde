@@ -1,8 +1,6 @@
-for name, icon in pairs(require("ak.consts").icons.diagnostics) do
-  name = "DiagnosticSign" .. name
-  vim.fn.sign_define(name, { text = icon, texthl = name, numhl = "" })
-end
+local Consts = require("ak.consts")
 
+---@type vim.diagnostic.Opts
 local opts = {
   underline = true,
   update_in_insert = false,
@@ -25,12 +23,20 @@ local opts = {
   severity_sort = true,
   signs = {
     text = {
-      [vim.diagnostic.severity.ERROR] = require("ak.consts").icons.diagnostics.Error,
-      [vim.diagnostic.severity.WARN] = require("ak.consts").icons.diagnostics.Warn,
-      [vim.diagnostic.severity.HINT] = require("ak.consts").icons.diagnostics.Hint,
-      [vim.diagnostic.severity.INFO] = require("ak.consts").icons.diagnostics.Info,
+      [vim.diagnostic.severity.ERROR] = Consts.icons.diagnostics.Error,
+      [vim.diagnostic.severity.WARN] = Consts.icons.diagnostics.Warn,
+      [vim.diagnostic.severity.HINT] = Consts.icons.diagnostics.Hint,
+      [vim.diagnostic.severity.INFO] = Consts.icons.diagnostics.Info,
     },
   },
 }
+
+if vim.fn.has("nvim-0.10.0") == 0 then -- Don't define diagnostics signs on >= 0.10:
+  for severity, icon in pairs(opts.signs.text) do
+    local name = vim.diagnostic.severity[severity]:lower():gsub("^%l", string.upper)
+    name = "DiagnosticSign" .. name
+    vim.fn.sign_define(name, { text = icon, texthl = name, numhl = "" })
+  end
+end
 
 vim.diagnostic.config(vim.deepcopy(opts))

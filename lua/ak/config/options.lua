@@ -19,9 +19,12 @@ opt.formatoptions = "jcroqlnt" -- tcqj
 opt.grepformat = "%f:%l:%c:%m"
 opt.grepprg = "rg --vimgrep"
 opt.ignorecase = true -- Ignore case
-opt.inccommand = "nosplit" -- preview incremental substitute
+-- opt.inccommand = "nosplit" -- preview incremental substitute
+-- Preview substitutions live, as you type!
+opt.inccommand = "split" -- kickstart
 opt.laststatus = 3 -- global statusline
 opt.list = true -- Show some invisible characters (tabs...
+opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" } -- kickstart
 opt.mouse = "" -- Disable mouse mode
 opt.number = true -- Print line number
 opt.pumblend = 10 -- Popup blend
@@ -67,8 +70,8 @@ if vim.fn.has("nvim-0.10") == 1 then opt.smoothscroll = true end
 opt.foldlevel = 99
 opt.foldmethod = "expr"
 opt.foldexpr = "nvim_treesitter#foldexpr()"
-opt.foldtext = ""
-opt.fillchars = "fold: " -- overriding earlier fillchars?
+-- opt.foldtext = ""
+-- opt.fillchars = "fold: " -- overriding earlier fillchars?
 
 -- Fix markdown indentation settings
 vim.g.markdown_recommended_style = 0
