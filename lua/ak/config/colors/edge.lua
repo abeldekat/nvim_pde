@@ -20,19 +20,24 @@ Utils.color.add_toggle("edge", {
 
 vim.api.nvim_create_autocmd("Colorscheme", {
   pattern = "edge",
+  group = vim.api.nvim_create_augroup("custom_highlights_edge", {}),
   callback = function()
-    -- the fg color is dimmed compared to lualine_c
-    vim.api.nvim_set_hl(0, "MiniStatuslineModeNormal", { link = "MiniStatuslineFilename" })
+    local config = vim.fn["edge#get_configuration"]()
+    local palette = vim.fn["edge#get_palette"](config.style, config.dim_foreground, config.colors_override)
+    local set_hl = vim.fn["edge#highlight"]
 
-    -- todo-comments: the colors don't change across variants
-    vim.api.nvim_set_hl(0, "MiniHipatternsFixme", { bg = "#ec7279", fg = "#2c2e34", bold = true })
-    vim.api.nvim_set_hl(0, "DiagnosticError", { fg = "#ec7279" })
-    vim.api.nvim_set_hl(0, "MiniHipatternsHack", { bg = "#deb974", fg = "#2c2e34", bold = true })
-    vim.api.nvim_set_hl(0, "DiagnosticWarn", { fg = "#deb974" })
-    vim.api.nvim_set_hl(0, "MiniHipatternsTodo", { bg = "#2563eb", fg = "#c5cdd9", bold = true })
-    vim.api.nvim_set_hl(0, "DiagnosticInfo", { fg = "#2563eb" })
-    vim.api.nvim_set_hl(0, "MiniHipatternsNote", { bg = "#10b981", fg = "#2c2e34", bold = true })
-    vim.api.nvim_set_hl(0, "DiagnosticHint", { fg = "#10b981" })
+    set_hl("MiniStatuslineModeNormal", palette.grey, palette.bg1, "bold") -- like filename
+
+    set_hl("MiniHipatternsFixme", palette.bg0, palette.red, "bold")
+    set_hl("MiniHipatternsHack", palette.bg0, palette.yellow, "bold")
+    set_hl("MiniHipatternsTodo", palette.bg0, palette.blue, "bold")
+    set_hl("MiniHipatternsNote", palette.bg0, palette.green, "bold")
+
+    -- without undercurl:
+    set_hl("DiagnosticError", palette.red, palette.none)
+    set_hl("DiagnosticWarn", palette.yellow, palette.none)
+    set_hl("DiagnosticInfo", palette.blue, palette.none)
+    set_hl("DiagnosticHint", palette.green, palette.none)
   end,
 })
 

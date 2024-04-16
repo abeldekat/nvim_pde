@@ -34,11 +34,6 @@ local function two()
       config = function() require("ak.config.colors.onedark") end,
     },
     {
-      "sainnhe/gruvbox-material",
-      name = "colors_gruvbox-material",
-      config = function() require("ak.config.colors.gruvbox-material") end,
-    },
-    {
       "sainnhe/sonokai",
       name = "colors_sonokai",
       config = function() require("ak.config.colors.sonokai") end,
@@ -49,15 +44,21 @@ local function two()
       config = function() require("ak.config.colors.solarized-osaka") end,
     },
     {
-      "ronisbr/nano-theme.nvim",
-      name = "colors_nano-theme",
-      config = function() require("ak.config.colors.nano-theme") end,
+      "lifepillar/vim-solarized8",
+      name = "colors_solarized8",
+      branch = "neovim",
+      config = function() require("ak.config.colors.solarized8") end,
     },
   }
 end
 
 local function three()
   return {
+    {
+      "ribru17/bamboo.nvim",
+      name = "colors_bamboo",
+      config = function() require("ak.config.colors.bamboo") end,
+    },
     {
       "sainnhe/everforest",
       name = "colors_everforest",
@@ -69,15 +70,9 @@ local function three()
       config = function() require("ak.config.colors.gruvbox") end,
     },
     {
-      "lifepillar/vim-solarized8",
-      name = "colors_solarized8",
-      branch = "neovim",
-      config = function() require("ak.config.colors.solarized8") end,
-    },
-    {
-      "ribru17/bamboo.nvim",
-      name = "colors_bamboo",
-      config = function() require("ak.config.colors.bamboo") end,
+      "sainnhe/gruvbox-material",
+      name = "colors_gruvbox-material",
+      config = function() require("ak.config.colors.gruvbox-material") end,
     },
   }
 end

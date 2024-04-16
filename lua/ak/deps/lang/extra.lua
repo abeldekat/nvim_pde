@@ -52,11 +52,6 @@ local function python()
       require("ak.config.lang.python.venv_selector") -- selector
     end
     Util.defer.on_keys(function() now(load_selector) end, "<leader>cv", "Venv selector")
-
-    -- now(function()
-    --   add(semshi)
-    --   vim.cmd("Semshi enable")
-    -- end)
   end, "FileType", "python")
 end
 

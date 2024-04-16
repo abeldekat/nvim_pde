@@ -6,7 +6,7 @@ local opts = {
   update_in_insert = false,
   virtual_text = {
     -- Show virtual text only for errors
-    -- severity = { min = "ERROR", max = "ERROR" }, -- TODO: Test this
+    -- severity = { min = "ERROR", max = "ERROR" },
 
     spacing = 4,
     source = "if_many",

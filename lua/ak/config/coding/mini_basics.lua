@@ -30,7 +30,7 @@ H.put_empty_line = function(put_above)
   vim.fn.append(target_line, vim.fn["repeat"]({ "" }, vim.v.count1))
 end
 
--- NOTE: if you don't want to support dot-repeat, use this snippet:
+-- if you don't want to support dot-repeat, use this snippet:
 -- ```
 -- map('n', 'gO', "<Cmd>call append(line('.') - 1, repeat([''], v:count1))<CR>")
 -- map('n', 'go', "<Cmd>call append(line('.'),     repeat([''], v:count1))<CR>")

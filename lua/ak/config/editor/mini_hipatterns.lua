@@ -108,12 +108,6 @@ if has_telescope then
     return opts
   end
 
-  -- Not implemented, use telescope send to trouble:
-  -- "]t", function() require("todo-comments").jump_next() end
-  -- "[t", function() require("todo-comments").jump_prev() end
-  -- "<leader>xt", "<cmd>TodoTrouble<cr>"
-  -- "<leader>xT": "<cmd>TodoTrouble keywords=TODO,FIX,FIXME<cr>"
-
   vim.keymap.set("n", "<leader>st", function()
     require("telescope.builtin").grep_string(todo_opts(todo_comments)) --
   end, { desc = "Todo", silent = true })

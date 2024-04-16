@@ -21,24 +21,31 @@ Utils.color.add_toggle("*material", {
 
 vim.api.nvim_create_autocmd("Colorscheme", {
   pattern = "gruvbox-material",
+  group = vim.api.nvim_create_augroup("custom_highlights_gruvboxmaterial", {}),
   callback = function()
-    vim.api.nvim_set_hl(0, "MiniStatuslineModeNormal", { link = "MiniStatuslineFilename" })
+    local config = vim.fn["gruvbox_material#get_configuration"]()
+    local palette = vim.fn["gruvbox_material#get_palette"](config.background, config.foreground, config.colors_override)
+    local set_hl = vim.fn["gruvbox_material#highlight"]
 
-    -- todo-comments: the colors don't change across variants
-    vim.api.nvim_set_hl(0, "MiniHipatternsFixme", { bg = "#ea6962", fg = "#32302f", bold = true })
-    vim.api.nvim_set_hl(0, "DiagnosticError", { fg = "#ea6962" })
-    vim.api.nvim_set_hl(0, "MiniHipatternsHack", { bg = "#d8a657", fg = "#32302f", bold = true })
-    vim.api.nvim_set_hl(0, "DiagnosticWarn", { fg = "#d8a657" })
-    vim.api.nvim_set_hl(0, "MiniHipatternsTodo", { bg = "#2563eb", fg = "#d4be98", bold = true })
-    vim.api.nvim_set_hl(0, "DiagnosticInfo", { fg = "#2563eb" })
-    vim.api.nvim_set_hl(0, "MiniHipatternsNote", { bg = "#10b981", fg = "#32302f", bold = true })
-    vim.api.nvim_set_hl(0, "DiagnosticHint", { fg = "#10b981" })
+    set_hl("MiniStatuslineModeNormal", palette.grey2, palette.bg_statusline1, "bold") -- like filename
+
+    set_hl("MiniHipatternsFixme", palette.bg0, palette.red, "bold")
+    set_hl("MiniHipatternsHack", palette.bg0, palette.yellow, "bold")
+    set_hl("MiniHipatternsTodo", palette.bg0, palette.blue, "bold")
+    set_hl("MiniHipatternsNote", palette.bg0, palette.green, "bold")
+
+    -- without undercurl:
+    set_hl("DiagnosticError", palette.red, palette.none)
+    set_hl("DiagnosticWarn", palette.yellow, palette.none)
+    set_hl("DiagnosticInfo", palette.blue, palette.none)
+    set_hl("DiagnosticHint", palette.green, palette.none)
   end,
 })
 
 vim.g.gruvbox_material_foreground = "material" -- "mix", "original"
 vim.g.gruvbox_material_better_performance = 1
+vim.g.ruvbox_material_enable_italic = 1
+-- vim.g.gruvbox_material_disable_italic_comment = 1
 vim.g.gruvbox_material_background = "soft"
 vim.g.gruvbox_material_foreground = "material"
--- vim.g.gruvbox_material_diagnostic_text_highlight = 1
 vim.o.background = prefer_light and "light" or "dark"

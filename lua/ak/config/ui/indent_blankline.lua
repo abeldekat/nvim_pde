@@ -21,8 +21,6 @@ local opts = {
       "help",
       "dashboard",
       "starter",
-      "Trouble",
-      "trouble",
       "lazy",
       "mason",
       "toggleterm",

@@ -3,6 +3,7 @@
 --          ╰─────────────────────────────────────────────────────────╯
 
 local Utils = require("ak.util")
+local prefer_light = require("ak.color").prefer_light
 local name = "everforest"
 
 -- lazygit colors are not always readable,  good light theme
@@ -22,23 +23,34 @@ Utils.color.add_toggle(name, {
 
 vim.api.nvim_create_autocmd("Colorscheme", {
   pattern = "everforest",
+  group = vim.api.nvim_create_augroup("custom_highlights_everforest", {}),
   callback = function()
-    vim.api.nvim_set_hl(0, "MiniStatuslineModeNormal", { link = "MiniStatuslineFilename" })
+    local config = vim.fn["everforest#get_configuration"]()
+    local palette = vim.fn["everforest#get_palette"](config.background, config.colors_override)
+    local set_hl = vim.fn["everforest#highlight"] -- group fg bg
 
-    -- todo-comments: the colors don't change across variants
-    vim.api.nvim_set_hl(0, "MiniHipatternsFixme", { bg = "#e67e80", fg = "#2d353b", bold = true })
-    vim.api.nvim_set_hl(0, "DiagnosticError", { fg = "#e67e80" })
-    vim.api.nvim_set_hl(0, "MiniHipatternsHack", { bg = "#dbbc7f", fg = "#2d353b", bold = true })
-    vim.api.nvim_set_hl(0, "DiagnosticWarn", { fg = "#dbbc7f" })
-    vim.api.nvim_set_hl(0, "MiniHipatternsTodo", { bg = "#2563eb", fg = "#d3c6aa", bold = true })
-    vim.api.nvim_set_hl(0, "DiagnosticInfo", { fg = "#2563eb" })
-    vim.api.nvim_set_hl(0, "MiniHipatternsNote", { bg = "#10b981", fg = "#2d353b", bold = true })
-    vim.api.nvim_set_hl(0, "DiagnosticHint", { fg = "#10b981" })
+    -- Override MiniStatuslineFilename, which is just "Grey"
+    set_hl("MiniStatuslineFilename", palette.grey1, palette.bg1) -- like fileinfo
+    -- Override normal
+    set_hl("MiniStatuslineModeNormal", palette.grey1, palette.bg1, "bold") -- like fileinfo
+
+    set_hl("MiniHipatternsFixme", palette.bg0, palette.red, "bold")
+    set_hl("MiniHipatternsHack", palette.bg0, palette.yellow, "bold")
+    set_hl("MiniHipatternsTodo", palette.bg0, palette.blue, "bold")
+    set_hl("MiniHipatternsNote", palette.bg0, palette.green, "bold")
+
+    -- without undercurl:
+    set_hl("DiagnosticError", palette.red, palette.none)
+    set_hl("DiagnosticWarn", palette.yellow, palette.none)
+    set_hl("DiagnosticInfo", palette.blue, palette.none)
+    set_hl("DiagnosticHint", palette.green, palette.none)
   end,
 })
 
-local prefer_light = require("ak.color").prefer_light
 vim.g.everforest_better_performance = 1
-vim.g.everforest_enable_italic = 0
+vim.g.everforest_enable_italic = 1
+-- vim.g.everforest_disable_italic_comment = 1
+vim.g.everforest_dim_inactive_windows = 1
 vim.g.everforest_background = "medium"
+
 vim.o.background = prefer_light and "light" or "dark"

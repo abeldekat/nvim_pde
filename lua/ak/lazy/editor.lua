@@ -7,6 +7,15 @@ local Util = require("ak.util")
 local with_dir = Util.opened_with_dir_argument()
 
 return {
+  {
+    "stevearc/oil.nvim",
+    init = function()
+      if with_dir then require("oil") end
+    end,
+    event = function() return not with_dir and { "VeryLazy" } or {} end,
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = function() require("ak.config.editor.oil") end,
+  },
 
   {
     "ggandor/leap.nvim",
@@ -19,6 +28,14 @@ return {
     config = function()
       require("ak.config.editor.leap")
       require("ak.config.editor.eyeliner")
+
+      --          ╭─────────────────────────────────────────────────────────╮
+      --          │          Efficiency: Also setup mini plugins:           │
+      --          ╰─────────────────────────────────────────────────────────╯
+      require("ak.config.editor.mini_clue")
+      require("ak.config.editor.mini_misc") -- zoom buffer
+      require("ak.config.editor.mini_cursorword")
+      require("ak.config.editor.mini_hipatterns")
     end,
   },
 
@@ -33,30 +50,9 @@ return {
     -- config = function() require("ak.config.editor.harpoon") end,
   },
   {
-    -- "abeldekat/grapple.nvim",
     "cbochs/grapple.nvim",
     event = "VeryLazy",
     config = function() require("ak.config.editor.grapple") end,
-  },
-
-  {
-    "stevearc/oil.nvim",
-    init = function()
-      if with_dir then require("oil") end
-    end,
-    event = function() return not with_dir and { "VeryLazy" } or {} end,
-    dependencies = { "nvim-tree/nvim-web-devicons" },
-    config = function()
-      require("ak.config.editor.oil")
-
-      --          ╭─────────────────────────────────────────────────────────╮
-      --          │          Efficiency: Also setup mini plugins:           │
-      --          ╰─────────────────────────────────────────────────────────╯
-      require("ak.config.editor.mini_clue")
-      require("ak.config.editor.mini_misc") -- zoom buffer
-      require("ak.config.editor.mini_cursorword")
-      require("ak.config.editor.mini_hipatterns")
-    end,
   },
 
   {
@@ -85,10 +81,6 @@ return {
         build = false,
         config = function() require("ak.config.editor.spectre") end,
       },
-      {
-        "folke/trouble.nvim",
-        config = function() require("ak.config.editor.trouble") end,
-      },
     },
     config = function() require("ak.config.editor.telescope") end,
   },
@@ -99,8 +91,6 @@ return {
     event = "VeryLazy",
     config = function() require("ak.config.editor.toggleterm") end,
   },
-
-  -- ── previously lazyfile ───────────────────────────────────────────────
 
   {
     "lewis6991/gitsigns.nvim",
@@ -120,5 +110,12 @@ return {
     "takac/vim-hardtime", -- toggle
     keys = { { "<leader>uH", desc = "Hardtime" } },
     config = function() require("ak.config.editor.hardtime") end,
+  },
+
+  {
+    "kevinhwang91/nvim-bqf",
+    ft = "qf",
+    dependencies = "yorickpeterse/nvim-pqf",
+    config = function() require("ak.config.editor.quickfix") end,
   },
 }

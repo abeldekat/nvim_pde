@@ -17,9 +17,6 @@ now(function()
   end
 end)
 
--- "jvgrootveld/telescope-zoxide",
--- "nvim-telescope/telescope-file-browser.nvim",
--- "nvim-telescope/telescope-project.nvim",
 later(function()
   add("tpope/vim-repeat")
   add("ggandor/leap.nvim")
@@ -29,30 +26,28 @@ later(function()
   add("jinh0/eyeliner.nvim")
   require("ak.config.editor.eyeliner")
 
+  require("ak.config.editor.mini_clue")
+  require("ak.config.editor.mini_misc")
+  require("ak.config.editor.mini_cursorword")
+  require("ak.config.editor.mini_hipatterns")
+
   --          ╭─────────────────────────────────────────────────────────╮
   --          │ Have both harpoon and grapple installed, but "packadd"  │
   --          │                       only one...                       │
   --          ╰─────────────────────────────────────────────────────────╯
-  local harpoon_spec = {
+  local spec_harpoon = {
     source = "ThePrimeagen/harpoon",
     checkout = "harpoon2",
   }
-  -- local grapple_spec = "cbochs/grapple.nvim"
-  local grapple_spec = "abeldekat/grapple.nvim"
-  --
-  register(harpoon_spec)
+  register(spec_harpoon)
   -- add(harpoon_spec)
   -- require("ak.config.editor.harpoon")
   --
+  local spec_grapple = "abeldekat/grapple.nvim"
   -- register(grapple_spec)
-  add(grapple_spec)
+  add(spec_grapple)
   require("ak.config.editor.grapple_pr") -- testing the pr
 
-  require("ak.config.editor.mini_clue")
-  require("ak.config.editor.mini_misc")
-
-  add("folke/trouble.nvim")
-  require("ak.config.editor.trouble")
   add("nvim-pack/nvim-spectre")
   require("ak.config.editor.spectre")
   add("stevearc/aerial.nvim")
@@ -63,6 +58,9 @@ later(function()
     vim.cmd("!make -s")
     vim.cmd("lcd -")
   end
+  -- "jvgrootveld/telescope-zoxide",
+  -- "nvim-telescope/telescope-file-browser.nvim",
+  -- "nvim-telescope/telescope-project.nvim",
   add({
     source = "nvim-telescope/telescope.nvim",
     depends = {
@@ -84,10 +82,6 @@ later(function()
 
   add("lewis6991/gitsigns.nvim")
   require("ak.config.editor.gitsigns")
-  -- require("ak.config.editor.mini_diff")
-
-  require("ak.config.editor.mini_cursorword")
-  require("ak.config.editor.mini_hipatterns")
 
   register("f-person/git-blame.nvim")
   Util.defer.on_keys(function()
@@ -104,4 +98,17 @@ later(function()
       require("ak.config.editor.hardtime")
     end)
   end, "<leader>uH", "Hardtime")
+
+  local quickfix_spec = {
+    source = "kevinhwang91/nvim-bqf",
+    depends = { "yorickpeterse/nvim-pqf" },
+  }
+  register("quickfix_spec")
+  Util.defer.on_events(function()
+    later(function()
+      add(quickfix_spec)
+      require("ak.config.editor.quickfix")
+      vim.cmd("copen")
+    end)
+  end, "FileType", "qf")
 end)

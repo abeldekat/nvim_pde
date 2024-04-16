@@ -33,10 +33,6 @@ local function get_opts()
   local actions = require("telescope.actions")
   local layout_actions = require("telescope.actions.layout")
 
-  local open_with_trouble = function(...) return require("trouble.providers.telescope").open_with_trouble(...) end
-  local open_selected_with_trouble = function(...)
-    return require("trouble.providers.telescope").open_selected_with_trouble(...)
-  end
   local find_files_no_ignore = function()
     local action_state = require("telescope.actions.state")
     local line = action_state.get_current_line()
@@ -80,8 +76,6 @@ local function get_opts()
       },
       mappings = {
         i = {
-          ["<c-t>"] = open_with_trouble,
-          ["<a-t>"] = open_selected_with_trouble,
           ["<a-i>"] = find_files_no_ignore,
           ["<a-h>"] = find_files_with_hidden,
           ["<C-Down>"] = actions.cycle_history_next,
@@ -162,8 +156,6 @@ local function keys()
   map("<leader>sb", "<cmd>Telescope current_buffer_fuzzy_find<cr>", { desc = "Buffer fuzzy" })
   map("<leader>sc", "<cmd>Telescope command_history<cr>", { desc = "Command history" })
   map("<leader>sC", "<cmd>Telescope commands<cr>", { desc = "Commands" })
-  map("<leader>sd", "<cmd>Telescope diagnostics bufnr=0<cr>", { desc = "Document diagnostics" })
-  map("<leader>sD", "<cmd>Telescope diagnostics<cr>", { desc = "Workspace diagnostics" })
   map("<leader>si", "<cmd>Telescope<cr>", { desc = "Telescope builtin" })
   map("<leader>sg", function() builtin.live_grep() end, { desc = "Grep" })
   map("<leader>sG", function() builtin.live_grep({ cwd = buffer_dir() }) end, { desc = "Grep (rel)" })
@@ -174,19 +166,6 @@ local function keys()
   map("<leader>sm", "<cmd>Telescope marks<cr>", { desc = "Jump to mark" })
   map("<leader>so", "<cmd>Telescope vim_options<cr>", { desc = "Options" })
   map("<leader>sR", "<cmd>Telescope resume<cr>", { desc = "Resume" })
-  map("<leader>sw", function() builtin.grep_string({ word_match = "-w" }) end, { desc = "Word" })
-  map(
-    "<leader>sW",
-    function() builtin.grep_string({ cwd = buffer_dir(), word_match = "-w" }) end,
-    { desc = "Word (rel)" }
-  )
-  map("<leader>sw", function() builtin.grep_string() end, { desc = "Selection" }, "v")
-  map("<leader>sW", function() builtin.grep_string({ cwd = buffer_dir() }) end, { desc = "Selection (rel)" }, "v")
-  map(
-    "<leader>uC",
-    function() builtin.colorscheme({ enable_preview = true }) end,
-    { desc = "Colorscheme with preview" }
-  )
   map(
     "<leader>sS",
     function()
@@ -205,6 +184,29 @@ local function keys()
     end,
     { desc = "Goto symbol" }
   )
+  map("<leader>sw", function() builtin.grep_string({ word_match = "-w" }) end, { desc = "Word" })
+  map(
+    "<leader>sW",
+    function() builtin.grep_string({ cwd = buffer_dir(), word_match = "-w" }) end,
+    { desc = "Word (rel)" }
+  )
+  map("<leader>sw", function() builtin.grep_string() end, { desc = "Selection" }, "v")
+  map("<leader>sW", function() builtin.grep_string({ cwd = buffer_dir() }) end, { desc = "Selection (rel)" }, "v")
+  map(
+    "<leader>uC",
+    function() builtin.colorscheme({ enable_preview = true }) end,
+    { desc = "Colorscheme with preview" }
+  )
+
+  -- diagnostics/quickfix
+  -- Used to be leader sd. Changed to replace trouble document diagnostics
+  map("<leader>xd", "<cmd>Telescope diagnostics bufnr=0<cr>", { desc = "Document diagnostics" })
+  -- Used to be leader sD. Changed to replace trouble workspace diagnostics
+  map("<leader>xD", "<cmd>Telescope diagnostics<cr>", { desc = "Workspace diagnostics" })
+  -- The bqf plugin needs the fzf plugin to search the quickfix. Use telescope instead.
+  map("<leader>xx", "<cmd> Telescope quickfix<cr>", { desc = "Quickfix search" })
+  map("<leader>xX", "<cmd> Telescope quickfixhistory<cr>", { desc = "Quickfixhis search" })
+  map("<leader>xz", "<cmd> Telescope loclist<cr>", { desc = "Search loclist" })
 end
 
 --          ╭─────────────────────────────────────────────────────────╮

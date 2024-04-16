@@ -90,7 +90,6 @@ vim.api.nvim_create_autocmd("ColorScheme", {
 })
 
 -- https://github.com/jesseduffield/lazygit/blob/master/docs/Config.md#overriding-default-config-file-location
--- TODO: Opens lazygit
 function M.update_if_needed()
   if dirty then update_config() end
 end

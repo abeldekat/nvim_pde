@@ -16,25 +16,29 @@ Utils.color.add_toggle("sonokai", {
 
 vim.api.nvim_create_autocmd("Colorscheme", {
   pattern = "sonokai",
+  group = vim.api.nvim_create_augroup("custom_highlights_sonokai", {}),
   callback = function()
-    -- the fg color is dimmed compared to lualine_c
-    vim.api.nvim_set_hl(0, "MiniStatuslineModeNormal", { link = "MiniStatuslineFilename" })
+    local config = vim.fn["sonokai#get_configuration"]()
+    local palette = vim.fn["sonokai#get_palette"](config.style, config.colors_override)
+    local set_hl = vim.fn["sonokai#highlight"]
+    --
+    set_hl("MiniStatuslineModeNormal", palette.grey, palette.bg1, "bold") -- like filename
 
-    -- todo-comments: the colors don't change across variants
-    vim.api.nvim_set_hl(0, "MiniHipatternsFixme", { bg = "#fb617e", fg = "#2b2d3a", bold = true })
-    vim.api.nvim_set_hl(0, "DiagnosticError", { fg = "#fb617e" })
-    vim.api.nvim_set_hl(0, "MiniHipatternsHack", { bg = "#edc763", fg = "#2b2d3a", bold = true })
-    vim.api.nvim_set_hl(0, "DiagnosticWarn", { fg = "#edc763" })
-    vim.api.nvim_set_hl(0, "MiniHipatternsTodo", { bg = "#2563eb", fg = "#e1e3e4", bold = true })
-    vim.api.nvim_set_hl(0, "DiagnosticInfo", { fg = "#2563eb" })
-    vim.api.nvim_set_hl(0, "MiniHipatternsNote", { bg = "#10b981", fg = "#2b2d3a", bold = true })
-    vim.api.nvim_set_hl(0, "DiagnosticHint", { fg = "#10b981" })
+    set_hl("MiniHipatternsFixme", palette.bg0, palette.red, "bold")
+    set_hl("MiniHipatternsHack", palette.bg0, palette.yellow, "bold")
+    set_hl("MiniHipatternsTodo", palette.bg0, palette.blue, "bold")
+    set_hl("MiniHipatternsNote", palette.bg0, palette.green, "bold")
+
+    -- without undercurl:
+    set_hl("DiagnosticError", palette.red, palette.none)
+    set_hl("DiagnosticWarn", palette.yellow, palette.none)
+    set_hl("DiagnosticInfo", palette.blue, palette.none)
+    set_hl("DiagnosticHint", palette.green, palette.none)
   end,
 })
 
 vim.g.sonokai_better_performance = 1
-vim.g.sonokai_enable_italic = 0
-vim.g.sonokai_disable_italic_comment = 1
+vim.g.sonokai_enable_italic = 1
+-- vim.g.sonokai_disable_italic_comment = 1
 vim.g.sonokai_dim_inactive_windows = 1
--- vim.g.sonokai_diagnostic_text_highlight = 1
 vim.g.sonokai_style = "andromeda"

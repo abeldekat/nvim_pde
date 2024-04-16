@@ -24,8 +24,9 @@ local opts = {
     ["<C-f>"] = cmp.mapping.scroll_docs(4),
     ["<C-Space>"] = cmp.mapping.complete(), -- invoke cmp manually
 
-    -- TODO: Testing the kickstart approach....
+    -- kickstart:
     ["C-y"] = cmp.mapping.confirm({ select = true }), -- kickstart: <C-y>
+    -- lazyvim:
     -- Set `select` to `false` to only confirm explicitly selected items.
     -- ["<C-e>"] = cmp.mapping.abort(), -- kickstart: not present
     -- ["<CR>"] = cmp.mapping.confirm({ select = true }), -- kickstart: <C-y>

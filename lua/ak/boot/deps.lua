@@ -1,40 +1,7 @@
 local Util = require("ak.util")
 
--- "2html_plugin",
--- "tohtml",
--- "getscript",
--- "getscriptPlugin",
--- "gzip",
--- "logipat",
--- "netrw",
--- "netrwPlugin",
--- "netrwSettings",
--- "netrwFileHandlers",
--- "matchit",
--- "tar",
--- "tarPlugin",
--- "rrhelper",
--- "spellfile_plugin",
--- "vimball",
--- "vimballPlugin",
--- "zip",
--- "zipPlugin",
--- "tutor",
--- "rplugin",
--- "syntax",
--- "synmenu",
--- "optwin",
--- "compiler",
--- "bugreport",
--- "ftplugin",
 local function setup_performance()
-  -- tohtml.vim             0.06    0.06
-  -- syntax.vim             0.27    0.26 ▏
-
-  -- TODO: More plugins to disable?
-  -- disabled_plugins = { "tohtml", "tutor" },
-  --
-  for _, disable in ipairs({ "gzip", "netrwPlugin", "tarPlugin", "zipPlugin" }) do
+  for _, disable in ipairs({ "gzip", "netrwPlugin", "tarPlugin", "tohtml", "tutor", "zipPlugin" }) do
     vim.g["loaded_" .. disable] = 0
   end
 end

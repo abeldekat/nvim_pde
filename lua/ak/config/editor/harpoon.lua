@@ -3,10 +3,6 @@
 -- https://github.com/ThePrimeagen/harpoon/issues/523
 -- https://github.com/ThePrimeagen/harpoon/issues/352
 
--- Selecting files with the same name in a different dir can fail:
--- TODO: For now, use fork abeldekat...
--- https://github.com/ThePrimeagen/harpoon/pull/503/commits/dfd4cd8233539e8942893a525df9553cc73c46a0
-
 local Harpoon = require("harpoon")
 local Extensions = require("harpoon.extensions")
 local Path = require("plenary.path")

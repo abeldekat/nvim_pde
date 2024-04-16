@@ -268,7 +268,7 @@ H.create_diagnostic_hl = function()
   local bg = fixed_hl and fixed_hl.bg or fallback.bg
   local function fg(name)
     local hl = vim.api.nvim_get_hl(0, { name = name, link = false })
-    return hl and hl.fg or fallback.fg
+    return hl and hl.fg or (hl.sp and hl.sp) or fallback.fg
   end
 
   vim.api.nvim_set_hl(0, H.diagnostic_hls.error, { bg = bg, fg = fg("DiagnosticError") })

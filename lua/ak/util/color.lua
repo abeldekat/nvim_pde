@@ -30,7 +30,6 @@ function Toggle.add_toggle(opts)
   end, { desc = "Change hue" })
 end
 
--- TODO: LazyVim-util-ui-color. Returns a color highlight string
 ---@param name string
 ---@param bg? boolean
 ---@return string?
