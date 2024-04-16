@@ -199,14 +199,14 @@ local function keys()
   )
 
   -- diagnostics/quickfix
-  -- Used to be leader sd. Changed to replace trouble document diagnostics
+  -- Changed from leader sd to replace trouble document diagnostics
   map("<leader>xd", "<cmd>Telescope diagnostics bufnr=0<cr>", { desc = "Document diagnostics" })
-  -- Used to be leader sD. Changed to replace trouble workspace diagnostics
+  -- Changed from leader sD to replace trouble workspace diagnostics
   map("<leader>xD", "<cmd>Telescope diagnostics<cr>", { desc = "Workspace diagnostics" })
   -- The bqf plugin needs the fzf plugin to search the quickfix. Use telescope instead.
   map("<leader>xx", "<cmd> Telescope quickfix<cr>", { desc = "Quickfix search" })
   map("<leader>xX", "<cmd> Telescope quickfixhistory<cr>", { desc = "Quickfixhis search" })
-  map("<leader>xz", "<cmd> Telescope loclist<cr>", { desc = "Search loclist" })
+  map("<leader>xz", "<cmd> Telescope loclist<cr>", { desc = "Loclist search" })
 end
 
 --          ╭─────────────────────────────────────────────────────────╮
