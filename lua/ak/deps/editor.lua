@@ -101,9 +101,9 @@ later(function()
 
   local quickfix_spec = {
     source = "kevinhwang91/nvim-bqf",
-    depends = { "yorickpeterse/nvim-pqf" },
+    depends = { { source = "yorickpeterse/nvim-pqf" } },
   }
-  register("quickfix_spec")
+  register(quickfix_spec)
   Util.defer.on_events(function()
     later(function()
       add(quickfix_spec)
