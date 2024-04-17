@@ -26,11 +26,6 @@ later(function()
   add("jinh0/eyeliner.nvim")
   require("ak.config.editor.eyeliner")
 
-  require("ak.config.editor.mini_clue")
-  require("ak.config.editor.mini_misc")
-  require("ak.config.editor.mini_cursorword")
-  require("ak.config.editor.mini_hipatterns")
-
   --          ╭─────────────────────────────────────────────────────────╮
   --          │ Have both harpoon and grapple installed, but "packadd"  │
   --          │                       only one...                       │
@@ -76,6 +71,11 @@ later(function()
     },
   })
   require("ak.config.editor.telescope")
+
+  require("ak.config.editor.mini_clue")
+  require("ak.config.editor.mini_misc")
+  require("ak.config.editor.mini_cursorword")
+  require("ak.config.editor.mini_hipatterns") -- uses telescope
 
   add("akinsho/toggleterm.nvim")
   require("ak.config.editor.toggleterm")

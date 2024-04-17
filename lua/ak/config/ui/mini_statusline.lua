@@ -153,14 +153,12 @@ AK.section_filename = function(args)
     local separator = package.config:sub(1, 1)
     return full_path:find(cwd .. separator, 1, true) == 1
   end
-  local full_fmt = "%F%m%r" -- modified and readonly flags
-  local relative_fmt = "%f%m%r" -- modified and readonly flags
+  local full_fmt = "%:~"
+  local relative_fmt = "%:."
 
-  if MiniStatusline.is_truncated(args.trunc_width) then
-    return relative_fmt
-  else
-    return is_in_cwd() and relative_fmt or full_fmt
-  end
+  local actual_fmt = is_in_cwd() and relative_fmt or full_fmt
+  if MiniStatusline.is_truncated(args.trunc_width) then actual_fmt = relative_fmt end
+  return vim.fn.expand(actual_fmt) .. "%m%r" -- modified and readonly
 end
 
 -- added: show when recording a macro

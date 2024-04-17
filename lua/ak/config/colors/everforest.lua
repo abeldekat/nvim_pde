@@ -40,6 +40,11 @@ vim.api.nvim_create_autocmd("Colorscheme", {
     set_hl("MiniHipatternsNote", palette.bg0, palette.green, "bold")
 
     -- without undercurl:
+    set_hl("ErrorText", palette.none, palette.none, "NONE", palette.red)
+    set_hl("WarningText", palette.none, palette.none, "NONE", palette.yellow)
+    set_hl("InfoText", palette.none, palette.none, "NONE", palette.blue)
+    set_hl("HintText", palette.none, palette.none, "NONE", palette.green)
+
     set_hl("DiagnosticError", palette.red, palette.none)
     set_hl("DiagnosticWarn", palette.yellow, palette.none)
     set_hl("DiagnosticInfo", palette.blue, palette.none)

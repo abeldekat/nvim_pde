@@ -28,14 +28,6 @@ return {
     config = function()
       require("ak.config.editor.leap")
       require("ak.config.editor.eyeliner")
-
-      --          ╭─────────────────────────────────────────────────────────╮
-      --          │          Efficiency: Also setup mini plugins:           │
-      --          ╰─────────────────────────────────────────────────────────╯
-      require("ak.config.editor.mini_clue")
-      require("ak.config.editor.mini_misc") -- zoom buffer
-      require("ak.config.editor.mini_cursorword")
-      require("ak.config.editor.mini_hipatterns")
     end,
   },
 
@@ -82,7 +74,17 @@ return {
         config = function() require("ak.config.editor.spectre") end,
       },
     },
-    config = function() require("ak.config.editor.telescope") end,
+    config = function()
+      require("ak.config.editor.telescope")
+
+      --          ╭─────────────────────────────────────────────────────────╮
+      --          │          Efficiency: Also setup mini plugins:           │
+      --          ╰─────────────────────────────────────────────────────────╯
+      require("ak.config.editor.mini_clue")
+      require("ak.config.editor.mini_misc") -- zoom buffer
+      require("ak.config.editor.mini_cursorword")
+      require("ak.config.editor.mini_hipatterns")
+    end,
   },
 
   {
