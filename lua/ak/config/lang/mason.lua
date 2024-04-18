@@ -3,7 +3,6 @@ local mason_ensure_installed = {
   "stylua", -- formatter
   "shfmt", -- formatter
   "black", -- formatter python
-  -- "debugpy", -- dap python
 }
 require("mason").setup()
 

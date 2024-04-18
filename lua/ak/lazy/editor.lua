@@ -51,7 +51,7 @@ return {
     "nvim-telescope/telescope.nvim",
     event = "VeryLazy",
     -- branch = "0.1.x",  -- kickstart
-    dependencies = { -- extensions: Also uses flash!
+    dependencies = {
       "nvim-telescope/telescope-ui-select.nvim", -- replacing dressing.nvim
       {
         "nvim-telescope/telescope-fzf-native.nvim",

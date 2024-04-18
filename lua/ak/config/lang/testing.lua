@@ -7,16 +7,16 @@ local get_opts = function()
     -- or a table of adapter names, mapped to adapter configs.
     -- The adapter will then be automatically loaded with the config.
     adapters = {
-      ["neotest-python"] = {
-        -- Here you can specify the settings for the adapter, i.e.
-        -- runner = "pytest",
-        -- python = ".venv/bin/python",
-        --   opts.adapters["neotest-python"] = {
-        --     dap = { justMyCode = false },
-        --     -- runner = "pytest",
-        --     -- args = { "--log-level", "DEBUG" },
-        --   }
-      },
+      -- ["neotest-python"] = {
+      --   -- Here you can specify the settings for the adapter, i.e.
+      --   -- runner = "pytest",
+      --   -- python = ".venv/bin/python",
+      --   --   opts.adapters["neotest-python"] = {
+      --   --     dap = { justMyCode = false },
+      --   --     -- runner = "pytest",
+      --   --     -- args = { "--log-level", "DEBUG" },
+      --   --   }
+      -- },
     },
     -- Example for loading neotest-go with a custom config
     -- adapters = {

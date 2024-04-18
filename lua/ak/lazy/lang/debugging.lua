@@ -4,7 +4,6 @@ return {
     "jay-babu/mason-nvim-dap.nvim", -- dependencies = "mason.nvim",
     "nvim-neotest/nvim-nio", -- dependency for dap ui
     "rcarriga/nvim-dap-ui",
-    "mfussenegger/nvim-dap-python",
     "theHamsta/nvim-dap-virtual-text",
     "jbyuki/one-small-step-for-vimkind", -- lua
   },

@@ -19,7 +19,6 @@ local opts = {
   exclude = {
     filetypes = {
       "help",
-      "dashboard",
       "starter",
       "lazy",
       "mason",

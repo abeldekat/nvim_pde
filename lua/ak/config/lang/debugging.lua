@@ -45,15 +45,15 @@ local function mason_dap()
   require("mason-nvim-dap").setup(opts)
 end
 
-local function python_dap()
-  local path = require("mason-registry").get_package("debugpy"):get_install_path()
-  require("dap-python").setup(path .. "/venv/bin/python")
-  Util.register_referenced("nvim-dap-python")
-
-  -- keys for ft = python
-  map("<leader>dPt", function() require("dap-python").test_method() end, { desc = "Python debug method" })
-  map("<leader>dPc", function() require("dap-python").test_class() end, { desc = "Python debug class" })
-end
+-- local function python_dap()
+--   local path = require("mason-registry").get_package("debugpy"):get_install_path()
+--   require("dap-python").setup(path .. "/venv/bin/python")
+--   Util.register_referenced("nvim-dap-python")
+--
+--   -- keys for ft = python
+--   map("<leader>dPt", function() require("dap-python").test_method() end, { desc = "Python debug method" })
+--   map("<leader>dPc", function() require("dap-python").test_class() end, { desc = "Python debug class" })
+-- end
 
 local function lua_dap()
   dap.adapters.nlua = function(callback, conf)
@@ -129,7 +129,7 @@ local function setup()
   mason_dap()
   ui()
   virtual_text()
-  python_dap()
+  -- python_dap()
   lua_dap()
   keys()
 

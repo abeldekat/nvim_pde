@@ -83,8 +83,7 @@ vim.g.markdown_recommended_style = 0
 -- basic
 opt.showtabline = 0 -- never show tabs, 1 is default, 2, -- always show tabs
 opt.colorcolumn = "80"
--- TODO: On write, the statusline disappears:
-opt.cmdheight = 0
+opt.cmdheight = 0 -- on write, the statusline disappears
 opt.guicursor = ""
 
 -- splits

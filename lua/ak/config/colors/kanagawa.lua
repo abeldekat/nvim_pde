@@ -32,9 +32,6 @@ local opts = {
       MiniHipatternsNote = { bg = c.theme.diag.hint, fg = c.theme.ui.bg, bold = true },
     }
 
-    -- if prefer_light then -- improve flashlabel
-    --   result["Substitute"] = { fg = c.theme.ui.fg_reverse, bg = c.theme.vcs.removed }
-    -- end
     return result
   end,
 }

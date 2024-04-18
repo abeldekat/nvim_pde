@@ -22,12 +22,4 @@ return {
       require("ak.config.util.mini_doc")
     end,
   },
-
-  -- {
-  --   "folke/persistence.nvim",
-  --   event = "BufReadPre",
-  --   config = function()
-  --     require("ak.config.util.persistence")
-  --   end,
-  -- },
 }

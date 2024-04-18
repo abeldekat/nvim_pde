@@ -56,21 +56,21 @@ local function markdown()
   }
 end
 
-local function python()
-  return {
-    {
-      "linux-cultist/venv-selector.nvim",
-      keys = { { "<leader>cv", desc = "Venv selector", ft = "python" } },
-      config = function() require("ak.config.lang.python.venv_selector") end,
-    },
-    -- {
-    --   "wookayin/semshi", -- "numiras/semshi" -- use a maintained fork
-    --   ft = "python",
-    --   build = ":UpdateRemotePlugins",
-    --   init = function() require("ak.config.lang.python.semshi") end,
-    -- },
-  }
-end
+-- local function python()
+--   return {
+--     {
+--       "linux-cultist/venv-selector.nvim",
+--       keys = { { "<leader>cv", desc = "Venv selector", ft = "python" } },
+--       config = function() require("ak.config.lang.python.venv_selector") end,
+--     },
+--     -- {
+--     --   "wookayin/semshi", -- "numiras/semshi" -- use a maintained fork
+--     --   ft = "python",
+--     --   build = ":UpdateRemotePlugins",
+--     --   init = function() require("ak.config.lang.python.semshi") end,
+--     -- },
+--   }
+-- end
 
 local function sql()
   return {
@@ -85,7 +85,7 @@ end
 
 local langs = {
   markdown,
-  python,
+  -- python,
   sql,
 }
 for _, lang in ipairs(langs) do

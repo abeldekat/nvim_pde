@@ -4,7 +4,6 @@ local MiniStarter = require("mini.starter")
 
 --          ╭─────────────────────────────────────────────────────────╮
 --          │             Setup mini.starter on UIEnter.              │
---          │       See: dashboard-nvim, plugin, dashboard.lua        │
 --          ╰─────────────────────────────────────────────────────────╯
 local function on_ui_enter(opts)
   vim.api.nvim_create_autocmd("UIEnter", {

@@ -8,7 +8,7 @@ local register = Util.deps.register
 later(function()
   local spec = {
     source = "nvim-neotest/neotest",
-    depends = { "nvim-neotest/nvim-nio", "nvim-neotest/neotest-python" },
+    depends = { "nvim-neotest/nvim-nio" },
   }
   local function load()
     add(spec)

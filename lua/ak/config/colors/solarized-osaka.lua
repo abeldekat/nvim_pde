@@ -14,12 +14,6 @@ local opts = {
   dim_inactive = true,
   style = prefer_light and "day" or "moon",
   on_highlights = function(hl, c)
-    if prefer_light then
-      -- only needed for light theme. Normal darktheme shows white as fg:
-      -- change fg = c.fg into:
-      hl.FlashLabel = { bg = c.magenta2, bold = true, fg = c.bg }
-    end
-
     -- Careful: Do not use the same table instance twice!
     -- The default colors configured for mini.statusline are lighter
     -- Use the lualine variant:
