@@ -12,8 +12,8 @@ My *personal development environment* for Neovim
 ### Structure
 
 - `init`: Defers to `ak.init`. Uses `:h vim.loader`.
-- `ak.init`: Bootstrap [mini.deps]
-- [ak.boot.deps]: Uses [mini.deps] and the units in [ak.deps] to boot.
+- `ak.init`: Bootstrap [mini.deps] using `ak.boot.deps`
+- [ak.deps]: Contains specs for [mini.deps] that load the config in `ak.config`
 - [ak.config]: Contains all setup for options, key-mappings, auto-commands,
 color-schemes and plugins.
 - [ak.util]: Shared code.
@@ -164,16 +164,14 @@ This repo uses code and ideas from the following repositories:
 [tmuxp]: https://github.com/tmux-python/tmuxp
 [scripts]: https://github.com/abeldekat/scripts
 [tmux-sessionizer]: https://github.com/abeldekat/scripts/blob/main/tmux-sessionizer
-[telescope]: https://github.com/LazyVim/LazyVim/blob/a50f92f7550fb6e9f21c0852e6cb190e6fcd50f5/lua/lazyvim/plugins/editor.lua#L135
 [ak.boot]: lua/ak/boot
 [ak.deps]: lua/ak/deps
-[ak.lazy]: lua/ak/lazy
 [ak.config]: lua/ak/config
 [ak.util]: lua/ak/util
 [leader uu]: lua/ak/util/color.lua
 [leader h]: lua/ak/util/color.lua
-[lazy methods]: lua/ak/util/defer.lua
-[with_submodules]: https://github.com/abeldekat/nvim_pde/tree/with_submodules
 [mini.surround]: https://github.com/echasnovski/mini.surround
 [mini.operators]: https://github.com/echasnovski/mini.operators
 [leap.nvim]: https://github.com/ggandor/leap.nvim
+[with_submodules]: https://github.com/abeldekat/nvim_pde/tree/with_submodules
+[with_lazynvim]: https://github.com/abeldekat/nvim_pde/tree/with_lazynvim
