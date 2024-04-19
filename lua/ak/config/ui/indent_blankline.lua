@@ -20,10 +20,8 @@ local opts = {
     filetypes = {
       "help",
       "starter",
-      "lazy",
       "mason",
       "toggleterm",
-      "lazyterm",
     },
   },
 }

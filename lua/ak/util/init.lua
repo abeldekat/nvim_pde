@@ -42,7 +42,6 @@ function M.opened_without_arguments()
   return true
 end
 
--- This indicates that some lazy plugins might have missed an event
 function M.opened_with_file_argument()
   return not (M.opened_without_arguments() or M.opened_with_dir_argument()) --
 end

@@ -121,7 +121,6 @@ local function keys()
     require("neotest").run.run({ strategy = "dap" })
   end, { desc = "Debug nearest" })
 
-  -- override lazy loading key
   map("<leader>dL", no_op, { desc = "No-op dap" })
 end
 

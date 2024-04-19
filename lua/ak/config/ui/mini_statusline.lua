@@ -8,12 +8,6 @@
 -- https://github.com/echasnovski/mini.nvim/issues/337
 -- use separate groups for each diagnostic
 
--- mini statusline in floating lazy.nvim ui:
--- local set_active_stl = function()
---   vim.wo.statusline = "%!v:lua.MiniStatusline.active()"
--- end
--- vim.api.nvim_create_autocmd("Filetype", { pattern = "lazy", callback = set_active_stl })
-
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                    Module definition                    │
 --          ╰─────────────────────────────────────────────────────────╯

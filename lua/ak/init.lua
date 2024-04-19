@@ -10,11 +10,6 @@
 --          ╰─────────────────────────────────────────────────────────╯
 
 return function(opts)
-  local plugin_manager = vim.env.AK_BOOT
-
-  if plugin_manager == "lazy" then
-    require("ak.boot.lazy")(opts)
-  else
-    require("ak.boot.deps")(opts)
-  end
+  -- local plugin_manager = vim.env.AK_BOOT -- only mini.deps...
+  require("ak.boot.deps")(opts)
 end

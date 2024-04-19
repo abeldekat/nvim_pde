@@ -91,7 +91,6 @@ local function keys()
   local themes = require("telescope.themes")
   local buffer_dir = require("telescope.utils").buffer_dir
 
-  -- top level, candidates to lazy-load:
   map(
     "<leader>/",
     function()
