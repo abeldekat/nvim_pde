@@ -59,14 +59,6 @@ end
 local opts = get_opts()
 local lint_module = require("lint")
 
-for name, linter in pairs(opts.linters) do
-  if type(linter) == "table" and type(lint_module.linters[name]) == "table" then
-    ---@diagnostic disable-next-line: param-type-mismatch
-    lint_module.linters[name] = vim.tbl_deep_extend("force", lint_module.linters[name], linter)
-  else
-    lint_module.linters[name] = linter
-  end
-end
 lint_module.linters_by_ft = opts.linters_by_ft
 
 vim.api.nvim_create_autocmd(opts.events, {
