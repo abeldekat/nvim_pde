@@ -2,6 +2,7 @@
 --          │                   Grapple statusline                    │
 --          ╰─────────────────────────────────────────────────────────╯
 local M = {}
+local Grapple = require("grapple")
 local scope_name = ""
 local is_current_buffer_tagged = false
 local cached_line = nil
@@ -20,7 +21,6 @@ local opts = {
 }
 
 local function produce() -- "󰛢 12" "󰛢 1[2]34…" "󰛢 1234[…]"
-  local Grapple = require("grapple")
   local current = Grapple.find({ buffer = 0 })
   local tags, _ = Grapple.tags() -- using the current scope
   tags = tags and tags or {}
@@ -51,7 +51,30 @@ local function produce() -- "󰛢 12" "󰛢 1[2]34…" "󰛢 1234[…]"
   cached_line = header .. " " .. table.concat(status)
 end
 
-local function subscribe_to_events() -- TODO: Grapple PR, use grapple events
+local function set_scope_name(name)
+  local scope_name_override = opts.scope_names[name]
+  scope_name = scope_name_override and scope_name_override or name
+end
+
+local function subscribe()
+  local function decorate(org_cmd)
+    return function(...)
+      org_cmd(...)
+      produce()
+    end
+  end
+  for _, name in ipairs({ "toggle", "tag", "untag", "reset" }) do
+    Grapple[name] = decorate(Grapple[name])
+  end
+
+  local use_scope = Grapple.use_scope
+  ---@diagnostic disable-next-line: duplicate-set-field
+  Grapple.use_scope = function(name)
+    use_scope(name)
+    set_scope_name(name)
+    produce()
+  end
+
   local group = vim.api.nvim_create_augroup("Grappleline", { clear = true })
   vim.api.nvim_create_autocmd({ "BufEnter" }, {
     group = group,
@@ -60,33 +83,8 @@ local function subscribe_to_events() -- TODO: Grapple PR, use grapple events
   })
 end
 
-local function subscribe_to_grapple()
-  local function decorate(org_cmd)
-    return function(...)
-      org_cmd(...)
-      produce()
-    end
-  end
-
-  local Grapple = require("grapple")
-  Grapple.toggle = decorate(Grapple.toggle)
-  Grapple.tag = decorate(Grapple.tag)
-  Grapple.untag = decorate(Grapple.untag)
-  Grapple.reset = decorate(Grapple.reset)
-
-  local grapple_use_scope = Grapple.use_scope
-  ---@diagnostic disable-next-line: duplicate-set-field
-  Grapple.use_scope = function(name)
-    grapple_use_scope(name)
-    local scope_name_override = opts.scope_names[name]
-    scope_name = scope_name_override and scope_name_override or name
-    produce()
-  end
-end
-
 function M.setup(notify_cb)
-  subscribe_to_events()
-  subscribe_to_grapple()
+  subscribe()
 
   local org_produce = produce
   produce = function()
@@ -95,9 +93,6 @@ function M.setup(notify_cb)
   end
   org_produce() -- initialize line
 end
-
 function M.is_current_buffer_tagged() return is_current_buffer_tagged end
-
 function M.line() return cached_line end
-
 return M
