@@ -68,10 +68,26 @@ local function sql()
   end, "FileType", "sql")
 end
 
+local function rust()
+  local crates = { source = "Saecki/crates.nvim" }
+  register(crates)
+  Util.defer.on_events(function() -- can also be a cmp source
+    later(function()
+      add(crates)
+      require("ak.config.lang.rust.crates")
+    end)
+  end, "BufRead", "Cargo.toml")
+
+  -- TODO: lsp rust_analyzer, taplo toml toolkit
+  -- TODO:     "mrcjkb/rustaceanvim"
+  -- TODO:  require("rustaceanvim.neotest"),
+end
+
 local langs = {
   markdown,
   -- python,
   sql,
+  rust,
 }
 for _, lang in ipairs(langs) do
   now(lang)

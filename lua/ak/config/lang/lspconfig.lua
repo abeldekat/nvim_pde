@@ -11,6 +11,14 @@
 --          ╰─────────────────────────────────────────────────────────╯
 local Util = require("ak.util")
 local H = {}
+-- perhaps also integrate:
+-- {
+--     workspace = { -- mariasolos
+--         -- PERF: didChangeWatchedFiles is too slow.
+--         -- TODO: Remove this when https://github.com/neovim/neovim/issues/23291#issuecomment-1686709265 is fixed.
+--         didChangeWatchedFiles = { dynamicRegistration = false },
+--     },
+-- }
 
 function H.inlay_hints()
   if vim.lsp.inlay_hint then
@@ -173,9 +181,9 @@ function H.yamlls()
   }
 end
 
-function H.ruff_lsp()
+function H.ruff()
   Util.lsp.on_attach(function(client, buffer)
-    if client.name ~= "ruff_lsp" then return end
+    if client.name ~= "ruff" then return end
     vim.keymap.set(
       "n",
       "<leader>co",
@@ -197,6 +205,14 @@ function H.ruff_lsp()
   return {}
 end
 
+function H.rust_analyzer(capabilities)
+  local lspconfig = require("lspconfig")
+  local ca = {}
+  lspconfig.rust_analyzer.setup({
+    capabilities = vim.tbl_deep_extend("force", {}, capabilities, ca),
+  })
+end
+
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                          Setup                          │
 --          ╰─────────────────────────────────────────────────────────╯
@@ -210,14 +226,9 @@ H.inlay_hints()
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 local has_cmp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
 capabilities = vim.tbl_deep_extend("force", capabilities, has_cmp and cmp_nvim_lsp.default_capabilities() or {})
--- perhaps also integrate:
--- {
---     workspace = { -- mariasolos
---         -- PERF: didChangeWatchedFiles is too slow.
---         -- TODO: Remove this when https://github.com/neovim/neovim/issues/23291#issuecomment-1686709265 is fixed.
---         didChangeWatchedFiles = { dynamicRegistration = false },
---     },
--- }
+
+-- without mason:
+H.rust_analyzer(capabilities)
 
 -- the servers below are setup by mason
 local servers = {
@@ -227,7 +238,8 @@ local servers = {
   bashls = {},
   marksman = {},
   pyright = {},
-  ruff_lsp = H.ruff_lsp(),
+  ruff = H.ruff(),
+  -- rust_analyzer = {},
 }
 local ensure_installed = vim.tbl_keys(servers or {})
 

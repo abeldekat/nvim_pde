@@ -33,7 +33,9 @@ end
 
 local nu = { number = true, relativenumber = true }
 function M.number()
+  ---@diagnostic disable-next-line: undefined-field
   if vim.opt_local.number:get() or vim.opt_local.relativenumber:get() then
+    ---@diagnostic disable-next-line: undefined-field
     nu = { number = vim.opt_local.number:get(), relativenumber = vim.opt_local.relativenumber:get() }
     vim.opt_local.number = false
     vim.opt_local.relativenumber = false
@@ -45,20 +47,10 @@ function M.number()
   end
 end
 
-local enabled = true
-function M.diagnostics()
-  -- if this Neovim version supports checking if diagnostics are enabled
-  -- then use that for the current state
-  if vim.diagnostic.is_disabled then enabled = not vim.diagnostic.is_disabled() end
-  enabled = not enabled
-
-  if enabled then
-    vim.diagnostic.enable()
-    Util.info("Enabled diagnostics", { title = "Diagnostics" })
-  else
-    vim.diagnostic.disable()
-    Util.warn("Disabled diagnostics", { title = "Diagnostics" })
-  end
+function M.diagnostic()
+  local enabled = not vim.diagnostic.is_enabled()
+  vim.diagnostic.enable(enabled)
+  Util.info(string.format("Diagnostic %s", enabled and "enabled" or "disabled"), { title = "Diagnostic" })
 end
 
 ---@param buf? number
@@ -67,7 +59,7 @@ function M.inlay_hints(buf, value)
   local ih = vim.lsp.inlay_hint
   if type(ih) == "table" and ih.enable then
     if value == nil then value = not ih.is_enabled(buf) end
-    ih.enable(buf, value)
+    ih.enable(value, { bufnr = buf })
   end
 end
 

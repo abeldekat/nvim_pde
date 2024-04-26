@@ -105,7 +105,7 @@ map("n", "<leader>us", function() Util.toggle("spell") end, { desc = "Toggle spe
 map("n", "<leader>uw", function() Util.toggle("wrap") end, { desc = "Toggle word wrap" })
 map("n", "<leader>uL", function() Util.toggle("relativenumber") end, { desc = "Toggle relative line numbers" })
 map("n", "<leader>ul", function() Util.toggle.number() end, { desc = "Toggle line numbers" })
-map("n", "<leader>ud", function() Util.toggle.diagnostics() end, { desc = "Toggle diagnostics" })
+map("n", "<leader>ud", function() Util.toggle.diagnostic() end, { desc = "Toggle diagnostic" })
 
 local conceallevel = vim.o.conceallevel > 0 and vim.o.conceallevel or 3
 map(

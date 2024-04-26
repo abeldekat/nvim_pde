@@ -45,6 +45,7 @@ local get_opts = function()
       "yaml",
       -- Extra Langs:
       "awk",
+      "ron", -- rusty object notation
       "rust",
       "sql",
       "xml",

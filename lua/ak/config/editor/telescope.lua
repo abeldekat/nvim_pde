@@ -24,6 +24,7 @@ local function get_opts()
 
   local opts = {
     defaults = {
+      path_display = { filename_first = { reverse_directories = false } },
       prompt_prefix = " ",
       selection_caret = " ",
       -- open files in the first window that is an actual file.

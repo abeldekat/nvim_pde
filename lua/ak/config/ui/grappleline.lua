@@ -1,131 +1,103 @@
----@diagnostic disable: undefined-field, undefined-doc-name
-
 --          ╭─────────────────────────────────────────────────────────╮
---          │ TODO: Remove when grapple.nvim PR is accepted. Archive  │
---          │                       the plugin                        │
+--          │                   Grapple statusline                    │
 --          ╰─────────────────────────────────────────────────────────╯
 local M = {}
-local Grappleline = require("grappleline")
+local scope_name = ""
+local is_current_buffer_tagged = false
+local cached_line = nil
 
-local function extended(on_update)
-  Grappleline.setup({
-    override_scope_names = { git = "", git_branch = "dev" },
-    on_update = on_update,
-  })
-end
-
-local function short(on_update)
-  Grappleline.setup({
-    override_scope_names = { git = "", git_branch = "dev" },
-    formatter = "short",
-    on_update = on_update,
-  })
-end
-
-local function old_override_example(on_update)
-  Grappleline.setup({
-    formatter_opts = {
-      extended = { -- customize the extended builtin
-        indicators = { " j ", " k ", " l ", " h " },
-        active_indicators = { "<j>", "<k>", "<l>", "<h>" },
-        empty_slot = " · ",
-      },
-    },
-    on_update = on_update,
-  })
-end
-
-local function extended_shortened(on_update)
-  Grappleline.setup({
-    override_scope_names = { git = "", git_branch = "dev" },
-    formatter_opts = {
-      extended = { -- remove all spaces....
-        indicators = { "1", "2", "3", "4" },
-        empty_slot = "·",
-        more_marks_indicator = "…", -- horizontal elipsis. Disable with empty string
-        more_marks_active_indicator = "[…]", -- Disable with empty string
-      },
-    },
-    on_update = on_update,
-  })
-end
-
-local function custom_formatter(on_update)
-  Grappleline.setup({
-    custom_formatter = Grappleline.gen_formatter(
-      ---@param data GrapplelineData
-      ---@return string
-      function(data)
-        return string.format(
-          "%s%s%s",
-          "➡️ ",
-          data.scope_name and string.format("%s ", data.scope_name) or "",
-          data.buffer_idx and string.format("%d", data.buffer_idx) or "-"
-        )
-      end
-    ),
-    on_update = on_update,
-  })
-end
-
-local function defer_to_grapple(on_update)
-  Grappleline.setup({
-    -- formatter = "grapple_name_or_index",
-    formatter = "grapple", -- the statusline function in grapple.nvim
-    on_update = on_update,
-  })
-end
-
--- Completely hide the line when there are no tags in some predefined scopes
-local function very_conditional(on_update)
-  local Grapple = require("grapple")
-  local scopes = { "git", "git_branch" } -- assuming no override_scope_names
-
-  local function nr_of_tags()
-    local result = 0
-    for _, scopename in ipairs(scopes) do
-      result = result + #Grapple.tags({ scope = scopename })
-    end
-    return result
-  end
-
-  ---@param data GrapplelineData
-  ---@param builtin function
-  local function conditional_formatter(data, builtin)
-    -- the current scope has tags:
-    if data.number_of_tags > 0 then return builtin(data) end
-    -- there are tags in all scopes of interest:
-    if nr_of_tags() > 0 then return builtin(data) end
-    return "" -- no tags, don't show anything
-  end
-
-  local gen_formatter_org = Grappleline.gen_formatter
-  ---@diagnostic disable-next-line: duplicate-set-field
-  Grappleline.gen_formatter = function(builtin) -- capture the builtin formatter
-    return gen_formatter_org(function(data) --
-      return conditional_formatter(data, builtin) -- closure on builtin!
-    end)
-  end
-  Grappleline.setup({ -- formatter = "extended" -- or any other builtin...
-    on_update = on_update,
-  })
-end
-
--- Each key belongs to a function doing a custom Grappleline setup
-local flavors = {
-  extended = extended,
-  short = short,
-  old_override_example = old_override_example,
-  custom_formatter = custom_formatter,
-  defer_to_grapple = defer_to_grapple,
-  extended_shortened = extended_shortened,
-  very_conditional = very_conditional,
+local opts = {
+  icon = "󰛢",
+  scope_names = { git = "", git_branch = "dev" },
+  max_slots = 4,
+  inactive = "%s",
+  active = function()
+    is_current_buffer_tagged = true
+    return "[%s]"
+  end,
+  more_marks = "…", -- #slots < #tags, horizontal elipsis
+  -- empty_slot = "·", -- #slots > #tags, middledot
 }
 
----@param on_update function
-function M.setup(on_update)
-  -- current favorite:
-  flavors.extended_shortened(on_update)
+local function produce() -- "󰛢 12" "󰛢 1[2]34…" "󰛢 1234[…]"
+  local Grapple = require("grapple")
+  local current = Grapple.find({ buffer = 0 })
+  local tags, _ = Grapple.tags() -- using the current scope
+  tags = tags and tags or {}
+  is_current_buffer_tagged = false
+
+  local header = string.format("%s%s%s", opts.icon, scope_name == "" and "" or " ", scope_name)
+
+  local nr_of_tags = #tags
+  local curpath = current and current.path or nil
+  local slot = 0
+  ---@type string[]
+  local status = vim.tbl_map(function(tag) -- slots and corresponding tags
+    slot = slot + 1
+    return string.format(curpath == tag.path and opts.active() or opts.inactive, "" .. slot)
+  end, vim.list_slice(tags, 1, math.min(opts.max_slots, nr_of_tags)))
+
+  -- if opts.max_slots > nr_of_tags then -- slots without tags
+  --   status[slot + 1] = string.rep(opts.empty_slot, opts.max_slots - nr_of_tags)
+  -- elseif opts.max_slots < nr_of_tags then -- tags without slots
+  if opts.max_slots < nr_of_tags then -- tags without slots
+    local active = vim.tbl_filter(
+      function(tag) return curpath == tag.path and true or false end,
+      vim.list_slice(tags, opts.max_slots + 1)
+    )
+    status[slot + 1] = string.format(#active > 0 and opts.active() or opts.inactive, opts.more_marks)
+  end
+
+  cached_line = header .. " " .. table.concat(status)
 end
+
+local function subscribe_to_events() -- TODO: Grapple PR, use grapple events
+  local group = vim.api.nvim_create_augroup("Grappleline", { clear = true })
+  vim.api.nvim_create_autocmd({ "BufEnter" }, {
+    group = group,
+    pattern = "*",
+    callback = function() produce() end,
+  })
+end
+
+local function subscribe_to_grapple()
+  local function decorate(org_cmd)
+    return function(...)
+      org_cmd(...)
+      produce()
+    end
+  end
+
+  local Grapple = require("grapple")
+  Grapple.toggle = decorate(Grapple.toggle)
+  Grapple.tag = decorate(Grapple.tag)
+  Grapple.untag = decorate(Grapple.untag)
+  Grapple.reset = decorate(Grapple.reset)
+
+  local grapple_use_scope = Grapple.use_scope
+  ---@diagnostic disable-next-line: duplicate-set-field
+  Grapple.use_scope = function(name)
+    grapple_use_scope(name)
+    local scope_name_override = opts.scope_names[name]
+    scope_name = scope_name_override and scope_name_override or name
+    produce()
+  end
+end
+
+function M.setup(notify_cb)
+  subscribe_to_events()
+  subscribe_to_grapple()
+
+  local org_produce = produce
+  produce = function()
+    org_produce()
+    notify_cb()
+  end
+  org_produce() -- initialize line
+end
+
+function M.is_current_buffer_tagged() return is_current_buffer_tagged end
+
+function M.line() return cached_line end
 
 return M

@@ -16,16 +16,18 @@ local H = {} -- helpers, copied, modified or added
 local MiniStatusline = require("mini.statusline")
 
 -- Testing: add both. Choose in ak.lazy and ak.deps(editor and ui)
---
+-- local on_update = function() vim.wo.statusline = "%{%v:lua.MiniStatusline.active()%}" end
+-- require("ak.config.ui.harpoonline").setup(on_update)
 local has_harpoonline = false -- , _ = pcall(require, "harpoonline")
 local Harpoonline
 if has_harpoonline then Harpoonline = require("harpoonline") end
 --
--- Testing grapple PR:
--- local has_grapple, Grappleline = pcall(require, "grappleline")
-local has_grapple, Grappleline = pcall(require, "grapple.statusline")
+local has_grapple, _ = pcall(require, "grapple")
 local grappleline
-if has_grapple then grappleline = Grappleline.get() end
+if has_grapple then
+  grappleline = require("ak.config.ui.grappleline")
+  grappleline.setup(function() vim.wo.statusline = "%{%v:lua.MiniStatusline.active()%}" end)
+end
 
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                      Module setup                       │
@@ -74,12 +76,12 @@ AK.active = function()
   --
   -- Added:
   local macro = AK.section_macro({ trunc_width = 120 })
-  local harpoon_data = AK.section_harpoon({ trunc_width = 75 })
+  -- local harpoon_data = AK.section_harpoon({ trunc_width = 75 })
   local grapple_data = AK.section_grapple({ trunc_width = 75 })
 
   return MiniStatusline.combine_groups({
     { hl = mode_hl, strings = { string.upper(mode) } }, -- Dynamic mode_hl
-    { hl = H.harpoon_highlight(), strings = { harpoon_data } }, -- added
+    -- { hl = H.harpoon_highlight(), strings = { harpoon_data } }, -- added
     { hl = H.grapple_highlight(), strings = { grapple_data } }, -- added
     { hl = H.fixed_hl, strings = { git, lsp, diagnostics } }, -- "..Devinfo"
     "%<", -- Mark general truncate point
@@ -136,7 +138,7 @@ AK.section_grapple = function(args)
   if MiniStatusline.is_truncated(args.trunc_width) or H.isnt_normal_buffer() then return "" end
   if not has_grapple then return "" end
 
-  return grappleline:format()
+  return grappleline.line()
 end
 
 -- overridden: in terminal, use full name. Use relative path if file is in cwd
@@ -298,7 +300,7 @@ H.diagnostic_get_count = function()
   end
   return res
 end
-H.diagnostic_is_disabled = function() return vim.diagnostic.is_disabled(0) end
+H.diagnostic_is_disabled = function() return not vim.diagnostic.is_enabled() end
 
 -- added
 H.harpoon_highlight = function()
@@ -309,7 +311,7 @@ end
 -- added
 H.grapple_highlight = function()
   --
-  return has_grapple and grappleline:is_current_buffer_tagged() and "MiniHipatternsHack" or H.fixed_hl
+  return has_grapple and grappleline.is_current_buffer_tagged() and "MiniHipatternsHack" or H.fixed_hl
 end
 
 --          ╭─────────────────────────────────────────────────────────╮

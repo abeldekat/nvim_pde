@@ -3,6 +3,7 @@ local mason_ensure_installed = {
   "stylua", -- formatter
   "shfmt", -- formatter
   "black", -- formatter python
+  "codelldb", -- rust debugger
 }
 require("mason").setup()
 

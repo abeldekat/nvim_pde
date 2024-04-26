@@ -22,9 +22,6 @@ local function load()
   require("ak.config.lang.lspconfig")
 
   add("b0o/SchemaStore.nvim")
-
-  add("j-hui/fidget.nvim")
-  require("ak.config.lang.fidget")
 end
 
 later(load)

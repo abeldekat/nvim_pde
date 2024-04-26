@@ -35,8 +35,6 @@ later(function()
   --          │       Mini.notify is used in ak.deps.start              │
   --          ╰─────────────────────────────────────────────────────────╯
   add({ source = "abeldekat/harpoonline", checkout = "stable" })
-  -- local on_update = function() vim.wo.statusline = "%{%v:lua.MiniStatusline.active()%}" end
-  -- require("ak.config.ui.harpoonline").setup(on_update)
   require("ak.config.ui.mini_statusline") -- does not use harpoonline
 
   add("lukas-reineke/indent-blankline.nvim")

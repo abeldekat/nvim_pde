@@ -38,10 +38,10 @@ later(function()
   -- add(harpoon_spec)
   -- require("ak.config.editor.harpoon")
   --
-  local spec_grapple = "abeldekat/grapple.nvim"
+  local spec_grapple = "cbochs/grapple.nvim"
   -- register(grapple_spec)
   add(spec_grapple)
-  require("ak.config.editor.grapple_pr") -- testing the pr
+  require("ak.config.editor.grapple")
 
   add("nvim-pack/nvim-spectre")
   require("ak.config.editor.spectre")

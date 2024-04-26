@@ -1,5 +1,5 @@
 local MiniNotify = require("mini.notify")
-MiniNotify.setup({ lsp_progress = { enable = false } })
+MiniNotify.setup({ lsp_progress = { enable = true } })
 
 -- Change duration for errors to show them longer
 -- local opts = { ERROR = { duration = 10000 } }
