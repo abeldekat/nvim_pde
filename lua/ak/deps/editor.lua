@@ -3,6 +3,7 @@ local MiniDeps = require("mini.deps")
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 local register = Util.deps.register
 local with_dir = Util.opened_with_dir_argument()
+local use_harpoon = true -- false: use grapple.nvim
 
 now(function()
   local function oil()
@@ -34,14 +35,16 @@ later(function()
     source = "ThePrimeagen/harpoon",
     checkout = "harpoon2",
   }
-  register(spec_harpoon)
-  -- add(spec_harpoon)
-  -- require("ak.config.editor.harpoon")
-  --
   local spec_grapple = "cbochs/grapple.nvim"
-  -- register(spec_grapple)
-  add(spec_grapple)
-  require("ak.config.editor.grapple")
+  if use_harpoon then
+    register(spec_grapple)
+    add(spec_harpoon)
+    require("ak.config.editor.harpoon")
+  else
+    register(spec_harpoon)
+    add(spec_grapple)
+    require("ak.config.editor.grapple")
+  end
 
   add("nvim-pack/nvim-spectre")
   require("ak.config.editor.spectre")

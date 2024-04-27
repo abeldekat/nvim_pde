@@ -9,15 +9,15 @@ My *personal development environment* for Neovim
   `lazy.nvim` and `mini.deps`
 >
 > Tag [with_lazynvim] references the version containing `lazy.nvim` and `mini.deps`
+
 ### Structure
 
 - `init`: Defers to `ak.init`. Uses `:h vim.loader`.
-- `ak.init`: Bootstrap [mini.deps] using `ak.boot.deps`
+- `ak.init`: Bootstrap [mini.deps] using [ak.boot.deps]
 - [ak.deps]: Contains specs for [mini.deps] that load the config in `ak.config`
 - [ak.config]: Contains all setup for options, key-mappings, auto-commands,
 color-schemes and plugins.
 - [ak.util]: Shared code.
-
 
 ## Install
 
@@ -158,13 +158,12 @@ This repo uses code and ideas from the following repositories:
 - [dotfiles](https://github.com/MariaSolOs/dotfiles/tree/main/.config/nvim) `@mariasolos`
 
 [mini.deps]: https://github.com/echasnovski/mini.deps
-[lazy.nvim]: https://github.com/folke/lazy.nvim
 [peek.nvim]: https://github.com/toppair/peek.nvim
 [deno]: https://deno.land
 [tmuxp]: https://github.com/tmux-python/tmuxp
 [scripts]: https://github.com/abeldekat/scripts
 [tmux-sessionizer]: https://github.com/abeldekat/scripts/blob/main/tmux-sessionizer
-[ak.boot]: lua/ak/boot
+[ak.boot.deps]: lua/ak/boot/deps.lua
 [ak.deps]: lua/ak/deps
 [ak.config]: lua/ak/config
 [ak.util]: lua/ak/util
