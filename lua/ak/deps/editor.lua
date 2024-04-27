@@ -35,11 +35,11 @@ later(function()
     checkout = "harpoon2",
   }
   register(spec_harpoon)
-  -- add(harpoon_spec)
+  -- add(spec_harpoon)
   -- require("ak.config.editor.harpoon")
   --
   local spec_grapple = "cbochs/grapple.nvim"
-  -- register(grapple_spec)
+  -- register(spec_grapple)
   add(spec_grapple)
   require("ak.config.editor.grapple")
 

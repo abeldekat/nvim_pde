@@ -1,3 +1,4 @@
+-- TODO: Implement toggle
 -- https://github.com/ThePrimeagen/harpoon/pull/514/commits/fedfcc67b152be40d972008b39c09c63cdf5c014
 -- https://github.com/ThePrimeagen/harpoon/issues/490
 -- https://github.com/ThePrimeagen/harpoon/issues/523

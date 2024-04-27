@@ -14,20 +14,8 @@
 local AK = {} -- module using the structure of MiniStatusline
 local H = {} -- helpers, copied, modified or added
 local MiniStatusline = require("mini.statusline")
-
--- Testing: add both. Choose in ak.lazy and ak.deps(editor and ui)
--- local on_update = function() vim.wo.statusline = "%{%v:lua.MiniStatusline.active()%}" end
--- require("ak.config.ui.harpoonline").setup(on_update)
-local has_harpoonline = false -- , _ = pcall(require, "harpoonline")
-local Harpoonline
-if has_harpoonline then Harpoonline = require("harpoonline") end
---
-local has_grapple, _ = pcall(require, "grapple")
+local harpoonline
 local grappleline
-if has_grapple then
-  grappleline = require("ak.config.ui.grappleline")
-  grappleline.setup(function() vim.wo.statusline = "%{%v:lua.MiniStatusline.active()%}" end)
-end
 
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                      Module setup                       │
@@ -51,6 +39,19 @@ AK.setup = function()
   })
   H.create_autocommands() -- lsp autocommands for custom lsp section
   H.set_active() -- lazy loading, missing events, still show statusline
+
+  -- Testing: add both. Choose in ak.deps.editor
+  local has_harpoon, _ = pcall(require, "harpoon")
+  if has_harpoon then
+    require("ak.config.ui.harpoonline").setup(H.set_active)
+    harpoonline = require("harpoonline")
+  end
+  --
+  local has_grapple, _ = pcall(require, "grapple")
+  if has_grapple then -- internal plugin
+    grappleline = require("ak.config.ui.grappleline")
+    grappleline.setup(H.set_active)
+  end
 end
 
 --          ╭─────────────────────────────────────────────────────────╮
@@ -76,12 +77,12 @@ AK.active = function()
   --
   -- Added:
   local macro = AK.section_macro({ trunc_width = 120 })
-  -- local harpoon_data = AK.section_harpoon({ trunc_width = 75 })
+  local harpoon_data = AK.section_harpoon({ trunc_width = 75 })
   local grapple_data = AK.section_grapple({ trunc_width = 75 })
 
   return MiniStatusline.combine_groups({
     { hl = mode_hl, strings = { string.upper(mode) } }, -- Dynamic mode_hl
-    -- { hl = H.harpoon_highlight(), strings = { harpoon_data } }, -- added
+    { hl = H.harpoon_highlight(), strings = { harpoon_data } }, -- added
     { hl = H.grapple_highlight(), strings = { grapple_data } }, -- added
     { hl = H.fixed_hl, strings = { git, lsp, diagnostics } }, -- "..Devinfo"
     "%<", -- Mark general truncate point
@@ -128,16 +129,12 @@ AK.section_diagnostics = function(args) -- args
 end
 
 AK.section_harpoon = function(args)
-  if MiniStatusline.is_truncated(args.trunc_width) or H.isnt_normal_buffer() then return "" end
-  if not has_harpoonline then return "" end
-
-  return Harpoonline.format()
+  if not harpoonline or MiniStatusline.is_truncated(args.trunc_width) or H.isnt_normal_buffer() then return "" end
+  return harpoonline.format()
 end
 
 AK.section_grapple = function(args)
-  if MiniStatusline.is_truncated(args.trunc_width) or H.isnt_normal_buffer() then return "" end
-  if not has_grapple then return "" end
-
+  if not grappleline or MiniStatusline.is_truncated(args.trunc_width) or H.isnt_normal_buffer() then return "" end
   return grappleline.line()
 end
 
@@ -304,14 +301,12 @@ H.diagnostic_is_disabled = function() return not vim.diagnostic.is_enabled() end
 
 -- added
 H.harpoon_highlight = function()
-  --
-  return has_harpoonline and Harpoonline.is_buffer_harpooned() and "MiniHipatternsHack" or H.fixed_hl
+  return harpoonline and harpoonline.is_buffer_harpooned() and "MiniHipatternsHack" or H.fixed_hl
 end
 
 -- added
 H.grapple_highlight = function()
-  --
-  return has_grapple and grappleline.is_current_buffer_tagged() and "MiniHipatternsHack" or H.fixed_hl
+  return grappleline and grappleline.is_current_buffer_tagged() and "MiniHipatternsHack" or H.fixed_hl
 end
 
 --          ╭─────────────────────────────────────────────────────────╮
