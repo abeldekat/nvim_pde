@@ -1,8 +1,6 @@
--- TODO: Implement toggle
--- https://github.com/ThePrimeagen/harpoon/pull/514/commits/fedfcc67b152be40d972008b39c09c63cdf5c014
 -- https://github.com/ThePrimeagen/harpoon/issues/490
 -- https://github.com/ThePrimeagen/harpoon/issues/523
--- https://github.com/ThePrimeagen/harpoon/issues/352
+-- PR:  Get the current harpoon mark #514
 
 local Harpoon = require("harpoon")
 local Extensions = require("harpoon.extensions")
@@ -17,6 +15,22 @@ H.current_list = H.current_list_placeholder
 H.lists = { H.current_list_placeholder }
 -- H.ui_column_delimiter = "  "
 
+-- Copied from harpoonline:
+-- If the current buffer is harpooned, return the index of the harpoon mark
+-- Otherwise, return nil
+---@param list HarpoonList
+---@return number|nil
+H.find_active_idx = function(list)
+  if vim.bo.buftype ~= "" then return end -- not a normal buffer
+
+  -- if list:length() == 0 --  NOTE: Harpoon issue #555
+  if #list.items == 0 then return end -- no items in the list
+
+  local current_file = vim.fn.expand("%:p:.")
+  for idx, item in ipairs(list.items) do
+    if item.value == current_file then return idx end
+  end
+end
 H.to_harpoon_name = function()
   return H.current_list ~= H.current_list_placeholder and H.current_list or nil --
 end
@@ -83,7 +97,15 @@ A.switch_list = function()
   H.current_list = H.name_of_next_list()
   vim.api.nvim_exec_autocmds("User", { pattern = "HarpoonSwitchedList", modeline = false, data = H.to_harpoon_name() })
 end
-A.add = function() H.get_current_list():add() end
+A.toggle = function() -- harpoon bug: works only on the last element of the list
+  local list = H.get_current_list()
+  local idx = H.find_active_idx(list)
+  if idx then
+    list:remove_at(idx)
+  else
+    list:add()
+  end
+end
 A.ui = function() Harpoon.ui:toggle_quick_menu(H.get_current_list()) end
 A.prev = function() H.get_current_list():prev() end
 A.next = function() H.get_current_list():next() end
@@ -91,7 +113,7 @@ A.select = function(index) H.get_current_list():select(index) end
 
 local function add_keys()
   vim.keymap.set("n", "<leader>J", A.switch_list, { desc = "Harpoon next list", silent = true })
-  vim.keymap.set("n", "<leader>a", A.add, { desc = "Harpoon add", silent = true })
+  vim.keymap.set("n", "<leader>a", A.toggle, { desc = "Harpoon toggle", silent = true })
   vim.keymap.set("n", "<leader>j", A.ui, { desc = "Harpoon ui", silent = true })
   vim.keymap.set("n", "<leader>n", A.next, { desc = "Harpoon next", silent = true })
   vim.keymap.set("n", "<leader>p", A.prev, { desc = "Harpoon prev", silent = true })
