@@ -17,7 +17,6 @@ local opts = {
     return "[%s]"
   end,
   more_marks = "…", -- #slots < #tags, horizontal elipsis
-  -- empty_slot = "·", -- #slots > #tags, middledot
 }
 
 local function produce() -- "󰛢 12" "󰛢 1[2]34…" "󰛢 1234[…]"
@@ -37,9 +36,6 @@ local function produce() -- "󰛢 12" "󰛢 1[2]34…" "󰛢 1234[…]"
     return string.format(curpath == tag.path and opts.active() or opts.inactive, "" .. slot)
   end, vim.list_slice(tags, 1, math.min(opts.max_slots, nr_of_tags)))
 
-  -- if opts.max_slots > nr_of_tags then -- slots without tags
-  --   status[slot + 1] = string.rep(opts.empty_slot, opts.max_slots - nr_of_tags)
-  -- elseif opts.max_slots < nr_of_tags then -- tags without slots
   if opts.max_slots < nr_of_tags then -- tags without slots
     local active = vim.tbl_filter(
       function(tag) return curpath == tag.path and true or false end,
