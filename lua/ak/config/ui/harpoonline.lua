@@ -19,7 +19,6 @@ end
 
 local function shortened_default(on_update)
   Harpoonline.setup({
-    icon = "󰛢",
     formatter_opts = {
       default = { -- remove all spaces...
         inactive = "%s",
@@ -80,7 +79,7 @@ local flavors = {
 ---@param on_update function
 function M.setup(on_update)
   --
-  flavors.shortened_default(on_update)
+  flavors.default(on_update)
 end
 
 return M

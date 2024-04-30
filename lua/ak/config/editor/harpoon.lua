@@ -97,13 +97,17 @@ A.switch_list = function()
   H.current_list = H.name_of_next_list()
   vim.api.nvim_exec_autocmds("User", { pattern = "HarpoonSwitchedList", modeline = false, data = H.to_harpoon_name() })
 end
-A.toggle = function() -- harpoon bug: works only on the last element of the list
+A.toggle = function() -- harpoon issue 555
   local list = H.get_current_list()
-  local idx = H.find_active_idx(list)
-  if idx then
-    list:remove_at(idx)
-  else
+  local active_idx = H.find_active_idx(list)
+  local len = #list.items
+  if not active_idx or len == 0 then
     list:add()
+  elseif active_idx == len then -- last item
+    list:remove_at(active_idx) --
+  else
+    -- must replace with the last item in order to avoid gaps
+    list:replace_at(active_idx, list.items[len])
   end
 end
 A.ui = function() Harpoon.ui:toggle_quick_menu(H.get_current_list()) end

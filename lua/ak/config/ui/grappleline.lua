@@ -8,7 +8,9 @@ local is_current_buffer_tagged = false
 local cached_line = nil
 
 local opts = {
-  icon = "󰛢",
+  -- Supplementary private use Area Plane-A
+  -- https://www.nerdfonts.com/cheat-sheet?q=nf-md-
+  icon = "󰛢", -- nf-md-hook  -- f06e2
   scope_names = { git = "", git_branch = "dev" },
   max_slots = 4,
   inactive = "%s",
