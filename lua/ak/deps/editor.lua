@@ -3,7 +3,26 @@ local MiniDeps = require("mini.deps")
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 local register = Util.deps.register
 local with_dir = Util.opened_with_dir_argument()
-local use_harpoon = true -- false: use grapple.nvim
+
+---@type "h" | "g"  -- Use either harpoon or grapple
+local marker_to_use = "g"
+local spec_harpoon = {
+  source = "ThePrimeagen/harpoon",
+  -- source = "abeldekat/harpoon",
+  checkout = "harpoon2",
+}
+local spec_grapple = "cbochs/grapple.nvim"
+
+local function harpoon()
+  register(spec_grapple)
+  add(spec_harpoon)
+  require("ak.config.editor.harpoon")
+end
+local function grapple()
+  register(spec_harpoon)
+  add(spec_grapple)
+  require("ak.config.editor.grapple")
+end
 
 now(function()
   local function oil()
@@ -27,23 +46,10 @@ later(function()
   add("jinh0/eyeliner.nvim")
   require("ak.config.editor.eyeliner")
 
-  --          ╭─────────────────────────────────────────────────────────╮
-  --          │ Have both harpoon and grapple installed, but "packadd"  │
-  --          │                       only one...                       │
-  --          ╰─────────────────────────────────────────────────────────╯
-  local spec_harpoon = {
-    source = "ThePrimeagen/harpoon",
-    checkout = "harpoon2",
-  }
-  local spec_grapple = "cbochs/grapple.nvim"
-  if use_harpoon then
-    register(spec_grapple)
-    add(spec_harpoon)
-    require("ak.config.editor.harpoon")
+  if marker_to_use == "h" then
+    harpoon()
   else
-    register(spec_harpoon)
-    add(spec_grapple)
-    require("ak.config.editor.grapple")
+    grapple()
   end
 
   add("nvim-pack/nvim-spectre")

@@ -79,7 +79,7 @@ local flavors = {
 ---@param on_update function
 function M.setup(on_update)
   --
-  flavors.default(on_update)
+  flavors.shortened_default(on_update)
 end
 
 return M

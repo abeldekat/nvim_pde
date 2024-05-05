@@ -171,8 +171,6 @@ map("n", "<C-N>", "<C-d>", { desc = "Down half page, better ctrl-d" })
 -- https://www.reddit.com/r/neovim/comments/mbj8m5/how_to_setup_ctrlshiftkey_mappings_in_neovim_and/
 -- TODO: Modify alacritty.yml. See harpoon setup
 -- vim.keymap.set("n", "<C-S-P>", function()
---   vim.print("hello")
 -- end)
 -- vim.keymap.set("n", "<C-S-N>", function()
---   vim.print("goodbye")
 -- end)
