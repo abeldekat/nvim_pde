@@ -14,7 +14,6 @@ nightfox
 nordfox
 onedark
 rose-pine
-solarized-osaka
 solarized8_flat
 sonokai
 terafox

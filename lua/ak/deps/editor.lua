@@ -37,6 +37,16 @@ now(function()
   end
 end)
 
+-- later(function()
+-- register("takac/vim-hardtime")
+-- Util.defer.on_keys(function()
+now(function()
+  require("ak.config.editor.hardtime")
+  add("takac/vim-hardtime")
+end)
+-- end, "<leader>uH", "Hardtime")
+-- end)
+
 later(function()
   add("tpope/vim-repeat")
   add("ggandor/leap.nvim")
@@ -99,14 +109,6 @@ later(function()
       require("ak.config.editor.gitblame")
     end)
   end, "<leader>gt", "Git-blame")
-
-  register("takac/vim-hardtime")
-  Util.defer.on_keys(function()
-    now(function()
-      add("takac/vim-hardtime")
-      require("ak.config.editor.hardtime")
-    end)
-  end, "<leader>uH", "Hardtime")
 
   local quickfix_spec = {
     source = "kevinhwang91/nvim-bqf",

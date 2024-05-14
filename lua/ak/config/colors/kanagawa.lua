@@ -14,22 +14,34 @@ Utils.color.add_toggle("kanagawa*", {
 vim.o.background = prefer_light and "light" or "dark"
 
 local opts = {
-  overrides = function(c)
-    local result = {
-      MiniStatusLineModeInactive = { fg = c.theme.ui.fg_dim, bg = c.theme.ui.bg_m3 },
-      MiniStatusLineFilename = { fg = c.theme.syn.fun, bg = c.theme.ui.bg_p1 }, -- lualine_b better fg
-      --
-      MiniStatusLineModeNormal = { fg = c.theme.syn.fun, bg = c.theme.ui.bg_p1 }, -- lualine_b better fg
-      MiniStatusLineModeInsert = { fg = c.theme.ui.bg, bg = c.theme.diag.ok },
-      MiniStatusLineModeReplace = { fg = c.theme.ui.bg, bg = c.theme.syn.constant },
-      MiniStatusLineModeVisual = { fg = c.theme.ui.bg, bg = c.theme.syn.keyword },
-      MiniStatusLineModeCommand = { fg = c.theme.ui.bg, bg = c.theme.syn.operator },
-      MiniStatusLineModeOther = { fg = c.theme.ui.bg, bg = c.theme.diag.ok }, -- added, same as insert
+  dimInactive = true,
 
-      MiniHipatternsFixme = { bg = c.theme.diag.error, fg = c.theme.ui.bg, bold = true },
-      MiniHipatternsHack = { bg = c.theme.diag.warning, fg = c.theme.ui.bg, bold = true },
-      MiniHipatternsTodo = { bg = c.theme.diag.info, fg = c.theme.ui.bg, bold = true },
-      MiniHipatternsNote = { bg = c.theme.diag.hint, fg = c.theme.ui.bg, bold = true },
+  colors = {
+    theme = {
+      all = {
+        ui = {
+          bg_gutter = "none",
+        },
+      },
+    },
+  },
+  overrides = function(c)
+    local t = c.theme
+    local result = {
+      MiniStatusLineModeInactive = { fg = t.ui.fg_dim, bg = t.ui.bg_m3 },
+      MiniStatusLineFilename = { fg = t.syn.fun, bg = t.ui.bg_p1 }, -- lualine_b better fg
+      --
+      MiniStatusLineModeNormal = { fg = t.syn.fun, bg = t.ui.bg_p1 }, -- lualine_b better fg
+      MiniStatusLineModeInsert = { fg = t.ui.bg, bg = t.diag.ok },
+      MiniStatusLineModeReplace = { fg = t.ui.bg, bg = t.syn.constant },
+      MiniStatusLineModeVisual = { fg = t.ui.bg, bg = t.syn.keyword },
+      MiniStatusLineModeCommand = { fg = t.ui.bg, bg = t.syn.operator },
+      MiniStatusLineModeOther = { fg = t.ui.bg, bg = t.diag.ok }, -- added, same as insert
+
+      MiniHipatternsFixme = { bg = t.diag.error, fg = t.ui.bg, bold = true },
+      MiniHipatternsHack = { bg = t.diag.warning, fg = t.ui.bg, bold = true },
+      MiniHipatternsTodo = { bg = t.diag.info, fg = t.ui.bg, bold = true },
+      MiniHipatternsNote = { bg = t.diag.hint, fg = t.ui.bg, bold = true },
     }
 
     return result

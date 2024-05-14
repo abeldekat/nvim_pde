@@ -18,8 +18,8 @@ local M = {}
 local colors = {
   one = function()
     return {
-      { source = "folke/tokyonight.nvim", name = "colors_tokyonight" },
       { source = "catppuccin/nvim", name = "colors_catppuccin" },
+      { source = "folke/tokyonight.nvim", name = "colors_tokyonight" },
       { source = "EdenEast/nightfox.nvim", name = "colors_nightfox" },
       { source = "rose-pine/neovim", name = "colors_rose-pine" },
     }
@@ -27,28 +27,27 @@ local colors = {
 
   two = function()
     return {
-      { source = "navarasu/onedark.nvim", name = "colors_onedark" },
       { source = "sainnhe/sonokai", name = "colors_sonokai" },
-      { source = "craftzdog/solarized-osaka.nvim", name = "colors_solarized-osaka" },
-      { source = "lifepillar/vim-solarized8", name = "colors_solarized8", checkout = "neovim" },
+      { source = "ribru17/bamboo.nvim", name = "colors_bamboo" },
+      { source = "sainnhe/everforest", name = "colors_everforest" },
+      { source = "sainnhe/gruvbox-material", name = "colors_gruvbox-material" },
+      { source = "sainnhe/edge", name = "colors_edge" },
     }
   end,
 
   three = function()
     return {
-      { source = "ribru17/bamboo.nvim", name = "colors_bamboo" },
-      { source = "sainnhe/everforest", name = "colors_everforest" },
-      { source = "sainnhe/gruvbox-material", name = "colors_gruvbox-material" },
+      { source = "rebelot/kanagawa.nvim", name = "colors_kanagawa" },
       { source = "ellisonleao/gruvbox.nvim", name = "colors_gruvbox" },
+      { source = "Shatur/neovim-ayu", name = "colors_ayu" },
+      { source = "navarasu/onedark.nvim", name = "colors_onedark" },
     }
   end,
 
   four = function()
     return {
-      { source = "sainnhe/edge", name = "colors_edge" },
-      { source = "Shatur/neovim-ayu", name = "colors_ayu" },
+      { source = "lifepillar/vim-solarized8", name = "colors_solarized8", checkout = "neovim" },
       { source = "AstroNvim/astrotheme", name = "colors_astrotheme" },
-      { source = "rebelot/kanagawa.nvim", name = "colors_kanagawa" },
     }
   end,
 }

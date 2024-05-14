@@ -317,4 +317,5 @@ H.marker_highlight = function() return markerline and markerline.is_buffer() and
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                        Activate                         │
 --          ╰─────────────────────────────────────────────────────────╯
+-- MiniStatusline.setup({ use_icons = false, set_vim_settings = false }) -- default
 AK.setup()
