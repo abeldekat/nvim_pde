@@ -51,7 +51,6 @@ autocmd("FileType", {
     "lspinfo",
     "notify",
     "qf",
-    "query",
     "spectre_panel",
     "startuptime",
     "neotest-output",

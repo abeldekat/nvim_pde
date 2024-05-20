@@ -55,10 +55,7 @@ function H.keys(_, buffer) -- client
   map("gD", vim.lsp.buf.declaration, { desc = "Goto declaration" })
   map("gI", "<cmd>Telescope lsp_implementations reuse_win=true<cr>", { desc = "Goto implementation" })
   map("gy", "<cmd>Telescope lsp_type_definitions reuse_win=true<cr>", { desc = "Goto type definition" })
-  if vim.fn.has("nvim-0.10") == 0 then
-    -- the Nvim LSP client sets K to show LSP "hover" feature. lsp-defaults
-    map("K", vim.lsp.buf.hover, { desc = "Hover" })
-  end
+  --   map("K", vim.lsp.buf.hover, { desc = "Hover" }) -- builtin, see lsp-defaults
   map("gK", vim.lsp.buf.signature_help, { desc = "Signature help" })
   map("<c-k>", vim.lsp.buf.signature_help, { desc = "Signature help" }, "i")
   map("<leader>ca", vim.lsp.buf.code_action, { desc = "Code action" }, { "n", "v" })
@@ -99,8 +96,7 @@ function H.lua_ls()
         return true -- opt out
       end
 
-      -- neovim 0.10: one can use client.settings...
-      client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, settings)
+      client.settings.Lua = vim.tbl_deep_extend("force", client.settings.Lua, settings)
       return true
     end,
     settings = {
@@ -111,8 +107,15 @@ function H.lua_ls()
         codeLens = {
           enable = true,
         },
+        doc = {
+          privateName = { "^_" },
+        },
         hint = {
           enable = true,
+          setType = false,
+          paramType = true,
+          paramName = "Disable",
+          semicolon = "Disable",
           arrayIndex = "Disable",
         },
       },
@@ -139,13 +142,6 @@ function H.jsonls()
 end
 
 function H.yamlls()
-  -- Neovim < 0.10 does not have dynamic registration for formatting
-  if vim.fn.has("nvim-0.10") == 0 then
-    Util.lsp.on_attach(function(client, _)
-      if client.name == "yamlls" then client.server_capabilities.documentFormattingProvider = true end
-    end)
-  end
-
   return {
     -- Have to add this for yamlls to understand that we support line folding
     capabilities = {

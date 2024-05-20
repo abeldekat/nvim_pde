@@ -15,8 +15,10 @@ local opts = {
       vim.keymap.set(mode, l, r, { buffer = buffer, desc = desc, silent = true }) --
     end
 
-    map("n", "]h", gs.next_hunk, "Next hunk")
-    map("n", "[h", gs.prev_hunk, "Prev hunk")
+    map("n", "]h", function() gs.nav_hunk("next") end, "Next Hunk")
+    map("n", "[h", function() gs.nav_hunk("prev") end, "Prev Hunk")
+    map("n", "]H", function() gs.nav_hunk("last") end, "Last Hunk")
+    map("n", "[H", function() gs.nav_hunk("first") end, "First Hunk")
     map({ "n", "v" }, "<leader>ghs", ":Gitsigns stage_hunk<CR>", "Stage hunk")
     map({ "n", "v" }, "<leader>ghr", ":Gitsigns reset_hunk<CR>", "Reset hunk")
     map("n", "<leader>ghS", gs.stage_buffer, "Stage buffer")

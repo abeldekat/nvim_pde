@@ -9,7 +9,7 @@ local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 vim.o.statusline = " " -- wait till statusline plugin is loaded
 
 now(function()
-  if Util.opened_without_arguments() then -- dashboard loads on UIEnter...
+  if Util.opened_without_arguments() then
     require("ak.config.ui.mini_starter").setup({
       {
         action = "DepsClean",

@@ -6,17 +6,41 @@ vim.api.nvim_set_hl(0, "CmpGhostText", { link = "Comment", default = true })
 
 local cmp = require("cmp")
 local defaults = require("cmp.config.default")()
-local luasnip = require("luasnip")
-require("luasnip.loaders.from_vscode").lazy_load()
-luasnip.config.setup({
-  history = true,
-  delete_check_events = "TextChanged",
-})
+
+local snip_native = true
+local snip_source = { name = "snippets" }
+local snip_expand = { expand = function(args) vim.snippet.expand(args.body) end }
+local snip_forward = function()
+  if vim.snippet.active({ direction = 1 }) then vim.snippet.jump(1) end
+end
+local snip_backward = function()
+  if vim.snippet.active({ direction = -1 }) then vim.snippet.jump(-1) end
+end
+if snip_native then
+  require("snippets").setup({ friendly_snippets = true })
+else
+  -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
+  --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
+  local luasnip = require("luasnip")
+  snip_source = { name = "luasnip" }
+  snip_expand = { expand = function(args) require("luasnip").lsp_expand(args.body) end }
+  snip_forward = function()
+    if luasnip.expand_or_locally_jumpable() then luasnip.expand_or_jump() end
+  end
+  snip_backward = function()
+    if luasnip.locally_jumpable(-1) then luasnip.jump(-1) end
+  end
+  require("luasnip.loaders.from_vscode").lazy_load()
+  luasnip.config.setup({
+    history = true,
+    delete_check_events = "TextChanged",
+  })
+end
 
 -- ---@type cmp.ConfigSchema
 local opts = {
   completion = { completeopt = "menu,menuone,noinsert" },
-  snippet = { expand = function(args) require("luasnip").lsp_expand(args.body) end },
+  snippet = snip_expand,
   mapping = cmp.mapping.preset.insert({
     ["<C-n>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
     ["<C-p>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
@@ -38,40 +62,12 @@ local opts = {
     --   cmp.abort()
     --   fallback()
     -- end,
-
-    -- Previously, lazyvim:
-    -- vim.keymap.set("i", "<tab>", function()
-    --   return require("luasnip").jumpable(1) and "<plug>luasnip-jump-next" or "<tab>"
-    -- end, { expr = true, silent = true })
-    -- vim.keymap.set("s", "<tab>", function()
-    --   return require("luasnip").jump(1)
-    -- end, {})
-    -- vim.keymap.set({ "i", "s" }, "<s-tab>", function()
-    --   return require("luasnip").jump(-1)
-    -- end, {})
-
-    -- Kickstart:
-    -- Think of <c-l> as moving to the right of your snippet expansion.
-    --  So if you have a snippet that's like:
-    --  function $name($args)
-    --    $body
-    --  end
-    --
-    -- <c-l> will move you to the right of each of the expansion locations.
-    -- <c-h> is similar, except moving you backwards.
-    ["<C-l>"] = cmp.mapping(function()
-      if luasnip.expand_or_locally_jumpable() then luasnip.expand_or_jump() end
-    end, { "i", "s" }),
-    ["<C-h>"] = cmp.mapping(function()
-      if luasnip.locally_jumpable(-1) then luasnip.jump(-1) end
-    end, { "i", "s" }),
-
-    -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
-    --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
+    ["<C-l>"] = cmp.mapping(snip_forward, { "i", "s" }),
+    ["<C-h>"] = cmp.mapping(snip_backward, { "i", "s" }),
   }),
   sources = cmp.config.sources({
     { name = "nvim_lsp" },
-    { name = "luasnip" },
+    snip_source,
     { name = "buffer" },
   }, {
     { name = "path" },

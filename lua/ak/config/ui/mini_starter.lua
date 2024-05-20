@@ -5,15 +5,15 @@ local MiniStarter = require("mini.starter")
 --          ╭─────────────────────────────────────────────────────────╮
 --          │             Setup mini.starter on UIEnter.              │
 --          ╰─────────────────────────────────────────────────────────╯
-local function on_ui_enter(opts)
-  vim.api.nvim_create_autocmd("UIEnter", {
-    group = vim.api.nvim_create_augroup("ak_mini_starter", { clear = true }),
-    callback = function()
-      MiniStarter.setup(opts)
-      MiniStarter.open()
-    end,
-  })
-end
+-- local function on_ui_enter(opts)
+--   vim.api.nvim_create_autocmd("UIEnter", {
+--     group = vim.api.nvim_create_augroup("ak_mini_starter", { clear = true }),
+--     callback = function()
+--       MiniStarter.setup(opts)
+--       MiniStarter.open()
+--     end,
+--   })
+-- end
 
 local function make_header()
   -- Header to be displayed before items. Converted to single string via
@@ -23,9 +23,10 @@ local function make_header()
   local major = versioninfo.major or ""
   local minor = versioninfo.minor or ""
   local patch = versioninfo.patch or ""
-  local prerelease = versioninfo.api_prerelease and "-dev" or ""
 
-  return string.format("NVIM v%s.%s.%s%s", major, minor, patch, prerelease)
+  -- local prerelease = versioninfo.api_prerelease and "-dev" or ""
+  -- return string.format("NVIM v%s.%s.%s%s", major, minor, patch, prerelease)
+  return string.format("NVIM v%s.%s.%s", major, minor, patch)
 end
 
 local function make_footer(opts, footer_cb)
@@ -86,7 +87,7 @@ end
 local function get_opts()
   local config = {
     -- Whether to open starter buffer conditionally on VimEnter.
-    autoopen = false, -- default true
+    autoopen = true, -- default true
     -- Whether to evaluate action of single active item
     evaluate_single = true, -- default false
 
@@ -106,12 +107,14 @@ local function get_opts()
   return config
 end
 
+-- Lazy loading mini.starter causes problems when using vim with stdin
 function M.setup(extra_center, footer_cb)
   local opts = get_opts()
 
   vim.list_extend(opts.items, extra_center)
   make_footer(opts, footer_cb)
-  on_ui_enter(opts)
+  -- on_ui_enter(opts) -- with autopen = false
+  MiniStarter.setup(opts)
 end
 
 return M

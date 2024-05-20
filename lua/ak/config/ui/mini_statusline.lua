@@ -25,11 +25,6 @@ local markerline
 --          │                      Module setup                       │
 --          ╰─────────────────────────────────────────────────────────╯
 AK.setup = function()
-  -- -- copied
-  if vim.fn.has("nvim-0.10") == 1 then
-    H.diagnostic_get_count = function() return vim.diagnostic.count(0) end --
-  end
-
   markerline = H.make_markerline()
 
   H.create_diagnostic_hl() -- added diagnostics with colors
@@ -282,13 +277,7 @@ end
 H.has_no_lsp_attached = function() return (H.n_attached_lsp[vim.api.nvim_get_current_buf()] or 0) == 0 end
 
 -- copied
-H.diagnostic_get_count = function()
-  local res = {}
-  for _, d in ipairs(vim.diagnostic.get(0)) do
-    res[d.severity] = (res[d.severity] or 0) + 1
-  end
-  return res
-end
+H.diagnostic_get_count = function() return vim.diagnostic.count(0) end
 H.diagnostic_is_disabled = function() return not vim.diagnostic.is_enabled() end
 
 H.make_markerline = function()

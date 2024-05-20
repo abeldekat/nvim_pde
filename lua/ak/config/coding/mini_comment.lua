@@ -1,4 +1,8 @@
 --          ╭─────────────────────────────────────────────────────────╮
+--          │            Not loaded, using builtin comment            │
+--          ╰─────────────────────────────────────────────────────────╯
+
+--          ╭─────────────────────────────────────────────────────────╮
 --          │                   What it doesn't do:                   │
 --          │  - Block and sub-line comments. This will only support  │
 --          │                  per-line commenting.                   │

@@ -1,3 +1,7 @@
+-- TODO: Now used for exchange:
+-- gx in Normal mode calls vim.ui.open() on whatever is under the cursor,
+-- which shells out to your operating system’s “open” capability
+
 local Util = require("ak.util")
 
 local function map(mode, lhs, rhs, opts)
@@ -85,6 +89,7 @@ map("n", "[q", vim.cmd.cprev, { desc = "Previous quickfix" })
 map("n", "]q", vim.cmd.cnext, { desc = "Next quickfix" })
 
 -- diagnostic
+-- <C-W>d (and <C-W><C-D>) in Normal mode map to vim.diagnostic.open_float(). Use this to view information about any diagnostics under the cursor in a floating window.
 local diagnostic_goto = function(next, severity)
   local go = next and vim.diagnostic.goto_next or vim.diagnostic.goto_prev
   severity = severity and vim.diagnostic.severity[severity] or nil
@@ -93,8 +98,8 @@ end
 -- kickstart:
 -- map('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 map("n", "<leader>cd", vim.diagnostic.open_float, { desc = "Line diagnostics" })
-map("n", "]d", diagnostic_goto(true), { desc = "Next diagnostic" })
-map("n", "[d", diagnostic_goto(false), { desc = "Prev diagnostic" })
+-- map("n", "]d", diagnostic_goto(true), { desc = "Next diagnostic" })
+-- map("n", "[d", diagnostic_goto(false), { desc = "Prev diagnostic" })
 map("n", "]e", diagnostic_goto(true, "ERROR"), { desc = "Next error" })
 map("n", "[e", diagnostic_goto(false, "ERROR"), { desc = "Prev error" })
 map("n", "]w", diagnostic_goto(true, "WARN"), { desc = "Next warning" })
@@ -130,6 +135,7 @@ end, { desc = "Toggle treesitter highlight" })
 
 -- highlights under cursor
 map("n", "<leader>ui", vim.show_pos, { desc = "Inspect pos" })
+map("n", "<leader>uI", "<cmd>InspectTree<cr>", { desc = "Inspect Tree" })
 
 -- terminal mappings: esc is slow when using vi-mode in the terminal
 -- added:
