@@ -21,6 +21,9 @@ local function load()
   require("ak.config.lang.diagnostics")
   require("ak.config.lang.lspconfig")
 
+  add("j-hui/fidget.nvim")
+  require("ak.config.lang.fidget")
+
   add("b0o/SchemaStore.nvim")
 end
 
