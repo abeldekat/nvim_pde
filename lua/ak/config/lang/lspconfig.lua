@@ -228,13 +228,14 @@ H.rust_analyzer(capabilities)
 
 -- the servers below are setup by mason
 local servers = {
-  lua_ls = H.lua_ls(),
-  jsonls = H.jsonls(),
-  yamlls = H.yamlls(),
   bashls = {},
+  jsonls = H.jsonls(),
+  lua_ls = H.lua_ls(),
   marksman = {},
   pyright = {},
   ruff = H.ruff(),
+  taplo = {}, -- toml
+  yamlls = H.yamlls(),
   -- rust_analyzer = {},
 }
 local ensure_installed = vim.tbl_keys(servers or {})

@@ -6,7 +6,7 @@ local function snip_native()
   require("snippets").setup({ friendly_snippets = true })
   return {
     source = { name = "snippets" },
-    expand = { expand = function(args) vim.snippet.expand(args.body) end },
+    expand = nil, -- { expand = function(args) vim.snippet.expand(args.body) end },
     forward = function()
       if vim.snippet.active({ direction = 1 }) then vim.snippet.jump(1) end
     end,
