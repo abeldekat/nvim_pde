@@ -37,6 +37,9 @@ later(function()
   })
   require("ak.config.coding.cmp") -- includes snippets
 
+  add("folke/ts-comments.nvim")
+  require("ak.config.coding.ts-comments")
+
   require("ak.config.coding.mini_basics") -- copied a selection...
   require("ak.config.coding.mini_surround")
   -- require("ak.config.coding.mini_comment")

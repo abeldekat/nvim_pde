@@ -3,7 +3,7 @@
 --          ╰─────────────────────────────────────────────────────────╯
 
 local function snip_native()
-  require("snippets").setup({ friendly_snippets = true })
+  require("snippets").setup({ friendly_snippets = true, global_snippets = { "all", "global" } })
   return {
     source = { name = "snippets" },
     expand = nil, -- { expand = function(args) vim.snippet.expand(args.body) end },
