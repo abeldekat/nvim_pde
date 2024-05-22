@@ -77,10 +77,6 @@ local function rust()
       require("ak.config.lang.rust.crates")
     end)
   end, "BufRead", "Cargo.toml")
-
-  -- TODO: lsp rust_analyzer, taplo toml toolkit
-  -- TODO:     "mrcjkb/rustaceanvim"
-  -- TODO:  require("rustaceanvim.neotest"),
 end
 
 local langs = {

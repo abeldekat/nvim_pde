@@ -1,4 +1,3 @@
-local Util = require("ak.util")
 local MiniDeps = require("mini.deps")
 local add, later = MiniDeps.add, MiniDeps.later
 
@@ -16,6 +15,7 @@ local function load()
     source = "neovim/nvim-lspconfig",
     depends = {
       "williamboman/mason-lspconfig.nvim",
+      { source = "mrcjkb/rustaceanvim", checkout = "4.23.2" },
     },
   })
   require("ak.config.lang.diagnostics")
@@ -26,11 +26,16 @@ local function load()
 
   add("b0o/SchemaStore.nvim")
 end
-
 later(load)
-later(function()
-  -- The lsp does not attach when directly opening a file:
-  if Util.opened_with_file_argument() then
-    vim.cmd("LspStart") --
-  end
-end)
+
+if vim.fn.argc() > 0 then
+  later(function() -- The lsp does not attach when directly opening a file:
+    local ft = vim.bo.filetype
+    if ft and ft ~= "oil" then
+      vim.api.nvim_exec_autocmds("FileType", {
+        modeline = false,
+        pattern = vim.bo.filetype,
+      })
+    end
+  end)
+end

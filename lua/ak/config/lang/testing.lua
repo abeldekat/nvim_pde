@@ -2,11 +2,13 @@ local function no_op() end
 
 local get_opts = function()
   return {
-    -- Can be a list of adapters like what neotest expects,
-    -- or a list of adapter names,
-    -- or a table of adapter names, mapped to adapter configs.
-    -- The adapter will then be automatically loaded with the config.
+    status = { virtual_text = true },
+    output = { open_on_run = true },
+    quickfix = {
+      open = function() vim.cmd("copen") end,
+    },
     adapters = {
+      require("rustaceanvim.neotest"),
       -- ["neotest-python"] = {
       --   -- Here you can specify the settings for the adapter, i.e.
       --   -- runner = "pytest",
@@ -18,27 +20,16 @@ local get_opts = function()
       --   --   }
       -- },
     },
-    -- Example for loading neotest-go with a custom config
-    -- adapters = {
-    --   ["neotest-go"] = {
-    --     args = { "-tags=integration" },
-    --   },
-    -- },
-    status = { virtual_text = true },
-    output = { open_on_run = true },
-    quickfix = {
-      open = function() vim.cmd("copen") end,
-    },
   }
 end
 
-local function map(l, r, opts, mode)
-  mode = mode or "n"
-  opts["silent"] = opts.silent ~= false
-  vim.keymap.set(mode, l, r, opts)
-end
-
 local function keys()
+  local function map(l, r, opts, mode)
+    mode = mode or "n"
+    opts["silent"] = opts.silent ~= false
+    vim.keymap.set(mode, l, r, opts)
+  end
+
   map("<leader>ta", function()
     for _, adapter_id in ipairs(require("neotest").run.adapters()) do
       require("neotest").run.run({ suite = true, adapter = adapter_id })
@@ -65,43 +56,17 @@ local function keys()
 end
 
 local function setup()
-  local opts = get_opts()
   local neotest_ns = vim.api.nvim_create_namespace("neotest")
   vim.diagnostic.config({
     virtual_text = {
-      format = function(diagnostic)
-        -- Replace newline and tab characters with space for more compact diagnostics
+      format = function(diagnostic) -- replace newline and tab for compact diagnostics
         local message = diagnostic.message:gsub("\n", " "):gsub("\t", " "):gsub("%s+", " "):gsub("^%s+", "")
         return message
       end,
     },
   }, neotest_ns)
 
-  if opts.adapters then
-    local adapters = {}
-    for name, config in pairs(opts.adapters or {}) do
-      if type(name) == "number" then
-        if type(config) == "string" then config = require(config) end
-        adapters[#adapters + 1] = config
-      elseif config ~= false then
-        local adapter = require(name)
-        if type(config) == "table" and not vim.tbl_isempty(config) then
-          local meta = getmetatable(adapter)
-          if adapter.setup then
-            adapter.setup(config)
-          elseif meta and meta.__call then
-            adapter(config)
-          else
-            error("Adapter " .. name .. " does not support setup")
-          end
-        end
-        adapters[#adapters + 1] = adapter
-      end
-    end
-    opts.adapters = adapters
-  end
-
-  require("neotest").setup(opts)
+  require("neotest").setup(get_opts())
   keys()
 end
 

@@ -42,10 +42,6 @@ function M.opened_without_arguments()
   return true
 end
 
-function M.opened_with_file_argument()
-  return not (M.opened_without_arguments() or M.opened_with_dir_argument()) --
-end
-
 function M.is_headless() return #vim.api.nvim_list_uis() == 0 end
 
 --          ╭─────────────────────────────────────────────────────────╮

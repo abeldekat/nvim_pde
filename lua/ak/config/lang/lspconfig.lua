@@ -201,12 +201,59 @@ function H.ruff()
   return {}
 end
 
-function H.rust_analyzer(capabilities)
-  local lspconfig = require("lspconfig")
-  local ca = {}
-  lspconfig.rust_analyzer.setup({
-    capabilities = vim.tbl_deep_extend("force", {}, capabilities, ca),
-  })
+-- Rust analyzer: Not installed by mason
+function H.rust_analyzer(_) -- capabilities setup by rustaceanvim
+  -- local lspconfig = require("lspconfig")
+  -- local ca = {}
+  -- lspconfig.rust_analyzer.setup({
+  --   capabilities = vim.tbl_deep_extend("force", {}, capabilities, ca),
+  -- })
+
+  local opts = {
+    server = {
+      on_attach = function(_, bufnr)
+        vim.keymap.set(
+          "n",
+          "<leader>cR",
+          function() vim.cmd.RustLsp("codeAction") end,
+          { desc = "Code Action", buffer = bufnr }
+        )
+        vim.keymap.set(
+          "n",
+          "<leader>dr",
+          function() vim.cmd.RustLsp("debuggables") end,
+          { desc = "Rust Debuggables", buffer = bufnr }
+        )
+      end,
+      default_settings = {
+        -- rust-analyzer language server configuration
+        ["rust-analyzer"] = {
+          cargo = {
+            allFeatures = true,
+            loadOutDirsFromCheck = true,
+            buildScripts = {
+              enable = true,
+            },
+          },
+          -- Add clippy lints for Rust.
+          checkOnSave = {
+            allFeatures = true,
+            command = "clippy",
+            extraArgs = { "--no-deps" },
+          },
+          procMacro = {
+            enable = true,
+            ignored = {
+              ["async-trait"] = { "async_trait" },
+              ["napi-derive"] = { "napi" },
+              ["async-recursion"] = { "async_recursion" },
+            },
+          },
+        },
+      },
+    },
+  }
+  vim.g.rustaceanvim = vim.tbl_deep_extend("keep", vim.g.rustaceanvim or {}, opts or {})
 end
 
 --          ╭─────────────────────────────────────────────────────────╮
@@ -223,9 +270,6 @@ local capabilities = vim.lsp.protocol.make_client_capabilities()
 local has_cmp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
 capabilities = vim.tbl_deep_extend("force", capabilities, has_cmp and cmp_nvim_lsp.default_capabilities() or {})
 
--- without mason:
-H.rust_analyzer(capabilities)
-
 -- the servers below are setup by mason
 local servers = {
   bashls = {},
@@ -236,7 +280,6 @@ local servers = {
   ruff = H.ruff(),
   taplo = {}, -- toml
   yamlls = H.yamlls(),
-  -- rust_analyzer = {},
 }
 local ensure_installed = vim.tbl_keys(servers or {})
 
@@ -254,3 +297,6 @@ require("mason-lspconfig").setup({
     end,
   },
 })
+
+-- servers without mason:
+H.rust_analyzer(capabilities)
