@@ -46,7 +46,9 @@ local function produce() -- "󰛢 12" "󰛢 1[2]34…" "󰛢 1234[…]"
     status[slot + 1] = string.format(#active > 0 and opts.active() or opts.inactive, opts.more_marks)
   end
 
-  cached_line = header .. " " .. table.concat(status)
+  local tagline = table.concat(status)
+  tagline = tagline == "" and "-" or (" " .. tagline)
+  cached_line = header .. tagline
 end
 
 local function set_scope_name(name)

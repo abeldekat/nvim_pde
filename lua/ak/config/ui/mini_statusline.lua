@@ -1,38 +1,10 @@
---          ╭─────────────────────────────────────────────────────────╮
---          │                          Notes                          │
---          ╰─────────────────────────────────────────────────────────╯
--- Lualine:
--- The intent of MiniStatuslineFilename is the same as lualine_c
-
--- highlighting:
--- https://github.com/echasnovski/mini.nvim/issues/337
--- use separate groups for each diagnostic
-
---          ╭─────────────────────────────────────────────────────────╮
---          │                    Module definition                    │
---          ╰─────────────────────────────────────────────────────────╯
 local AK = {} -- module using the structure of MiniStatusline
 local H = {} -- helpers, copied, modified or added
 local MiniStatusline = require("mini.statusline")
 
--- Supports harpoon or grapple
----@class Markerline
----@field line function
----@field is_buffer function
-local markerline
-
---          ╭─────────────────────────────────────────────────────────╮
---          │                      Module setup                       │
---          ╰─────────────────────────────────────────────────────────╯
 AK.setup = function()
-  markerline = H.make_markerline()
-
   H.create_diagnostic_hl() -- added diagnostics with colors
-  vim.api.nvim_create_autocmd("ColorScheme", {
-    pattern = "*",
-    callback = H.create_diagnostic_hl,
-  }) -- recreate when changing colorscheme
-
+  H.require_markerline()
   MiniStatusline.setup({
     use_icons = false,
     set_vim_settings = false,
@@ -42,73 +14,40 @@ AK.setup = function()
   H.set_active() -- lazy loading, missing events, still show statusline
 end
 
---          ╭─────────────────────────────────────────────────────────╮
---          │                       Entrypoint                        │
---          ╰─────────────────────────────────────────────────────────╯
-AK.active = function()
-  -- Customize statusline content for blocked filetypes to your liking
+AK.active = function() -- entrypoint
   if H.is_blocked_filetype() then return "" end
 
   local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 120 })
-  --
-  -- Block:
-  -- local git = MiniStatusline.section_git({ trunc_width = 75, icon = "" })
-  local git = MiniStatusline.section_git({ trunc_width = 40, icon = "" })
   local diff = MiniStatusline.section_diff({ trunc_width = 75, icon = "" })
-  local lsp = AK.section_lsp({ trunc_width = 75, icon = "" })
-  local diagnostics = AK.section_diagnostics({ trunc_width = 75 })
-  --
-  local filename = AK.section_filename({ trunc_width = 140 })
-  local fileinfo = AK.section_fileinfo({ trunc_width = 120 })
-  --
-  -- Block:
+  local git = MiniStatusline.section_git({ trunc_width = 40, icon = "" })
+  local lsp = MiniStatusline.section_lsp({ trunc_width = 75, icon = "󰰎" })
   local search = MiniStatusline.section_searchcount({ trunc_width = 75 })
+  local diagnostics = AK.section_diagnostics({ trunc_width = 75, icon = "" })
+  local fileinfo = AK.section_fileinfo({ trunc_width = 120 })
+  local filename = AK.section_filename({ trunc_width = 140 })
   local location = AK.section_location({ trunc_width = 75 })
-  --
-  -- Added:
   local macro = AK.section_macro({ trunc_width = 120 })
   local marker_data = AK.section_marker({ trunc_width = 75 })
-  -- local harpoon_data = AK.section_harpoon({ trunc_width = 75 })
-  -- local grapple_data = AK.section_grapple({ trunc_width = 75 })
 
   return MiniStatusline.combine_groups({
-    { hl = mode_hl, strings = { string.upper(mode) } }, -- Dynamic mode_hl
-    { hl = H.marker_highlight(), strings = { marker_data } }, -- added
-    -- { hl = H.harpoon_highlight(), strings = { harpoon_data } }, -- added
-    -- { hl = H.grapple_highlight(), strings = { grapple_data } }, -- added
-    { hl = H.fixed_hl, strings = { git, diff, lsp, diagnostics } }, -- "..Devinfo"
-
+    { hl = mode_hl, strings = { string.upper(mode) } },
+    { hl = H.fixed_hl, strings = { git } },
+    { hl = H.marker_highlight(), strings = { marker_data } },
+    { hl = H.fixed_hl, strings = { diff } },
+    { hl = H.fixed_hl, strings = { lsp, diagnostics } },
     "%<", -- Mark general truncate point
-    { hl = H.fixed_hl, strings = { filename } }, -- "..Filename"
-
+    { hl = H.fixed_hl, strings = { filename } },
     "%=", -- End left alignment
-    { hl = "MiniStatuslineModeCommand", strings = { macro } }, -- added
-    { hl = H.fixed_hl, strings = { fileinfo } }, -- "..Fileinfo"
-    { hl = mode_hl, strings = { search, location } }, -- Dynamic mode_hl
+    { hl = "MiniStatuslineModeCommand", strings = { macro } },
+    { hl = H.fixed_hl, strings = { fileinfo } },
+    { hl = mode_hl, strings = { search, location } },
   })
 end
 
---          ╭─────────────────────────────────────────────────────────╮
---          │                        Sections                         │
---          ╰─────────────────────────────────────────────────────────╯
-
--- added: removed from section_diagnostics
-AK.section_lsp = function(args)
-  _G.n_attached_lsp = H.n_attached_lsp
-
-  local dont_show = MiniStatusline.is_truncated(args.trunc_width) or H.isnt_normal_buffer() or H.has_no_lsp_attached()
-  if dont_show then return "" end
-
-  local icon = args.icon or "LSP"
-  return string.format("%s ", icon)
-end
-
--- overridden: removed lsp, added color to diagnostics
+-- overridden: added color to diagnostics
 AK.section_diagnostics = function(args) -- args
-  local dont_show = MiniStatusline.is_truncated(args.trunc_width) or H.isnt_normal_buffer()
-  if dont_show or H.diagnostic_is_disabled() then return "" end
+  if MiniStatusline.is_truncated(args.trunc_width) or H.diagnostic_is_disabled() then return "" end
 
-  -- Construct string parts
   local counts = H.diagnostic_get_count()
   local severity, t = vim.diagnostic.severity, {}
   for _, level in ipairs(H.diagnostic_levels) do
@@ -118,16 +57,11 @@ AK.section_diagnostics = function(args) -- args
     end
   end
 
-  if vim.tbl_count(t) == 0 then return "" end
-  return string.format("%s ", table.concat(t, ""))
+  if #t == 0 then return "" end
+  return args.icon .. table.concat(t, "")
 end
 
-AK.section_marker = function(args)
-  if not markerline or MiniStatusline.is_truncated(args.trunc_width) or H.isnt_normal_buffer() then return "" end
-  return markerline.line()
-end
-
--- overridden: in terminal, use full name. Use relative path if file is in cwd
+-- overridden: Use relative path if file is in cwd
 AK.section_filename = function(args)
   local function is_in_cwd()
     local cwd = vim.fn.getcwd()
@@ -143,20 +77,11 @@ AK.section_filename = function(args)
   return vim.fn.expand(actual_fmt) .. "%m%r" -- modified and readonly
 end
 
--- added: show when recording a macro
-AK.section_macro = function(args)
-  if MiniStatusline.is_truncated(args.trunc_width) then return "" end
-
-  local reg = vim.fn.reg_recording()
-  return reg == "" and reg or "REC @" .. reg
-end
-
 -- overridden: removed filesize
 AK.section_fileinfo = function(args)
   local filetype = vim.bo.filetype
-
-  -- Only show when filetype is detected in normal buffer
-  if (filetype == "") or H.isnt_normal_buffer() then return "" end
+  -- Don't show anything if no filetype or not inside a "normal buffer"
+  if filetype == "" or vim.bo.buftype ~= "" then return "" end
 
   -- Construct output string if truncated
   if MiniStatusline.is_truncated(args.trunc_width) then return filetype end
@@ -174,6 +99,19 @@ AK.section_location = function(args)
 
   -- Use `virtcol()` to correctly handle multi-byte characters
   return '%l|%L %2v|%-2{virtcol("$") - 1}'
+end
+
+-- added:
+AK.section_marker = function(args)
+  if not H.markerline or MiniStatusline.is_truncated(args.trunc_width) then return "" end
+  return H.markerline.line()
+end
+
+-- added: show when recording a macro
+AK.section_macro = function(args)
+  if MiniStatusline.is_truncated(args.trunc_width) then return "" end
+  local reg = vim.fn.reg_recording()
+  return reg == "" and "" or "REC @" .. reg
 end
 
 --          ╭─────────────────────────────────────────────────────────╮
@@ -201,44 +139,27 @@ H.diagnostic_levels = {
   { name = "HINT", sign = "H", hl = H.diagnostic_hls.hint },
 }
 
--- copied
-H.n_attached_lsp = {} -- Count of attached LSP clients per buffer id
+-- Supports harpoon or grapple
+---@class Markerline
+---@field line function
+---@field is_buffer function
+H.markerline = nil
 
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                  Helper functionality                   │
 --          ╰─────────────────────────────────────────────────────────╯
--- added: Remove the lsp autocommands and recreate them to be used here.
+-- added:
 H.create_autocommands = function()
-  local to_remove = vim.api.nvim_get_autocmds({
-    group = "MiniStatusline",
-    event = { "LspAttach", "LspDetach" },
-  })
-  for _, autocmd in ipairs(to_remove) do
-    vim.api.nvim_del_autocmd(autocmd.id)
-  end
-
-  local make_track_lsp = function(increment)
-    return function(data)
-      H.n_attached_lsp[data.buf] = (H.n_attached_lsp[data.buf] or 0) + increment
-      if increment > 0 then
-        -- slow lsp(ie marksman): the symbol only shows when moving inside the buffer:
-        H.set_active()
-      end
-    end
-  end
   local augroup = vim.api.nvim_create_augroup("MiniStatuslineAk", {})
-
   local au = function(event, pattern, callback, desc)
     vim.api.nvim_create_autocmd(event, { group = augroup, pattern = pattern, callback = callback, desc = desc })
   end
-  au("LspAttach", "*", make_track_lsp(1), "Track LSP clients")
-  au("LspDetach", "*", make_track_lsp(-1), "Track LSP clients")
 
-  vim.api.nvim_create_autocmd("User", {
-    group = "MiniStatuslineAk",
-    pattern = "GitSignsUpdate",
-    callback = function() H.set_active() end,
-  })
+  au("ColorScheme", "*", H.create_diagnostic_hl, "Create diagnostic highlight")
+
+  -- slow lsp(ie marksman): the symbol only shows when moving inside the buffer:
+  au("LspDetach", "*", H.set_active, "Track LSP clients")
+  au("LspDetach", "*", H.set_active, "Track LSP clients")
 end
 
 -- added
@@ -270,40 +191,30 @@ H.is_blocked_filetype = function()
 end
 
 -- copied
-H.isnt_normal_buffer = function()
-  -- For more information see ":h buftype"
-  return vim.bo.buftype ~= ""
-end
-
--- copied
-H.has_no_lsp_attached = function() return (H.n_attached_lsp[vim.api.nvim_get_current_buf()] or 0) == 0 end
-
--- copied
 H.diagnostic_get_count = function() return vim.diagnostic.count(0) end
-H.diagnostic_is_disabled = function() return not vim.diagnostic.is_enabled() end
+H.diagnostic_is_disabled = function() return not vim.diagnostic.is_enabled({ bufnr = 0 }) end
 
-H.make_markerline = function()
-  -- See ak.deps.editor
+H.require_markerline = function() -- See ak.deps.editor
   local function make(line, is_buffer) return { line = line, is_buffer = is_buffer } end
-
   local line
+
   local has, _ = pcall(require, "harpoon")
   if has then
     line = require("harpoonline")
     require("ak.config.ui.harpoonline").setup(H.set_active)
-    return make(line.format, line.is_buffer_harpooned)
+    H.markerline = make(line.format, line.is_buffer_harpooned)
   end
 
   has, _ = pcall(require, "grapple")
   if has then -- internal plugin
     line = require("ak.config.ui.grappleline")
     line.setup(H.set_active)
-    return make(line.line, line.is_current_buffer_tagged)
+    H.markerline = make(line.line, line.is_current_buffer_tagged)
   end
 end
 
 -- added
-H.marker_highlight = function() return markerline and markerline.is_buffer() and "MiniHipatternsHack" or H.fixed_hl end
+H.marker_highlight = function() return H.markerline and H.markerline.is_buffer() and "MiniHipatternsHack" or H.fixed_hl end
 
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                        Activate                         │

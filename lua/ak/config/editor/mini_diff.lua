@@ -2,7 +2,27 @@
 --          │                 WIP: Replacing gitsigns                 │
 --          ╰─────────────────────────────────────────────────────────╯
 
-local opts = {
+local augroup = vim.api.nvim_create_augroup("MiniDiffAk", {})
+vim.api.nvim_create_autocmd("User", {
+  group = augroup,
+  pattern = "MiniDiffUpdated",
+  callback = function(data)
+    local summary = vim.b[data.buf].minidiff_summary_string
+    if not summary then return end
+
+    vim.b[data.buf].minidiff_summary_string = string.gsub(summary, " ", "")
+  end,
+  desc = "Diff in statusline",
+})
+
+vim.keymap.set(
+  "n",
+  "<leader>go",
+  function() require("mini.diff").toggle_overlay(0) end,
+  { desc = "Toggle mini.diff overlay", silent = true }
+)
+
+require("mini.diff").setup({
   view = {
     style = "sign",
     signs = {
@@ -11,12 +31,4 @@ local opts = {
       delete = "",
     },
   },
-}
-require("mini.diff").setup(opts)
-
-vim.keymap.set(
-  "n",
-  "<leader>go",
-  function() require("mini.diff").toggle_overlay(0) end,
-  { desc = "Toggle mini.diff overlay", silent = true }
-)
+})
