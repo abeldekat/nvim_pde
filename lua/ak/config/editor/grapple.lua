@@ -31,11 +31,10 @@ H.use_scope = function()
   vim.cmd("Grapple use_scope " .. H.scope)
 end
 H.basename = function(entity, _)
-  vim.opt_local.cursorline = false
-  vim.b.minicursorword_disable = true
+  vim.opt_local.number = true -- window style is minimal
+  vim.opt.relativenumber = true
 
-  local parent_mark
-  -- avoid a line containing "init.lua init.lua":
+  local parent_mark -- avoid a line containing "init.lua init.lua":
   local use_virtual_txt = P.fs_short(entity.tag.path) ~= P.base(entity.tag.path)
   if use_virtual_txt then
     parent_mark = {
@@ -78,8 +77,6 @@ Grapple.setup({
   status = true,
   style = "basename",
   quick_select = "",
-  -- override basename to always show the dir hint
+  -- -- override basename to always show the dir hint
   styles = { basename = H.basename },
-  --"minimal" style disables a lot. Make it look like harpoon...
-  win_opts = { style = "" },
 })
