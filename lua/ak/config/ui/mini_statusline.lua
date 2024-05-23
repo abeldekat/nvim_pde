@@ -52,7 +52,9 @@ AK.active = function()
   local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 120 })
   --
   -- Block:
-  local git = MiniStatusline.section_git({ trunc_width = 75, icon = "" })
+  -- local git = MiniStatusline.section_git({ trunc_width = 75, icon = "" })
+  local git = MiniStatusline.section_git({ trunc_width = 40, icon = "" })
+  local diff = MiniStatusline.section_diff({ trunc_width = 75, icon = "" })
   local lsp = AK.section_lsp({ trunc_width = 75, icon = "" })
   local diagnostics = AK.section_diagnostics({ trunc_width = 75 })
   --
@@ -74,7 +76,7 @@ AK.active = function()
     { hl = H.marker_highlight(), strings = { marker_data } }, -- added
     -- { hl = H.harpoon_highlight(), strings = { harpoon_data } }, -- added
     -- { hl = H.grapple_highlight(), strings = { grapple_data } }, -- added
-    { hl = H.fixed_hl, strings = { git, lsp, diagnostics } }, -- "..Devinfo"
+    { hl = H.fixed_hl, strings = { git, diff, lsp, diagnostics } }, -- "..Devinfo"
 
     "%<", -- Mark general truncate point
     { hl = H.fixed_hl, strings = { filename } }, -- "..Filename"

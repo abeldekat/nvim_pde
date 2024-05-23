@@ -99,8 +99,10 @@ later(function()
   add("akinsho/toggleterm.nvim")
   require("ak.config.editor.toggleterm")
 
-  add("lewis6991/gitsigns.nvim")
-  require("ak.config.editor.gitsigns")
+  -- add("lewis6991/gitsigns.nvim")
+  -- require("ak.config.editor.gitsigns")
+  require("ak.config.editor.mini_git")
+  require("ak.config.editor.mini_diff")
 
   register("f-person/git-blame.nvim")
   Util.defer.on_keys(function()

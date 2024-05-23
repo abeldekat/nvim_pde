@@ -1,3 +1,7 @@
+--          ╭─────────────────────────────────────────────────────────╮
+--          │           TODO: Migrate to mini git and diff            │
+--          ╰─────────────────────────────────────────────────────────╯
+
 local opts = {
   attach_to_untracked = false, -- used to be true by default
   signs = {

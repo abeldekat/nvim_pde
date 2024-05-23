@@ -1,9 +1,11 @@
 local mason_ensure_installed = {
-  "markdownlint", -- linter
-  "stylua", -- formatter
-  "shfmt", -- formatter
   "black", -- formatter python
   "codelldb", -- rust debugger
+  "markdownlint", -- linter
+  "markdown-toc", -- formatter
+  "prettier",
+  "shfmt", -- formatter
+  "stylua", -- formatter
 }
 require("mason").setup()
 

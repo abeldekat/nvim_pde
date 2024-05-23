@@ -32,7 +32,7 @@ local function get_defaults(bufnr)
     result["bufnr"] = bufnr
   end
 
-  result["timeout_ms"] = 500 -- 3000
+  result["timeout_ms"] = 3000 -- markdownlint timeout
   -- kickstart:
   -- Disable "format_on_save lsp_fallback" for languages that don't
   -- have a well standardized coding style. You can add additional
@@ -81,6 +81,26 @@ local function get_opts()
       lua = { "stylua" },
       sh = { "shfmt" },
       python = { "black" },
+
+      ["javascript"] = { "prettier" },
+      ["javascriptreact"] = { "prettier" },
+      ["typescript"] = { "prettier" },
+      ["typescriptreact"] = { "prettier" },
+      ["vue"] = { "prettier" },
+      ["css"] = { "prettier" },
+      ["scss"] = { "prettier" },
+      ["less"] = { "prettier" },
+      ["html"] = { "prettier" },
+      ["json"] = { "prettier" },
+      ["jsonc"] = { "prettier" },
+      ["yaml"] = { "prettier" },
+      -- ["markdown"] = { "prettier" },
+      -- ["markdown.mdx"] = { "prettier" },
+      ["graphql"] = { "prettier" },
+      ["handlebars"] = { "prettier" },
+
+      ["markdown"] = { "prettier", "markdownlint", "markdown-toc" },
+      ["markdown.mdx"] = { "prettier", "markdownlint", "markdown-toc" },
     },
     -- https://github.com/stevearc/conform.nvim/blob/master/doc/advanced_topics.md#injected-language-formatting-code-blocks
     formatters = {
