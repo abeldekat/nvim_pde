@@ -31,8 +31,8 @@ AK.active = function() -- entrypoint
 
   return MiniStatusline.combine_groups({
     { hl = mode_hl, strings = { string.upper(mode) } },
-    { hl = H.fixed_hl, strings = { git } },
     { hl = H.marker_highlight(), strings = { marker_data } },
+    { hl = H.fixed_hl, strings = { git } },
     { hl = H.fixed_hl, strings = { diff } },
     { hl = H.fixed_hl, strings = { lsp, diagnostics } },
     "%<", -- Mark general truncate point
