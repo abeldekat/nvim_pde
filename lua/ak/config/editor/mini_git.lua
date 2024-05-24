@@ -10,9 +10,9 @@ vim.api.nvim_create_autocmd("User", {
     local summary = vim.b[data.buf].minigit_summary_string
     if not summary then return end
 
-    summary = string.gsub(summary, " ", "", 1) -- remove space between name and status
-    summary = string.gsub(summary, "%(", "[")
-    summary = string.gsub(summary, "%)", "]")
+    summary = summary:gsub(" ", "", 1) -- remove space between name and status
+    summary = summary:gsub("%(", "[")
+    summary = summary:gsub("%)", "]")
     vim.b[data.buf].minigit_summary_string = summary
   end,
   desc = "Diff in statusline",

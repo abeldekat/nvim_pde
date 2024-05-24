@@ -18,23 +18,25 @@ AK.active = function() -- entrypoint
   if H.is_blocked_filetype() then return "" end
 
   local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 120 })
-  local diff = MiniStatusline.section_diff({ trunc_width = 75, icon = "" })
-  local git = MiniStatusline.section_git({ trunc_width = 40, icon = "" })
-  local lsp = MiniStatusline.section_lsp({ trunc_width = 75, icon = "󰰎" })
+  local diff = MiniStatusline.section_diff({ trunc_width = 75, icon = "" })
+  local git = MiniStatusline.section_git({ trunc_width = 40, icon = "" })
+  local lsp = MiniStatusline.section_lsp({ trunc_width = 75 })
   local search = MiniStatusline.section_searchcount({ trunc_width = 75 })
-  local diagnostics = AK.section_diagnostics({ trunc_width = 75, icon = "" })
+  local diag = AK.section_diagnostics({ trunc_width = 75, icon = "" })
   local fileinfo = AK.section_fileinfo({ trunc_width = 120 })
   local filename = AK.section_filename({ trunc_width = 140 })
   local location = AK.section_location({ trunc_width = 75 })
   local macro = AK.section_macro({ trunc_width = 120 })
   local marker_data = AK.section_marker({ trunc_width = 75 })
 
+  diff = diff and diff:sub(2) or diff -- remove first space
+  lsp = lsp and #lsp > 0 and " " or ""
+  diag = diag and diag:sub(2) or diag -- remove first space
   return MiniStatusline.combine_groups({
-    { hl = mode_hl, strings = { string.upper(mode) } },
+    { hl = mode_hl, strings = { mode:upper() } },
     { hl = H.marker_highlight(), strings = { marker_data } },
-    { hl = H.fixed_hl, strings = { git } },
-    { hl = H.fixed_hl, strings = { diff } },
-    { hl = H.fixed_hl, strings = { lsp, diagnostics } },
+    { hl = H.fixed_hl, strings = { git, diff } },
+    { hl = H.fixed_hl, strings = { lsp, diag } },
     "%<", -- Mark general truncate point
     { hl = H.fixed_hl, strings = { filename } },
     "%=", -- End left alignment

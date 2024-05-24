@@ -47,8 +47,8 @@ local function produce() -- "󰛢 12" "󰛢 1[2]34…" "󰛢 1234[…]"
   end
 
   local tagline = table.concat(status)
-  tagline = tagline == "" and "-" or (" " .. tagline)
-  cached_line = header .. tagline
+  local sep = tagline == "" and "-" or " "
+  cached_line = header .. sep .. tagline
 end
 
 local function set_scope_name(name)

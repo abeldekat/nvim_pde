@@ -10,7 +10,7 @@ vim.api.nvim_create_autocmd("User", {
     local summary = vim.b[data.buf].minidiff_summary_string
     if not summary then return end
 
-    vim.b[data.buf].minidiff_summary_string = string.gsub(summary, " ", "")
+    vim.b[data.buf].minidiff_summary_string = summary:gsub(" ", "")
   end,
   desc = "Diff in statusline",
 })
