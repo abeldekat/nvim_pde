@@ -33,7 +33,7 @@ AK.active = function() -- entrypoint
   lsp = lsp and #lsp > 0 and " " or ""
   diag = diag and diag:sub(2) or diag -- remove first space
   return MiniStatusline.combine_groups({
-    { hl = mode_hl, strings = { mode:upper() } },
+    { hl = mode_hl, strings = { mode } },
     { hl = H.marker_highlight(), strings = { marker_data } },
     { hl = H.fixed_hl, strings = { git, diff } },
     { hl = H.fixed_hl, strings = { lsp, diag } },
