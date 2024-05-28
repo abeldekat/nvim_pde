@@ -18,11 +18,11 @@ local register = Util.deps.register
 local function hook_nvconfig()
   vim.g.base46_cache = vim.fn.stdpath("data") .. "/nvchad/base46/"
   vim.cmd.packadd("colors_nvconfig")
-  require("base46").load_all_highlights()
+  require("base46").compile()
 end
 local spec_nvconfig = {
-  source = "nvchad/base46",
-  name = "colors_nvconfig", -- Added code to the default nvconfig
+  source = "nvchad/base46", -- v2.5 is the default
+  name = "colors_nvconfig",
   hooks = { post_install = hook_nvconfig, post_checkout = hook_nvconfig },
 }
 
@@ -100,18 +100,6 @@ local function add_telescope(specs_to_use)
   end)
 end
 
-local function activate_nvconfig()
-  require("ak.config.colors.nvconfig").setup(function()
-    add(spec_nvconfig)
-    local default_themes =
-      vim.fn.readdir(vim.fn.stdpath("data") .. "/site/pack/deps/opt/" .. spec_nvconfig.name .. "/lua/base46/themes")
-    for index, theme in ipairs(default_themes) do
-      default_themes[index] = theme:match("(.+)%..+")
-    end
-    return default_themes
-  end)
-end
-
 local function activate(color_name, config_name)
   Util.try(function()
     require(config_name)
@@ -132,13 +120,19 @@ function M.colorscheme()
       end)
       return true
     end
-    return false
+    return false -- register only
   end)
-
   add_telescope(specs_to_use)
 
-  if active.spec_name == spec_nvconfig.name then now(function() activate_nvconfig() end) end
   later(function() register(spec_nvconfig) end)
+  if active.spec_name == spec_nvconfig.name then
+    now(function()
+      require("ak.config.colors.nvconfig").setup(function()
+        add(spec_nvconfig) -- only add the plugin when theme is changed
+        return vim.fn.stdpath("data") .. "/site/pack/deps/opt/" .. spec_nvconfig.name .. "/lua/base46/themes"
+      end)
+    end)
+  end
 end
 
 return M

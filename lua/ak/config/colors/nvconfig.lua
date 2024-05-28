@@ -105,8 +105,13 @@ local function replace_word(old, new)
 end
 
 local function select(themes_cb) -- based on nvchad ui telescope
+  local default_themes = vim.fn.readdir(themes_cb())
+  for index, theme in ipairs(default_themes) do
+    default_themes[index] = theme:match("(.+)%..+")
+  end
+
   local old = M.ui.theme
-  vim.ui.select(themes_cb(), { prompt = "select base46" }, function(choice)
+  vim.ui.select(default_themes, { prompt = "select base46" }, function(choice)
     if not choice then return end
     M.ui.theme = choice
     require("base46").load_all_highlights()
