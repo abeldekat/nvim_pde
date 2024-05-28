@@ -8,12 +8,23 @@
 --          │            contrast and saturation palette.             │
 --          ╰─────────────────────────────────────────────────────────╯
 
+local M = {}
 local Util = require("ak.util")
 local Color = require("ak.color")
 local MiniDeps = require("mini.deps")
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 local register = Util.deps.register
-local M = {}
+
+local function hook_nvconfig()
+  vim.g.base46_cache = vim.fn.stdpath("data") .. "/nvchad/base46/"
+  vim.cmd.packadd("colors_nvconfig")
+  require("base46").load_all_highlights()
+end
+local spec_nvconfig = {
+  source = "nvchad/base46",
+  name = "colors_nvconfig", -- Added code to the default nvconfig
+  hooks = { post_install = hook_nvconfig, post_checkout = hook_nvconfig },
+}
 
 local colors = {
   one = function()
@@ -52,22 +63,56 @@ local colors = {
   end,
 }
 
-local color_selected_groups = {
+local groups = {
   colors.one,
   colors.two,
   colors.three,
   colors.four,
 }
 
-local function on_each_color(cb)
-  for _, group in ipairs(color_selected_groups) do
-    for _, spec in ipairs(group()) do
-      cb(spec)
+local function register_specs(activate_cb)
+  local function on_each_spec(cb)
+    for _, group in ipairs(groups) do
+      for _, spec in ipairs(group()) do
+        cb(spec)
+      end
     end
   end
+
+  local specs = {}
+  on_each_spec(function(spec)
+    table.insert(specs, spec)
+    if not activate_cb(spec) then later(function() register(spec) end) end
+  end)
+  return specs
 end
 
-local function color_apply(color_name, config_name)
+local function add_telescope(specs_to_use)
+  later(function()
+    vim.keymap.set("n", "<leader>uu", function() -- Show all custom colors in telescope
+      for _, spec in ipairs(specs_to_use) do
+        add(spec)
+        require(Util.color.to_config_name(spec.name))
+      end
+
+      vim.schedule(function() Util.color.telescope_custom_colors() end)
+    end, { desc = "Telescope custom colors", silent = true })
+  end)
+end
+
+local function activate_nvconfig()
+  require("ak.config.colors.nvconfig").setup(function()
+    add(spec_nvconfig)
+    local default_themes =
+      vim.fn.readdir(vim.fn.stdpath("data") .. "/site/pack/deps/opt/" .. spec_nvconfig.name .. "/lua/base46/themes")
+    for index, theme in ipairs(default_themes) do
+      default_themes[index] = theme:match("(.+)%..+")
+    end
+    return default_themes
+  end)
+end
+
+local function activate(color_name, config_name)
   Util.try(function()
     require(config_name)
     vim.cmd.colorscheme(color_name)
@@ -77,34 +122,23 @@ local function color_apply(color_name, config_name)
   })
 end
 
--- Only loads the plugin matching the color name set in ak.color
 function M.colorscheme()
-  local color_name = Color.color
-  local info = Util.color.from_color_name(color_name)
-
-  local all_colors = {}
-  on_each_color(function(spec)
-    table.insert(all_colors, spec)
-    if spec.name == info.package_name then
+  local active = Util.color.from_color_name(Color.color)
+  local specs_to_use = register_specs(function(spec)
+    if active.spec_name == spec.name then
       now(function()
         add(spec)
-        color_apply(color_name, info.config_name)
+        activate(active.name, active.config_name)
       end)
-    else
-      later(function() register(spec) end)
+      return true
     end
+    return false
   end)
 
-  later(function()
-    vim.keymap.set("n", "<leader>uu", function() -- Show all custom colors in telescope
-      for _, color in ipairs(all_colors) do
-        add(color)
-        require(Util.color.from_package_name(color.name).config_name)
-      end
+  add_telescope(specs_to_use)
 
-      vim.schedule(function() Util.color.telescope_custom_colors() end)
-    end, { desc = "Telescope custom colors", silent = true })
-  end)
+  if active.spec_name == spec_nvconfig.name then now(function() activate_nvconfig() end) end
+  later(function() register(spec_nvconfig) end)
 end
 
 return M

@@ -67,21 +67,14 @@ function M.telescope_custom_colors()
   vim.fn.getcompletion = target
 end
 
--- Given a name, returns a table containing:
--- color_name: The name of the color
--- config_name: The full path of the config to require
-function M.from_package_name(package_name)
-  local name = package_name:gsub("colors_", "")
-  return {
-    color_name = name,
-    config_name = "ak.config.colors." .. name,
-  }
-end
+-- Given the name of a spec, return the name of the config to require
+function M.to_config_name(spec_name) return "ak.config.colors." .. spec_name:gsub("colors_", "") end
 
 -- Given a name, returns a table containing:
--- package_name: The name of the package to packadd
+-- name: The name of the color
+-- spec_name: The name of the spec
 -- config_name: The full path of the config to require
-function M.from_color_name(color_name)
+function M.from_color_name(color_name) -- color names: ak.colors.txt
   local name = color_name
   if name:find("fox", 1, true) then
     name = "nightfox" -- ie nordfox becomes nightfox
@@ -90,7 +83,8 @@ function M.from_color_name(color_name)
   end
 
   return {
-    package_name = "colors_" .. name,
+    name = color_name,
+    spec_name = "colors_" .. name,
     config_name = "ak.config.colors." .. name,
   }
 end

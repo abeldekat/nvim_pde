@@ -12,6 +12,7 @@ kanagawa
 nano-theme
 nightfox
 nordfox
+nvconfig
 onedark
 rose-pine
 solarized8_flat
