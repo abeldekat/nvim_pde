@@ -18,7 +18,7 @@ local register = Util.deps.register
 local function hook_nvconfig()
   vim.g.base46_cache = vim.fn.stdpath("data") .. "/nvchad/base46/"
   vim.cmd.packadd("colors_nvconfig")
-  require("base46").compile()
+  require("ak.config.colors.nvconfig").compile()
 end
 local spec_nvconfig = {
   source = "nvchad/base46", -- v2.5 is the default
@@ -126,7 +126,7 @@ function M.colorscheme()
   if active.spec_name == spec_nvconfig.name then
     now(function()
       require("ak.config.colors.nvconfig").setup(function()
-        add(spec_nvconfig) -- only add the plugin when theme is changed
+        add(spec_nvconfig) -- only add the plugin when selecting a new theme
         return vim.fn.stdpath("data") .. "/site/pack/deps/opt/" .. spec_nvconfig.name .. "/lua/base46/themes"
       end)
     end)
