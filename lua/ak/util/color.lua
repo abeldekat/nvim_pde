@@ -50,10 +50,13 @@ function M.add_toggle(pattern, toggle_opts)
 end
 
 function M.telescope_custom_colors()
+  local ok, _ = pcall(require, "telescope")
+  if not ok then return end
+
   -- stylua: ignore
   local builtins = { "zellner", "torte", "slate", "shine", "ron", "quiet", "peachpuff",
   "pablo", "murphy", "lunaperche", "koehler", "industry", "evening", "elflord",
-  "desert", "delek", "default", "darkblue", "blue" }
+  "desert", "delek", "darkblue", "blue" }
 
   local target = vim.fn.getcompletion
 

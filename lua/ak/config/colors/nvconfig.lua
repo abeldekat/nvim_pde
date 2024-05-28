@@ -3,9 +3,13 @@
 --      │                    https://0x0.st/Xrbn.mp4                     │
 --      ╰────────────────────────────────────────────────────────────────╯
 
--- Use colors from base46 nvchad
+-- Use colors from the collection in plugin base46 from nvchad
 -- The base46 plugin requires this nvconfig and compiles ui.theme
--- Activate a theme in the collection: ak.colors.lua, local color = "nvconfig"
+--
+-- Activate the collection:
+--   In ak.colors.lua, set local color = "nvconfig"
+-- In order to switch back to regular themes, undo the above and restart nvim.
+-- Only use this theme **after** the plugin has been installed!
 --
 -- A setup method has been added in order to use this module as a colorscheme
 -- in ak.config.colors
@@ -14,8 +18,6 @@
 -- on initial install
 -- on update
 -- when the theme changes
---
--- Only use this theme **after** the plugin has been installed!
 
 local M = {}
 
@@ -145,7 +147,8 @@ M.setup = function(themes_cb)
     dofile(vim.g.base46_cache .. filename)
   end
 
-  vim.keymap.set("n", "<leader>mb", function() select(themes_cb) end, { desc = "Select base46" })
+  -- override telescope custom colors keymap:
+  vim.keymap.set("n", "<leader>uu", function() select(themes_cb) end, { desc = "Base46 colors" })
 end
 
 return M

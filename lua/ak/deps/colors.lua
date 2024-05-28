@@ -88,16 +88,14 @@ local function register_specs(activate_cb)
 end
 
 local function add_telescope(specs_to_use)
-  later(function()
-    vim.keymap.set("n", "<leader>uu", function() -- Show all custom colors in telescope
-      for _, spec in ipairs(specs_to_use) do
-        add(spec)
-        require(Util.color.to_config_name(spec.name))
-      end
+  vim.keymap.set("n", "<leader>uu", function() -- Show all custom colors in telescope
+    for _, spec in ipairs(specs_to_use) do
+      add(spec)
+      require(Util.color.to_config_name(spec.name))
+    end
 
-      vim.schedule(function() Util.color.telescope_custom_colors() end)
-    end, { desc = "Telescope custom colors", silent = true })
-  end)
+    vim.schedule(function() Util.color.telescope_custom_colors() end)
+  end, { desc = "Telescope custom colors", silent = true })
 end
 
 local function activate(color_name, config_name)

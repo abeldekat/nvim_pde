@@ -166,11 +166,6 @@ local function keys()
   )
   map("<leader>sw", function() builtin.grep_string() end, { desc = "Selection" }, "v")
   map("<leader>sW", function() builtin.grep_string({ cwd = buffer_dir() }) end, { desc = "Selection (rel)" }, "v")
-  map(
-    "<leader>uC",
-    function() builtin.colorscheme({ enable_preview = true }) end,
-    { desc = "Colorscheme with preview" }
-  )
 
   -- diagnostics/quickfix
   -- Changed from leader sd to replace trouble document diagnostics
