@@ -1,8 +1,11 @@
 astrotheme
 ayu
 bamboo
+base46
+carbonfox
 catppuccin
 dawnfox
+dayfox
 duskfox
 edge
 everforest
@@ -12,7 +15,6 @@ kanagawa
 nano-theme
 nightfox
 nordfox
-nvconfig
 onedark
 rose-pine
 solarized8_flat

@@ -6,8 +6,7 @@ local Utils = require("ak.util")
 
 Utils.color.add_toggle("*fox", {
   name = "nightfox",
-  -- "carbonfox", "dayfox",
-  flavours = { "nordfox", "nightfox", "duskfox", "terafox", "dawnfox" },
+  flavours = { "nordfox", "nightfox", "carbonfox", "duskfox", "terafox", "dawnfox", "dayfox" },
 })
 
 local opts = {

@@ -15,20 +15,20 @@ local MiniDeps = require("mini.deps")
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 local register = Util.deps.register
 
-local function hook_nvconfig()
+local function hook_base46()
   vim.g.base46_cache = vim.fn.stdpath("data") .. "/nvchad/base46/"
-  vim.cmd.packadd("colors_nvconfig")
-  require("ak.config.colors.nvconfig").compile()
+  vim.cmd.packadd("colors_base46")
+  require("ak.config.colors.base46").compile()
 end
-local spec_nvconfig = {
+local spec_base46 = {
   -- Interesting themes:
   -- Dark: chadraculu doomchad everblush falcon flexoki github_dark
   -- material-darker melange monekai sweetpastel solarized_dark, osaka
   -- tomorrow_night wombat
   -- Light: flex-light flexoki-light github_light material-lighter nano-light
   source = "nvchad/base46", -- v2.5 is the default
-  name = "colors_nvconfig",
-  hooks = { post_install = hook_nvconfig, post_checkout = hook_nvconfig },
+  name = "colors_base46",
+  hooks = { post_install = hook_base46, post_checkout = hook_base46 },
 }
 
 local colors = {
@@ -127,12 +127,12 @@ function M.colorscheme()
   end)
   add_telescope(specs_to_use)
 
-  later(function() register(spec_nvconfig) end)
-  if active.spec_name == spec_nvconfig.name then
+  later(function() register(spec_base46) end)
+  if active.spec_name == spec_base46.name then
     now(function()
-      require("ak.config.colors.nvconfig").setup(function()
-        add(spec_nvconfig) -- only add the plugin when selecting a new theme
-        return vim.fn.stdpath("data") .. "/site/pack/deps/opt/" .. spec_nvconfig.name .. "/lua/base46/themes"
+      require("ak.config.colors.base46").setup(function()
+        add(spec_base46) -- only add the plugin when selecting a new theme
+        return vim.fn.stdpath("data") .. "/site/pack/deps/opt/" .. spec_base46.name .. "/lua/base46/themes"
       end)
     end)
   end

@@ -3,25 +3,22 @@
 --      │                    https://0x0.st/Xrbn.mp4                     │
 --      ╰────────────────────────────────────────────────────────────────╯
 
--- Use colors from the collection in plugin base46 from nvchad
--- The base46 plugin requires this nvconfig and compiles ui.theme
+-- The collection in plugin nvchad/base46 has around 70 themes
+-- The plugin requires lua/nvconfig, which requires this module.
+-- M.ui and M.base46 are stripped down parts of nvconfig.
 --
--- Activate the collection:
---   In ak.colors.lua, set local color = "nvconfig"
+-- The base46 plugin itself is needed on initial install, on update and on theme change
+
+-- Activate the collection: In ak.colors.lua, set local color = "base46"
 -- In order to switch back to regular themes, undo the above and restart nvim.
 -- Only use this collection **after** plugin base64 has been installed!
---
--- Methods have been added in order to use this module as a colorscheme
--- in ak.config.colors
---
--- The base46 plugin itself is only needed:
--- on initial install
--- on update
--- when the theme changes
 
 local M = {}
 
-M.ui = {
+M.ui = { --  transparency = false, theme_toggle = {},
+  theme = "melange",
+  changed_themes = {},
+  hl_override = {},
   hl_add = {
     MiniStatuslineFilename = { bg = "statusline_bg", fg = "grey_fg2" },
     MiniStatuslineModeNormal = { bg = "statusline_bg", fg = "grey_fg2", bold = true },
@@ -30,49 +27,33 @@ M.ui = {
     MiniStatuslineModeCommand = { bg = "yellow", fg = "black", bold = true },
     MiniStatuslineModeOther = { bg = "blue", fg = "black", bold = true },
     MiniStatuslineModeVisual = { bg = "dark_purple", fg = "black", bold = true },
-
     MiniHipatternsFixme = { bg = "red", fg = "black", bold = true },
     MiniHipatternsHack = { bg = "yellow", fg = "black", bold = true },
     MiniHipatternsTodo = { bg = "blue", fg = "black", bold = true },
     MiniHipatternsNote = { bg = "green", fg = "black", bold = true },
+    StatusLine = { bg = "statusline_bg" }, -- part of statusline integration
   },
-  hl_override = {},
-  changed_themes = {},
-  theme_toggle = {},
-  theme = "nightfox",
-  transparency = false,
-  cmp = {
-    icons = true,
-    lspkind_text = true,
-    style = "default", -- default/flat_light/flat_dark/atom/atom_colored
-  },
-  telescope = { style = "borderless" }, -- borderless / bordered
 
-  ------------------------------- nvchad_ui modules -----------------------------
-  -- Removed integrations nvdash, cheatsheet, tabufline and term:
-  statusline = { theme = "default", separator_style = "default" },
+  -- Removed integrations cheatsheet, nvdash, statusline, tabufline, telescope and term:
+  cmp = { icons = true, lspkind_text = true, style = "default" },
   lsp = { signature = true },
 }
--- Dummy, used in module base46.init.lua, adding to its local integrations
-M.base46 = { integrations = {} }
+M.base46 = { integrations = {} } -- Dummy, used in plugin base46.init.lua
 
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                         Added:                          │
 --          ╰─────────────────────────────────────────────────────────╯
 
 vim.g.base46_cache = vim.fn.stdpath("data") .. "/nvchad/base46/"
-local integrations = {
+local integrations = { --  "statusline", "devicons", "telescope",
   "blankline",
   "cmp",
   "defaults",
-  -- "devicons",
   "git",
   "lsp",
   "mason",
-  "statusline", -- needed for starter
   "syntax",
   "treesitter",
-  -- "telescope",
 }
 
 -- Override base46.load_all_highlights to only load selected integrations
@@ -83,14 +64,14 @@ local function load_all_highlights()
 end
 
 local function persist(old, new)
-  local chadrc = vim.fn.stdpath("config") .. "/lua/ak/config/colors/" .. "nvconfig.lua"
-  local file = io.open(chadrc, "r")
+  local this_module = vim.fn.stdpath("config") .. "/lua/ak/config/colors/" .. "base46.lua"
+  local file = io.open(this_module, "r")
   if not file then return end
 
   local added_pattern = string.gsub(old, "-", "%%-") -- add % before - if exists
   local new_content = file:read("*all"):gsub(added_pattern, new)
 
-  file = io.open(chadrc, "w")
+  file = io.open(this_module, "w")
   if not file then return end
   file:write(new_content)
   file:close()
@@ -103,7 +84,7 @@ local function select(themes_cb) -- based on nvchad ui telescope
   end
 
   local old = M.ui.theme
-  vim.ui.select(default_themes, { prompt = "select base46" }, function(choice)
+  vim.ui.select(default_themes, { prompt = "Select base46" }, function(choice)
     if not choice then return end
     M.ui.theme = choice
 
