@@ -18,9 +18,9 @@ require("nightfox").setup({
   options = opts,
   groups = {
     all = {
-      -- left and right, dynamic
-      -- the theme supplied by nightfox is too dark:
-      MiniStatuslineModeNormal = { link = "MiniStatuslineFilename" },
+      -- Using MiniStatuslineDevinfo, the theme supplied by nightfox is too dark:
+      MiniStatuslineModeNormal = { bg = "bg2", fg = "fg3", style = "bold" },
+      MiniStatuslineFilename = { bg = "bg2", fg = "fg3" },
 
       MiniHipatternsFixme = { bg = "diag.error", fg = "bg", style = "bold" },
       MiniHipatternsHack = { bg = "diag.warn", fg = "bg", style = "bold" },

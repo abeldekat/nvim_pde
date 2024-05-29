@@ -23,8 +23,8 @@ local M = {}
 
 M.ui = {
   hl_add = {
-    MiniStatuslineFilename = { bg = "statusline_bg" },
-    MiniStatuslineModeNormal = { bg = "statusline_bg" },
+    MiniStatuslineFilename = { bg = "statusline_bg", fg = "grey_fg2" },
+    MiniStatuslineModeNormal = { bg = "statusline_bg", fg = "grey_fg2", bold = true },
     MiniStatuslineModeInsert = { bg = "green", fg = "black", bold = true },
     MiniStatuslineModeReplace = { bg = "red", fg = "black", bold = true },
     MiniStatuslineModeCommand = { bg = "yellow", fg = "black", bold = true },
@@ -39,7 +39,7 @@ M.ui = {
   hl_override = {},
   changed_themes = {},
   theme_toggle = {},
-  theme = "melange",
+  theme = "nightfox",
   transparency = false,
   cmp = {
     icons = true,
