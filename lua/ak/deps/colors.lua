@@ -21,6 +21,11 @@ local function hook_nvconfig()
   require("ak.config.colors.nvconfig").compile()
 end
 local spec_nvconfig = {
+  -- Interesting themes:
+  -- Dark: chadraculu doomchad everblush falcon flexoki github_dark
+  -- material-darker melange monekai sweetpastel solarized_dark, osaka
+  -- tomorrow_night wombat
+  -- Light: flex-light flexoki-light github_light material-lighter nano-light
   source = "nvchad/base46", -- v2.5 is the default
   name = "colors_nvconfig",
   hooks = { post_install = hook_nvconfig, post_checkout = hook_nvconfig },

@@ -22,7 +22,20 @@
 local M = {}
 
 M.ui = {
-  hl_add = {},
+  hl_add = {
+    MiniStatuslineFilename = { bg = "statusline_bg" },
+    MiniStatuslineModeNormal = { bg = "statusline_bg" },
+    MiniStatuslineModeInsert = { bg = "green", fg = "black", bold = true },
+    MiniStatuslineModeReplace = { bg = "red", fg = "black", bold = true },
+    MiniStatuslineModeCommand = { bg = "yellow", fg = "black", bold = true },
+    MiniStatuslineModeOther = { bg = "blue", fg = "black", bold = true },
+    MiniStatuslineModeVisual = { bg = "dark_purple", fg = "black", bold = true },
+
+    MiniHipatternsFixme = { bg = "red", fg = "black", bold = true },
+    MiniHipatternsHack = { bg = "yellow", fg = "black", bold = true },
+    MiniHipatternsTodo = { bg = "blue", fg = "black", bold = true },
+    MiniHipatternsNote = { bg = "green", fg = "black", bold = true },
+  },
   hl_override = {},
   changed_themes = {},
   theme_toggle = {},
@@ -36,11 +49,10 @@ M.ui = {
   telescope = { style = "borderless" }, -- borderless / bordered
 
   ------------------------------- nvchad_ui modules -----------------------------
-  -- Removed integrartions nvdash, cheatsheet, tabufline and term:
+  -- Removed integrations nvdash, cheatsheet, tabufline and term:
   statusline = { theme = "default", separator_style = "default" },
   lsp = { signature = true },
 }
-
 -- Dummy, used in module base46.init.lua, adding to its local integrations
 M.base46 = { integrations = {} }
 
