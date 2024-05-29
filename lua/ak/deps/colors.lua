@@ -21,7 +21,6 @@ local function hook_base46()
   require("ak.config.colors.base46").compile()
 end
 local spec_base46 = {
-  -- Interesting themes:
   -- Dark: chadraculu doomchad everblush falcon flexoki github_dark
   -- material-darker melange monekai sweetpastel solarized_dark, osaka
   -- tomorrow_night wombat

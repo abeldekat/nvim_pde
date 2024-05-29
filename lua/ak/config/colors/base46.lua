@@ -4,12 +4,12 @@
 --      ╰────────────────────────────────────────────────────────────────╯
 
 -- The collection in plugin nvchad/base46 has around 70 themes
--- The plugin requires lua/nvconfig, which requires this module.
+-- The plugin requires lua/nvconfig: Require returns this module instead.
 -- M.ui and M.base46 are stripped down parts of nvconfig.
 --
 -- The base46 plugin itself is needed on initial install, on update and on theme change
 
--- Activate the collection: In ak.colors.lua, set local color = "base46"
+-- Activate the collection: Set local color = "base46" in ak.colors.lua,
 -- In order to switch back to regular themes, undo the above and restart nvim.
 -- Only use this collection **after** plugin base64 has been installed!
 
@@ -98,12 +98,18 @@ end
 
 -- Override base46.compile to only compile selected integrations
 M.compile = function()
-  local base46 = require("base46")
+  local require_orig = require -- return this module when nvconfig is required
+  _G.require = function(args)
+    if type(args) == "string" and args == "nvconfig" then return require_orig("ak.config.colors.base46") end
+    return require_orig(args)
+  end
   if not vim.loop.fs_stat(vim.g.base46_cache) then vim.fn.mkdir(vim.g.base46_cache, "p") end
 
+  local base46 = require("base46")
   for _, filename in ipairs(integrations) do
     base46.saveStr_to_cache(filename, base46.load_integrationTB(filename))
   end
+  _G.require = require_orig -- restore require
 end
 
 M.setup = function(themes_cb)
