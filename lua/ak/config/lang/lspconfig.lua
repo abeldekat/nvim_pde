@@ -12,7 +12,9 @@
 local Util = require("ak.util")
 local H = {}
 
--- perhaps also integrate:
+-- perhaps: LazyVim rename file
+
+-- perhaps:
 -- {
 --   workspace = { -- mariasolos
 --     -- PERF: didChangeWatchedFiles is too slow.
@@ -52,7 +54,7 @@ function H.keys(_, buffer) -- client
   end
   map("<leader>cl", "<cmd>LspInfo<cr>", { desc = "Lsp info" })
   map("gd", "<cmd>Telescope lsp_definitions reuse_win=true<cr>", { desc = "Goto definition" })
-  map("gr", "<cmd>Telescope lsp_references<cr>", { desc = "References" })
+  map("gr", "<cmd>Telescope lsp_references<cr>", { desc = "References", nowait = true })
   map("gD", vim.lsp.buf.declaration, { desc = "Goto declaration" })
   map("gI", "<cmd>Telescope lsp_implementations reuse_win=true<cr>", { desc = "Goto implementation" })
   map("gy", "<cmd>Telescope lsp_type_definitions reuse_win=true<cr>", { desc = "Goto type definition" })

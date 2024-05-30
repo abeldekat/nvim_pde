@@ -102,7 +102,7 @@ M.compile = function()
     if type(args) == "string" and args == "nvconfig" then return require_orig("ak.config.colors.base46") end
     return require_orig(args)
   end
-  if not vim.loop.fs_stat(vim.g.base46_cache) then vim.fn.mkdir(vim.g.base46_cache, "p") end
+  if not vim.uv.fs_stat(vim.g.base46_cache) then vim.fn.mkdir(vim.g.base46_cache, "p") end
 
   local base46 = require("base46")
   for _, filename in ipairs(integrations) do
