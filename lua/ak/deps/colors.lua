@@ -21,8 +21,8 @@ local function hook_base46()
   require("ak.config.colors.base46").compile()
 end
 local spec_base46 = {
-  -- Dark: chadraculu doomchad everblush falcon flexoki github_dark
-  -- material-darker melange monekai sweetpastel solarized_dark, osaka
+  -- Dark: bearded_arc chadraculu doomchad everblush falcon flexoki github_dark
+  -- material-darker melange monekai sweetpastel solarized_dark osaka
   -- tomorrow_night wombat
   -- Light: flex-light flexoki-light github_light material-lighter nano-light
   source = "nvchad/base46", -- v2.5 is the default

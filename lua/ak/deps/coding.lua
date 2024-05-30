@@ -8,20 +8,20 @@ later(function()
   add("windwp/nvim-autopairs")
   require("ak.config.coding.autopairs")
 
-  -- local function make_jsregexp(path)
-  --   vim.cmd("lcd " .. path)
-  --   vim.cmd("!make -s install_jsregexp")
-  --   vim.cmd("lcd -")
-  --   Util.info("luasnip: cannot rm is not an error!")
-  -- end
-  -- add({
-  --   source = "L3MON4D3/LuaSnip",
-  --   hooks = {
-  --     post_install = function(params) make_jsregexp(params.path) end,
-  --     post_checkout = function(params) make_jsregexp(params.path) end,
-  --   },
-  --   depends = { "rafamadriz/friendly-snippets" },
-  -- })
+  local function make_jsregexp(path)
+    vim.cmd("lcd " .. path)
+    vim.cmd("!make -s install_jsregexp")
+    vim.cmd("lcd -")
+    Util.info("luasnip: cannot rm is not an error!")
+  end
+  add({
+    source = "L3MON4D3/LuaSnip",
+    hooks = {
+      post_install = function(params) make_jsregexp(params.path) end,
+      post_checkout = function(params) make_jsregexp(params.path) end,
+    },
+    depends = { "rafamadriz/friendly-snippets" },
+  })
   add({
     source = "hrsh7th/nvim-cmp",
     depends = {
@@ -30,9 +30,9 @@ later(function()
       "hrsh7th/cmp-path",
 
       -- Native snippets:
-      "rafamadriz/friendly-snippets",
-      "garymjr/nvim-snippets",
-      -- Luasnip: "saadparwaiz1/cmp_luasnip",
+      -- "rafamadriz/friendly-snippets",
+      -- "garymjr/nvim-snippets",
+      "saadparwaiz1/cmp_luasnip",
     },
   })
   require("ak.config.coding.cmp") -- includes snippets

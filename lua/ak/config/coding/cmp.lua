@@ -41,13 +41,23 @@ end
 vim.api.nvim_set_hl(0, "CmpGhostText", { link = "Comment", default = true })
 
 local cmp = require("cmp")
-local defaults = require("cmp.config.default")()
-local snippets = true and snip_native() or snip_luasnip()
+local icons = require("ak.consts").icons.kinds
+local snippets = false and snip_native() or snip_luasnip()
+
+local formatting_style = {
+  format = function(_, item)
+    local icon = icons[item.kind]
+    icon = icon and (" " .. icon .. " ") or icon
+    if icon then item.kind = string.format("%s %s", icon, item.kind) end
+    return item
+  end,
+}
 
 -- ---@type cmp.ConfigSchema
 local opts = {
   completion = { completeopt = "menu,menuone,noinsert" },
-  snippet = snippets.expand,
+  experimental = { ghost_text = { hl_group = "CmpGhostText" } },
+  formatting = formatting_style,
   mapping = cmp.mapping.preset.insert({
     ["<C-n>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
     ["<C-p>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
@@ -55,38 +65,34 @@ local opts = {
     ["<C-f>"] = cmp.mapping.scroll_docs(4),
     ["<C-Space>"] = cmp.mapping.complete(), -- invoke cmp manually
 
-    ["C-y"] = cmp.mapping.confirm({ select = true }),
+    -- Cmp assigns: ctrl-y and ctrl-e
+    -- Override C-j(newline) because C-y is harder to type:
+    ["<C-j>"] = cmp.mapping.confirm({ select = true }),
+
     ["<C-l>"] = cmp.mapping(snippets.forward, { "i", "s" }),
     ["<C-h>"] = cmp.mapping(snippets.backward, { "i", "s" }),
   }),
+  snippet = snippets.expand,
   sources = cmp.config.sources({
     { name = "nvim_lsp" },
     snippets.source,
     { name = "buffer" },
-  }, {
     { name = "path" },
   }),
-  ---@diagnostic disable-next-line: missing-fields
-  formatting = {
-    format = function(_, item)
-      local icons = require("ak.consts").icons.kinds
-      if icons[item.kind] then item.kind = icons[item.kind] .. item.kind end
-      return item
-    end,
-  },
-  experimental = {
-    ghost_text = {
-      hl_group = "CmpGhostText",
-    },
-  },
-  sorting = defaults.sorting,
-  view = {
-    entries = {
-      follow_cursor = true,
-    },
+  -- view = { entries = { follow_cursor = true, }, }, --docs_auto_open
+  window = {
+    -- Default winhighlight = 'Normal:Pmenu,FloatBorder:Pmenu,CursorLine:PmenuSel,Search:None',
+    completion = cmp.config.window.bordered({
+      -- Default winhighlight: "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None"
+      winhighlight = "Normal:Normal,FloatBorder:None,CursorLine:PmenuSel,Search:None",
+      scrollbar = false,
+    }),
+    -- Default winhighlight = 'FloatBorder:NormalFloat',
+    documentation = cmp.config.window.bordered({
+      -- Default winhighlight: "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None"
+      winhighlight = "Normal:Normal,FloatBorder:None,CursorLine:PmenuSel,Search:None",
+      scrollbar = false,
+    }),
   },
 }
-for _, source in ipairs(opts.sources) do
-  source.group_index = source.group_index or 1
-end
 cmp.setup(opts)

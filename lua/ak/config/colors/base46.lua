@@ -35,8 +35,7 @@ M.ui = { --  transparency = false, theme_toggle = {},
   },
 
   -- Removed integrations cheatsheet, nvdash, statusline, tabufline, telescope and term:
-  cmp = { icons = true, lspkind_text = true, style = "default" },
-  lsp = { signature = true },
+  cmp = {}, -- base46 does not use cmp.icons cmp.lspkind_text and lsp
 }
 M.base46 = { integrations = {} } -- Dummy, used in plugin base46.init.lua
 
@@ -113,7 +112,7 @@ M.compile = function()
 end
 
 M.setup = function(themes_cb)
-  -- override custom colors keymapping:
+  -- Override custom colors keymapping:
   vim.keymap.set("n", "<leader>uu", function() select(themes_cb) end, { desc = "Base46 colors" })
   load_all_highlights()
 end

@@ -11,13 +11,14 @@
 --          ╰─────────────────────────────────────────────────────────╯
 local Util = require("ak.util")
 local H = {}
+
 -- perhaps also integrate:
 -- {
---     workspace = { -- mariasolos
---         -- PERF: didChangeWatchedFiles is too slow.
---         -- TODO: Remove this when https://github.com/neovim/neovim/issues/23291#issuecomment-1686709265 is fixed.
---         didChangeWatchedFiles = { dynamicRegistration = false },
---     },
+--   workspace = { -- mariasolos
+--     -- PERF: didChangeWatchedFiles is too slow.
+--     -- TODO: Remove this when https://github.com/neovim/neovim/issues/23291#issuecomment-1686709265 is fixed.
+--     didChangeWatchedFiles = { dynamicRegistration = false },
+--   },
 -- }
 
 function H.inlay_hints()
