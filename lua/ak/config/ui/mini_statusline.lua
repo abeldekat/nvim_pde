@@ -3,7 +3,7 @@ local H = {} -- helpers, copied, modified or added
 local MiniStatusline = require("mini.statusline")
 
 AK.setup = function()
-  H.create_diagnostic_hl() -- added diagnostics with colors
+  H.create_diagnostic_hl() -- colored diagnostics
   H.require_markerline()
   MiniStatusline.setup({
     use_icons = false,
@@ -17,21 +17,21 @@ end
 AK.active = function() -- entrypoint
   if H.is_blocked_filetype() then return "" end
 
-  local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 120 })
+  local diag = MiniStatusline.section_diagnostics({ trunc_width = 75, icon = "", signs = H.diag_signs })
   local diff = MiniStatusline.section_diff({ trunc_width = 75, icon = "" })
-  local git = MiniStatusline.section_git({ trunc_width = 40, icon = "" })
-  local lsp = MiniStatusline.section_lsp({ trunc_width = 75 })
-  local search = MiniStatusline.section_searchcount({ trunc_width = 75 })
-  local diag = AK.section_diagnostics({ trunc_width = 75, icon = "" })
   local fileinfo = AK.section_fileinfo({ trunc_width = 120 })
   local filename = AK.section_filename({ trunc_width = 140 })
+  local git = MiniStatusline.section_git({ trunc_width = 40, icon = "" })
   local location = AK.section_location({ trunc_width = 75 })
+  local lsp = MiniStatusline.section_lsp({ trunc_width = 75 })
   local macro = AK.section_macro({ trunc_width = 120 })
   local marker_data = AK.section_marker({ trunc_width = 75 })
+  local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 120 })
+  local search = MiniStatusline.section_searchcount({ trunc_width = 75 })
 
-  diff = diff and diff:sub(2) or diff -- remove first space
+  diag = diag and diag:gsub(" ", "") or ""
+  diff = diff and diff:sub(2) or "" -- remove first space
   lsp = lsp and #lsp > 0 and " " or ""
-  diag = diag and diag:sub(2) or diag -- remove first space
   return MiniStatusline.combine_groups({
     { hl = mode_hl, strings = { mode } },
     { hl = H.marker_highlight(), strings = { marker_data } },
@@ -44,23 +44,6 @@ AK.active = function() -- entrypoint
     { hl = H.fixed_hl, strings = { fileinfo } },
     { hl = mode_hl, strings = { search, location } },
   })
-end
-
--- overridden: added color to diagnostics
-AK.section_diagnostics = function(args) -- args
-  if MiniStatusline.is_truncated(args.trunc_width) or H.diagnostic_is_disabled() then return "" end
-
-  local counts = H.diagnostic_get_count()
-  local severity, t = vim.diagnostic.severity, {}
-  for _, level in ipairs(H.diagnostic_levels) do
-    local n = counts[severity[level.name]] or 0
-    if n > 0 then -- Add level info only if diagnostic is present
-      table.insert(t, string.format(" %%#%s#%s%s", level.hl, level.sign, n))
-    end
-  end
-
-  if #t == 0 then return "" end
-  return args.icon .. table.concat(t, "")
 end
 
 -- overridden: Use relative path if file is in cwd
@@ -120,26 +103,21 @@ end
 --          │                       Helper data                       │
 --          ╰─────────────────────────────────────────────────────────╯
 -- added:
-H.diagnostic_hls = {
+H.diag_hls = {
   error = "DiagnosticErrorStatusline",
   warn = "DiagnosticWarnStatusline",
   info = "DiagnosticInfoStatusline",
   hint = "DiagnosticHintStatusline",
 }
-
--- added. Colors only appear:
---   for diagnostics
---   in any mode except normal mode
---   when recording a macro
-H.fixed_hl = "MiniStatuslineFilename"
-
--- overridden: added hl
-H.diagnostic_levels = {
-  { name = "ERROR", sign = "E", hl = H.diagnostic_hls.error },
-  { name = "WARN", sign = "W", hl = H.diagnostic_hls.warn },
-  { name = "INFO", sign = "I", hl = H.diagnostic_hls.info },
-  { name = "HINT", sign = "H", hl = H.diagnostic_hls.hint },
+H.diag_signs = {
+  ERROR = string.format("%%#%s#%s", H.diag_hls.error, "E"),
+  WARN = string.format("%%#%s#%s", H.diag_hls.warn, "W"),
+  INFO = string.format("%%#%s#%s", H.diag_hls.info, "I"),
+  HINT = string.format("%%#%s#%s", H.diag_hls.hint, "H"),
 }
+
+-- added. Colors appear: for diagnostics, any mode except normal, macro recording
+H.fixed_hl = "MiniStatuslineFilename"
 
 -- Supports harpoon or grapple
 ---@class Markerline
@@ -156,9 +134,8 @@ H.create_autocommands = function()
   local au = function(event, pattern, callback, desc)
     vim.api.nvim_create_autocmd(event, { group = augroup, pattern = pattern, callback = callback, desc = desc })
   end
-
+  -- Colored diagnostics
   au("ColorScheme", "*", H.create_diagnostic_hl, "Create diagnostic highlight")
-
   -- slow lsp(ie marksman): the symbol only shows when moving inside the buffer:
   au("LspDetach", "*", H.set_active, "Track LSP clients")
   au("LspDetach", "*", H.set_active, "Track LSP clients")
@@ -174,10 +151,10 @@ H.create_diagnostic_hl = function()
     return hl and hl.fg or (hl.sp and hl.sp) or fallback.fg
   end
 
-  vim.api.nvim_set_hl(0, H.diagnostic_hls.error, { bg = bg, fg = fg("DiagnosticError") })
-  vim.api.nvim_set_hl(0, H.diagnostic_hls.warn, { bg = bg, fg = fg("DiagnosticWarn") })
-  vim.api.nvim_set_hl(0, H.diagnostic_hls.info, { bg = bg, fg = fg("DiagnosticInfo") })
-  vim.api.nvim_set_hl(0, H.diagnostic_hls.hint, { bg = bg, fg = fg("DiagnosticHint") })
+  vim.api.nvim_set_hl(0, H.diag_hls.error, { bg = bg, fg = fg("DiagnosticError") })
+  vim.api.nvim_set_hl(0, H.diag_hls.warn, { bg = bg, fg = fg("DiagnosticWarn") })
+  vim.api.nvim_set_hl(0, H.diag_hls.info, { bg = bg, fg = fg("DiagnosticInfo") })
+  vim.api.nvim_set_hl(0, H.diag_hls.hint, { bg = bg, fg = fg("DiagnosticHint") })
 end
 
 --          ╭─────────────────────────────────────────────────────────╮
@@ -191,10 +168,6 @@ H.is_blocked_filetype = function()
   local blocked_filetypes = { ["starter"] = true }
   return blocked_filetypes[vim.bo.filetype]
 end
-
--- copied
-H.diagnostic_get_count = function() return vim.diagnostic.count(0) end
-H.diagnostic_is_disabled = function() return not vim.diagnostic.is_enabled({ bufnr = 0 }) end
 
 H.require_markerline = function() -- See ak.deps.editor
   local function make(line, is_buffer) return { line = line, is_buffer = is_buffer } end
