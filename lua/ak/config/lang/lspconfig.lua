@@ -79,28 +79,7 @@ end
 
 function H.lua_ls()
   require("lazydev").setup()
-  local settings = {
-    runtime = { version = "LuaJIT" },
-    workspace = { -- Make the server aware of Neovim runtime files
-      checkThirdParty = false,
-      library = {
-        vim.env.VIMRUNTIME,
-        "${3rd}/luv/library",
-        -- "${3rd}/busted/library",
-      },
-    },
-  }
   return {
-    on_init = function(client)
-      -- local path = client.workspace_folders[1].name
-      -- local fs_stat = vim.uv.fs_stat
-      -- if fs_stat(path .. "/.luarc.json") or fs_stat(path .. "/.luarc.jsonc") then
-      --   return true -- opt out
-      -- end
-
-      client.settings.Lua = vim.tbl_deep_extend("force", client.settings.Lua, settings)
-      return true
-    end,
     settings = {
       Lua = {
         completion = { callSnippet = "Replace" },
