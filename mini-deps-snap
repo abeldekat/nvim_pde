@@ -35,6 +35,7 @@ return {
   harpoonline = "6ba9dca0fc42781c4a0ff89932bd386d6bbd75f8",
   ["headlines.nvim"] = "618ef1b2502c565c82254ef7d5b04402194d9ce3",
   ["indent-blankline.nvim"] = "d98f537c3492e87b6dc6c2e3f66ac517528f406f",
+  ["lazydev.nvim"] = "6c38b78b78de0e4e86dd05c8cacf4b4bd2419cd8",
   ["leap-spooky.nvim"] = "5f44a1f63dc1c4ce50244e92da5bc0d8d1f6eb47",
   ["leap.nvim"] = "6252b89ffa8a10311344fe10cc00fbbb6170f30f",
   ["markdown-preview.nvim"] = "a923f5fc5ba36a3b17e289dc35dc17f66d0548ee",
