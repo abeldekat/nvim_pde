@@ -14,7 +14,6 @@ local function load()
   add({
     source = "neovim/nvim-lspconfig",
     depends = {
-      "folke/lazydev.nvim",
       "williamboman/mason-lspconfig.nvim",
       { source = "mrcjkb/rustaceanvim", checkout = "4.24.0" },
     },

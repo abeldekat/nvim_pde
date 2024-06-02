@@ -77,13 +77,20 @@ function H.keys(_, buffer) -- client
   -- end
 end
 
+-- Assumption: .luarc.jsonc takes precendence. Individual values override,
+-- arrays are not merged
+-- Example: diagnostics global array, "one" in lua_ls settings,
+-- and "two" in .luarc.json -> Only a warning on global "one"
+-- NOTE: when uncommenting a library block in .luarc.jsonc, the completion
+-- becomes available without restarting nvim
 function H.lua_ls()
-  require("lazydev").setup()
   return {
     settings = {
       Lua = {
-        completion = { callSnippet = "Replace" },
+        runtime = { version = "LuaJIT" },
         codeLens = { enable = true },
+        completion = { callSnippet = "Replace" },
+        diagnostics = { globals = { "vim" } },
         doc = { privateName = { "^_" } },
         hint = {
           enable = true,
@@ -92,6 +99,14 @@ function H.lua_ls()
           paramName = "Disable",
           semicolon = "Disable",
           arrayIndex = "Disable",
+        },
+        workspace = {
+          checkThirdParty = false,
+          library = {
+            vim.env.VIMRUNTIME,
+            "${3rd}/luv/library",
+            -- "${3rd}/busted/library",
+          },
         },
       },
     },
