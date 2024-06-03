@@ -56,9 +56,9 @@
       // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-pqf/lua",
       // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/grapple.nvim/lua",
       // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/harpoon/lua",
-      // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/telescope-alternate.nvim/lua",
       // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/telescope-fzf-native.nvim/lua",
       // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/telescope-ui-select.nvim/lua",
+      // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/telescope-alternate.nvim/lua",
       // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/telescope.nvim/lua",
 
       // // treesitter
@@ -78,8 +78,8 @@
       // // lang
       // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/conform.nvim/lua",
       // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-lint/lua",
-      // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/mason-lspconfig.nvim/lua",
       // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/mason.nvim/lua",
+      // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/mason-lspconfig.nvim/lua",
       // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/fidget.nvim/lua",
       // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/SchemaStore.nvim/lua",
       // "$XDG_DATA_HOME/nvim/site/pack/deps/opt/rustaceanvim/lua/",

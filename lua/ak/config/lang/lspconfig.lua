@@ -84,6 +84,9 @@ end
 -- NOTE: when uncommenting a library block in .luarc.jsonc, the completion
 -- becomes available without restarting nvim
 function H.lua_ls()
+  require("lazydev").setup({ -- mv .luarc.jsonc to .luarc.jsonc.bak
+    --
+  })
   return {
     settings = {
       Lua = {
