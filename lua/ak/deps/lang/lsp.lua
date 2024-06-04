@@ -13,7 +13,8 @@ local function load()
   })
   require("ak.config.lang.mason")
 
-  register("Bilal2453/luvit-meta") -- does not need to be loaded
+  -- TODO: register when pr is merged
+  add("Bilal2453/luvit-meta") -- does not need to be loaded
   add({
     source = "neovim/nvim-lspconfig",
     depends = {

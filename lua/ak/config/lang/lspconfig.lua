@@ -85,7 +85,11 @@ end
 -- becomes available without restarting nvim
 function H.lua_ls()
   require("lazydev").setup({ -- mv .luarc.jsonc to .luarc.jsonc.bak
-    -- debug = true,
+    cmp = false,
+    enabled = function(root_dir)
+      if vim.uv.fs_stat(root_dir .. "/.luarc.json") or vim.uv.fs_stat(root_dir .. "/.luarc.jsonc") then return false end
+      return vim.g.lazydev_enabled == nil and true or vim.g.lazydev_enabled
+    end,
     library = { { path = "luvit-meta/library", words = { "vim%.uv" } } },
   })
   return {
