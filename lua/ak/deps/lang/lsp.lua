@@ -1,5 +1,7 @@
+local Util = require("ak.util")
 local MiniDeps = require("mini.deps")
 local add, later = MiniDeps.add, MiniDeps.later
+local register = Util.deps.register
 
 local function load()
   local build_mason = function()
@@ -11,6 +13,7 @@ local function load()
   })
   require("ak.config.lang.mason")
 
+  register("Bilal2453/luvit-meta") -- does not need to be loaded
   add({
     source = "neovim/nvim-lspconfig",
     depends = {

@@ -85,12 +85,13 @@ end
 -- becomes available without restarting nvim
 function H.lua_ls()
   require("lazydev").setup({ -- mv .luarc.jsonc to .luarc.jsonc.bak
-    --
+    -- debug = true,
+    library = { { path = "luvit-meta/library", words = { "vim%.uv" } } },
   })
   return {
     settings = {
       Lua = {
-        runtime = { version = "LuaJIT" },
+        -- runtime = { version = "LuaJIT" },
         codeLens = { enable = true },
         completion = { callSnippet = "Replace" },
         diagnostics = { globals = { "vim" } },
@@ -105,11 +106,11 @@ function H.lua_ls()
         },
         workspace = {
           checkThirdParty = false,
-          library = {
-            vim.env.VIMRUNTIME,
-            "${3rd}/luv/library",
-            -- "${3rd}/busted/library",
-          },
+          -- library = {
+          --   vim.env.VIMRUNTIME,
+          --   "${3rd}/luv/library",
+          --   "${3rd}/busted/library",
+          -- },
         },
       },
     },

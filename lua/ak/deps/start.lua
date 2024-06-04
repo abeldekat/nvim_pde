@@ -9,7 +9,6 @@ now(function()
 
   -- Needed for a smoother installation process:
   require("ak.config.ui.mini_notify") -- mini.nvim in pack start
-
   require("ak.deps.colors").colorscheme()
 end)
 
@@ -17,8 +16,7 @@ later(function()
   require("ak.config.keymaps") -- load the keymaps first in the later phase
   add("nvim-lua/plenary.nvim") -- needed for harpoon and possibly other plugins
 
-  -- For reference and completion in other configs:
+  -- Only used for completion when browsing other configs:
   register("folke/lazy.nvim")
   register("LazyVim/LazyVim")
-  register("Bilal2453/luvit-meta")
 end)
