@@ -37,7 +37,7 @@ return {
   ["headlines.nvim"] = "618ef1b2502c565c82254ef7d5b04402194d9ce3",
   ["indent-blankline.nvim"] = "d98f537c3492e87b6dc6c2e3f66ac517528f406f",
   ["lazy.nvim"] = "0fc34a0cf5f5f6f998a0897119a7d846b47eaa9d",
-  ["lazydev.nvim"] = "e2bc1915b1056c422256f58025ff9a1e0488018c",
+  ["lazydev.nvim"] = "96062a7b94d5e6c3b4ec746b5d8d2a69e6389761",
   ["leap-spooky.nvim"] = "5f44a1f63dc1c4ce50244e92da5bc0d8d1f6eb47",
   ["leap.nvim"] = "0d15057cc47fa49f6609bf364f5ad3842f08c58c",
   ["luvit-meta"] = "ce76f6f6cdc9201523a5875a4471dcfe0186eb60",
