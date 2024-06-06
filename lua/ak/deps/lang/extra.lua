@@ -37,24 +37,6 @@ local function markdown()
   add_md("lukas-reineke/headlines.nvim", "headlines")
 end
 
--- local function python()
---   local selector = "linux-cultist/venv-selector.nvim"
---   register(selector)
---
---   -- local on_semshi = function() vim.cmd("packadd semshi | runtime! plugin/rplugin.vim | silent! UpdateRemotePlugins") end
---   -- local semshi = { source = "wookayin/semshi", hooks = { post_install = on_semshi, post_checkout = on_semshi } }
---   -- register(semshi)
---   -- require("ak.config.lang.python.semshi")
---
---   Util.defer.on_events(function()
---     local function load_selector()
---       add(selector)
---       require("ak.config.lang.python.venv_selector") -- selector
---     end
---     Util.defer.on_keys(function() now(load_selector) end, "<leader>cv", "Venv selector")
---   end, "FileType", "python")
--- end
-
 local function sql()
   local spec = { source = "tpope/vim-dadbod", depends = { "kristijanhusak/vim-dadbod-completion" } }
 
@@ -81,7 +63,6 @@ end
 
 local langs = {
   markdown,
-  -- python,
   sql,
   rust,
 }

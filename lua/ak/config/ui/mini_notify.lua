@@ -4,18 +4,15 @@ MiniNotify.setup({ lsp_progress = { enable = false } })
 -- Change duration for errors to show them longer
 -- local opts = { ERROR = { duration = 10000 } }
 local mini_notify = MiniNotify.make_notify() -- opts
-local org_notify = vim.notify
 
--- python semshi logs an error using string level:
--- https://github.com/echasnovski/mini.nvim/issues/640#issuecomment-1878354167
-
+-- local org_notify = vim.notify
 ---@diagnostic disable-next-line: duplicate-set-field
 vim.notify = function(msg, level, opts)
-  if type(level) == "string" then -- python semshi error, don't crash
-    org_notify(msg, level, opts)
-  else
-    mini_notify(msg, level)
-  end
+  -- if type(level) == "string" then -- python semshi error, don't crash
+  --   org_notify(msg, level, opts)
+  -- else
+  mini_notify(msg, level)
+  -- end
 end
 
 -- vim.keymap.set("n", "<leader>sna", function()

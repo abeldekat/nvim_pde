@@ -7,19 +7,7 @@ local get_opts = function()
     quickfix = {
       open = function() vim.cmd("copen") end,
     },
-    adapters = {
-      require("rustaceanvim.neotest"),
-      -- ["neotest-python"] = {
-      --   -- Here you can specify the settings for the adapter, i.e.
-      --   -- runner = "pytest",
-      --   -- python = ".venv/bin/python",
-      --   --   opts.adapters["neotest-python"] = {
-      --   --     dap = { justMyCode = false },
-      --   --     -- runner = "pytest",
-      --   --     -- args = { "--log-level", "DEBUG" },
-      --   --   }
-      -- },
-    },
+    adapters = { require("rustaceanvim.neotest") },
   }
 end
 
@@ -40,6 +28,7 @@ local function keys()
   map("<leader>tT", function() require("neotest").run.run(vim.uv.cwd()) end, { desc = "Run All Test Files" })
   map(
     "<leader>tr",
+    ---@diagnostic disable-next-line: missing-fields
     function() require("neotest").run.run({ extra_args = { "-s", "-vvv" } }) end,
     { desc = "Run nearest" }
   )
@@ -51,6 +40,7 @@ local function keys()
   )
   map("<leader>tO", function() require("neotest").output_panel.toggle() end, { desc = "Toggle output panel" })
   map("<leader>tS", function() require("neotest").run.stop() end, { desc = "Stop" })
+  map("<leader>tw", function() require("neotest").watch.toggle(vim.fn.expand("%")) end, { desc = "Toggle watch" })
 
   map("<leader>tL", no_op, { desc = "No-op neotest" })
 end

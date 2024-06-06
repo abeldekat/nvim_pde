@@ -266,8 +266,8 @@ local servers = {
   jsonls = H.jsonls(),
   lua_ls = H.lua_ls(),
   marksman = {},
-  pyright = {},
-  ruff = H.ruff(),
+  pyright = {}, -- test basedpyright, semantic highlighting
+  ruff = H.ruff(), -- test, replaced ruff_lsp
   taplo = {}, -- toml
   yamlls = H.yamlls(),
 }

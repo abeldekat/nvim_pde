@@ -32,6 +32,7 @@ local get_opts = function()
       "luap",
       "markdown",
       "markdown_inline",
+      "printf",
       "python",
       "query",
       "regex",
@@ -43,6 +44,11 @@ local get_opts = function()
       "yaml",
       -- Extra Langs:
       "awk",
+      "git_config",
+      "gitcommit",
+      "git_rebase",
+      "gitignore",
+      "gitattributes",
       "ron", -- rusty object notation
       "rust",
       "sql",

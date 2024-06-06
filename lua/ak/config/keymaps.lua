@@ -156,6 +156,7 @@ map("n", "<leader><tab><tab>", "<cmd>tabnew<cr>", { desc = "New tab" })
 map("n", "<leader><tab>]", "<cmd>tabnext<cr>", { desc = "Next tab" })
 map("n", "<leader><tab>d", "<cmd>tabclose<cr>", { desc = "Close tab" })
 map("n", "<leader><tab>[", "<cmd>tabprevious<cr>", { desc = "Previous tab" })
+map("n", "<leader><tab>o", "<cmd>tabonly<cr>", { desc = "Close Other Tabs" })
 -- added:
 map("n", "<leader>1", "1gt", { desc = "Tab 1" })
 map("n", "<leader>2", "2gt", { desc = "Tab 2" })

@@ -68,7 +68,7 @@ vim.keymap.set("n", "<leader>mZ", toggle_patch, { desc = "Toggle lazydev" })
 apply_patch()
 
 Lazydev.setup({ -- mv .luarc.jsonc to .luarc.jsonc.bak  Or use vim rc.
-  debug = true,
+  -- debug = true,
   integrations = { cmp = false },
   library = { { path = "luvit-meta/library", words = { "vim%.uv" } } },
 })
