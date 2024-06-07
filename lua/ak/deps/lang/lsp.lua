@@ -14,6 +14,12 @@ local function load()
   require("ak.config.lang.mason")
 
   register("Bilal2453/luvit-meta") -- does not need to be loaded
+  register("folke/lazydev.nvim")
+  Util.defer.on_events(function()
+    add("folke/lazydev.nvim")
+    require("ak.config.lang.lazydev")
+  end, "FileType", "lua")
+
   add({
     source = "neovim/nvim-lspconfig",
     depends = {
@@ -23,7 +29,6 @@ local function load()
     },
   })
   require("ak.config.lang.diagnostics")
-  require("ak.config.lang.lazydev")
   require("ak.config.lang.lspconfig")
 
   add("j-hui/fidget.nvim")

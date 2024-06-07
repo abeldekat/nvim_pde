@@ -14,7 +14,10 @@
 local Lazydev = require("lazydev")
 local Workspace = require("lazydev.workspace")
 local Buf = require("lazydev.buf")
-local updated_workspaces = {}
+---@type table<string, boolean>
+local workspaces_updated = {}
+---@type table<string, boolean>
+local workspaces_luarc = {}
 
 -- Restrict lazydev to one initial update per workspace
 local patch_active = true
@@ -24,7 +27,7 @@ local function apply_patch()
 
   local ws_update = Workspace.update
   Workspace.update = function(self)
-    updated_workspaces[ws_key(self)] = true -- remember ws passed initial update
+    workspaces_updated[ws_key(self)] = true -- remember ws passed initial update
     return ws_update(self)
   end
 
@@ -32,7 +35,7 @@ local function apply_patch()
   Buf.on_attach = function(client, buf)
     if patch_active then -- return early if ws has been updated
       local ws = Workspace.find({ buf = buf })
-      if ws and updated_workspaces[ws_key(ws)] then
+      if ws and workspaces_updated[ws_key(ws)] then
         return --
       end
     end
@@ -67,8 +70,20 @@ vim.keymap.set("n", "<leader>mz", fetch_once, { desc = "Attach lazydev", silent 
 vim.keymap.set("n", "<leader>mZ", toggle_patch, { desc = "Toggle lazydev" })
 apply_patch()
 
-Lazydev.setup({ -- mv .luarc.jsonc to .luarc.jsonc.bak  Or use vim rc.
+-- When using .luarc.jsonc either:
+-- cp .luarc.strict.jsonc .luarc.jsonc
+-- cp .luarc.nonstrict.jsonc .luarc.jsonc
+Lazydev.setup({
   -- debug = true,
+  enabled = function(root_dir)
+    if workspaces_luarc[root_dir] == nil then -- test once per workspace:
+      local stat = vim.uv.fs_stat(root_dir .. "/.luarc.json") or vim.uv.fs_stat(root_dir .. "/.luarc.jsonc")
+      workspaces_luarc[root_dir] = stat and true or false
+    end
+    local has_no_local_luarc = workspaces_luarc[root_dir] == false
+    local is_enabled_globally = vim.g.lazydev_enabled == nil and true or vim.g.lazydev_enabled
+    return has_no_local_luarc and is_enabled_globally
+  end,
   integrations = { cmp = false },
   library = { { path = "luvit-meta/library", words = { "vim%.uv" } } },
 })
