@@ -17,7 +17,7 @@ local Buf = require("lazydev.buf")
 ---@type table<string, boolean>
 local workspaces_updated = {}
 ---@type table<string, boolean>
-local workspaces_luarc = {}
+local workspaces_is_enabled = {}
 
 -- Restrict lazydev to one initial update per workspace
 local patch_active = true
@@ -76,13 +76,12 @@ apply_patch()
 Lazydev.setup({
   -- debug = true,
   enabled = function(root_dir)
-    if workspaces_luarc[root_dir] == nil then -- test once per workspace:
+    if workspaces_is_enabled[root_dir] == nil then -- test once per workspace:
       local stat = vim.uv.fs_stat(root_dir .. "/.luarc.json") or vim.uv.fs_stat(root_dir .. "/.luarc.jsonc")
-      workspaces_luarc[root_dir] = stat and true or false
+      workspaces_is_enabled[root_dir] = not stat and true or false
     end
-    local has_no_local_luarc = workspaces_luarc[root_dir] == false
     local is_enabled_globally = vim.g.lazydev_enabled == nil and true or vim.g.lazydev_enabled
-    return has_no_local_luarc and is_enabled_globally
+    return workspaces_is_enabled[root_dir] and is_enabled_globally
   end,
   integrations = { cmp = false },
   library = { { path = "luvit-meta/library", words = { "vim%.uv" } } },
