@@ -35,6 +35,7 @@ opt.ignorecase = true -- Ignore case
 -- opt.inccommand = "nosplit" -- preview incremental substitute
 -- Preview substitutions live, as you type!
 opt.inccommand = "split" -- kickstart
+opt.linebreak = true
 opt.laststatus = 3 -- global statusline
 opt.list = true -- Show some invisible characters (tabs...
 opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" } -- kickstart

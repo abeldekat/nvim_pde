@@ -1,8 +1,9 @@
+local has_luasnip, _ = pcall(require, "luasnip")
 require("neogen").setup({
-  snippet_engine = "luasnip",
-  languages = {
-    lua = { template = { annotation_convention = "emmylua" } },
-  },
+  snippet_engine = has_luasnip and "luasnip" or "nvim",
+  -- languages = {
+  --   lua = { template = { annotation_convention = "emmylua" } },
+  -- },
 })
 
 -- will generate annotation for the function, class or other relevant type you're currently in
