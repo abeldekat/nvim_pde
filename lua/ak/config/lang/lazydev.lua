@@ -14,12 +14,13 @@
 local Lazydev = require("lazydev")
 local Workspace = require("lazydev.workspace")
 local Buf = require("lazydev.buf")
+
 ---@type table<string, boolean>
 local workspaces_updated = {}
 ---@type table<string, boolean>
 local workspaces_is_enabled = {}
 
--- Restrict lazydev to one initial update per workspace
+-- Restrict lazydev to one initial update per workspace:
 local patch_active = true
 
 local function apply_patch()
@@ -66,13 +67,12 @@ local function toggle_patch()
   if not patch_active then ensure_lazydev_attached() end
 end
 
+vim.keymap.set("n", "<leader>mi", "<cmd>LazyDev<cr>", { desc = "Info lazydev", silent = true })
 vim.keymap.set("n", "<leader>mz", fetch_once, { desc = "Attach lazydev", silent = true })
 vim.keymap.set("n", "<leader>mZ", toggle_patch, { desc = "Toggle lazydev" })
 apply_patch()
 
--- When using .luarc.jsonc either:
--- cp .luarc.strict.jsonc .luarc.jsonc
--- cp .luarc.nonstrict.jsonc .luarc.jsonc
+-- When using .luarc.jsonc: cp either .luarc.strict or .luarc.nonstrict to .luarc.jsonc
 Lazydev.setup({
   -- debug = true,
   enabled = function(root_dir)
@@ -84,5 +84,8 @@ Lazydev.setup({
     return workspaces_is_enabled[root_dir] and is_enabled_globally
   end,
   integrations = { cmp = false },
-  library = { { path = "luvit-meta/library", words = { "vim%.uv" } } },
+
+  -- library = { { path = "luvit-meta/library", words = { "vim%.uv" } } },
+  -- Loading only uv directly:
+  library = { { path = require("lazydev.pkg").get_plugin_path("luvit-meta") .. "/library/uv.lua" } },
 })

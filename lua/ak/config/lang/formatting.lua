@@ -101,10 +101,14 @@ local function get_opts()
 
       ["markdown"] = { "prettier", "markdownlint", "markdown-toc" },
       ["markdown.mdx"] = { "prettier", "markdownlint", "markdown-toc" },
+      sql = { "sqlfluff" },
+      mysql = { "sqlfluff" },
+      plsql = { "sqlfluff" },
     },
     -- https://github.com/stevearc/conform.nvim/blob/master/doc/advanced_topics.md#injected-language-formatting-code-blocks
     formatters = {
       injected = { options = { ignore_errors = true } },
+      sqlfluff = { args = { "format", "--dialect=ansi", "-" } },
     },
     format_on_save = function(bufnr) return is_format_on_save_enabled(bufnr) and get_defaults(bufnr) or nil end,
   }

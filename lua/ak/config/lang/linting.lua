@@ -47,20 +47,16 @@ local function get_opts()
     events = { "BufWritePost", "BufReadPost", "InsertLeave" },
     linters_by_ft = {
       markdown = { "markdownlint" },
-      -- Use the "*" filetype to run linters on all filetypes.
-      -- ['*'] = { 'global linter' },
-      -- Use the "_" filetype to run linters on filetypes that don't have other linters configured.
-      -- ['_'] = { 'fallback linter' },
-      -- ["*"] = { "typos" },
+      sql = { "sqlfluff" },
+      mysql = { "sqlfluff" },
+      plsql = { "sqlfluff" },
     },
   }
 end
 
-local opts = get_opts()
 local lint_module = require("lint")
-
+local opts = get_opts()
 lint_module.linters_by_ft = opts.linters_by_ft
-
 vim.api.nvim_create_autocmd(opts.events, {
   group = vim.api.nvim_create_augroup("nvim-lint", { clear = true }),
   callback = debounce(100, function() lint(lint_module) end),

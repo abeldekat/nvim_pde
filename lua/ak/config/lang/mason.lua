@@ -5,6 +5,7 @@ local mason_ensure_installed = {
   "markdown-toc", -- formatter
   "prettier",
   "shfmt", -- formatter
+  "sqlfluff", -- formatter
   "stylua", -- formatter
 }
 require("mason").setup()
