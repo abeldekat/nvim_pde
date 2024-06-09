@@ -59,7 +59,7 @@ function M.inlay_hints(buf, value)
   local ih = vim.lsp.inlay_hint
   if type(ih) == "table" and ih.enable then
     if value == nil then value = not ih.is_enabled({ bufnr = buf or 0 }) end
-    ih.enable(value, { bufnr = buf })
+    ih.enable(value, { bufnr = buf }) -- bufnr nil: ... for all ...
   end
 end
 

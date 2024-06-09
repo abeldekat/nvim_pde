@@ -11,36 +11,36 @@
 -- lua/ak/config/editor/telescope(large plugin): +/- 320M ( 465 -> 780 )
 -- open all files in ak/config: +- 1400M (480 -> 1.900). Lsp processes +/- 2400 files...
 
+-- Prevent lazydev from attaching to other buffers in the same workspace.
+-- A workspace is guaranteed to be initialized
+local use_patch = false
+
 local Lazydev = require("lazydev")
 local Workspace = require("lazydev.workspace")
 local Buf = require("lazydev.buf")
 
 ---@type table<string, boolean>
-local workspaces_updated = {}
+local workspaces_initialized = {}
 ---@type table<string, boolean>
 local workspaces_is_enabled = {}
-
--- Restrict lazydev to one initial update per workspace:
-local patch_active = true
 
 local function apply_patch()
   local function ws_key(ws) return ws.client_id .. ws.root end
 
   local ws_update = Workspace.update
   Workspace.update = function(self)
-    workspaces_updated[ws_key(self)] = true -- remember ws passed initial update
+    workspaces_initialized[ws_key(self)] = true -- remember ws passed initial update
     return ws_update(self)
   end
 
-  local ws_on_attach = Buf.on_attach
+  local buf_on_attach = Buf.on_attach
   Buf.on_attach = function(client, buf)
-    if patch_active then -- return early if ws has been updated
+    local function ws_is_initialized()
       local ws = Workspace.find({ buf = buf })
-      if ws and workspaces_updated[ws_key(ws)] then
-        return --
-      end
+      return ws and workspaces_initialized[ws_key(ws)]
     end
-    ws_on_attach(client, buf)
+    if use_patch and ws_is_initialized() then return end
+    buf_on_attach(client, buf)
   end
 end
 
@@ -54,17 +54,17 @@ end
 
 -- Keep setting patch_active. Ensure lazydev on current buffer
 local function fetch_once()
-  local patch_active_org = patch_active
-  patch_active = false
+  local patch_active_org = use_patch
+  use_patch = false
   ensure_lazydev_attached()
-  patch_active = patch_active_org
+  use_patch = patch_active_org
 end
 
 -- Toggle setting patch_active. Ensure lazydev on current buffer
 local function toggle_patch()
-  patch_active = not patch_active
-  vim.notify(patch_active and "Lazydev patched" or "Lazydev active")
-  if not patch_active then ensure_lazydev_attached() end
+  use_patch = not use_patch
+  vim.notify(use_patch and "Lazydev patched" or "Lazydev active")
+  if not use_patch then ensure_lazydev_attached() end
 end
 
 vim.keymap.set("n", "<leader>mi", "<cmd>LazyDev<cr>", { desc = "Info lazydev", silent = true })

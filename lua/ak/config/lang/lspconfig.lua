@@ -12,37 +12,31 @@
 local Util = require("ak.util")
 local H = {}
 
--- perhaps: LazyVim rename file
+H.opts = {
+  inlay_hints = { auto = false, filter = { "lua" } },
+  codeLens = { auto = false, filter = { "lua" } },
+}
 
--- perhaps:
--- {
---   workspace = { -- mariasolos
---     -- PERF: didChangeWatchedFiles is too slow.
---     -- TODO: Remove this when https://github.com/neovim/neovim/issues/23291#issuecomment-1686709265 is fixed.
---     didChangeWatchedFiles = { dynamicRegistration = false },
---   },
--- }
-
-function H.inlay_hints()
-  if vim.lsp.inlay_hint then
-    Util.lsp.on_attach(function(client, buffer) -- set to false by default
-      if client.supports_method("textDocument/inlayHint") then Util.toggle.inlay_hints(buffer, false) end
-    end)
-  end
+function H.auto_inlay_hints()
+  Util.lsp.on_attach(function(_, buffer)
+    -- if client.supports_method("textDocument/inlayHint") then
+    if vim.tbl_contains(H.opts.inlay_hints.filter, vim.bo[buffer].filetype) then
+      Util.toggle.inlay_hints(buffer, true) --
+    end
+  end)
 end
 
 function H.codelens()
-  if vim.lsp.codelens then
-    Util.lsp.on_attach(function(client, buffer)
-      if client.supports_method("textDocument/codeLens") then
-        vim.lsp.codelens.refresh()
-        vim.api.nvim_create_autocmd({ "BufEnter", "InsertLeave" }, { --  "CursorHold"
-          buffer = buffer,
-          callback = vim.lsp.codelens.refresh,
-        })
-      end
-    end)
-  end
+  Util.lsp.on_attach(function(_, buffer)
+    -- if client.supports_method("textDocument/codeLens") then
+    if vim.tbl_contains(H.opts.codeLens.filter, vim.bo[buffer].filetype) then
+      vim.lsp.codelens.refresh()
+      vim.api.nvim_create_autocmd({ "BufEnter", "InsertLeave" }, { --  "CursorHold"
+        buffer = buffer,
+        callback = vim.lsp.codelens.refresh,
+      })
+    end
+  end)
 end
 
 function H.keys(_, buffer) -- client
@@ -92,8 +86,8 @@ function H.lua_ls()
         completion = { callSnippet = "Replace" },
         diagnostics = { globals = { "vim" } },
         doc = { privateName = { "^_" } },
-        hint = {
-          enable = true,
+        hint = { -- default no inlay hints
+          enable = true, -- must be true in order to toggle hints on or off
           setType = false,
           paramType = true,
           paramName = "Disable",
@@ -253,8 +247,8 @@ Util.lsp.on_attach(function(client, buffer) -- keymaps
   H.keys(client, buffer) -- are always set regardles of capabilities
 end)
 
-H.inlay_hints()
--- H.codelens() -- needs a toggle....
+if H.opts.inlay_hints.auto then H.auto_inlay_hints() end
+if H.opts.codeLens.auto then H.codelens() end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 local has_cmp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")

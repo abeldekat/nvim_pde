@@ -11,7 +11,7 @@ function M.on_attach(on_attach)
     callback = function(args)
       local buffer = args.buf ---@type number
       local client = vim.lsp.get_client_by_id(args.data.client_id)
-      on_attach(client, buffer)
+      if client then on_attach(client, buffer) end
     end,
   })
 end
