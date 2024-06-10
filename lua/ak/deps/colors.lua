@@ -67,28 +67,19 @@ local colors = {
   end,
 }
 
-local groups = {
-  colors.one,
-  colors.two,
-  colors.three,
-  colors.four,
-}
-
-local function register_specs(activate_cb)
-  local function on_each_spec(cb)
-    for _, group in ipairs(groups) do
-      for _, spec in ipairs(group()) do
-        cb(spec)
-      end
+local function register_specs(groups)
+  local result = {}
+  for _, group in ipairs(groups) do
+    for _, spec in ipairs(group()) do
+      table.insert(result, spec)
     end
   end
-
-  local specs = {}
-  on_each_spec(function(spec)
-    table.insert(specs, spec)
-    if not activate_cb(spec) then later(function() register(spec) end) end
+  later(function()
+    for _, spec in ipairs(result) do
+      register(spec)
+    end
   end)
-  return specs
+  return result
 end
 
 local function add_telescope(specs_to_use)
@@ -97,6 +88,7 @@ local function add_telescope(specs_to_use)
       add(spec)
       require(Util.color.to_config_name(spec.name))
     end
+    require(Util.color.to_config_name("colors_mini_hues")) -- mini.nvim
 
     vim.schedule(function() Util.color.telescope_custom_colors() end)
   end, { desc = "Telescope custom colors", silent = true })
@@ -114,25 +106,26 @@ end
 
 function M.colorscheme()
   local active = Util.color.from_color_name(Color.color)
-  local specs_to_use = register_specs(function(spec)
-    if active.spec_name == spec.name then
-      now(function()
-        add(spec)
-        activate(active.name, active.config_name)
-      end)
-      return true
-    end
-    return false -- register only
-  end)
-  add_telescope(specs_to_use)
+
+  add_telescope(register_specs({
+    colors.one,
+    colors.two,
+    colors.three,
+    colors.four,
+  }))
 
   later(function() register(spec_base46) end)
-  if active.spec_name == spec_base46.name then
+  if active.name == "base46" then -- collection, special case, no colorscheme command
     now(function()
-      require("ak.config.colors.base46").setup(function()
+      require(active.config_name).setup(function()
         add(spec_base46) -- only add the plugin when selecting a new theme
         return vim.fn.stdpath("data") .. "/site/pack/deps/opt/" .. spec_base46.name .. "/lua/base46/themes"
       end)
+    end)
+  else
+    now(function()
+      if active.spec_name then add(active.spec_name) end
+      activate(active.name, active.config_name)
     end)
   end
 end

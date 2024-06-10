@@ -75,20 +75,22 @@ function M.to_config_name(spec_name) return "ak.config.colors." .. spec_name:gsu
 
 -- Given a name, returns a table containing:
 -- name: The name of the color
--- spec_name: The name of the spec
+-- spec_name: The name of the spec, or nil
 -- config_name: The full path of the config to require
 function M.from_color_name(color_name) -- color names: ak.colors.txt
-  local name = color_name
-  if name:find("fox", 1, true) then
-    name = "nightfox" -- ie nordfox becomes nightfox
-  elseif name:find("solarized8", 1, true) then
-    name = "solarized8" -- ie solarized8_flat becomes solarized8
+  local tmp = color_name
+  if tmp:find("fox", 1, true) then
+    tmp = "nightfox" -- ie nordfox becomes nightfox
+  elseif tmp:find("solarized8", 1, true) then
+    tmp = "solarized8" -- ie solarized8_flat becomes solarized8
+  elseif tmp:find("hue", 1, true) then
+    tmp = "mini_hues"
   end
 
   return {
     name = color_name,
-    spec_name = "colors_" .. name,
-    config_name = "ak.config.colors." .. name,
+    spec_name = tmp ~= "mini_hues" and ("colors_" .. tmp) or nil,
+    config_name = "ak.config.colors." .. tmp,
   }
 end
 

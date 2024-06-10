@@ -115,29 +115,6 @@ autocmd("Filetype", {
   group = augroup("continue_comments"),
 })
 
--- Show cursor line only in active window
-autocmd({ "InsertLeave", "WinEnter" }, {
-  callback = function()
-    local ok, cl = pcall(vim.api.nvim_win_get_var, 0, "auto-cursorline")
-    if ok and cl then
-      vim.wo.cursorline = true
-      vim.api.nvim_win_del_var(0, "auto-cursorline")
-    end
-  end,
-  group = augroup("cursor_in_active_window"),
-})
-
-autocmd({ "InsertEnter", "WinLeave" }, {
-  callback = function()
-    local cl = vim.wo.cursorline
-    if cl then
-      vim.api.nvim_win_set_var(0, "auto-cursorline", cl)
-      vim.wo.cursorline = false
-    end
-  end,
-  group = augroup("cursor_in_active_window"),
-})
-
 -- https://github.com/neovim/neovim/issues/4396
 -- https://github.com/neovim/neovim/issues/4867#issuecomment-291249173
 -- autocmd("VimLeave", {

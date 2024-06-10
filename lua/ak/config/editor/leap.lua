@@ -13,34 +13,6 @@ vim.keymap.set({ "n", "x", "o" }, "S", "<Plug>(leap-backward)", { desc = "Leap b
 vim.keymap.set({ "n", "x", "o" }, "g/", "<Plug>(leap-from-window)", { desc = "Leap from window", silent = true })
 
 --          ╭─────────────────────────────────────────────────────────╮
---          │     The following additional tweaks are suggested:      │
---          ╰─────────────────────────────────────────────────────────╯
-require("leap").opts.special_keys.prev_group = "<bs>"
-require("leap").opts.special_keys.prev_target = "<bs>"
-require("leap.user").set_repeat_keys("<cr>", "<bs>")
-
---          ╭─────────────────────────────────────────────────────────╮
---          │      https://github.com/neovim/neovim/issues/20793      │
---          │Workaround for the duplicate cursor bug when autojumping │
---          ╰─────────────────────────────────────────────────────────╯
--- Confusing...
--- Hide the (real) cursor when leaping, and restore it afterwards.
--- vim.api.nvim_create_autocmd("User", {
---   pattern = "LeapEnter",
---   callback = function()
---     vim.cmd.hi("Cursor", "blend=100")
---     vim.opt.guicursor:append({ "a:Cursor/lCursor" })
---   end,
--- })
--- vim.api.nvim_create_autocmd("User", {
---   pattern = "LeapLeave",
---   callback = function()
---     vim.cmd.hi("Cursor", "blend=0")
---     vim.opt.guicursor:remove({ "a:Cursor/lCursor" })
---   end,
--- })
-
---          ╭─────────────────────────────────────────────────────────╮
 --          │                    treesitter nodes:                    │
 --          ╰─────────────────────────────────────────────────────────╯
 local H = {}
@@ -108,6 +80,6 @@ vim.keymap.set({ "x", "o" }, "\\", H.leap_ts)
 -- Custom textobjects need to be added to the config in order to be usable
 require("leap-spooky").setup({
   extra_text_objects = nil, -- the default
-  prefix = true, -- yriw instead of yirw
+  -- prefix = true, -- yriw instead of yirw
   paste_on_remote_yank = false, -- the default
 })

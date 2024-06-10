@@ -8,7 +8,6 @@ local with_dir = Util.opened_with_dir_argument()
 local marker_to_use = "g"
 local spec_harpoon = {
   source = "ThePrimeagen/harpoon",
-  -- source = "abeldekat/harpoon",
   checkout = "harpoon2",
 }
 local spec_grapple = "cbochs/grapple.nvim"

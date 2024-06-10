@@ -3,7 +3,6 @@
 ---@field color_lazygit ak.util.color_lazygit
 ---@field defer ak.util.defer
 ---@field deps ak.util.deps
----@field lsp ak.util.lsp
 ---@field toggle ak.util.toggle
 local M = {}
 

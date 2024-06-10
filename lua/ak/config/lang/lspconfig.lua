@@ -17,8 +17,20 @@ H.opts = {
   codeLens = { auto = false, filter = { "lua" } },
 }
 
+---@param on_attach fun(client, buffer)
+---@param name? string
+function H.on_attach(on_attach, name)
+  vim.api.nvim_create_autocmd("LspAttach", {
+    callback = function(args)
+      local buffer = args.buf ---@type number
+      local client = vim.lsp.get_client_by_id(args.data.client_id)
+      if client and (not name or client.name == name) then on_attach(client, buffer) end
+    end,
+  })
+end
+
 function H.auto_inlay_hints()
-  Util.lsp.on_attach(function(_, buffer)
+  H.on_attach(function(_, buffer)
     -- if client.supports_method("textDocument/inlayHint") then
     if vim.tbl_contains(H.opts.inlay_hints.filter, vim.bo[buffer].filetype) then
       Util.toggle.inlay_hints(buffer, true) --
@@ -27,7 +39,7 @@ function H.auto_inlay_hints()
 end
 
 function H.codelens()
-  Util.lsp.on_attach(function(_, buffer)
+  H.on_attach(function(_, buffer)
     -- if client.supports_method("textDocument/codeLens") then
     if vim.tbl_contains(H.opts.codeLens.filter, vim.bo[buffer].filetype) then
       vim.lsp.codelens.refresh()
@@ -162,8 +174,7 @@ function H.yamlls()
 end
 
 function H.ruff()
-  Util.lsp.on_attach(function(client, buffer)
-    if client.name ~= "ruff" then return end
+  H.on_attach(function(client, buffer)
     vim.keymap.set(
       "n",
       "<leader>co",
@@ -181,7 +192,7 @@ function H.ruff()
 
     -- Disable hover in favor of Pyright
     client.server_capabilities.hoverProvider = false
-  end)
+  end, "ruff")
   return {}
 end
 
@@ -243,7 +254,7 @@ end
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                          Setup                          │
 --          ╰─────────────────────────────────────────────────────────╯
-Util.lsp.on_attach(function(client, buffer) -- keymaps
+H.on_attach(function(client, buffer) -- keymaps
   H.keys(client, buffer) -- are always set regardles of capabilities
 end)
 
@@ -275,7 +286,6 @@ require("mason-lspconfig").setup({
       if not vim.tbl_contains(ensure_installed, server_name) then return end
 
       local server = servers[server_name] or {}
-      -- Useful when disabling certain features (for example, turning off formatting for tsserver)
       server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
       require("lspconfig")[server_name].setup(server)
     end,
