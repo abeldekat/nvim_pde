@@ -1,3 +1,4 @@
+akhue
 astrotheme
 ayu
 bamboo
@@ -16,6 +17,7 @@ nano-theme
 nightfox
 nordfox
 onedark
+randomhue
 rose-pine
 solarized8_flat
 sonokai
