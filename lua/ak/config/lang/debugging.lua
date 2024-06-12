@@ -1,4 +1,3 @@
-local Util = require("ak.util")
 local dap = require("dap")
 
 local function no_op() end
@@ -60,6 +59,7 @@ local function lua_dap()
     local adapter = { type = "server", host = conf.host or "127.0.0.1", port = conf.port or 8086 }
     if conf.start_neovim then
       local dap_run = dap.run
+      ---@diagnostic disable-next-line: duplicate-set-field
       dap.run = function(c)
         adapter.port = c.port
         adapter.host = c.host

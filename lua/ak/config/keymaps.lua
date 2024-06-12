@@ -179,6 +179,11 @@ map("n", "mw", "<C-W>w", { desc = "Next window", remap = true })
 -- c-n can behave like j and enter, also sometimes "next":
 map("n", "<C-N>", "<C-d>", { desc = "Down half page, better ctrl-d" })
 
+-- dotfiles echasnovski:
+-- Better command history navigation
+map("c", "<C-p>", "<Up>", { silent = false })
+map("c", "<C-n>", "<Down>", { silent = false })
+
 -- https://www.reddit.com/r/neovim/comments/mbj8m5/how_to_setup_ctrlshiftkey_mappings_in_neovim_and/
 -- TODO: Modify alacritty.yml. See harpoon setup
 -- vim.keymap.set("n", "<C-S-P>", function()

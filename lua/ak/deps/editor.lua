@@ -11,7 +11,6 @@ local spec_harpoon = {
   checkout = "harpoon2",
 }
 local spec_grapple = "cbochs/grapple.nvim"
-
 local function harpoon()
   register(spec_grapple)
   add(spec_harpoon)
@@ -21,6 +20,12 @@ local function grapple()
   register(spec_harpoon)
   add(spec_grapple)
   require("ak.config.editor.grapple")
+end
+
+local spec_hardtime = "takac/vim-hardtime"
+local function hardtime()
+  require("ak.config.editor.hardtime")
+  add(spec_hardtime)
 end
 
 now(function()
@@ -36,15 +41,11 @@ now(function()
   end
 end)
 
--- later(function()
--- register("takac/vim-hardtime")
--- Util.defer.on_keys(function()
-now(function()
-  require("ak.config.editor.hardtime")
-  add("takac/vim-hardtime")
+-- now(hardtime)
+later(function()
+  register(spec_hardtime)
+  Util.defer.on_keys(hardtime, "<leader>uH", "Hardtime")
 end)
--- end, "<leader>uH", "Hardtime")
--- end)
 
 later(function()
   add("tpope/vim-repeat")
@@ -55,11 +56,8 @@ later(function()
   add("jinh0/eyeliner.nvim")
   require("ak.config.editor.eyeliner")
 
-  if marker_to_use == "h" then
-    harpoon()
-  else
-    grapple()
-  end
+  -- stylua: ignore
+  if marker_to_use == "h" then harpoon() else grapple() end
 
   add("nvim-pack/nvim-spectre")
   require("ak.config.editor.spectre")
@@ -103,22 +101,23 @@ later(function()
   require("ak.config.editor.mini_git")
   require("ak.config.editor.mini_diff")
 
-  register("f-person/git-blame.nvim")
+  local spec_blame = "f-person/git-blame.nvim"
+  register(spec_blame)
   Util.defer.on_keys(function()
     now(function()
-      add("f-person/git-blame.nvim")
+      add(spec_blame)
       require("ak.config.editor.gitblame")
     end)
   end, "<leader>gt", "Git-blame")
 
-  local quickfix_spec = {
+  local spec_quickfix = {
     source = "kevinhwang91/nvim-bqf",
     depends = { { source = "yorickpeterse/nvim-pqf" } },
   }
-  register(quickfix_spec)
+  register(spec_quickfix)
   Util.defer.on_events(function()
     later(function()
-      add(quickfix_spec)
+      add(spec_quickfix)
       require("ak.config.editor.quickfix")
       vim.cmd("copen")
     end)

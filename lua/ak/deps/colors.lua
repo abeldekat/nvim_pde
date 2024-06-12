@@ -15,6 +15,9 @@ local MiniDeps = require("mini.deps")
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 local register = Util.deps.register
 
+-- Contains example "gruvbuddy":
+-- local spec_colorbuddy = { source = "tjdevries/colorbuddy.nvim", name = "colors_gruvbuddy" }
+
 local function hook_base46()
   vim.g.base46_cache = vim.fn.stdpath("data") .. "/nvchad/base46/"
   vim.cmd.packadd("colors_base46")
@@ -82,16 +85,16 @@ local function register_specs(groups)
   return result
 end
 
-local function add_telescope(specs_to_use)
+local function add_picker(specs_to_use)
   vim.keymap.set("n", "<leader>uu", function() -- Show all custom colors in telescope
     for _, spec in ipairs(specs_to_use) do
       add(spec)
       require(Util.color.to_config_name(spec.name))
     end
-    require(Util.color.to_config_name("colors_mini_hues")) -- mini.nvim
+    require(Util.color.from_color_name("mini").config_name) -- Mini collection
 
-    vim.schedule(function() Util.color.telescope_custom_colors() end)
-  end, { desc = "Telescope custom colors", silent = true })
+    vim.schedule(function() Util.color.picker() end)
+  end, { desc = "Colorscheme picker", silent = true })
 end
 
 local function activate(color_name, config_name)
@@ -105,9 +108,10 @@ local function activate(color_name, config_name)
 end
 
 function M.colorscheme()
-  local active = Util.color.from_color_name(Color.color)
+  local color_name = Color.color
+  local color_info = Util.color.from_color_name(color_name)
 
-  add_telescope(register_specs({
+  add_picker(register_specs({
     colors.one,
     colors.two,
     colors.three,
@@ -115,17 +119,17 @@ function M.colorscheme()
   }))
 
   later(function() register(spec_base46) end)
-  if active.name == "base46" then -- collection, special case, no colorscheme command
+  if color_name == "base46" then -- collection, special case, no colorscheme command
     now(function()
-      require(active.config_name).setup(function()
-        add(spec_base46) -- only add the plugin when selecting a new theme
+      require(color_info.config_name).setup(function()
+        add(spec_base46) -- only add spec when selecting a new theme.
         return vim.fn.stdpath("data") .. "/site/pack/deps/opt/" .. spec_base46.name .. "/lua/base46/themes"
       end)
     end)
   else
     now(function()
-      if active.spec_name then add(active.spec_name) end
-      activate(active.name, active.config_name)
+      if color_info.spec_name then add(color_info.spec_name) end
+      activate(color_name, color_info.config_name)
     end)
   end
 end

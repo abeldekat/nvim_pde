@@ -13,6 +13,9 @@ everforest
 gruvbox
 gruvbox-material
 kanagawa
+minibuddy
+minicyan
+minischeme
 nano-theme
 nightfox
 nordfox

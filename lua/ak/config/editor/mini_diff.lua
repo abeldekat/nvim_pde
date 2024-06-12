@@ -27,6 +27,10 @@ vim.api.nvim_create_autocmd("User", {
   desc = "Diff in statusline",
 })
 
+-- TODO: Test:
+-- local rhs = function() return MiniDiff.operator('yank') .. 'gh' end
+-- vim.keymap.set('n', 'ghy', rhs, { expr = true, remap = true, desc = "Copy hunk's reference lines" })
+
 vim.keymap.set(
   "n",
   "<leader>go",
@@ -35,12 +39,5 @@ vim.keymap.set(
 )
 
 require("mini.diff").setup({
-  view = {
-    style = "sign",
-    signs = {
-      add = "▎",
-      change = "▎",
-      delete = "",
-    },
-  },
+  view = { style = "sign", signs = { add = "▎", change = "▎", delete = "" } },
 })
