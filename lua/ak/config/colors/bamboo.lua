@@ -20,7 +20,7 @@ end
 
 require("bamboo").setup({
   style = "vulgaris",
-  toggle_style_key = "<leader>a",
+  toggle_style_key = "<leader>h",
   dim_inactive = true,
   highlights = highlights(),
 })

@@ -1,19 +1,7 @@
 local M = {}
 
 local MiniStarter = require("mini.starter")
-
---          ╭─────────────────────────────────────────────────────────╮
---          │             Setup mini.starter on UIEnter.              │
---          ╰─────────────────────────────────────────────────────────╯
--- local function on_ui_enter(opts)
---   vim.api.nvim_create_autocmd("UIEnter", {
---     group = vim.api.nvim_create_augroup("ak_mini_starter", { clear = true }),
---     callback = function()
---       MiniStarter.setup(opts)
---       MiniStarter.open()
---     end,
---   })
--- end
+local Picker = require("ak.util").pick
 
 local function make_header()
   -- Header to be displayed before items. Converted to single string via
@@ -45,22 +33,22 @@ local function make_items()
   local section = "Navigation"
   return {
     {
-      action = "Telescope find_files",
+      action = Picker.find_files,
       name = "Files",
       section = section,
     },
     {
-      action = "Telescope live_grep",
+      action = Picker.live_grep,
       name = "Live grep",
       section = section,
     },
     {
-      action = "Telescope keymaps",
+      action = Picker.keymaps,
       name = "Keymaps",
       section = section,
     },
     {
-      action = "Telescope oldfiles",
+      action = Picker.oldfiles,
       name = "Recent files",
       section = section,
     },
@@ -113,7 +101,6 @@ function M.setup(extra_center, footer_cb)
 
   vim.list_extend(opts.items, extra_center)
   make_footer(opts, footer_cb)
-  -- on_ui_enter(opts) -- with autopen = false
   MiniStarter.setup(opts)
 end
 

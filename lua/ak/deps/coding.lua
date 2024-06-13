@@ -5,9 +5,6 @@ local register = Util.deps.register
 
 -- Lazy loading benefit: +-5 ms
 later(function()
-  add("windwp/nvim-autopairs")
-  require("ak.config.coding.autopairs")
-
   local function make_jsregexp(path)
     vim.cmd("lcd " .. path)
     vim.cmd("!make -s install_jsregexp")
@@ -32,27 +29,33 @@ later(function()
       -- Native snippets:
       -- "rafamadriz/friendly-snippets",
       -- "garymjr/nvim-snippets",
+
+      -- LuaSnip:
       "saadparwaiz1/cmp_luasnip",
     },
   })
   require("ak.config.coding.cmp") -- includes snippets
 
+  add("windwp/nvim-autopairs")
+  require("ak.config.coding.autopairs")
   add("folke/ts-comments.nvim")
   require("ak.config.coding.ts-comments")
 
+  -- require("ak.config.coding.mini_comment") -- builtin
+  require("ak.config.coding.mini_ai") -- testing...
   require("ak.config.coding.mini_basics") -- copied a selection...
   require("ak.config.coding.mini_surround")
-  -- require("ak.config.coding.mini_comment")
   require("ak.config.coding.mini_operators")
   require("ak.config.coding.mini_move")
 
   add("monaqa/dial.nvim")
   require("ak.config.coding.dial")
 
-  register("LudoPinelli/comment-box.nvim")
+  local spec_comment_box = "LudoPinelli/comment-box.nvim"
+  register(spec_comment_box)
   Util.defer.on_keys(function()
     now(function()
-      add("LudoPinelli/comment-box.nvim")
+      add(spec_comment_box)
       require("ak.config.coding.comment_box")
     end)
   end, "<leader>bL", "Load comment-box")

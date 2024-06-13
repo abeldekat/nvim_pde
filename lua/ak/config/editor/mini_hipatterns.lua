@@ -120,7 +120,6 @@ if has_telescope then
       end
       return result
     end
-
     require("telescope.builtin").grep_string(todo_opts(filter({ "TODO", "FIX", "FIXME" })))
   end, { desc = "Todo/Fix/Fixme", silent = true })
 end

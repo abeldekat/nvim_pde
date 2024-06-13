@@ -49,25 +49,11 @@ function M.add_toggle(pattern, toggle_opts)
   })
 end
 
-function M.picker()
-  local ok, _ = pcall(require, "telescope")
-  if not ok then return end
-
+function M.builtins_to_skip()
   -- stylua: ignore
-  local builtins = { "zellner", "torte", "slate", "shine", "ron", "quiet", "peachpuff",
+  return  { "zellner", "torte", "slate", "shine", "ron", "quiet", "peachpuff",
   "pablo", "murphy", "lunaperche", "koehler", "industry", "evening", "elflord",
   "desert", "delek", "darkblue", "blue" }
-
-  local target = vim.fn.getcompletion
-
-  ---@diagnostic disable-next-line: duplicate-set-field
-  vim.fn.getcompletion = function()
-    ---@diagnostic disable-next-line: redundant-parameter
-    return vim.tbl_filter(function(color) return not vim.tbl_contains(builtins, color) end, target("", "color"))
-  end
-
-  vim.cmd("Telescope colorscheme enable_preview=true")
-  vim.fn.getcompletion = target
 end
 
 -- Given the name of a spec, return the name of the config to require

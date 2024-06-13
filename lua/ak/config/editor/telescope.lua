@@ -1,3 +1,5 @@
+local Utils = require("ak.util")
+
 local function map(l, r, opts, mode)
   mode = mode or "n"
   opts["silent"] = opts.silent ~= false
@@ -38,16 +40,12 @@ local function get_opts()
         end
         return 0
       end,
+      sorting_strategy = "ascending",
       layout_strategy = "flex",
       layout_config = {
+        prompt_position = "top",
         horizontal = {
           preview_width = 0.55,
-        },
-        vertical = {
-          width = 0.9,
-          height = 0.95,
-          preview_height = 0.5,
-          preview_cutoff = 0,
         },
         flex = {
           flip_columns = 140,
@@ -233,6 +231,36 @@ local function extensions()
   map("<leader>ss", "<cmd>Telescope aerial<cr>", { desc = "Goto symbol (aerial)" })
 end
 
+local function picker()
+  ---@type Picker
+  local Picker = {
+    find_files = function() vim.cmd("Telescope find_files") end,
+    live_grep = function() vim.cmd("Telescope live_grep") end,
+    keymaps = function() vim.cmd("Telescope keymaps") end,
+    oldfiles = function() vim.cmd("Telescope oldfiles") end,
+    lsp_definitions = function() vim.cmd("Telescope lsp_definitions reuse_win=true") end,
+    lsp_references = function() vim.cmd("Telescope lsp_references") end,
+    lsp_implementations = function() vim.cmd("Telescope lsp_implementations reuse_win=true") end,
+    lsp_type_definitions = function() vim.cmd("Telescope lsp_type_definitions reuse_win=true") end,
+    colors = function()
+      local target = vim.fn.getcompletion
+      local skip = Utils.color.builtins_to_skip()
+
+      ---@diagnostic disable-next-line: duplicate-set-field
+      vim.fn.getcompletion = function()
+        ---@diagnostic disable-next-line: redundant-parameter
+        return vim.tbl_filter(
+          function(color) return not vim.tbl_contains(skip, color) end, --
+          target("", "color")
+        )
+      end
+
+      vim.cmd("Telescope colorscheme enable_preview=true")
+      vim.fn.getcompletion = target
+    end,
+  }
+  Utils.pick.use_picker(Picker)
+end
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                          Setup                          │
 --          ╰─────────────────────────────────────────────────────────╯
@@ -241,6 +269,6 @@ local function setup()
   require("telescope").setup(get_opts())
   keys()
   extensions()
+  picker()
 end
-
 setup()

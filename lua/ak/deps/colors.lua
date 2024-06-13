@@ -12,6 +12,7 @@ local M = {}
 local Util = require("ak.util")
 local Color = require("ak.color")
 local MiniDeps = require("mini.deps")
+local Picker = Util.pick
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 local register = Util.deps.register
 
@@ -86,14 +87,14 @@ local function register_specs(groups)
 end
 
 local function add_picker(specs_to_use)
-  vim.keymap.set("n", "<leader>uu", function() -- Show all custom colors in telescope
-    for _, spec in ipairs(specs_to_use) do
+  vim.keymap.set("n", "<leader>uu", function()
+    for _, spec in ipairs(specs_to_use) do -- Load all specs and their configs
       add(spec)
       require(Util.color.to_config_name(spec.name))
     end
     require(Util.color.from_color_name("mini").config_name) -- Mini collection
 
-    vim.schedule(function() Util.color.picker() end)
+    vim.schedule(function() Picker.colors() end)
   end, { desc = "Colorscheme picker", silent = true })
 end
 

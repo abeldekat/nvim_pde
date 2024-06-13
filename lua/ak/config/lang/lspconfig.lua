@@ -10,6 +10,7 @@
 --          │                language specific plugins                │
 --          ╰─────────────────────────────────────────────────────────╯
 local Util = require("ak.util")
+local Picker = Util.pick
 local H = {}
 
 H.opts = {
@@ -59,11 +60,11 @@ function H.keys(_, buffer) -- client
     vim.keymap.set(mode, l, r, opts)
   end
   map("<leader>cl", "<cmd>LspInfo<cr>", { desc = "Lsp info" })
-  map("gd", "<cmd>Telescope lsp_definitions reuse_win=true<cr>", { desc = "Goto definition" })
-  map("gr", "<cmd>Telescope lsp_references<cr>", { desc = "References", nowait = true })
+  map("gd", Picker.lsp_definitions, { desc = "Goto definition" })
+  map("gr", Picker.lsp_references, { desc = "References", nowait = true })
   map("gD", vim.lsp.buf.declaration, { desc = "Goto declaration" })
-  map("gI", "<cmd>Telescope lsp_implementations reuse_win=true<cr>", { desc = "Goto implementation" })
-  map("gy", "<cmd>Telescope lsp_type_definitions reuse_win=true<cr>", { desc = "Goto type definition" })
+  map("gI", Picker.lsp_implementations, { desc = "Goto implementation" })
+  map("gy", Picker.lsp_type_definitions, { desc = "Goto type definition" })
   --   map("K", vim.lsp.buf.hover, { desc = "Hover" }) -- builtin, see lsp-defaults
   map("gK", vim.lsp.buf.signature_help, { desc = "Signature help" })
   map("<c-k>", vim.lsp.buf.signature_help, { desc = "Signature help" }, "i")

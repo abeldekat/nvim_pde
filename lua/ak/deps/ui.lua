@@ -40,5 +40,5 @@ later(function()
   add("lukas-reineke/indent-blankline.nvim")
   require("ak.config.ui.indent_blankline")
 
-  -- telescope ui select replaces stevearc/dressing.nvim
+  require("ak.config.ui.mini_animate")
 end)
