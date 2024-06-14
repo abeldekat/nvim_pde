@@ -40,5 +40,6 @@ later(function()
   add("lukas-reineke/indent-blankline.nvim")
   require("ak.config.ui.indent_blankline")
 
+  -- PERF: :Startuptime is slower....
   require("ak.config.ui.mini_animate")
 end)

@@ -16,7 +16,7 @@ end
 ---@type "h" | "g"  -- Use either harpoon or grapple
 local marker_to_use = "g"
 ---@type "t" | "f" | "m" -- Use either telescope, fzf_lua or mini.pick
-local picker_to_use = "t"
+local picker_to_use = "m"
 
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                         Marker                          │

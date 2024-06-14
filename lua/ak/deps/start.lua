@@ -14,6 +14,8 @@ end)
 
 later(function()
   require("ak.config.keymaps") -- load the keymaps first in the later phase
+
+  require("mini.extra").setup() -- adds for example extra pickers
   add("nvim-lua/plenary.nvim") -- needed for harpoon and possibly other plugins
 
   -- Only used for completion when browsing other configs:

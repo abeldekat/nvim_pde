@@ -1,5 +1,22 @@
 local Utils = require("ak.util")
 
+local function color_picker()
+  local target = vim.fn.getcompletion
+  local skip = Utils.color.builtins_to_skip()
+
+  ---@diagnostic disable-next-line: duplicate-set-field
+  vim.fn.getcompletion = function()
+    ---@diagnostic disable-next-line: redundant-parameter
+    return vim.tbl_filter(
+      function(color) return not vim.tbl_contains(skip, color) end, --
+      target("", "color")
+    )
+  end
+
+  vim.cmd("Telescope colorscheme enable_preview=true")
+  vim.fn.getcompletion = target
+end
+
 local function map(l, r, opts, mode)
   mode = mode or "n"
   opts["silent"] = opts.silent ~= false
@@ -44,9 +61,7 @@ local function get_opts()
       layout_strategy = "flex",
       layout_config = {
         prompt_position = "top",
-        horizontal = {
-          preview_width = 0.55,
-        },
+        -- horizontal = { preview_width = 0.55, },
         flex = {
           flip_columns = 140,
         },
@@ -90,6 +105,7 @@ local function keys()
   local themes = require("telescope.themes")
   local buffer_dir = require("telescope.utils").buffer_dir
 
+  -- hotkeys:
   map(
     "<leader>/",
     function()
@@ -98,11 +114,9 @@ local function keys()
         previewer = false,
       }))
     end,
-    { desc = "Search in buffer" }
+    { desc = "Buffer fuzzy" }
   )
-  map("<leader>o", function()
-    builtin.buffers({ sort_mru = true }) -- removed sort_lastused
-  end, { desc = "Other buffers" })
+  map("<leader>o", function() builtin.buffers({ sort_mru = true }) end, { desc = "Buffers" })
   map("<leader>e", function() builtin.live_grep(themes.get_ivy({})) end, { desc = "Grep" })
   map("<leader>r", function() builtin.oldfiles() end, { desc = "Recent" })
   map("<leader>:", function() builtin.command_history() end, { desc = "Command history" })
@@ -117,9 +131,9 @@ local function keys()
   map("<leader>fR", function() builtin.oldfiles({ cwd = buffer_dir() }) end, { desc = "Recent (rel)" })
 
   -- git
-  map("<leader>gb", "<cmd>Telescope git_bcommits<cr>", { desc = "bcommits" })
-  map("<leader>gc", "<cmd>Telescope git_commits<cr>", { desc = "commits" })
-  map("<leader>gs", "<cmd>Telescope git_status<cr>", { desc = "status" })
+  map("<leader>gb", "<cmd>Telescope git_bcommits<cr>", { desc = "Git commits buffer" })
+  map("<leader>gc", "<cmd>Telescope git_commits<cr>", { desc = "Git commits" })
+  map("<leader>gs", "<cmd>Telescope git_status<cr>", { desc = "Git status" })
 
   -- search
   map('<leader>s"', "<cmd>Telescope registers<cr>", { desc = "Registers" })
@@ -127,7 +141,7 @@ local function keys()
   map("<leader>sb", "<cmd>Telescope current_buffer_fuzzy_find<cr>", { desc = "Buffer fuzzy" })
   map("<leader>sc", "<cmd>Telescope command_history<cr>", { desc = "Command history" })
   map("<leader>sC", "<cmd>Telescope commands<cr>", { desc = "Commands" })
-  map("<leader>si", "<cmd>Telescope<cr>", { desc = "Telescope builtin" })
+  map("<leader>si", "<cmd>Telescope<cr>", { desc = "Picker builtin" })
   map("<leader>sg", function() builtin.live_grep() end, { desc = "Grep" })
   map("<leader>sG", function() builtin.live_grep({ cwd = buffer_dir() }) end, { desc = "Grep (rel)" })
   map("<leader>sh", "<cmd>Telescope help_tags<cr>", { desc = "Help pages" })
@@ -139,7 +153,7 @@ local function keys()
   map("<leader>so", "<cmd>Telescope vim_options<cr>", { desc = "Options" })
   map("<leader>sR", "<cmd>Telescope resume<cr>", { desc = "Resume" })
   map(
-    "<leader>sS",
+    "<leader>sS", -- c-space-space, :class:, c-l -> filter on class
     function()
       builtin.lsp_dynamic_workspace_symbols({
         symbols = require("ak.consts").get_kind_filter(),
@@ -166,11 +180,9 @@ local function keys()
   map("<leader>sW", function() builtin.grep_string({ cwd = buffer_dir() }) end, { desc = "Selection (rel)" }, "v")
 
   -- diagnostics/quickfix
-  -- Changed from leader sd to replace trouble document diagnostics
-  map("<leader>xd", "<cmd>Telescope diagnostics bufnr=0<cr>", { desc = "Document diagnostics" })
-  -- Changed from leader sD to replace trouble workspace diagnostics
-  map("<leader>xD", "<cmd>Telescope diagnostics<cr>", { desc = "Workspace diagnostics" })
-  -- The bqf plugin needs the fzf plugin to search the quickfix. Use telescope instead.
+  map("<leader>xd", "<cmd>Telescope diagnostics<cr>", { desc = "Workspace diagnostics" })
+  map("<leader>xD", "<cmd>Telescope diagnostics bufnr=0<cr>", { desc = "Document diagnostics" })
+  -- The bqf plugin needs the fzf plugin to search the quickfix. Use picker instead.
   map("<leader>xx", "<cmd> Telescope quickfix<cr>", { desc = "Quickfix search" })
   map("<leader>xX", "<cmd> Telescope quickfixhistory<cr>", { desc = "Quickfixhis search" })
   map("<leader>xz", "<cmd> Telescope loclist<cr>", { desc = "Loclist search" })
@@ -184,7 +196,6 @@ local function extensions()
   require("telescope").load_extension("ui-select")
 
   -- ── alternate ─────────────────────────────────────────────────────────
-
   require("telescope-alternate").setup({
     mappings = {
       {
@@ -205,59 +216,44 @@ local function extensions()
   )
 
   -- ── zoxide ────────────────────────────────────────────────────────────
-
   -- require("telescope").load_extension("zoxide") -- <c-b> does not work
   -- map("<leader>fz", function()
   --   require("telescope").extensions.zoxide.list()
   -- end, { desc = "Zoxide file navigation" })
 
   -- ── file-browser ──────────────────────────────────────────────────────
-
   -- require("telescope").load_extension("file_browser")
   -- map("<leader>fB", function()
   --   require("telescope").extensions.file_browser.file_browser()
   -- end, { desc = "Telescope file_browser" })
 
   -- ── project ───────────────────────────────────────────────────────────
-
   -- require("telescope").load_extension("project") -- requires file browser
   -- map("<leader>fp", function()
   --   require("telescope").extensions.project.project()
   -- end, { desc = "Telescope Project" })
 
   -- ── aerial ────────────────────────────────────────────────────────────
-
   require("telescope").load_extension("aerial")
+  -- Shows only function symbol kinds:
   map("<leader>ss", "<cmd>Telescope aerial<cr>", { desc = "Goto symbol (aerial)" })
 end
 
 local function picker()
+  local builtin = require("telescope.builtin")
+  local buffer_dir = require("telescope.utils").buffer_dir
+
   ---@type Picker
   local Picker = {
     find_files = function() vim.cmd("Telescope find_files") end,
     live_grep = function() vim.cmd("Telescope live_grep") end,
     keymaps = function() vim.cmd("Telescope keymaps") end,
-    oldfiles = function() vim.cmd("Telescope oldfiles") end,
+    oldfiles = function() builtin.oldfiles({ cwd = buffer_dir() }) end,
     lsp_definitions = function() vim.cmd("Telescope lsp_definitions reuse_win=true") end,
     lsp_references = function() vim.cmd("Telescope lsp_references") end,
     lsp_implementations = function() vim.cmd("Telescope lsp_implementations reuse_win=true") end,
     lsp_type_definitions = function() vim.cmd("Telescope lsp_type_definitions reuse_win=true") end,
-    colors = function()
-      local target = vim.fn.getcompletion
-      local skip = Utils.color.builtins_to_skip()
-
-      ---@diagnostic disable-next-line: duplicate-set-field
-      vim.fn.getcompletion = function()
-        ---@diagnostic disable-next-line: redundant-parameter
-        return vim.tbl_filter(
-          function(color) return not vim.tbl_contains(skip, color) end, --
-          target("", "color")
-        )
-      end
-
-      vim.cmd("Telescope colorscheme enable_preview=true")
-      vim.fn.getcompletion = target
-    end,
+    colors = function() color_picker() end,
   }
   Utils.pick.use_picker(Picker)
 end

@@ -14,8 +14,9 @@ local function no_picker(msg) vim.notify("No picker for " .. msg) end
 local function get_opts() return {} end
 
 local function keys()
-  map("<leader>/", function() no_picker("Search in buffer") end, { desc = "Search in buffer" })
-  map("<leader>o", function() no_picker("Other buffers") end, { desc = "Other buffers" })
+  -- hotkeys:
+  map("<leader>/", function() no_picker("Search in buffer") end, { desc = "Buffer fuzzy" })
+  map("<leader>o", function() no_picker("Other buffers") end, { desc = "Buffers" })
   map("<leader>e", function() no_picker("Grep") end, { desc = "Grep" })
   map("<leader>r", function() no_picker("Recent") end, { desc = "Recent" })
   map("<leader>:", function() no_picker("Command history") end, { desc = "Command history" })
@@ -30,9 +31,9 @@ local function keys()
   map("<leader>fR", function() no_picker("Recent (rel)") end, { desc = "Recent (rel)" })
 
   -- git
-  map("<leader>gb", function() no_picker("bcommits") end, { desc = "bcommits" })
-  map("<leader>gc", function() no_picker("commits") end, { desc = "commits" })
-  map("<leader>gs", function() no_picker("status") end, { desc = "status" })
+  map("<leader>gb", function() no_picker("bcommits") end, { desc = "Git commits buffer" })
+  map("<leader>gc", function() no_picker("commits") end, { desc = "Git commits" })
+  map("<leader>gs", function() no_picker("status") end, { desc = "Git status" })
 
   -- search
   map('<leader>s"', function() no_picker("Registers") end, { desc = "Registers" })
@@ -40,7 +41,7 @@ local function keys()
   map("<leader>sb", function() no_picker("Buffer fuzzy") end, { desc = "Buffer fuzzy" })
   map("<leader>sc", function() no_picker("Command history") end, { desc = "Command history" })
   map("<leader>sC", function() no_picker("Commands") end, { desc = "Commands" })
-  map("<leader>si", function() no_picker("Telescope builtin") end, { desc = "Telescope builtin" })
+  map("<leader>si", function() no_picker("Picker builtin") end, { desc = "Picker builtin" })
   map("<leader>sg", function() no_picker("Grep") end, { desc = "Grep" })
   map("<leader>sG", function() no_picker("Grep (rel)") end, { desc = "Grep (rel)" })
   map("<leader>sh", function() no_picker("Help pages") end, { desc = "Help pages" })
@@ -59,11 +60,9 @@ local function keys()
   map("<leader>sW", function() no_picker("Selection (rel)") end, { desc = "Selection (rel)" }, "v")
 
   -- diagnostics/quickfix
-  -- Changed from leader sd to replace trouble document diagnostics
-  map("<leader>xd", function() no_picker("Document diagnostics") end, { desc = "Document diagnostics" })
-  -- Changed from leader sD to replace trouble workspace diagnostics
-  map("<leader>xD", function() no_picker("Workspace diagnostics") end, { desc = "Workspace diagnostics" })
-  -- The bqf plugin needs the fzf plugin to search the quickfix. Use telescope instead.
+  map("<leader>xd", function() no_picker("Workspace diagnostics") end, { desc = "Workspace diagnostics" })
+  map("<leader>xD", function() no_picker("Document diagnostics") end, { desc = "Document diagnostics" })
+  -- The bqf plugin needs the fzf plugin to search the quickfix. Use picker instead.
   map("<leader>xx", function() no_picker("Quickfix search") end, { desc = "Quickfix search" })
   map("<leader>xX", function() no_picker("Quickfixhis search") end, { desc = "Quickfixhis search" })
   map("<leader>xz", function() no_picker("Loclist search") end, { desc = "Loclist search" })
@@ -73,7 +72,7 @@ local function extensions() end
 
 local function picker()
   ---@type Picker
-  local No_op = {
+  local Picker = {
     find_files = function() no_picker("find_files") end,
     live_grep = function() no_picker("live_grep") end,
     keymaps = function() no_picker("keymaps") end,
@@ -84,7 +83,7 @@ local function picker()
     lsp_type_definitions = function() no_picker("lsp_type_definitions") end,
     colors = function() no_picker("colors") end,
   }
-  Utils.pick.use_picker(No_op)
+  Utils.pick.use_picker(Picker)
 end
 
 --          ╭─────────────────────────────────────────────────────────╮

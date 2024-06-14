@@ -86,13 +86,17 @@ local function register_specs(groups)
   return result
 end
 
+local colors_loaded = false
 local function add_picker(specs_to_use)
   vim.keymap.set("n", "<leader>uu", function()
-    for _, spec in ipairs(specs_to_use) do -- Load all specs and their configs
-      add(spec)
-      require(Util.color.to_config_name(spec.name))
+    if not colors_loaded then
+      for _, spec in ipairs(specs_to_use) do -- Load all specs and their configs
+        add(spec)
+        require(Util.color.to_config_name(spec.name))
+      end
+      require(Util.color.from_color_name("mini").config_name) -- Mini collection
+      colors_loaded = true
     end
-    require(Util.color.from_color_name("mini").config_name) -- Mini collection
 
     vim.schedule(function() Picker.colors() end)
   end, { desc = "Colorscheme picker", silent = true })
