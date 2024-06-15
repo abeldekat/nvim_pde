@@ -12,6 +12,7 @@
 --   Nothing more: no favoring certain places in string, etc.
 
 -- TODO: search all buf_lines: Default = all buffers. Useful in workflow?
+-- TODO: Use treesitter picker and hipatterns(only in open buffers)
 
 local Utils = require("ak.util")
 local Pick = require("mini.pick")
@@ -94,14 +95,38 @@ end
 -- https://github.com/echasnovski/mini.nvim/discussions/518#discussioncomment-7373556
 -- For TODOs in a project, use builtin.grep
 --
--- patterns: mini.hipatterns, config, highlighters
+-- patterns: see mini.hipatterns, config, highlighters
 ExtraAK.pickers.todo_comments = function(patterns)
+  local function enable_hipatterns(buf_id)
+    if MiniHipatterns then MiniHipatterns.enable(buf_id) end
+  end
   local function search_regex(keywords)
     local pattern = [[\b(KEYWORDS):]]
     return pattern:gsub("KEYWORDS", table.concat(keywords, "|"))
   end
-  local regex = search_regex(vim.tbl_keys(patterns))
-  Pick.builtin.grep({ tool = "rg", pattern = regex }) -- TODO: highlight in list buffer?
+
+  local show = function(buf_id, items, query)
+    enable_hipatterns(buf_id)
+    Pick.default_show(
+      buf_id,
+      vim.tbl_map(function(item)
+        local s = string.gsub(item, "│", "") -- remove character used by comment box
+        s = string.gsub(s, "-- ", " ") -- remove comment before and todo keep one space
+        s = string.gsub(s, "%s+", " ") -- change multiple spaces into one space
+        return s
+      end, items),
+      query
+    )
+  end
+  local preview = function(buf_id, item)
+    enable_hipatterns(buf_id)
+    Pick.default_preview(buf_id, item)
+  end
+
+  Pick.builtin.grep(
+    { tool = "rg", pattern = search_regex(vim.tbl_keys(patterns)) },
+    { source = { name = "Todo-comments", show = show, preview = preview } }
+  )
 end
 
 ExtraAK.pickers.color_picker = function()
@@ -215,7 +240,6 @@ end
 -- TODO:
 -- Ask: Lsp always shows the picker even if there is only one.
 -- Ask: Quickfixhis search
--- Use treesitter picker and hipatterns
 -- Decide: Git status versus git hunks staged/unstaged
 local function picker()
   local builtin = Pick.builtin

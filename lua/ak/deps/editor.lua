@@ -4,15 +4,6 @@ local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 local register = Util.deps.register
 local with_dir = Util.opened_with_dir_argument()
 
---          ╭─────────────────────────────────────────────────────────╮
---          │                        Hardtime                         │
---          ╰─────────────────────────────────────────────────────────╯
-local spec_hardtime = "takac/vim-hardtime"
-local function hardtime()
-  require("ak.config.editor.hardtime")
-  add(spec_hardtime)
-end
-
 ---@type "h" | "g"  -- Use either harpoon or grapple
 local marker_to_use = "g"
 ---@type "t" | "f" | "m" -- Use either telescope, fzf_lua or mini.pick
@@ -77,6 +68,15 @@ local function picker_mini_pick()
   register(spec_telescope)
   register(spec_fzf_lua)
   require("ak.config.editor.mini_pick")
+end
+
+--          ╭─────────────────────────────────────────────────────────╮
+--          │                        Hardtime                         │
+--          ╰─────────────────────────────────────────────────────────╯
+local spec_hardtime = "takac/vim-hardtime"
+local function hardtime()
+  require("ak.config.editor.hardtime")
+  add(spec_hardtime)
 end
 
 --          ╭─────────────────────────────────────────────────────────╮
