@@ -1,5 +1,47 @@
 local Utils = require("ak.util")
 
+-- patterns: mini.hipatterns, config, highlighters
+local function todo_comments(patterns)
+  local function todo_opts()
+    local function search_regex(keywords)
+      local pattern = [[\b(KEYWORDS):]]
+      return pattern:gsub("KEYWORDS", table.concat(keywords, "|"))
+    end
+
+    local opts = {}
+    -- stylua: ignore start
+    opts.vimgrep_arguments = {
+      "rg", "--color=never", "--no-heading", "--with-filename", "--line-number", "--column"
+    }
+    -- stylua: ignore end
+    opts.prompt_title = "Find Todo"
+    opts.use_regex = true
+    opts.search = search_regex(vim.tbl_keys(patterns))
+    local entry_maker = require("telescope.make_entry").gen_from_vimgrep(opts)
+    opts.entry_maker = function(line)
+      local entry_result = entry_maker(line)
+
+      entry_result.display = function(entry)
+        local function find_todo()
+          for _, hl in pairs(patterns) do
+            local pattern = hl.pattern:sub(2) -- remove the prepending space
+            if entry.text:find(pattern, 1, true) then return hl end
+          end
+          return patterns[1] -- prevent nil
+        end
+        local todo = find_todo()
+        local display = string.format("%s:%s:%s ", entry.filename, entry.lnum, entry.col)
+        local text_result = todo.pattern .. " " .. display .. " " .. entry.text
+        return text_result, { { { 0, #todo.pattern }, todo.group } }
+      end
+      return entry_result
+    end
+    return opts
+  end
+
+  require("telescope.builtin").grep_string(todo_opts())
+end
+
 local function color_picker()
   local target = vim.fn.getcompletion
   local skip = Utils.color.builtins_to_skip()
@@ -118,7 +160,7 @@ local function keys()
   )
   map("<leader>o", function() builtin.buffers({ sort_mru = true }) end, { desc = "Buffers" })
   map("<leader>e", function() builtin.live_grep(themes.get_ivy({})) end, { desc = "Grep" })
-  map("<leader>r", function() builtin.oldfiles() end, { desc = "Recent" })
+  map("<leader>r", function() builtin.oldfiles({ cwd_only = true }) end, { desc = "Recent (rel)" })
   map("<leader>:", function() builtin.command_history() end, { desc = "Command history" })
   map("<leader><leader>", function() builtin.git_files({ show_untracked = true }) end, { desc = "Git files" })
 
@@ -128,7 +170,7 @@ local function keys()
   map("<leader>ff", function() builtin.find_files() end, { desc = "Find files" })
   map("<leader>fF", function() builtin.find_files({ cwd = buffer_dir() }) end, { desc = "Find files (rel)" })
   map("<leader>fr", function() builtin.oldfiles() end, { desc = "Recent" })
-  map("<leader>fR", function() builtin.oldfiles({ cwd = buffer_dir() }) end, { desc = "Recent (rel)" })
+  map("<leader>fR", function() builtin.oldfiles({ cwd_only = true }) end, { desc = "Recent (rel)" })
 
   -- git
   map("<leader>gb", "<cmd>Telescope git_bcommits<cr>", { desc = "Git commits buffer" })
@@ -241,19 +283,19 @@ end
 
 local function picker()
   local builtin = require("telescope.builtin")
-  local buffer_dir = require("telescope.utils").buffer_dir
 
   ---@type Picker
   local Picker = {
     find_files = function() vim.cmd("Telescope find_files") end,
     live_grep = function() vim.cmd("Telescope live_grep") end,
     keymaps = function() vim.cmd("Telescope keymaps") end,
-    oldfiles = function() builtin.oldfiles({ cwd = buffer_dir() }) end,
+    oldfiles = builtin.oldfiles,
     lsp_definitions = function() vim.cmd("Telescope lsp_definitions reuse_win=true") end,
     lsp_references = function() vim.cmd("Telescope lsp_references") end,
     lsp_implementations = function() vim.cmd("Telescope lsp_implementations reuse_win=true") end,
     lsp_type_definitions = function() vim.cmd("Telescope lsp_type_definitions reuse_win=true") end,
-    colors = function() color_picker() end,
+    colors = color_picker,
+    todo_comments = todo_comments,
   }
   Utils.pick.use_picker(Picker)
 end

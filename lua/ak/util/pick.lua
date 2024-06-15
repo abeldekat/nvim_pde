@@ -2,8 +2,6 @@
 --          │      Picker functionality used in multiple places       │
 --          ╰─────────────────────────────────────────────────────────╯
 
--- TODO: Solve mini-hipatterns telescope dependency
-
 ---@class Picker
 ---@field find_files fun()
 ---@field live_grep fun()
@@ -14,6 +12,7 @@
 ---@field lsp_implementations fun()
 ---@field lsp_type_definitions fun()
 ---@field colors fun()
+---@field todo_comments fun(patterns: table)
 
 local function no_picker(msg) vim.notify("No picker for " .. msg) end
 
@@ -28,6 +27,7 @@ local No_op = {
   lsp_implementations = function() no_picker("lsp_implementations") end,
   lsp_type_definitions = function() no_picker("lsp_type_definitions") end,
   colors = function() no_picker("colors") end,
+  todo_comments = function(patterns) no_picker("todo_comments") end,
 }
 
 local picker = No_op
@@ -44,4 +44,6 @@ M.lsp_references = function() picker.lsp_references() end
 M.lsp_implementations = function() picker.lsp_implementations() end
 M.lsp_type_definitions = function() picker.lsp_type_definitions() end
 M.colors = function() picker.colors() end
+-- patterns: mini.hipatterns, config, highlighters
+M.todo_comments = function(patterns) picker.todo_comments(patterns) end
 return M

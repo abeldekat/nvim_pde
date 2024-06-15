@@ -18,7 +18,7 @@ local function keys()
   map("<leader>/", function() no_picker("Search in buffer") end, { desc = "Buffer fuzzy" })
   map("<leader>o", function() no_picker("Other buffers") end, { desc = "Buffers" })
   map("<leader>e", function() no_picker("Grep") end, { desc = "Grep" })
-  map("<leader>r", function() no_picker("Recent") end, { desc = "Recent" })
+  map("<leader>r", function() no_picker("Recent (rel)") end, { desc = "Recent (rel)" })
   map("<leader>:", function() no_picker("Command history") end, { desc = "Command history" })
   map("<leader><leader>", function() no_picker("Git files") end, { desc = "Git files" })
 
@@ -82,6 +82,7 @@ local function picker()
     lsp_implementations = function() no_picker("lsp_implementations") end,
     lsp_type_definitions = function() no_picker("lsp_type_definitions") end,
     colors = function() no_picker("colors") end,
+    todo_comments = function() no_picker("todo_comments") end,
   }
   Utils.pick.use_picker(Picker)
 end

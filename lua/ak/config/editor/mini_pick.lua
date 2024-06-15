@@ -1,7 +1,3 @@
---          ╭─────────────────────────────────────────────────────────╮
---          │                 WIP: Testing mini.pick                  │
---          ╰─────────────────────────────────────────────────────────╯
-
 -- UI consists from a single window capable of displaying three different views:
 -- - "Main" - where current query matches are shown.
 -- - "Preview" - preview of current item (toggle with `<Tab>`).
@@ -15,14 +11,100 @@
 -- - Sorting is done to first minimize match width and then match start.
 --   Nothing more: no favoring certain places in string, etc.
 
-local Utils = require("ak.util")
+-- TODO: search all buf_lines: Default = all buffers. Useful in workflow?
 
-local function bdir()
-  -- note: in oil dir, fallback to root cwd
-  if vim["bo"].buftype == "" then return vim.fn.expand("%:p:h") end
+local Utils = require("ak.util")
+local Pick = require("mini.pick")
+
+local function no_picker(msg) vim.notify("No picker for " .. msg) end
+
+local H = {} -- Helpers copied from mini.extra
+local ExtraAK = { pickers = {} }
+local Path = require("plenary.path")
+
+-- from telescope oldfiles:
+---@return boolean
+H.buf_in_cwd = function(bufname, cwd)
+  if cwd:sub(-1) ~= Path.path.sep then cwd = cwd .. Path.path.sep end
+  local bufname_prefix = bufname:sub(1, #cwd)
+  return bufname_prefix == cwd
 end
 
-local function color_picker()
+-- mini.extra:
+H.error = function(msg) error(string.format("(ak.extra) %s", msg), 0) end
+
+-- mini.extra:
+H.short_path = function(path, cwd)
+  cwd = cwd or vim.fn.getcwd()
+  if not vim.startswith(path, cwd) then return vim.fn.fnamemodify(path, ":~") end
+  local res = path:sub(cwd:len() + 1):gsub("^/+", ""):gsub("/+$", "")
+  return res
+end
+
+-- mini.extra:
+H.show_with_icons = function(buf_id, items, query) Pick.default_show(buf_id, items, query, { show_icons = true }) end
+
+-- mini.extra:
+H.pick_get_config = function() return vim.tbl_deep_extend("force", Pick.config or {}, vim.b.minipick_config or {}) end
+
+-- mini.extra:
+H.pick_start = function(items, default_opts, opts)
+  local fallback = {
+    source = {
+      preview = Pick.default_preview,
+      choose = Pick.default_choose,
+      choose_marked = Pick.default_choose_marked,
+    },
+  }
+  local opts_final = vim.tbl_deep_extend("force", fallback, default_opts, opts or {}, { source = { items = items } })
+  return Pick.start(opts_final)
+end
+
+--- Added option cwd_only:
+--- Old files picker.
+---
+--- Pick from |v:oldfiles| entries representing readable files.
+---
+---@param local_opts __extra_pickers_local_opts
+---   Not used at the moment.
+---@param opts __extra_pickers_opts
+---
+---@return __extra_pickers_return
+ExtraAK.pickers.oldfiles = function(local_opts, opts)
+  local oldfiles = vim.v.oldfiles
+  if not vim.islist(oldfiles) then H.error("`pickers.oldfiles` picker needs valid `v:oldfiles`.") end
+
+  local filter = local_opts and local_opts.cwd_only or false
+  local items = vim.schedule_wrap(function()
+    local cwd = Pick.get_picker_opts().source.cwd
+    local res = {}
+    for _, path in ipairs(oldfiles) do
+      if vim.fn.filereadable(path) == 1 then
+        local use = not filter and true or H.buf_in_cwd(path, cwd) -- added condition
+        if use then table.insert(res, H.short_path(path, cwd)) end
+      end
+    end
+    Pick.set_picker_items(res)
+  end)
+
+  local show = H.pick_get_config().source.show or H.show_with_icons
+  return H.pick_start(items, { source = { name = "Old files cwd", show = show } }, opts)
+end
+
+-- https://github.com/echasnovski/mini.nvim/discussions/518#discussioncomment-7373556
+-- For TODOs in a project, use builtin.grep
+--
+-- patterns: mini.hipatterns, config, highlighters
+ExtraAK.pickers.todo_comments = function(patterns)
+  local function search_regex(keywords)
+    local pattern = [[\b(KEYWORDS):]]
+    return pattern:gsub("KEYWORDS", table.concat(keywords, "|"))
+  end
+  local regex = search_regex(vim.tbl_keys(patterns))
+  Pick.builtin.grep({ tool = "rg", pattern = regex }) -- TODO: highlight in list buffer?
+end
+
+ExtraAK.pickers.color_picker = function()
   local target = vim.fn.getcompletion
   local skip = Utils.color.builtins_to_skip()
 
@@ -43,7 +125,10 @@ local function color_picker()
   vim.fn.getcompletion = target
 end
 
-local function no_picker(msg) vim.notify("No picker for " .. msg) end
+local function bdir()
+  -- note: in oil dir, fallback to root cwd
+  if vim["bo"].buftype == "" then return vim.fn.expand("%:p:h") end
+end
 
 local function map(l, r, opts, mode)
   mode = mode or "n"
@@ -59,14 +144,15 @@ local function get_opts()
 end
 
 local function keys()
-  local builtin = MiniPick.builtin
+  local builtin = Pick.builtin
   local extra = MiniExtra.pickers
+  local ak_extra = ExtraAK.pickers
 
   -- hotkeys:
   map("<leader>/", function() extra.buf_lines({ scope = "current" }) end, { desc = "Buffer fuzzy" })
   map("<leader>o", function() builtin.buffers() end, { desc = "Buffers" }) -- mnemonic: open buffers
   map("<leader>e", function() builtin.grep_live() end, { desc = "Grep" })
-  map("<leader>r", function() extra.oldfiles() end, { desc = "Recent" })
+  map("<leader>r", function() ak_extra.oldfiles({ cwd_only = true }) end, { desc = "Recent (rel)" })
   map("<leader>:", function() extra.history({ scope = ":" }) end, { desc = "Command history" })
   map("<leader><leader>", function() builtin.files({ tool = "git" }) end, { desc = "Git files" })
 
@@ -76,7 +162,7 @@ local function keys()
   map("<leader>ff", function() builtin.files() end, { desc = "Find files" })
   map("<leader>fF", function() builtin.files(nil, { source = { cwd = bdir() } }) end, { desc = "Find files (rel)" })
   map("<leader>fr", function() extra.oldfiles() end, { desc = "Recent" })
-  map("<leader>fR", function() no_picker("Recent (rel)") end, { desc = "NP: Recent (rel)" })
+  map("<leader>fR", function() ak_extra.oldfiles({ cwd_only = true }) end, { desc = "Recent (rel)" })
 
   -- git:
   map("<leader>gb", function() extra.git_commits({ path = vim.fn.expand("%") }) end, { desc = "Git commits buffer" })
@@ -121,7 +207,7 @@ local function keys()
 end
 
 local function extensions()
-  vim.ui.select = MiniPick.ui_select
+  vim.ui.select = Pick.ui_select
   -- aerial telescope extension: leader ss
   -- telescope alternate: ml
 end
@@ -129,27 +215,25 @@ end
 -- TODO:
 -- Ask: Lsp always shows the picker even if there is only one.
 -- Ask: Quickfixhis search
--- Ask: Oldfiles does not take cwd into account: extra.oldfiles({}, { source = { cwd = bdir() } })
--- Use treesitter picker
--- Test hipatterns
+-- Use treesitter picker and hipatterns
 -- Decide: Git status versus git hunks staged/unstaged
--- Perhaps: search all buf_lines: Default = all buffers
--- Test extra.list scope = "change"
 local function picker()
-  local builtin = MiniPick.builtin
+  local builtin = Pick.builtin
   local extra = MiniExtra.pickers
+  local ak_extra = ExtraAK.pickers
 
   ---@type Picker
   local Picker = {
-    find_files = function() builtin.files() end,
-    live_grep = function() builtin.grep_live() end,
-    keymaps = function() extra.keymaps() end,
-    oldfiles = function() extra.oldfiles() end,
+    find_files = builtin.files,
+    live_grep = builtin.grep_live,
+    keymaps = extra.keymaps,
+    oldfiles = extra.oldfiles,
     lsp_definitions = function() extra.lsp({ scope = "definition" }) end,
     lsp_references = function() extra.lsp({ scope = "references" }) end,
     lsp_implementations = function() extra.lsp({ scope = "implementation" }) end,
     lsp_type_definitions = function() extra.lsp({ scope = "type_definition" }) end,
-    colors = function() color_picker() end,
+    colors = ak_extra.color_picker,
+    todo_comments = ak_extra.todo_comments,
   }
   Utils.pick.use_picker(Picker)
 end
@@ -158,7 +242,7 @@ end
 --          │                          Setup                          │
 --          ╰─────────────────────────────────────────────────────────╯
 local function setup()
-  require("mini.pick").setup(get_opts())
+  Pick.setup(get_opts())
   keys()
   extensions()
   picker()
