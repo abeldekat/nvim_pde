@@ -11,11 +11,7 @@
 -- - Sorting is done to first minimize match width and then match start.
 --   Nothing more: no favoring certain places in string, etc.
 
--- NOTE: No picker for autocommands and man-pages
-
--- TODO:
--- Ask: Lsp always shows the picker even if there is only one.
--- Decide: Git status versus git hunks staged/unstaged
+-- NOTE: No picker for autocommands, man-pages and git status
 
 local Utils = require("ak.util")
 local Pick = require("mini.pick")
@@ -216,7 +212,12 @@ local function keys()
   -- git:
   map("<leader>gb", function() extra.git_commits({ path = vim.fn.expand("%") }) end, { desc = "Git commits buffer" })
   map("<leader>gc", extra.git_commits, { desc = "Git commits" })
-  map("<leader>gs", function() extra.git_hunks({ scope = "staged" }) end, { desc = "Git status" })
+  map("<leader>gs", extra.git_hunks, { desc = "Modified hunks" }) -- Instead of git status
+  map(
+    "<leader>gS",
+    function() extra.git_hunks({ path = vim.fn.expand("%") }) end,
+    { desc = "Modified hunks (current)" }
+  )
 
   -- search
   map('<leader>s"', extra.registers, { desc = "Registers" })
@@ -258,6 +259,12 @@ local function keys()
   -- only implemented by mini.pick:
   map("<leader>sB", extra.buf_lines, { desc = "Buffers fuzzy" })
   map("<leader>sp", extra.hipatterns, { desc = "Buffers hipatterns" })
+  map("<leader>ga", function() extra.git_hunks({ scope = "staged" }) end, { desc = "Added hunks" })
+  map(
+    "<leader>gA",
+    function() extra.git_hunks({ path = vim.fn.expand("%"), scope = "staged" }) end,
+    { desc = "Added hunks (current)" }
+  )
 end
 
 local function extensions()

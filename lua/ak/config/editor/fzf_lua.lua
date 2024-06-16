@@ -69,8 +69,11 @@ local function keys()
   map("<leader>xz", function() no_picker("Loclist search") end, { desc = "Loclist search" })
 
   -- only implemented by mini.pick:
-  map("<leader>sB", function() no_picker("Buffers fuzzy") end, { desc = "Buffers fuzzy" })
-  map("<leader>sp", function() no_picker("Buffers hipatterns") end, { desc = "Buffers hipatterns" })
+  map("<leader>sB", function() no_picker("Buffers fuzzy") end, { desc = "NP: Buffers fuzzy" })
+  map("<leader>sp", function() no_picker("Buffers hipatterns") end, { desc = "NP: Buffers hipatterns" })
+  map("<leader>gS", function() no_picker("Modified hunks (current)") end, { desc = "NP: Modified hunks (current)" })
+  map("<leader>ga", function() no_picker("Added hunks") end, { desc = "NP: Added hunks" })
+  map("<leader>gB", function() no_picker("Added hunks (current)") end, { desc = "NP: Added hunks (current)" })
 end
 
 local function extensions() end
