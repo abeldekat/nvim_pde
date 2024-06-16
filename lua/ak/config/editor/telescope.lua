@@ -1,5 +1,7 @@
 local Utils = require("ak.util")
 
+local function no_picker(msg) vim.notify("No picker for " .. msg) end
+
 -- patterns: mini.hipatterns, config, highlighters
 local function todo_comments(patterns)
   local function todo_opts()
@@ -56,7 +58,7 @@ local function color_picker()
   end
 
   vim.cmd("Telescope colorscheme enable_preview=true")
-  vim.fn.getcompletion = target
+  vim.fn.getcompletion = target -- restore completion builtin
 end
 
 local function map(l, r, opts, mode)
@@ -183,6 +185,7 @@ local function keys()
   map("<leader>sb", "<cmd>Telescope current_buffer_fuzzy_find<cr>", { desc = "Buffer fuzzy" })
   map("<leader>sc", "<cmd>Telescope command_history<cr>", { desc = "Command history" })
   map("<leader>sC", "<cmd>Telescope commands<cr>", { desc = "Commands" })
+  map("<leader>se", "<cmd>Telescope treesitter<cr>", { desc = "Treesitter" })
   map("<leader>si", "<cmd>Telescope<cr>", { desc = "Picker builtin" })
   map("<leader>sg", function() builtin.live_grep() end, { desc = "Grep" })
   map("<leader>sG", function() builtin.live_grep({ cwd = buffer_dir() }) end, { desc = "Grep (rel)" })
@@ -228,6 +231,10 @@ local function keys()
   map("<leader>xx", "<cmd> Telescope quickfix<cr>", { desc = "Quickfix search" })
   map("<leader>xX", "<cmd> Telescope quickfixhistory<cr>", { desc = "Quickfixhis search" })
   map("<leader>xz", "<cmd> Telescope loclist<cr>", { desc = "Loclist search" })
+
+  -- only implemented by mini.pick:
+  map("<leader>sB", function() no_picker("Buffers fuzzy") end, { desc = "Buffers fuzzy" })
+  map("<leader>sp", function() no_picker("Buffers hipatterns") end, { desc = "Buffers hipatterns" })
 end
 
 --          ╭─────────────────────────────────────────────────────────╮

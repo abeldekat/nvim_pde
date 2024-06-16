@@ -41,6 +41,7 @@ local function keys()
   map("<leader>sb", function() no_picker("Buffer fuzzy") end, { desc = "Buffer fuzzy" })
   map("<leader>sc", function() no_picker("Command history") end, { desc = "Command history" })
   map("<leader>sC", function() no_picker("Commands") end, { desc = "Commands" })
+  map("<leader>se", function() no_picker("Treesitter") end, { desc = "Treesitter" })
   map("<leader>si", function() no_picker("Picker builtin") end, { desc = "Picker builtin" })
   map("<leader>sg", function() no_picker("Grep") end, { desc = "Grep" })
   map("<leader>sG", function() no_picker("Grep (rel)") end, { desc = "Grep (rel)" })
@@ -66,6 +67,10 @@ local function keys()
   map("<leader>xx", function() no_picker("Quickfix search") end, { desc = "Quickfix search" })
   map("<leader>xX", function() no_picker("Quickfixhis search") end, { desc = "Quickfixhis search" })
   map("<leader>xz", function() no_picker("Loclist search") end, { desc = "Loclist search" })
+
+  -- only implemented by mini.pick:
+  map("<leader>sB", function() no_picker("Buffers fuzzy") end, { desc = "Buffers fuzzy" })
+  map("<leader>sp", function() no_picker("Buffers hipatterns") end, { desc = "Buffers hipatterns" })
 end
 
 local function extensions() end

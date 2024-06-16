@@ -11,20 +11,58 @@
 -- - Sorting is done to first minimize match width and then match start.
 --   Nothing more: no favoring certain places in string, etc.
 
--- TODO: search all buf_lines: Default = all buffers. Useful in workflow?
--- TODO: Use treesitter picker and hipatterns(only in open buffers)
+-- NOTE: No picker for autocommands and man-pages
+
+-- TODO:
+-- Ask: Lsp always shows the picker even if there is only one.
+-- Decide: Git status versus git hunks staged/unstaged
 
 local Utils = require("ak.util")
 local Pick = require("mini.pick")
 
-local function no_picker(msg) vim.notify("No picker for " .. msg) end
-
-local H = {} -- Helpers copied from mini.extra
-local ExtraAK = { pickers = {} }
+local H = {}
 local Path = require("plenary.path")
 
+H.pre_hooks = {}
+H.post_hooks = {}
+
+H.setup_autocommands = function()
+  local group = vim.api.nvim_create_augroup("minipick-hooks", { clear = true })
+  vim.api.nvim_create_autocmd({ "User" }, {
+    pattern = "MiniPickStart",
+    group = group,
+    desc = "Pre hook for picker based on source.name",
+    callback = function(...)
+      local opts = MiniPick.get_picker_opts() or {}
+      local pre_hook = H.pre_hooks[opts.source.name] or function(...) end
+      pre_hook(...)
+    end,
+  })
+  vim.api.nvim_create_autocmd({ "User" }, {
+    pattern = "MiniPickStop",
+    group = group,
+    desc = "Post hook for picker based on source.name",
+    callback = function(...)
+      local opts = MiniPick.get_picker_opts()
+      if opts then
+        local post_hook = H.post_hooks[opts.source.name] or function(...) end
+        post_hook(...)
+      else
+        vim.notify("MiniPick.get_picker_opts() returned nil")
+      end
+    end,
+  })
+end
+
+H.colors = function()
+  local skip = Utils.color.builtins_to_skip()
+  return vim.tbl_filter(
+    function(color) return not vim.tbl_contains(skip, color) end, --
+    vim.fn.getcompletion("", "color")
+  )
+end
+
 -- from telescope oldfiles:
----@return boolean
 H.buf_in_cwd = function(bufname, cwd)
   if cwd:sub(-1) ~= Path.path.sep then cwd = cwd .. Path.path.sep end
   local bufname_prefix = bufname:sub(1, #cwd)
@@ -61,17 +99,8 @@ H.pick_start = function(items, default_opts, opts)
   return Pick.start(opts_final)
 end
 
---- Added option cwd_only:
---- Old files picker.
----
---- Pick from |v:oldfiles| entries representing readable files.
----
----@param local_opts __extra_pickers_local_opts
----   Not used at the moment.
----@param opts __extra_pickers_opts
----
----@return __extra_pickers_return
-ExtraAK.pickers.oldfiles = function(local_opts, opts)
+--- Copied oldfiles and added option cwd_only
+Pick.registry.oldfiles_with_filter = function(local_opts, opts)
   local oldfiles = vim.v.oldfiles
   if not vim.islist(oldfiles) then H.error("`pickers.oldfiles` picker needs valid `v:oldfiles`.") end
 
@@ -93,65 +122,67 @@ ExtraAK.pickers.oldfiles = function(local_opts, opts)
 end
 
 -- https://github.com/echasnovski/mini.nvim/discussions/518#discussioncomment-7373556
--- For TODOs in a project, use builtin.grep
---
--- patterns: see mini.hipatterns, config, highlighters
-ExtraAK.pickers.todo_comments = function(patterns)
-  local function enable_hipatterns(buf_id)
-    if MiniHipatterns then MiniHipatterns.enable(buf_id) end
+-- For TODOs in a project, use builtin.grep.
+Pick.registry.todo_comments = function(patterns) --hipatterns.config.highlighters
+  local function find_todo(item)
+    for _, hl in pairs(patterns) do
+      local pattern = hl.pattern:sub(2) -- remove the prepending space
+      if item:find(pattern, 1, true) then return hl end
+    end
+    return patterns[1] -- prevent nil
   end
-  local function search_regex(keywords)
+  local change_display = function(items)
+    return vim.tbl_map(function(item)
+      local s = string.gsub(item, "│", "") -- remove character used by comment box
+      s = string.gsub(s, "%s+", " ") -- change multiple spaces into one space
+      local todo = find_todo(s).pattern:sub(1, -2) -- remove the : to prevent hl on first col
+      return todo .. " " .. s
+    end, items)
+  end
+  local search_regex = function(keywords)
     local pattern = [[\b(KEYWORDS):]]
     return pattern:gsub("KEYWORDS", table.concat(keywords, "|"))
   end
-
+  local on_start = function()
+    if MiniHipatterns then MiniHipatterns.enable(vim.api.nvim_get_current_buf()) end
+  end
   local show = function(buf_id, items, query)
-    enable_hipatterns(buf_id)
-    Pick.default_show(
-      buf_id,
-      vim.tbl_map(function(item)
-        local s = string.gsub(item, "│", "") -- remove character used by comment box
-        s = string.gsub(s, "-- ", " ") -- remove comment before and todo keep one space
-        s = string.gsub(s, "%s+", " ") -- change multiple spaces into one space
-        return s
-      end, items),
-      query
-    )
-  end
-  local preview = function(buf_id, item)
-    enable_hipatterns(buf_id)
-    Pick.default_preview(buf_id, item)
+    Pick.default_show(buf_id, change_display(items), query, { show_icons = true }) --
   end
 
+  local name = "Todo-comments"
+  if H.pre_hooks[name] == nil then H.pre_hooks[name] = on_start end
   Pick.builtin.grep(
     { tool = "rg", pattern = search_regex(vim.tbl_keys(patterns)) },
-    { source = { name = "Todo-comments", show = show, preview = preview } }
+    { source = { name = name, show = show } }
   )
 end
 
-ExtraAK.pickers.color_picker = function()
-  local target = vim.fn.getcompletion
-  local skip = Utils.color.builtins_to_skip()
-
-  ---@diagnostic disable-next-line: duplicate-set-field
-  vim.fn.getcompletion = function()
-    ---@diagnostic disable-next-line: redundant-parameter
-    return vim.tbl_filter(
-      function(color) return not vim.tbl_contains(skip, color) end, --
-      target("", "color")
-    )
-  end
-
-  vim.ui.select(vim.fn.getcompletion(), { prompt = "Select colorscheme" }, function(choice)
-    if not choice then return end
-    vim.cmd.colorscheme(choice)
-  end)
-
-  vim.fn.getcompletion = target
+-- Previewing multiple themes:
+-- Press tab for preview, and continue with ctrl-n and ctrl-p
+Pick.registry.colors = function()
+  local selected_colorscheme = nil
+  local on_start = function() selected_colorscheme = vim.g.colors_name end
+  local on_stop = function() vim.cmd.colorscheme(selected_colorscheme) end
+  local name = "Colors with preview"
+  if H.pre_hooks[name] == nil then H.pre_hooks[name] = on_start end
+  if H.post_hooks[name] == nil then H.post_hooks[name] = on_stop end
+  return MiniPick.start({
+    source = {
+      name = name,
+      items = H.colors(),
+      choose = function(item) selected_colorscheme = item end,
+      preview = function(buf_id, item)
+        vim.cmd.colorscheme(item)
+        vim.api.nvim_buf_set_lines(buf_id, 0, -1, false, { item })
+      end,
+    },
+  })
 end
 
-local function bdir()
-  -- note: in oil dir, fallback to root cwd
+local function no_picker(msg) vim.notify("No picker for " .. msg) end
+
+local function bdir() -- note: in oil dir, fallback to root cwd
   if vim["bo"].buftype == "" then return vim.fn.expand("%:p:h") end
 end
 
@@ -161,56 +192,50 @@ local function map(l, r, opts, mode)
   vim.keymap.set(mode, l, r, opts)
 end
 
-local function get_opts()
-  return {
-    -- default false, more speed and memory on repeated prompts:
-    -- options = { use_cache = false },
-  }
-end
-
 local function keys()
   local builtin = Pick.builtin
   local extra = MiniExtra.pickers
-  local ak_extra = ExtraAK.pickers
+  local registry = Pick.registry
 
   -- hotkeys:
   map("<leader>/", function() extra.buf_lines({ scope = "current" }) end, { desc = "Buffer fuzzy" })
-  map("<leader>o", function() builtin.buffers() end, { desc = "Buffers" }) -- mnemonic: open buffers
+  map("<leader>o", builtin.buffers, { desc = "Buffers" }) -- mnemonic: open buffers
   map("<leader>e", function() builtin.grep_live() end, { desc = "Grep" })
-  map("<leader>r", function() ak_extra.oldfiles({ cwd_only = true }) end, { desc = "Recent (rel)" })
+  map("<leader>r", function() registry.oldfiles_with_filter({ cwd_only = true }) end, { desc = "Recent (rel)" })
   map("<leader>:", function() extra.history({ scope = ":" }) end, { desc = "Command history" })
   map("<leader><leader>", function() builtin.files({ tool = "git" }) end, { desc = "Git files" })
 
   -- find:
-  map("<leader>fb", function() builtin.buffers() end, { desc = "Buffers" })
+  map("<leader>fb", builtin.buffers, { desc = "Buffers" })
   map("<leader>fg", function() builtin.files({ tool = "git" }) end, { desc = "Git files" })
-  map("<leader>ff", function() builtin.files() end, { desc = "Find files" })
+  map("<leader>ff", builtin.files, { desc = "Find files" })
   map("<leader>fF", function() builtin.files(nil, { source = { cwd = bdir() } }) end, { desc = "Find files (rel)" })
-  map("<leader>fr", function() extra.oldfiles() end, { desc = "Recent" })
-  map("<leader>fR", function() ak_extra.oldfiles({ cwd_only = true }) end, { desc = "Recent (rel)" })
+  map("<leader>fr", extra.oldfiles, { desc = "Recent" })
+  map("<leader>fR", function() registry.oldfiles_with_filter({ cwd_only = true }) end, { desc = "Recent (rel)" })
 
   -- git:
   map("<leader>gb", function() extra.git_commits({ path = vim.fn.expand("%") }) end, { desc = "Git commits buffer" })
-  map("<leader>gc", function() extra.git_commits() end, { desc = "Git commits" })
+  map("<leader>gc", extra.git_commits, { desc = "Git commits" })
   map("<leader>gs", function() extra.git_hunks({ scope = "staged" }) end, { desc = "Git status" })
 
   -- search
-  map('<leader>s"', function() extra.registers() end, { desc = "Registers" })
+  map('<leader>s"', extra.registers, { desc = "Registers" })
   map("<leader>sa", function() no_picker("Auto commands") end, { desc = "NP: Auto commands" })
   map("<leader>sb", function() extra.buf_lines({ scope = "current" }) end, { desc = "Buffer fuzzy" })
   map("<leader>sc", function() extra.history({ scope = ":" }) end, { desc = "Command history" })
-  map("<leader>sC", function() extra.commands() end, { desc = "Commands" })
+  map("<leader>sC", extra.commands, { desc = "Commands" })
+  map("<leader>se", extra.treesitter, { desc = "Treesitter" })
   map("<leader>si", function() no_picker("Picker builtin") end, { desc = "NP: Picker builtin" })
-  map("<leader>sg", function() builtin.grep_live() end, { desc = "Grep" })
+  map("<leader>sg", builtin.grep_live, { desc = "Grep" })
   map("<leader>sG", function() builtin.grep_live(nil, { source = { cwd = bdir() } }) end, { desc = "Grep (rel)" })
-  map("<leader>sh", function() builtin.help() end, { desc = "Help pages" })
-  map("<leader>sH", function() extra.hl_groups() end, { desc = "Search highlight groups" })
+  map("<leader>sh", builtin.help, { desc = "Help pages" })
+  map("<leader>sH", extra.hl_groups, { desc = "Search highlight groups" })
   map("<leader>sj", function() extra.list({ scope = "jump" }) end, { desc = "Jumplist" }) --**
-  map("<leader>sk", function() extra.keymaps() end, { desc = "Key maps" })
+  map("<leader>sk", extra.keymaps, { desc = "Key maps" })
   map("<leader>sM", function() no_picker("Man pages") end, { desc = "NP: Man pages" })
-  map("<leader>sm", function() extra.marks() end, { desc = "Jump to mark" })
-  map("<leader>so", function() extra.options() end, { desc = "Options" })
-  map("<leader>sR", function() builtin.resume() end, { desc = "Resume" })
+  map("<leader>sm", extra.marks, { desc = "Jump to mark" })
+  map("<leader>so", extra.options, { desc = "Options" })
+  map("<leader>sR", builtin.resume, { desc = "Resume" })
   map("<leader>sS", function() extra.lsp({ scope = "workspace_symbol" }) end, { desc = "Goto symbol (workspace)" })
   map("<leader>ss", function() extra.lsp({ scope = "document_symbol" }) end, { desc = "Goto symbol" })
   map("<leader>sw", function() builtin.grep({ pattern = vim.fn.expand("<cword>") }) end, { desc = "Word" })
@@ -229,6 +254,10 @@ local function keys()
   map("<leader>xx", function() extra.list({ scope = "quickfix" }) end, { desc = "Quickfix search" })
   map("<leader>xX", function() no_picker("Quickfixhis search") end, { desc = "NP: Quickfixhis search" })
   map("<leader>xz", function() extra.list({ scope = "location" }) end, { desc = "Loclist search" })
+
+  -- only implemented by mini.pick:
+  map("<leader>sB", extra.buf_lines, { desc = "Buffers fuzzy" })
+  map("<leader>sp", extra.hipatterns, { desc = "Buffers hipatterns" })
 end
 
 local function extensions()
@@ -237,14 +266,10 @@ local function extensions()
   -- telescope alternate: ml
 end
 
--- TODO:
--- Ask: Lsp always shows the picker even if there is only one.
--- Ask: Quickfixhis search
--- Decide: Git status versus git hunks staged/unstaged
 local function picker()
   local builtin = Pick.builtin
   local extra = MiniExtra.pickers
-  local ak_extra = ExtraAK.pickers
+  local registry = Pick.registry
 
   ---@type Picker
   local Picker = {
@@ -256,10 +281,17 @@ local function picker()
     lsp_references = function() extra.lsp({ scope = "references" }) end,
     lsp_implementations = function() extra.lsp({ scope = "implementation" }) end,
     lsp_type_definitions = function() extra.lsp({ scope = "type_definition" }) end,
-    colors = ak_extra.color_picker,
-    todo_comments = ak_extra.todo_comments,
+    colors = registry.colors,
+    todo_comments = registry.todo_comments,
   }
   Utils.pick.use_picker(Picker)
+end
+
+local function get_opts()
+  return {
+    -- default false, more speed and memory on repeated prompts:
+    -- options = { use_cache = false },
+  }
 end
 
 --          ╭─────────────────────────────────────────────────────────╮
@@ -267,6 +299,7 @@ end
 --          ╰─────────────────────────────────────────────────────────╯
 local function setup()
   Pick.setup(get_opts())
+  H.setup_autocommands()
   keys()
   extensions()
   picker()

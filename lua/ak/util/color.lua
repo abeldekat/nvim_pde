@@ -53,7 +53,7 @@ function M.builtins_to_skip()
   -- stylua: ignore
   return  { "zellner", "torte", "slate", "shine", "ron", "quiet", "peachpuff",
   "pablo", "murphy", "lunaperche", "koehler", "industry", "evening", "elflord",
-  "desert", "delek", "darkblue", "blue" }
+  "desert", "delek", "darkblue", "blue", "sorbet", "morning", "wildcharm", "zaibatsu" }
 end
 
 -- Given the name of a spec, return the name of the config to require

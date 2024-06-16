@@ -57,26 +57,13 @@ hipatterns.setup({ highlighters = highlighters })
 --          ╭─────────────────────────────────────────────────────────╮
 --          │              Replacing todo-comments.nvim               │
 --          ╰─────────────────────────────────────────────────────────╯
-local alt_groups = { -- In telescope, without the background:
-  MiniHipatternsFixme = "DiagnosticError",
-  MiniHipatternsHack = "DiagnosticWarn",
-  MiniHipatternsTodo = "DiagnosticInfo",
-  MiniHipatternsNote = "DiagnosticHint",
-}
 
-local todo_comments = {}
-for key, config in pairs(highlighters) do
-  if type(config.pattern) == "string" then
-    config = vim.tbl_extend("force", config, { group = alt_groups[config.group] })
-    todo_comments[key] = config
-  end
-end
-vim.keymap.set("n", "<leader>st", function() Picker.todo_comments(todo_comments) end, { desc = "Todo", silent = true })
+vim.keymap.set("n", "<leader>st", function() Picker.todo_comments(highlighters) end, { desc = "Todo", silent = true })
 vim.keymap.set("n", "<leader>sT", function()
   local function filter(keys)
     local result = {}
     for _, key in ipairs(keys) do
-      local config = todo_comments[key]
+      local config = highlighters[key]
       if config then result[key] = config end
     end
     return result

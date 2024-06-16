@@ -27,7 +27,7 @@ local No_op = {
   lsp_implementations = function() no_picker("lsp_implementations") end,
   lsp_type_definitions = function() no_picker("lsp_type_definitions") end,
   colors = function() no_picker("colors") end,
-  todo_comments = function(patterns) no_picker("todo_comments") end,
+  todo_comments = function(_) no_picker("todo_comments") end,
 }
 
 local picker = No_op
@@ -44,6 +44,6 @@ M.lsp_references = function() picker.lsp_references() end
 M.lsp_implementations = function() picker.lsp_implementations() end
 M.lsp_type_definitions = function() picker.lsp_type_definitions() end
 M.colors = function() picker.colors() end
--- patterns: mini.hipatterns, config, highlighters
+-- patterns argument: See mini.hipatterns, config, highlighters
 M.todo_comments = function(patterns) picker.todo_comments(patterns) end
 return M
