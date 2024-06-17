@@ -25,6 +25,7 @@ vim.api.nvim_create_autocmd("Colorscheme", {
   callback = function()
     local set_hl = function(name, data) vim.api.nvim_set_hl(0, name, data) end
     set_hl("MiniStatuslineInactive", { link = "StatusLineNC" })
+
     -- colors taken from lualine theme, normal c:
     local fg = prefer_light and "#586e75" or "#93a1a1"
     local bg = prefer_light and "#eee8d5" or "#073642"
@@ -36,5 +37,9 @@ vim.api.nvim_create_autocmd("Colorscheme", {
     set_hl("MiniStatuslineModeReplace", { link = "DiffDelete" })
     set_hl("MiniStatuslineModeCommand", { link = "DiffText" })
     set_hl("MiniStatuslineModeOther", { link = "IncSearch" })
+    set_hl("MiniStatuslineModeOther", { link = "IncSearch" })
+
+    local fg_msg_area = vim.api.nvim_get_hl(0, { name = "Comment" }).fg
+    set_hl("MsgArea", { fg = fg_msg_area }) -- Area for messages and cmdline
   end,
 })

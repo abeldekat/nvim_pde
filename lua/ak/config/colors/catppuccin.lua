@@ -21,6 +21,8 @@ local opts = {
       MiniHipatternsHack = { fg = colors.base, bg = colors.yellow, style = { "bold" } },
       MiniHipatternsNote = { fg = colors.base, bg = colors.teal, style = { "bold" } },
       MiniHipatternsTodo = { fg = colors.base, bg = colors.sky, style = { "bold" } },
+
+      MsgArea = { fg = colors.overlay0 }, -- Area for messages and cmdline
     }
   end,
   integrations = {

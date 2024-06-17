@@ -39,6 +39,8 @@ vim.api.nvim_create_autocmd("Colorscheme", {
     set_hl("DiagnosticWarn", palette.yellow, palette.none)
     set_hl("DiagnosticInfo", palette.blue, palette.none)
     set_hl("DiagnosticHint", palette.green, palette.none)
+
+    set_hl("MsgArea", palette.grey_dim, palette.none) -- Area for messages and cmdline
   end,
 })
 

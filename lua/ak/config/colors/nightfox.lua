@@ -25,6 +25,8 @@ require("nightfox").setup({
       MiniHipatternsHack = { bg = "diag.warn", fg = "bg", style = "bold" },
       MiniHipatternsTodo = { bg = "diag.info", fg = "bg", style = "bold" },
       MiniHipatternsNote = { bg = "diag.hint", fg = "bg", style = "bold" },
+
+      MsgArea = { fg = "syntax.comment" }, -- Area for messages and cmdline
     },
   },
 })

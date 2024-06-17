@@ -18,13 +18,17 @@ Utils.color.add_toggle("rose-pine*", {
 local current_nc = "#16141f"
 
 local hl_config = {
-  -- Use MiniStatuslineFilename for  mode normal:
-  MiniStatuslineModeNormal = { fg = "muted", bg = "surface", current = current_nc },
+  -- Change muted into subtle:
+  MiniStatuslineFilename = { fg = "subtle", bg = "surface", current = current_nc },
+  -- Use MiniStatuslineFilename for mode normal:
+  MiniStatuslineModeNormal = { fg = "subtle", bg = "surface", current = current_nc },
 
   MiniHipatternsFixme = { bg = "love", fg = "base", bold = true, current = current_nc },
   MiniHipatternsHack = { bg = "gold", fg = "base", bold = true, current = current_nc },
   MiniHipatternsTodo = { bg = "foam", fg = "base", bold = true, current = current_nc },
   MiniHipatternsNote = { bg = "iris", fg = "base", bold = true, current = current_nc },
+
+  MsgArea = { fg = "muted", current = current_nc }, -- Area for messages and cmdline
 }
 
 --          ╭─────────────────────────────────────────────────────────╮

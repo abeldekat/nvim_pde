@@ -6,7 +6,7 @@ local with_dir = Util.opened_with_dir_argument()
 
 ---@type "h" | "g"  -- Use either harpoon or grapple
 local marker_to_use = "g"
----@type "t" | "f" | "m" -- Use either telescope, fzf_lua or mini.pick
+---@type "t" | "m" -- Use either telescope or mini.pick
 local picker_to_use = "m"
 
 --          ╭─────────────────────────────────────────────────────────╮
@@ -59,15 +59,10 @@ local function picker_telescope()
   add(spec_telescope)
   require("ak.config.editor.telescope")
 end
-local function picker_fzf_lua()
-  register(spec_telescope)
-  add(spec_fzf_lua)
-  require("ak.config.editor.fzf_lua")
-end
 local function picker_mini_pick()
   register(spec_telescope)
-  register(spec_fzf_lua)
-  require("ak.config.editor.mini_pick")
+  add(spec_fzf_lua) -- HACK: -- mini.pick lsp jump problem. Use fzf for lsp
+  require("ak.config.editor.mini_pick").setup({ use_fzf = true })
 end
 
 --          ╭─────────────────────────────────────────────────────────╮
@@ -117,12 +112,10 @@ later(function()
   require("ak.config.editor.spectre")
   add("stevearc/aerial.nvim")
   require("ak.config.editor.aerial")
-  if picker_to_use == "t" then
-    picker_telescope()
-  elseif picker_to_use == "f" then
-    picker_fzf_lua()
-  else
+  if picker_to_use == "m" then
     picker_mini_pick()
+  else
+    picker_telescope()
   end
 
   require("ak.config.editor.mini_clue")

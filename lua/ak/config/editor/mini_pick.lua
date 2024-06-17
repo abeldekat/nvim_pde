@@ -11,12 +11,19 @@
 -- - Sorting is done to first minimize match width and then match start.
 --   Nothing more: no favoring certain places in string, etc.
 
--- NOTE: No picker for autocommands, man-pages and git status
+-- NOTE: No picker for autocommands, man-pages and git status.
+-- -- Git: use hunks. Autocommands and man-pages: use fzf builtin.
+-- TODO: No Lsp jump_to_single_result.
+-- -- For now, use fzf-lua for LSP
+-- TODO: Lsp confusing jumps with ctrl-o and ctrl-i compared to telescope
+-- TODO: Buffer current fuzzy: Syntax highlighting
+-- TODO: Paths: There is no filename first option
 
+local M = {}
 local Utils = require("ak.util")
 local Pick = require("mini.pick")
 
-local H = {}
+local H = {} -- Helper functions for custom pickers
 local Path = require("plenary.path")
 
 H.pre_hooks = {}
@@ -156,6 +163,7 @@ end
 
 -- Previewing multiple themes:
 -- Press tab for preview, and continue with ctrl-n and ctrl-p
+-- The above does not work for nvchad base46(implemented as ui-select)
 Pick.registry.colors = function()
   local selected_colorscheme = nil
   local on_start = function() selected_colorscheme = vim.g.colors_name end
@@ -188,7 +196,7 @@ local function map(l, r, opts, mode)
   vim.keymap.set(mode, l, r, opts)
 end
 
-local function keys()
+local function keys(external_opts)
   local builtin = Pick.builtin
   local extra = MiniExtra.pickers
   local registry = Pick.registry
@@ -226,7 +234,11 @@ local function keys()
   map("<leader>sc", function() extra.history({ scope = ":" }) end, { desc = "Command history" })
   map("<leader>sC", extra.commands, { desc = "Commands" })
   map("<leader>se", extra.treesitter, { desc = "Treesitter" })
-  map("<leader>si", function() no_picker("Picker builtin") end, { desc = "NP: Picker builtin" })
+  if external_opts.use_fzf then
+    map("<leader>si", function() vim.cmd("FzfLua builtin") end, { desc = "NP: Picker builtin" })
+  else
+    map("<leader>si", function() no_picker("Picker builtin") end, { desc = "NP: Picker builtin" })
+  end
   map("<leader>sg", builtin.grep_live, { desc = "Grep" })
   map("<leader>sG", function() builtin.grep_live(nil, { source = { cwd = bdir() } }) end, { desc = "Grep (rel)" })
   map("<leader>sh", builtin.help, { desc = "Help pages" })
@@ -239,15 +251,14 @@ local function keys()
   map("<leader>sR", builtin.resume, { desc = "Resume" })
   map("<leader>sS", function() extra.lsp({ scope = "workspace_symbol" }) end, { desc = "Goto symbol (workspace)" })
   map("<leader>ss", function() extra.lsp({ scope = "document_symbol" }) end, { desc = "Goto symbol" })
+
+  -- In visual mode: Yank some text, :Pick grep and put(ctrl-r ")
   map("<leader>sw", function() builtin.grep({ pattern = vim.fn.expand("<cword>") }) end, { desc = "Word" })
   map(
     "<leader>sW",
     function() builtin.grep({ pattern = vim.fn.expand("<cword>") }, { source = { cwd = bdir() } }) end,
     { desc = "Word (rel)" }
   )
-  -- Not needed: Yank some text, :Pick grep and put(ctrl-r ")
-  map("<leader>sw", function() no_picker("Selection") end, { desc = "NP: Selection" }, "v")
-  map("<leader>sW", function() no_picker("Selection (rel)") end, { desc = "NP: Selection (rel)" }, "v")
 
   -- diagnostics/quickfix
   map("<leader>xd", function() extra.diagnostic({ scope = "all" }) end, { desc = "Workspace diagnostics" })
@@ -267,16 +278,22 @@ local function keys()
   )
 end
 
-local function extensions()
-  vim.ui.select = Pick.ui_select
-  -- aerial telescope extension: leader ss
-  -- telescope alternate: ml
+local function fzf()
+  require("fzf-lua").setup()
+  local fzf_lua_lsp_opts = "jump_to_single_result=true ignore_current_line=true"
+  return {
+    lsp_definitions = function() vim.cmd("FzfLua lsp_definitions " .. fzf_lua_lsp_opts) end,
+    lsp_references = function() vim.cmd("FzfLua lsp_references " .. fzf_lua_lsp_opts) end,
+    lsp_implementations = function() vim.cmd("FzfLua lsp_implementations " .. fzf_lua_lsp_opts) end,
+    lsp_type_definitions = function() vim.cmd("FzfLua lsp_typedefs " .. fzf_lua_lsp_opts) end,
+  }
 end
 
-local function picker()
+local function picker(external_opts)
   local builtin = Pick.builtin
   local extra = MiniExtra.pickers
   local registry = Pick.registry
+  local fzf_lua = external_opts.use_fzf and fzf() or nil -- mini.pick lsp jump problem
 
   ---@type Picker
   local Picker = {
@@ -284,10 +301,12 @@ local function picker()
     live_grep = builtin.grep_live,
     keymaps = extra.keymaps,
     oldfiles = extra.oldfiles,
-    lsp_definitions = function() extra.lsp({ scope = "definition" }) end,
-    lsp_references = function() extra.lsp({ scope = "references" }) end,
-    lsp_implementations = function() extra.lsp({ scope = "implementation" }) end,
-    lsp_type_definitions = function() extra.lsp({ scope = "type_definition" }) end,
+    lsp_definitions = fzf_lua and fzf_lua.lsp_definitions or function() extra.lsp({ scope = "definition" }) end,
+    lsp_references = fzf_lua and fzf_lua.lsp_references or function() extra.lsp({ scope = "references" }) end,
+    lsp_implementations = fzf_lua and fzf_lua.lsp_implementations
+      or function() extra.lsp({ scope = "implementation" }) end,
+    lsp_type_definitions = fzf_lua and fzf_lua.lsp_type_definitions
+      or function() extra.lsp({ scope = "type_definition" }) end,
     colors = registry.colors,
     todo_comments = registry.todo_comments,
   }
@@ -304,11 +323,18 @@ end
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                          Setup                          │
 --          ╰─────────────────────────────────────────────────────────╯
-local function setup()
+M.setup = function(external_opts)
   Pick.setup(get_opts())
+
   H.setup_autocommands()
-  keys()
-  extensions()
-  picker()
+  keys(external_opts)
+  picker(external_opts)
+
+  -- Extensions:
+  -- telescope ui select:
+  vim.ui.select = Pick.ui_select
+  -- aerial telescope extension: leader ss
+  -- telescope alternate: ml
 end
-setup()
+
+return M

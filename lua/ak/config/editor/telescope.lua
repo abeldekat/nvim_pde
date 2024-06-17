@@ -215,14 +215,13 @@ local function keys()
     end,
     { desc = "Goto symbol" }
   )
+  -- In visual mode: Yank some text, :Pick grep and put(ctrl-r ")
   map("<leader>sw", function() builtin.grep_string({ word_match = "-w" }) end, { desc = "Word" })
   map(
     "<leader>sW",
     function() builtin.grep_string({ cwd = buffer_dir(), word_match = "-w" }) end,
     { desc = "Word (rel)" }
   )
-  map("<leader>sw", function() builtin.grep_string() end, { desc = "Selection" }, "v")
-  map("<leader>sW", function() builtin.grep_string({ cwd = buffer_dir() }) end, { desc = "Selection (rel)" }, "v")
 
   -- diagnostics/quickfix
   map("<leader>xd", "<cmd>Telescope diagnostics<cr>", { desc = "Workspace diagnostics" })

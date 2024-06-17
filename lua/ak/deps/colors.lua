@@ -67,6 +67,7 @@ local colors = {
     return {
       { source = "lifepillar/vim-solarized8", name = "colors_solarized8", checkout = "neovim" },
       { source = "AstroNvim/astrotheme", name = "colors_astrotheme" },
+      { source = "ronisbr/nano-theme.nvim", name = "colors_nano-theme" },
     }
   end,
 }

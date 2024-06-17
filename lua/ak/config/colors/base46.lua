@@ -32,6 +32,7 @@ M.ui = { --  transparency = false, theme_toggle = {},
     MiniHipatternsTodo = { bg = "blue", fg = "black", bold = true },
     MiniHipatternsNote = { bg = "green", fg = "black", bold = true },
     StatusLine = { bg = "statusline_bg" }, -- part of statusline integration
+    MsgArea = { fg = "grey_fg2" }, -- Area for messages and cmdline
   },
 
   -- Removed integrations cheatsheet, nvdash, statusline, tabufline, telescope and term:
@@ -90,6 +91,7 @@ local function select(themes_cb) -- based on nvchad ui telescope
     require("plenary.reload").reload_module("base46")
     M.compile()
     load_all_highlights()
+    ---@diagnostic disable-next-line: missing-parameter
     pcall(function() require("ibl").update() end)
     persist(old, choice)
   end)

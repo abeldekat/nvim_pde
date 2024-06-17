@@ -42,6 +42,8 @@ local opts = {
       MiniHipatternsHack = { bg = t.diag.warning, fg = t.ui.bg, bold = true },
       MiniHipatternsTodo = { bg = t.diag.info, fg = t.ui.bg, bold = true },
       MiniHipatternsNote = { bg = t.diag.hint, fg = t.ui.bg, bold = true },
+
+      MsgArea = { fg = t.syn.comment }, -- theme.ui.fg_dim -- Area for messages and cmdline
     }
 
     return result

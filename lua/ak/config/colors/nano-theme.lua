@@ -31,5 +31,7 @@ vim.api.nvim_create_autocmd("Colorscheme", {
     -- added
     set_hl("MiniStatuslineModeCommand", { fg = c.bg, bg = c.nano_popout_color }) -- same as insert
     set_hl("MiniStatuslineModeOther", { fg = c.bg, bg = c.nano_popout_color }) -- same as insert
+
+    set_hl("MsgArea", { fg = c.nano_faded_color }) -- Area for messages and cmdline
   end,
 })

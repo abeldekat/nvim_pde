@@ -26,6 +26,8 @@ local function highlights(hl, c)
   hl.MiniHipatternsHack = { fg = c.ui.base, bg = c.ui.yellow, bold = true }
   hl.MiniHipatternsTodo = { fg = c.ui.base, bg = c.ui.blue, bold = true }
   hl.MiniHipatternsNote = { fg = c.ui.base, bg = c.ui.cyan, bold = true }
+
+  hl.MsgArea = { fg = c.syntax.comment } -- Area for messages and cmdline
 end
 
 local opts = {

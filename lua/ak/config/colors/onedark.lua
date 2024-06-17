@@ -25,5 +25,8 @@ vim.api.nvim_create_autocmd("Colorscheme", {
     vim.api.nvim_set_hl(0, "MiniHipatternsHack", { fg = hl_for_bg.bg, bg = hl_warn.fg, bold = true })
     vim.api.nvim_set_hl(0, "MiniHipatternsTodo", { fg = hl_for_bg.bg, bg = hl_info.fg, bold = true })
     vim.api.nvim_set_hl(0, "MiniHipatternsNote", { fg = hl_for_bg.bg, bg = hl_hint.fg, bold = true })
+
+    local hl_for_msg_area = vim.api.nvim_get_hl(0, { name = "Comment", link = false })
+    vim.api.nvim_set_hl(0, "MsgArea", { fg = hl_for_msg_area.fg }) -- Area for messages and cmdline
   end,
 })
