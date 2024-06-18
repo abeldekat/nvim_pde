@@ -83,7 +83,7 @@ local function filter_specs_to_use(groups)
 end
 
 local colors_loaded = false
-local function add_picker(specs_to_use)
+local function add_keymap_all_colors(specs_to_use)
   vim.keymap.set("n", "<leader>uu", function()
     if not colors_loaded then
       for _, spec in pairs(specs_to_use) do -- Load all specs and their configs
@@ -134,7 +134,7 @@ function M.colorscheme()
     register(spec_base46)
     -- stylua: ignore
     for _, spec in pairs(specs) do register(spec) end
-    add_picker(specs)
+    add_keymap_all_colors(specs)
   end)
 end
 

@@ -170,8 +170,11 @@ Pick.registry.colors = function()
     selected_colorscheme = vim.g.colors_name --
   end
   local on_stop = function()
-    vim.cmd.colorscheme(selected_colorscheme) --
+    vim.schedule(function() -- must use schedule, otherwise eyeliner stops displaying
+      vim.cmd.colorscheme(selected_colorscheme)
+    end)
   end
+
   local name = "Colors with preview"
   if H.pre_hooks[name] == nil then H.pre_hooks[name] = on_start end
   if H.post_hooks[name] == nil then H.post_hooks[name] = on_stop end

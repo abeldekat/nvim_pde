@@ -3,6 +3,8 @@
 --          │     a lualine theme is included in the lualine repo     │
 --          ╰─────────────────────────────────────────────────────────╯
 
+-- NOTE: Mini.pick current line not different...
+
 local Utils = require("ak.util")
 local prefer_light = require("ak.color").prefer_light
 vim.o.background = prefer_light and "light" or "dark"

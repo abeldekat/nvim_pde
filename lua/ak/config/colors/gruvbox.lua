@@ -1,8 +1,10 @@
 --          ╭─────────────────────────────────────────────────────────╮
 --          │             mini.statusline: not supported              │
 --          │              gruvbox has no lualine theme               │
---          │         lualine itself provides a gruvbox theme         │
 --          ╰─────────────────────────────────────────────────────────╯
+
+-- NOTE: Mini.pick current line not different...
+-- NOTE: Eyeliner: Hard to see...
 
 local Utils = require("ak.util")
 

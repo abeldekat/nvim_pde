@@ -2,6 +2,8 @@
 --          │               mini.statusline: supported                │
 --          ╰─────────────────────────────────────────────────────────╯
 
+-- NOTE: Mini.pick current line not different
+
 -- has its own toggle_style
 require("onedark").setup({ -- the default is dark
   toggle_style_list = { "warm", "warmer", "light", "dark", "darker", "cool", "deep" },
