@@ -8,6 +8,8 @@
 --          ╰─────────────────────────────────────────────────────────╯
 
 local Util = require("ak.util")
+local repeatable_move_enabled = false -- toggle, when enabled eyeliner does not work.
+
 local opts = {
   select = {
     enable = true,
@@ -84,60 +86,39 @@ local opts = {
   },
 }
 
-local function activate_repeatable_move()
-  local ts_repeat_move = require("nvim-treesitter.textobjects.repeatable_move")
+local function toggle_repeatable_move()
   local modes = { "n", "x", "o" }
-  vim.keymap.set(modes, ";", ts_repeat_move.repeat_last_move)
-  vim.keymap.set(modes, ",", ts_repeat_move.repeat_last_move_opposite)
-  vim.keymap.set(modes, "f", ts_repeat_move.builtin_f)
-  vim.keymap.set(modes, "F", ts_repeat_move.builtin_F)
-  vim.keymap.set(modes, "t", ts_repeat_move.builtin_t)
-  vim.keymap.set(modes, "T", ts_repeat_move.builtin_T)
-end
 
-local function eyeliner_and_repeatable_move()
-  local use_eyeliner = true -- default, eyeliner is parsed before treesitter
-  vim.keymap.set("n", "<leader>um", function()
-    use_eyeliner = not use_eyeliner
-    if use_eyeliner then
-      pcall(vim.keymap.del, { "n", "x", "o" }, ";")
-      pcall(vim.keymap.del, { "n", "x", "o" }, ",")
-      vim.cmd("EyelinerEnable")
-    else
-      vim.cmd("EyelinerDisable")
-      activate_repeatable_move()
-    end
-  end, { desc = "Toggle treesitter repeatable move" })
-end
-
-local function textobjects_in_diff_mode()
-  -- In diff mode, use the default vim text objects c & C instead of the treesitter ones.
-  local move = require("nvim-treesitter.textobjects.move") ---@type table<string,fun(...)>
-  local configs = require("nvim-treesitter.configs")
-  for name, fn in pairs(move) do
-    if name:find("goto") == 1 then
-      move[name] = function(q, ...)
-        if vim.wo.diff then
-          local config = configs.get_module("textobjects.move")[name] ---@type table<string,string>
-          for key, query in pairs(config or {}) do
-            if q == query and key:find("[%]%[][cC]") then
-              vim.cmd("normal! " .. key)
-              return
-            end
-          end
-        end
-        return fn(q, ...)
-      end
-    end
+  local function notify()
+    vim.api.nvim_exec_autocmds(
+      "User",
+      { pattern = "AkRepeatableMoveToggled", modeline = false, data = { enabled = repeatable_move_enabled } }
+    )
   end
-end
+  local function enable()
+    notify()
+    local ts_repeat_move = require("nvim-treesitter.textobjects.repeatable_move")
+    vim.keymap.set(modes, ";", ts_repeat_move.repeat_last_move)
+    vim.keymap.set(modes, ",", ts_repeat_move.repeat_last_move_opposite)
+    vim.keymap.set(modes, "f", ts_repeat_move.builtin_f_expr, { expr = true })
+    vim.keymap.set(modes, "F", ts_repeat_move.builtin_F_expr, { expr = true })
+    vim.keymap.set(modes, "t", ts_repeat_move.builtin_t_expr, { expr = true })
+    vim.keymap.set(modes, "T", ts_repeat_move.builtin_T_expr, { expr = true })
+  end
+  local function disable()
+    for _, key in ipairs({ ";", ",", "f", "F", "t", "T" }) do
+      pcall(vim.keymap.del, modes, key)
+    end
+    notify()
+  end
 
-if Util.has("eyeliner.nvim") then
-  eyeliner_and_repeatable_move()
-else
-  activate_repeatable_move()
+  repeatable_move_enabled = not repeatable_move_enabled
+  -- stylua: ignore
+  if repeatable_move_enabled then enable() else disable() end
 end
-textobjects_in_diff_mode()
+vim.keymap.set("n", "<leader>um", toggle_repeatable_move, { desc = "Toggle treesitter repeatable move" })
+
 -- If treesitter is already loaded, we need to run config again for textobjects:
+-- In diff mode, use the default vim text objects c & C instead of the treesitter ones.
 ---@diagnostic disable-next-line: missing-fields
-require("nvim-treesitter.configs").setup({ textobjects = opts })
+if not vim.wo.diff then require("nvim-treesitter.configs").setup({ textobjects = opts }) end

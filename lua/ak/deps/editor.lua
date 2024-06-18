@@ -6,6 +6,7 @@ local with_dir = Util.opened_with_dir_argument()
 
 ---@type "h" | "g"  -- Use either harpoon or grapple
 local marker_to_use = "g"
+local mini_pick_also_use_fzf = true
 ---@type "t" | "m" -- Use either telescope or mini.pick
 local picker_to_use = "m"
 
@@ -61,8 +62,12 @@ local function picker_telescope()
 end
 local function picker_mini_pick()
   register(spec_telescope)
-  add(spec_fzf_lua) -- HACK: -- mini.pick lsp jump problem. Use fzf for lsp
-  require("ak.config.editor.mini_pick").setup({ use_fzf = true })
+  if mini_pick_also_use_fzf then
+    add(spec_fzf_lua) -- HACK: -- mini.pick lsp jump problem. Use fzf for lsp
+  else
+    register(spec_fzf_lua)
+  end
+  require("ak.config.editor.mini_pick").setup({ use_fzf = mini_pick_also_use_fzf })
 end
 
 --          ╭─────────────────────────────────────────────────────────╮

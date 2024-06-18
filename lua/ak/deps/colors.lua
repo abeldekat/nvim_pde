@@ -72,18 +72,13 @@ local colors = {
   end,
 }
 
-local function register_specs(groups)
+local function filter_specs_to_use(groups)
   local result = {}
   for _, group in ipairs(groups) do
     for _, spec in ipairs(group()) do
-      table.insert(result, spec)
+      result[spec.name] = spec
     end
   end
-  later(function()
-    for _, spec in ipairs(result) do
-      register(spec)
-    end
-  end)
   return result
 end
 
@@ -91,7 +86,7 @@ local colors_loaded = false
 local function add_picker(specs_to_use)
   vim.keymap.set("n", "<leader>uu", function()
     if not colors_loaded then
-      for _, spec in ipairs(specs_to_use) do -- Load all specs and their configs
+      for _, spec in pairs(specs_to_use) do -- Load all specs and their configs
         add(spec)
         require(Util.color.to_config_name(spec.name))
       end
@@ -116,28 +111,31 @@ end
 function M.colorscheme()
   local color_name = Color.color
   local color_info = Util.color.from_color_name(color_name)
-
-  add_picker(register_specs({
+  local specs = filter_specs_to_use({ -- key: spec_name, value: spec
     colors.one,
     colors.two,
     colors.three,
     colors.four,
-  }))
+  })
 
-  later(function() register(spec_base46) end)
-  if color_name == "base46" then -- collection, special case, no colorscheme command
-    now(function()
+  now(function()
+    if color_name == "base46" then -- collection, special case, no colorscheme command
       require(color_info.config_name).setup(function()
         add(spec_base46) -- only add spec when selecting a new theme.
         return vim.fn.stdpath("data") .. "/site/pack/deps/opt/" .. spec_base46.name .. "/lua/base46/themes"
       end)
-    end)
-  else
-    now(function()
-      if color_info.spec_name then add(color_info.spec_name) end
+    else
+      if color_info.spec_name then add(specs[color_info.spec_name]) end
       activate(color_name, color_info.config_name)
-    end)
-  end
+    end
+  end)
+
+  later(function()
+    register(spec_base46)
+    -- stylua: ignore
+    for _, spec in pairs(specs) do register(spec) end
+    add_picker(specs)
+  end)
 end
 
 return M

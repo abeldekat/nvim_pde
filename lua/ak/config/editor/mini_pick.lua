@@ -164,10 +164,14 @@ end
 -- Previewing multiple themes:
 -- Press tab for preview, and continue with ctrl-n and ctrl-p
 -- The above does not work for nvchad base46(implemented as ui-select)
+local selected_colorscheme = nil
 Pick.registry.colors = function()
-  local selected_colorscheme = nil
-  local on_start = function() selected_colorscheme = vim.g.colors_name end
-  local on_stop = function() vim.cmd.colorscheme(selected_colorscheme) end
+  local on_start = function()
+    selected_colorscheme = vim.g.colors_name --
+  end
+  local on_stop = function()
+    vim.cmd.colorscheme(selected_colorscheme) --
+  end
   local name = "Colors with preview"
   if H.pre_hooks[name] == nil then H.pre_hooks[name] = on_start end
   if H.post_hooks[name] == nil then H.post_hooks[name] = on_stop end
@@ -175,7 +179,9 @@ Pick.registry.colors = function()
     source = {
       name = name,
       items = H.colors(),
-      choose = function(item) selected_colorscheme = item end,
+      choose = function(item)
+        selected_colorscheme = item --
+      end,
       preview = function(buf_id, item)
         vim.cmd.colorscheme(item)
         vim.api.nvim_buf_set_lines(buf_id, 0, -1, false, { item })

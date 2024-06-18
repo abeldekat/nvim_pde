@@ -43,7 +43,9 @@ local function get_defaults(bufnr)
   --   lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
   -- }
   -- Use lsp formatting for certain filetypes:
-  result["lsp_fallback"] = vim.tbl_contains({ "c", "json", "jsonc", "rust" }, vim.bo[bufnr].filetype)
+  if vim.tbl_contains({ "c", "json", "jsonc", "rust" }, vim.bo[bufnr].filetype) then
+    result["lsp_format"] = "fallback" -- "never"|"fallback"|"prefer"|"first"|"last" "fallback"
+  end
   return result
 end
 

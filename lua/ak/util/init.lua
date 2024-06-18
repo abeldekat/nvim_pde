@@ -15,17 +15,6 @@ setmetatable(M, {
   end,
 })
 
----@type string[]
-local referenced_plugins = {}
-
--- Register the name of a plugin that is also referenced in modules other than their own
--- Those modules must be loaded after the plugin has registered itself.
----@param plugin string
-function M.register_referenced(plugin) table.insert(referenced_plugins, plugin) end
-
----@param plugin string
-function M.has(plugin) return vim.tbl_contains(referenced_plugins, plugin) end
-
 -- This indicates that oil.nvim should be shown
 function M.opened_with_dir_argument()
   if vim.fn.argc() == 1 then
