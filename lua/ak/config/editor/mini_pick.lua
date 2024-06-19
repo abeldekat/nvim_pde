@@ -34,7 +34,7 @@ H.setup_autocommands = function()
       desc = desc,
       callback = function(...)
         local opts = MiniPick.get_picker_opts() or {}
-        if opts then
+        if opts and opts.source then
           local hook = hooks[opts.source.name] or function(...) end
           hook(...)
         end
