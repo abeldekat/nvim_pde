@@ -8,7 +8,6 @@
 --          │            contrast and saturation palette.             │
 --          ╰─────────────────────────────────────────────────────────╯
 
-local M = {}
 local Util = require("ak.util")
 local Color = require("ak.color")
 local MiniDeps = require("mini.deps")
@@ -108,34 +107,30 @@ local function activate(color_name, config_name)
   })
 end
 
-function M.colorscheme()
-  local color_name = Color.color
-  local color_info = Util.color.from_color_name(color_name)
-  local specs = filter_specs_to_use({ -- key: spec_name, value: spec
-    colors.one,
-    colors.two,
-    colors.three,
-    colors.four,
-  })
+local color_name = Color.color
+local color_info = Util.color.from_color_name(color_name)
+local specs = filter_specs_to_use({ -- key: spec_name, value: spec
+  colors.one,
+  colors.two,
+  colors.three,
+  colors.four,
+})
 
-  now(function()
-    if color_name == "base46" then -- collection, special case, no colorscheme command
-      require(color_info.config_name).setup(function()
-        add(spec_base46) -- only add spec when selecting a new theme.
-        return vim.fn.stdpath("data") .. "/site/pack/deps/opt/" .. spec_base46.name .. "/lua/base46/themes"
-      end)
-    else
-      if color_info.spec_name then add(specs[color_info.spec_name]) end
-      activate(color_name, color_info.config_name)
-    end
-  end)
+now(function()
+  if color_name == "base46" then -- collection, special case, no colorscheme command
+    require(color_info.config_name).setup(function()
+      add(spec_base46) -- only add spec when selecting a new theme.
+      return vim.fn.stdpath("data") .. "/site/pack/deps/opt/" .. spec_base46.name .. "/lua/base46/themes"
+    end)
+  else
+    if color_info.spec_name then add(specs[color_info.spec_name]) end
+    activate(color_name, color_info.config_name)
+  end
+end)
 
-  later(function()
-    register(spec_base46)
+later(function()
+  register(spec_base46)
     -- stylua: ignore
     for _, spec in pairs(specs) do register(spec) end
-    add_keymap_all_colors(specs)
-  end)
-end
-
-return M
+  add_keymap_all_colors(specs)
+end)

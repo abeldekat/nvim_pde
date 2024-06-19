@@ -305,7 +305,7 @@ local function picker(external_opts)
   local fzf_lua = external_opts.use_fzf and fzf() or nil -- mini.pick lsp jump problem
 
   ---@type Picker
-  local Picker = {
+  local Picker = { --also allowed: scope declaration
     find_files = builtin.files,
     live_grep = builtin.grep_live,
     keymaps = extra.keymaps,

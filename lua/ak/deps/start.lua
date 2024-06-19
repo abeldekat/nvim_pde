@@ -9,7 +9,6 @@ now(function()
 
   -- Needed for a smoother installation process:
   require("ak.config.ui.mini_notify") -- mini.nvim in pack start
-  require("ak.deps.colors").colorscheme()
 end)
 
 later(function()
