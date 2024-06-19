@@ -17,6 +17,7 @@
     "version": "LuaJIT"
   },
   "workspace": {
+    "ignoreSubmodules": true,
     "checkThirdParty": false,
     "ignoreDir": ["lua"],
     "library": [

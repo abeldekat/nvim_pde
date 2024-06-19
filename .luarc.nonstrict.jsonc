@@ -16,6 +16,7 @@
     "version": "LuaJIT"
   },
   "workspace": {
+    "ignoreSubmodules": true,
     "checkThirdParty": false,
     "ignoreDir": ["colors_*/"],
     "library": [

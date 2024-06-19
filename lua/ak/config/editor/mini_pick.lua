@@ -11,13 +11,9 @@
 -- - Sorting is done to first minimize match width and then match start.
 --   Nothing more: no favoring certain places in string, etc.
 
--- NOTE: No picker for autocommands, man-pages and git status.
--- -- Git: use hunks. Autocommands and man-pages: use fzf builtin.
--- TODO: No Lsp jump_to_single_result.
--- -- For now, use fzf-lua for LSP
--- TODO: Lsp confusing jumps with ctrl-o and ctrl-i compared to telescope
--- TODO: Buffer current fuzzy: Syntax highlighting
--- TODO: Paths: There is no filename first option
+-- NOTE: No picker for autocommands, man-pages. Use fzf-lua builtin
+-- NOTE: No git status: use hunks.
+-- NOTE: Paths: There is no filename first option
 
 local M = {}
 local Utils = require("ak.util")
@@ -37,8 +33,10 @@ H.setup_autocommands = function()
     desc = "Pre hook for picker based on source.name",
     callback = function(...)
       local opts = MiniPick.get_picker_opts() or {}
-      local pre_hook = H.pre_hooks[opts.source.name] or function(...) end
-      pre_hook(...)
+      if opts then
+        local pre_hook = H.pre_hooks[opts.source.name] or function(...) end
+        pre_hook(...)
+      end
     end,
   })
   vim.api.nvim_create_autocmd({ "User" }, {
@@ -50,8 +48,6 @@ H.setup_autocommands = function()
       if opts then
         local post_hook = H.post_hooks[opts.source.name] or function(...) end
         post_hook(...)
-      else
-        vim.notify("MiniPick.get_picker_opts() returned nil")
       end
     end,
   })
@@ -287,11 +283,10 @@ local function keys(external_opts)
   )
 end
 
-local function fzf()
+local function activate_fzf_lua()
   require("fzf-lua").setup()
   local fzf_lua_lsp_opts = "jump_to_single_result=true ignore_current_line=true"
   return {
-    lsp_definitions = function() vim.cmd("FzfLua lsp_definitions " .. fzf_lua_lsp_opts) end,
     lsp_references = function() vim.cmd("FzfLua lsp_references " .. fzf_lua_lsp_opts) end,
     lsp_implementations = function() vim.cmd("FzfLua lsp_implementations " .. fzf_lua_lsp_opts) end,
     lsp_type_definitions = function() vim.cmd("FzfLua lsp_typedefs " .. fzf_lua_lsp_opts) end,
@@ -302,20 +297,25 @@ local function picker(external_opts)
   local builtin = Pick.builtin
   local extra = MiniExtra.pickers
   local registry = Pick.registry
-  local fzf_lua = external_opts.use_fzf and fzf() or nil -- mini.pick lsp jump problem
+  local fzf_lua = external_opts.use_fzf and activate_fzf_lua() or nil
 
   ---@type Picker
-  local Picker = { --also allowed: scope declaration
+  local Picker = { --also allowed: scope declaration. Not implemented by several lsp
     find_files = builtin.files,
     live_grep = builtin.grep_live,
     keymaps = extra.keymaps,
     oldfiles = extra.oldfiles,
-    lsp_definitions = fzf_lua and fzf_lua.lsp_definitions or function() extra.lsp({ scope = "definition" }) end,
+
+    -- mini.pick: no direct jump to definition(#978):
+    lsp_definitions = function() vim.lsp.buf.definition({ reuse_win = true }) end,
+
+    -- pickers.lsp does not add previous position to jumplist(#979):
     lsp_references = fzf_lua and fzf_lua.lsp_references or function() extra.lsp({ scope = "references" }) end,
     lsp_implementations = fzf_lua and fzf_lua.lsp_implementations
       or function() extra.lsp({ scope = "implementation" }) end,
     lsp_type_definitions = fzf_lua and fzf_lua.lsp_type_definitions
       or function() extra.lsp({ scope = "type_definition" }) end,
+
     colors = registry.colors,
     todo_comments = registry.todo_comments,
   }
@@ -340,10 +340,8 @@ M.setup = function(external_opts)
   picker(external_opts)
 
   -- Extensions:
-  -- telescope ui select:
-  vim.ui.select = Pick.ui_select
-  -- aerial telescope extension: leader ss
-  -- telescope alternate: ml
+  vim.ui.select = Pick.ui_select -- telescope ui select
+  map("ml", function() no_picker("Alternate file") end, { desc = "Alternate file" })
 end
 
 return M
