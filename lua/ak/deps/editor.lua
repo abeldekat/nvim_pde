@@ -4,10 +4,9 @@ local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 local register = Util.deps.register
 local with_dir = Util.opened_with_dir_argument()
 
----@type "h" | "g"  -- Use either harpoon or grapple
+---@type "g" | "h"  -- Use either grapple or harpoon
 local marker_to_use = "g"
-local mini_pick_also_use_fzf = true
----@type "t" | "m" -- Use either telescope or mini.pick
+---@type "m" | "t" -- mini.pick, but preserve existing telescope setup
 local picker_to_use = "m"
 
 --          ╭─────────────────────────────────────────────────────────╮
@@ -24,7 +23,7 @@ local function marker_harpoon()
   require("ak.config.editor.harpoon")
 end
 local function marker_grapple()
-  register(spec_harpoon)
+  -- register(spec_harpoon) -- download when needed, also see ui
   add(spec_grapple)
   require("ak.config.editor.grapple")
 end
@@ -42,8 +41,7 @@ local spec_telescope = {
   depends = {
     -- "jvgrootveld/telescope-zoxide",
     -- "nvim-telescope/telescope-file-browser.nvim",
-    -- "nvim-telescope/telescope-project.nvim",
-    "nvim-telescope/telescope-ui-select.nvim", -- replacing dressing.nvim
+    "nvim-telescope/telescope-ui-select.nvim",
     "otavioschwanck/telescope-alternate.nvim",
     {
       source = "nvim-telescope/telescope-fzf-native.nvim",
@@ -61,13 +59,15 @@ local function picker_telescope()
   require("ak.config.editor.telescope")
 end
 local function picker_mini_pick()
-  register(spec_telescope)
-  if mini_pick_also_use_fzf then
-    add(spec_fzf_lua) -- HACK: -- mini.pick lsp jump problem. Use fzf for lsp
-  else
-    register(spec_fzf_lua)
-  end
-  require("ak.config.editor.mini_pick").setup({ use_fzf = mini_pick_also_use_fzf })
+  -- register(spec_telescope) -- download when needed
+  register(spec_fzf_lua)
+  Util.defer.on_keys(function()
+    now(function()
+      add(spec_fzf_lua)
+      require("ak.config.editor.mini_pick").setup_fzf_lua()
+    end)
+  end, "<leader>si", "Picker builtin") -- Occasionally use fzf-lua builtin
+  require("ak.config.editor.mini_pick").setup()
 end
 
 --          ╭─────────────────────────────────────────────────────────╮

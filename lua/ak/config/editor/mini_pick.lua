@@ -201,7 +201,7 @@ local function map(l, r, opts, mode)
   vim.keymap.set(mode, l, r, opts)
 end
 
-local function keys(external_opts)
+local function keys()
   local builtin = Pick.builtin
   local extra = MiniExtra.pickers
   local registry = Pick.registry
@@ -239,11 +239,8 @@ local function keys(external_opts)
   map("<leader>sc", function() extra.history({ scope = ":" }) end, { desc = "Command history" })
   map("<leader>sC", extra.commands, { desc = "Commands" })
   map("<leader>se", extra.treesitter, { desc = "Treesitter" })
-  if external_opts.use_fzf then
-    map("<leader>si", function() vim.cmd("FzfLua builtin") end, { desc = "NP: Picker builtin" })
-  else
-    map("<leader>si", function() no_picker("Picker builtin") end, { desc = "NP: Picker builtin" })
-  end
+  -- Use fzf-lua:
+  -- map("<leader>si", function() no_picker("Picker builtin") end, { desc = "NP: Picker builtin" })
   map("<leader>sg", builtin.grep_live, { desc = "Grep" })
   map("<leader>sG", function() builtin.grep_live(nil, { source = { cwd = bdir() } }) end, { desc = "Grep (rel)" })
   map("<leader>sh", builtin.help, { desc = "Help pages" })
@@ -283,21 +280,10 @@ local function keys(external_opts)
   )
 end
 
-local function activate_fzf_lua()
-  require("fzf-lua").setup()
-  local fzf_lua_lsp_opts = "jump_to_single_result=true ignore_current_line=true"
-  return {
-    lsp_references = function() vim.cmd("FzfLua lsp_references " .. fzf_lua_lsp_opts) end,
-    lsp_implementations = function() vim.cmd("FzfLua lsp_implementations " .. fzf_lua_lsp_opts) end,
-    lsp_type_definitions = function() vim.cmd("FzfLua lsp_typedefs " .. fzf_lua_lsp_opts) end,
-  }
-end
-
-local function picker(external_opts)
+local function picker()
   local builtin = Pick.builtin
   local extra = MiniExtra.pickers
   local registry = Pick.registry
-  local fzf_lua = external_opts.use_fzf and activate_fzf_lua() or nil
 
   ---@type Picker
   local Picker = { --also allowed: scope declaration. Not implemented by several lsp
@@ -310,11 +296,12 @@ local function picker(external_opts)
     lsp_definitions = function() vim.lsp.buf.definition({ reuse_win = true }) end,
 
     -- pickers.lsp does not add previous position to jumplist(#979):
-    lsp_references = fzf_lua and fzf_lua.lsp_references or function() extra.lsp({ scope = "references" }) end,
-    lsp_implementations = fzf_lua and fzf_lua.lsp_implementations
-      or function() extra.lsp({ scope = "implementation" }) end,
-    lsp_type_definitions = fzf_lua and fzf_lua.lsp_type_definitions
-      or function() extra.lsp({ scope = "type_definition" }) end,
+    -- lsp_references = function() extra.lsp({ scope = "references" }) end,
+    -- lsp_implementations = function() extra.lsp({ scope = "implementation" }) end,
+    -- lsp_type_definitions = function() extra.lsp({ scope = "type_definition" }) end,
+    lsp_references = function() vim.lsp.buf.references(nil, { reuse_win = true }) end,
+    lsp_implementations = function() vim.lsp.buf.implementation({ reuse_win = true }) end,
+    lsp_type_definitions = function() vim.lsp.buf.type_definition({ reuse_win = true }) end,
 
     colors = registry.colors,
     todo_comments = registry.todo_comments,
@@ -332,12 +319,17 @@ end
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                          Setup                          │
 --          ╰─────────────────────────────────────────────────────────╯
-M.setup = function(external_opts)
+M.setup_fzf_lua = function()
+  require("fzf-lua").setup()
+  map("<leader>si", function() vim.cmd("FzfLua builtin") end, { desc = "Picker builtin" })
+end
+
+M.setup = function()
   Pick.setup(get_opts())
 
   H.setup_autocommands()
-  keys(external_opts)
-  picker(external_opts)
+  keys()
+  picker()
 
   -- Extensions:
   vim.ui.select = Pick.ui_select -- telescope ui select
