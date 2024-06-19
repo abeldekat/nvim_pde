@@ -27,30 +27,22 @@ H.post_hooks = {}
 
 H.setup_autocommands = function()
   local group = vim.api.nvim_create_augroup("minipick-hooks", { clear = true })
-  vim.api.nvim_create_autocmd({ "User" }, {
-    pattern = "MiniPickStart",
-    group = group,
-    desc = "Pre hook for picker based on source.name",
-    callback = function(...)
-      local opts = MiniPick.get_picker_opts() or {}
-      if opts then
-        local pre_hook = H.pre_hooks[opts.source.name] or function(...) end
-        pre_hook(...)
-      end
-    end,
-  })
-  vim.api.nvim_create_autocmd({ "User" }, {
-    pattern = "MiniPickStop",
-    group = group,
-    desc = "Post hook for picker based on source.name",
-    callback = function(...)
-      local opts = MiniPick.get_picker_opts()
-      if opts then
-        local post_hook = H.post_hooks[opts.source.name] or function(...) end
-        post_hook(...)
-      end
-    end,
-  })
+  local function au(pattern, desc, hooks)
+    vim.api.nvim_create_autocmd({ "User" }, {
+      pattern = pattern,
+      group = group,
+      desc = desc,
+      callback = function(...)
+        local opts = MiniPick.get_picker_opts() or {}
+        if opts then
+          local hook = hooks[opts.source.name] or function(...) end
+          hook(...)
+        end
+      end,
+    })
+  end
+  au("MiniPickStart", "Pre hook for picker based on source.name", H.pre_hooks)
+  au("MiniPickStop", "Post hook for picker based on source.name", H.post_hooks)
 end
 
 H.colors = function()
@@ -286,7 +278,7 @@ local function picker()
   local registry = Pick.registry
 
   ---@type Picker
-  local Picker = { --also allowed: scope declaration. Not implemented by several lsp
+  local Picker = { --also allowed: scope declaration. Not implemented by most lsp
     find_files = builtin.files,
     live_grep = builtin.grep_live,
     keymaps = extra.keymaps,
