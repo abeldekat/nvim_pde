@@ -44,23 +44,6 @@ local function todo_comments(patterns)
   require("telescope.builtin").grep_string(todo_opts())
 end
 
-local function color_picker()
-  local target = vim.fn.getcompletion
-  local skip = Utils.color.builtins_to_skip()
-
-  ---@diagnostic disable-next-line: duplicate-set-field
-  vim.fn.getcompletion = function()
-    ---@diagnostic disable-next-line: redundant-parameter
-    return vim.tbl_filter(
-      function(color) return not vim.tbl_contains(skip, color) end, --
-      target("", "color")
-    )
-  end
-
-  vim.cmd("Telescope colorscheme enable_preview=true")
-  vim.fn.getcompletion = target -- restore completion builtin
-end
-
 local function map(l, r, opts, mode)
   mode = mode or "n"
   opts["silent"] = opts.silent ~= false
@@ -299,11 +282,13 @@ local function picker()
     live_grep = function() vim.cmd("Telescope live_grep") end,
     keymaps = function() vim.cmd("Telescope keymaps") end,
     oldfiles = builtin.oldfiles,
+
     lsp_definitions = function() vim.cmd("Telescope lsp_definitions reuse_win=true") end,
     lsp_references = function() vim.cmd("Telescope lsp_references") end,
     lsp_implementations = function() vim.cmd("Telescope lsp_implementations reuse_win=true") end,
     lsp_type_definitions = function() vim.cmd("Telescope lsp_type_definitions reuse_win=true") end,
-    colors = color_picker,
+
+    colors = function() vim.cmd("Telescope colorscheme enable_preview=true ignore_builtins=true") end,
     todo_comments = todo_comments,
   }
   Utils.pick.use_picker(Picker)

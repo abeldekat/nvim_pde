@@ -46,9 +46,16 @@ H.setup_autocommands = function()
 end
 
 H.colors = function()
-  local skip = Utils.color.builtins_to_skip()
+  -- stylua: ignore
+  local builtins = { -- source code telescope.nvim ignore_builtins
+      "blue", "darkblue", "default", "delek", "desert", "elflord", "evening",
+      "habamax", "industry", "koehler", "lunaperche", "morning", "murphy",
+      "pablo", "peachpuff", "quiet", "retrobox", "ron", "shine", "slate",
+      "sorbet", "torte", "vim", "wildcharm", "zaibatsu", "zellner",
+  }
+
   return vim.tbl_filter(
-    function(color) return not vim.tbl_contains(skip, color) end, --
+    function(color) return not vim.tbl_contains(builtins, color) end, --
     vim.fn.getcompletion("", "color")
   )
 end

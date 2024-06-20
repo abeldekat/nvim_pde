@@ -49,13 +49,6 @@ function M.add_toggle(pattern, toggle_opts)
   })
 end
 
-function M.builtins_to_skip()
-  -- stylua: ignore
-  return  { "zellner", "torte", "slate", "shine", "ron", "quiet", "peachpuff",
-  "pablo", "murphy", "lunaperche", "koehler", "industry", "evening", "elflord",
-  "desert", "delek", "darkblue", "blue", "sorbet", "morning", "wildcharm", "zaibatsu" }
-end
-
 -- Given the name of a spec, return the name of the config to require
 function M.to_config_name(spec_name) return "ak.config.colors." .. spec_name:gsub("colors_", "") end
 

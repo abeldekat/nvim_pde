@@ -129,8 +129,9 @@ now(function()
 end)
 
 later(function()
-  register(spec_base46)
-    -- stylua: ignore
-    for _, spec in pairs(specs) do register(spec) end
+  -- stylua: ignore
+  for _, spec in pairs(specs) do register(spec) end
   add_keymap_all_colors(specs)
+
+  register(spec_base46)
 end)
