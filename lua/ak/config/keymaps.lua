@@ -119,7 +119,7 @@ map("n", "<leader>ud", function() Util.toggle.diagnostic() end, { desc = "Toggle
 local conceallevel = vim.o.conceallevel > 0 and vim.o.conceallevel or 3
 map(
   "n",
-  "<leader>uc",
+  "<leader>uC",
   function() Util.toggle("conceallevel", false, { 0, conceallevel }) end,
   { desc = "Toggle conceal" }
 )
