@@ -54,12 +54,14 @@ end
 
 hipatterns.setup({ highlighters = highlighters })
 
---          ╭─────────────────────────────────────────────────────────╮
---          │              Replacing todo-comments.nvim               │
---          ╰─────────────────────────────────────────────────────────╯
-
-vim.keymap.set("n", "<leader>st", function() Picker.todo_comments(highlighters) end, { desc = "Todo", silent = true })
-vim.keymap.set("n", "<leader>sT", function()
+-- Todo-comments using mini.hipatterns
+vim.keymap.set(
+  "n",
+  "<leader>ft",
+  function() Picker.todo_comments(highlighters) end,
+  { desc = "Todo all", silent = true }
+)
+vim.keymap.set("n", "<leader>fT", function()
   local function filter(keys)
     local result = {}
     for _, key in ipairs(keys) do

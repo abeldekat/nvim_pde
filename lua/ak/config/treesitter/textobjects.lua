@@ -1,13 +1,11 @@
 --          ╭─────────────────────────────────────────────────────────╮
 --          │            Should be loaded after treesitter            │
---          │                See also: jump eyeliner                  │
 --          ╰─────────────────────────────────────────────────────────╯
 
 --          ╭─────────────────────────────────────────────────────────╮
 --          │treesitter textobjects: uses k for block, b is preserved │
 --          ╰─────────────────────────────────────────────────────────╯
 
-local Util = require("ak.util")
 local repeatable_move_enabled = false -- toggle, when enabled eyeliner does not work.
 
 local opts = {

@@ -61,8 +61,8 @@ function H.keys(_, buffer) -- client
   end
   map("<leader>cl", "<cmd>LspInfo<cr>", { desc = "Lsp info" })
   map("gd", Picker.lsp_definitions, { desc = "Goto definition" })
-  map("gr", Picker.lsp_references, { desc = "References", nowait = true })
   map("gD", vim.lsp.buf.declaration, { desc = "Goto declaration" })
+  map("gr", Picker.lsp_references, { desc = "References", nowait = true })
   map("gI", Picker.lsp_implementations, { desc = "Goto implementation" })
   map("gy", Picker.lsp_type_definitions, { desc = "Goto type definition" })
   --   map("K", vim.lsp.buf.hover, { desc = "Hover" }) -- builtin, see lsp-defaults
@@ -77,11 +77,6 @@ function H.keys(_, buffer) -- client
   map("<leader>cr", vim.lsp.buf.rename, { desc = "Rename" })
   map("<leader>cc", vim.lsp.codelens.run, { desc = "Run Codelens" }, { "n", "v" })
   map("<leader>cC", vim.lsp.codelens.refresh, { desc = "Refresh & Display Codelens" })
-
-  -- Also possible
-  -- local methods = vim.lsp.protocol.Methods
-  -- if client.supports_method(methods.textDocument_codeAction) then
-  -- end
 end
 
 -- Assumption: .luarc.jsonc takes precendence. Individual values override,

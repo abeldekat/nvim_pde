@@ -45,7 +45,7 @@ H.name_of_next_list = function()
   return H.lists[idx == #H.lists and 1 or idx + 1]
 end
 
--- -- TODO: revisit this code later
+-- -- Revisit this code later....
 -- -- Display filename only, two spaces and normalized filename
 -- ---@param list_item HarpoonListItem
 -- ---@return string

@@ -34,7 +34,7 @@ local function make_items()
   return {
     {
       action = Picker.find_files,
-      name = "Files",
+      name = "Files fuzzy",
       section = section,
     },
     {
@@ -54,7 +54,7 @@ local function make_items()
     },
     {
       action = "Oil",
-      name = "Oil(mk)",
+      name = "Oil(key 'mk')",
       section = section,
     },
     {

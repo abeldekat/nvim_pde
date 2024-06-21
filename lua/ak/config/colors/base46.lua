@@ -114,8 +114,8 @@ M.compile = function()
 end
 
 M.setup = function(themes_cb)
-  -- Override custom colors keymapping:
-  vim.keymap.set("n", "<leader>uu", function() select(themes_cb) end, { desc = "Base46 colors" })
+  -- Override colors keymapping:
+  vim.keymap.set("n", "<leader>fc", function() select(themes_cb) end, { desc = "Base46 colors" })
   load_all_highlights()
 end
 

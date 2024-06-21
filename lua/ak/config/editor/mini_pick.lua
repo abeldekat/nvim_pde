@@ -11,9 +11,9 @@
 -- - Sorting is done to first minimize match width and then match start.
 --   Nothing more: no favoring certain places in string, etc.
 
--- NOTE: No picker for autocommands, man-pages. Use fzf-lua builtin
+-- NOTE:  manpages, autocommands and quickfixhis: Use fzf-lua builtin
 -- NOTE: No git status: use hunks.
--- NOTE: Paths: There is no filename first option
+-- NOTE: Paths: No filename first option
 
 local M = {}
 local Utils = require("ak.util")
@@ -188,9 +188,7 @@ Pick.registry.colors = function()
   })
 end
 
-local function no_picker(msg) vim.notify("No picker for " .. msg) end
-
-local function bdir() -- note: in oil dir, fallback to root cwd
+local function bdir() -- note: in oil dir, return nil and fallback to root cwd
   if vim["bo"].buftype == "" then return vim.fn.expand("%:p:h") end
 end
 
@@ -200,83 +198,89 @@ local function map(l, r, opts, mode)
   vim.keymap.set(mode, l, r, opts)
 end
 
+local function pick_other()
+  vim.ui.select(
+    { "Pick commands", "Pick files", "Pick hl_groups", "Pick list scope='change'", "Pick options", "Pick treesitter" },
+    { prompt = "Other pickers" },
+    function(item, idx)
+      if idx then vim.cmd(item) end
+    end
+  )
+end
+
+local cwd_cache = {}
+local function files() -- either files or git_files
+  local builtin = Pick.builtin
+  local cwd = vim.uv.cwd()
+  if cwd and cwd_cache[cwd] == nil then cwd_cache[cwd] = vim.uv.fs_stat(".git") and true or false end
+
+  local opts = {}
+  if cwd_cache[cwd] then opts.tool = "git" end
+  builtin.files(opts)
+end
+
 local function keys()
   local builtin = Pick.builtin
   local extra = MiniExtra.pickers
   local registry = Pick.registry
 
   -- hotkeys:
-  map("<leader>/", function() extra.buf_lines({ scope = "current" }) end, { desc = "Buffer fuzzy" })
-  map("<leader>o", builtin.buffers, { desc = "Buffers" }) -- mnemonic: open buffers
-  map("<leader>e", function() builtin.grep_live() end, { desc = "Grep" })
+  map("<leader>/", function() extra.buf_lines({ scope = "current" }) end, { desc = "Buffer lines" })
+  map("<leader>'", builtin.buffers, { desc = "Buffers pick" }) -- home row, used often
+  map("<leader>l", builtin.grep_live, { desc = "Live grep" })
   map("<leader>r", function() registry.oldfiles_with_filter({ cwd_only = true }) end, { desc = "Recent (rel)" })
-  map("<leader>:", function() extra.history({ scope = ":" }) end, { desc = "Command history" })
-  map("<leader><leader>", function() builtin.files({ tool = "git" }) end, { desc = "Git files" })
+  map("<leader><leader>", files, { desc = "Files pick" })
 
-  -- find:
-  map("<leader>fb", builtin.buffers, { desc = "Buffers" })
-  map("<leader>fg", function() builtin.files({ tool = "git" }) end, { desc = "Git files" })
-  map("<leader>ff", builtin.files, { desc = "Find files" })
-  map("<leader>fF", function() builtin.files(nil, { source = { cwd = bdir() } }) end, { desc = "Find files (rel)" })
-  map("<leader>fr", extra.oldfiles, { desc = "Recent" })
-  map("<leader>fR", function() registry.oldfiles_with_filter({ cwd_only = true }) end, { desc = "Recent (rel)" })
-
-  -- git:
-  map("<leader>gb", function() extra.git_commits({ path = vim.fn.expand("%") }) end, { desc = "Git commits buffer" })
-  map("<leader>gc", extra.git_commits, { desc = "Git commits" })
-  map("<leader>gs", extra.git_hunks, { desc = "Modified hunks" }) -- Instead of git status
+  -- fuzzy
+  map("<leader>f/", function() extra.history({ scope = "/" }) end, { desc = "'/' history" })
+  map("<leader>f:", function() extra.history({ scope = ":" }) end, { desc = "':' history" })
+  map('<leader>f"', extra.registers, { desc = "Registers" })
+  map("<leader>fa", function() extra.git_hunks({ scope = "staged" }) end, { desc = "Staged hunks" })
   map(
-    "<leader>gS",
-    function() extra.git_hunks({ path = vim.fn.expand("%") }) end,
-    { desc = "Modified hunks (current)" }
+    "<leader>fA",
+    function() extra.git_hunks({ path = vim.fn.expand("%"), scope = "staged" }) end,
+    { desc = "Staged hunks (current)" }
   )
-
-  -- search
-  map('<leader>s"', extra.registers, { desc = "Registers" })
-  map("<leader>sa", function() no_picker("Auto commands") end, { desc = "NP: Auto commands" })
-  map("<leader>sb", function() extra.buf_lines({ scope = "current" }) end, { desc = "Buffer fuzzy" })
-  map("<leader>sc", function() extra.history({ scope = ":" }) end, { desc = "Command history" })
-  map("<leader>sC", extra.commands, { desc = "Commands" })
-  map("<leader>se", extra.treesitter, { desc = "Treesitter" })
-  -- Use fzf-lua:
-  -- map("<leader>si", function() no_picker("Picker builtin") end, { desc = "NP: Picker builtin" })
-  map("<leader>sg", builtin.grep_live, { desc = "Grep" })
-  map("<leader>sG", function() builtin.grep_live(nil, { source = { cwd = bdir() } }) end, { desc = "Grep (rel)" })
-  map("<leader>sh", builtin.help, { desc = "Help pages" })
-  map("<leader>sH", extra.hl_groups, { desc = "Search highlight groups" })
-  map("<leader>sj", function() extra.list({ scope = "jump" }) end, { desc = "Jumplist" }) --**
-  map("<leader>sk", extra.keymaps, { desc = "Key maps" })
-  map("<leader>sM", function() no_picker("Man pages") end, { desc = "NP: Man pages" })
-  map("<leader>sm", extra.marks, { desc = "Jump to mark" })
-  map("<leader>so", extra.options, { desc = "Options" })
-  map("<leader>sR", builtin.resume, { desc = "Resume" })
-  map("<leader>sS", function() extra.lsp({ scope = "workspace_symbol" }) end, { desc = "Goto symbol (workspace)" })
-  map("<leader>ss", function() extra.lsp({ scope = "document_symbol" }) end, { desc = "Goto symbol" })
-
-  -- In visual mode: Yank some text, :Pick grep and put(ctrl-r ")
-  map("<leader>sw", function() builtin.grep({ pattern = vim.fn.expand("<cword>") }) end, { desc = "Word" })
+  map("<leader>fb", builtin.buffers, { desc = "Buffer pick" })
+  -- <leader>fc colors( ak.deps colors, also base46)
+  map("<leader>fd", function() extra.diagnostic({ scope = "current" }) end, { desc = "Diagnostic buffer" })
+  map("<leader>fD", function() extra.diagnostic({ scope = "all" }) end, { desc = "Diagnostic workspace" })
+  map("<leader>ff", files, { desc = "Files" })
+  map("<leader>fF", function() builtin.files(nil, { source = { cwd = bdir() } }) end, { desc = "Files(rel)" })
+  map("<leader>fg", builtin.grep_live, { desc = "Grep" })
+  map("<leader>fG", function() builtin.grep_live(nil, { source = { cwd = bdir() } }) end, { desc = "Grep (rel)" })
+  map("<leader>fh", builtin.help, { desc = "Help" })
+  map("<leader>fi", extra.git_commits, { desc = "Git commits" })
+  map("<leader>fI", function() extra.git_commits({ path = vim.fn.expand("%") }) end, { desc = "Git commits buffer" })
+  map("<leader>fj", function() extra.list({ scope = "jump" }) end, { desc = "Jumplist" })
+  map("<leader>fJ", extra.marks, { desc = "Marks" })
+  map("<leader>fk", extra.keymaps, { desc = "Key maps" })
+  map("<leader>fl", function() extra.buf_lines({ scope = "current" }) end, { desc = "Buffer lines" })
+  map("<leader>fL", function() extra.buf_lines() end, { desc = "Buffers lines" })
+  map("<leader>fm", extra.git_hunks, { desc = "Unstaged hunks" })
   map(
-    "<leader>sW",
+    "<leader>fM",
+    function() extra.git_hunks({ path = vim.fn.expand("%") }) end,
+    { desc = "Unstaged hunks (current)" }
+  )
+  map("<leader>fo", pick_other, { desc = "Other pickers" })
+  map("<leader>fp", extra.hipatterns, { desc = "Hipatterns" })
+  -- <leader>fP fzf-lua builtin(fzf-lua setup)
+  map("<leader>fr", extra.oldfiles, { desc = "Recent" }) -- could also use fv fV for visits
+  map("<leader>fR", function() registry.oldfiles_with_filter({ cwd_only = true }) end, { desc = "Recent (rel)" })
+  map("<leader>fs", function() extra.lsp({ scope = "document_symbol" }) end, { desc = "Symbols buffer" })
+  map("<leader>fS", function() extra.lsp({ scope = "workspace_symbol" }) end, { desc = "Symbols workspace" })
+  -- <leader>ft: todo comments(hipatterns config)
+  map("<leader>fu", builtin.resume, { desc = "Resume picker" })
+  -- In visual mode: Yank some text, :Pick grep and put(ctrl-r ")
+  map("<leader>fw", function() builtin.grep({ pattern = vim.fn.expand("<cword>") }) end, { desc = "Word" })
+  map(
+    "<leader>fW",
     function() builtin.grep({ pattern = vim.fn.expand("<cword>") }, { source = { cwd = bdir() } }) end,
     { desc = "Word (rel)" }
   )
-
-  -- diagnostics/quickfix
-  map("<leader>xd", function() extra.diagnostic({ scope = "all" }) end, { desc = "Workspace diagnostics" })
-  map("<leader>xD", function() extra.diagnostic({ scope = "current" }) end, { desc = "Document diagnostics" })
-  map("<leader>xx", function() extra.list({ scope = "quickfix" }) end, { desc = "Quickfix search" })
-  map("<leader>xX", function() no_picker("Quickfixhis search") end, { desc = "NP: Quickfixhis search" })
-  map("<leader>xz", function() extra.list({ scope = "location" }) end, { desc = "Loclist search" })
-
-  -- only implemented by mini.pick:
-  map("<leader>sB", extra.buf_lines, { desc = "Buffers fuzzy" })
-  map("<leader>sp", extra.hipatterns, { desc = "Buffers hipatterns" })
-  map("<leader>ga", function() extra.git_hunks({ scope = "staged" }) end, { desc = "Added hunks" })
-  map(
-    "<leader>gA",
-    function() extra.git_hunks({ path = vim.fn.expand("%"), scope = "staged" }) end,
-    { desc = "Added hunks (current)" }
-  )
+  map("<leader>fx", function() extra.list({ scope = "quickfix" }) end, { desc = "Quickfix" })
+  map("<leader>fX", function() extra.list({ scope = "location" }) end, { desc = "Loclist" })
 end
 
 local function picker()
@@ -285,8 +289,8 @@ local function picker()
   local registry = Pick.registry
 
   ---@type Picker
-  local Picker = { --also allowed: scope declaration. Not implemented by most lsp
-    find_files = builtin.files,
+  local Picker = {
+    find_files = files,
     live_grep = builtin.grep_live,
     keymaps = extra.keymaps,
     oldfiles = extra.oldfiles,
@@ -308,31 +312,21 @@ local function picker()
   Utils.pick.use_picker(Picker)
 end
 
-local function get_opts()
-  return {
-    -- default false, more speed and memory on repeated prompts:
-    -- options = { use_cache = false },
-  }
-end
-
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                          Setup                          │
 --          ╰─────────────────────────────────────────────────────────╯
-M.setup_fzf_lua = function()
-  require("fzf-lua").setup()
-  map("<leader>si", function() vim.cmd("FzfLua builtin") end, { desc = "Picker builtin" })
-end
-
 M.setup = function()
-  Pick.setup(get_opts())
+  Pick.setup({
+    -- default false, more speed and memory on repeated prompts:
+    -- options = { use_cache = false },
+  })
 
   H.setup_autocommands()
   keys()
   picker()
 
-  -- Extensions:
-  vim.ui.select = Pick.ui_select -- telescope ui select
-  map("ml", function() no_picker("Alternate file") end, { desc = "Alternate file" })
+  vim.ui.select = Pick.ui_select
+  map("ml", function() vim.notify("No picker for alternate file") end, { desc = "Alternate file" })
 end
 
 return M

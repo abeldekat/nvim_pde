@@ -51,22 +51,22 @@ H.basename = function(entity, _)
 end
 
 for _, key in ipairs({
-  { "<leader>J", H.use_scope, desc = "Grapple next scope" },
+  { "<leader>J", H.use_scope, desc = "Next scope (grap) " },
 
-  { "<leader>j", "<cmd>Grapple toggle_tags<cr>", desc = "Grapple tags" },
-  { "<leader>n", "<cmd>Grapple cycle_tags next<cr>", desc = "Grapple next" },
-  { "<leader>p", "<cmd>Grapple cycle_tags prev<cr>", desc = "Grapple prev" },
+  { "<leader>j", "<cmd>Grapple toggle_tags<cr>", desc = "Tags (grap) " },
+  { "<leader>;", "<cmd>Grapple cycle_tags next<cr>", desc = "Next (grap)" },
+  { "<leader>,", "<cmd>Grapple cycle_tags prev<cr>", desc = "Prev (grap)" },
 
-  { "<leader>A", "<cmd>Grapple reset<cr>", desc = "Grapple reset" },
-  { "<leader>a", "<cmd>Grapple toggle<cr>", desc = "Grapple toggle" },
+  { "<leader>A", "<cmd>Grapple reset<cr>", desc = "Reset (grap)" },
+  { "<leader>a", "<cmd>Grapple toggle<cr>", desc = "Toggle (grap)" },
 
-  { "<c-j>", "<cmd>Grapple select index=1<cr>", desc = "Grapple 1" },
-  { "<c-k>", "<cmd>Grapple select index=2<cr>", desc = "Grapple 2" },
-  { "<c-l>", "<cmd>Grapple select index=3<cr>", desc = "Grapple 3" },
-  { "<c-h>", "<cmd>Grapple select index=4<cr>", desc = "Grapple 4" },
+  { "<c-j>", "<cmd>Grapple select index=1<cr>", desc = "Grap 1" },
+  { "<c-k>", "<cmd>Grapple select index=2<cr>", desc = "Grap 2" },
+  { "<c-l>", "<cmd>Grapple select index=3<cr>", desc = "Grap 3" },
+  { "<c-h>", "<cmd>Grapple select index=4<cr>", desc = "Grap 4" },
 
-  { "<leader>mg", "<cmd>Grapple toggle_scopes<cr>", desc = "Grapple scopes" },
-  { "<leader>mG", "<cmd>Grapple toggle_loaded<cr>", desc = "Grapple loaded" },
+  { "<leader>mg", "<cmd>Grapple toggle_scopes<cr>", desc = "Scopes (grap)" },
+  { "<leader>mG", "<cmd>Grapple toggle_loaded<cr>", desc = "Loaded (grap)" },
 }) do
   H.map(key[1], key[2], key["desc"])
 end

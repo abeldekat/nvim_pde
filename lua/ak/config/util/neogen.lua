@@ -7,4 +7,4 @@ require("neogen").setup({
 })
 
 -- will generate annotation for the function, class or other relevant type you're currently in
-vim.keymap.set("n", "<leader>mn", "<cmd>Neogen<cr>", { desc = "Document", silent = true })
+vim.keymap.set("n", "<leader>mN", "<cmd>Neogen<cr>", { desc = "Document", silent = true })

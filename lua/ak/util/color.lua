@@ -27,7 +27,7 @@ function Toggle.add_toggle(opts)
       local info = string.format("Using %s[%s]", opts.name, vim.inspect(flavour))
       vim.api.nvim_echo({ { info, "InfoMsg" } }, true, {})
     end, 250)
-  end, { desc = "Highlights alternate" })
+  end, { desc = "Theme flavours" })
 end
 
 ---@param name string

@@ -4,7 +4,7 @@ local miniclue = require("mini.clue")
 local opts = {
   window = {
     config = { width = "auto" },
-    delay = 2000, -- 1000
+    -- delay = 2000, -- 1000
   },
 
   triggers = {
@@ -44,15 +44,11 @@ local opts = {
     { mode = "n", keys = "<leader>b", desc = "+commentbox" },
     { mode = "n", keys = "<leader>c", desc = "+code" },
     { mode = "n", keys = "<leader>d", desc = "+debug" },
-    { mode = "n", keys = "<leader>f", desc = "+file/find" },
+    { mode = "n", keys = "<leader>f", desc = "+fuzzy" },
     { mode = "n", keys = "<leader>g", desc = "+git" },
-    { mode = "n", keys = "<leader>gh", desc = "+hunks" },
     { mode = "n", keys = "<leader>m", desc = "+misc" },
-    { mode = "n", keys = "<leader>s", desc = "+search" },
-    { mode = "n", keys = "<leader>sn", desc = "+notify" },
     { mode = "n", keys = "<leader>t", desc = "+test" },
     { mode = "n", keys = "<leader>u", desc = "+ui" },
-    { mode = "n", keys = "<leader>x", desc = "+diagnostics/quickfix" },
 
     miniclue.gen_clues.builtin_completion(),
     miniclue.gen_clues.g(),
