@@ -4,7 +4,7 @@ local MiniStatusline = require("mini.statusline")
 
 AK.setup = function()
   H.create_diagnostic_hl() -- colored diagnostics
-  H.require_markerline()
+  H.optional_dependencies()
   MiniStatusline.setup({
     use_icons = false,
     set_vim_settings = false,
@@ -46,20 +46,16 @@ AK.active = function() -- entrypoint
   })
 end
 
--- overridden: Use relative path if file is in cwd
-AK.section_filename = function(args)
-  local function is_in_cwd()
-    local cwd = vim.fn.getcwd()
-    local full_path = vim.fn.expand("%:p")
-    local separator = package.config:sub(1, 1)
-    return full_path:find(cwd .. separator, 1, true) == 1
-  end
-  local full_fmt = "%:~"
-  local relative_fmt = "%:."
+-- overridden: Use relative path if file is in cwd. Remove oil//
+AK.section_filename = function()
+  local function to_result(text) return text .. "%m%r" end -- modified, readonly
 
-  local actual_fmt = is_in_cwd() and relative_fmt or full_fmt
-  if MiniStatusline.is_truncated(args.trunc_width) then actual_fmt = relative_fmt end
-  return vim.fn.expand(actual_fmt) .. "%m%r" -- modified and readonly
+  local is_oil = H.oil and vim.bo.filetype == "oil"
+  local full_path = is_oil and H.oil.get_current_dir() or vim.fn.expand("%:p")
+  if not full_path then return to_result("") end
+
+  local fmt = is_oil and ":~" or ":~:." -- always show full path in oil
+  return to_result(vim.fn.fnamemodify(full_path, fmt))
 end
 
 -- overridden: removed filesize
@@ -125,6 +121,8 @@ H.fixed_hl = "MiniStatuslineFilename"
 ---@field is_buffer function
 H.markerline = nil
 
+H.oil = nil
+
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                  Helper functionality                   │
 --          ╰─────────────────────────────────────────────────────────╯
@@ -169,7 +167,7 @@ H.is_blocked_filetype = function()
   return blocked_filetypes[vim.bo.filetype]
 end
 
-H.require_markerline = function() -- See ak.deps.editor
+H.optional_dependencies = function() -- See ak.deps.editor
   local function make(line, is_buffer) return { line = line, is_buffer = is_buffer } end
   local line
 
@@ -186,6 +184,10 @@ H.require_markerline = function() -- See ak.deps.editor
     line.setup(H.set_active)
     H.markerline = make(line.line, line.is_current_buffer_tagged)
   end
+
+  local oil
+  has, oil = pcall(require, "oil")
+  if has then H.oil = oil end
 end
 
 -- added

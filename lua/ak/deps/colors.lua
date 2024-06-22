@@ -29,6 +29,8 @@ local spec_base46 = {
   -- tomorrow_night wombat
   -- Light: flex-light flexoki-light github_light material-lighter nano-light
   source = "nvchad/base46", -- v2.5 is the default
+  -- before changes to method load_integrationTB
+  checkout = "87e09eb9e959966397bd9d8aab18d88ef349c913",
   name = "colors_base46",
   hooks = { post_install = hook_base46, post_checkout = hook_base46 },
 }
@@ -117,6 +119,7 @@ local specs = filter_specs_to_use({ -- key: spec_name, value: spec
 })
 
 now(function()
+  add_keymap_all_colors(specs)
   if color_name == "base46" then -- collection, special case, no colorscheme command
     require(color_info.config_name).setup(function()
       add(spec_base46) -- only add spec when selecting a new theme.
@@ -130,8 +133,8 @@ end)
 
 later(function()
   -- stylua: ignore
-  for _, spec in pairs(specs) do register(spec) end
-  add_keymap_all_colors(specs)
-
   register(spec_base46)
+  for _, spec in pairs(specs) do
+    register(spec)
+  end
 end)
