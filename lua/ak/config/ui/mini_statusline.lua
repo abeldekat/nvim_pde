@@ -20,7 +20,7 @@ AK.active = function() -- entrypoint
   local diag = MiniStatusline.section_diagnostics({ trunc_width = 75, icon = "", signs = H.diag_signs })
   local diff = MiniStatusline.section_diff({ trunc_width = 75, icon = "" })
   local fileinfo = AK.section_fileinfo({ trunc_width = 120 })
-  local filename = AK.section_filename({ trunc_width = 140 })
+  local filename = AK.section_filename() -- { trunc_width = 140 }: Use of automatic statusline truncation:
   local git = MiniStatusline.section_git({ trunc_width = 40, icon = "" })
   local location = AK.section_location({ trunc_width = 75 })
   local lsp = MiniStatusline.section_lsp({ trunc_width = 75 })

@@ -87,12 +87,20 @@ end
 -- becomes available without restarting nvim
 function H.lua_ls()
   return {
+    handlers = { -- nvim echasnovski
+      -- Show only one definition to be usable with `a = function()` style.
+      -- Because LuaLS treats both `a` and `function()` as definitions of `a`.
+      ["textDocument/definition"] = function(err, result, ctx, config)
+        if type(result) == "table" then result = { result[1] } end
+        vim.lsp.handlers["textDocument/definition"](err, result, ctx, config)
+      end,
+    },
     settings = {
       Lua = {
         -- runtime = { version = "LuaJIT" }, -- lazydev or luarc
         codeLens = { enable = true },
         completion = { callSnippet = "Replace" },
-        diagnostics = { globals = { "vim" } },
+        diagnostics = { globals = { "vim", "describe", "it", "before_each", "after_each" } },
         doc = { privateName = { "^_" } },
         hint = { -- default no inlay hints
           enable = true, -- must be true in order to toggle hints on or off

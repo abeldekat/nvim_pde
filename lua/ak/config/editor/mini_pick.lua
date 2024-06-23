@@ -293,7 +293,6 @@ local function picker()
     find_files = files,
     live_grep = builtin.grep_live,
     keymaps = extra.keymaps,
-    oldfiles = extra.oldfiles,
 
     -- mini.pick: no direct jump to definition(#978):
     lsp_definitions = function() vim.lsp.buf.definition({ reuse_win = true }) end,
