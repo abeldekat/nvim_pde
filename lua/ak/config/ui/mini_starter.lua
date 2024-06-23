@@ -56,14 +56,12 @@ local function make_footer(opts, footer_cb) opts.footer = footer_cb end
 local function make_items()
   local section = "Commands"
   local items = {
-    { action = Picker.find_files, name = "Files fuzzy", section = section },
-    { action = Picker.live_grep, name = "Live grep", section = section },
     { action = Picker.keymaps, name = "Keymaps", section = section },
     { action = "Oil", name = "Oil(key 'mk')", section = section },
     { action = "qa", name = "Quit", section = section },
   }
   return {
-    StarterOverride.recent_files(5, true), -- starter.sections.recent_files(5, true, false),
+    StarterOverride.recent_files(4, true), -- starter.sections.recent_files(5, true, false),
     items,
   }
 end

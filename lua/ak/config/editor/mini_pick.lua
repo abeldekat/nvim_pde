@@ -284,14 +284,11 @@ local function keys()
 end
 
 local function picker()
-  local builtin = Pick.builtin
   local extra = MiniExtra.pickers
   local registry = Pick.registry
 
   ---@type Picker
   local Picker = {
-    find_files = files,
-    live_grep = builtin.grep_live,
     keymaps = extra.keymaps,
 
     -- mini.pick: no direct jump to definition(#978):
