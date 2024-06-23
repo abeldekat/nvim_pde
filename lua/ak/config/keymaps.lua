@@ -97,7 +97,6 @@ map("n", "<leader><tab>[", "<cmd>tabprevious<cr>", { desc = "Previous tab" })
 map("n", "<leader><tab>o", "<cmd>tabonly<cr>", { desc = "Close Other Tabs" })
 map("n", "<leader>1", "1gt", { desc = "Tab 1" })
 map("n", "<leader>2", "2gt", { desc = "Tab 2" })
-map("n", "<leader>3", "3gt", { desc = "Tab 3" })
 map("n", "<leader><tab>s", "<cmd>tabs<cr>", { desc = "Show tabs" })
 
 -- terminal mappings: esc is slow when using vi-mode in the terminal

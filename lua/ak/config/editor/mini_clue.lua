@@ -41,12 +41,12 @@ local opts = {
 
   clues = {
     { mode = "n", keys = "<leader><tab>", desc = "+tabs" },
-    { mode = "n", keys = "<leader>b", desc = "+commentbox" },
     { mode = "n", keys = "<leader>c", desc = "+code" },
     { mode = "n", keys = "<leader>d", desc = "+debug" },
     { mode = "n", keys = "<leader>f", desc = "+fuzzy" },
     { mode = "n", keys = "<leader>g", desc = "+git" },
     { mode = "n", keys = "<leader>m", desc = "+misc" },
+    { mode = "n", keys = "<leader>mb", desc = "+commentbox" },
     { mode = "n", keys = "<leader>t", desc = "+test" },
     { mode = "n", keys = "<leader>u", desc = "+ui" },
 

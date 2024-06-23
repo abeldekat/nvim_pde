@@ -104,7 +104,7 @@ later(function()
   require("ak.config.editor.eyeliner")
 
   -- stylua: ignore
-  if marker_to_use == "h" then marker_harpoon() else marker_grapple() end
+  if marker_to_use == "g" then marker_grapple() else marker_harpoon() end
 
   add("nvim-pack/nvim-spectre")
   require("ak.config.editor.spectre")

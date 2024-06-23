@@ -8,20 +8,20 @@ local function map(l, r, opts, mode)
 end
 
 -- Titles
-map("<leader>bb", function()
+map("<leader>mbb", function()
   ---@diagnostic disable-next-line: missing-parameter
   require("comment-box").ccbox() -- a centered fixed size box with the text centered
 end, { desc = "Commentbox box" }, { "n", "v" })
 
 -- Delete
-map("<leader>bd", function() vim.cmd("CBd") end, { desc = "Commentbox delete" }, { "n", "v" })
+map("<leader>mbd", function() vim.cmd("CBd") end, { desc = "Commentbox delete" }, { "n", "v" })
 
 -- Line
 -- map("<leader>Cl", "<cmd>CBllline<cr>", { desc = "Commentbox titled line" }, "v") -- , { "n", "v" })
-map("<leader>bl", function()
+map("<leader>mbl", function()
   ---@diagnostic disable-next-line: missing-parameter
   require("comment-box").llline() -- left aligned titled line with left aligned text
 end, { desc = "Commentbox titled line" }, { "n", "v" })
 
 -- Commentbox lazy loading
-vim.keymap.set("n", "<leader>bL", no_op, { desc = "No-op comment-box", silent = true })
+vim.keymap.set("n", "<leader>mbL", no_op, { desc = "No-op comment-box", silent = true })
