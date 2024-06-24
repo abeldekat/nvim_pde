@@ -22,8 +22,10 @@ local Pick = require("mini.pick")
 local H = {} -- Helper functions for custom pickers
 local Path = require("plenary.path")
 
-H.pre_hooks = {}
-H.post_hooks = {}
+---@type table<string,function>  event MiniPickStart
+H.start_hooks = {}
+---@type table<string,function> event MiniPickStop
+H.stop_hooks = {}
 
 H.setup_autocommands = function()
   local group = vim.api.nvim_create_augroup("minipick-hooks", { clear = true })
@@ -41,8 +43,8 @@ H.setup_autocommands = function()
       end,
     })
   end
-  au("MiniPickStart", "Pre hook for picker based on source.name", H.pre_hooks)
-  au("MiniPickStop", "Post hook for picker based on source.name", H.post_hooks)
+  au("MiniPickStart", "Picker start hook for source.name", H.start_hooks)
+  au("MiniPickStop", "Picker stop hook for source.name", H.stop_hooks)
 end
 
 H.colors = function()
@@ -149,7 +151,7 @@ Pick.registry.todo_comments = function(patterns) --hipatterns.config.highlighter
   end
 
   local name = "Todo-comments"
-  if H.pre_hooks[name] == nil then H.pre_hooks[name] = on_start end
+  if H.start_hooks[name] == nil then H.start_hooks[name] = on_start end
   Pick.builtin.grep(
     { tool = "rg", pattern = search_regex(vim.tbl_keys(patterns)) },
     { source = { name = name, show = show } }
@@ -171,21 +173,30 @@ Pick.registry.colors = function()
   end
 
   local name = "Colors with preview"
-  if H.pre_hooks[name] == nil then H.pre_hooks[name] = on_start end
-  if H.post_hooks[name] == nil then H.post_hooks[name] = on_stop end
+  if H.start_hooks[name] == nil then H.start_hooks[name] = on_start end
+  if H.stop_hooks[name] == nil then H.stop_hooks[name] = on_stop end
   return MiniPick.start({
     source = {
       name = name,
       items = H.colors(),
-      choose = function(item)
-        selected_colorscheme = item --
-      end,
+      choose = function(item) selected_colorscheme = item end,
       preview = function(buf_id, item)
         vim.cmd.colorscheme(item)
         vim.api.nvim_buf_set_lines(buf_id, 0, -1, false, { item })
       end,
     },
   })
+end
+
+Pick.registry.buffer_lines_current = function()
+  local show = function(buf_id, items, query, opts)
+    if items and #items > 0 then -- one buffer, one ft: Enable highlighting
+      local ft = vim.bo[items[1].bufnr].filetype
+      vim.bo.filetype = ft
+    end
+    Pick.default_show(buf_id, items, query, opts)
+  end
+  MiniExtra.pickers.buf_lines({ scope = "current" }, { source = { show = show } })
 end
 
 local function bdir() -- note: in oil dir, return nil and fallback to root cwd
@@ -216,7 +227,7 @@ local function keys()
 
   -- hotkeys:
   map("<leader><leader>", files, { desc = "Files pick" })
-  map("<leader>/", function() extra.buf_lines({ scope = "current" }) end, { desc = "Buffer lines" })
+  map("<leader>/", registry.buffer_lines_current, { desc = "Buffer lines" })
   map("<leader>'", builtin.buffers, { desc = "Buffers pick" }) -- home row, used often
   map("<leader>l", builtin.grep_live, { desc = "Live grep" })
   map("<leader>r", function() registry.oldfiles_with_filter({ cwd_only = true }) end, { desc = "Recent (rel)" })
@@ -242,7 +253,7 @@ local function keys()
   map("<leader>fh", builtin.help, { desc = "Help" })
   map("<leader>fi", function() vim.notify("No picker for fzf-lua builtin") end, { desc = "Fzf-lua builtin" })
   map("<leader>fk", extra.keymaps, { desc = "Key maps" })
-  map("<leader>fl", function() extra.buf_lines({ scope = "current" }) end, { desc = "Buffer lines" })
+  map("<leader>fl", registry.buffer_lines_current, { desc = "Buffer lines" })
   map("<leader>fL", function() extra.buf_lines() end, { desc = "Buffers lines" })
   map("<leader>fm", extra.git_hunks, { desc = "Unstaged hunks" })
   map(
@@ -272,7 +283,7 @@ local function keys()
 
   -- fuzzy other
   map("<leader>fo:", extra.commands, { desc = "Commands" })
-  -- <leader>foz colors( ak.deps colors, also base46)
+  -- <leader>foc colors( ak.deps colors and ak.config.colors base46)
   map("<leader>foC", function() extra.list({ scope = "change" }) end, { desc = "Changes" })
   map("<leader>fof", builtin.files, { desc = "Files rg" })
   map("<leader>foj", function() extra.list({ scope = "jump" }) end, { desc = "Jumps" })
