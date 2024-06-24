@@ -188,11 +188,14 @@ Pick.registry.colors = function()
   })
 end
 
+-- https://github.com/echasnovski/mini.nvim/discussions/988
+-- Fuzzy search the current buffer with syntax highlighting
+-- Does not alwasy work because of the line numbers added to each line
 Pick.registry.buffer_lines_current = function()
   local show = function(buf_id, items, query, opts)
-    if items and #items > 0 then -- one buffer, one ft: Enable highlighting
+    if items and #items > 0 then -- all items have the same buffer
       local ft = vim.bo[items[1].bufnr].filetype
-      vim.bo.filetype = ft
+      vim.bo[buf_id].filetype = ft
     end
     Pick.default_show(buf_id, items, query, opts)
   end
