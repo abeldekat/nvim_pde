@@ -241,7 +241,7 @@ local function keys()
   map("<leader>fg", builtin.grep_live, { desc = "Grep" })
   map("<leader>fG", function() builtin.grep_live(nil, { source = { cwd = bdir() } }) end, { desc = "Grep (rel)" })
   map("<leader>fh", builtin.help, { desc = "Help" })
-  -- <leader>fi fzf-lua or telescope builtin
+  map("<leader>fi", function() vim.notify("No picker for fzf-lua builtin") end, { desc = "Fzf-lua builtin" })
   map("<leader>fk", extra.keymaps, { desc = "Key maps" })
   map("<leader>fl", function() extra.buf_lines({ scope = "current" }) end, { desc = "Buffer lines" })
   map("<leader>fL", function() extra.buf_lines() end, { desc = "Buffers lines" })
@@ -318,9 +318,7 @@ M.setup = function()
   H.setup_autocommands()
   keys()
   picker()
-
   vim.ui.select = Pick.ui_select
-  map("ml", function() vim.notify("No picker for alternate file") end, { desc = "Alternate file" })
 end
 
 return M

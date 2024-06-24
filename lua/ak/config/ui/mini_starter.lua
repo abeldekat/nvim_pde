@@ -70,8 +70,10 @@ end
 function M.setup(extra_center, footer_cb)
   local opts = {
     evaluate_single = true,
-    items = make_items(),
     header = make_header(),
+    items = make_items(),
+    -- Removed the m for oil mk:
+    query_updaters = "abcdefghijklnopqrstuvwxyz0123456789_-.",
   }
   vim.list_extend(opts.items, extra_center)
   make_footer(opts, footer_cb)

@@ -6,7 +6,7 @@ local with_dir = Util.opened_with_dir_argument()
 
 ---@type "g" | "h"  -- Use either grapple or harpoon
 local marker_to_use = "g"
----@type "f" | "t" -- mini.pick: Enable more pickers using telescope or fzf builtin
+---@type "f" | "n" -- mini.pick: Enable more pickers using fzf-lua builtin
 local picker_builtin_to_use = "f"
 
 --          ╭─────────────────────────────────────────────────────────╮
@@ -31,36 +31,18 @@ end
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                         Picker                          │
 --          ╰─────────────────────────────────────────────────────────╯
-local function fzf_native(params)
-  vim.cmd("lcd " .. params.path)
-  vim.cmd("!make -s")
-  vim.cmd("lcd -")
-end
-local spec_telescope = {
-  source = "nvim-telescope/telescope.nvim",
-  depends = {
-    { -- "otavioschwanck/telescope-alternate.nvim",
-      source = "nvim-telescope/telescope-fzf-native.nvim",
-      hooks = { post_install = fzf_native, post_checkout = fzf_native },
-    },
-  },
-}
 local spec_fzf_lua = { source = "ibhagwan/fzf-lua" }
 local function picker_mini_pick()
   require("ak.config.editor.mini_pick").setup()
-
-  register(picker_builtin_to_use == "f" and spec_fzf_lua or spec_telescope)
-  Util.defer.on_keys(function()
-    now(function()
-      if picker_builtin_to_use == "f" then
+  if picker_builtin_to_use == "f" then
+    register(spec_fzf_lua)
+    Util.defer.on_keys(function()
+      now(function()
         add(spec_fzf_lua)
         require("ak.config.editor.mini_pick_fzf_lua")
-      else
-        add(spec_telescope)
-        require("ak.config.editor.mini_pick_telescope")
-      end
-    end)
-  end, "<leader>fi", "Picker builtin")
+      end)
+    end, "<leader>fi", "Picker builtin")
+  end
 end
 
 --          ╭─────────────────────────────────────────────────────────╮
