@@ -66,7 +66,7 @@ require("telescope").setup(get_opts(true))
 require("telescope").load_extension("fzf")
 -- require("telescope").load_extension("ui-select")
 -- alternate_extension()
-vim.keymap.set("n", "<leader>fP", "<cmd>Telescope builtin<cr>", { desc = "Picker builtin", silent = true })
+vim.keymap.set("n", "<leader>fi", "<cmd>Telescope builtin<cr>", { desc = "Picker builtin", silent = true })
 vim.keymap.set(
   "n",
   "ml",

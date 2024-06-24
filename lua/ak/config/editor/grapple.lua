@@ -64,8 +64,8 @@ for _, key in ipairs({
   { "<c-l>", "<cmd>Grapple select index=3<cr>", desc = "Grapple 3" },
   { "<c-h>", "<cmd>Grapple select index=4<cr>", desc = "Grapple 4" },
 
-  { "<leader>mg", "<cmd>Grapple toggle_scopes<cr>", desc = "Grapple scopes" },
-  { "<leader>mG", "<cmd>Grapple toggle_loaded<cr>", desc = "Grapple loaded" },
+  { "<leader>og", "<cmd>Grapple toggle_scopes<cr>", desc = "Grapple scopes" },
+  { "<leader>oG", "<cmd>Grapple toggle_loaded<cr>", desc = "Grapple loaded" },
 }) do
   H.map(key[1], key[2], key["desc"])
 end

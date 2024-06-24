@@ -198,16 +198,6 @@ local function map(l, r, opts, mode)
   vim.keymap.set(mode, l, r, opts)
 end
 
-local function pick_other()
-  vim.ui.select(
-    { "Pick commands", "Pick files", "Pick hl_groups", "Pick list scope='change'", "Pick options", "Pick treesitter" },
-    { prompt = "Other pickers" },
-    function(item, idx)
-      if idx then vim.cmd(item) end
-    end
-  )
-end
-
 local cwd_cache = {}
 local function files() -- either files or git_files
   local builtin = Pick.builtin
@@ -242,18 +232,16 @@ local function keys()
     { desc = "Staged hunks (current)" }
   )
   map("<leader>fb", builtin.buffers, { desc = "Buffer pick" })
-  -- <leader>fc colors( ak.deps colors, also base46)
+  map("<leader>fc", extra.git_commits, { desc = "Git commits" })
+  map("<leader>fC", function() extra.git_commits({ path = vim.fn.expand("%") }) end, { desc = "Git commits buffer" })
   map("<leader>fd", function() extra.diagnostic({ scope = "current" }) end, { desc = "Diagnostic buffer" })
   map("<leader>fD", function() extra.diagnostic({ scope = "all" }) end, { desc = "Diagnostic workspace" })
   map("<leader>ff", files, { desc = "Files" })
-  map("<leader>fF", function() builtin.files(nil, { source = { cwd = bdir() } }) end, { desc = "Files(rel)" })
+  map("<leader>fF", function() builtin.files(nil, { source = { cwd = bdir() } }) end, { desc = "Files (rel)" })
   map("<leader>fg", builtin.grep_live, { desc = "Grep" })
   map("<leader>fG", function() builtin.grep_live(nil, { source = { cwd = bdir() } }) end, { desc = "Grep (rel)" })
   map("<leader>fh", builtin.help, { desc = "Help" })
-  map("<leader>fi", extra.git_commits, { desc = "Git commits" })
-  map("<leader>fI", function() extra.git_commits({ path = vim.fn.expand("%") }) end, { desc = "Git commits buffer" })
-  map("<leader>fj", function() extra.list({ scope = "jump" }) end, { desc = "Jumplist" })
-  map("<leader>fJ", extra.marks, { desc = "Marks" })
+  -- <leader>fi fzf-lua or telescope builtin
   map("<leader>fk", extra.keymaps, { desc = "Key maps" })
   map("<leader>fl", function() extra.buf_lines({ scope = "current" }) end, { desc = "Buffer lines" })
   map("<leader>fL", function() extra.buf_lines() end, { desc = "Buffers lines" })
@@ -263,9 +251,15 @@ local function keys()
     function() extra.git_hunks({ path = vim.fn.expand("%") }) end,
     { desc = "Unstaged hunks (current)" }
   )
-  map("<leader>fo", pick_other, { desc = "Other pickers" })
+  map("<leader>foc", extra.commands, { desc = "Commands" })
+  map("<leader>foC", function() extra.list({ scope = "change" }) end, { desc = "Changes" })
+  map("<leader>fof", builtin.files, { desc = "Files rg" })
+  map("<leader>foj", function() extra.list({ scope = "jump" }) end, { desc = "Jumps" })
+  map("<leader>foh", extra.hl_groups, { desc = "Highlights" })
+  map("<leader>fom", extra.marks, { desc = "Marks" })
+  map("<leader>foo", extra.options, { desc = "Options" })
+  map("<leader>fot", extra.treesitter, { desc = "Treesitter" })
   map("<leader>fp", extra.hipatterns, { desc = "Hipatterns" })
-  -- <leader>fP fzf-lua builtin(fzf-lua setup)
   map("<leader>fr", extra.oldfiles, { desc = "Recent" }) -- could also use fv fV for visits
   map("<leader>fR", function() registry.oldfiles_with_filter({ cwd_only = true }) end, { desc = "Recent (rel)" })
   map("<leader>fs", function() extra.lsp({ scope = "document_symbol" }) end, { desc = "Symbols buffer" })
@@ -279,8 +273,12 @@ local function keys()
     function() builtin.grep({ pattern = vim.fn.expand("<cword>") }, { source = { cwd = bdir() } }) end,
     { desc = "Word (rel)" }
   )
-  map("<leader>fx", function() extra.list({ scope = "quickfix" }) end, { desc = "Quickfix" })
+  map("<leader>fx", function()
+    vim.cmd.cclose() -- In quickfix, "bql" hides the picker
+    extra.list({ scope = "quickfix" })
+  end, { desc = "Quickfix" })
   map("<leader>fX", function() extra.list({ scope = "location" }) end, { desc = "Loclist" })
+  -- <leader>fz colors( ak.deps colors, also base46)
 end
 
 local function picker()

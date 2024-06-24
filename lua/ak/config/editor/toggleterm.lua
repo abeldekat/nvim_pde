@@ -50,7 +50,7 @@ end, { desc = "Lazygit file", silent = true })
 local lazygit = Terminal:new({ cmd = "lazygit", count = 99, hidden = true, direction = "tab" })
 vim.keymap.set("n", "<leader>gg", lazygit_toggle(lazygit), { desc = "Lazygit", silent = true })
 
-vim.keymap.set("n", "<leader>mt", function() vim.cmd("ToggleTermToggleAll") end, {
+vim.keymap.set("n", "<leader>ot", function() vim.cmd("ToggleTermToggleAll") end, {
   desc = "ToggleTerm all",
   silent = true,
 })
@@ -58,7 +58,7 @@ vim.keymap.set("n", "<leader>mt", function() vim.cmd("ToggleTermToggleAll") end,
 -- see :h filename-modifiers
 -- in normal mode, in a toggle term, cd to dir of alternate file
 -- toggle first to update the alternate file...
-vim.keymap.set("n", "<leader>mc", function()
+vim.keymap.set("n", "<leader>oc", function()
   local id = terminal.get_focused_id()
   local target = terminal.get(id)
   local alternate_dir = vim.fn.expand("#:~:h")

@@ -85,7 +85,7 @@ end
 
 local colors_loaded = false
 local function add_keymap_all_colors(specs_to_use)
-  vim.keymap.set("n", "<leader>fc", function()
+  vim.keymap.set("n", "<leader>fz", function()
     if not colors_loaded then
       for _, spec in pairs(specs_to_use) do -- Load all specs and their configs
         add(spec)

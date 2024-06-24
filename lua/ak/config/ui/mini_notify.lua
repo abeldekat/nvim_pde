@@ -28,7 +28,7 @@ vim.keymap.set("n", "<leader>un", function() MiniNotify.clear() end, {
   silent = true,
 })
 
-vim.keymap.set("n", "<leader>mn", function() MiniNotify.show_history() end, {
+vim.keymap.set("n", "<leader>on", function() MiniNotify.show_history() end, {
   desc = "Notify history",
   silent = true,
 })

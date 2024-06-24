@@ -67,9 +67,9 @@ local function toggle_patch()
   if not use_patch then ensure_lazydev_attached() end
 end
 
-vim.keymap.set("n", "<leader>mi", "<cmd>LazyDev<cr>", { desc = "Info lazydev", silent = true })
-vim.keymap.set("n", "<leader>mz", fetch_once, { desc = "Attach lazydev", silent = true })
-vim.keymap.set("n", "<leader>mZ", toggle_patch, { desc = "Toggle lazydev" })
+vim.keymap.set("n", "<leader>oi", "<cmd>LazyDev<cr>", { desc = "Info lazydev", silent = true })
+vim.keymap.set("n", "<leader>oz", fetch_once, { desc = "Attach lazydev", silent = true })
+vim.keymap.set("n", "<leader>oZ", toggle_patch, { desc = "Toggle lazydev" })
 apply_patch()
 
 -- When using .luarc.jsonc: cp either .luarc.strict or .luarc.nonstrict to .luarc.jsonc

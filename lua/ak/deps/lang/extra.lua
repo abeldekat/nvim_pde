@@ -46,7 +46,7 @@ local function sql()
   end
   register(spec)
   Util.defer.on_events(function()
-    Util.defer.on_keys(function() now(load) end, "<leader>md", "Load dadbod")
+    Util.defer.on_keys(function() now(load) end, "<leader>od", "Load dadbod")
   end, "FileType", "sql")
 end
 

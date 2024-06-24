@@ -60,7 +60,7 @@ local function picker_mini_pick()
         require("ak.config.editor.mini_pick_telescope")
       end
     end)
-  end, "<leader>fP", "Picker builtin")
+  end, "<leader>fi", "Picker builtin")
 end
 
 --          ╭─────────────────────────────────────────────────────────╮

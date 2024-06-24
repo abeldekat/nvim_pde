@@ -16,12 +16,6 @@ local opts = {
     -- Careful: Do not use the same table instance twice!
     hl.MiniStatuslineModeNormal = { bg = c.bg_statusline, fg = c.fg_sidebar } -- left and right, dynamic
     hl.MiniStatuslineFilename = { bg = c.bg_statusline, fg = c.fg_sidebar } -- all inner groups
-
-    hl.MiniHipatternsFixme = { bg = hl.DiagnosticError.fg, fg = c.bg, bold = true }
-    hl.MiniHipatternsHack = { bg = hl.DiagnosticWarn.fg, fg = c.bg, bold = true }
-    hl.MiniHipatternsTodo = { bg = hl.DiagnosticInfo.fg, fg = c.bg, bold = true }
-    hl.MiniHipatternsNote = { bg = hl.DiagnosticHint.fg, fg = c.bg, bold = true }
-
     hl.MsgArea = { fg = c.comment } -- fg_dark: -- Area for messages and cmdline
   end,
 }
