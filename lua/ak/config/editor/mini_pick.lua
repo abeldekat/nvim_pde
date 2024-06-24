@@ -215,16 +215,15 @@ local function keys()
   local registry = Pick.registry
 
   -- hotkeys:
+  map("<leader><leader>", files, { desc = "Files pick" })
   map("<leader>/", function() extra.buf_lines({ scope = "current" }) end, { desc = "Buffer lines" })
   map("<leader>'", builtin.buffers, { desc = "Buffers pick" }) -- home row, used often
   map("<leader>l", builtin.grep_live, { desc = "Live grep" })
   map("<leader>r", function() registry.oldfiles_with_filter({ cwd_only = true }) end, { desc = "Recent (rel)" })
-  map("<leader><leader>", files, { desc = "Files pick" })
 
-  -- fuzzy
+  -- fuzzy main. Free: fe,fj,fn,fq,fv,fy
   map("<leader>f/", function() extra.history({ scope = "/" }) end, { desc = "'/' history" })
   map("<leader>f:", function() extra.history({ scope = ":" }) end, { desc = "':' history" })
-  map('<leader>f"', extra.registers, { desc = "Registers" })
   map("<leader>fa", function() extra.git_hunks({ scope = "staged" }) end, { desc = "Staged hunks" })
   map(
     "<leader>fA",
@@ -251,14 +250,6 @@ local function keys()
     function() extra.git_hunks({ path = vim.fn.expand("%") }) end,
     { desc = "Unstaged hunks (current)" }
   )
-  map("<leader>foc", extra.commands, { desc = "Commands" })
-  map("<leader>foC", function() extra.list({ scope = "change" }) end, { desc = "Changes" })
-  map("<leader>fof", builtin.files, { desc = "Files rg" })
-  map("<leader>foj", function() extra.list({ scope = "jump" }) end, { desc = "Jumps" })
-  map("<leader>foh", extra.hl_groups, { desc = "Highlights" })
-  map("<leader>fom", extra.marks, { desc = "Marks" })
-  map("<leader>foo", extra.options, { desc = "Options" })
-  map("<leader>fot", extra.treesitter, { desc = "Treesitter" })
   map("<leader>fp", extra.hipatterns, { desc = "Hipatterns" })
   map("<leader>fr", extra.oldfiles, { desc = "Recent" }) -- could also use fv fV for visits
   map("<leader>fR", function() registry.oldfiles_with_filter({ cwd_only = true }) end, { desc = "Recent (rel)" })
@@ -278,7 +269,18 @@ local function keys()
     extra.list({ scope = "quickfix" })
   end, { desc = "Quickfix" })
   map("<leader>fX", function() extra.list({ scope = "location" }) end, { desc = "Loclist" })
-  -- <leader>fz colors( ak.deps colors, also base46)
+
+  -- fuzzy other
+  map("<leader>fo:", extra.commands, { desc = "Commands" })
+  -- <leader>foz colors( ak.deps colors, also base46)
+  map("<leader>foC", function() extra.list({ scope = "change" }) end, { desc = "Changes" })
+  map("<leader>fof", builtin.files, { desc = "Files rg" })
+  map("<leader>foj", function() extra.list({ scope = "jump" }) end, { desc = "Jumps" })
+  map("<leader>foh", extra.hl_groups, { desc = "Highlights" })
+  map("<leader>fom", extra.marks, { desc = "Marks" })
+  map("<leader>foo", extra.options, { desc = "Options" })
+  map("<leader>for", extra.registers, { desc = "Registers" })
+  map("<leader>fot", extra.treesitter, { desc = "Treesitter" })
 end
 
 local function picker()
