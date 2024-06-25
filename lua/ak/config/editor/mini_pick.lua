@@ -35,7 +35,7 @@ H.setup_autocommands = function()
       group = group,
       desc = desc,
       callback = function(...)
-        local opts = MiniPick.get_picker_opts() or {}
+        local opts = Pick.get_picker_opts() or {}
         if opts and opts.source then
           local hook = hooks[opts.source.name] or function(...) end
           hook(...)
@@ -188,17 +188,61 @@ Pick.registry.colors = function()
   })
 end
 
+-- Old version:
+-- Does not alwasy work because of the line numbers added to each line
+-- Pick.registry.buffer_lines_current = function()
+--   local show = function(buf_id, items, query, opts)
+--     if items and #items > 0 then -- one buffer, one ft: Enable highlighting
+--       local ft = vim.bo[items[1].bufnr].filetype
+--       vim.bo[buf_id].filetype = ft
+--     end
+--     Pick.default_show(buf_id, items, query, opts)
+--   end
+--   MiniExtra.pickers.buf_lines({ scope = "current" }, { source = { show = show } })
+-- end
+
 -- https://github.com/echasnovski/mini.nvim/discussions/988
 -- Fuzzy search the current buffer with syntax highlighting
--- Does not alwasy work because of the line numbers added to each line
 Pick.registry.buffer_lines_current = function()
+  local ns = vim.api.nvim_create_namespace("ak_buffer_lines_current")
   local show = function(buf_id, items, query, opts)
-    if items and #items > 0 then -- all items have the same buffer
-      local ft = vim.bo[items[1].bufnr].filetype
-      vim.bo[buf_id].filetype = ft
+    local find_linenr = function(text)
+      local _, _, linenr, _ = string.find(text, "(%d+):(.*)")
+      return linenr
+    end
+    local remove_linenrs = function(replacement)
+      return vim.tbl_map(function(item)
+        local linenr = find_linenr(item)
+        if linenr then item = string.sub(item, #linenr + 2) end
+        return item
+      end, replacement)
+    end
+    local add_extmark = function(buffer, idx, text)
+      vim.api.nvim_buf_set_extmark(buffer, ns, idx - 1, 0, {
+        virt_text = { { text } },
+        virt_text_pos = "inline",
+        priority = 1000,
+      })
+    end
+    if not items or #items == 0 then Pick.default_show(buf_id, items, query, opts) end
+
+    local set_lines_orig = vim.api.nvim_buf_set_lines
+    ---@diagnostic disable-next-line: duplicate-set-field
+    vim.api.nvim_buf_set_lines = function(buffer, start, end_, strict_indexing, replacement)
+      set_lines_orig(buffer, start, end_, strict_indexing, remove_linenrs(replacement))
+      for idx, _ in ipairs(replacement) do
+        local linenr = find_linenr(replacement[idx])
+        if linenr then add_extmark(buffer, idx, linenr .. ": ") end
+      end
     end
     Pick.default_show(buf_id, items, query, opts)
+    vim.api.nvim_buf_set_lines = set_lines_orig -- restore original function
   end
+
+  local name = "Buffer lines (current)"
+  local src_buffer_filetype = vim.bo.filetype -- remember ft of buffer to search in
+  H.start_hooks[name] = function() vim.bo.filetype = src_buffer_filetype end -- set same ft in picker buffer
+  H.stop_hooks[name] = function() vim.api.nvim_buf_clear_namespace(0, ns, 0, -1) end -- clean up
   MiniExtra.pickers.buf_lines({ scope = "current" }, { source = { show = show } })
 end
 
