@@ -122,7 +122,7 @@ Pick.registry.oldfiles_with_filter = function(local_opts, opts)
 end
 
 -- https://github.com/echasnovski/mini.nvim/discussions/518#discussioncomment-7373556
--- For TODOs in a project, use builtin.grep.
+-- Implements: For TODOs in a project, use builtin.grep.
 Pick.registry.todo_comments = function(patterns) --hipatterns.config.highlighters
   local function find_todo(item)
     for _, hl in pairs(patterns) do
@@ -190,7 +190,7 @@ end
 
 -- Old version:
 -- Does not alwasy work because of the line numbers added to each line
--- Pick.registry.buffer_lines_current = function()
+-- Pick.registry.buffer_lines_current_bak = function()
 --   local show = function(buf_id, items, query, opts)
 --     if items and #items > 0 then -- one buffer, one ft: Enable highlighting
 --       local ft = vim.bo[items[1].bufnr].filetype
@@ -241,7 +241,12 @@ Pick.registry.buffer_lines_current = function()
 
   local name = "Buffer lines (current)"
   local src_buffer_filetype = vim.bo.filetype -- remember ft of buffer to search in
-  H.start_hooks[name] = function() vim.bo.filetype = src_buffer_filetype end -- set same ft in picker buffer
+  H.start_hooks[name] = function() -- apply ft in picker buffer
+    local has_lang, lang = pcall(vim.treesitter.language.get_lang, src_buffer_filetype)
+    local has_ts, _ = pcall(vim.treesitter.start, 0, has_lang and lang or src_buffer_filetype)
+    -- at this point, the lang may be present, but the parser is not
+    if not has_ts then vim.bo.syntax = src_buffer_filetype end
+  end
   H.stop_hooks[name] = function() vim.api.nvim_buf_clear_namespace(0, ns, 0, -1) end -- clean up
   MiniExtra.pickers.buf_lines({ scope = "current" }, { source = { show = show } })
 end

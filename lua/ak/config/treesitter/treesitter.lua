@@ -30,6 +30,7 @@ local get_opts = function()
       "lua",
       "luadoc",
       "luap",
+      "make",
       "markdown",
       "markdown_inline",
       "printf",
