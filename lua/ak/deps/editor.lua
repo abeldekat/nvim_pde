@@ -103,19 +103,8 @@ later(function()
   add("akinsho/toggleterm.nvim")
   require("ak.config.editor.toggleterm")
 
-  -- add("lewis6991/gitsigns.nvim")
-  -- require("ak.config.editor.gitsigns")
   require("ak.config.editor.mini_git")
   require("ak.config.editor.mini_diff")
-
-  local spec_blame = "f-person/git-blame.nvim"
-  register(spec_blame)
-  Util.defer.on_keys(function()
-    now(function()
-      add(spec_blame)
-      require("ak.config.editor.gitblame")
-    end)
-  end, "<leader>gt", "Git-blame")
 
   local spec_quickfix = {
     source = "kevinhwang91/nvim-bqf",

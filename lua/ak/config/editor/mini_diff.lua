@@ -1,7 +1,3 @@
---          ╭─────────────────────────────────────────────────────────╮
---          │                 WIP: Replacing gitsigns                 │
---          ╰─────────────────────────────────────────────────────────╯
-
 -- - Configurable mappings to manage diff hunks:
 --     - Apply and reset hunks inside region (selected visually or with
 --       a dot-repeatable operator).

@@ -16,7 +16,6 @@ local opts = {
     return { -- left and right, dynamic
       MiniStatuslineModeNormal = { link = "MiniStatuslineFilename" },
 
-      -- See "DiagnosticError" etc
       MiniHipatternsFixme = { fg = colors.base, bg = colors.red, style = { "bold" } },
       MiniHipatternsHack = { fg = colors.base, bg = colors.yellow, style = { "bold" } },
       MiniHipatternsNote = { fg = colors.base, bg = colors.teal, style = { "bold" } },
@@ -33,7 +32,7 @@ local opts = {
     dropbar = { enabled = false },
     fidget = true,
     flash = false,
-    gitsigns = true,
+    gitsigns = false,
     harpoon = true,
     headlines = true,
     illuminate = { enabled = false },
@@ -42,7 +41,7 @@ local opts = {
     lsp_trouble = false,
     mason = true,
     markdown = true,
-    mini = true,
+    mini = true, -- enabled by default
     native_lsp = {
       enabled = true,
       underlines = {
@@ -61,7 +60,7 @@ local opts = {
     nvimtree = false,
     rainbow_delimiters = false,
     semantic_tokens = true,
-    telescope = true,
+    telescope = false,
     treesitter = true,
     treesitter_context = true,
     ufo = false,
