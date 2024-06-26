@@ -203,52 +203,38 @@ end
 
 -- https://github.com/echasnovski/mini.nvim/discussions/988
 -- Fuzzy search the current buffer with syntax highlighting
+local ns_digit_prefix = vim.api.nvim_create_namespace("cur-buf-pick-show")
+local show_cur_buf_lines = function(buf_id, items, query, opts)
+  if items == nil or #items == 0 then return end
+
+  -- Show as usual
+  Pick.default_show(buf_id, items, query, opts)
+
+  -- Move prefix line numbers into inline extmarks
+  local lines = vim.api.nvim_buf_get_lines(buf_id, 0, -1, false)
+  local digit_prefixes = {}
+  for i, l in ipairs(lines) do
+    local _, prefix_end, prefix = l:find("^(%d+:)")
+    if prefix_end ~= nil then
+      digit_prefixes[i], lines[i] = prefix, l:sub(prefix_end + 1)
+    end
+  end
+
+  vim.api.nvim_buf_set_lines(buf_id, 0, -1, false, lines)
+  for i, pref in pairs(digit_prefixes) do
+    local extmark_opts = { virt_text = { { pref, "MiniPickNormal" } }, virt_text_pos = "inline" }
+    vim.api.nvim_buf_set_extmark(buf_id, ns_digit_prefix, i - 1, 0, extmark_opts)
+  end
+
+  -- Set highlighting based on the curent filetype
+  local ft = vim.bo[items[1].bufnr].filetype
+  local has_lang, lang = pcall(vim.treesitter.language.get_lang, ft)
+  local has_ts, _ = pcall(vim.treesitter.start, buf_id, has_lang and lang or ft)
+  if not has_ts and ft then vim.bo[buf_id].syntax = ft end
+end
+
 Pick.registry.buffer_lines_current = function()
-  local ns = vim.api.nvim_create_namespace("ak_buffer_lines_current")
-  local show = function(buf_id, items, query, opts)
-    local find_linenr = function(text)
-      local _, _, linenr, _ = string.find(text, "(%d+):(.*)")
-      return linenr
-    end
-    local remove_linenrs = function(replacement)
-      return vim.tbl_map(function(item)
-        local linenr = find_linenr(item)
-        if linenr then item = string.sub(item, #linenr + 2) end
-        return item
-      end, replacement)
-    end
-    local add_extmark = function(buffer, idx, text)
-      vim.api.nvim_buf_set_extmark(buffer, ns, idx - 1, 0, {
-        virt_text = { { text } },
-        virt_text_pos = "inline",
-        priority = 1000,
-      })
-    end
-    if not items or #items == 0 then Pick.default_show(buf_id, items, query, opts) end
-
-    local set_lines_orig = vim.api.nvim_buf_set_lines
-    ---@diagnostic disable-next-line: duplicate-set-field
-    vim.api.nvim_buf_set_lines = function(buffer, start, end_, strict_indexing, replacement)
-      set_lines_orig(buffer, start, end_, strict_indexing, remove_linenrs(replacement))
-      for idx, _ in ipairs(replacement) do
-        local linenr = find_linenr(replacement[idx])
-        if linenr then add_extmark(buffer, idx, linenr .. ": ") end
-      end
-    end
-    Pick.default_show(buf_id, items, query, opts)
-    vim.api.nvim_buf_set_lines = set_lines_orig -- restore original function
-  end
-
-  local name = "Buffer lines (current)"
-  local src_buffer_filetype = vim.bo.filetype -- remember ft of buffer to search in
-  H.start_hooks[name] = function() -- apply ft in picker buffer
-    local has_lang, lang = pcall(vim.treesitter.language.get_lang, src_buffer_filetype)
-    local has_ts, _ = pcall(vim.treesitter.start, 0, has_lang and lang or src_buffer_filetype)
-    -- at this point, the lang may be present, but the parser is not
-    if not has_ts then vim.bo.syntax = src_buffer_filetype end
-  end
-  H.stop_hooks[name] = function() vim.api.nvim_buf_clear_namespace(0, ns, 0, -1) end -- clean up
-  MiniExtra.pickers.buf_lines({ scope = "current" }, { source = { show = show } })
+  MiniExtra.pickers.buf_lines({ scope = "current" }, { source = { show = show_cur_buf_lines } })
 end
 
 local function bdir() -- note: in oil dir, return nil and fallback to root cwd
@@ -281,6 +267,7 @@ local function keys()
   map("<leader><leader>", files, { desc = "Files pick" })
   map("<leader>/", registry.buffer_lines_current, { desc = "Buffer lines" })
   map("<leader>'", builtin.buffers, { desc = "Buffers pick" }) -- home row, used often
+  map("<leader>b", function() extra.lsp({ scope = "document_symbol" }) end, { desc = "Buffer symbols" })
   map("<leader>l", builtin.grep_live, { desc = "Live grep" })
   map("<leader>r", function() registry.oldfiles_with_filter({ cwd_only = true }) end, { desc = "Recent (rel)" })
 
