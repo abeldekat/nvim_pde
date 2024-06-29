@@ -11,9 +11,8 @@
 -- - Sorting is done to first minimize match width and then match start.
 --   Nothing more: no favoring certain places in string, etc.
 
--- NOTE:  manpages, autocommands and quickfixhis: Use fzf-lua builtin
--- NOTE: No git status: use hunks.
--- NOTE: Paths: No filename first option
+-- Manpages, autocommands and quickfixhis: Use fzf-lua builtin
+-- Paths: No filename first option
 
 local M = {}
 local Utils = require("ak.util")
@@ -187,19 +186,6 @@ Pick.registry.colors = function()
     },
   })
 end
-
--- Old version:
--- Does not alwasy work because of the line numbers added to each line
--- Pick.registry.buffer_lines_current_bak = function()
---   local show = function(buf_id, items, query, opts)
---     if items and #items > 0 then -- one buffer, one ft: Enable highlighting
---       local ft = vim.bo[items[1].bufnr].filetype
---       vim.bo[buf_id].filetype = ft
---     end
---     Pick.default_show(buf_id, items, query, opts)
---   end
---   MiniExtra.pickers.buf_lines({ scope = "current" }, { source = { show = show } })
--- end
 
 -- https://github.com/echasnovski/mini.nvim/discussions/988
 -- Fuzzy search the current buffer with syntax highlighting

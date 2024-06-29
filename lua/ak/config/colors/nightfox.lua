@@ -2,6 +2,9 @@
 --          │               mini.statusline: supported                │
 --          │       nightfox has themes instead of flavours...        │
 --          ╰─────────────────────────────────────────────────────────╯
+
+-- New mini highlighters, yet to be merged
+
 local Utils = require("ak.util")
 
 Utils.color.add_toggle("*fox", {

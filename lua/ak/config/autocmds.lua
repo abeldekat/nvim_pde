@@ -26,21 +26,7 @@ autocmd({ "VimResized" }, {
   end,
 })
 
--- go to last loc when opening a buffer
-autocmd("BufReadPost", {
-  group = augroup("last_loc"),
-  callback = function(event)
-    local exclude = { "gitcommit" }
-    local buf = event.buf
-
-    if vim.tbl_contains(exclude, vim.bo[buf].filetype) or vim.b[buf].ak_last_loc then return end
-    vim.b[buf].ak_last_loc = true
-
-    local mark = vim.api.nvim_buf_get_mark(buf, '"')
-    local lcount = vim.api.nvim_buf_line_count(buf)
-    if mark[1] > 0 and mark[1] <= lcount then pcall(vim.api.nvim_win_set_cursor, 0, mark) end
-  end,
-})
+-- go to last loc when opening a buffer: See mini.misc
 
 -- close some filetypes with <q>
 autocmd("FileType", {
@@ -102,8 +88,6 @@ autocmd({ "BufWritePre" }, {
   end,
 })
 
--- ADDING:
-
 -- Don't continue comments with o and O
 autocmd("Filetype", {
   pattern = { "*" },
@@ -114,12 +98,3 @@ autocmd("Filetype", {
   end,
   group = augroup("continue_comments"),
 })
-
--- https://github.com/neovim/neovim/issues/4396
--- https://github.com/neovim/neovim/issues/4867#issuecomment-291249173
--- autocmd("VimLeave", {
---   pattern = "*",
---   callback = function()
---     vim.cmd("set guicursor=a:ver25-blinkon1000")
---   end,
--- })

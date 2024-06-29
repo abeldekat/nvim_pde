@@ -3,7 +3,9 @@ local MiniDeps = require("mini.deps")
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 local register = Util.deps.register
 
--- Lazy loading benefit: +-5 ms
+Util.has_mini_ai = true -- ai and textobjects with gen_treesitter...
+if Util.has_mini_ai then later(function() require("ak.config.coding.mini_ai") end) end
+
 later(function()
   local function make_jsregexp(path)
     vim.cmd("lcd " .. path)
@@ -38,11 +40,10 @@ later(function()
 
   add("windwp/nvim-autopairs")
   require("ak.config.coding.autopairs")
-  add("folke/ts-comments.nvim")
-  require("ak.config.coding.ts-comments")
+  -- add("folke/ts-comments.nvim")
+  -- require("ak.config.coding.ts-comments")
 
   -- require("ak.config.coding.mini_comment") -- now builtin
-  require("ak.config.coding.mini_ai") -- testing...
   require("ak.config.coding.mini_basics") -- copied a selection...
   require("ak.config.coding.mini_surround")
   require("ak.config.coding.mini_operators")

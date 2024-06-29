@@ -2,7 +2,7 @@
 --          │               mini.statusline: supported                │
 --          ╰─────────────────────────────────────────────────────────╯
 
--- NOTE: Mini.pick current line not different
+-- New mini highlighters, yet to be merged. Now, pick current line is not visible
 
 -- has its own toggle_style
 require("onedark").setup({ -- the default is dark

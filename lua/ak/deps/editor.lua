@@ -88,15 +88,12 @@ later(function()
   -- stylua: ignore
   if marker_to_use == "g" then marker_grapple() else marker_harpoon() end
 
-  add("nvim-pack/nvim-spectre")
-  require("ak.config.editor.spectre")
   add("stevearc/aerial.nvim")
   require("ak.config.editor.aerial")
 
   picker_mini_pick()
 
   require("ak.config.editor.mini_clue")
-  require("ak.config.editor.mini_misc")
   require("ak.config.editor.mini_cursorword")
   require("ak.config.editor.mini_hipatterns")
 
@@ -118,4 +115,13 @@ later(function()
       vim.cmd("copen")
     end)
   end, "FileType", "qf")
+
+  local spec_spectre = "nvim-pack/nvim-spectre"
+  register(spec_spectre)
+  Util.defer.on_keys(function()
+    now(function()
+      add(spec_spectre)
+      require("ak.config.editor.spectre")
+    end)
+  end, "<leader>cR", "Replace in files (spectre)")
 end)

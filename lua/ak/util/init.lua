@@ -15,6 +15,8 @@ setmetatable(M, {
   end,
 })
 
+M.has_mini_ai = false -- treesitter textobjects and mini.ai
+
 -- This indicates that oil.nvim should be shown
 function M.opened_with_dir_argument()
   if vim.fn.argc() == 1 then

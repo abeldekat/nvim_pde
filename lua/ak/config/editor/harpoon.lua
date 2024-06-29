@@ -23,7 +23,7 @@ H.lists = { H.current_list_placeholder }
 H.find_active_idx = function(list)
   if vim.bo.buftype ~= "" then return end -- not a normal buffer
 
-  -- if list:length() == 0 --  NOTE: Harpoon issue #555
+  -- if list:length() == 0 --Harpoon issue #555
   if #list.items == 0 then return end -- no items in the list
 
   local current_file = vim.fn.expand("%:p:.")

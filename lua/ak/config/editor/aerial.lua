@@ -18,10 +18,9 @@ if Consts.kind_filter then
 end
 
 local opts = {
-  attach_mode = "global",
-  backends = { "lsp", "treesitter", "markdown", "man" },
   show_guides = true,
   layout = {
+    default_direction = "prefer_left",
     resize_to_content = false,
     win_opts = {
       winhl = "Normal:NormalFloat,FloatBorder:NormalFloat,SignColumn:SignColumnSB",
@@ -31,13 +30,12 @@ local opts = {
   },
   icons = icons,
   filter_kind = filter_kind,
-        -- stylua: ignore
-        guides = {
-          mid_item   = "├╴",
-          last_item  = "└╴",
-          nested_top = "│ ",
-          whitespace = "  ",
-        },
+  guides = {
+    mid_item = "├╴",
+    last_item = "└╴",
+    nested_top = "│ ",
+    whitespace = "  ",
+  },
 }
 require("aerial").setup(opts)
 vim.keymap.set("n", "<leader>cs", "<cmd>AerialToggle<cr>", { desc = "Aerial (Symbols)", silent = true })
