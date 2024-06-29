@@ -1,12 +1,12 @@
 # Neovim pde
 
-My *personal development environment* for Neovim
+My _personal development environment_ for Neovim
 
 ## Older versions
 
 > [!NOTE]
 > Tag [with_submodules] references the version containing `git submodules`,
-  `lazy.nvim` and `mini.deps`
+> `lazy.nvim` and `mini.deps`
 >
 > Tag [with_lazynvim] references the version containing `lazy.nvim` and `mini.deps`
 
@@ -16,14 +16,14 @@ My *personal development environment* for Neovim
 - `ak.init`: Bootstrap [mini.deps] using [ak.boot.deps]
 - [ak.deps]: Contains specs for [mini.deps] that load the config in `ak.config`
 - [ak.config]: Contains all setup for options, key-mappings, auto-commands,
-color-schemes and plugins.
+  color-schemes and plugins.
 - [ak.util]: Shared code.
 
 ## Install
 
- > Requirements: Neovim latest version or nightly.
- >
- > Always review the code before installing a configuration.
+> Requirements: Neovim latest version or nightly.
+>
+> Always review the code before installing a configuration.
 
 Clone the repository:
 
@@ -55,18 +55,18 @@ Leader: `space`
 
 ### Navigation
 
-- Main plugins: harpoon, oil and telescope.
+- Main plugins: grapple, oil and telescope.
 - Menu: `mini.clue`
 
-#### Harpoon
+#### Grapple
 
 - Switch active list: `<leader>J`
-- Info in statusline: `abeldekat/harpoonline`
+- Info in statusline: custom statusline component [grappleline]
 - Using the shortcuts for window navigation:
-`c-j`, `<c-k>`,`<c-l>`,`<c-h>`, corresponding to file 1-4
+  `c-j`, `<c-k>`,`<c-l>`,`<c-h>`, corresponding to file 1-4
 - ui: `<leader>j` ("strongest finger")
-- add: `<leader>a`
-- next/prev: `<leader>n` / `<leader>p`
+- toggle tag: `<leader>a`
+- next/prev: `<leader>;` / `<leader>,`
 
 Window navigation:
 
@@ -83,7 +83,7 @@ Window navigation:
 #### Tmux
 
 - [tmux-sessionizer] inspired by @ThePrimeagen
-- workspaces at the top of the screen,  using [tmuxp]
+- workspaces at the top of the screen, using [tmuxp]
 - leader: `ctrl space`
 - navigation:
   - `tmux-sessionizer`: leader h
@@ -97,7 +97,7 @@ Window navigation:
 - `mini.statusline`, no colors, except on:
   - mode change
   - diagnostics
-  - current buffer is harpooned
+  - current buffer is tagged(grapple)
   - macro recording
 - `cmdheight 0`
 - many color-schemes
@@ -117,7 +117,7 @@ git update-index --assume-unchanged lua/ak/colors.lua
 
 ### Key conflicts
 
-*Surrounding*:
+_Surrounding_:
 
 Using [mini.surround]. Suggested keys: `sa sd sr sf sF sh sn`
 
@@ -126,7 +126,7 @@ Solution: Use the `m` key in combination with `asdf`,
 adjacent keys on a qwerty keyboard.
 Key `ms` is a mnemonic for `surround substitute`, performing a surround replace.
 
-*Operators*:
+_Operators_:
 
 Using [mini.operators]. Suggested key `gr`("go replace")
 is already used by the `lsp`("go references").
@@ -167,6 +167,7 @@ This repo uses code and ideas from the following repositories:
 [ak.deps]: lua/ak/deps
 [ak.config]: lua/ak/config
 [ak.util]: lua/ak/util
+[grappleline]: lua/ak/config/ui/grappleline.lua
 [leader uu]: lua/ak/util/color.lua
 [leader h]: lua/ak/util/color.lua
 [mini.surround]: https://github.com/echasnovski/mini.surround
