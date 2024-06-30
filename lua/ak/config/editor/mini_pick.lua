@@ -61,65 +61,6 @@ H.colors = function()
   )
 end
 
--- from telescope oldfiles:
-H.buf_in_cwd = function(bufname, cwd)
-  if cwd:sub(-1) ~= Path.path.sep then cwd = cwd .. Path.path.sep end
-  local bufname_prefix = bufname:sub(1, #cwd)
-  return bufname_prefix == cwd
-end
-
--- mini.extra:
-H.error = function(msg) error(string.format("(ak.extra) %s", msg), 0) end
-
--- mini.extra:
-H.short_path = function(path, cwd)
-  cwd = cwd or vim.fn.getcwd()
-  if not vim.startswith(path, cwd) then return vim.fn.fnamemodify(path, ":~") end
-  local res = path:sub(cwd:len() + 1):gsub("^/+", ""):gsub("/+$", "")
-  return res
-end
-
--- mini.extra:
-H.show_with_icons = function(buf_id, items, query) Pick.default_show(buf_id, items, query, { show_icons = true }) end
-
--- mini.extra:
-H.pick_get_config = function() return vim.tbl_deep_extend("force", Pick.config or {}, vim.b.minipick_config or {}) end
-
--- mini.extra:
-H.pick_start = function(items, default_opts, opts)
-  local fallback = {
-    source = {
-      preview = Pick.default_preview,
-      choose = Pick.default_choose,
-      choose_marked = Pick.default_choose_marked,
-    },
-  }
-  local opts_final = vim.tbl_deep_extend("force", fallback, default_opts, opts or {}, { source = { items = items } })
-  return Pick.start(opts_final)
-end
-
---- Copied oldfiles and added option cwd_only
-Pick.registry.oldfiles_with_filter = function(local_opts, opts)
-  local oldfiles = vim.v.oldfiles
-  if not vim.islist(oldfiles) then H.error("`pickers.oldfiles` picker needs valid `v:oldfiles`.") end
-
-  local filter = local_opts and local_opts.cwd_only or false
-  local items = vim.schedule_wrap(function()
-    local cwd = Pick.get_picker_opts().source.cwd
-    local res = {}
-    for _, path in ipairs(oldfiles) do
-      if vim.fn.filereadable(path) == 1 then
-        local use = not filter and true or H.buf_in_cwd(path, cwd) -- added condition
-        if use then table.insert(res, H.short_path(path, cwd)) end
-      end
-    end
-    Pick.set_picker_items(res)
-  end)
-
-  local show = H.pick_get_config().source.show or H.show_with_icons
-  return H.pick_start(items, { source = { name = "Old files cwd", show = show } }, opts)
-end
-
 -- https://github.com/echasnovski/mini.nvim/discussions/518#discussioncomment-7373556
 -- Implements: For TODOs in a project, use builtin.grep.
 Pick.registry.todo_comments = function(patterns) --hipatterns.config.highlighters
@@ -273,7 +214,7 @@ local function keys()
   map("<leader>'", builtin.buffers, { desc = "Buffers pick" }) -- home row, used often
   map("<leader>b", function() extra.lsp({ scope = "document_symbol" }) end, { desc = "Buffer symbols" })
   map("<leader>l", builtin.grep_live, { desc = "Live grep" })
-  map("<leader>r", function() registry.oldfiles_with_filter({ cwd_only = true }) end, { desc = "Recent (rel)" })
+  map("<leader>r", function() extra.oldfiles({ current_dir = true }) end, { desc = "Recent (rel)" })
 
   -- fuzzy main. Free: fe,fj,fn,fq,fv,fy
   map("<leader>f/", function() extra.history({ scope = "/" }) end, { desc = "'/' history" })
@@ -306,7 +247,7 @@ local function keys()
   )
   map("<leader>fp", extra.hipatterns, { desc = "Hipatterns" })
   map("<leader>fr", extra.oldfiles, { desc = "Recent" }) -- could also use fv fV for visits
-  map("<leader>fR", function() registry.oldfiles_with_filter({ cwd_only = true }) end, { desc = "Recent (rel)" })
+  map("<leader>fR", function() extra.oldfiles({ current_dir = true }) end, { desc = "Recent (rel)" })
   map("<leader>fs", function() extra.lsp({ scope = "document_symbol" }) end, { desc = "Symbols buffer" })
   map("<leader>fS", function() extra.lsp({ scope = "workspace_symbol" }) end, { desc = "Symbols workspace" })
   -- <leader>ft: todo comments(hipatterns config)
