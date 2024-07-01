@@ -55,7 +55,7 @@ Leader: `space`
 
 ### Navigation
 
-- Main plugins: grapple, oil and telescope.
+- Main plugins: grapple, oil and mini.pick.
 - Menu: `mini.clue`
 
 #### Grapple
@@ -76,7 +76,7 @@ Window navigation:
 
 #### Oil
 
-- `ml`("rolling fingers"), opening oil
+- `mk`("rolling fingers"), opening oil
 - `h` up one level
 - `l` down one level, open file
 
@@ -105,8 +105,8 @@ Window navigation:
 Change color-schemes:
 
 - on each startup, see [scripts], `vim_menu_owns`
-- telescope, [leader uu], loads all colors, does not show builtin color-schemes
-- change the palette of the current color-scheme using [leader h], aka "hue"
+- mini.pick, `leader f o c`, loads all colors, does not show builtin color-schemes
+- change the palette of the current color-scheme using [leader h]
 
 Script `vim_menu_owns` writes to `lua.ak.colors`.
 Ignoring changes to that file:
@@ -168,7 +168,6 @@ This repo uses code and ideas from the following repositories:
 [ak.config]: lua/ak/config
 [ak.util]: lua/ak/util
 [grappleline]: lua/ak/config/ui/grappleline.lua
-[leader uu]: lua/ak/util/color.lua
 [leader h]: lua/ak/util/color.lua
 [mini.surround]: https://github.com/echasnovski/mini.surround
 [mini.operators]: https://github.com/echasnovski/mini.operators

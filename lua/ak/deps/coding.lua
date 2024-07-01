@@ -44,7 +44,8 @@ later(function()
   -- require("ak.config.coding.ts-comments")
 
   -- require("ak.config.coding.mini_comment") -- now builtin
-  require("ak.config.coding.mini_basics") -- copied a selection...
+  require("ak.config.coding.mini_basics") -- using a selection...
+  require("ak.config.coding.mini_splitjoin")
   require("ak.config.coding.mini_surround")
   require("ak.config.coding.mini_operators")
   require("ak.config.coding.mini_move")

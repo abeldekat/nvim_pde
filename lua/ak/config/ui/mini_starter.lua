@@ -5,7 +5,7 @@ local Picker = require("ak.util").pick
 local StarterOverride = {}
 
 -- Optimized recent_files, only testing for filereadable on items < n
-StarterOverride.recent_files_in_cwd = function(n) -- show_path
+StarterOverride.recent_files_in_cwd = function(n)
   return function()
     local section = "Recent files (cwd)"
     local cwd = vim.fn.getcwd() .. "/"
