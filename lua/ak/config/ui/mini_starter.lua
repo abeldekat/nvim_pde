@@ -22,7 +22,7 @@ StarterOverride.recent_files_in_cwd = function(n)
   end
 end
 
-local function make_header()
+local function header_cb()
   local versioninfo = vim.version() or {}
   local major = versioninfo.major or ""
   local minor = versioninfo.minor or ""
@@ -30,32 +30,31 @@ local function make_header()
   return string.format("NVIM v%s.%s.%s", major, minor, patch)
 end
 
-local function make_footer(opts, footer_cb) opts.footer = footer_cb end
-
-local function make_items()
-  local section = "Commands"
-  local items = {
-    { action = Picker.keymaps, name = "Keymaps", section = section },
-    { action = "Oil", name = "Oil(key 'mk')", section = section },
-    { action = "qa", name = "Quit", section = section },
-  }
-  return {
-    StarterOverride.recent_files_in_cwd(4), -- starter.sections.recent_files(5, true, false),
-    items,
-  }
-end
-
 -- Lazy loading mini.starter causes problems when using vim with stdin
-function M.setup(extra_center, footer_cb)
-  local opts = {
-    evaluate_single = true,
-    header = make_header(),
-    items = make_items(),
-    -- Removed the m for oil mk:
-    query_updaters = "abcdefghijklnopqrstuvwxyz0123456789_-.",
+-- Keymap "mk"(oil) is not available when letter m is in query_updaters
+-- When using leap, the letter s cannot be a query updater
+-- General problem: When a letter is removed from query_updaters
+-- that letter is still highlighted
+function M.setup(package_manager, footer_cb)
+  local section_commands = "Commands"
+  local commands = {
+    { action = "Oil", name = "Explore (key 'mk')", section = section_commands },
+    { action = Picker.keymaps, name = "Keymaps", section = section_commands },
+    { action = "qa", name = "Quit", section = section_commands },
   }
-  vim.list_extend(opts.items, extra_center)
-  make_footer(opts, footer_cb)
+  local recent_files = StarterOverride.recent_files_in_cwd(4)
+
+  local opts = {
+    content_hooks = {
+      Starter.gen_hook.aligning("center", "center"),
+      Starter.gen_hook.indexing("all", { section_commands }),
+    },
+    evaluate_single = true,
+    footer = footer_cb,
+    header = header_cb,
+    items = { recent_files, package_manager, commands },
+    query_updaters = "ekq0123456789",
+  }
   Starter.setup(opts)
 end
 
