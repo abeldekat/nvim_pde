@@ -35,25 +35,26 @@ end
 -- When using leap, the letter s cannot be a query updater
 -- General problem: When a letter is removed from query_updaters
 -- that letter is still highlighted
-function M.setup(package_manager, footer_cb)
-  local section_commands = "Commands"
-  local commands = {
-    { action = "Oil", name = "Explore (key 'mk')", section = section_commands },
-    { action = Picker.keymaps, name = "Keymaps", section = section_commands },
-    { action = "qa", name = "Quit", section = section_commands },
+function M.setup(pm_opts)
+  local commands_section = "Commands"
+  local commands_items = {
+    { action = "Oil", name = "e. explore('mk')", section = commands_section },
+    { action = Picker.keymaps, name = "k. keymaps", section = commands_section },
+    { action = "qa", name = "q. quit", section = commands_section },
   }
-  local recent_files = StarterOverride.recent_files_in_cwd(4)
+  local recent_files_items = StarterOverride.recent_files_in_cwd(4)
 
   local opts = {
     content_hooks = {
+      Starter.gen_hook.adding_bullet(),
       Starter.gen_hook.aligning("center", "center"),
-      Starter.gen_hook.indexing("all", { section_commands }),
+      Starter.gen_hook.indexing("all", { pm_opts.section, commands_section }),
     },
     evaluate_single = true,
-    footer = footer_cb,
+    footer = function() return "  Press space for the menu" end,
     header = header_cb,
-    items = { recent_files, package_manager, commands },
-    query_updaters = "ekq0123456789",
+    items = { recent_files_items, pm_opts.items, commands_items },
+    query_updaters = pm_opts.query_updaters .. "ekq123456789",
   }
   Starter.setup(opts)
 end

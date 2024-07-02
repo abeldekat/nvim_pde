@@ -10,23 +10,28 @@ vim.o.statusline = " " -- wait till statusline plugin is loaded
 
 now(function()
   if Util.opened_without_arguments() then
+    local section = "Deps"
     require("ak.config.ui.mini_starter").setup({
-      {
-        action = "DepsClean",
-        name = "Clean",
-        section = "Deps",
+      section = section,
+      items = {
+        {
+          action = "DepsUpdate",
+          name = "u. update",
+          section = section,
+        },
+        {
+          action = "DepsSnapSave",
+          name = "a. snapSave",
+          section = section,
+        },
+        {
+          action = "DepsClean",
+          name = "c. clean",
+          section = section,
+        },
       },
-      {
-        action = "DepsSnapSave",
-        name = "SnapSave",
-        section = "Deps",
-      },
-      {
-        action = "DepsUpdate",
-        name = "Update",
-        section = "Deps",
-      },
-    }, function() return "  Press space for the menu" end)
+      query_updaters = "uac",
+    })
   end
 end)
 
