@@ -61,11 +61,11 @@ end
 -- overridden: removed filesize
 AK.section_fileinfo = function(args)
   local filetype = vim.bo.filetype
-  -- Don't show anything if no filetype or not inside a "normal buffer"
-  if filetype == "" or vim.bo.buftype ~= "" then return "" end
+  -- Don't show anything if there is no filetype
+  if filetype == "" then return "" end
 
-  -- Construct output string if truncated
-  if MiniStatusline.is_truncated(args.trunc_width) then return filetype end
+  -- Construct output string if truncated or buffer is not normal
+  if MiniStatusline.is_truncated(args.trunc_width) or vim.bo.buftype ~= "" then return filetype end
 
   -- Construct output string with extra file info
   local encoding = vim.bo.fileencoding or vim.bo.encoding
@@ -163,7 +163,7 @@ H.set_active = function() vim.wo.statusline = "%{%v:lua.MiniStatusline.active()%
 
 -- added
 H.is_blocked_filetype = function()
-  local blocked_filetypes = { ["starter"] = true }
+  local blocked_filetypes = { ["ministarter"] = true }
   return blocked_filetypes[vim.bo.filetype]
 end
 

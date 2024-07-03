@@ -310,6 +310,7 @@ M.setup = function()
   Pick.setup({
     -- default false, more speed and memory on repeated prompts:
     -- options = { use_cache = false },
+    -- window = { config = { border = "solid" } },
   })
 
   H.setup_autocommands()

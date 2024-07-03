@@ -29,7 +29,7 @@ local plugins = {
   ["mini.diff"] = true,
   ["mini.files"] = true,
   ["mini.hipatterns"] = true,
-  ["mini.hue"] = true,
+  ["mini.icons"] = true,
   -- ["mini.indent"] = false,
   -- ["mini.jump"] = false,
   -- ["mini.map"] = false,
@@ -53,8 +53,8 @@ local opts = {
   plugins = plugins,
   on_highlights = function(hl, c)
     -- Careful: Do not use the same table instance twice!
-    hl.MiniStatuslineModeNormal = { bg = c.bg_statusline, fg = c.fg_sidebar } -- left and right, dynamic
-    hl.MiniStatuslineFilename = { bg = c.bg_statusline, fg = c.fg_sidebar } -- all inner groups
+    hl.MiniStatuslineModeNormal = { fg = c.fg_sidebar, bg = c.bg_statusline } -- left and right, dynamic
+    hl.MiniStatuslineFilename = { fg = c.fg_sidebar, bg = c.bg_statusline } -- all inner groups
     hl.MsgArea = { fg = c.comment } -- fg_dark: -- Area for messages and cmdline
   end,
   -- plugins = plugins,
