@@ -59,7 +59,7 @@ end
 --          ╰─────────────────────────────────────────────────────────╯
 now(function()
   local function oil()
-    add("nvim-tree/nvim-web-devicons")
+    require("ak.config.editor.mini_icons")
     add("stevearc/oil.nvim")
     require("ak.config.editor.oil")
   end

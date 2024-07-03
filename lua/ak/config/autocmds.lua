@@ -44,6 +44,7 @@ autocmd("FileType", {
     "neotest-summary",
     "neotest-output-panel",
     "dbout",
+    "git",
   },
   callback = function(event)
     vim.bo[event.buf].buflisted = false
