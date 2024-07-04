@@ -6,8 +6,6 @@ local with_dir = Util.opened_with_dir_argument()
 
 ---@type "g" | "h"  -- Use either grapple or harpoon
 local marker_to_use = "g"
----@type "f" | "n" -- mini.pick: Enable more pickers using fzf-lua builtin
-local picker_builtin_to_use = "f"
 
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                         Marker                          │
@@ -31,18 +29,15 @@ end
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                         Picker                          │
 --          ╰─────────────────────────────────────────────────────────╯
-local spec_fzf_lua = { source = "ibhagwan/fzf-lua" }
 local function picker_mini_pick()
   require("ak.config.editor.mini_pick").setup()
-  if picker_builtin_to_use == "f" then
-    register(spec_fzf_lua)
-    Util.defer.on_keys(function()
-      now(function()
-        add(spec_fzf_lua)
-        require("ak.config.editor.mini_pick_fzf_lua")
-      end)
-    end, "<leader>fi", "Picker builtin")
-  end
+  -- register("ibhagwan/fzf-lua")
+  -- Util.defer.on_keys(function()
+  --   now(function()
+  --     add("ibhagwan/fzf-lua")
+  --     require("ak.config.editor.mini_pick_fzf_lua")
+  --   end)
+  -- end, "<leader>fi", "Picker builtin")
 end
 
 --          ╭─────────────────────────────────────────────────────────╮

@@ -1,7 +1,4 @@
---          ╭─────────────────────────────────────────────────────────╮
---          │        Favor this plugin over mini.indentscope          │
---          ╰─────────────────────────────────────────────────────────╯
-
+-- Alternative: mini.indentscope
 local opts = {
   indent = {
     char = "│",
