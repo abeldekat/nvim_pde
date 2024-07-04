@@ -19,7 +19,6 @@ local Utils = require("ak.util")
 local Pick = require("mini.pick")
 
 local H = {} -- Helper functions for custom pickers
-local Path = require("plenary.path")
 
 ---@type table<string,function>  event MiniPickStart
 H.start_hooks = {}
@@ -81,7 +80,11 @@ Pick.registry.todo_comments = function(patterns) --hipatterns.config.highlighter
   end
   local search_regex = function(keywords)
     local pattern = [[\b(KEYWORDS):]]
-    return pattern:gsub("KEYWORDS", table.concat(keywords, "|"))
+    local upper = vim.tbl_filter(function(keyword)
+      local match = string.match(keyword, "^%u+$")
+      return match and true or false
+    end, keywords)
+    return pattern:gsub("KEYWORDS", table.concat(upper, "|"))
   end
   local on_start = function()
     if MiniHipatterns then MiniHipatterns.enable(vim.api.nvim_get_current_buf()) end
