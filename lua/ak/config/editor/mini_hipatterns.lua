@@ -32,8 +32,11 @@ local function get_opt_function_from_lazy_lua()
   local lazyspec = loadstring(file)()
   if not lazyspec then return end
 
-  local hi_spec = lazyspec[1]
-  if not hi_spec or type(hi_spec[1]) ~= "string" or not string.find(hi_spec[1], "hipatterns") then return end
+  local hi_spec = vim.tbl_filter(
+    function(spec) return type(spec[1]) == "string" and spec[1]:find("hipatterns") ~= nil end,
+    lazyspec
+  )[1]
+  if not hi_spec then return end
 
   local hi_spec_callable = hi_spec.opts
   if not hi_spec_callable or type(hi_spec_callable) ~= "function" then return end
