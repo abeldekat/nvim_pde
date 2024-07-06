@@ -29,8 +29,6 @@ local spec_base46 = {
   -- tomorrow_night wombat
   -- Light: flex-light flexoki-light github_light material-lighter nano-light
   source = "nvchad/base46", -- v2.5 is the default
-  -- before changes to method load_integrationTB
-  checkout = "87e09eb9e959966397bd9d8aab18d88ef349c913",
   name = "colors_base46",
   hooks = { post_install = hook_base46, post_checkout = hook_base46 },
 }
