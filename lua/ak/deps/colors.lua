@@ -40,16 +40,17 @@ local colors = {
       { source = "folke/tokyonight.nvim", name = "colors_tokyonight" },
       { source = "EdenEast/nightfox.nvim", name = "colors_nightfox" },
       { source = "rose-pine/neovim", name = "colors_rose-pine" },
+      { source = "ribru17/bamboo.nvim", name = "colors_bamboo" },
     }
   end,
 
   two = function()
     return {
       { source = "sainnhe/sonokai", name = "colors_sonokai" },
-      { source = "ribru17/bamboo.nvim", name = "colors_bamboo" },
       { source = "sainnhe/everforest", name = "colors_everforest" },
       { source = "sainnhe/gruvbox-material", name = "colors_gruvbox-material" },
       { source = "sainnhe/edge", name = "colors_edge" },
+      { source = "craftzdog/solarized-osaka.nvim", name = "colors_solarized-osaka" },
     }
   end,
 
@@ -57,8 +58,8 @@ local colors = {
     return {
       { source = "rebelot/kanagawa.nvim", name = "colors_kanagawa" },
       { source = "ellisonleao/gruvbox.nvim", name = "colors_gruvbox" },
-      { source = "Shatur/neovim-ayu", name = "colors_ayu" },
       { source = "navarasu/onedark.nvim", name = "colors_onedark" },
+      { source = "Shatur/neovim-ayu", name = "colors_ayu" },
     }
   end,
 

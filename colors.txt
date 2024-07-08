@@ -22,6 +22,7 @@ nordfox
 onedark
 randomhue
 rose-pine
+solarized-osaka
 solarized8_flat
 sonokai
 terafox
