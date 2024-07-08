@@ -1,6 +1,3 @@
---          ╭─────────────────────────────────────────────────────────╮
---          │               mini.statusline: supported                │
---          ╰─────────────────────────────────────────────────────────╯
 local Utils = require("ak.util")
 local prefer_light = require("ak.color").prefer_light
 local name = "gruvbox-material"
@@ -28,11 +25,6 @@ vim.api.nvim_create_autocmd("Colorscheme", {
     local set_hl = vim.fn["gruvbox_material#highlight"]
 
     set_hl("MiniStatuslineModeNormal", palette.grey2, palette.bg_statusline1, "bold") -- like filename
-
-    set_hl("MiniHipatternsFixme", palette.bg0, palette.red, "bold")
-    set_hl("MiniHipatternsHack", palette.bg0, palette.yellow, "bold")
-    set_hl("MiniHipatternsTodo", palette.bg0, palette.blue, "bold")
-    set_hl("MiniHipatternsNote", palette.bg0, palette.green, "bold")
 
     -- without undercurl:
     set_hl("ErrorText", palette.none, palette.none, "NONE", palette.red)

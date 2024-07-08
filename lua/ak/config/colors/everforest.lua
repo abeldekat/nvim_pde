@@ -1,7 +1,3 @@
---          ╭─────────────────────────────────────────────────────────╮
---          │               mini.statusline: supported                │
---          ╰─────────────────────────────────────────────────────────╯
-
 local Utils = require("ak.util")
 local prefer_light = require("ak.color").prefer_light
 local name = "everforest"
@@ -33,11 +29,6 @@ vim.api.nvim_create_autocmd("Colorscheme", {
     set_hl("MiniStatuslineFilename", palette.grey1, palette.bg1) -- like fileinfo
     -- Override normal
     set_hl("MiniStatuslineModeNormal", palette.grey1, palette.bg1, "bold") -- like fileinfo
-
-    set_hl("MiniHipatternsFixme", palette.bg0, palette.red, "bold")
-    set_hl("MiniHipatternsHack", palette.bg0, palette.yellow, "bold")
-    set_hl("MiniHipatternsTodo", palette.bg0, palette.blue, "bold")
-    set_hl("MiniHipatternsNote", palette.bg0, palette.green, "bold")
 
     -- without undercurl:
     set_hl("ErrorText", palette.none, palette.none, "NONE", palette.red)

@@ -1,6 +1,3 @@
---          ╭─────────────────────────────────────────────────────────╮
---          │               mini.statusline: supported                │
---          ╰─────────────────────────────────────────────────────────╯
 local Utils = require("ak.util")
 local prefer_light = require("ak.color").prefer_light
 
