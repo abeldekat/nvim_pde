@@ -99,7 +99,6 @@ Window navigation:
   - diagnostics
   - current buffer is tagged(grapple)
   - macro recording
-- `cmdheight 0`
 - many color-schemes
 
 Change color-schemes:
