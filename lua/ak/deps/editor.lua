@@ -73,10 +73,11 @@ later(function()
 end)
 
 later(function()
-  add("tpope/vim-repeat")
+  -- repeat: for now, avoid the new commits in 2024
+  add({ source = "tpope/vim-repeat", checkout = "24afe922e6a05891756ecf331f39a1f6743d3d5a" })
   add("ggandor/leap.nvim")
-  add("ggandor/leap-spooky.nvim")
   require("ak.config.editor.leap")
+
   add("jinh0/eyeliner.nvim")
   require("ak.config.editor.eyeliner")
 

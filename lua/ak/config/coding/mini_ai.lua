@@ -1,4 +1,4 @@
---   -- Move cursor to corresponding edge of `a` textobject
+--   -- NOTE: Move cursor to corresponding edge of `a` textobject
 --   goto_left = 'g[',
 --   goto_right = 'g]',
 
@@ -19,19 +19,27 @@ local function get_opts()
     custom_textobjects = {
       -- Builtin ? interactive, conditional in treesitter is "ii ai"(if mnemonic)
       -- ["?"] = false,
+
       -- Builtin a, same as treesitter: Use treesitter when available:
       a = has_ts and ai.gen_spec.treesitter({ a = "@parameter.outer", i = "@parameter.inner" })
         or ai.gen_spec.argument(),
+
+      -- Overrides built-in block {}
+      B = MiniExtra.gen_ai_spec.buffer(),
+
       -- Custom, word with case:
       e = {
         { "%u[%l%d]+%f[^%l%d]", "%f[%S][%l%d]+%f[^%l%d]", "%f[%P][%l%d]+%f[^%l%d]", "^[%l%d]+%f[^%l%d]" },
         "^().*()$",
       },
+
       -- Builtin f, different from treesitter. Operates on function call instead of entire function
       -- Use treesitter if available or or disable to avoid confusion:
       f = has_ts and ai.gen_spec.treesitter({ a = "@function.outer", i = "@function.inner" }) or false,
+
       -- Remap builtin f to F
       F = ai.gen_spec.function_call(),
+
       -- Builtin t, disable, use Neovim builtin
       t = false,
     },
