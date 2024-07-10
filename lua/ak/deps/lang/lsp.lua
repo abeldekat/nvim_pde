@@ -25,7 +25,7 @@ local function load()
     depends = {
       "folke/lazydev.nvim",
       "williamboman/mason-lspconfig.nvim",
-      { source = "mrcjkb/rustaceanvim", checkout = "4.26.0" },
+      { source = "mrcjkb/rustaceanvim", checkout = "4.26.1" },
     },
   })
   require("ak.config.lang.diagnostics")

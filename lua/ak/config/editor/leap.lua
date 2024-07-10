@@ -85,14 +85,12 @@ end
 --          │  Leap remote: gs and gS cannot be used(mini.operators)  │
 --          ╰─────────────────────────────────────────────────────────╯
 -- Dynamic:
--- Example: 'g/{leap}ipy' (inside paragraph) -- operation last, visual mode in the remote
--- Example: 'yg/{leap}ip' (inside paragraph) -- operation first, no visual mode
--- Example: Using flash: 'yr{flash}ip' (inside paragraph)
+-- Example: 'g/{leap}ipy' (inside paragraph) -- verb last, visual mode in the remote
 vim.keymap.set({ "n" }, "g/", function() require("leap.remote").action() end, { desc = "Leap remote" })
 
--- In operator pending mode, "r" is shorter than "g/":
-vim.keymap.set({ "o" }, "g/", function() require("leap.remote").action() end, { desc = "Leap remote" })
--- Flash -- { "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
+-- Example: 'yg/{leap}ip' (inside paragraph) -- verb first, no visual mode
+-- In operator pending mode, "r"(flash) is shorter than "g/":
+-- vim.keymap.set({ "o" }, "g/", function() require("leap.remote").action() end, { desc = "Leap remote" })
 vim.keymap.set({ "o" }, "r", function() require("leap.remote").action() end, { desc = "Leap remote" })
 -- Example: forced linewise version:
 -- vim.keymap.set({ "n", "o" }, "gS", function() require("leap.remote").action({ input = "V" }) end)
@@ -113,7 +111,6 @@ vim.api.nvim_create_autocmd("User", {
 --          ╰─────────────────────────────────────────────────────────╯
 
 -- 1 solution ggandor:
--- -- Not needed, one can also use "ir/ar", or "r"
 -- -- Static: Predefined remote text objects
 -- -- Example: 'yarp{leap}'
 -- local predefined_remotes = {
@@ -134,7 +131,6 @@ vim.api.nvim_create_autocmd("User", {
 
 -- 2 Reddit, solution TheLeoP_:
 -- All one letter text-objects can be mapped with a single keymap like:
--- Disadvantage: cannot use "s" to search in the remote: yir{required textobject one letter}{leap}
 -- vim.keymap.set({ "x", "o" }, "ir", function()
 --   local ok, char = pcall(vim.fn.getcharstr)
 --   if not ok or char == "\27" or not char then return end
