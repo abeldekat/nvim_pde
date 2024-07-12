@@ -23,7 +23,7 @@
 local Jump2d = require("mini.jump2d")
 
 local function map(mode, rhs, opts) -- adapted from mini.jump2d
-  local lhs = "s" -- "<CR>"
+  local lhs = "<CR>" -- "s"
   opts = vim.tbl_deep_extend("force", { silent = true }, opts or {})
   vim.keymap.set(mode, lhs, rhs, opts)
 end

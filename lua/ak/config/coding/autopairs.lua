@@ -2,7 +2,7 @@
 --          │                  Also see: completion                   │
 --          ╰─────────────────────────────────────────────────────────╯
 
--- TESTING: mini.pairs
+-- "windwp/nvim-autopairs". Replaced by mini.pairs...
 
 local opts = {
   check_ts = true,

@@ -1,4 +1,4 @@
--- TESTING: replace autopairs with mini.pairs
+-- Replaces autopairs...
 
 local pairs = require("mini.pairs")
 local opts = {
