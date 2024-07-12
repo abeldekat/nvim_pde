@@ -3,7 +3,6 @@ local MiniDeps = require("mini.deps")
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 local register = Util.deps.register
 
-local test_mini_jump2d = true
 local pick_add_fzf = false
 local hardtime_now = false
 ---@type "g" | "h"  -- Use either grapple or harpoon
@@ -54,6 +53,7 @@ later(function()
   require("ak.config.editor.mini_clue")
   require("ak.config.editor.mini_cursorword")
   require("ak.config.editor.mini_hipatterns")
+  require("ak.config.editor.mini_jump2d")
   require("ak.config.editor.mini_git")
   require("ak.config.editor.mini_diff")
   require("ak.config.editor.mini_pick").setup()
@@ -67,23 +67,6 @@ later(function()
       end)
     end, "<leader>fi", "Picker builtin")
   end
-
-  --          ╭─────────────────────────────────────────────────────────╮
-  --          │                         Jumping                         │
-  --          ╰─────────────────────────────────────────────────────────╯
-  local spec_leap = {
-    source = "ggandor/leap.nvim", -- repeat: for now, avoid the new commits in 2024:
-    depends = { { source = "tpope/vim-repeat", checkout = "24afe922e6a05891756ecf331f39a1f6743d3d5a" } },
-  }
-  if test_mini_jump2d then
-    register(spec_leap)
-    require("ak.config.editor.mini_jump2d")
-  else
-    add(spec_leap)
-    require("ak.config.editor.leap")
-  end
-  add("jinh0/eyeliner.nvim")
-  require("ak.config.editor.eyeliner")
 
   --          ╭─────────────────────────────────────────────────────────╮
   --          │                         Marking                         │
@@ -102,8 +85,12 @@ later(function()
   --          ╭─────────────────────────────────────────────────────────╮
   --          │                          Other                          │
   --          ╰─────────────────────────────────────────────────────────╯
+  add("jinh0/eyeliner.nvim")
+  require("ak.config.editor.eyeliner")
+
   add("stevearc/aerial.nvim")
   require("ak.config.editor.aerial")
+
   add("akinsho/toggleterm.nvim")
   require("ak.config.editor.toggleterm")
 

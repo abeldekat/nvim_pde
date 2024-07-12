@@ -7,7 +7,7 @@ return {
   ["cmp-nvim-lsp"] = "39e2eda76828d88b773cc27a3f61d2ad782c922d",
   ["cmp-path"] = "91ff86cd9c29299a64f968ebb45846c485725f23",
   cmp_luasnip = "05a9ab28b53f71d1aece421ef32fee2cb857a843",
-  colors_astrotheme = "48b8cb48d5d9fad48324eec2a101a5fa2cac57f9",
+  colors_astrotheme = "ad99418444a00843a8ce50210a3510ac5e7b680c",
   colors_ayu = "d64a8b7e8730095ff634e6586584e8543043e986",
   colors_bamboo = "8d86d4b5dec2e35392d53a82602d4f2b12e3f014",
   colors_base46 = "b17df65f6d423055e9fdfa4e7f55967c03862f29",
@@ -37,7 +37,6 @@ return {
   ["indent-blankline.nvim"] = "65e20ab94a26d0e14acac5049b8641336819dfc7",
   ["lazy.nvim"] = "1d451b4c2ce957da05e2123ce1a001804fc7ea96",
   ["lazydev.nvim"] = "cea5d0fb556cdc35122d9cae772e7e0ed65b4505",
-  ["leap.nvim"] = "c099aecaf858574909bd38cbadb8543c4dd16611",
   ["luvit-meta"] = "ce76f6f6cdc9201523a5875a4471dcfe0186eb60",
   ["markdown-preview.nvim"] = "a923f5fc5ba36a3b17e289dc35dc17f66d0548ee",
   ["mason-lspconfig.nvim"] = "37a336b653f8594df75c827ed589f1c91d91ff6c",
@@ -69,7 +68,6 @@ return {
   ["vim-dadbod"] = "7888cb7164d69783d3dce4e0283decd26b82538b",
   ["vim-dadbod-completion"] = "8c9051c1cfc73fcf5bfe9a84db7097e4f7c0180d",
   ["vim-hardtime"] = "91177392e9372a1cf09a4b9b79532d2490bd405f",
-  ["vim-repeat"] = "24afe922e6a05891756ecf331f39a1f6743d3d5a",
   ["vim-slime"] = "ca59df2570e1a12f9ddfa90b6118df4d87453fcd",
   ["vim-startuptime"] = "ac2cccb5be617672add1f4f3c0a55ce99ba34e01"
 }
