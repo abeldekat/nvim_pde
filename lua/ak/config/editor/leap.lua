@@ -14,6 +14,8 @@
 -- previous search. Pressing it after one input character (`s{char}<enter>`) can
 -- be used as a multiline substitute for `fFtT` motions.
 
+-- TESTING: mini.jump2d
+
 local function leap_ts()
   local api = vim.api
   local ts = vim.treesitter

@@ -2,6 +2,8 @@
 --          │                  Also see: completion                   │
 --          ╰─────────────────────────────────────────────────────────╯
 
+-- TESTING: mini.pairs
+
 local opts = {
   check_ts = true,
   ts_config = { java = false },
