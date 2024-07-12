@@ -85,7 +85,7 @@ later(function()
   --          ╭─────────────────────────────────────────────────────────╮
   --          │                          Other                          │
   --          ╰─────────────────────────────────────────────────────────╯
-  add("jinh0/eyeliner.nvim")
+  add("jinh0/eyeliner.nvim") -- mini.jump does not highlight best letters to jump to
   require("ak.config.editor.eyeliner")
 
   add("stevearc/aerial.nvim")

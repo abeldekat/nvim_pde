@@ -1,21 +1,21 @@
--- Prerequisite: Uppercase labels disturbe the flow!
 -- Intent in normal mode using word_start:
--- - focus on target position
--- - start_jumping
+-- - focus on target position and start_jumping
 -- - all word starts are visible showing all lowercase labels at once
 -- - insert the two labels
 -- - reached destination
--- - finetune location if needed using f/F/t/T
+-- - fine-tune location if needed using f/F/t/T/w/b/e
 --
--- One short mental pause(label distribution is somewhat predicatable) after "start jumping".
+-- Notes:
+-- One short mental pause(label distribution is somewhat predictable) after "start jumping".
+-- Labels must be lowercase. Uppercase labels disturb the flow.
+--
+-- Intent in visual and operator pending mode using single_character:
+-- All characters must be reachable. Speed is less important.
 --
 -- Other spotters:
 -- 1. default: Too crowded. It is harder to correctly focus on the target
 -- 2. single_character with n_steps_ahead = 2:
 -- The first character needs to be typed as is(some chars are more difficult)
---
--- Intent in visual and operator pending mode using single_character:
--- All characters must be reachable. Speed is less important. No need for n_steps_ahead
 
 local Jump2d = require("mini.jump2d")
 
