@@ -1,6 +1,6 @@
 # Neovim pde
 
-A _personal development environment_ for Neovim
+My _personal development environment_ for Neovim
 
 ## Older versions
 
@@ -119,9 +119,8 @@ _Surrounding_:
 
 Using [mini.surround]. Suggested keys: `sa sd sr sf sF sh sn`
 
-In previous versions, The "s" was already used by leap.nvim.
-Solution: Use the `m` key in combination with `asdf`,
-adjacent keys on a qwerty keyboard.
+In previous versions, the "s" was already used by leap.nvim.
+Solution: Use the `m` key in combination with `asdf`, adjacent keys on a qwerty keyboard.
 Key `ms` is a mnemonic for `surround substitute`, performing a surround replace.
 
 _Operators_:
