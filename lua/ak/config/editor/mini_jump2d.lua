@@ -34,6 +34,11 @@ local function start()
   Jump2d.start(builtin)
 end
 
-Jump2d.setup({ mappings = { start_jumping = "" } }) -- no mappings
+Jump2d.setup({
+  labels = "cdefghijklmnoprstuvwxy", -- typing: removed b and qaz
+  mappings = {
+    start_jumping = "", -- no mappings
+  },
+})
 map("n", start_in_normal_mode, { desc = "Start 2d jumping" })
 map({ "x", "o" }, start, { desc = "Start 2d jumping" })
