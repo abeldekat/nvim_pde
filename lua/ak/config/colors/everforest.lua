@@ -42,6 +42,11 @@ vim.api.nvim_create_autocmd("Colorscheme", {
     set_hl("DiagnosticHint", palette.green, palette.none)
 
     set_hl("MsgArea", palette.grey0, palette.none) -- Area for messages and cmdline
+
+    -- EyelinerPrimary: "Constant" foreground, aqua. Not visible in light theme.
+    -- EyelinerSecondary: foreground from "Define"
+    -- EyelinerDimmed: foreground from "Comment"
+    set_hl("EyelinerPrimary", palette.yellow, palette.none)
   end,
 })
 

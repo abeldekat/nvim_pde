@@ -2,6 +2,8 @@ local Utils = require("ak.util")
 local prefer_light = require("ak.color").prefer_light
 vim.o.background = prefer_light and "light" or "dark"
 
+local hi = function(name, data) vim.api.nvim_set_hl(0, name, data) end
+
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                         base16                          │
 --          ╰─────────────────────────────────────────────────────────╯
@@ -12,13 +14,15 @@ Utils.color.add_toggle("mini*", {
 vim.api.nvim_create_autocmd("Colorscheme", {
   pattern = { "mini*" },
   callback = function()
-    -- TODO: base16.config.palette
-    local hi = function(name, data) vim.api.nvim_set_hl(0, name, data) end
-    hi("MiniStatuslineModeNormal", { link = "MiniStatuslineFilename" })
-    hi("MiniPickMatchRanges", { fg = "orange", bold = true }) -- DiagnosticFloatingHint{fg=p.cyan, bg=p.bg_edge})
+    local p = MiniBase16.config.palette
+    if p == nil then return end
 
-    local fg_msg_area = vim.api.nvim_get_hl(0, { name = "Comment" }).fg
-    hi("MsgArea", { fg = fg_msg_area }) -- Area for messages and cmdline
+    -- Is a link to DiagnosticFloatingHint, change to bold orange
+    hi("MiniPickMatchRanges", { fg = "orange", bold = true })
+    -- No distinct color for mode normal:
+    hi("MiniStatuslineModeNormal", { link = "MiniStatuslineFilename" })
+    -- Area for messages and cmdline, change p.base05
+    hi("MsgArea", { fg = p.base03 })
   end,
 })
 
@@ -42,14 +46,13 @@ vim.api.nvim_create_autocmd("Colorscheme", {
   callback = function()
     if p == nil then return end
 
-    local hi = function(name, data) vim.api.nvim_set_hl(0, name, data) end
-    hi("MiniStatuslineModeNormal", { link = "MiniStatuslineFilename" })
-    hi("MiniPickMatchRanges", { fg = p.orange, bold = true }) -- DiagnosticFloatingHint{fg=p.cyan, bg=p.bg_edge})
-
-    -- Links to MiniJump2dSpot by default, changed fg(fg_edge2)
+    -- Is a link to MiniJump2dSpot, changed fg(fg_edge2):
     hi("MiniJump2dSpotUnique", { fg = p.orange, bg = p.bg_edge2, bold = true, nocombine = true })
-
-    -- Area for messages and cmdline, using Comment.fg
+    -- Is a link to DiagnosticFloatingHint, change to bold orange:
+    hi("MiniPickMatchRanges", { fg = p.orange, bold = true })
+    -- No distinct color for mode normal:
+    hi("MiniStatuslineModeNormal", { link = "MiniStatuslineFilename" })
+    -- Area for messages and cmdline, changed from Normal to Comment.fg
     hi("MsgArea", { fg = p.fg_mid2 })
   end,
 })
