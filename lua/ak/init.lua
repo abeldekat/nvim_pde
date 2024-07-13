@@ -1,8 +1,8 @@
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                 Separation of concerns                  │
---          │                   The plugin section:                   │
+--          │                   The package manager:                  │
 --          │                Retrieve and load plugins                │
---          │                       See ak.boot                       │
+--          │                      See ak.deps                        │
 --          │                                                         │
 --          │                   The config section:                   │
 --          │                        All setup                        │
@@ -11,5 +11,5 @@
 
 return function(opts)
   -- local plugin_manager = vim.env.AK_BOOT -- only mini.deps...
-  require("ak.boot.deps")(opts)
+  require("ak.mini_deps")(opts)
 end

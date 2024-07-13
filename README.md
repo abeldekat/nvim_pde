@@ -1,6 +1,6 @@
 # Neovim pde
 
-My _personal development environment_ for Neovim
+A _personal development environment_ for Neovim
 
 ## Older versions
 
@@ -12,18 +12,17 @@ My _personal development environment_ for Neovim
 
 ### Structure
 
-- `init`: Defers to `ak.init`. Uses `:h vim.loader`.
-- `ak.init`: Bootstrap [mini.deps] using [ak.boot.deps]
-- [ak.deps]: Contains specs for [mini.deps] that load the config in `ak.config`
-- [ak.config]: Contains all setup for options, key-mappings, auto-commands,
-  color-schemes and plugins.
-- [ak.util]: Shared code.
+- `init`: Uses `:h vim.loader` and calls `ak.init`
+- [ak.init]: Invoke [ak.mini_deps]
+- [ak.deps]: Load plugins
+- [ak.config]: All setup for plugins, options, key-mappings, auto-commands, and colors
+- [ak.util]: Shared code
 
 ## Install
 
 > Requirements: Neovim latest version or nightly.
 >
-> Always review the code before installing a configuration.
+> Always review the code before trying a configuration.
 
 Clone the repository:
 
@@ -55,7 +54,7 @@ Leader: `space`
 
 ### Navigation
 
-- Main plugins: grapple, oil and mini.pick.
+- Main plugins: grapple, oil, mini.pick and mini.jump2d.
 - Menu: `mini.clue`
 
 #### Grapple
@@ -120,7 +119,7 @@ _Surrounding_:
 
 Using [mini.surround]. Suggested keys: `sa sd sr sf sF sh sn`
 
-The "s" is already used by [leap.nvim].
+In previous versions, The "s" was already used by leap.nvim.
 Solution: Use the `m` key in combination with `asdf`,
 adjacent keys on a qwerty keyboard.
 Key `ms` is a mnemonic for `surround substitute`, performing a surround replace.
@@ -145,24 +144,22 @@ Change suggested key `gs`("go sort") into `gS`.
 
 This repo uses code and ideas from the following repositories:
 
-- [mini.deps](https://github.com/echasnovski/mini.deps)
-- [lazy.nvim](https://github.com/folke/lazy.nvim)
-- [pckr.nvim](https://github.com/lewis6991/pckr.nvim)
 - [nvim](https://github.com/echasnovski/nvim) `@echasnovski`
+- [mini.deps](https://github.com/echasnovski/mini.deps)
 - [LazyVim](https://github.com/LazyVim/LazyVim)
+- [lazy.nvim](https://github.com/folke/lazy.nvim)
 - [dotfiles](https://github.com/folke/dot/tree/master/nvim) `@folke`
 - [dotfiles](https://github.com/dpetka2001/dotfiles/tree/main/dot_config/nvim) `@dpetka2001`
 - [dotfiles](https://github.com/lewis6991/dotfiles/tree/main/config/nvim) `@lewis6991`
 - [dotfiles](https://github.com/savq/dotfiles/tree/master/nvim) `@savq`
 - [dotfiles](https://github.com/MariaSolOs/dotfiles/tree/main/.config/nvim) `@mariasolos`
+- [pckr.nvim](https://github.com/lewis6991/pckr.nvim)
 
-[mini.deps]: https://github.com/echasnovski/mini.deps
-[peek.nvim]: https://github.com/toppair/peek.nvim
-[deno]: https://deno.land
 [tmuxp]: https://github.com/tmux-python/tmuxp
 [scripts]: https://github.com/abeldekat/scripts
 [tmux-sessionizer]: https://github.com/abeldekat/scripts/blob/main/tmux-sessionizer
-[ak.boot.deps]: lua/ak/boot/deps.lua
+[ak.init]: lua/ak/init.lua
+[ak.mini_deps]: lua/ak/mini_deps.lua
 [ak.deps]: lua/ak/deps
 [ak.config]: lua/ak/config
 [ak.util]: lua/ak/util
@@ -170,6 +167,7 @@ This repo uses code and ideas from the following repositories:
 [leader h]: lua/ak/util/color.lua
 [mini.surround]: https://github.com/echasnovski/mini.surround
 [mini.operators]: https://github.com/echasnovski/mini.operators
-[leap.nvim]: https://github.com/ggandor/leap.nvim
+[peek.nvim]: https://github.com/toppair/peek.nvim
+[deno]: https://deno.land
 [with_submodules]: https://github.com/abeldekat/nvim_pde/tree/with_submodules
 [with_lazynvim]: https://github.com/abeldekat/nvim_pde/tree/with_lazynvim
