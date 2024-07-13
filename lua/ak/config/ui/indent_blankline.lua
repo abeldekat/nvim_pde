@@ -1,4 +1,4 @@
--- Alternative: mini.indentscope
+-- "lukas-reineke/indent-blankline.nvim". Replaced by mini.indent_scope...
 local opts = {
   indent = {
     char = "│",

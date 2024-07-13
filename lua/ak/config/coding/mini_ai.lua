@@ -17,8 +17,8 @@ local has_ts, _ = pcall(require, "nvim-treesitter-textobjects")
 local function get_opts()
   local opts = {
     custom_textobjects = {
-      -- Builtin ? interactive, conditional in treesitter is "ii ai"(if mnemonic)
-      -- ["?"] = false,
+      -- Builtin ? interactive, favour conditional in treesitter
+      ["?"] = false,
 
       -- Builtin a, same as treesitter: Use treesitter when available:
       a = has_ts and ai.gen_spec.treesitter({ a = "@parameter.outer", i = "@parameter.inner" })

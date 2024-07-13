@@ -42,8 +42,7 @@ later(function()
   -- add({ source = "abeldekat/harpoonline", checkout = "stable" }) -- download when needed
   require("ak.config.ui.mini_statusline")
 
-  add("lukas-reineke/indent-blankline.nvim")
-  require("ak.config.ui.indent_blankline")
+  require("ak.config.ui.mini_indentscope")
 
   -- PERF: :Startuptime is slower....
   require("ak.config.ui.mini_animate")

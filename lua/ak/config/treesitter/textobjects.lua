@@ -68,9 +68,9 @@ local function get_opts()
         -- class
         ["ac"] = { query = "@class.outer", desc = "around class" },
         ["ic"] = { query = "@class.inner", desc = "inside class" },
-        -- conditional: use ii ai, not i? a?: mini.ai has ? interactive
-        ["ai"] = { query = "@conditional.outer", desc = "around conditional" },
-        ["ii"] = { query = "@conditional.inner", desc = "inside conditional" },
+        -- disabled mini.ai ? interactive. mini.indentscope has ii and ai
+        ["a?"] = { query = "@conditional.outer", desc = "around conditional" },
+        ["i?"] = { query = "@conditional.inner", desc = "inside conditional" },
         -- loop:
         ["ao"] = { query = "@loop.outer", desc = "around loop" },
         ["io"] = { query = "@loop.inner", desc = "inside loop" },
