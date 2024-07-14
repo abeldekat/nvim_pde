@@ -6,11 +6,8 @@
 --          │gm multiply (overrides half a screen width to the right) │
 --          ╰─────────────────────────────────────────────────────────╯
 
-local function get_opts()
-  local opts = {
-    replace = { prefix = "gs" }, --> "go substitute", lsp uses gr, go referenceDs
-    sort = { prefix = "gS" }, --> "go sort"
-  }
-  return opts
-end
-require("mini.operators").setup(get_opts())
+local opts = {
+  replace = { prefix = "gs" }, --> "go substitute", lsp uses gr, go references
+  sort = { prefix = "gS" }, --> "go sort"
+}
+require("mini.operators").setup(opts)

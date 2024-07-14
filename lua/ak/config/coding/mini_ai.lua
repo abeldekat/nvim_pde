@@ -10,6 +10,9 @@
 -- Frontier pattern, documented in lua 5.2:
 -- https://www.lua.org/manual/5.2/manual.html#6.4.1
 
+-- Downside: When inside a large function, using treesitter, mini.ai might not be able
+-- to delete inside function with cover_or_next
+
 local ai = require("mini.ai")
 local has_ts, _ = pcall(require, "nvim-treesitter-textobjects")
 
