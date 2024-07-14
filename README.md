@@ -115,14 +115,6 @@ git update-index --assume-unchanged lua/ak/colors.lua
 
 ### Key conflicts
 
-_Surrounding_:
-
-Using [mini.surround]. Suggested keys: `sa sd sr sf sF sh sn`
-
-In previous versions, the "s" was already used by leap.nvim.
-Solution: Use the `m` key in combination with `asdf`, adjacent keys on a qwerty keyboard.
-Key `ms` is a mnemonic for `surround substitute`, performing a surround replace.
-
 _Operators_:
 
 Using [mini.operators]. Suggested key `gr`("go replace")
@@ -164,7 +156,6 @@ This repo uses code and ideas from the following repositories:
 [ak.util]: lua/ak/util
 [grappleline]: lua/ak/config/ui/grappleline.lua
 [leader h]: lua/ak/util/color.lua
-[mini.surround]: https://github.com/echasnovski/mini.surround
 [mini.operators]: https://github.com/echasnovski/mini.operators
 [peek.nvim]: https://github.com/toppair/peek.nvim
 [deno]: https://deno.land
