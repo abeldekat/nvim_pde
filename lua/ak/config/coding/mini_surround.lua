@@ -10,7 +10,10 @@ local opts = {
   -- add delete find find_left highlight replace update_n_lines(sn)
   -- suffix_last suffix_next examples:
   -- sdn: delete next surrounding sdl: delete last surrounding
-  -- mappings = {},
+  mappings = {
+    -- use substitute mnemonic for consistency with mini.operators
+    replace = "ss",
+  },
 
   -- Number of lines within which surrounding is searched
   -- n_lines = 20,

@@ -115,12 +115,17 @@ git update-index --assume-unchanged lua/ak/colors.lua
 
 ### Key conflicts
 
-_Operators_:
+Replace **replace** with **substitute** mnemonic:
 
-Using [mini.operators]. Suggested key `gr`("go replace")
-is already used by the `lsp`("go references").
-Solution: Use `gs`, mnemonic for "go substitute".
-Change suggested key `gs`("go sort") into `gS`.
+In my config, the suggested key `gr`("go replace") in [mini.operators] is already used
+for the `lsp`("go references").
+I prefer "two character hotkeys" as I use some lsp keys quite often(`gd`, `gr`).
+Solution: Change operator `gr` into `gs`, mnemonic for "go substitute".
+
+Consequences:
+
+- [mini.operators]: Change suggested key `gs`("go sort") into `gS`.
+- [mini.surround]: Change `sr`(surround replace) into `ss`(surround substitute).
 
 ## Environment
 
@@ -157,6 +162,7 @@ This repo uses code and ideas from the following repositories:
 [grappleline]: lua/ak/config/ui/grappleline.lua
 [leader h]: lua/ak/util/color.lua
 [mini.operators]: https://github.com/echasnovski/mini.operators
+[mini.surround]: https://github.com/echasnovski/mini.surround
 [peek.nvim]: https://github.com/toppair/peek.nvim
 [deno]: https://deno.land
 [with_submodules]: https://github.com/abeldekat/nvim_pde/tree/with_submodules
