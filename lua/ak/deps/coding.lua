@@ -38,9 +38,7 @@ later(function()
   })
   require("ak.config.coding.cmp") -- includes snippets
 
-  -- add("folke/ts-comments.nvim")
-  -- require("ak.config.coding.ts-comments")
-
+  require("ak.config.coding.mini_align") -- using a selection...
   require("ak.config.coding.mini_basics") -- using a selection...
   -- require("ak.config.coding.mini_comment") -- now builtin
   require("ak.config.coding.mini_move")
@@ -51,13 +49,6 @@ later(function()
 
   add("monaqa/dial.nvim")
   require("ak.config.coding.dial")
-
-  local spec_comment_box = "LudoPinelli/comment-box.nvim"
-  register(spec_comment_box)
-  Util.defer.on_keys(function()
-    now(function()
-      add(spec_comment_box)
-      require("ak.config.coding.comment_box")
-    end)
-  end, "<leader>obL", "Load comment-box")
+  -- add("folke/ts-comments.nvim")
+  -- require("ak.config.coding.ts-comments")
 end)
