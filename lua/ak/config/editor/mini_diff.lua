@@ -49,5 +49,5 @@ vim.keymap.set(
 
 require("mini.diff").setup({
   wrap_goto = true,
-  view = { style = "sign", signs = { add = "▎", change = "▎", delete = "" } },
+  -- view = { style = "sign", signs = { add = "▎", change = "▎", delete = "" } },
 })

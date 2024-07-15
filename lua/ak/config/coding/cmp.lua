@@ -41,7 +41,47 @@ end
 vim.api.nvim_set_hl(0, "CmpGhostText", { link = "Comment", default = true })
 
 local cmp = require("cmp")
-local icons = require("ak.consts").icons.kinds
+local icons = {
+  Array = " ",
+  Boolean = "󰨙 ",
+  Class = " ",
+  Codeium = "󰘦 ",
+  Color = " ",
+  Control = " ",
+  Collapsed = " ",
+  Constant = "󰏿 ",
+  Constructor = " ",
+  Copilot = " ",
+  Enum = " ",
+  EnumMember = " ",
+  Event = " ",
+  Field = " ",
+  File = " ",
+  Folder = " ",
+  Function = "f ",
+  Interface = " ",
+  Key = " ",
+  Keyword = " ",
+  Method = "f ",
+  Module = " ",
+  Namespace = "󰦮 ",
+  Null = " ",
+  Number = "󰎠 ",
+  Object = " ",
+  Operator = " ",
+  Package = " ",
+  Property = " ",
+  Reference = " ",
+  Snippet = " ",
+  String = " ",
+  Struct = "󰆼 ",
+  TabNine = "󰏚 ",
+  Text = " ",
+  TypeParameter = " ",
+  Unit = " ",
+  Value = " ",
+  Variable = "󰀫 ",
+}
 local snippets = false and snip_native() or snip_luasnip()
 
 local formatting_style = {

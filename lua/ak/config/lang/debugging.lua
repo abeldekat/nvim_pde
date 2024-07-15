@@ -56,7 +56,9 @@ end
 
 local function lua_dap()
   dap.adapters.nlua = function(callback, conf)
+    ---@diagnostic disable-next-line: undefined-field
     local adapter = { type = "server", host = conf.host or "127.0.0.1", port = conf.port or 8086 }
+    ---@diagnostic disable-next-line: undefined-field
     if conf.start_neovim then
       local dap_run = dap.run
       ---@diagnostic disable-next-line: duplicate-set-field
@@ -133,7 +135,13 @@ local function setup()
   keys()
 
   vim.api.nvim_set_hl(0, "DapStoppedLine", { default = true, link = "Visual" })
-  for name, sign in pairs(require("ak.consts").icons.dap) do
+  for name, sign in pairs({
+    Stopped = { "󰁕 ", "DiagnosticWarn", "DapStoppedLine" },
+    Breakpoint = " ",
+    BreakpointCondition = " ",
+    BreakpointRejected = { " ", "DiagnosticError" },
+    LogPoint = ".>",
+  }) do
     sign = type(sign) == "table" and sign or { sign } --[[ @as table]]
     vim.fn.sign_define(
       "Dap" .. name,

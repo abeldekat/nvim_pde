@@ -281,7 +281,7 @@ local function keys()
   map("<leader>fot", extra.treesitter, { desc = "Treesitter" })
 end
 
-local function picker()
+local function picker() -- provide the picker to use in other modules
   local extra = MiniExtra.pickers
   local registry = Pick.registry
 
