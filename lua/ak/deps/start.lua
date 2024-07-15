@@ -1,7 +1,5 @@
-local Util = require("ak.util")
 local MiniDeps = require("mini.deps")
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
-local register = Util.deps.register
 
 now(function()
   require("ak.config.options")
@@ -16,8 +14,4 @@ later(function()
   require("ak.config.mini_notify") -- mini.nvim in pack start
 
   add("nvim-lua/plenary.nvim") -- needed for harpoon and possibly other plugins
-
-  -- Only used for completion when browsing other configs:
-  register("folke/lazy.nvim")
-  register("LazyVim/LazyVim")
 end)
