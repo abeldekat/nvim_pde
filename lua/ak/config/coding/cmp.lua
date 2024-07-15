@@ -41,52 +41,11 @@ end
 vim.api.nvim_set_hl(0, "CmpGhostText", { link = "Comment", default = true })
 
 local cmp = require("cmp")
-local icons = {
-  Array = " ",
-  Boolean = "󰨙 ",
-  Class = " ",
-  Codeium = "󰘦 ",
-  Color = " ",
-  Control = " ",
-  Collapsed = " ",
-  Constant = "󰏿 ",
-  Constructor = " ",
-  Copilot = " ",
-  Enum = " ",
-  EnumMember = " ",
-  Event = " ",
-  Field = " ",
-  File = " ",
-  Folder = " ",
-  Function = "f ",
-  Interface = " ",
-  Key = " ",
-  Keyword = " ",
-  Method = "f ",
-  Module = " ",
-  Namespace = "󰦮 ",
-  Null = " ",
-  Number = "󰎠 ",
-  Object = " ",
-  Operator = " ",
-  Package = " ",
-  Property = " ",
-  Reference = " ",
-  Snippet = " ",
-  String = " ",
-  Struct = "󰆼 ",
-  TabNine = "󰏚 ",
-  Text = " ",
-  TypeParameter = " ",
-  Unit = " ",
-  Value = " ",
-  Variable = "󰀫 ",
-}
 local snippets = false and snip_native() or snip_luasnip()
 
 local formatting_style = {
   format = function(_, item)
-    local icon = icons[item.kind]
+    local icon = MiniIcons and MiniIcons.get("lsp", item.kind)
     icon = icon and (" " .. icon .. " ") or icon
     if icon then item.kind = string.format("%s %s", icon, item.kind) end
     return item

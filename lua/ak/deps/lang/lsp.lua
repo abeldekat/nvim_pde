@@ -9,7 +9,7 @@ if extra_lazyvim_support then later(function()
   register("LazyVim/LazyVim")
 end) end
 
-local function load()
+local function lsp()
   local build_mason = function()
     later(function() vim.cmd("MasonUpdate") end)
   end
@@ -42,9 +42,9 @@ local function load()
 
   add("b0o/SchemaStore.nvim")
 end
-later(load)
 
-if vim.fn.argc() > 0 then
+later(lsp)
+if Util.opened_with_arguments() then
   later(function() -- The lsp does not attach when directly opening a file:
     local ft = vim.bo.filetype
     if ft and ft ~= "oil" then

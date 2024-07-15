@@ -3,8 +3,8 @@ local MiniDeps = require("mini.deps")
 local add, later = MiniDeps.add, MiniDeps.later
 local now = MiniDeps.now
 
-local function load_treesitter()
-  local ts_spec = { -- monitor = "main", -- Use 'master' while monitoring updates in 'main'
+local function treesitter()
+  local ts_spec = {
     source = "nvim-treesitter/nvim-treesitter",
     checkout = "master",
     hooks = { post_checkout = function() vim.cmd("TSUpdate") end },
@@ -12,12 +12,8 @@ local function load_treesitter()
   add(ts_spec)
   require("ak.config.treesitter.treesitter")
 end
-
-if Util.opened_without_arguments() then
-  later(load_treesitter)
-else -- load treesitter early when opening a file from the cmdline
-  now(load_treesitter)
-end
+-- stylua: ignore
+if Util.opened_with_arguments() then now(treesitter) else later(treesitter) end
 
 later(function()
   add("nvim-treesitter/nvim-treesitter-textobjects")

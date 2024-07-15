@@ -1,22 +1,9 @@
---          ╭─────────────────────────────────────────────────────────╮
---          │                    colors mini.nvim:                    │
---          │   - `randomhue` - random background and foreground of   │
---          │          the same hue with medium saturation.           │
---          │  - `minicyan` - cyan and grey main colors with medium   │
---          │            contrast and saturation palette.             │
---          │ - `minischeme` - blue and yellow main colors with high  │
---          │            contrast and saturation palette.             │
---          ╰─────────────────────────────────────────────────────────╯
-
 local Util = require("ak.util")
 local Color = require("ak.color")
 local MiniDeps = require("mini.deps")
 local Picker = Util.pick
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 local register = Util.deps.register
-
--- Contains example "gruvbuddy":
--- local spec_colorbuddy = { source = "tjdevries/colorbuddy.nvim", name = "colors_gruvbuddy" }
 
 local function hook_base46()
   vim.g.base46_cache = vim.fn.stdpath("data") .. "/nvchad/base46/"

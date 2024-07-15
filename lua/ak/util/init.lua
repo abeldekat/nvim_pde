@@ -8,6 +8,8 @@
 ---@field toggle ak.util.toggle
 local M = {}
 
+M.has_mini_ai = false -- treesitter textobjects and mini.ai
+
 setmetatable(M, {
   __index = function(t, k)
     ---@diagnostic disable-next-line: no-unknown
@@ -16,23 +18,18 @@ setmetatable(M, {
   end,
 })
 
-M.has_mini_ai = false -- treesitter textobjects and mini.ai
-
--- This indicates that oil.nvim should be shown
-function M.opened_with_dir_argument()
-  if vim.fn.argc() == 1 then
+local argc = vim.fn.argc()
+local has_one_single_dir_arg = (function() -- oil
+  if argc == 1 then
     ---@diagnostic disable-next-line: param-type-mismatch
     local stat = vim.uv.fs_stat(vim.fn.argv(0))
     if stat and stat.type == "directory" then return true end
   end
   return false
-end
+end)()
 
--- This indicates that the dashboard should be shown.
-function M.opened_without_arguments()
-  if vim.fn.argc() > 0 then return false end
-  return true
-end
+M.opened_with_arguments = function() return argc > 0 end
+M.opened_with_dir_argument = function() return has_one_single_dir_arg end
 
 --          ╭─────────────────────────────────────────────────────────╮
 --          │             Copied code from lazy.core.util             │

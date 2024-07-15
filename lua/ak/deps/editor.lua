@@ -9,15 +9,6 @@ local hardtime_now = false
 local marker_to_use = "g"
 
 now(function()
-  local opened_with_dir_argument = Util.opened_with_dir_argument()
-
-  --          ╭─────────────────────────────────────────────────────────╮
-  --          │                          Icons                          │
-  --          ╰─────────────────────────────────────────────────────────╯
-  local function icons() require("ak.config.editor.mini_icons") end
-  -- stylua: ignore
-  if opened_with_dir_argument then icons() else later(icons) end
-
   --          ╭─────────────────────────────────────────────────────────╮
   --          │                           Oil                           │
   --          ╰─────────────────────────────────────────────────────────╯
@@ -26,7 +17,7 @@ now(function()
     require("ak.config.editor.oil")
   end
   -- stylua: ignore
-  if opened_with_dir_argument then oil() else later(oil) end
+  if Util.opened_with_dir_argument() then oil() else later(oil) end
 
   --          ╭─────────────────────────────────────────────────────────╮
   --          │                         Hardtime                        │
