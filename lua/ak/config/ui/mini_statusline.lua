@@ -20,7 +20,7 @@ AK.active = function() -- entrypoint
   local diag = MiniStatusline.section_diagnostics({ trunc_width = 75, icon = "", signs = H.diag_signs })
   local diff = MiniStatusline.section_diff({ trunc_width = 75, icon = "" })
   local fileinfo = AK.section_fileinfo({ trunc_width = 120 })
-  local filename = AK.section_filename() -- { trunc_width = 140 }: Use of automatic statusline truncation:
+  local filename = AK.section_filename() -- { trunc_width = 140 }: Use automatic statusline truncation
   local git = MiniStatusline.section_git({ trunc_width = 40, icon = "" })
   local location = AK.section_location({ trunc_width = 75 })
   local lsp = MiniStatusline.section_lsp({ trunc_width = 75 })
@@ -28,6 +28,7 @@ AK.active = function() -- entrypoint
   local marker_data = AK.section_marker({ trunc_width = 75 })
   local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 120 })
   local search = MiniStatusline.section_searchcount({ trunc_width = 75 })
+  local tabinfo = AK.section_tabinfo({ trunc_width = 75 })
 
   diag = diag and diag:gsub(" ", "") or ""
   diff = diff and diff:sub(2) or "" -- remove first space
@@ -40,7 +41,7 @@ AK.active = function() -- entrypoint
     "%<", -- Mark general truncate point
     { hl = H.fixed_hl, strings = { filename } },
     "%=", -- End left alignment
-    { hl = "MiniStatuslineModeCommand", strings = { macro } },
+    { hl = "MiniStatuslineModeCommand", strings = { macro, tabinfo } },
     { hl = H.fixed_hl, strings = { fileinfo } },
     { hl = mode_hl, strings = { search, location } },
   })
@@ -86,6 +87,14 @@ end
 AK.section_marker = function(args)
   if not H.markerline or MiniStatusline.is_truncated(args.trunc_width) then return "" end
   return H.markerline.line()
+end
+
+-- added:
+AK.section_tabinfo = function(args)
+  if MiniStatusline.is_truncated(args.trunc_width) then return "" end
+  local tabnr = vim.api.nvim_tabpage_get_number(0)
+  if tabnr == 1 then return "" end
+  return string.format("t%d", tabnr)
 end
 
 -- added: show when recording a macro
