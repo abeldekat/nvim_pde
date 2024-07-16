@@ -86,6 +86,7 @@ local function get_opts()
   return opts
 end
 
+-- Event AkRepeatableMoveToggled is intended for eyeliner.nvim(not used at the moment)
 local function toggle_repeatable_move()
   local modes = { "n", "x", "o" }
 

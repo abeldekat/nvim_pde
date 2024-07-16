@@ -1,3 +1,5 @@
+-- Test working with f/F/t/T without using "jinh0/eyeliner.nvim"
+
 vim.api.nvim_create_autocmd("User", {
   group = vim.api.nvim_create_augroup("AkRepeatableMove", {}),
   pattern = "AkRepeatableMoveToggled",
