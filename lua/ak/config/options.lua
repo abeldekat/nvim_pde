@@ -2,10 +2,12 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
 local opt = vim.opt
+vim.schedule(function() -- includes system call responsible for 40% startuptime!
+  opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus" -- Sync with system clipboard
+end)
 
 opt.autowrite = true -- Enable auto write
 opt.breakindent = true
-opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus" -- Sync with system clipboard
 opt.completeopt = "menu,menuone,noselect"
 opt.conceallevel = 2 -- Hide * markup for bold and italic, but not markers with substitutions
 opt.confirm = true -- Confirm to save changes before exiting modified buffer
