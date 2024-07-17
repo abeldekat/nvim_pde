@@ -163,7 +163,7 @@ Pick.registry.buffer_lines_current = function()
     local lines = vim.api.nvim_buf_get_lines(buf_id, 0, -1, false)
     local digit_prefixes = {}
     for i, l in ipairs(lines) do
-      local _, prefix_end, prefix = l:find("^(%d+:)")
+      local _, prefix_end, prefix = l:find("^(%d+│)")
       if prefix_end ~= nil then
         digit_prefixes[i], lines[i] = prefix, l:sub(prefix_end + 1)
       end
@@ -171,7 +171,7 @@ Pick.registry.buffer_lines_current = function()
 
     vim.api.nvim_buf_set_lines(buf_id, 0, -1, false, lines)
     for i, pref in pairs(digit_prefixes) do
-      pref = string.sub(pref, 1, -2)
+      pref = string.sub(pref, 1, -4) -- Remove multi byte char "│"
       local extmark_opts = { virt_text = { { pref } }, virt_text_pos = "right_align" }
       vim.api.nvim_buf_set_extmark(buf_id, ns_digit_prefix, i - 1, 0, extmark_opts)
     end
