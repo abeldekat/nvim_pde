@@ -26,7 +26,7 @@ local function get_opts()
       a = has_ts and ai.gen_spec.treesitter({ a = "@parameter.outer", i = "@parameter.inner" })
         or ai.gen_spec.argument(),
 
-      -- Overrides built-in block {}
+      -- Overrides built-in block {}. D perhaps?
       B = MiniExtra.gen_ai_spec.buffer(),
 
       -- Custom, word with case:
