@@ -1,7 +1,6 @@
 local Util = require("ak.util")
 local MiniDeps = require("mini.deps")
-local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
-local register = Util.deps.register
+local add, later = MiniDeps.add, MiniDeps.later
 
 Util.has_mini_ai = true -- ai and textobjects with gen_treesitter...
 if Util.has_mini_ai then later(function() require("ak.config.coding.mini_ai") end) end

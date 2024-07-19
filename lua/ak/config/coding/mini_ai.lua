@@ -51,3 +51,10 @@ end
 
 -- NOTE: mini.ai select, cursor is positioned on start of the selection.
 ai.setup(get_opts())
+
+vim.keymap.set(
+  "n",
+  "<leader>ua",
+  function() vim.g.miniai_disable = not vim.g.miniai_disable end,
+  { desc = "Toggle Mini.Ai", silent = true }
+)

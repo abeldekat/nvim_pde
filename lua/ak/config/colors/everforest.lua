@@ -25,6 +25,10 @@ vim.api.nvim_create_autocmd("Colorscheme", {
     local palette = vim.fn["everforest#get_palette"](config.background, config.colors_override)
     local set_hl = vim.fn["everforest#highlight"] -- group fg bg
 
+    -- Highlight all characters to type (mostly 2)
+    set_hl("MiniJump2dSpot", palette.orange, palette.none)
+    set_hl("MiniJump2dSpotAhead", palette.orange, palette.none)
+
     -- Override MiniStatuslineFilename, which is just "Grey"
     set_hl("MiniStatuslineFilename", palette.grey1, palette.bg1) -- like fileinfo
     -- Override normal
@@ -42,11 +46,6 @@ vim.api.nvim_create_autocmd("Colorscheme", {
     set_hl("DiagnosticHint", palette.green, palette.none)
 
     set_hl("MsgArea", palette.grey0, palette.none) -- Area for messages and cmdline
-
-    -- EyelinerPrimary: "Constant" foreground, aqua. Not visible in light theme.
-    -- EyelinerSecondary: foreground from "Define"
-    -- EyelinerDimmed: foreground from "Comment"
-    set_hl("EyelinerPrimary", palette.yellow, palette.none)
   end,
 })
 

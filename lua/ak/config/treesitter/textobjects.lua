@@ -7,7 +7,7 @@
 --          ╰─────────────────────────────────────────────────────────╯
 
 local Util = require("ak.util")
-local repeatable_move_enabled = false -- toggle, when enabled eyeliner does not work.
+local repeatable_move_enabled = false -- toggle
 
 local function get_opts()
   local opts = {
@@ -86,18 +86,17 @@ local function get_opts()
   return opts
 end
 
--- Event AkRepeatableMoveToggled is intended for eyeliner.nvim(not used at the moment)
 local function toggle_repeatable_move()
   local modes = { "n", "x", "o" }
 
-  local function notify()
-    vim.api.nvim_exec_autocmds(
-      "User",
-      { pattern = "AkRepeatableMoveToggled", modeline = false, data = { enabled = repeatable_move_enabled } }
-    )
-  end
+  -- local function notify()
+  --   vim.api.nvim_exec_autocmds(
+  --     "User",
+  --     { pattern = "AkRepeatableMoveToggled", modeline = false, data = { enabled = repeatable_move_enabled } }
+  --   )
+  -- end
   local function enable()
-    notify()
+    -- notify()
     local ts_repeat_move = require("nvim-treesitter.textobjects.repeatable_move")
     vim.keymap.set(modes, ";", ts_repeat_move.repeat_last_move)
     vim.keymap.set(modes, ",", ts_repeat_move.repeat_last_move_opposite)
@@ -110,7 +109,7 @@ local function toggle_repeatable_move()
     for _, key in ipairs({ ";", ",", "f", "F", "t", "T" }) do
       pcall(vim.keymap.del, modes, key)
     end
-    notify()
+    -- notify()
   end
 
   repeatable_move_enabled = not repeatable_move_enabled
