@@ -124,10 +124,6 @@ H.diag_signs = {
 -- added. Colors appear: for diagnostics, any mode except normal, macro recording
 H.fixed_hl = "MiniStatuslineFilename"
 
--- Supports harpoon or grapple
----@class Markerline
----@field line function
----@field is_buffer function
 H.markerline = nil
 
 H.oil = nil
@@ -177,21 +173,11 @@ H.is_blocked_filetype = function()
 end
 
 H.optional_dependencies = function() -- See ak.deps.editor
-  local function make(line, is_buffer) return { line = line, is_buffer = is_buffer } end
-  local line
-
-  local has, _ = pcall(require, "harpoon")
-  if has then
-    line = require("harpoonline")
-    require("ak.config.ui.harpoonline").setup(H.set_active)
-    H.markerline = make(line.format, line.is_buffer_harpooned)
-  end
-
-  has, _ = pcall(require, "grapple")
+  local has, _ = pcall(require, "grapple")
   if has then -- internal plugin
-    line = require("ak.config.ui.grappleline")
-    line.setup(H.set_active)
-    H.markerline = make(line.line, line.is_current_buffer_tagged)
+    local grappleline = require("ak.config.ui.grappleline")
+    grappleline.setup(H.set_active)
+    H.markerline = grappleline
   end
 
   local oil
@@ -200,7 +186,9 @@ H.optional_dependencies = function() -- See ak.deps.editor
 end
 
 -- added
-H.marker_highlight = function() return H.markerline and H.markerline.is_buffer() and "MiniHipatternsHack" or H.fixed_hl end
+H.marker_highlight = function()
+  return H.markerline and H.markerline.is_current_buffer_tagged() and "MiniHipatternsHack" or H.fixed_hl
+end
 
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                        Activate                         │

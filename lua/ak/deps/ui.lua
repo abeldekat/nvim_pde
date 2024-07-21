@@ -5,7 +5,6 @@ local now, later = MiniDeps.now, MiniDeps.later
 vim.o.statusline = " " -- wait till statusline plugin is loaded
 
 later(function()
-  -- add({ source = "abeldekat/harpoonline", checkout = "stable" }) -- download when needed
   require("ak.config.ui.mini_statusline")
   require("ak.config.ui.mini_indentscope")
   require("ak.config.ui.mini_animate") -- PERF: :Startuptime is slower....

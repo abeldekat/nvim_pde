@@ -24,6 +24,10 @@ vim.api.nvim_create_autocmd("Colorscheme", {
     local palette = vim.fn["gruvbox_material#get_palette"](config.background, config.foreground, config.colors_override)
     local set_hl = vim.fn["gruvbox_material#highlight"]
 
+    -- Highlight all characters to type (mostly 2)
+    set_hl("MiniJump2dSpot", palette.orange, palette.none)
+    set_hl("MiniJump2dSpotAhead", palette.orange, palette.none)
+
     set_hl("MiniStatuslineModeNormal", palette.grey2, palette.bg_statusline1, "bold") -- like filename
 
     -- without undercurl:

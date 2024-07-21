@@ -4,7 +4,7 @@ local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 local register = Util.deps.register
 
 local pick_add_fzf = false
-local hardtime_now = false
+local hardtime_now = true
 ---@type "g" | "h"  -- Use either grapple or harpoon
 local marker_to_use = "g"
 
@@ -62,16 +62,8 @@ later(function()
   --          ╭─────────────────────────────────────────────────────────╮
   --          │                         Marking                         │
   --          ╰─────────────────────────────────────────────────────────╯
-  local spec_harpoon = { source = "ThePrimeagen/harpoon", checkout = "harpoon2" }
-  local spec_grapple = "cbochs/grapple.nvim"
-  if marker_to_use == "g" then
-    add(spec_grapple)
-    require("ak.config.editor.grapple")
-  else -- download harpoon on demand, not registered
-    register(spec_grapple)
-    add(spec_harpoon)
-    require("ak.config.editor.harpoon")
-  end
+  add("cbochs/grapple.nvim")
+  require("ak.config.editor.grapple")
 
   --          ╭─────────────────────────────────────────────────────────╮
   --          │                          Other                          │
