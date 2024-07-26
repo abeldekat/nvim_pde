@@ -103,7 +103,6 @@ end
 
 -- Previewing multiple themes:
 -- Press tab for preview, and continue with ctrl-n and ctrl-p
--- The above does not work for nvchad base46(implemented as ui-select)
 local selected_colorscheme = nil
 Pick.registry.colors = function()
   local on_start = function()
@@ -268,7 +267,7 @@ local function keys()
 
   -- fuzzy other
   map("<leader>fo:", extra.commands, { desc = "Commands" })
-  -- <leader>foc colors( ak.deps colors and ak.config.colors base46)
+  -- <leader>foc colors
   map("<leader>foC", function() extra.list({ scope = "change" }) end, { desc = "Changes" })
   map("<leader>fof", builtin.files, { desc = "Files rg" })
   map("<leader>foj", function() extra.list({ scope = "jump" }) end, { desc = "Jumps" })

@@ -5,21 +5,6 @@ local Picker = Util.pick
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 local register = Util.deps.register
 
-local function hook_base46()
-  vim.g.base46_cache = vim.fn.stdpath("data") .. "/nvchad/base46/"
-  vim.cmd.packadd("colors_base46")
-  require("ak.config.colors.base46").compile()
-end
-local spec_base46 = {
-  -- Dark: bearded_arc chadraculu doomchad everblush falcon flexoki github_dark
-  -- material-darker melange monekai sweetpastel solarized_dark osaka
-  -- tomorrow_night wombat
-  -- Light: flex-light flexoki-light github_light material-lighter nano-light
-  source = "nvchad/base46", -- v2.5 is the default
-  name = "colors_base46",
-  hooks = { post_install = hook_base46, post_checkout = hook_base46 },
-}
-
 local colors = {
   one = function()
     return {
@@ -106,21 +91,11 @@ local specs = filter_specs_to_use({ -- key: spec_name, value: spec
 
 now(function()
   add_keymap_all_colors(specs)
-  if color_name == "base46" then -- collection, special case, no colorscheme command
-    require(color_info.config_name).setup(function()
-      add(spec_base46) -- only add spec when selecting a new theme.
-      return vim.fn.stdpath("data") .. "/site/pack/deps/opt/" .. spec_base46.name .. "/lua/base46/themes"
-    end)
-  else
-    if color_info.spec_name then add(specs[color_info.spec_name]) end
-    activate(color_name, color_info.config_name)
-  end
+  if color_info.spec_name then add(specs[color_info.spec_name]) end
+  activate(color_name, color_info.config_name)
 end)
 
 later(function()
   -- stylua: ignore
-  register(spec_base46)
-  for _, spec in pairs(specs) do
-    register(spec)
-  end
+  for _, spec in pairs(specs) do register(spec) end
 end)
