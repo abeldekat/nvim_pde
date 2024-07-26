@@ -33,7 +33,7 @@ local function mason_dap()
 
     -- You can provide additional configuration to the handlers,
     -- see mason-nvim-dap README for more information
-    handlers = {},
+    handlers = { python = function() end }, -- nvim-dap-python handlers
 
     -- You'll need to check that you have the required things installed
     -- online, please don't ask me how to install them :)
