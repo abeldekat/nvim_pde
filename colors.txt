@@ -12,6 +12,7 @@ everforest
 gruvbox
 gruvbox-material
 kanagawa
+melange
 minibuddy
 minicyan
 minischeme
