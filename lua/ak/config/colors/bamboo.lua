@@ -7,6 +7,8 @@ require("bamboo").setup({
   dim_inactive = true,
   highlights = {
     MiniStatuslineModeNormal = { link = "MiniStatuslineFilename" },
+    MiniJump2dSpot = { fg = "$yellow", bold = true, nocombine = true },
+    MiniJump2dSpotAhead = { link = "MiniJump2dSpot" },
     MsgArea = { fg = "$grey" }, -- Area for messages and cmdline
   },
 })

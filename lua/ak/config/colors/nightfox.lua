@@ -20,15 +20,8 @@ require("nightfox").setup({
   options = opts,
   groups = {
     all = {
-      -- Using MiniStatuslineDevinfo, the theme supplied by nightfox is too dark:
-      MiniStatuslineModeNormal = { bg = "bg2", fg = "fg3", style = "bold" },
-      MiniStatuslineFilename = { bg = "bg2", fg = "fg3" },
-
-      MiniHipatternsFixme = { bg = "diag.error", fg = "bg", style = "bold" },
-      MiniHipatternsHack = { bg = "diag.warn", fg = "bg", style = "bold" },
-      MiniHipatternsTodo = { bg = "diag.info", fg = "bg", style = "bold" },
-      MiniHipatternsNote = { bg = "diag.hint", fg = "bg", style = "bold" },
-
+      MiniStatuslineModeNormal = { link = "MiniStatuslineFilename" },
+      MiniJump2dSpotAhead = { link = "MiniJump2dSpot" },
       MsgArea = { fg = "syntax.comment" }, -- Area for messages and cmdline
     },
   },

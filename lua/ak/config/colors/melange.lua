@@ -20,8 +20,7 @@ vim.api.nvim_create_autocmd("Colorscheme", {
     set_hl("MiniHipatternsHack", { bg = yellow, fg = "black", bold = true })
     set_hl("MiniHipatternsTodo", { bg = blue, fg = "black", bold = true })
     set_hl("MiniHipatternsNote", { bg = cyan, fg = "black", bold = true })
-    set_hl("MiniJump2dSpot", { fg = orange, bold = true })
-    set_hl("MiniJump2dSpotAhead", { fg = orange, bold = true })
+    set_hl("MiniJump2dSpotAhead", { link = "MiniJump2dSpot" })
     set_hl("MiniPickMatchRanges", { fg = orange, bold = true })
     set_hl("MiniPickNormal", { link = "Normal" }) -- NormalFloat
 
