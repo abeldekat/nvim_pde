@@ -161,10 +161,3 @@ map('n', '<C-Up>', '"<Cmd>resize +"          . v:count1 . "<CR>"',
 map('n', '<C-Right>', '"<Cmd>vertical resize +" . v:count1 . "<CR>"',
   { expr = true, replace_keycodes = false, desc = 'Increase window width' })
 -- stylua: ignore end
-
--- https://www.reddit.com/r/neovim/comments/mbj8m5/how_to_setup_ctrlshiftkey_mappings_in_neovim_and/
--- Modify alacritty.yml. See harpoon setup
--- vim.keymap.set("n", "<C-S-P>", function()
--- end)
--- vim.keymap.set("n", "<C-S-N>", function()
--- end)

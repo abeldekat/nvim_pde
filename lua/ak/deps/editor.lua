@@ -5,8 +5,6 @@ local register = Util.deps.register
 
 local pick_add_fzf = false
 local hardtime_now = true
----@type "g" | "h"  -- Use either grapple or harpoon
-local marker_to_use = "g"
 
 now(function()
   --          ╭─────────────────────────────────────────────────────────╮
