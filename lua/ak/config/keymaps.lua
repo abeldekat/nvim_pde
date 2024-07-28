@@ -97,6 +97,7 @@ map("n", "<leader><tab>[", "<cmd>tabprevious<cr>", { desc = "Previous tab" })
 map("n", "<leader><tab>o", "<cmd>tabonly<cr>", { desc = "Close Other Tabs" })
 map("n", "<leader>1", "1gt", { desc = "Tab 1" })
 map("n", "<leader>2", "2gt", { desc = "Tab 2" })
+map("n", "<leader>3", "3gt", { desc = "Tab 3" })
 map("n", "<leader><tab>s", "<cmd>tabs<cr>", { desc = "Show tabs" })
 
 -- terminal mappings: esc is slow when using vi-mode in the terminal
@@ -151,10 +152,14 @@ map("n", "mw", "<C-W>w", { desc = "Next win", remap = true })
 
 -- window resize (respecting `v:count`) -> mini.basics
 -- stylua: ignore start
-map('n', '<C-Left>',  '"<Cmd>vertical resize -" . v:count1 . "<CR>"', { expr = true, replace_keycodes = false, desc = 'Decrease window width' })
-map('n', '<C-Down>',  '"<Cmd>resize -"          . v:count1 . "<CR>"', { expr = true, replace_keycodes = false, desc = 'Decrease window height' })
-map('n', '<C-Up>',    '"<Cmd>resize +"          . v:count1 . "<CR>"', { expr = true, replace_keycodes = false, desc = 'Increase window height' })
-map('n', '<C-Right>', '"<Cmd>vertical resize +" . v:count1 . "<CR>"', { expr = true, replace_keycodes = false, desc = 'Increase window width' })
+map('n', '<C-Left>', '"<Cmd>vertical resize -" . v:count1 . "<CR>"',
+  { expr = true, replace_keycodes = false, desc = 'Decrease window width' })
+map('n', '<C-Down>', '"<Cmd>resize -"          . v:count1 . "<CR>"',
+  { expr = true, replace_keycodes = false, desc = 'Decrease window height' })
+map('n', '<C-Up>', '"<Cmd>resize +"          . v:count1 . "<CR>"',
+  { expr = true, replace_keycodes = false, desc = 'Increase window height' })
+map('n', '<C-Right>', '"<Cmd>vertical resize +" . v:count1 . "<CR>"',
+  { expr = true, replace_keycodes = false, desc = 'Increase window width' })
 -- stylua: ignore end
 
 -- https://www.reddit.com/r/neovim/comments/mbj8m5/how_to_setup_ctrlshiftkey_mappings_in_neovim_and/

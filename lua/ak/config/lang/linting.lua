@@ -46,7 +46,7 @@ local function get_opts()
     -- Event to trigger linters
     events = { "BufWritePost", "BufReadPost", "InsertLeave" },
     linters_by_ft = {
-      markdown = { "markdownlint" },
+      markdown = { "markdownlint-cli2" },
       sql = { "sqlfluff" },
       mysql = { "sqlfluff" },
       plsql = { "sqlfluff" },

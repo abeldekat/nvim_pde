@@ -1,7 +1,7 @@
 local mason_ensure_installed = {
   "black", -- formatter python
   "codelldb", -- rust debugger
-  "markdownlint", -- linter
+  "markdownlint-cli2", -- linter
   "markdown-toc", -- formatter
   "prettier",
   "shfmt", -- formatter
