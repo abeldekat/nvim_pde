@@ -4,7 +4,7 @@ local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 local register = Util.deps.register
 
 local pick_add_fzf = false
-local hardtime_now = true
+local hardtime_now = false
 
 now(function()
   --          ╭─────────────────────────────────────────────────────────╮

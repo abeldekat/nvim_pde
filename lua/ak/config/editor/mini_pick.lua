@@ -69,12 +69,11 @@ Pick.registry.labeled_buffers = function(_, _) -- local_opts, opts
       return string.format("%s %s %s", label, text, label) -- the first label does the trick!
     end
     local buffers_output = vim.api.nvim_exec2("buffers", { output = true }).output
-    local cur_buf_id, include_current = vim.api.nvim_get_current_buf(), false
-    local buffer_items = {}
+    local buffer_items, cur_buf_id, include_current = {}, vim.api.nvim_get_current_buf(), false
     for i, l in ipairs(vim.split(buffers_output, "\n")) do
       local buf_str, name = l:match("^%s*%d+"), l:match('"(.*)"')
       local buf_id = tonumber(buf_str)
-      local item = { text = add_label(name, i), bufnr = buf_id } -- In addition: add label
+      local item = { text = add_label(name, i), bufnr = buf_id } -- additionally add label
       if buf_id ~= cur_buf_id or include_current then table.insert(buffer_items, item) end
     end
     return buffer_items
