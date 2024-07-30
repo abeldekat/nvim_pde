@@ -60,6 +60,59 @@ H.colors = function()
   )
 end
 
+Pick.registry.labeled_buffers = function(_, _) -- local_opts, opts
+  local centered_window = { -- centered window for consistency with grapple
+    config = function() -- copied from :h MiniPick
+      local height = math.floor(0.618 * vim.o.lines)
+      local width = math.floor(0.618 * vim.o.columns)
+      return {
+        anchor = "NW",
+        height = height,
+        width = width,
+        row = math.floor(0.5 * (vim.o.lines - height)),
+        col = math.floor(0.5 * (vim.o.columns - width)),
+      }
+    end,
+  }
+  local window = true and centered_window or nil
+  local icon_length = 5 -- prepending icon + space. Use 0 to disable icons
+  local letters = "abcdefghijklmnopqrstuvwxyz" -- more items than letters: normal operation
+
+  local add_label = function(text, idx)
+    local letter = string.sub(letters, idx, idx)
+    local label = letter == "" and "[ ]" or ("[" .. letter .. "]")
+    -- The first label does the trick!
+    -- Second label, when highlighted, indicates a direct hotkey
+    return string.format("%s %s %s", label, text, label)
+  end
+  local show = function(buf_id, items, query)
+    MiniPick.default_show(buf_id, items, query, { show_icons = (icon_length ~= 0) })
+    if #Pick.get_picker_items() > string.len(letters) then return end -- no hotkey, no highlighting
+
+    if query and #query == 1 then
+      local submit = vim.api.nvim_replace_termcodes("<cr>", true, false, true)
+      vim.api.nvim_feedkeys(submit, "n", false) -- hotkey
+    end
+    for i = 1, #items do
+      local start, _ = string.find(items[i].text, "[", 2, true) -- ignore first label
+      if start then
+        vim.api.nvim_buf_add_highlight(buf_id, 0, "MiniPickMatchRanges", i - 1, (start - 1) + icon_length, -1)
+      end
+    end
+  end
+  local buffers_output = vim.api.nvim_exec2("buffers", { output = true }).output -- Pick.builtin.buffers
+  local cur_buf_id, include_current = vim.api.nvim_get_current_buf(), false
+  local items = {}
+  for i, l in ipairs(vim.split(buffers_output, "\n")) do
+    local buf_str, name = l:match("^%s*%d+"), l:match('"(.*)"')
+    local buf_id = tonumber(buf_str)
+    local item = { text = add_label(name, i), bufnr = buf_id } -- In addition: add label
+    if buf_id ~= cur_buf_id or include_current then table.insert(items, item) end
+  end
+
+  return MiniPick.start({ source = { name = "Labeled_buffers", items = items, show = show }, window = window })
+end
+
 -- https://github.com/echasnovski/mini.nvim/discussions/518#discussioncomment-7373556
 -- Implements: For TODOs in a project, use builtin.grep.
 Pick.registry.todo_comments = function(patterns) --hipatterns.config.highlighters
@@ -211,7 +264,8 @@ local function keys()
   -- hotkeys:
   map("<leader><leader>", files, { desc = "Files pick" })
   map("<leader>/", registry.buffer_lines_current, { desc = "Buffer lines" })
-  map("<leader>'", builtin.buffers, { desc = "Buffers pick" }) -- home row, used often
+  -- map("<leader>'", builtin.buffers, { desc = "Buffers pick" }) -- home row, used often
+  map("<leader>'", registry.labeled_buffers, { desc = "Buffers pick" }) -- home row, used often
   map("<leader>b", function() extra.lsp({ scope = "document_symbol" }) end, { desc = "Buffer symbols" })
   map("<leader>l", builtin.grep_live, { desc = "Live grep" })
   map("<leader>r", function() extra.oldfiles({ current_dir = true }) end, { desc = "Recent (rel)" })
