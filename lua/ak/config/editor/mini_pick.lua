@@ -24,6 +24,8 @@ local H = {} -- Helper functions for custom pickers
 H.start_hooks = {}
 ---@type table<string,function> event MiniPickStop
 H.stop_hooks = {}
+-- when applicable, labels to use for "hotkeys"
+H.labels = "abcdefghijklmnopqrstuvwxyz"
 
 H.setup_autocommands = function()
   local group = vim.api.nvim_create_augroup("minipick-hooks", { clear = true })
@@ -60,64 +62,94 @@ H.colors = function()
   )
 end
 
-Pick.registry.labeled_buffers = function(_, _) -- local_opts, opts
-  local letters = "abcdefghijklmnopqrstuvwxyz" -- more items than letters: no hotkey
-  local buffer_items = (function() -- see Pick.builtin.buffers
-    local add_label = function(text, idx)
-      local letter = string.sub(letters, idx, idx)
-      local label = letter == "" and "[ ]" or ("[" .. letter .. "]")
-      return string.format("%s %s %s", label, text, label) -- the first label does the trick!
-    end
-    local buffers_output = vim.api.nvim_exec2("buffers", { output = true }).output
-    local buffer_items, cur_buf_id, include_current = {}, vim.api.nvim_get_current_buf(), false
-    for i, l in ipairs(vim.split(buffers_output, "\n")) do
-      local buf_str, name = l:match("^%s*%d+"), l:match('"(.*)"')
-      local buf_id = tonumber(buf_str)
-      local item = { text = add_label(name, i), bufnr = buf_id } -- additionally add label
-      if buf_id ~= cur_buf_id or include_current then table.insert(buffer_items, item) end
-    end
-    return buffer_items
-  end)()
-  local window = true
-      and { -- centered window for consistency with grapple
-        config = function() -- copied from :h MiniPick
-          local height = math.floor(0.618 * vim.o.lines)
-          local width = math.floor(0.618 * vim.o.columns)
-          return {
-            anchor = "NW",
-            height = height,
-            width = width,
-            row = math.floor(0.5 * (vim.o.lines - height)),
-            col = math.floor(0.5 * (vim.o.columns - width)),
-          }
-        end,
+H.make_centered_window = function() -- copied from :h MiniPick
+  return {
+    config = function()
+      local height = math.floor(0.618 * vim.o.lines)
+      local width = math.floor(0.618 * vim.o.columns)
+      return {
+        anchor = "NW",
+        height = height,
+        width = width,
+        row = math.floor(0.5 * (vim.o.lines - height)),
+        col = math.floor(0.5 * (vim.o.columns - width)),
       }
-    or nil
-  local show_icons = true
-  local icon_length = show_icons and 5 or 0
-  local use_hotkey = #buffer_items <= string.len(letters)
-  local hl = use_hotkey and "MiniPickMatchRanges" or "Comment"
+    end,
+  }
+end
 
-  local show = function(buf_id, items, query)
-    local find_label = function(item, find_pos)
-      local start, _ = string.find(item.text, "[", find_pos, true)
-      start = start and (start - 1) + icon_length or start
-      return start
+H.buffer_items = function() -- copied and modified Pick.builtin.buffers
+  local buffers_output = vim.api.nvim_exec2("buffers", { output = true }).output
+  local buffer_items, cur_buf_id, include_current = {}, vim.api.nvim_get_current_buf(), false
+  for _, l in ipairs(vim.split(buffers_output, "\n")) do
+    local buf_str, name = l:match("^%s*%d+"), l:match('"(.*)"')
+    local buf_id = tonumber(buf_str)
+    local item = { text = name, bufnr = buf_id }
+    if buf_id ~= cur_buf_id or include_current then table.insert(buffer_items, item) end
+  end
+  return buffer_items
+end
+
+H.make_labeled = function(picker_opts)
+  local find_label = function(item, find_pos, icon_length)
+    local startpos, _ = string.find(item.text, "[", find_pos, true)
+    startpos = startpos and (startpos - 1) + icon_length or startpos
+    local endpos = startpos and startpos + 3 or startpos
+    return startpos, endpos -- label has 3 characters
+  end
+  local add_label = function(item, idx)
+    local label = string.sub(H.labels, idx, idx)
+    label = label == "" and "[ ]" or ("[" .. label .. "]")
+    item.text = string.format("%s %s %s", label, item.text, label) -- the first label does the trick!
+  end
+  local items_orig = picker_opts.source.items
+  local show_orig = picker_opts.source.show or Pick.default_show
+  if not items_orig then return picker_opts end -- lazy solution: bail out
+
+  picker_opts.source.items = function() -- TODO: Assuming items is a function
+    local items = items_orig()
+    for idx, item in ipairs(items) do
+      add_label(item, idx)
     end
-    MiniPick.default_show(buf_id, items, query, { show_icons = show_icons })
+    return items
+  end
+  picker_opts.source.show = function(buf_id, items, query, opts)
+    local icon_length = opts and opts.show_icons and 5 or 0 -- icon and space
+    local use_hotkey = #Pick.get_picker_items() <= string.len(H.labels)
+    local hl = use_hotkey and "MiniPickMatchRanges" or "Comment"
+    local hl_label = function(find_from, item, idx)
+      local startpos, endpos = find_label(item, find_from, icon_length) -- first label occurrence
+      if startpos and endpos then vim.api.nvim_buf_add_highlight(buf_id, 0, hl, idx - 1, startpos, endpos) end
+    end
 
+    show_orig(buf_id, items, query, opts)
     if use_hotkey and query and #query == 1 then
       local submit = vim.api.nvim_replace_termcodes("<cr>", true, false, true)
       vim.api.nvim_feedkeys(submit, "n", false) -- hotkey
     end
-    for i = 1, #items do
-      local start = find_label(items[i], 1) -- first label occurrence
-      if start then vim.api.nvim_buf_add_highlight(buf_id, 0, hl, i - 1, start, start + 3) end
-      start = find_label(items[i], 2) -- second label occurrence
-      if start then vim.api.nvim_buf_add_highlight(buf_id, 0, hl, i - 1, start, -1) end
+    for idx, item in ipairs(items) do
+      hl_label(1, item, idx)
+      hl_label(2, item, idx)
     end
   end
-  return MiniPick.start({ window = window, source = { name = "Labeled_buffers", items = buffer_items, show = show } })
+  return picker_opts
+end
+
+-- https://github.com/echasnovski/mini.nvim/discussions/1096
+Pick.registry.labeled_buffers = function(_, _) -- local_opts, opts
+  local name = "Labeled_buffers"
+  local show_icons = true
+  local window = true and H.make_centered_window() or nil -- consistency with grapple
+  local opts = { window = window, source = { name = name, items = H.buffer_items } }
+  opts = H.make_labeled(opts)
+
+  local show_labeled = opts.source.show -- hotkeys and highlights...
+  if show_labeled then
+    ---@diagnostic disable-next-line: redundant-parameter
+    opts.source.show = function(buf_id, items, query) show_labeled(buf_id, items, query, { show_icons = show_icons }) end
+  end
+
+  return MiniPick.start(opts)
 end
 
 -- https://github.com/echasnovski/mini.nvim/discussions/518#discussioncomment-7373556
@@ -187,23 +219,6 @@ Pick.registry.colors = function()
     },
   })
 end
-
--- -- https://github.com/echasnovski/mini.nvim/discussions/988
--- -- Fuzzy search the current buffer with syntax highlighting
--- -- First attempt.
--- Pick.registry.buffer_lines_current = function()
---   local show = function(buf_id, items, query, opts)
---     local buf_target = buf_id
---     if items and #items > 0 then
---       local ft = vim.bo[items[1].bufnr].filetype
---       local has_lang, lang = pcall(vim.treesitter.language.get_lang, ft)
---       local has_ts, _ = pcall(vim.treesitter.start, buf_target, has_lang and lang or ft)
---       if not has_ts and ft then vim.bo[buf_target].syntax = ft end
---     end
---     Pick.default_show(buf_target, items, query, opts)
---   end
---   MiniExtra.pickers.buf_lines({ scope = "current" }, { source = { show = show } })
--- end
 
 -- https://github.com/echasnovski/mini.nvim/discussions/988
 -- Fuzzy search the current buffer with syntax highlighting
