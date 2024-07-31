@@ -153,6 +153,40 @@ Pick.registry.labeled_buffers = function(_, _) -- local_opts, opts
   return MiniPick.start(opts)
 end
 
+H.make_labeled_builtin = function(show_icons, builtin)
+  return function(local_opts, start_opts)
+    local start_orig = Pick.start
+    ---@diagnostic disable-next-line: duplicate-set-field
+    Pick.start = function(opts)
+      H.make_labeled(opts.source)
+
+      local labeled_show = opts.source.show -- hotkeys and highlights...
+      opts.source.show = function(buf_id, items, query)
+        ---@diagnostic disable-next-line: redundant-parameter
+        labeled_show(buf_id, items, query, { show_icons = show_icons })
+      end
+      local result = start_orig(opts)
+
+      Pick.start = start_orig -- restore to original start!
+      return result
+    end
+    builtin(local_opts, start_opts)
+  end
+end
+
+-- https://github.com/echasnovski/mini.nvim/discussions/1096
+-- Advantage of this approach: No need to copy code from the builtin...
+-- Drawback: Another level of abstraction, decorating Pick.start temporarily
+Pick.registry.labeled_buffers_alternative = function(_, _) -- local_opts, opts
+  local name = "Labeled_buffers"
+  local show_icons = true
+  local source = { name = name }
+  local window = true and H.make_centered_window() or nil -- consistency with grapple
+
+  local builtin = H.make_labeled_builtin(show_icons, Pick.builtin.buffers)
+  builtin({}, { source = source, window = window })
+end
+
 -- https://github.com/echasnovski/mini.nvim/discussions/518#discussioncomment-7373556
 -- Implements: For TODOs in a project, use builtin.grep.
 Pick.registry.todo_comments = function(patterns) --hipatterns.config.highlighters
@@ -288,7 +322,7 @@ local function keys()
   map("<leader><leader>", files, { desc = "Files pick" })
   map("<leader>/", registry.buffer_lines_current, { desc = "Buffer lines" })
   -- map("<leader>'", builtin.buffers, { desc = "Buffers pick" }) -- home row, used often
-  map("<leader>'", registry.labeled_buffers, { desc = "Buffers pick" }) -- home row, used often
+  map("<leader>'", registry.labeled_buffers_alternative, { desc = "Buffers pick" }) -- home row, used often
   map("<leader>b", function() extra.lsp({ scope = "document_symbol" }) end, { desc = "Buffer symbols" })
   map("<leader>l", builtin.grep_live, { desc = "Live grep" })
   map("<leader>r", function() extra.oldfiles({ current_dir = true }) end, { desc = "Recent (rel)" })
