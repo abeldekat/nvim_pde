@@ -26,6 +26,8 @@ H.start_hooks = {}
 H.stop_hooks = {}
 -- when applicable, labels to use for "hotkeys"
 H.labels = "abcdefghijklmnopqrstuvwxyz"
+-- copied
+H.show_with_icons = function(buf_id, items, query) MiniPick.default_show(buf_id, items, query, { show_icons = true }) end
 
 H.setup_autocommands = function()
   local group = vim.api.nvim_create_augroup("minipick-hooks", { clear = true })
@@ -90,7 +92,19 @@ H.buffer_items = function() -- copied and modified Pick.builtin.buffers
   return buffer_items
 end
 
-H.make_labeled = function(source)
+-- From the help, regarding icons:
+--
+-- Disable icons in |MiniPick.builtin| pickers related to paths:
+-- local pick = require('mini.pick')
+-- pick.setup({ source = { show = pick.default_show } })
+--
+-- The problem:
+-- This function decorates the show function and has no no access
+-- to the opts defined in mini.pick, H.show_with_icons
+--
+-- Current solution:
+-- When calling this function, provide show_icons as an argument
+H.make_source_labeled = function(source, show_icons)
   local find_label = function(item, find_pos, icon_length)
     local startpos, _ = string.find(item.text, "[", find_pos, true)
     startpos = startpos and (startpos - 1) + icon_length or startpos
@@ -102,10 +116,10 @@ H.make_labeled = function(source)
     label = label == "" and "[ ]" or ("[" .. label .. "]")
     item.text = string.format("%s %s %s", label, item.text, label) -- the first label does the trick!
   end
-  local items_orig = source.items
-  local show_orig = source.show or Pick.default_show
+  local items_orig = source.items -- decorating
   if not items_orig then return source end -- lazy solution: bail out!
 
+  local show_orig = source.show and source.show or Pick.default_show
   source.items = function()
     local items = type(items_orig) == "function" and items_orig() or items_orig
     ---@diagnostic disable-next-line: param-type-mismatch
@@ -115,7 +129,7 @@ H.make_labeled = function(source)
     return items
   end
   source.show = function(buf_id, items, query, opts)
-    local icon_length = opts and opts.show_icons and 5 or 0 -- icon and space
+    local icon_length = show_icons and 5 or 0 -- icon and space
     local use_hotkey = #Pick.get_picker_items() <= string.len(H.labels)
     local hl = use_hotkey and "MiniPickMatchRanges" or "Comment"
     local hl_label = function(find_from, item, idx)
@@ -129,62 +143,60 @@ H.make_labeled = function(source)
       vim.api.nvim_feedkeys(submit, "n", false) -- hotkey
     end
     for idx, item in ipairs(items) do
-      hl_label(1, item, idx) -- label start surrounding
-      hl_label(2, item, idx) -- label end surrounding
+      hl_label(1, item, idx) -- start of label surrounding
+      hl_label(2, item, idx) -- end of label surrounding
     end
   end
   return source
 end
 
--- https://github.com/echasnovski/mini.nvim/discussions/1096
-Pick.registry.labeled_buffers = function(_, _) -- local_opts, opts
-  local name = "Labeled_buffers"
-  local show_icons = true
-  local source = { name = name, items = H.buffer_items }
-  local window = true and H.make_centered_window() or nil -- consistency with grapple
-  local opts = { source = H.make_labeled(source), window = window }
-
-  local labeled_show = opts.source.show -- hotkeys and highlights...
-  if labeled_show then
-    ---@diagnostic disable-next-line: redundant-parameter
-    opts.source.show = function(buf_id, items, query) labeled_show(buf_id, items, query, { show_icons = show_icons }) end
-  end
-
-  return MiniPick.start(opts)
-end
-
-H.make_labeled_builtin = function(show_icons, builtin)
+H.make_labeled = function(picker_func, show_icons)
   return function(local_opts, start_opts)
     local start_orig = Pick.start
     ---@diagnostic disable-next-line: duplicate-set-field
     Pick.start = function(opts)
-      H.make_labeled(opts.source)
-
-      local labeled_show = opts.source.show -- hotkeys and highlights...
-      opts.source.show = function(buf_id, items, query)
-        ---@diagnostic disable-next-line: redundant-parameter
-        labeled_show(buf_id, items, query, { show_icons = show_icons })
-      end
+      H.make_source_labeled(opts.source, show_icons)
       local result = start_orig(opts)
 
       Pick.start = start_orig -- restore to original start!
       return result
     end
-    builtin(local_opts, start_opts)
+    picker_func(local_opts, start_opts)
   end
 end
 
 -- https://github.com/echasnovski/mini.nvim/discussions/1096
--- Advantage of this approach: No need to copy code from the builtin...
--- Drawback: Another level of abstraction, decorating Pick.start temporarily
-Pick.registry.labeled_buffers_alternative = function(_, _) -- local_opts, opts
+-- This function uses Pick.start and is responsible for both items and show
+Pick.registry.labeled_buffers_alternative1 = function(_, _) -- local_opts, opts
   local name = "Labeled_buffers"
+  local items = H.buffer_items -- copied from mini.pick builtin.buffers!
   local show_icons = true
-  local source = { name = name }
-  local window = true and H.make_centered_window() or nil -- consistency with grapple
+  local show = show_icons and H.show_with_icons or nil
 
-  local builtin = H.make_labeled_builtin(show_icons, Pick.builtin.buffers)
-  builtin({}, { source = source, window = window })
+  local source = { name = name, items = items, show = show }
+  source = H.make_source_labeled(source, show_icons)
+  local window = true and H.make_centered_window() or nil -- consistency with grapple
+  local opts = { source = source, window = window }
+
+  return MiniPick.start(opts)
+end
+
+-- https://github.com/echasnovski/mini.nvim/discussions/1096
+-- Advantage of this approach:
+-- 1. The picker function is responsible for both items and show
+-- 2. Reusability(no need to copy code from Pick.builtin.*)
+-- Drawback: Another level of abstraction, decorating Pick.start temporarily
+Pick.registry.labeled_buffers_alternative2 = function(_, _) -- local_opts, opts
+  local name = "Labeled_buffers"
+  local show_icons = false -- default true in Pick.builtin.buffers
+  local show = not show_icons and Pick.default_show or nil
+
+  local source = { name = name, show = show }
+  local window = true and H.make_centered_window() or nil -- consistency with grapple
+  local opts = { source = source, window = window }
+
+  local picker_func = H.make_labeled(Pick.builtin.buffers, show_icons)
+  picker_func({}, opts)
 end
 
 -- https://github.com/echasnovski/mini.nvim/discussions/518#discussioncomment-7373556
@@ -322,7 +334,7 @@ local function keys()
   map("<leader><leader>", files, { desc = "Files pick" })
   map("<leader>/", registry.buffer_lines_current, { desc = "Buffer lines" })
   -- map("<leader>'", builtin.buffers, { desc = "Buffers pick" }) -- home row, used often
-  map("<leader>'", registry.labeled_buffers_alternative, { desc = "Buffers pick" }) -- home row, used often
+  map("<leader>'", registry.labeled_buffers_alternative2, { desc = "Buffers pick" }) -- home row, used often
   map("<leader>b", function() extra.lsp({ scope = "document_symbol" }) end, { desc = "Buffer symbols" })
   map("<leader>l", builtin.grep_live, { desc = "Live grep" })
   map("<leader>r", function() extra.oldfiles({ current_dir = true }) end, { desc = "Recent (rel)" })
