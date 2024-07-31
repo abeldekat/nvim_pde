@@ -103,21 +103,22 @@ H.make_show_with_labels = function(show_orig, show_icons)
   return function(buf_id, items, query, opts)
     local icon_length = show_icons and 5 or 0 -- icon and space
     local use_hotkey = #Pick.get_picker_items() <= string.len(H.labels)
-    local hl = "MiniPickMatchRanges"
+    local hl = use_hotkey and "MiniPickMatchRanges" or "Comment"
+
     local hl_label = function(find_from, item, idx)
       local startpos, endpos = H.find_label(item, find_from, icon_length)
       if startpos and endpos then vim.api.nvim_buf_add_highlight(buf_id, 0, hl, idx - 1, startpos, endpos) end
     end
     show_orig(buf_id, items, query, opts)
-    if not use_hotkey then return end
 
-    if query and #query == 1 then
-      local submit = vim.api.nvim_replace_termcodes("<cr>", true, false, true)
-      vim.api.nvim_feedkeys(submit, "n", false) -- hotkey
-    end
     for idx, item in ipairs(items) do
       hl_label(1, item, idx) -- start of label surrounding
       hl_label(2, item, idx) -- end of label surrounding
+    end
+    if use_hotkey and query and #query == 1 then
+      local submit = vim.api.nvim_replace_termcodes("<cr>", true, false, true)
+      vim.api.nvim_feedkeys(submit, "n", false) -- hotkey
+      vim.api.nvim_feedkeys("<Ignore>", "n", false) -- prevent extra cr cursor movement
     end
   end
 end
@@ -163,9 +164,9 @@ H.make_labeled = function(picker_func, show_icons)
     end
 
     ---@diagnostic disable-next-line: duplicate-set-field
-    Pick.start = function(opts)
+    Pick.start = function(opts) -- when entering start, there is always a show...
       Pick.start = start_orig -- immediately restore
-      local show_orig = opts.source.show and opts.source.show or Pick.default_show
+      local show_orig = opts.source.show
       opts.source.show = H.make_show_with_labels(show_orig, show_icons)
       return start_orig(opts)
     end
@@ -175,24 +176,20 @@ end
 
 -- https://github.com/echasnovski/mini.nvim/discussions/1096
 -- The most relevant usage of labels in a picker...
-Pick.registry.labeled_buffers = function(_, _)
-  local name = "Labeled_buffers"
+Pick.registry.labeled_buffers = function(local_opts, _)
   local show_icons = true -- default true in Pick.builtin.buffers
-  local show = not show_icons and Pick.default_show or nil
-
-  local source = { name = name, show = show }
+  local source = { show = not show_icons and Pick.default_show or nil }
   local window = true and H.make_centered_window() or nil -- consistency with grapple
   local opts = { source = source, window = window }
 
   local picker_func = H.make_labeled(Pick.builtin.buffers, show_icons)
-  picker_func({}, opts)
+  picker_func(local_opts, opts)
 end
 
 -- POC reusablity: Adds hotkey and highlights
--- But: Only when there are hotkeys, the jump is to the item after the target item
 Pick.registry.labeled_lsp = function(local_opts, opts)
-  -- icons are already present in source.items
-  local picker_func = H.make_labeled(MiniExtra.pickers.lsp, false)
+  local show_icons = false -- icons are already present in source.items
+  local picker_func = H.make_labeled(MiniExtra.pickers.lsp, show_icons)
   picker_func(local_opts, opts)
 end
 
