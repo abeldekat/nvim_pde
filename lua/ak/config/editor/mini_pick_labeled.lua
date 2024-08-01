@@ -130,23 +130,17 @@ Pick.registry.labeled_buffers = function(local_opts, _)
   picker_func(local_opts, opts)
 end
 
--- POC reusablity: Adds hotkey and highlights
-Pick.registry.labeled_lsp = function(local_opts, opts)
+Pick.registry.labeled_lsp = function(local_opts, opts) -- POC
   local show_icons = false -- icons are already present in source.items
   local picker_func = H.make_labeled(MiniExtra.pickers.lsp, show_icons)
   picker_func(local_opts, opts)
 end
 
-local function map(l, r, opts, mode)
-  mode = mode or "n"
-  opts["silent"] = opts.silent ~= false
-  vim.keymap.set(mode, l, r, opts)
-end
-map("<leader><leader>", "TODO:", { desc = "Files pick" })
-map("<leader>'", Pick.registry.labeled_buffers, { desc = "Buffers pick" }) -- home row, used often
-map("<leader>b", function()
+local map = vim.keymap.set
+map("n", "<leader>'", Pick.registry.labeled_buffers, { desc = "Labeled buffers pick", silent = true })
+map("n", "<leader>b", function()
   local local_opts = { scope = "document_symbol" }
   local opts = {}
   Pick.registry.labeled_lsp(local_opts, opts)
-end, { desc = "Buffer symbols" })
-Pick.setup({})
+end, { desc = "Labeled buffer symbols", silent = true })
+-- Pick.setup({})

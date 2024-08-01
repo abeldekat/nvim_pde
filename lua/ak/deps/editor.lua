@@ -3,7 +3,7 @@ local MiniDeps = require("mini.deps")
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 local register = Util.deps.register
 
-local pick_poc = false
+local pick_labeled = true
 local pick_add_fzf = false
 local hardtime_now = false
 
@@ -46,8 +46,9 @@ later(function()
   require("ak.config.editor.mini_jump2d")
   require("ak.config.editor.mini_git")
   require("ak.config.editor.mini_diff")
-  if pick_poc then
-    require("ak.config.editor.mini_pick_poc")
+  if pick_labeled then
+    require("ak.config.editor.mini_pick")
+    require("ak.config.editor.mini_pick_labeled")
   else
     require("ak.config.editor.mini_pick")
   end
