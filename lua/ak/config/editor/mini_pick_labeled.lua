@@ -74,25 +74,24 @@ H.make_override_match = function(match_orig)
   end
 end
 
--- Add clues to the items displayed
--- Important highlights: When the clue is a hotkey, a single key selects the item immediately
+-- Add clues to the items displayed.
 H.make_override_show = function(show_orig, runtime_vars)
   local nr_of_labels = #H.labels
-  local ns_id = H.ns_id.labels
-  local show = function(buf_id, items, query, opts)
-    -- Invoke original show function
-    show_orig(buf_id, items, query, opts)
+  return function(buf_id, items, query, opts)
+    show_orig(buf_id, items, query, opts) -- invoke original show function
 
-    local hl = runtime_vars.use_hotkey and "MiniPickMatchRanges" or "Comment"
-    local handle_clues = function(idx, item_displayed)
-      local line_nr = idx - 1
-      for label, item in pairs(runtime_vars.labels_to_items) do
-        if item == item_displayed then
-          local virt_text = { { string.format("[%s]", label), hl } }
-          local extmark_opts = { hl_mode = "combine", priority = 200, virt_text = virt_text, virt_text_pos = "eol" }
-          H.set_extmark(buf_id, ns_id, line_nr, 0, extmark_opts)
+    local add_clues = function(idx, item_displayed, hl)
+      local find_label = function()
+        for label, item in pairs(runtime_vars.labels_to_items) do
+          if item == item_displayed then return label end
         end
       end
+      local label = find_label()
+      if not label then return end
+
+      local virt_text = { { string.format("[%s]", label), hl } }
+      local extmark_opts = { hl_mode = "combine", priority = 200, virt_text = virt_text, virt_text_pos = "eol" }
+      H.set_extmark(buf_id, H.ns_id.labels, idx - 1, 0, extmark_opts)
     end
     local submit = function()
       local key = vim.api.nvim_replace_termcodes("<cr>", true, false, true)
@@ -100,17 +99,16 @@ H.make_override_show = function(show_orig, runtime_vars)
       vim.api.nvim_feedkeys("<Ignore>", "n", false) -- prevent extra cr cursor movement
     end
 
-    -- Clear namespace, removing virtual labels and corresponding hl
-    H.clear_namespace(buf_id, ns_id)
-    -- Add labels as visual clues
+    H.clear_namespace(buf_id, H.ns_id.labels) -- remove virtual clues and hl
+    local use_hotkey = runtime_vars.use_hotkey
     for i, item_displayed in ipairs(items) do
-      if i > nr_of_labels then break end
-      handle_clues(i, item_displayed)
+      if i > nr_of_labels then break end -- item can't have a label
+      add_clues(i, item_displayed, use_hotkey and #query == 0 and "MiniPickMatchRanges" or "Comment")
     end
-    -- User typed a hotkey: Submit automatically
-    if runtime_vars.use_hotkey and query and #query == 1 then submit() end
+    if use_hotkey and #query == 1 and vim.tbl_contains(vim.tbl_keys(runtime_vars.labels_to_items), query[1]) then
+      submit()
+    end
   end
-  return show
 end
 
 H.make_override_start = function(start_orig)
@@ -204,7 +202,7 @@ map(
 )
 map("n", "<leader>ff", Pick.registry.labeled_files, { desc = "Labeled files", silent = true })
 map("n", "<leader>fU", function()
-  vim.ui.select = Pick.registry.labeled_ui_select
+  vim.ui.select = Pick.registry.labeled_ui_select -- Pick.ui_select
   local hello = "Hello"
   vim.ui.select({ hello, "Helloo", "Hellooo", "Helloooo", "Hellooooo", "Helloooooo" }, {
     prompt = "Choose your Hello version",
