@@ -75,7 +75,7 @@ H.make_override_match = function(match_orig)
 end
 
 -- Add clues to the items displayed
--- Highlights: When the clue is a hotkey, a single key selects the item immediately
+-- Important highlights: When the clue is a hotkey, a single key selects the item immediately
 H.make_override_show = function(show_orig, runtime_vars)
   local nr_of_labels = #H.labels
   local ns_id = H.ns_id.labels
@@ -113,6 +113,32 @@ H.make_override_show = function(show_orig, runtime_vars)
   return show
 end
 
+H.make_override_start = function(start_orig)
+  return function(opts)
+    Pick.start = start_orig -- Picker started, restore original
+    local runtime_vars = {
+      items = {}, -- Pick.get_picker_items returns a deepcopy, preventing simple equality test
+      use_hotkey = false, -- Only when all items are labeled a hotkey can be used
+      labels_to_items = {}, -- Key is the label, value is corresponding item
+    }
+    Pick.set_picker_items = H.make_override_set_items(Pick.set_picker_items, runtime_vars)
+    opts.source.match = H.make_override_match(opts.source.match or Pick.default_match)
+    opts.source.show = H.make_override_show(opts.source.show or Pick.default_show, runtime_vars)
+
+    -- Invoke the original Pick.start:
+    return start_orig(opts)
+  end
+end
+
+H.make_labeled_ui_select = function()
+  return function(items, opts, on_choice)
+    -- Override Pick.start before picker_func executes:
+    Pick.start = H.make_override_start(Pick.start)
+    -- Invoke Pick.ui_select
+    Pick.ui_select(items, opts, on_choice)
+  end
+end
+
 -- https://github.com/echasnovski/mini.nvim/discussions/1096
 -- Notion of a picker func: Any function calling Pick.start
 --
@@ -122,30 +148,14 @@ end
 -- Drawback: Another level of abstraction, decorating Pick.start temporarily
 H.make_labeled = function(picker_func)
   return function(local_opts, start_opts)
-    local start_orig = Pick.start
-
-    -- Override Pick.start when picker_func executes:
-    ---@diagnostic disable-next-line: duplicate-set-field
-    Pick.start = function(opts)
-      Pick.start = start_orig -- Picker started, restore original
-      local runtime_vars = {
-        items = {}, -- Pick.get_picker_items returns a deepcopy, preventing simple equality test
-        use_hotkey = false, -- Only when all items are labeled a hotkey can be used
-        labels_to_items = {}, -- Key is the label, value is corresponding item
-      }
-      Pick.set_picker_items = H.make_override_set_items(Pick.set_picker_items, runtime_vars)
-      opts.source.match = H.make_override_match(opts.source.match or Pick.default_match)
-      opts.source.show = H.make_override_show(opts.source.show or Pick.default_show, runtime_vars)
-
-      -- Invoke the original Pick.start:
-      return start_orig(opts)
-    end
+    -- Override Pick.start before picker_func executes:
+    Pick.start = H.make_override_start(Pick.start)
     -- Invoke the picker function:
     picker_func(local_opts, start_opts)
   end
 end
 
--- POC: Override some pickers defined in ak/config/editor/mini_pick.lua
+-- POC: Override pickers defined in ak/config/editor/mini_pick.lua
 
 -- The most relevant usage of labels in a picker...
 Pick.registry.labeled_buffers = function(local_opts, _)
@@ -173,6 +183,11 @@ Pick.registry.labeled_files = function(local_opts, opts)
   picker_func(local_opts, opts)
 end
 
+Pick.registry.labeled_ui_select = function(items, opts, on_choice)
+  local picker_ui_select = H.make_labeled_ui_select()
+  picker_ui_select(items, opts, on_choice)
+end
+
 local map = vim.keymap.set
 map("n", "<leader>'", Pick.registry.labeled_buffers, { desc = "Labeled buffers pick", silent = true })
 map(
@@ -188,4 +203,15 @@ map(
   { desc = "Labeled recent (rel)", silent = true }
 )
 map("n", "<leader>ff", Pick.registry.labeled_files, { desc = "Labeled files", silent = true })
+map("n", "<leader>fU", function()
+  vim.ui.select = Pick.registry.labeled_ui_select
+  local hello = "Hello"
+  vim.ui.select({ hello, "Helloo", "Hellooo", "Helloooo", "Hellooooo", "Helloooooo" }, {
+    prompt = "Choose your Hello version",
+  }, function(choice)
+    if not choice then return end
+    hello = choice
+  end)
+  vim.notify(hello)
+end, { desc = "Labeled files", silent = true })
 -- Pick.setup({})
