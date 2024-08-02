@@ -192,7 +192,7 @@ local function keys()
   -- hotkeys:
   map("<leader><leader>", files, { desc = "Files pick" })
   map("<leader>/", registry.buffer_lines_current, { desc = "Buffer lines" })
-  map("<leader>'", builtin.buffers, { desc = "Buffers pick" }) -- home row, used often
+  map("<leader>;", builtin.buffers, { desc = "Buffers pick" }) -- home row, used often
   map("<leader>b", function() extra.lsp({ scope = "document_symbol" }) end, { desc = "Buffer symbols" })
   map("<leader>l", builtin.grep_live, { desc = "Live grep" })
   map("<leader>r", function() extra.oldfiles({ current_dir = true }) end, { desc = "Recent (rel)" })

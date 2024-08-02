@@ -176,6 +176,11 @@ Pick.registry.labeled_oldfiles = function(local_opts, opts)
   picker_func(local_opts, opts)
 end
 
+Pick.registry.labeled_history = function(local_opts, opts)
+  local picker_func = H.make_labeled(MiniExtra.pickers.history)
+  picker_func(local_opts, opts)
+end
+
 Pick.registry.labeled_files = function(local_opts, opts)
   local picker_func = H.make_labeled(Pick.builtin.files)
   picker_func(local_opts, opts)
@@ -187,7 +192,7 @@ Pick.registry.labeled_ui_select = function(items, opts, on_choice)
 end
 
 local map = vim.keymap.set
-map("n", "<leader>'", Pick.registry.labeled_buffers, { desc = "Labeled buffers pick", silent = true })
+map("n", "<leader>;", Pick.registry.labeled_buffers, { desc = "Labeled buffers pick", silent = true })
 map(
   "n",
   "<leader>b",
@@ -200,6 +205,7 @@ map(
   function() Pick.registry.labeled_oldfiles({ current_dir = true }, {}) end,
   { desc = "Labeled recent (rel)", silent = true }
 )
+map("n", "<leader>f:", function() Pick.registry.labeled_history({ scope = ":" }) end, { desc = "Labeled ':' history" })
 map("n", "<leader>ff", Pick.registry.labeled_files, { desc = "Labeled files", silent = true })
 map("n", "<leader>fU", function()
   vim.ui.select = Pick.registry.labeled_ui_select -- Pick.ui_select

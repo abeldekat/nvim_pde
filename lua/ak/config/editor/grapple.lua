@@ -53,8 +53,9 @@ end
 for _, key in ipairs({
   { "<leader>J", H.use_scope, desc = "Grapple other scope" },
   { "<leader>j", "<cmd>Grapple toggle_tags<cr>", desc = "Grapple tags" },
-  { "<leader>;", "<cmd>Grapple cycle_tags next<cr>", desc = "Grapple next" },
-  { "<leader>,", "<cmd>Grapple cycle_tags prev<cr>", desc = "Grapple prev" },
+  -- Not useing next and prev often:
+  -- { "<leader>;", "<cmd>Grapple cycle_tags next<cr>", desc = "Grapple next" },
+  -- { "<leader>,", "<cmd>Grapple cycle_tags prev<cr>", desc = "Grapple prev" },
 
   { "<leader>A", "<cmd>Grapple reset<cr>", desc = "Grapple reset" },
   { "<leader>a", "<cmd>Grapple toggle<cr>", desc = "Grapple toggle tag" },
