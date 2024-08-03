@@ -1,3 +1,8 @@
+-- TODO: Do not add clue when query contains 1 char that is not a hotkey
+--
+-- Useful when:
+-- Picker has limited items (ie buffers, ui_select: hotkeys activated)
+-- Picker displays most valuable results on top(ie oldfiles, visits)
 local Pick = require("mini.pick")
 local H = {}
 
@@ -41,14 +46,15 @@ H.make_override_set_items = function(picker_set_items_orig, runtime_vars)
   return function(items, opts)
     Pick.set_picker_items = picker_set_items_orig -- items are known, restore original
     local nr_of_items = #items
-    runtime_vars.items = items -- used to test for equality to find the label for a displayed item
+    runtime_vars.items = items -- used to test equality, finding label for displayed item
     for i = 1, nr_of_labels do -- store label-item combination for the first x items
-      if nr_of_items < i then break end
+      if i > nr_of_items then break end
       local label = H.label_at_index(i)
       runtime_vars.labels_to_items[label] = items[i]
     end
     if nr_of_items <= nr_of_labels then runtime_vars.use_hotkey = true end
 
+    -- Invoke original set_picker_items function
     picker_set_items_orig(items, opts)
   end
 end
@@ -62,9 +68,8 @@ H.make_override_match = function(match_orig)
     -- Add labels
     local nr_of_stritems = #stritems
     if not labels_have_been_added then
-      for i = 1, nr_of_labels do
-        if nr_of_stritems < i then break end
-        -- Append label as first char, forcing selection:
+      for i = 1, nr_of_labels do -- label as first char, forcing selection:
+        if i > nr_of_stritems then break end
         stritems[i] = string.format("%s %s", H.label_at_index(i), stritems[i])
       end
     end
@@ -155,7 +160,7 @@ end
 
 -- POC: Override pickers defined in ak/config/editor/mini_pick.lua
 
--- The most relevant usage of labels in a picker...
+-- Most relevant usage of labels in a picker because hotkeys are likely to be activated
 Pick.registry.labeled_buffers = function(local_opts, _)
   local show_icons = true -- default true in Pick.builtin.buffers
   local source = { show = not show_icons and Pick.default_show or nil }
@@ -181,6 +186,7 @@ Pick.registry.labeled_history = function(local_opts, opts)
   picker_func(local_opts, opts)
 end
 
+-- Not useful, top results have no extra value for the user
 Pick.registry.labeled_files = function(local_opts, opts)
   local picker_func = H.make_labeled(Pick.builtin.files)
   picker_func(local_opts, opts)
