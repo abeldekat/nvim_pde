@@ -1,5 +1,3 @@
--- TODO: Do not add clue when query contains 1 char that is not a hotkey
---
 -- Useful when:
 -- Picker has limited items (ie buffers, ui_select: hotkeys activated)
 -- Picker displays most valuable results on top(ie oldfiles, visits)
