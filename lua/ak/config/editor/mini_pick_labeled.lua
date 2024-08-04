@@ -38,16 +38,13 @@ end
 H.make_override_match = function(match_orig, data)
   -- premisse: items and stritems are constant and related, having the same ordering and length.
   return function(stritems, inds, query, do_sync)
-    -- Make label,  forcing selection, even when other stritems start with label char
+    -- Make label, forcing selection, even when other stritems start with same char
     local make_unique_label = function(idx)
       local char = H.labels[idx]
       local underscored = string.format("%s_%s", char, char)
       return string.format("%s %s %s %s ", underscored, underscored, underscored, char)
     end
     local match = function() return match_orig(stritems, inds, query, do_sync) end
-
-    -- Initialize
-    if data.autosubmit == nil then data.autosubmit = #stritems <= #H.labels end
 
     -- Restore previously modified stritem
     if data.idx_selected then
@@ -62,7 +59,7 @@ H.make_override_match = function(match_orig, data)
     -- Find label idx
     local char = query[1]
     local label_idx = H.get_label_idx(char)
-    if not label_idx or label_idx > data.max_items_displayed then return match() end
+    if not label_idx or label_idx > data.nr_labels_to_add then return match() end
 
     -- Apply label
     stritems[label_idx] = string.format("%s%s", make_unique_label(label_idx), stritems[label_idx])
@@ -74,25 +71,29 @@ end
 H.make_override_show = function(show, data)
   local enter_key = vim.api.nvim_replace_termcodes("<cr>", true, true, true)
   local esc_key = vim.api.nvim_replace_termcodes("<esc>", true, true, true)
-  local first_item -- needed to detect scrolling
+  local first_item -- detect scrolling
+  local autosubmit -- all available items must fit in window and have a label
   return function(buf_id, items, query, opts) -- items are items --displayed--
-    if data.autosubmit and data.idx_selected then
+    if data.idx_selected and autosubmit then -- label matched, handle autoselect
       data.idx_selected = nil
       vim.api.nvim_feedkeys(enter_key, "n", false)
       vim.api.nvim_feedkeys(esc_key, "n", false)
       return
     end
 
-    -- Initialize
     if not first_item then first_item = items[1] end
-    if not data.max_items_displayed then data.max_items_displayed = #items end
+    if not autosubmit then
+      data.nr_labels_to_add = math.min(#H.labels, #items)
+      autosubmit = #(Pick.get_picker_items() or {}) == data.nr_labels_to_add
+    end
 
     show(buf_id, items, query, opts)
+    H.clear_namespace(buf_id, H.ns_id.labels)
 
-    H.clear_namespace(buf_id, H.ns_id.labels) -- remove virtual clues
+    -- Decide if clues can be shown
     if not (#query == 0 and first_item == items[1]) then return end
 
-    local hl = data.autosubmit and "MiniPickMatchRanges" or "Comment"
+    local hl = autosubmit and "MiniPickMatchRanges" or "Comment"
     for i, label in ipairs(H.labels) do
       if i > #items then break end
       local virt_text = { { string.format("[%s]", label), hl } }
@@ -105,10 +106,9 @@ end
 H.make_override_start = function(start)
   return function(opts)
     Pick.start = start -- Picker started, restore original
-    local data = {
-      autosubmit = nil, -- initialized in match
-      idx_selected = nil, -- set in match
-      max_items_displayed = #H.labels, -- initialized in show
+    local data = { -- Maybe: A setting in opts to disable autosubmit per picker
+      idx_selected = nil, -- set in match when label is processed
+      nr_labels_to_add = nil, -- initialized in show
     }
     opts.source.match = H.make_override_match(opts.source.match or Pick.default_match, data)
     opts.source.show = H.make_override_show(opts.source.show or Pick.default_show, data)
