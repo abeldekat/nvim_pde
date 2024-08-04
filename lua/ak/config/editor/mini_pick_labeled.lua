@@ -1,15 +1,19 @@
 -- Useful when:
 -- Picker has limited items (ie buffers, ui_select: hotkeys activated)
 -- Picker displays most valuable results on top(ie oldfiles, visits)
+-- Example less useful: Pick.files, top results have no extra meaning
 local Pick = require("mini.pick")
 local H = {}
 
--- Labels to use
-H.labels = "abcdefghijklmnopqrstuvwxyz"
--- Visual clues namespace
-H.ns_id = {
+H.labels = vim.split("abcdefghijklmnopqrstuvwxyz", "")
+H.ns_id = { -- Visual clues namespace
   labels = vim.api.nvim_create_namespace("MiniPickLabels"),
 }
+H.get_label_idx = function(label)
+  -- stylua: ignore
+  for idx, l in ipairs(H.labels) do if l == label then return idx end end
+end
+
 -- Copied
 H.clear_namespace = function(buf_id, ns_id) pcall(vim.api.nvim_buf_clear_namespace, buf_id, ns_id, 0, -1) end
 -- Copied
@@ -30,112 +34,92 @@ H.make_centered_window = function()
     end,
   }
 end
--- Returns label at index
-H.label_at_index = function(idx) return H.labels:sub(idx, idx) end
 
--- NOTE: When source.items is a schedule-wrapped function, calling set_picker_items directly,
--- overriding source.items is not possible. Example: MiniExtra.oldfiles
---
--- NOTE: When the items are strings, it's not possible to add a label field to the item
--- Example: MiniExtra.oldfiles. Oldfiles is not working when items(list of strings)
--- are transformed to items(list of { label = "<somelabel", text = "contents of item"}).
-H.make_override_set_items = function(picker_set_items_orig, runtime_vars)
-  local nr_of_labels = #H.labels
-  return function(items, opts)
-    Pick.set_picker_items = picker_set_items_orig -- items are known, restore original
-    local nr_of_items = #items
-    runtime_vars.items = items -- used to test equality, finding label for displayed item
-    for i = 1, nr_of_labels do -- store label-item combination for the first x items
-      if i > nr_of_items then break end
-      local label = H.label_at_index(i)
-      runtime_vars.labels_to_items[label] = items[i]
-    end
-    if nr_of_items <= nr_of_labels then runtime_vars.use_hotkey = true end
-
-    -- Invoke original set_picker_items function
-    picker_set_items_orig(items, opts)
-  end
-end
-
--- 1. stritems and inds are always the same on each match invocation
--- 2. items and stritems are related, having the same ordering and length.
-H.make_override_match = function(match_orig)
-  local labels_have_been_added = false
-  local nr_of_labels = #H.labels
+H.make_override_match = function(match_orig, data)
+  -- premisse: items and stritems are constant and related, having the same ordering and length.
   return function(stritems, inds, query, do_sync)
-    -- Add labels
-    local nr_of_stritems = #stritems
-    if not labels_have_been_added then
-      for i = 1, nr_of_labels do -- label as first char, forcing selection:
-        if i > nr_of_stritems then break end
-        stritems[i] = string.format("%s %s", H.label_at_index(i), stritems[i])
-      end
+    -- Make label,  forcing selection, even when other stritems start with label char
+    local make_unique_label = function(idx)
+      local char = H.labels[idx]
+      local underscored = string.format("%s_%s", char, char)
+      return string.format("%s %s %s %s ", underscored, underscored, underscored, char)
     end
-    labels_have_been_added = true
-    -- Invoke original match function
-    return match_orig(stritems, inds, query, do_sync)
+    local match = function() return match_orig(stritems, inds, query, do_sync) end
+
+    -- Initialize
+    if data.autosubmit == nil then data.autosubmit = #stritems <= #H.labels end
+
+    -- Restore previously modified stritem
+    if data.idx_selected then
+      local idx = data.idx_selected
+      stritems[idx] = string.sub(stritems[idx], string.len(make_unique_label(idx)) + 1)
+    end
+    data.idx_selected = nil
+
+    -- Can query hold a label
+    if #query ~= 1 then return match() end
+
+    -- Find label idx
+    local char = query[1]
+    local label_idx = H.get_label_idx(char)
+    if not label_idx or label_idx > data.max_items_displayed then return match() end
+
+    -- Apply label
+    stritems[label_idx] = string.format("%s%s", make_unique_label(label_idx), stritems[label_idx])
+    data.idx_selected = label_idx -- remember, restore stritem if needed on next query input
+    return match()
   end
 end
 
--- Add clues to the items displayed.
-H.make_override_show = function(show_orig, runtime_vars)
-  local nr_of_labels = #H.labels
-  return function(buf_id, items, query, opts)
-    show_orig(buf_id, items, query, opts) -- invoke original show function
+H.make_override_show = function(show, data)
+  local enter_key = vim.api.nvim_replace_termcodes("<cr>", true, true, true)
+  local esc_key = vim.api.nvim_replace_termcodes("<esc>", true, true, true)
+  local first_item -- needed to detect scrolling
+  return function(buf_id, items, query, opts) -- items are items --displayed--
+    if data.autosubmit and data.idx_selected then
+      data.idx_selected = nil
+      vim.api.nvim_feedkeys(enter_key, "n", false)
+      vim.api.nvim_feedkeys(esc_key, "n", false)
+      return
+    end
 
-    local add_clues = function(idx, item_displayed, hl)
-      local find_label = function()
-        for label, item in pairs(runtime_vars.labels_to_items) do
-          if item == item_displayed then return label end
-        end
-      end
-      local label = find_label()
-      if not label then return end
+    -- Initialize
+    if not first_item then first_item = items[1] end
+    if not data.max_items_displayed then data.max_items_displayed = #items end
 
+    show(buf_id, items, query, opts)
+
+    H.clear_namespace(buf_id, H.ns_id.labels) -- remove virtual clues
+    if not (#query == 0 and first_item == items[1]) then return end
+
+    local hl = data.autosubmit and "MiniPickMatchRanges" or "Comment"
+    for i, label in ipairs(H.labels) do
+      if i > #items then break end
       local virt_text = { { string.format("[%s]", label), hl } }
       local extmark_opts = { hl_mode = "combine", priority = 200, virt_text = virt_text, virt_text_pos = "eol" }
-      H.set_extmark(buf_id, H.ns_id.labels, idx - 1, 0, extmark_opts)
-    end
-    local submit = function()
-      local key = vim.api.nvim_replace_termcodes("<cr>", true, false, true)
-      vim.api.nvim_feedkeys(key, "n", false)
-      vim.api.nvim_feedkeys("<Ignore>", "n", false) -- prevent extra cr cursor movement
-    end
-
-    H.clear_namespace(buf_id, H.ns_id.labels) -- remove virtual clues and hl
-    local use_hotkey = runtime_vars.use_hotkey
-    for i, item_displayed in ipairs(items) do
-      if i > nr_of_labels then break end -- item can't have a label
-      add_clues(i, item_displayed, use_hotkey and #query == 0 and "MiniPickMatchRanges" or "Comment")
-    end
-    if use_hotkey and #query == 1 and vim.tbl_contains(vim.tbl_keys(runtime_vars.labels_to_items), query[1]) then
-      submit()
+      H.set_extmark(buf_id, H.ns_id.labels, i - 1, 0, extmark_opts)
     end
   end
 end
 
-H.make_override_start = function(start_orig)
+H.make_override_start = function(start)
   return function(opts)
-    Pick.start = start_orig -- Picker started, restore original
-    local runtime_vars = {
-      items = {}, -- Pick.get_picker_items returns a deepcopy, preventing simple equality test
-      use_hotkey = false, -- Only when all items are labeled a hotkey can be used
-      labels_to_items = {}, -- Key is the label, value is corresponding item
+    Pick.start = start -- Picker started, restore original
+    local data = {
+      autosubmit = nil, -- initialized in match
+      idx_selected = nil, -- set in match
+      max_items_displayed = #H.labels, -- initialized in show
     }
-    Pick.set_picker_items = H.make_override_set_items(Pick.set_picker_items, runtime_vars)
-    opts.source.match = H.make_override_match(opts.source.match or Pick.default_match)
-    opts.source.show = H.make_override_show(opts.source.show or Pick.default_show, runtime_vars)
+    opts.source.match = H.make_override_match(opts.source.match or Pick.default_match, data)
+    opts.source.show = H.make_override_show(opts.source.show or Pick.default_show, data)
 
-    -- Invoke the original Pick.start:
-    return start_orig(opts)
+    return start(opts)
   end
 end
 
 H.make_labeled_ui_select = function()
   return function(items, opts, on_choice)
-    -- Override Pick.start before picker_func executes:
     Pick.start = H.make_override_start(Pick.start)
-    -- Invoke Pick.ui_select
     Pick.ui_select(items, opts, on_choice)
   end
 end
@@ -149,9 +133,7 @@ end
 -- Drawback: Another level of abstraction, decorating Pick.start temporarily
 H.make_labeled = function(picker_func)
   return function(local_opts, start_opts)
-    -- Override Pick.start before picker_func executes:
     Pick.start = H.make_override_start(Pick.start)
-    -- Invoke the picker function:
     picker_func(local_opts, start_opts)
   end
 end
@@ -184,42 +166,34 @@ Pick.registry.labeled_history = function(local_opts, opts)
   picker_func(local_opts, opts)
 end
 
--- Not useful, top results have no extra value for the user
-Pick.registry.labeled_files = function(local_opts, opts)
-  local picker_func = H.make_labeled(Pick.builtin.files)
-  picker_func(local_opts, opts)
-end
-
 Pick.registry.labeled_ui_select = function(items, opts, on_choice)
   local picker_ui_select = H.make_labeled_ui_select()
   picker_ui_select(items, opts, on_choice)
 end
 
 local map = vim.keymap.set
-map("n", "<leader>;", Pick.registry.labeled_buffers, { desc = "Labeled buffers pick", silent = true })
-map(
-  "n",
-  "<leader>b",
-  function() Pick.registry.labeled_lsp({ scope = "document_symbol" }, {}) end,
-  { desc = "Labeled buffer symbols", silent = true }
-)
-map(
-  "n",
-  "<leader>r",
-  function() Pick.registry.labeled_oldfiles({ current_dir = true }, {}) end,
-  { desc = "Labeled recent (rel)", silent = true }
-)
-map("n", "<leader>f:", function() Pick.registry.labeled_history({ scope = ":" }) end, { desc = "Labeled ':' history" })
-map("n", "<leader>ff", Pick.registry.labeled_files, { desc = "Labeled files", silent = true })
-map("n", "<leader>fU", function()
+
+local buffers = Pick.registry.labeled_buffers
+map("n", "<leader>;", buffers, { desc = "Labeled buffers pick", silent = true })
+
+local lsp = function() Pick.registry.labeled_lsp({ scope = "document_symbol" }, {}) end
+map("n", "<leader>b", lsp, { desc = "Labeled buffer symbols", silent = true })
+
+local oldfiles = function() Pick.registry.labeled_oldfiles({ current_dir = true }, {}) end
+map("n", "<leader>r", oldfiles, { desc = "Labeled recent (rel)", silent = true })
+
+local his = function() Pick.registry.labeled_history({ scope = ":" }) end
+map("n", "<leader>f:", his, { desc = "Labeled ':' history" })
+
+local hellos = { "hello", "Helloo", "Hellooo", "Helloooo", "Hellooooo", "Helloooooo" }
+local on_choice = function(choice)
+  if not choice then return end
+  vim.notify(choice)
+end
+local ui_select = function()
+  local org = vim.ui.select
   vim.ui.select = Pick.registry.labeled_ui_select -- Pick.ui_select
-  local hello = "Hello"
-  vim.ui.select({ hello, "Helloo", "Hellooo", "Helloooo", "Hellooooo", "Helloooooo" }, {
-    prompt = "Choose your Hello version",
-  }, function(choice)
-    if not choice then return end
-    hello = choice
-  end)
-  vim.notify(hello)
-end, { desc = "Labeled files", silent = true })
--- Pick.setup({})
+  vim.ui.select(hellos, { prompt = "Say hi" }, on_choice)
+  vim.ui.select = org
+end
+map("n", "<leader>fU", ui_select, { desc = "Labeled ui select", silent = true })
