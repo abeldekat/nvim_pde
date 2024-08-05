@@ -6,17 +6,16 @@ Utils.color.add_toggle("rose-pine*", {
   flavours = { "rose-pine-moon", "rose-pine-main", "rose-pine-dawn" },
 })
 
---          ╭─────────────────────────────────────────────────────────╮
---          │     constants usable to toggle the highlight groups     │
---          │                see rose-pine.palette.lua                │
---          ╰─────────────────────────────────────────────────────────╯
-
 -- Before setup, the palette is set to main_nc:
 local current_nc = "#16141f"
 
 local hl_config = {
-  MiniStatuslineModeNormal = { fg = "muted", bg = "surface", current = current_nc }, -- MiniStatuslineFilename
-  MsgArea = { fg = "muted", current = current_nc }, -- Area for messages and cmdline
+  -- Same as MiniStatuslineFilename
+  MiniStatuslineModeNormal = { fg = "muted", bg = "surface", current = current_nc },
+  -- Same as MiniJump2dSpot
+  MiniJump2dSpotAhead = { fg = "gold", bold = true, nocombine = true },
+  -- Area for messages and cmdline
+  MsgArea = { fg = "muted", current = current_nc },
 }
 
 --          ╭─────────────────────────────────────────────────────────╮
@@ -24,29 +23,29 @@ local hl_config = {
 --          │            see lualine.themes.rose-pine.lua             │
 --          ╰─────────────────────────────────────────────────────────╯
 
--- create the highlights for mini.statusline and mini.hlpatterns
-local function groups()
-  -- Initially, force rose-pine to return the correct palette:
-  vim.o.background = prefer_light and "light" or "dark"
-  local palette = require("rose-pine.palette")
+local function apply_hl(highlight, palette, copy_from)
+  highlight.bg = palette[copy_from.bg]
+  highlight.fg = palette[copy_from.fg]
+  highlight.bold = copy_from.bold
+  return highlight
+end
 
+-- create initial modified hl
+local function groups()
+  local palette = require("rose-pine.palette")
   local result = {}
-  for hl_name, config in pairs(hl_config) do -- use palette for actual colors
-    local new_config = { bg = palette[config.bg], fg = palette[config.fg] }
-    if config.bold then new_config.bold = config.bold end
-    result[hl_name] = new_config
+  for name, copy_from in pairs(hl_config) do -- use palette for actual colors
+    result[name] = apply_hl({}, palette, copy_from)
   end
   return result
 end
 
--- change the highlights for mini.statusline when the palette changes
+-- change hl when palette changes
 local function before_highlight(group, highlight, palette)
-  local config = hl_config[group]
-  if config and config.current ~= palette._nc then
-    highlight.bg = palette[config.bg]
-    highlight.fg = palette[config.fg]
-    if config.bold then highlight.bold = config.bold end
-    config.current = palette._nc
+  local copy_from = hl_config[group]
+  if copy_from and copy_from.current ~= palette._nc then
+    apply_hl(highlight, palette, copy_from)
+    copy_from.current = palette._nc
   end
 end
 
@@ -54,6 +53,7 @@ end
 --          │                          setup                          │
 --          ╰─────────────────────────────────────────────────────────╯
 
+vim.o.background = prefer_light and "light" or "dark"
 local opts = {
   variant = prefer_light and "dawn" or "moon",
   dark_variant = "moon",
