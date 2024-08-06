@@ -3,7 +3,6 @@ local MiniDeps = require("mini.deps")
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 local register = Util.deps.register
 
-local pick_labeled = true
 local pick_add_fzf = false
 local hardtime_now = false
 
@@ -46,13 +45,7 @@ later(function()
   require("ak.config.editor.mini_jump2d")
   require("ak.config.editor.mini_git")
   require("ak.config.editor.mini_diff")
-  if pick_labeled then
-    require("ak.config.editor.mini_pick")
-    -- require("ak.config.editor.mini_pick_labeled")
-    require("ak.config.editor.mini_pick_labeled_autocmd")
-  else
-    require("ak.config.editor.mini_pick")
-  end
+  require("ak.config.editor.mini_pick")
   if pick_add_fzf then -- download fzf on demand, not registered
     local spec_fzf = "ibhagwan/fzf-lua"
     register(spec_fzf)

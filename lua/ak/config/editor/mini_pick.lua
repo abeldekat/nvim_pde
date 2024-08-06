@@ -16,7 +16,11 @@
 
 local Utils = require("ak.util")
 local Pick = require("mini.pick")
-local H = {} -- Helper functions for custom pickers
+local Extra = require("mini.extra")
+
+-- Helper data ================================================================
+
+local H = {} -- Helper functions
 
 ---@type table<string,function>  event MiniPickStart
 H.start_hooks = {}
@@ -57,6 +61,154 @@ H.colors = function()
     vim.fn.getcompletion("", "color")
   )
 end
+
+H.bdir = function() -- note: in oil dir, return nil and fallback to root cwd
+  if vim["bo"].buftype == "" then return vim.fn.expand("%:p:h") end
+end
+
+H.make_centered_window = function() -- copied from :h MiniPick
+  return {
+    config = function()
+      local height = math.floor(0.618 * vim.o.lines)
+      local width = math.floor(0.618 * vim.o.columns)
+      return {
+        anchor = "NW",
+        height = height,
+        width = width,
+        row = math.floor(0.5 * (vim.o.lines - height)),
+        col = math.floor(0.5 * (vim.o.columns - width)),
+      }
+    end,
+  }
+end
+
+-- EPL: "Extra Labeled Picker"" feature. Has similar purpose as "H = {}" in mini.extra
+-- Useful when: Picker has limited items (ie buffers, ui_select: hotkeys activated)
+-- Useful when: Picker displays most valuable results on top(ie oldfiles, visits)
+-- Less useful: Pick.files, top results have no extra meaning
+--
+-- Edge cases that are hard to fix:
+-- 1:
+-- a. Pick buffers, labeled, lots of buffers starting with "lua", autosubmit is not active
+-- b. Press label 'l'(also first letter of "lua")
+-- c  Note that the labeled item is -not- placed as first item in the list
+-- d. Press enter
+-- e.  Note that the labeled item is opened correctly, instead of the first item displayed
+--
+local EPL = {}
+
+EPL.invert = function(tbl_in)
+  local tbl_out = {}
+  -- stylua: ignore
+  for idx, l in ipairs(tbl_in) do tbl_out[l] = idx end
+  return tbl_out
+end
+EPL.labels = vim.split("abcdefghijklmnopqrstuvwxyz", "")
+EPL.labels_inv = EPL.invert(EPL.labels)
+EPL.ns_id = { labels = vim.api.nvim_create_namespace("MiniPickLabels") } -- clues
+
+-- Copied from mini.pick:
+EPL.clear_namespace = function(buf_id, ns_id) pcall(vim.api.nvim_buf_clear_namespace, buf_id, ns_id, 0, -1) end
+EPL.set_extmark = function(...) pcall(vim.api.nvim_buf_set_extmark, ...) end
+
+EPL.make_override_match = function(match, data)
+  -- premisse: items and stritems are constant and related, having the same ordering and length.
+  return function(stritems, inds, query, do_sync)
+    -- Restore previously modified stritem
+    if data.idx_selected then
+      local idx = data.idx_selected
+      stritems[idx] = string.sub(stritems[idx], 2)
+    end
+    data.idx_selected = nil
+
+    -- Can query hold a label
+    if #query ~= 1 then return match(stritems, inds, query, do_sync) end
+
+    -- Find label idx
+    local char = query[1]
+    local label_idx = EPL.labels_inv[char]
+    if not label_idx or label_idx > data.max_labels then return match(stritems, inds, query, do_sync) end
+
+    -- Apply label: In most cases, the items is shown as first item in list
+    stritems[label_idx] = string.format("%s%s", char, stritems[label_idx])
+    data.idx_selected = label_idx -- remember to restore stritem if needed on next query input
+    return match(stritems, inds, query, do_sync)
+  end
+end
+
+EPL.make_override_show = function(show, data)
+  local enter_key = vim.api.nvim_replace_termcodes("<cr>", true, true, true)
+  local first_item -- detect scrolling
+  local autosubmit -- all available items must fit in window and have a label
+  return function(buf_id, items, query, opts) -- items are items --displayed--
+    if data.idx_selected and autosubmit then -- label matched
+      vim.api.nvim_feedkeys(enter_key, "n", false)
+      vim.api.nvim_feedkeys("<Ignore>", "n", false)
+      return
+    end
+
+    if not first_item then first_item = items[1] end
+    if not autosubmit then
+      data.max_labels = math.min(#EPL.labels, #items)
+      autosubmit = #(Pick.get_picker_items() or {}) == data.max_labels
+    end
+
+    show(buf_id, items, query, opts)
+    EPL.clear_namespace(buf_id, EPL.ns_id.labels)
+    if not (#query == 0 and first_item == items[1]) then return end
+
+    local hl = autosubmit and "MiniPickMatchRanges" or "Comment"
+    for i, label in ipairs(EPL.labels) do
+      if i > data.max_labels then break end
+      local virt_text = { { string.format("[%s]", label), hl } }
+      local extmark_opts = { hl_mode = "combine", priority = 200, virt_text = virt_text, virt_text_pos = "eol" }
+      EPL.set_extmark(buf_id, EPL.ns_id.labels, i - 1, 0, extmark_opts)
+    end
+  end
+end
+
+EPL.make_override_choose = function(choose, data)
+  -- must override, in edge cases the item is not shown first in the list
+  return function(item)
+    if data.idx_selected then item = Pick.get_picker_items()[data.idx_selected] end
+    return choose(item)
+  end
+end
+
+-- Extra: Add feature to label pickers  ================================================================
+
+-- Take opts = { label = true } into account and  override opts.source.{match, show, choose}
+Extra.pickers_enable_label_in_options = function()
+  local group = vim.api.nvim_create_augroup("minipick-hooks", { clear = true })
+  vim.api.nvim_create_autocmd("User", {
+    pattern = "MiniPickStart",
+    group = group,
+    desc = "Augment pickers with labels",
+    callback = function()
+      local opts = Pick.get_picker_opts()
+      if not opts then return end
+
+      local should_label = opts.label
+
+      -- FIXME: Also activates labels in other pickers
+      -- if not should_label and vim.ui.select == Extra.pickers.labeled_ui_select then should_label = true end
+
+      if not should_label then return end
+
+      local data = {
+        idx_selected = nil, -- set in match when label is detected
+        max_labels = nil, -- set in show
+      }
+      opts.source.match = EPL.make_override_match(opts.source.match, data)
+      opts.source.show = EPL.make_override_show(opts.source.show, data)
+      opts.source.choose = EPL.make_override_choose(opts.source.choose, data)
+      Pick.set_picker_opts(opts)
+    end,
+  })
+end
+Extra.pickers.labeled_ui_select = function(items, opts, on_choice) Pick.ui_select(items, opts, on_choice) end
+
+-- Custom pickers  ================================================================
 
 -- https://github.com/echasnovski/mini.nvim/discussions/518#discussioncomment-7373556
 -- Implements: For TODOs in a project, use builtin.grep.
@@ -99,6 +251,7 @@ Pick.registry.todo_comments = function(patterns) --hipatterns.config.highlighter
   )
 end
 
+-- https://github.com/echasnovski/mini.nvim/discussions/951
 -- Previewing multiple themes:
 -- Press tab for preview, and continue with ctrl-n and ctrl-p
 local selected_colorscheme = nil
@@ -163,15 +316,7 @@ Pick.registry.buffer_lines_current = function()
   MiniExtra.pickers.buf_lines({ scope = "current" }, { source = { show = show_cur_buf_lines } })
 end
 
-local function bdir() -- note: in oil dir, return nil and fallback to root cwd
-  if vim["bo"].buftype == "" then return vim.fn.expand("%:p:h") end
-end
-
-local function map(l, r, opts, mode)
-  mode = mode or "n"
-  opts["silent"] = opts.silent ~= false
-  vim.keymap.set(mode, l, r, opts)
-end
+-- Apply  ================================================================
 
 local cwd_cache = {}
 local function files() -- either files or git_files
@@ -184,84 +329,9 @@ local function files() -- either files or git_files
   builtin.files(opts)
 end
 
-local function keys()
-  local builtin = Pick.builtin
+local function provide_picker() -- picker to use in other modules
   local extra = MiniExtra.pickers
-  local registry = Pick.registry
-
-  -- hotkeys:
-  map("<leader><leader>", files, { desc = "Files pick" })
-  map("<leader>/", registry.buffer_lines_current, { desc = "Buffer lines" })
-  map("<leader>;", builtin.buffers, { desc = "Buffers pick" }) -- home row, used often
-  map("<leader>b", function() extra.lsp({ scope = "document_symbol" }) end, { desc = "Buffer symbols" })
-  map("<leader>l", builtin.grep_live, { desc = "Live grep" })
-  map("<leader>r", function() extra.oldfiles({ current_dir = true }) end, { desc = "Recent (rel)" })
-
-  -- fuzzy main. Free: fe,fj,fn,fq,fv,fy
-  map("<leader>f/", function() extra.history({ scope = "/" }) end, { desc = "'/' history" })
-  map("<leader>f:", function() extra.history({ scope = ":" }) end, { desc = "':' history" })
-  map("<leader>fa", function() extra.git_hunks({ scope = "staged" }) end, { desc = "Staged hunks" })
-  map(
-    "<leader>fA",
-    function() extra.git_hunks({ path = vim.fn.expand("%"), scope = "staged" }) end,
-    { desc = "Staged hunks (current)" }
-  )
-  map("<leader>fb", builtin.buffers, { desc = "Buffer pick" })
-  map("<leader>fc", extra.git_commits, { desc = "Git commits" })
-  map("<leader>fC", function() extra.git_commits({ path = vim.fn.expand("%") }) end, { desc = "Git commits buffer" })
-  map("<leader>fd", function() extra.diagnostic({ scope = "current" }) end, { desc = "Diagnostic buffer" })
-  map("<leader>fD", function() extra.diagnostic({ scope = "all" }) end, { desc = "Diagnostic workspace" })
-  map("<leader>ff", files, { desc = "Files" })
-  map("<leader>fF", function() builtin.files(nil, { source = { cwd = bdir() } }) end, { desc = "Files (rel)" })
-  map("<leader>fg", builtin.grep_live, { desc = "Grep" })
-  map("<leader>fG", function() builtin.grep_live(nil, { source = { cwd = bdir() } }) end, { desc = "Grep (rel)" })
-  map("<leader>fh", builtin.help, { desc = "Help" })
-  map("<leader>fi", function() vim.notify("No picker for fzf-lua builtin") end, { desc = "Fzf-lua builtin" })
-  map("<leader>fk", extra.keymaps, { desc = "Key maps" })
-  map("<leader>fl", registry.buffer_lines_current, { desc = "Buffer lines" })
-  map("<leader>fL", function() extra.buf_lines() end, { desc = "Buffers lines" })
-  map("<leader>fm", extra.git_hunks, { desc = "Unstaged hunks" })
-  map(
-    "<leader>fM",
-    function() extra.git_hunks({ path = vim.fn.expand("%") }) end,
-    { desc = "Unstaged hunks (current)" }
-  )
-  map("<leader>fp", extra.hipatterns, { desc = "Hipatterns" })
-  map("<leader>fr", extra.oldfiles, { desc = "Recent" }) -- could also use fv fV for visits
-  map("<leader>fR", function() extra.oldfiles({ current_dir = true }) end, { desc = "Recent (rel)" })
-  map("<leader>fs", function() extra.lsp({ scope = "document_symbol" }) end, { desc = "Symbols buffer" })
-  map("<leader>fS", function() extra.lsp({ scope = "workspace_symbol" }) end, { desc = "Symbols workspace" })
-  -- <leader>ft: todo comments(hipatterns config)
-  map("<leader>fu", builtin.resume, { desc = "Resume picker" })
-  -- In visual mode: Yank some text, :Pick grep and put(ctrl-r ")
-  map("<leader>fw", function() builtin.grep({ pattern = vim.fn.expand("<cword>") }) end, { desc = "Word" })
-  map(
-    "<leader>fW",
-    function() builtin.grep({ pattern = vim.fn.expand("<cword>") }, { source = { cwd = bdir() } }) end,
-    { desc = "Word (rel)" }
-  )
-  map("<leader>fx", function()
-    vim.cmd.cclose() -- In quickfix, "bql" hides the picker
-    extra.list({ scope = "quickfix" })
-  end, { desc = "Quickfix" })
-  map("<leader>fX", function() extra.list({ scope = "location" }) end, { desc = "Loclist" })
-
-  -- fuzzy other
-  map("<leader>fo:", extra.commands, { desc = "Commands" })
-  -- <leader>foc colors
-  map("<leader>foC", function() extra.list({ scope = "change" }) end, { desc = "Changes" })
-  map("<leader>fof", builtin.files, { desc = "Files rg" })
-  map("<leader>foj", function() extra.list({ scope = "jump" }) end, { desc = "Jumps" })
-  map("<leader>foh", extra.hl_groups, { desc = "Highlights" })
-  map("<leader>fom", extra.marks, { desc = "Marks" })
-  map("<leader>foo", extra.options, { desc = "Options" })
-  map("<leader>for", extra.registers, { desc = "Registers" })
-  map("<leader>fot", extra.treesitter, { desc = "Treesitter" })
-end
-
-local function picker() -- provide the picker to use in other modules
-  local extra = MiniExtra.pickers
-  local registry = Pick.registry
+  local custom = Pick.registry
 
   ---@type Picker
   local Picker = {
@@ -278,24 +348,124 @@ local function picker() -- provide the picker to use in other modules
     lsp_implementations = function() vim.lsp.buf.implementation({ reuse_win = true }) end,
     lsp_type_definitions = function() vim.lsp.buf.type_definition({ reuse_win = true }) end,
 
-    colors = registry.colors,
-    todo_comments = registry.todo_comments,
+    colors = custom.colors,
+    todo_comments = custom.todo_comments,
   }
   Utils.pick.use_picker(Picker)
 end
 
---          ╭─────────────────────────────────────────────────────────╮
---          │                          Setup                          │
---          ╰─────────────────────────────────────────────────────────╯
+local function keys()
+  local function map(l, r, opts, mode)
+    mode = mode or "n"
+    opts["silent"] = opts.silent ~= false
+    vim.keymap.set(mode, l, r, opts)
+  end
+  local builtin = Pick.builtin
+  local extra = MiniExtra.pickers
+  local custom = Pick.registry
+
+  -- hotkeys:
+  map("<leader><leader>", files, { desc = "Files pick" })
+  map("<leader>/", custom.buffer_lines_current, { desc = "Buffer lines" })
+  local labeled_buffers = function()
+    local show_icons = true
+    local source = { show = not show_icons and Pick.default_show or nil }
+    local window = true and H.make_centered_window() or nil
+    local opts = { label = true, source = source, window = window }
+    builtin.buffers({}, opts)
+  end
+  map("<leader>;", labeled_buffers, { desc = "Buffers pick" }) -- home row, used often
+  local labeled_symbols = function() extra.lsp({ scope = "document_symbol" }, { label = true }) end
+  map("<leader>b", labeled_symbols, { desc = "Buffer symbols" })
+  map("<leader>l", builtin.grep_live, { desc = "Live grep" })
+  local labeled_oldfiles = function() extra.oldfiles({ current_dir = true }, { label = true }) end
+  map("<leader>r", labeled_oldfiles, { desc = "Recent (rel)" })
+
+  -- fuzzy main. Free: fe,fj,fn,fq,fv,fy
+  map("<leader>f/", function() extra.history({ scope = "/" }) end, { desc = "'/' history" })
+  local labeled_his_cmd = function() extra.history({ scope = ":" }, { label = true }) end
+  map("<leader>f:", labeled_his_cmd, { desc = "':' history" })
+  map("<leader>fa", function() extra.git_hunks({ scope = "staged" }) end, { desc = "Staged hunks" })
+  map(
+    "<leader>fA",
+    function() extra.git_hunks({ path = vim.fn.expand("%"), scope = "staged" }) end,
+    { desc = "Staged hunks (current)" }
+  )
+  map("<leader>fb", builtin.buffers, { desc = "Buffer pick" })
+  map("<leader>fc", extra.git_commits, { desc = "Git commits" })
+  map("<leader>fC", function() extra.git_commits({ path = vim.fn.expand("%") }) end, { desc = "Git commits buffer" })
+  map("<leader>fd", function() extra.diagnostic({ scope = "current" }) end, { desc = "Diagnostic buffer" })
+  map("<leader>fD", function() extra.diagnostic({ scope = "all" }) end, { desc = "Diagnostic workspace" })
+  map("<leader>ff", files, { desc = "Files" })
+  map("<leader>fF", function() builtin.files(nil, { source = { cwd = H.bdir() } }) end, { desc = "Files (rel)" })
+  map("<leader>fg", builtin.grep_live, { desc = "Grep" })
+  map("<leader>fG", function() builtin.grep_live(nil, { source = { cwd = H.bdir() } }) end, { desc = "Grep (rel)" })
+  map("<leader>fh", builtin.help, { desc = "Help" })
+  map("<leader>fi", function() vim.notify("No picker for fzf-lua builtin") end, { desc = "Fzf-lua builtin" })
+  map("<leader>fk", extra.keymaps, { desc = "Key maps" })
+  map("<leader>fl", custom.buffer_lines_current, { desc = "Buffer lines" })
+  map("<leader>fL", function() extra.buf_lines() end, { desc = "Buffers lines" })
+  map("<leader>fm", extra.git_hunks, { desc = "Unstaged hunks" })
+  local git_hunks = function() extra.git_hunks({ path = vim.fn.expand("%") }) end
+  map("<leader>fM", git_hunks, { desc = "Unstaged hunks (current)" })
+  map("<leader>fp", extra.hipatterns, { desc = "Hipatterns" })
+  map("<leader>fr", extra.oldfiles, { desc = "Recent" }) -- could also use fv fV for visits
+  map("<leader>fR", function() extra.oldfiles({ current_dir = true }) end, { desc = "Recent (rel)" })
+  map("<leader>fs", function() extra.lsp({ scope = "document_symbol" }) end, { desc = "Symbols buffer" })
+  map("<leader>fS", function() extra.lsp({ scope = "workspace_symbol" }) end, { desc = "Symbols workspace" })
+  -- <leader>ft: todo comments, defined in hipatterns config
+  map("<leader>fu", builtin.resume, { desc = "Resume picker" })
+  -- In visual mode: Yank some text, :Pick grep and put(ctrl-r ")
+  map("<leader>fw", function() builtin.grep({ pattern = vim.fn.expand("<cword>") }) end, { desc = "Word" })
+  local grep_cword_cwd = function()
+    builtin.grep({ pattern = vim.fn.expand("<cword>") }, { source = { cwd = H.bdir() } })
+  end
+  map("<leader>fW", grep_cword_cwd, { desc = "Word (rel)" })
+  map("<leader>fx", function()
+    vim.cmd.cclose() -- In quickfix, "bql" hides the picker
+    extra.list({ scope = "quickfix" })
+  end, { desc = "Quickfix" })
+  map("<leader>fX", function() extra.list({ scope = "location" }) end, { desc = "Loclist" })
+
+  -- fuzzy other
+  map("<leader>fo:", extra.commands, { desc = "Commands" })
+  -- <leader>foc, defined in colors
+  map("<leader>foC", function() extra.list({ scope = "change" }) end, { desc = "Changes" })
+  map("<leader>fof", builtin.files, { desc = "Files rg" })
+  map("<leader>foj", function() extra.list({ scope = "jump" }) end, { desc = "Jumps" })
+  map("<leader>foh", extra.hl_groups, { desc = "Highlights" })
+  map("<leader>fom", extra.marks, { desc = "Marks" })
+  map("<leader>foo", extra.options, { desc = "Options" })
+  map("<leader>for", extra.registers, { desc = "Registers" })
+  map("<leader>fot", extra.treesitter, { desc = "Treesitter" })
+
+  -- POC labeled ui_select
+  local on_choice = function(choice)
+    if not choice then return end
+    vim.notify(choice)
+  end
+  local labeled_ui_select = function()
+    local org = vim.ui.select
+    vim.ui.select = Extra.pickers.labeled_ui_select
+    vim.ui.select({ "Hello", "Helloooo", "Helloooooo" }, { prompt = "Say hi" }, on_choice)
+    vim.ui.select = org
+  end
+  map("<leader>fU", labeled_ui_select, { desc = "Labeled ui select", silent = true })
+end
+
 local function setup()
   Pick.setup({
-    -- default false, more speed and memory on repeated prompts:
+    -- Default false, more speed and memory on repeated prompts:
     -- options = { use_cache = false },
   })
 
   H.setup_autocommands()
+  Extra.pickers_enable_label_in_options() -- also uses MiniPickStart event
+
   keys()
-  picker()
+  provide_picker()
   vim.ui.select = Pick.ui_select
+  -- vim.ui.select = Extra.pickers.labeled_ui_select
 end
+
 setup()
