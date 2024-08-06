@@ -105,7 +105,7 @@ EPL.make_override_show = function(show, data)
 end
 
 EPL.make_override_choose = function(choose, data)
-  -- must override, in edge cases the items is not shown as first item in list
+  -- must override, in edge cases the item is not shown first in the list
   return function(item)
     if data.idx_selected then item = Pick.get_picker_items()[data.idx_selected] end
     return choose(item)
