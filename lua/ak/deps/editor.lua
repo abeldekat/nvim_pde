@@ -48,7 +48,8 @@ later(function()
   require("ak.config.editor.mini_diff")
   if pick_labeled then
     require("ak.config.editor.mini_pick")
-    require("ak.config.editor.mini_pick_labeled")
+    -- require("ak.config.editor.mini_pick_labeled")
+    require("ak.config.editor.mini_pick_labeled_autocmd")
   else
     require("ak.config.editor.mini_pick")
   end

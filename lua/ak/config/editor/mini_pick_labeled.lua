@@ -19,8 +19,7 @@ L.ns_id = { labels = vim.api.nvim_create_namespace("MiniPickLabels") } -- clues
 -- Copied from mini.pick:
 L.clear_namespace = function(buf_id, ns_id) pcall(vim.api.nvim_buf_clear_namespace, buf_id, ns_id, 0, -1) end
 L.set_extmark = function(...) pcall(vim.api.nvim_buf_set_extmark, ...) end
--- Copied from :h MiniPick
-L.make_centered_window = function()
+L.make_centered_window = function() -- Copied from :h MiniPick
   return {
     config = function()
       local height = math.floor(0.618 * vim.o.lines)
@@ -36,20 +35,13 @@ L.make_centered_window = function()
   }
 end
 
--- Make label, forcing selection, even when other stritems start with same char
-L.make_unique_label = function(idx)
-  local char = L.labels[idx]
-  local underscored = string.format("%s_%s", char, char)
-  return string.format("%s %s %s %s ", underscored, underscored, underscored, char)
-end
-
 L.make_override_match = function(match, data)
   -- premisse: items and stritems are constant and related, having the same ordering and length.
   return function(stritems, inds, query, do_sync)
     -- Restore previously modified stritem
     if data.idx_selected then
       local idx = data.idx_selected
-      stritems[idx] = string.sub(stritems[idx], string.len(L.make_unique_label(idx)) + 1)
+      stritems[idx] = string.sub(stritems[idx], 2)
     end
     data.idx_selected = nil
 
@@ -59,10 +51,10 @@ L.make_override_match = function(match, data)
     -- Find label idx
     local char = query[1]
     local label_idx = L.labels_inv[char]
-    if not label_idx or label_idx > data.nr_labels_to_add then return match(stritems, inds, query, do_sync) end
+    if not label_idx or label_idx > data.max_labels then return match(stritems, inds, query, do_sync) end
 
-    -- Apply label
-    stritems[label_idx] = string.format("%s%s", L.make_unique_label(label_idx), stritems[label_idx])
+    -- Apply label: In most cases, the items is shown as first item in list
+    stritems[label_idx] = string.format("%s%s", char, stritems[label_idx])
     data.idx_selected = label_idx -- remember to restore stritem if needed on next query input
     return match(stritems, inds, query, do_sync)
   end
@@ -70,36 +62,40 @@ end
 
 L.make_override_show = function(show, data)
   local enter_key = vim.api.nvim_replace_termcodes("<cr>", true, true, true)
-  local esc_key = vim.api.nvim_replace_termcodes("<esc>", true, true, true)
   local first_item -- detect scrolling
   local autosubmit -- all available items must fit in window and have a label
   return function(buf_id, items, query, opts) -- items are items --displayed--
-    if data.idx_selected and autosubmit then -- label matched, handle autosubmit
-      data.idx_selected = nil
+    if data.idx_selected and autosubmit then -- label matched
       vim.api.nvim_feedkeys(enter_key, "n", false)
-      vim.api.nvim_feedkeys(esc_key, "n", false)
+      vim.api.nvim_feedkeys("<Ignore>", "n", false)
       return
     end
 
     if not first_item then first_item = items[1] end
     if not autosubmit then
-      data.nr_labels_to_add = math.min(#L.labels, #items)
-      autosubmit = #(Pick.get_picker_items() or {}) == data.nr_labels_to_add
+      data.max_labels = math.min(#L.labels, #items)
+      autosubmit = #(Pick.get_picker_items() or {}) == data.max_labels
     end
 
     show(buf_id, items, query, opts)
     L.clear_namespace(buf_id, L.ns_id.labels)
-
-    -- Decide if clues can be shown
     if not (#query == 0 and first_item == items[1]) then return end
 
     local hl = autosubmit and "MiniPickMatchRanges" or "Comment"
     for i, label in ipairs(L.labels) do
-      if i > #items then break end
+      if i > data.max_labels then break end
       local virt_text = { { string.format("[%s]", label), hl } }
       local extmark_opts = { hl_mode = "combine", priority = 200, virt_text = virt_text, virt_text_pos = "eol" }
       L.set_extmark(buf_id, L.ns_id.labels, i - 1, 0, extmark_opts)
     end
+  end
+end
+
+L.make_override_choose = function(choose, data)
+  -- must override, in edge cases the items is not shown as first item in list
+  return function(item)
+    if data.idx_selected then item = Pick.get_picker_items()[data.idx_selected] end
+    return choose(item)
   end
 end
 
@@ -108,12 +104,13 @@ end
 L.make_override_start = function(start)
   return function(opts)
     Pick.start = start -- Picker started, restore original
-    local data = { -- Maybe: A setting in opts to disable autosubmit per picker
-      idx_selected = nil, -- set in match when label is processed
-      nr_labels_to_add = nil, -- initialized in show
+    local data = {
+      idx_selected = nil, -- set in match when label is detected
+      max_labels = nil, -- set in show
     }
     opts.source.match = L.make_override_match(opts.source.match or Pick.default_match, data)
     opts.source.show = L.make_override_show(opts.source.show or Pick.default_show, data)
+    opts.source.choose = L.make_override_choose(opts.source.choose or Pick.default_choose, data)
 
     return start(opts)
   end
@@ -138,7 +135,7 @@ end
 Pick.registry.labeled_buffers = function(local_opts, _)
   local show_icons = true
   local source = { show = not show_icons and Pick.default_show or nil }
-  local window = true and L.make_centered_window() or nil -- consistency with grapple
+  local window = true and L.make_centered_window() or nil
   local opts = { source = source, window = window }
 
   local picker_func = L.make_labeled(Pick.builtin.buffers)
