@@ -114,9 +114,7 @@ end
 
 -- Public  ================================================================
 
--- NOTE:  only works if H.advance in pick(line 2075) does not schedule the MiniPickStart event!
--- Take opts = { label = true } is into account,
--- and override functions opts.source.{match, show, choose}
+-- Take opts = { label = true } into account and  override opts.source.{match, show, choose}
 Extra.pickers_enable_label_in_options = function()
   local group = vim.api.nvim_create_augroup("minipick-hooks", { clear = true })
   vim.api.nvim_create_autocmd("User", {
