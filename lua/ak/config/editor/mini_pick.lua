@@ -28,7 +28,7 @@ H.start_hooks = {}
 H.stop_hooks = {}
 
 H.setup_autocommands = function()
-  local group = vim.api.nvim_create_augroup("minipick-hooks", { clear = true })
+  local group = vim.api.nvim_create_augroup("minipick-custom-hooks", { clear = true })
   local function au(pattern, desc, hooks)
     vim.api.nvim_create_autocmd({ "User" }, {
       pattern = pattern,
@@ -105,11 +105,12 @@ EPL.invert = function(tbl_in)
 end
 EPL.labels = vim.split("abcdefghijklmnopqrstuvwxyz", "")
 EPL.labels_inv = EPL.invert(EPL.labels)
-EPL.ns_id = { labels = vim.api.nvim_create_namespace("MiniPickLabels") } -- clues
+EPL.ns_id = { labels = vim.api.nvim_create_namespace("MiniExtraLabeledPick") } -- clues
 
 -- Copied from mini.pick:
 EPL.clear_namespace = function(buf_id, ns_id) pcall(vim.api.nvim_buf_clear_namespace, buf_id, ns_id, 0, -1) end
 EPL.set_extmark = function(...) pcall(vim.api.nvim_buf_set_extmark, ...) end
+EPL.ui_select_marker = function() end
 
 EPL.make_override_match = function(match, data)
   -- premisse: items and stritems are constant and related, having the same ordering and length.
@@ -161,8 +162,13 @@ EPL.make_override_show = function(show, data)
     for i, label in ipairs(EPL.labels) do
       if i > data.max_labels then break end
       local virt_text = { { string.format("[%s]", label), hl } }
-      local extmark_opts = { hl_mode = "combine", priority = 200, virt_text = virt_text, virt_text_pos = "eol" }
-      EPL.set_extmark(buf_id, EPL.ns_id.labels, i - 1, 0, extmark_opts)
+      local extmark_opts = { hl_mode = "combine", priority = 200, virt_text = virt_text }
+
+      -- Add clue to start or end of line, or both:
+      for _, virt_text_pos in ipairs({ "eol" }) do -- { "inline", "eol" }
+        extmark_opts.virt_text_pos = virt_text_pos
+        EPL.set_extmark(buf_id, EPL.ns_id.labels, i - 1, 0, extmark_opts)
+      end
     end
   end
 end
@@ -175,11 +181,11 @@ EPL.make_override_choose = function(choose, data)
   end
 end
 
--- Extra: Add feature to label pickers  ================================================================
+-- Extra: Implements feature adding labels to pickers  ======================================================
 
 -- Take opts = { label = true } into account and  override opts.source.{match, show, choose}
 Extra.pickers_enable_label_in_options = function()
-  local group = vim.api.nvim_create_augroup("minipick-hooks", { clear = true })
+  local group = vim.api.nvim_create_augroup("miniextra-labeled-pick", { clear = true })
   vim.api.nvim_create_autocmd("User", {
     pattern = "MiniPickStart",
     group = group,
@@ -189,10 +195,7 @@ Extra.pickers_enable_label_in_options = function()
       if not opts then return end
 
       local should_label = opts.label
-
-      -- FIXME: Also activates labels in other pickers
-      -- if not should_label and vim.ui.select == Extra.pickers.labeled_ui_select then should_label = true end
-
+      if should_label == nil and vim.ui.select == EPL.ui_select_marker then should_label = true end
       if not should_label then return end
 
       local data = {
@@ -206,12 +209,19 @@ Extra.pickers_enable_label_in_options = function()
     end,
   })
 end
-Extra.pickers.labeled_ui_select = function(items, opts, on_choice) Pick.ui_select(items, opts, on_choice) end
+
+Extra.pickers.labeled_ui_select = function(items, opts, on_choice)
+  local ui_select_org = vim.ui.select
+  vim.ui.select = EPL.ui_select_marker
+  Pick.ui_select(items, opts, on_choice)
+  vim.ui.select = ui_select_org
+end
 
 -- Custom pickers  ================================================================
 
 -- https://github.com/echasnovski/mini.nvim/discussions/518#discussioncomment-7373556
 -- Implements: For TODOs in a project, use builtin.grep.
+-- Note: label is possible, but prevents preview on other items
 Pick.registry.todo_comments = function(patterns) --hipatterns.config.highlighters
   local function find_todo(item)
     for _, hl in pairs(patterns) do
@@ -254,6 +264,7 @@ end
 -- https://github.com/echasnovski/mini.nvim/discussions/951
 -- Previewing multiple themes:
 -- Press tab for preview, and continue with ctrl-n and ctrl-p
+-- Note: label is possible, but most relevant items are not on top
 local selected_colorscheme = nil
 Pick.registry.colors = function()
   local on_start = function()
@@ -267,6 +278,7 @@ Pick.registry.colors = function()
   if H.start_hooks[name] == nil then H.start_hooks[name] = on_start end
   if H.stop_hooks[name] == nil then H.stop_hooks[name] = on_stop end
   return MiniPick.start({
+    label = true,
     source = {
       name = name,
       items = H.colors(),
@@ -386,11 +398,8 @@ local function keys()
   local labeled_his_cmd = function() extra.history({ scope = ":" }, { label = true }) end
   map("<leader>f:", labeled_his_cmd, { desc = "':' history" })
   map("<leader>fa", function() extra.git_hunks({ scope = "staged" }) end, { desc = "Staged hunks" })
-  map(
-    "<leader>fA",
-    function() extra.git_hunks({ path = vim.fn.expand("%"), scope = "staged" }) end,
-    { desc = "Staged hunks (current)" }
-  )
+  local staged_buffer = function() extra.git_hunks({ path = vim.fn.expand("%"), scope = "staged" }) end
+  map("<leader>fA", staged_buffer, { desc = "Staged hunks (current)" })
   map("<leader>fb", builtin.buffers, { desc = "Buffer pick" })
   map("<leader>fc", extra.git_commits, { desc = "Git commits" })
   map("<leader>fC", function() extra.git_commits({ path = vim.fn.expand("%") }) end, { desc = "Git commits buffer" })
@@ -413,7 +422,7 @@ local function keys()
   map("<leader>fR", function() extra.oldfiles({ current_dir = true }) end, { desc = "Recent (rel)" })
   map("<leader>fs", function() extra.lsp({ scope = "document_symbol" }) end, { desc = "Symbols buffer" })
   map("<leader>fS", function() extra.lsp({ scope = "workspace_symbol" }) end, { desc = "Symbols workspace" })
-  -- <leader>ft: todo comments, defined in hipatterns config
+  -- <leader>ft: todo comments, see provide_picker and ak.config.editor.mini_hipatterns.lua
   map("<leader>fu", builtin.resume, { desc = "Resume picker" })
   -- In visual mode: Yank some text, :Pick grep and put(ctrl-r ")
   map("<leader>fw", function() builtin.grep({ pattern = vim.fn.expand("<cword>") }) end, { desc = "Word" })
@@ -429,7 +438,7 @@ local function keys()
 
   -- fuzzy other
   map("<leader>fo:", extra.commands, { desc = "Commands" })
-  -- <leader>foc, defined in colors
+  -- <leader>foc: colors, see provide_picker and ak.deps.colors.lua
   map("<leader>foC", function() extra.list({ scope = "change" }) end, { desc = "Changes" })
   map("<leader>fof", builtin.files, { desc = "Files rg" })
   map("<leader>foj", function() extra.list({ scope = "jump" }) end, { desc = "Jumps" })
@@ -438,19 +447,6 @@ local function keys()
   map("<leader>foo", extra.options, { desc = "Options" })
   map("<leader>for", extra.registers, { desc = "Registers" })
   map("<leader>fot", extra.treesitter, { desc = "Treesitter" })
-
-  -- POC labeled ui_select
-  local on_choice = function(choice)
-    if not choice then return end
-    vim.notify(choice)
-  end
-  local labeled_ui_select = function()
-    local org = vim.ui.select
-    vim.ui.select = Extra.pickers.labeled_ui_select
-    vim.ui.select({ "Hello", "Helloooo", "Helloooooo" }, { prompt = "Say hi" }, on_choice)
-    vim.ui.select = org
-  end
-  map("<leader>fU", labeled_ui_select, { desc = "Labeled ui select", silent = true })
 end
 
 local function setup()
@@ -464,8 +460,8 @@ local function setup()
 
   keys()
   provide_picker()
-  vim.ui.select = Pick.ui_select
-  -- vim.ui.select = Extra.pickers.labeled_ui_select
+  -- vim.ui.select = Pick.ui_select
+  vim.ui.select = Extra.pickers.labeled_ui_select
 end
 
 setup()
