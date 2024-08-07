@@ -130,7 +130,7 @@ ELP.make_override_match = function(match, data)
     local label_idx = ELP.labels_inv[char]
     if not label_idx or label_idx > data.max_labels then return match(stritems, inds, query, do_sync) end
 
-    -- Apply label: In most cases, the items is shown as first item in list
+    -- Apply label: In most cases, the item is shown as first item in list
     stritems[label_idx] = string.format("%s%s", char, stritems[label_idx])
     data.idx_selected = label_idx -- remember to restore stritem if needed on next query input
     return match(stritems, inds, query, do_sync)
