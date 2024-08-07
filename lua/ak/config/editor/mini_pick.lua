@@ -82,7 +82,7 @@ H.make_centered_window = function() -- copied from :h MiniPick
   }
 end
 
--- EPL: "Extra Labeled Picker"" feature. Has similar purpose as "H = {}" in mini.extra
+-- ELP: "Extra Labeled Picker" feature. Has similar purpose as "H = {}" in mini.extra
 -- Useful when: Picker has limited items (ie buffers, ui_select: hotkeys activated)
 -- Useful when: Picker displays most valuable results on top(ie oldfiles, visits)
 -- Less useful: Pick.files, top results have no extra meaning
@@ -95,24 +95,24 @@ end
 -- d. Press enter
 -- e.  Note that the labeled item is opened correctly, instead of the first item displayed
 --
-local EPL = {}
+local ELP = {}
 
-EPL.invert = function(tbl_in)
+ELP.invert = function(tbl_in)
   local tbl_out = {}
   -- stylua: ignore
   for idx, l in ipairs(tbl_in) do tbl_out[l] = idx end
   return tbl_out
 end
-EPL.labels = vim.split("abcdefghijklmnopqrstuvwxyz", "")
-EPL.labels_inv = EPL.invert(EPL.labels)
-EPL.ns_id = { labels = vim.api.nvim_create_namespace("MiniExtraLabeledPick") } -- clues
+ELP.labels = vim.split("abcdefghijklmnopqrstuvwxyz", "")
+ELP.labels_inv = ELP.invert(ELP.labels)
+ELP.ns_id = { labels = vim.api.nvim_create_namespace("MiniExtraLabeledPick") } -- clues
 
 -- Copied from mini.pick:
-EPL.clear_namespace = function(buf_id, ns_id) pcall(vim.api.nvim_buf_clear_namespace, buf_id, ns_id, 0, -1) end
-EPL.set_extmark = function(...) pcall(vim.api.nvim_buf_set_extmark, ...) end
-EPL.ui_select_marker = function() end
+ELP.clear_namespace = function(buf_id, ns_id) pcall(vim.api.nvim_buf_clear_namespace, buf_id, ns_id, 0, -1) end
+ELP.set_extmark = function(...) pcall(vim.api.nvim_buf_set_extmark, ...) end
+ELP.ui_select_marker = "+ELP+"
 
-EPL.make_override_match = function(match, data)
+ELP.make_override_match = function(match, data)
   -- premisse: items and stritems are constant and related, having the same ordering and length.
   return function(stritems, inds, query, do_sync)
     -- Restore previously modified stritem
@@ -127,7 +127,7 @@ EPL.make_override_match = function(match, data)
 
     -- Find label idx
     local char = query[1]
-    local label_idx = EPL.labels_inv[char]
+    local label_idx = ELP.labels_inv[char]
     if not label_idx or label_idx > data.max_labels then return match(stritems, inds, query, do_sync) end
 
     -- Apply label: In most cases, the items is shown as first item in list
@@ -137,7 +137,7 @@ EPL.make_override_match = function(match, data)
   end
 end
 
-EPL.make_override_show = function(show, data)
+ELP.make_override_show = function(show, data)
   local enter_key = vim.api.nvim_replace_termcodes("<cr>", true, true, true)
   local first_item -- detect scrolling
   local autosubmit -- all available items must fit in window and have a label
@@ -150,16 +150,16 @@ EPL.make_override_show = function(show, data)
 
     if not first_item then first_item = items[1] end
     if not autosubmit then
-      data.max_labels = math.min(#EPL.labels, #items)
+      data.max_labels = math.min(#ELP.labels, #items)
       autosubmit = #(Pick.get_picker_items() or {}) == data.max_labels
     end
 
     show(buf_id, items, query, opts)
-    EPL.clear_namespace(buf_id, EPL.ns_id.labels)
+    ELP.clear_namespace(buf_id, ELP.ns_id.labels)
     if not (#query == 0 and first_item == items[1]) then return end
 
     local hl = autosubmit and "MiniPickMatchRanges" or "Comment"
-    for i, label in ipairs(EPL.labels) do
+    for i, label in ipairs(ELP.labels) do
       if i > data.max_labels then break end
       local virt_text = { { string.format("[%s]", label), hl } }
       local extmark_opts = { hl_mode = "combine", priority = 200, virt_text = virt_text }
@@ -167,13 +167,13 @@ EPL.make_override_show = function(show, data)
       -- Add clue to start or end of line, or both:
       for _, virt_text_pos in ipairs({ "eol" }) do -- { "inline", "eol" }
         extmark_opts.virt_text_pos = virt_text_pos
-        EPL.set_extmark(buf_id, EPL.ns_id.labels, i - 1, 0, extmark_opts)
+        ELP.set_extmark(buf_id, ELP.ns_id.labels, i - 1, 0, extmark_opts)
       end
     end
   end
 end
 
-EPL.make_override_choose = function(choose, data)
+ELP.make_override_choose = function(choose, data)
   -- must override, in edge cases the item is not shown first in the list
   return function(item)
     if data.idx_selected then item = Pick.get_picker_items()[data.idx_selected] end
@@ -195,26 +195,31 @@ Extra.pickers_enable_label_in_options = function()
       if not opts then return end
 
       local should_label = opts.label
-      if should_label == nil and vim.ui.select == EPL.ui_select_marker then should_label = true end
+      if should_label == nil and string.find(opts.source.name, ELP.ui_select_marker, 1, true) then
+        should_label = true
+        opts.source.name = string.sub(opts.source.name, #ELP.ui_select_marker + 1)
+      end
       if not should_label then return end
 
       local data = {
         idx_selected = nil, -- set in match when label is detected
         max_labels = nil, -- set in show
       }
-      opts.source.match = EPL.make_override_match(opts.source.match, data)
-      opts.source.show = EPL.make_override_show(opts.source.show, data)
-      opts.source.choose = EPL.make_override_choose(opts.source.choose, data)
+      opts.source.match = ELP.make_override_match(opts.source.match, data)
+      opts.source.show = ELP.make_override_show(opts.source.show, data)
+      opts.source.choose = ELP.make_override_choose(opts.source.choose, data)
       Pick.set_picker_opts(opts)
     end,
   })
 end
 
 Extra.pickers.labeled_ui_select = function(items, opts, on_choice)
-  local ui_select_org = vim.ui.select
-  vim.ui.select = EPL.ui_select_marker
+  -- kind (string|nil) Arbitrary hint string indicating the item shape.
+  -- Plugins reimplementing `vim.ui.select` may wish to use this to infer
+  -- the structure or semantics of `items`, or the context in which select() was called.
+  if not opts.prompt then opts.prompt = "Select one of:" end -- explicitly set default
+  opts.prompt = string.format("%s%s", ELP.ui_select_marker, opts.prompt)
   Pick.ui_select(items, opts, on_choice)
-  vim.ui.select = ui_select_org
 end
 
 -- Custom pickers  ================================================================

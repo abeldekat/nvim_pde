@@ -1,4 +1,4 @@
--- NOTE: Used for exchange:
+-- Note: Used for exchange:
 -- gx in Normal mode calls vim.ui.open() on whatever is under the cursor,
 -- which shells out to your operating system’s “open” capability
 
