@@ -1,8 +1,3 @@
--- UI consists from a single window capable of displaying three different views:
--- - "Main" - where current query matches are shown.
--- - "Preview" - preview of current item (toggle with `<Tab>`).
--- - "Info" - general info about picker and its state (toggle with `<S-Tab>`).
-
 -- - If query starts with `'`, the match is exact.
 -- - If query starts with `^`, the match is exact at start.
 -- - If query ends with `$`, the match is exact at end.

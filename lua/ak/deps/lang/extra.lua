@@ -20,10 +20,10 @@ local function add_md(source, to_require, hook)
 end
 
 local function markdown()
-  local function build_markdown_preview()
-    later(function() vim.fn["mkdp#util#install"]() end)
-  end
-  add_md("iamcco/markdown-preview.nvim", "markdown_preview", build_markdown_preview)
+  -- local function build_markdown_preview()
+  --   later(function() vim.fn["mkdp#util#install"]() end)
+  -- end
+  -- add_md("iamcco/markdown-preview.nvim", "markdown_preview", build_markdown_preview)
 
   local function build_peek(params)
     later(function()
