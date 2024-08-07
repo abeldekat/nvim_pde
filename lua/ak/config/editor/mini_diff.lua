@@ -38,16 +38,16 @@ vim.api.nvim_create_autocmd("User", {
   desc = "Diff in statusline",
 })
 
-local rhs = function() return MiniDiff.operator("yank") .. "gh" end
-vim.keymap.set("n", "ghy", rhs, { expr = true, remap = true, desc = "Copy hunk's reference lines" })
-vim.keymap.set(
-  "n",
-  "<leader>go",
-  function() require("mini.diff").toggle_overlay(0) end,
-  { desc = "Toggle mini.diff overlay", silent = true }
-)
+local map = vim.keymap.set
+local yank_hunk = function() return MiniDiff.operator("yank") .. "gh" end
+map("n", "ghy", yank_hunk, { expr = true, remap = true, desc = "Copy hunk's reference lines" })
+local toggle_overlay = function() require("mini.diff").toggle_overlay(0) end
+map("n", "<leader>go", toggle_overlay, { desc = "Toggle mini.diff overlay", silent = true })
 
-require("mini.diff").setup({
-  wrap_goto = true,
-  -- view = { style = "sign", signs = { add = "▎", change = "▎", delete = "" } },
-})
+map("n", "gq", function() -- Overrides format the lines that {motion} moves over.
+  vim.fn.setqflist(MiniDiff.export("qf"))
+  vim.cmd("copen")
+end, { desc = "Quickfix diffs" })
+
+-- view = { style = "sign", signs = { add = "▎", change = "▎", delete = "" } },
+require("mini.diff").setup({ wrap_goto = true })
