@@ -81,15 +81,6 @@ end
 -- Useful when: Picker has limited items (ie buffers, ui_select: hotkeys activated)
 -- Useful when: Picker displays most valuable results on top(ie oldfiles, visits)
 -- Less useful: Pick.files, top results have no extra meaning
---
--- Edge cases that are hard to fix:
--- 1:
--- a. Pick buffers, labeled, lots of buffers starting with "lua", autosubmit is not active
--- b. Press label 'l'(also first letter of "lua")
--- c  Note that the labeled item is -not- placed as first item in the list
--- d. Press enter
--- e.  Note that the labeled item is opened correctly, instead of the first item displayed
---
 local ELP = {}
 
 ELP.invert = function(tbl_in)
@@ -101,11 +92,11 @@ end
 ELP.labels = vim.split("abcdefghijklmnopqrstuvwxyz", "")
 ELP.labels_inv = ELP.invert(ELP.labels)
 ELP.ns_id = { labels = vim.api.nvim_create_namespace("MiniExtraLabeledPick") } -- clues
+ELP.ui_select_marker = "+ELP+"
 
 -- Copied from mini.pick:
 ELP.clear_namespace = function(buf_id, ns_id) pcall(vim.api.nvim_buf_clear_namespace, buf_id, ns_id, 0, -1) end
 ELP.set_extmark = function(...) pcall(vim.api.nvim_buf_set_extmark, ...) end
-ELP.ui_select_marker = "+ELP+"
 
 ELP.make_override_match = function(match, data)
   -- premisse: items and stritems are constant and related, having the same ordering and length.
@@ -132,44 +123,70 @@ ELP.make_override_match = function(match, data)
   end
 end
 
+ELP.autosubmit = function(key)
+  vim.api.nvim_feedkeys(key, "n", false)
+  vim.api.nvim_feedkeys("<Ignore>", "n", false)
+end
+
+-- This function fixes the following special case:
+-- a. Pick buffers, labeled, lots of buffers starting with "lua", autosubmit is not active
+-- b. Press label 'l'(also first letter of "lua")
+-- c  Note that the labeled item is -not- placed as first item in the list
+-- d. Press enter
+-- e. Note that the labeled item is opened correctly, because choose is overridden
+ELP.move_labeled_item_to_first_position = function(items, idx_selected)
+  local corrected = {}
+  corrected[1] = items[idx_selected]
+  table.remove(items, idx_selected)
+  for i = 2, #items + 1 do
+    corrected[i] = items[i - 1]
+  end
+  return corrected
+end
+
+ELP.add_clues = function(buf_id, max_labels, hl)
+  for i, label in ipairs(ELP.labels) do
+    if i > max_labels then break end
+    local virt_text = { { string.format("[%s]", label), hl } }
+    local extmark_opts = { hl_mode = "combine", priority = 200, virt_text = virt_text }
+
+    -- Add clue to start or end of line, or both:
+    for _, virt_text_pos in ipairs({ "eol" }) do -- { "inline", "eol" }
+      extmark_opts.virt_text_pos = virt_text_pos
+      ELP.set_extmark(buf_id, ELP.ns_id.labels, i - 1, 0, extmark_opts)
+    end
+  end
+end
+
 ELP.make_override_show = function(show, data)
   local enter_key = vim.api.nvim_replace_termcodes("<cr>", true, true, true)
-  local first_item -- detect scrolling
-  local autosubmit -- all available items must fit in window and have a label
-  return function(buf_id, items, query, opts) -- items are items --displayed--
-    if data.idx_selected and autosubmit then -- label matched
-      vim.api.nvim_feedkeys(enter_key, "n", false)
-      vim.api.nvim_feedkeys("<Ignore>", "n", false)
-      return
+  local first_item
+  local autosubmit
+  return function(buf_id, items, query, opts) -- items contain as many as displayed
+    if data.idx_selected then -- user typed a valid label
+      if autosubmit then return ELP.autosubmit(enter_key) end
+
+      local current_ind = Pick.get_picker_matches().current_ind
+      if #items > 1 and current_ind ~= data.idx_selected then
+        items = ELP.move_labeled_item_to_first_position(items, data.idx_selected)
+      end
     end
 
-    if not first_item then first_item = items[1] end
+    if not first_item then first_item = items[1] end -- initialize
     if not autosubmit then
       data.max_labels = math.min(#ELP.labels, #items)
       autosubmit = #(Pick.get_picker_items() or {}) == data.max_labels
     end
 
-    show(buf_id, items, query, opts)
-    ELP.clear_namespace(buf_id, ELP.ns_id.labels)
-    if not (#query == 0 and first_item == items[1]) then return end
+    show(buf_id, items, query, opts) -- show
+    ELP.clear_namespace(buf_id, ELP.ns_id.labels) -- remove clues
+    if not (#query == 0 and first_item == items[1]) then return end -- scrolled, no clues
 
-    local hl = autosubmit and "MiniPickMatchRanges" or "Comment"
-    for i, label in ipairs(ELP.labels) do
-      if i > data.max_labels then break end
-      local virt_text = { { string.format("[%s]", label), hl } }
-      local extmark_opts = { hl_mode = "combine", priority = 200, virt_text = virt_text }
-
-      -- Add clue to start or end of line, or both:
-      for _, virt_text_pos in ipairs({ "eol" }) do -- { "inline", "eol" }
-        extmark_opts.virt_text_pos = virt_text_pos
-        ELP.set_extmark(buf_id, ELP.ns_id.labels, i - 1, 0, extmark_opts)
-      end
-    end
+    ELP.add_clues(buf_id, data.max_labels, autosubmit and "MiniPickMatchRanges" or "Comment")
   end
 end
 
 ELP.make_override_choose = function(choose, data)
-  -- must override, in edge cases the item is not shown first in the list
   return function(item)
     if data.idx_selected then item = Pick.get_picker_items()[data.idx_selected] end
     return choose(item)
@@ -457,11 +474,11 @@ local function setup()
 
   H.setup_autocommands()
   Extra.pickers_enable_label_in_options() -- also uses MiniPickStart event
+  -- vim.ui.select = Pick.ui_select
+  vim.ui.select = Extra.pickers.labeled_ui_select
 
   keys()
   provide_picker()
-  -- vim.ui.select = Pick.ui_select
-  vim.ui.select = Extra.pickers.labeled_ui_select
 end
 
 setup()
