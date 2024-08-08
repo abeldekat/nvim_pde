@@ -176,42 +176,42 @@ ELP.make_override_choose = function(choose, data)
   end
 end
 
+ELP.on_pick_start = function()
+  local opts = Pick.get_picker_opts()
+  if not opts then return end
+
+  local label = opts.label
+  local src = opts.source
+  if label == nil and src.name and string.sub(src.name, 1, #ELP.ui_select_marker) == ELP.ui_select_marker then
+    src.name = string.sub(src.name, #ELP.ui_select_marker + 1)
+    label = true -- vim.ui.select is set to labeled_ui_select
+  end
+  if not label then return end
+
+  local data = {
+    idx_selected = nil, -- set in match when label is detected
+    max_labels = nil, -- set in show
+  }
+  src.match = ELP.make_override_match(src.match, data)
+  src.show = ELP.make_override_show(src.show, data)
+  src.choose = ELP.make_override_choose(src.choose, data)
+  Pick.set_picker_opts(opts)
+end
+
 -- Extra: Implements feature adding labels to pickers  ======================================================
 
--- Take opts = { label = true } into account and  override opts.source.{match, show, choose}
+-- Take opts.label into account and override opts.source.{match, show, choose}
 Extra.pickers_enable_label_in_options = function()
   local group = vim.api.nvim_create_augroup("miniextra-labeled-pick", { clear = true })
   vim.api.nvim_create_autocmd("User", {
     pattern = "MiniPickStart",
     group = group,
     desc = "Augment pickers with labels",
-    callback = function()
-      local opts = Pick.get_picker_opts()
-      if not opts then return end
-
-      local should_label = opts.label
-      if should_label == nil and string.find(opts.source.name, ELP.ui_select_marker, 1, true) then
-        should_label = true
-        opts.source.name = string.sub(opts.source.name, #ELP.ui_select_marker + 1)
-      end
-      if not should_label then return end
-
-      local data = {
-        idx_selected = nil, -- set in match when label is detected
-        max_labels = nil, -- set in show
-      }
-      opts.source.match = ELP.make_override_match(opts.source.match, data)
-      opts.source.show = ELP.make_override_show(opts.source.show, data)
-      opts.source.choose = ELP.make_override_choose(opts.source.choose, data)
-      Pick.set_picker_opts(opts)
-    end,
+    callback = ELP.on_pick_start,
   })
 end
 
 Extra.pickers.labeled_ui_select = function(items, opts, on_choice)
-  -- kind (string|nil) Arbitrary hint string indicating the item shape.
-  -- Plugins reimplementing `vim.ui.select` may wish to use this to infer
-  -- the structure or semantics of `items`, or the context in which select() was called.
   if not opts.prompt then opts.prompt = "Select one of:" end -- explicitly set default
   opts.prompt = string.format("%s%s", ELP.ui_select_marker, opts.prompt)
   Pick.ui_select(items, opts, on_choice)
