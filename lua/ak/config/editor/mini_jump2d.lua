@@ -18,26 +18,35 @@
 -- The first character needs to be typed as is(some chars are more difficult)
 
 local Jump2d = require("mini.jump2d")
+local key = "<CR>" -- "s"
 
 local function map(mode, rhs, opts) -- adapted from mini.jump2d
-  local lhs = "<CR>" -- "s"
   opts = vim.tbl_deep_extend("force", { silent = true }, opts or {})
-  vim.keymap.set(mode, lhs, rhs, opts)
+  vim.keymap.set(mode, key, rhs, opts)
 end
-local function start_in_normal_mode()
+local function create_autocmds()
+  local augroup = vim.api.nvim_create_augroup("MiniJump2dCustom", {})
+  local au = function(e, p, c, desc)
+    vim.api.nvim_create_autocmd(e, { pattern = p, group = augroup, callback = c, desc = desc })
+  end
+  local revert_cr = function() vim.keymap.set("n", key, key, { buffer = true }) end
+
+  au("FileType", "qf", revert_cr, "Revert " .. key)
+  au("CmdwinEnter", "*", revert_cr, "Revert " .. key)
+end
+
+create_autocmds()
+map("n", function()
   local builtin = Jump2d.builtin_opts.word_start
   builtin.view = { n_steps_ahead = 10 }
   Jump2d.start(builtin)
-end
-local function start()
+end, { desc = "Start 2d jumping" })
+map({ "x", "o" }, function()
   local builtin = Jump2d.builtin_opts.single_character
   Jump2d.start(builtin)
-end
-
+end, { desc = "Start 2d jumping" })
 Jump2d.setup({
   labels = "cdefghijklmnoprstuvwxy", -- improve typing: removed b and qaz
-  mappings = { start_jumping = "" }, -- no mappings
+  mappings = { start_jumping = "" }, -- no mappings, using 2 different builtins
   view = { dim = true }, -- flashy, but better label visibility.
 })
-map("n", start_in_normal_mode, { desc = "Start 2d jumping" })
-map({ "x", "o" }, start, { desc = "Start 2d jumping" })
