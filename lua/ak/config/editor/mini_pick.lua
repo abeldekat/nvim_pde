@@ -83,13 +83,15 @@ end
 -- Less useful: Pick.files, top results have no extra meaning
 local ELP = {}
 
+ELP.labels = vim.split("abcdefghijklmnopqrstuvwxyz", "") -- configurable
+ELP.virt_clues_pos = { "eol" } -- configurable { "inline" }, { "inline", "eol"}
+
 ELP.invert = function(tbl_in)
   local tbl_out = {}
   -- stylua: ignore
   for idx, l in ipairs(tbl_in) do tbl_out[l] = idx end
   return tbl_out
 end
-ELP.labels = vim.split("abcdefghijklmnopqrstuvwxyz", "")
 ELP.labels_inv = ELP.invert(ELP.labels)
 ELP.ns_id = { labels = vim.api.nvim_create_namespace("MiniExtraLabeledPick") } -- clues
 ELP.ui_select_marker = "+ELP+"
@@ -98,27 +100,25 @@ ELP.ui_select_marker = "+ELP+"
 ELP.clear_namespace = function(buf_id, ns_id) pcall(vim.api.nvim_buf_clear_namespace, buf_id, ns_id, 0, -1) end
 ELP.set_extmark = function(...) pcall(vim.api.nvim_buf_set_extmark, ...) end
 
-ELP.make_override_match = function(match, data)
+ELP.make_override_match = function(match, picker_ctx)
   -- premisse: items and stritems are constant and related, having the same ordering and length.
   return function(stritems, inds, query, do_sync)
-    -- Restore previously modified stritem
-    if data.idx_selected then
-      local idx = data.idx_selected
-      stritems[idx] = string.sub(stritems[idx], 2)
+    if picker_ctx.labeled_ind then -- restore previously modified stritem
+      stritems[picker_ctx.labeled_ind] = string.sub(stritems[picker_ctx.labeled_ind], 2)
     end
-    data.idx_selected = nil
+    picker_ctx.labeled_ind = nil
 
-    -- Can query hold a label
+    -- Query only holds a potential label when it contains 1 single char
     if #query ~= 1 then return match(stritems, inds, query, do_sync) end
 
-    -- Find label idx
+    -- Find index of potential label
     local char = query[1]
-    local label_idx = ELP.labels_inv[char]
-    if not label_idx or label_idx > data.max_labels then return match(stritems, inds, query, do_sync) end
+    local labeled_ind = ELP.labels_inv[char]
+    if not labeled_ind or labeled_ind > picker_ctx.max_labels then return match(stritems, inds, query, do_sync) end
 
-    -- Apply label: In most cases, the item is shown as first item in list
-    stritems[label_idx] = string.format("%s%s", char, stritems[label_idx])
-    data.idx_selected = label_idx -- remember to restore stritem if needed on next query input
+    -- Apply valid label: In most cases, the item is shown as first item in list
+    picker_ctx.labeled_ind = labeled_ind
+    stritems[labeled_ind] = string.format("%s%s", char, stritems[labeled_ind])
     return match(stritems, inds, query, do_sync)
   end
 end
@@ -134,84 +134,92 @@ end
 -- c  Note that the labeled item is -not- placed as first item in the list
 -- d. Press enter
 -- e. Note that the labeled item is opened correctly, because choose is overridden
-ELP.move_labeled_item_to_first_position = function(items, idx_selected)
-  local corrected = {}
-  corrected[1] = items[idx_selected]
-  table.remove(items, idx_selected)
-  for i = 2, #items + 1 do
-    corrected[i] = items[i - 1]
+ELP.move_to_first_position = function(items, labeled_ind)
+  local result = {}
+  result[1] = items[labeled_ind]
+  table.remove(items, labeled_ind)
+  for i, item in ipairs(items) do
+    result[i + 1] = item
   end
-  return corrected
+  return result
 end
 
-ELP.add_clues = function(buf_id, max_labels, hl)
+ELP.add_clues = function(buf_id, max_labels, autosubmit)
+  local hl = autosubmit and "MiniPickMatchRanges" or "Comment"
   for i, label in ipairs(ELP.labels) do
     if i > max_labels then break end
     local virt_text = { { string.format("[%s]", label), hl } }
     local extmark_opts = { hl_mode = "combine", priority = 200, virt_text = virt_text }
 
     -- Add clue to start or end of line, or both:
-    for _, virt_text_pos in ipairs({ "eol" }) do -- { "inline", "eol" }
+    for _, virt_text_pos in ipairs(ELP.virt_clues_pos) do
       extmark_opts.virt_text_pos = virt_text_pos
       ELP.set_extmark(buf_id, ELP.ns_id.labels, i - 1, 0, extmark_opts)
     end
   end
 end
 
-ELP.make_override_show = function(show, data)
+ELP.make_ctx_for_show = function(items, picker_ctx)
+  local ctx = {}
+  ctx.first_item = items[1] or {}
+  ctx.autosubmit = #picker_ctx.all_items == picker_ctx.max_labels
+  return ctx
+end
+
+ELP.make_override_show = function(show, picker_ctx)
   local enter_key = vim.api.nvim_replace_termcodes("<cr>", true, true, true)
-  local first_item
-  local autosubmit
+  local ctx
   return function(buf_id, items, query, opts) -- items contain as many as displayed
-    if data.idx_selected then -- user typed a valid label
-      if autosubmit then return ELP.autosubmit(enter_key) end
-
-      local current_ind = Pick.get_picker_matches().current_ind
-      if #items > 1 and current_ind ~= data.idx_selected then
-        items = ELP.move_labeled_item_to_first_position(items, data.idx_selected)
-      end
-    end
-
-    if not first_item then first_item = items[1] end -- initialize
-    if not autosubmit then
-      data.max_labels = math.min(#ELP.labels, #items)
-      autosubmit = #(Pick.get_picker_items() or {}) == data.max_labels
-    end
-
-    show(buf_id, items, query, opts) -- show
+    if not picker_ctx.max_labels then picker_ctx.max_labels = math.min(#ELP.labels, #items) end
+    if not picker_ctx.all_items then picker_ctx.all_items = Pick.get_picker_items() or {} end
+    if not ctx then ctx = ELP.make_ctx_for_show(items, picker_ctx) end
     ELP.clear_namespace(buf_id, ELP.ns_id.labels) -- remove clues
-    if not (#query == 0 and first_item == items[1]) then return end -- scrolled, no clues
 
-    ELP.add_clues(buf_id, data.max_labels, autosubmit and "MiniPickMatchRanges" or "Comment")
+    -- Query does not contain a label
+    if not picker_ctx.labeled_ind then
+      show(buf_id, items, query, opts)
+      if #query == 0 and ctx.first_item == items[1] then -- no clues if window scrolled
+        ELP.add_clues(buf_id, picker_ctx.max_labels, ctx.autosubmit)
+      end
+      return
+    end
+
+    -- Query contains one single char recorgnized as label
+    if not ctx.autosubmit then
+      local current_ind = Pick.get_picker_matches().current_ind
+      if #items > 1 and current_ind ~= picker_ctx.labeled_ind then
+        items = ELP.move_to_first_position(items, picker_ctx.labeled_ind)
+      end
+      show(buf_id, items, query, opts)
+      return
+    end
+    ELP.autosubmit(enter_key)
   end
 end
 
-ELP.make_override_choose = function(choose, data)
+ELP.make_override_choose = function(choose, picker_ctx)
   return function(item)
-    if data.idx_selected then item = Pick.get_picker_items()[data.idx_selected] end
+    if picker_ctx.labeled_ind then item = picker_ctx.all_items[picker_ctx.labeled_ind] end
     return choose(item)
   end
 end
 
-ELP.on_pick_start = function()
+ELP.on_pick_start_event = function()
   local opts = Pick.get_picker_opts()
   if not opts then return end
 
   local label = opts.label
   local src = opts.source
-  if label == nil and src.name and string.sub(src.name, 1, #ELP.ui_select_marker) == ELP.ui_select_marker then
+  if label == nil and string.sub(src.name, 1, #ELP.ui_select_marker) == ELP.ui_select_marker then
     src.name = string.sub(src.name, #ELP.ui_select_marker + 1)
-    label = true -- vim.ui.select is set to labeled_ui_select
+    label = true -- vim.ui.select is set to Extra.pickers.labeled_ui_select
   end
   if not label then return end
 
-  local data = {
-    idx_selected = nil, -- set in match when label is detected
-    max_labels = nil, -- set in show
-  }
-  src.match = ELP.make_override_match(src.match, data)
-  src.show = ELP.make_override_show(src.show, data)
-  src.choose = ELP.make_override_choose(src.choose, data)
+  local picker_ctx = { labeled_ind = nil, max_labels = nil, all_items = nil }
+  src.match = ELP.make_override_match(src.match, picker_ctx)
+  src.show = ELP.make_override_show(src.show, picker_ctx)
+  src.choose = ELP.make_override_choose(src.choose, picker_ctx)
   Pick.set_picker_opts(opts)
 end
 
@@ -224,7 +232,7 @@ Extra.pickers_enable_label_in_options = function()
     pattern = "MiniPickStart",
     group = group,
     desc = "Augment pickers with labels",
-    callback = ELP.on_pick_start,
+    callback = ELP.on_pick_start_event,
   })
 end
 
@@ -452,6 +460,14 @@ local function keys()
     extra.list({ scope = "quickfix" })
   end, { desc = "Quickfix" })
   map("<leader>fX", function() extra.list({ scope = "location" }) end, { desc = "Loclist" })
+
+  -- test ui_select for labeled pickers
+  -- local on_choice = function(choice)
+  --   if not choice then return end
+  --   vim.notify(choice)
+  -- end
+  -- local select_hello = function() vim.ui.select({ "Hello", "Helloooo", "Helloooooo" }, { prompt = "Say hi" }, on_choice) end
+  -- map("<leader>fy", select_hello, { desc = "Labeled ui select", silent = true })
 
   -- fuzzy other
   map("<leader>fo:", extra.commands, { desc = "Commands" })
