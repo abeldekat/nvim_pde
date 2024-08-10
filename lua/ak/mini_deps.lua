@@ -44,24 +44,20 @@ return function(_) -- opts
   setup_performance()
   local is_initial_install, path_package = clone()
 
-  --          ╭─────────────────────────────────────────────────────────╮
-  --          │  Patch MiniDeps to always include optional plugins on   │
-  --          │                 the following commands:                 │
-  --          │    DepsClean, DepsUpdate, DepsSnapLoad, DepsSnapSave    │
-  --          ╰─────────────────────────────────────────────────────────╯
-  Util.deps.patch()
-
-  local MiniDepsPatched = require("mini.deps")
-  MiniDepsPatched.setup({ path = { package = path_package } })
+  local MiniDeps = require("mini.deps")
+  MiniDeps.setup({ path = { package = path_package } })
   for _, module in ipairs(modules) do
     require(module)
   end
   if is_initial_install then
     --          ╭─────────────────────────────────────────────────────────╮
-    --          │On an initial install, the install should be reproducible│
+    --          │  On initial install, the install should be reproducible │
     --          │              Last step in the later chain:              │
     --          │  Restore all plugins to the versions in mini-deps-snap  │
     --          ╰─────────────────────────────────────────────────────────╯
-    MiniDepsPatched.later(function() vim.cmd("DepsSnapLoad") end) --
+    MiniDeps.later(function()
+      Util.deps.load_registered()
+      vim.cmd("DepsSnapLoad")
+    end)
   end
 end

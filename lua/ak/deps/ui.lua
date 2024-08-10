@@ -11,14 +11,22 @@ later(function()
 end)
 
 if Util.opened_with_arguments() then return end
+
+local deps_cmd = function(cmd)
+  Util.deps.load_registered()
+  vim.cmd(cmd)
+end
+local update = function() deps_cmd("DepsUpdate") end
+local save = function() deps_cmd("DepsSnapSave") end
+local clean = function() deps_cmd("DepsClean") end
 now(function()
   local section = "Deps"
   require("ak.config.ui.mini_starter").setup({
     section = section,
     items = {
-      { action = "DepsUpdate", name = "u. update", section = section },
-      { action = "DepsSnapSave", name = "a. snapSave", section = section },
-      { action = "DepsClean", name = "c. clean", section = section },
+      { action = update, name = "u. update", section = section },
+      { action = save, name = "a. snapSave", section = section },
+      { action = clean, name = "c. clean", section = section },
     },
     query_updaters = "uac",
   })

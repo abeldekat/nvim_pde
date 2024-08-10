@@ -8,16 +8,19 @@ Utils.color.add_toggle("catppuccin*", {
 
 local opts = {
   flavour = prefer_light and "latte" or "frappe",
-  custom_highlights = function(colors)
+  custom_highlights = function(c)
     return { -- left and right, dynamic
+      -- MiniStatuslineFilename is a bit to dark:
+      MiniStatuslineFilename = { fg = c.subtext1, bg = c.mantle },
       MiniStatuslineModeNormal = { link = "MiniStatuslineFilename" },
 
-      MiniHipatternsFixme = { fg = colors.base, bg = colors.red, style = { "bold" } },
-      MiniHipatternsHack = { fg = colors.base, bg = colors.yellow, style = { "bold" } },
-      MiniHipatternsNote = { fg = colors.base, bg = colors.teal, style = { "bold" } },
-      MiniHipatternsTodo = { fg = colors.base, bg = colors.sky, style = { "bold" } },
+      MiniJump2dSpot = { bg = c.base, fg = c.flamingo, style = { "bold", "underline" } },
+      MiniJump2dSpotAhead = { bg = c.base, fg = c.flamingo, style = { "bold", "underline" } },
 
-      MsgArea = { fg = colors.overlay0 }, -- Area for messages and cmdline
+      MiniPickMatchRanges = { fg = c.peach, style = { "bold" } },
+      MiniPickNormal = { link = "Normal" }, -- DiagnosticFloatingHint
+
+      MsgArea = { fg = c.overlay0 }, -- Area for messages and cmdline
     }
   end,
   integrations = {
