@@ -3,7 +3,6 @@ local MiniDeps = require("mini.deps")
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 local register = Util.deps.register
 
-local quickfix = "quicker" -- "bqf", "quicker", ""
 local pick_add_fzf = false
 local hardtime_now = false
 
@@ -72,20 +71,8 @@ later(function()
     source = "kevinhwang91/nvim-bqf",
     depends = { { source = "yorickpeterse/nvim-pqf" } },
   }
-  register(spec_bqf)
-  local spec_quicker = "stevearc/quicker.nvim"
-  register(spec_quicker)
-
-  local quickfix_config = require("ak.config.editor.quickfix")
-  local actions = {
-    quicker = { spec_quicker, quickfix_config.quicker },
-    bqf = { spec_bqf, quickfix_config.bqf },
-  }
-  local action = actions[quickfix]
-  if action then
-    add(action[1]) -- add spec
-    action[2]() -- run config
-  end
+  add(spec_bqf)
+  require("ak.config.editor.quickfix")
 
   --          ╭─────────────────────────────────────────────────────────╮
   --          │                          Other                          │

@@ -56,7 +56,6 @@ return {
   ["one-small-step-for-vimkind"] = "7ec237f828fafcbf9bf7675059a753a1bc114fdb",
   ["peek.nvim"] = "5820d937d5414baea5f586dc2a3d912a74636e5b",
   ["plenary.nvim"] = "a3e3bc82a3f95c5ed0d7201546d5d2c19b20d683",
-  ["quicker.nvim"] = "b6a3d2f6aed7882e8bea772f82ba80b5535157a9",
   rustaceanvim = "cb83e412f0552df3957a5d3e5f29c1ea4b777975",
   ["toggleterm.nvim"] = "137d06fb103952a0fb567882bb8527e2f92d327d",
   ["vim-dadbod"] = "7888cb7164d69783d3dce4e0283decd26b82538b",
