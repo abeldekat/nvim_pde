@@ -49,8 +49,9 @@ ELP.make_override_match = function(match, picker_ctx)
   end
 end
 
-ELP.autosubmit = function(key)
-  vim.api.nvim_feedkeys(key, "n", false)
+ELP.autosubmit = function()
+  local enter_key = vim.api.nvim_replace_termcodes("<cr>", true, true, true)
+  vim.api.nvim_feedkeys(enter_key, "n", false)
   vim.api.nvim_feedkeys("<Ignore>", "n", false)
 end
 
@@ -93,7 +94,6 @@ ELP.make_ctx_for_show = function(items, picker_ctx)
 end
 
 ELP.make_override_show = function(show, picker_ctx)
-  local enter_key = vim.api.nvim_replace_termcodes("<cr>", true, true, true)
   local ctx
   return function(buf_id, items, query, opts) -- items contain as many as displayed
     if not picker_ctx.max_labels then picker_ctx.max_labels = math.min(#ELP.labels, #items) end
@@ -119,7 +119,7 @@ ELP.make_override_show = function(show, picker_ctx)
       show(buf_id, items, query, opts)
       return
     end
-    ELP.autosubmit(enter_key)
+    ELP.autosubmit()
   end
 end
 
