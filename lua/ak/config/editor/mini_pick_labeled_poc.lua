@@ -85,7 +85,10 @@ end
 ELP.set_labeled_as_first_item = function(all_inds, labeled_ind)
   local labeled_ind_pos
   for i, ind in ipairs(all_inds) do
-    if ind == labeled_ind then labeled_ind_pos = i end
+    if ind == labeled_ind then
+      labeled_ind_pos = i
+      break
+    end
   end
   table.remove(all_inds, labeled_ind_pos)
   table.insert(all_inds, 1, labeled_ind)
