@@ -45,8 +45,8 @@ later(function()
   require("ak.config.editor.mini_jump2d")
   require("ak.config.editor.mini_git")
   require("ak.config.editor.mini_diff")
+  require("ak.config.editor.mini_pick_labeled")
   require("ak.config.editor.mini_pick")
-  -- require("ak.config.editor.mini_pick_labeled_poc")
   if pick_add_fzf then -- download fzf on demand, not registered
     local spec_fzf = "ibhagwan/fzf-lua"
     register(spec_fzf)
