@@ -27,8 +27,13 @@ end
 
 -- Helper ================================================================
 
-H.labels = vim.split("abcdefghijklmnopqrstuvwxyz", "") -- configurable
-H.virt_clues_pos = { "eol" } -- configurable { "inline" }, { "inline", "eol"}
+-- "abcdefghijklmnopqrstuvwxyz"
+-- 20 letters:
+-- asdfghjkl -- middle row
+-- qweruio -- upper row
+-- cvnm -- lower row
+H.labels = vim.split("asdfghjklqweruiocvnm", "") -- configurable
+H.virt_clues_pos = { "inline", "eol" } -- configurable { "inline" }, { "eol "}
 
 H.invert = function(tbl_in)
   local tbl_out = {}

@@ -59,13 +59,12 @@ Leader: `space`
 
 #### Grapple
 
-- Switch active list: `<leader>J`
 - Info in statusline: custom statusline component [grappleline]
 - Using the shortcuts for window navigation:
   `c-j`, `<c-k>`,`<c-l>`,`<c-h>`, corresponding to file 1-4
 - ui: `<leader>j` ("strongest finger")
+- Switch active list: `<leader>oj`
 - toggle tag: `<leader>a`
-- next/prev: `<leader>;` / `<leader>,`
 
 Window navigation:
 

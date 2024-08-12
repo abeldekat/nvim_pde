@@ -275,7 +275,7 @@ local function keys()
   local labeled_buffers = function()
     local show_icons = true
     local source = { show = not show_icons and Pick.default_show or nil }
-    local window = true and H.make_centered_window() or nil
+    local window = false and H.make_centered_window() or nil
     local opts = { label = true, source = source, window = window }
     builtin.buffers({}, opts)
   end

@@ -1,4 +1,6 @@
 -- Approach:
+-- <leader>a toggles a tag in the current scope
+--
 -- Main scope is git. The first four files are on ctrl-{jklh}
 -- When git is current, tags can be toggled using <leader>a, so the ui is rarely needed.
 --
