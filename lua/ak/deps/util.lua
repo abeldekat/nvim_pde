@@ -20,7 +20,7 @@ later(function()
       require("ak.config.util.slime")
       add(spec_slime)
     end)
-  end, "<leader>or", "Load slime(repl)")
+  end, "<leader>oR", "Load slime(repl)")
 
   -- Documentation generator
   local spec_neogen = "danymat/neogen"

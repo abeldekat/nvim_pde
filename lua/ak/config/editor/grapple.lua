@@ -1,21 +1,24 @@
+-- Approach:
+-- Main scope is git. The first four files are on ctrl-{jklh}
+-- When git is current, tags can be toggled using <leader>a, so the ui is rarely needed.
+--
+-- Second scope is git_branch, called "dev". Used to collect multiple relevant files.
+-- Tags can always be added using <leader>oa. Use ui to maintain its tags
+--
+-- Pick.registry.grapple provides fast labeled access to both scopes without needing
+-- to change the current scope. See ak.config.editor.pick
+--
+-- See also ak.config.ui.grappleline
+
+-- local default_order = { "global", "cwd", "git", "git_branch", "lsp" }
 local Grapple = require("grapple")
 local P = require("grapple.path")
-local H = {} -- helper functions
+local H = {} -- helper
 
---          ╭─────────────────────────────────────────────────────────╮
---          │                       Helper data                       │
---          ╰─────────────────────────────────────────────────────────╯
--- local default_order = { "global", "cwd", "git", "git_branch", "lsp" }
--- It's possible to use git and git_branch in the same way as two harpoon lists
--- git: the default list for the project
--- git_branch: the sublist for the current branch in the project
 H.scopes = { "git", "git_branch" } -- global, static, cwd, git, git_branch, lsp
 H.scope_default = H.scopes[1]
 H.scope = H.scope_default
 
---          ╭─────────────────────────────────────────────────────────╮
---          │                    Helper functions                     │
---          ╰─────────────────────────────────────────────────────────╯
 H.map = function(lhs, rhs, desc) vim.keymap.set("n", lhs, rhs, { desc = desc, silent = true }) end
 H.name_of_next_scope = function()
   local function current_scope()
@@ -25,10 +28,6 @@ H.name_of_next_scope = function()
   end
   local idx = current_scope()
   return H.scopes[idx == #H.scopes and 1 or idx + 1]
-end
-H.use_scope = function()
-  H.scope = H.name_of_next_scope()
-  vim.cmd("Grapple use_scope " .. H.scope)
 end
 H.basename = function(entity, _)
   vim.opt_local.number = true -- window style is minimal
@@ -49,24 +48,26 @@ H.basename = function(entity, _)
     marks = { parent_mark },
   }
 end
+-- When switching scopes, also show the ui. Fast repeat with <leader>oj
+H.use_scope_and_open_ui = function()
+  H.scope = H.name_of_next_scope()
+  vim.cmd("Grapple use_scope " .. H.scope)
+  Grapple.open_tags()
+end
 
 for _, key in ipairs({
-  { "<leader>J", H.use_scope, desc = "Grapple other scope" },
-  { "<leader>j", "<cmd>Grapple toggle_tags<cr>", desc = "Grapple tags" },
-  -- Not useing next and prev often:
-  -- { "<leader>;", "<cmd>Grapple cycle_tags next<cr>", desc = "Grapple next" },
-  -- { "<leader>,", "<cmd>Grapple cycle_tags prev<cr>", desc = "Grapple prev" },
-
-  { "<leader>A", "<cmd>Grapple reset<cr>", desc = "Grapple reset" },
-  { "<leader>a", "<cmd>Grapple toggle<cr>", desc = "Grapple toggle tag" },
+  { "<leader>j", "<cmd>Grapple toggle_tags<cr>", desc = "Grapple ui" },
+  { "<leader>a", "<cmd>Grapple toggle<cr>", desc = "Grapple tag +-" },
 
   { "<c-j>", "<cmd>Grapple select index=1<cr>", desc = "Grapple 1" },
   { "<c-k>", "<cmd>Grapple select index=2<cr>", desc = "Grapple 2" },
   { "<c-l>", "<cmd>Grapple select index=3<cr>", desc = "Grapple 3" },
   { "<c-h>", "<cmd>Grapple select index=4<cr>", desc = "Grapple 4" },
 
+  { "<leader>oa", function() Grapple.tag({ scope = "git_branch" }) end, desc = "Grapple tag dev +" },
   { "<leader>og", "<cmd>Grapple toggle_scopes<cr>", desc = "Grapple scopes" },
-  { "<leader>oG", "<cmd>Grapple toggle_loaded<cr>", desc = "Grapple loaded" },
+  { "<leader>oj", H.use_scope_and_open_ui, desc = "Grapple main <-> dev" },
+  { "<leader>or", "<cmd>Grapple reset<cr>", desc = "Grapple reset" },
 }) do
   H.map(key[1], key[2], key["desc"])
 end

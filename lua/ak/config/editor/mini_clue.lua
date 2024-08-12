@@ -47,7 +47,6 @@ local opts = {
     { mode = "n", keys = "<leader>fo", desc = "+other pickers" },
     { mode = "n", keys = "<leader>g", desc = "+git" },
     { mode = "n", keys = "<leader>o", desc = "+other" },
-    { mode = "n", keys = "<leader>ob", desc = "+commentbox" },
     { mode = "n", keys = "<leader>t", desc = "+test" },
     { mode = "n", keys = "<leader>u", desc = "+ui" },
 

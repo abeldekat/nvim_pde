@@ -188,6 +188,39 @@ Pick.registry.buffer_lines_current = function()
   MiniExtra.pickers.buf_lines({ scope = "current" }, { source = { show = show_cur_buf_lines } })
 end
 
+Pick.registry.grapple = function() -- all items in git(default) and git_branch("dev")
+  local ok, g = pcall(require, "grapple")
+  if not ok then return end
+
+  local function tag_to_item(tag)
+    if tag.cursor then return {
+      path = tag.path,
+      lnum = tag.cursor[1],
+      col = tag.cursor[2],
+    } end
+    return { path = tag.path }
+  end
+
+  local items = function()
+    local result = {}
+    for _, scope in ipairs({ "git", "git_branch" }) do
+      local tags = g.tags({ scope = scope })
+      if tags then vim.list_extend(result, vim.tbl_map(tag_to_item, tags)) end
+    end
+    return result
+  end
+
+  local show = function(buf_id, items_to_display, query)
+    items_to_display = vim.tbl_map(function(item) return vim.fn.fnamemodify(item.path, ":~:.") end, items_to_display)
+    Pick.default_show(buf_id, items_to_display, query, { show_icons = true })
+  end
+
+  Pick.start({
+    label = true,
+    source = { name = "Grapple", items = items, show = show },
+  })
+end
+
 -- Apply  ================================================================
 
 local cwd_cache = {}
@@ -247,6 +280,7 @@ local function keys()
     builtin.buffers({}, opts)
   end
   map("<leader>;", labeled_buffers, { desc = "Buffers pick" }) -- home row, used often
+  map("<leader>,", custom.grapple, { desc = "Grapple pick" })
   local labeled_symbols = function() extra.lsp({ scope = "document_symbol" }, { label = true }) end
   map("<leader>b", labeled_symbols, { desc = "Buffer symbols" })
   map("<leader>l", builtin.grep_live, { desc = "Live grep" })
