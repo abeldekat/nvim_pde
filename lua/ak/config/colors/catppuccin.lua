@@ -7,7 +7,7 @@ Utils.color.add_toggle("catppuccin*", {
 })
 
 local opts = {
-  flavour = prefer_light and "latte" or "frappe",
+  flavour = prefer_light and "latte" or "mocha",
   custom_highlights = function(c)
     return { -- left and right, dynamic
       -- MiniStatuslineFilename is a bit to dark:
