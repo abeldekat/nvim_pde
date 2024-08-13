@@ -55,26 +55,21 @@ local opts = {
     "rst", -- python
     "rasi", -- rofi
   },
-  incremental_selection = {
-    enable = true,
-    -- Normal mode:
-    -- gnn : "Start selecting [n]odes with [n]vim treesitter"
-    -- Visual mode, contextual:
-    -- grn : "Inc[r]ement selection to named [n]ode"
-    -- grm : "Sh[r]ink selection to previous named node" (m is next to n on keyboard)
-    -- grc : "Inc[r]ement selection to surrounding s[c]ope"
-    --
-    -- keymaps = { -- "C-space" is not usable in tmux...
-    --   init_selection = "<C-space>", -- gnn
-    --   node_incremental = "<C-space>", -- grn
-    --   scope_incremental = false, -- grc
-    --   node_decremental = "<bs>", -- grm
-    -- },
-  },
-
-  -- init_selection = "gts",
-  -- node_incremental = "gni",
-  -- scope_incremental = "gsi",
-  -- node_decremental = "gdi",
+  -- incremental_selection = { -- leap provides incremental_selection
+  --   enable = true, -- using default keymaps gnn
+  --   -- Normal mode:
+  --   -- gnn : "Start selecting [n]odes with [n]vim treesitter"
+  --   -- Visual mode, contextual:
+  --   -- grn : "Inc[r]ement selection to named [n]ode"
+  --   -- grm : "Sh[r]ink selection to previous named node" (m is next to n on keyboard)
+  --   -- grc : "Inc[r]ement selection to surrounding s[c]ope"
+  --   --
+  --   -- keymaps = { -- "C-space" is not usable in tmux...
+  --   --   init_selection = "<C-space>", -- gnn
+  --   --   node_incremental = "<C-space>", -- grn
+  --   --   scope_incremental = false, -- grc
+  --   --   node_decremental = "<bs>", -- grm
+  --   -- },
+  -- },
 }
 require("nvim-treesitter.configs").setup(opts)

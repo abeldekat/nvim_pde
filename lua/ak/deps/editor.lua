@@ -80,6 +80,9 @@ later(function()
   add("akinsho/toggleterm.nvim")
   require("ak.config.editor.toggleterm")
 
+  add("ggandor/leap.nvim") -- treesitter incremental selection
+  require("ak.config.editor.leap")
+
   local spec_spectre = "nvim-pack/nvim-spectre"
   register(spec_spectre)
   Util.defer.on_keys(function()
