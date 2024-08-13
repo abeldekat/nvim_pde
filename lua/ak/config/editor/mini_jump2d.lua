@@ -38,15 +38,15 @@ end
 create_autocmds()
 map("n", function()
   local builtin = Jump2d.builtin_opts.word_start
-  builtin.view = { n_steps_ahead = 10 }
+  builtin.view = { n_steps_ahead = 10, dim = true }
   Jump2d.start(builtin)
 end, { desc = "Start 2d jumping" })
 map({ "x", "o" }, function()
-  local builtin = Jump2d.builtin_opts.single_character
+  local builtin = Jump2d.builtin_opts.default -- single_character
+  builtin.view = { dim = true }
   Jump2d.start(builtin)
 end, { desc = "Start 2d jumping" })
 Jump2d.setup({
   labels = "cdefghijklmnoprstuvwxy", -- improve typing: removed b and qaz
   mappings = { start_jumping = "" }, -- no mappings, using 2 different builtins
-  view = { dim = true }, -- flashy, but better label visibility.
 })
