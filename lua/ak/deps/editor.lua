@@ -3,6 +3,7 @@ local MiniDeps = require("mini.deps")
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 local register = Util.deps.register
 
+local marker_use_visits = false -- false: use grapple.nvim
 local pick_add_fzf = false
 local hardtime_now = false
 
@@ -61,8 +62,14 @@ later(function()
   --          ╭─────────────────────────────────────────────────────────╮
   --          │                         Marking                         │
   --          ╰─────────────────────────────────────────────────────────╯
-  add("cbochs/grapple.nvim")
-  require("ak.config.editor.grapple")
+  local spec_grapple = "cbochs/grapple.nvim"
+  if marker_use_visits then
+    register(spec_grapple)
+    require("ak.config.editor.mini_visits")
+  else
+    add(spec_grapple)
+    require("ak.config.editor.grapple")
+  end
 
   --          ╭─────────────────────────────────────────────────────────╮
   --          │                         Quickfix                        │

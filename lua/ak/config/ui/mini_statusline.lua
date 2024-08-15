@@ -173,16 +173,22 @@ H.is_blocked_filetype = function()
 end
 
 H.optional_dependencies = function() -- See ak.deps.editor
-  local has, _ = pcall(require, "grapple")
-  if has then -- internal plugin
+  local has_oil, oil = pcall(require, "oil")
+  if has_oil then H.oil = oil end
+
+  if MiniVisits ~= nil then -- use internal visitsline plugin for mini.visits
+    local visitsline = require("ak.config.ui.visitsline")
+    visitsline.setup(H.set_active)
+    H.markerline = visitsline
+    return
+  end
+
+  local has_grapple, _ = pcall(require, "grapple") -- Use grapple
+  if has_grapple then -- use internal grappleline plugin for plugin
     local grappleline = require("ak.config.ui.grappleline")
     grappleline.setup(H.set_active)
     H.markerline = grappleline
   end
-
-  local oil
-  has, oil = pcall(require, "oil")
-  if has then H.oil = oil end
 end
 
 -- added
