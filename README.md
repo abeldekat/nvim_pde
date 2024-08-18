@@ -50,15 +50,12 @@ Note: For [peek.nvim], [deno] needs to be installed.
 I touch type using the right hand
 in combination with the forefinger of the left hand
 
-Leader: `space`
-
-### Navigation
-
+- Leader: `space`
 - Main plugins: `mini.visits`, `oil`, `mini.pick`and `mini.jump2d`
 - I configured `mini.visits` to operate in almost the same way as `grapple.nvim`
 - Menu: `mini.clue`
 
-#### Visits
+### Visits
 
 - Info in statusline: custom statusline component [visitsline]
 - Toggle current label on file: `<leader>a`
@@ -76,13 +73,13 @@ Leader: `space`
 - `mw`(next window)
 - `me`(last accessed window)
 
-#### Oil
+### Oil
 
 - `mk`("rolling fingers"), opening oil
 - `h` up one level
 - `l` down one level, open file
 
-#### Tmux
+### Tmux
 
 - [tmux-sessionizer] inspired by @ThePrimeagen
 - workspaces at the top of the screen, using [tmuxp]
