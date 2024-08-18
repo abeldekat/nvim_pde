@@ -54,7 +54,7 @@ Leader: `space`
 
 ### Navigation
 
-- Main plugins: mini.visits, oil, mini.pick and mini.jump2d.
+- Main plugins: `mini.visits`, `oil`, `mini.pick`and `mini.jump2d`
 - I configured `mini.visits` to operate in almost the same way as `grapple.nvim`
 - Menu: `mini.clue`
 
@@ -63,7 +63,7 @@ Leader: `space`
 - Info in statusline: custom statusline component [visitsline]
 - Toggle current label on file: `<leader>a`
 - The shortcuts normally used for window navigation correspond to file 1-4:
-  `c-j`, `<c-k>`,`<c-l>`,`<c-h>`,
+  `c-j`, `<c-k>`,`<c-l>`,`<c-h>`
 - Pick files having current label: `<leader>j` ("strongest finger")
 - Pick all labeled files: `<leader>,`
 - Switch context(label): `<leader>oj`
