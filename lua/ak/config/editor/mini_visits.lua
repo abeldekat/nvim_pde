@@ -13,9 +13,10 @@
 -- No need to change the current context.
 --
 -- See also:
--- 1. ak.config.editor.mini_pick and mini_pick_labeled
--- 2. ak.config.ui.mini_statusline and visitsline
--- 3. ak.config.autocmmands
+-- 1. ak.config.editor: mini_pick and mini_pick_labeled
+-- 2. ak.config.ui: mini_statusline and visitsline
+-- 3. ak.util.labels
+-- 4. ak.config.autocmmands
 
 -- One caveat: Field "latest" applies on visit, not on individual label
 -- Adding a path to a label that is already present in another label might
