@@ -10,7 +10,8 @@ local cached_line
 local notify_cb
 
 local opts = {
-  icon = "󰛢", -- nf-md-hook  -- f06e2 -- nerdfont -- area plane a
+  -- icon = "󰛢", -- nf-md-hook  -- f06e2 -- nerdfont -- area plane a
+  icon = "󰖃", -- nf-md-walk  -- f0583
   -- label_names = { [label_name] = "" }, -- display label_name override
   label_names = {},
   max_slots = 4,
