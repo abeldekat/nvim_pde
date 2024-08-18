@@ -17,6 +17,10 @@ local Extra = require("mini.extra")
 
 local H = {} -- Helper functions
 
+H.ns_id = { ak = vim.api.nvim_create_namespace("MiniPickAk") }
+
+-- Copied
+H.show_with_icons = function(buf_id, items, query) Pick.default_show(buf_id, items, query, { show_icons = true }) end
 ---@type table<string,function>  event MiniPickStart
 H.start_hooks = {}
 ---@type table<string,function> event MiniPickStop
@@ -154,9 +158,8 @@ end
 -- https://github.com/echasnovski/mini.nvim/discussions/988
 -- Fuzzy search the current buffer with syntax highlighting
 -- Last attempt: linenr as extmarks, but no MiniPickMatchRanges highlighting
-local ns_digit_prefix = vim.api.nvim_create_namespace("cur-buf-pick-show")
 Pick.registry.buffer_lines_current = function()
-  local show_cur_buf_lines = function(buf_id, items, query, opts)
+  local show = function(buf_id, items, query, opts)
     if items == nil or #items == 0 then return end
 
     -- Show as usual
@@ -176,7 +179,7 @@ Pick.registry.buffer_lines_current = function()
     for i, pref in pairs(digit_prefixes) do
       pref = string.sub(pref, 1, -4) -- Remove multi byte char "│"
       local extmark_opts = { virt_text = { { pref } }, virt_text_pos = "right_align" }
-      vim.api.nvim_buf_set_extmark(buf_id, ns_digit_prefix, i - 1, 0, extmark_opts)
+      vim.api.nvim_buf_set_extmark(buf_id, H.ns_id.ak, i - 1, 0, extmark_opts)
     end
 
     -- Set highlighting based on the curent filetype
@@ -185,40 +188,65 @@ Pick.registry.buffer_lines_current = function()
     local has_ts, _ = pcall(vim.treesitter.start, buf_id, has_lang and lang or ft)
     if not has_ts and ft then vim.bo[buf_id].syntax = ft end
   end
-  MiniExtra.pickers.buf_lines({ scope = "current" }, { source = { show = show_cur_buf_lines } })
+  MiniExtra.pickers.buf_lines({ scope = "current" }, { source = { show = show } })
 end
 
-Pick.registry.grapple = function() -- all items in git(default) and git_branch("dev")
-  local ok, g = pcall(require, "grapple")
+Pick.registry.grapple = function()
+  local ok, Grapple = pcall(require, "grapple")
   if not ok then return end
 
-  local function tag_to_item(tag)
-    if tag.cursor then return {
+  local function tag_to_item(tag, scope)
+    local result = {
       path = tag.path,
-      lnum = tag.cursor[1],
-      col = tag.cursor[2],
-    } end
-    return { path = tag.path }
-  end
-
-  local items = function()
-    local result = {}
-    for _, scope in ipairs({ "git", "git_branch" }) do
-      local tags = g.tags({ scope = scope })
-      if tags then vim.list_extend(result, vim.tbl_map(tag_to_item, tags)) end
+      text = string.format(" %-12s %s", scope, vim.fn.fnamemodify(tag.path, ":~:.")),
+    }
+    if tag.cursor then
+      result["lnum"] = tag.cursor[1]
+      result["col"] = tag.cursor[2]
     end
     return result
   end
 
-  local show = function(buf_id, items_to_display, query)
-    items_to_display = vim.tbl_map(function(item) return vim.fn.fnamemodify(item.path, ":~:.") end, items_to_display)
-    Pick.default_show(buf_id, items_to_display, query, { show_icons = true })
+  local picker_items = function()
+    local result = {}
+    for _, scope in ipairs(Utils.labels.grapple) do
+      local tags = Grapple.tags({ scope = scope })
+      if tags then vim.list_extend(result, vim.tbl_map(function(tag) return tag_to_item(tag, scope) end, tags)) end
+    end
+    return result
+  end
+  return Pick.start({ label = true, source = { name = "Grapple all", items = picker_items, show = H.show_with_icons } })
+end
+
+Pick.registry.visits_by_label = function() -- a customized Extra.pickers.visit_paths
+  -- Not copied: H.full_path, H.normalize_path,H.is_windows
+  -- Copied from mini.extra:
+  local short_path = function(path, cwd)
+    cwd = cwd or vim.fn.getcwd()
+    -- Ensure `cwd` is treated as directory path (to not match similar prefix)
+    cwd = cwd:sub(-1) == "/" and cwd or (cwd .. "/")
+    return vim.startswith(path, cwd) and path:sub(cwd:len() + 1) or vim.fn.fnamemodify(path, ":~")
   end
 
-  Pick.start({
-    label = true,
-    source = { name = "Grapple", items = items, show = show },
-  })
+  local paths_to_items = function(paths, label)
+    return vim.tbl_map(function(visit_path)
+      local path_path = visit_path -- needed, otherwise files outside cwd are not opened
+      local text_path = short_path(visit_path)
+      return { path = path_path, text = string.format(" %-6s %s", label, text_path) }
+    end, paths)
+  end
+
+  local picker_items = vim.schedule_wrap(function()
+    local items = {}
+    for _, label in ipairs(Utils.labels.visits) do
+      local paths = MiniVisits.list_paths(nil, { filter = label })
+      if paths then vim.list_extend(items, paths_to_items(paths, label)) end
+    end
+    Pick.set_picker_items(items)
+  end)
+  local name = "Visits by labels"
+  local source = { name = name, items = picker_items, show = H.show_with_icons }
+  return Pick.start({ source = source, label = true })
 end
 
 -- Apply  ================================================================
@@ -280,7 +308,8 @@ local function keys()
     builtin.buffers({}, opts)
   end
   map("<leader>;", labeled_buffers, { desc = "Buffers pick" }) -- home row, used often
-  map("<leader>,", custom.grapple, { desc = "Grapple pick" })
+  local desc_leader_comma = MiniVisits and "Visits pick" or "Grapple pick"
+  map("<leader>,", MiniVisits and custom.visits_by_label or custom.grapple, { desc = desc_leader_comma })
   local labeled_symbols = function() extra.lsp({ scope = "document_symbol" }, { label = true }) end
   map("<leader>b", labeled_symbols, { desc = "Buffer symbols" })
   map("<leader>l", builtin.grep_live, { desc = "Live grep" })

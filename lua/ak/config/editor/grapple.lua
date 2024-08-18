@@ -1,8 +1,9 @@
+--  Replaced by mini.visits...
+
 -- Approach:
 -- <leader>a toggles a tag in the current scope
 --
 -- Main scope is git. The first four files are on ctrl-{jklh}
--- When git is current, tags can be toggled using <leader>a, so the ui is rarely needed.
 --
 -- Second scope is git_branch, called "dev". Used to collect multiple relevant files.
 -- Tags can always be added using <leader>oa. Use ui to maintain its tags
@@ -12,16 +13,18 @@
 --
 -- See also ak.config.ui.grappleline
 
--- local default_order = { "global", "cwd", "git", "git_branch", "lsp" }
+local Utils = require("ak.util")
 local Grapple = require("grapple")
 local P = require("grapple.path")
-local H = {} -- helper
 
-H.scopes = { "git", "git_branch" } -- global, static, cwd, git, git_branch, lsp
-H.scope_default = H.scopes[1]
-H.scope = H.scope_default
+-- Helper:
+
+local H = {}
+H.scopes = Utils.labels.grapple
+H.scope = H.scopes[1]
 
 H.map = function(lhs, rhs, desc) vim.keymap.set("n", lhs, rhs, { desc = desc, silent = true }) end
+
 H.name_of_next_scope = function()
   local function current_scope()
     for idx, name in ipairs(H.scopes) do
@@ -31,6 +34,7 @@ H.name_of_next_scope = function()
   local idx = current_scope()
   return H.scopes[idx == #H.scopes and 1 or idx + 1]
 end
+
 H.basename = function(entity, _)
   vim.opt_local.number = true -- window style is minimal
   vim.opt.relativenumber = true
@@ -50,36 +54,49 @@ H.basename = function(entity, _)
     marks = { parent_mark },
   }
 end
--- When switching scopes, also show the ui. Fast repeat with <leader>oj
-H.use_scope_and_open_ui = function()
-  H.scope = H.name_of_next_scope()
-  vim.cmd("Grapple use_scope " .. H.scope)
-  Grapple.open_tags()
-end
+
+-- Setup:
+
+local A = {
+  switch_context = function()
+    H.scope = H.name_of_next_scope()
+    Grapple.use_scope(H.scope)
+    vim.api.nvim_exec_autocmds("User", { pattern = "GrappleSwitchedContext", modeline = false, data = H.scope })
+  end,
+  ui = function() Grapple.toggle_tags() end,
+  select = function(ind) Grapple.select({ index = ind }) end,
+  toggle = function(scope)
+    Grapple.toggle({ scope = scope })
+    vim.api.nvim_exec_autocmds("User", { pattern = "GrappleModified", modeline = false })
+  end,
+  reset = function()
+    Grapple.reset()
+    vim.api.nvim_exec_autocmds("User", { pattern = "GrappleModified", modeline = false })
+  end,
+}
 
 for _, key in ipairs({
-  { "<leader>j", "<cmd>Grapple toggle_tags<cr>", desc = "Grapple ui" },
-  { "<leader>a", "<cmd>Grapple toggle<cr>", desc = "Grapple tag +-" },
+  { "<leader>j", A.ui, desc = "Grapple ui" },
+  { "<leader>a", function() A.toggle(H.label) end, desc = "Grapple toggle" },
 
-  { "<c-j>", "<cmd>Grapple select index=1<cr>", desc = "Grapple 1" },
-  { "<c-k>", "<cmd>Grapple select index=2<cr>", desc = "Grapple 2" },
-  { "<c-l>", "<cmd>Grapple select index=3<cr>", desc = "Grapple 3" },
-  { "<c-h>", "<cmd>Grapple select index=4<cr>", desc = "Grapple 4" },
+  { "<c-j>", function() A.select(1) end, desc = "Grapple 1" },
+  { "<c-k>", function() A.select(2) end, desc = "Grapple 2" },
+  { "<c-l>", function() A.select(3) end, desc = "Grapple 3" },
+  { "<c-h>", function() A.select(4) end, desc = "Grapple 4" },
 
-  { "<leader>oa", function() Grapple.tag({ scope = "git_branch" }) end, desc = "Grapple tag dev +" },
-  { "<leader>og", "<cmd>Grapple toggle_scopes<cr>", desc = "Grapple scopes" },
-  { "<leader>oj", H.use_scope_and_open_ui, desc = "Grapple main <-> dev" },
-  { "<leader>or", "<cmd>Grapple reset<cr>", desc = "Grapple reset" },
+  { "<leader>oa", function() A.toggle({ scope = H.scopes[#H.scopes] }) end, desc = "Grapple 'dev' toggle" },
+  { "<leader>og", Grapple.toggle_scopes, desc = "Grapple scopes" },
+  { "<leader>oj", A.switch_context, desc = "Grapple switch context" },
+  { "<leader>or", A.reset, desc = "Grapple reset" },
 }) do
   H.map(key[1], key[2], key["desc"])
 end
 
 Grapple.setup({
-  scope = "git",
+  scope = H.scope,
   icons = false,
   status = true,
   style = "basename",
   quick_select = "",
-  -- -- override basename to always show the dir hint
-  styles = { basename = H.basename },
+  styles = { basename = H.basename }, -- override basename to always show the dir hint
 })

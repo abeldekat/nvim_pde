@@ -3,7 +3,7 @@ local MiniDeps = require("mini.deps")
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 local register = Util.deps.register
 
-local marker_use_visits = false -- false: use grapple.nvim
+local marker_use_grapple = false -- default mini.visits
 local pick_add_fzf = false
 local hardtime_now = false
 
@@ -38,6 +38,18 @@ end)
 
 later(function()
   --          ╭─────────────────────────────────────────────────────────╮
+  --          │                         Marking                         │
+  --          ╰─────────────────────────────────────────────────────────╯
+  local spec_grapple = "cbochs/grapple.nvim"
+  if marker_use_grapple then
+    add(spec_grapple)
+    require("ak.config.editor.grapple")
+  else
+    -- register(spec_grapple) -- download on demand. Used version 0.30.0
+    require("ak.config.editor.mini_visits")
+  end
+
+  --          ╭─────────────────────────────────────────────────────────╮
   --          │                          Mini                           │
   --          ╰─────────────────────────────────────────────────────────╯
   require("ak.config.editor.mini_clue")
@@ -60,18 +72,6 @@ later(function()
   end
 
   --          ╭─────────────────────────────────────────────────────────╮
-  --          │                         Marking                         │
-  --          ╰─────────────────────────────────────────────────────────╯
-  local spec_grapple = "cbochs/grapple.nvim"
-  if marker_use_visits then
-    register(spec_grapple)
-    require("ak.config.editor.mini_visits")
-  else
-    add(spec_grapple)
-    require("ak.config.editor.grapple")
-  end
-
-  --          ╭─────────────────────────────────────────────────────────╮
   --          │                         Quickfix                        │
   --          ╰─────────────────────────────────────────────────────────╯
   local spec_bqf = {
@@ -87,7 +87,7 @@ later(function()
   add("akinsho/toggleterm.nvim")
   require("ak.config.editor.toggleterm")
 
-  add("ggandor/leap.nvim") -- treesitter incremental selection
+  add("ggandor/leap.nvim") -- using treesitter incremental selection
   require("ak.config.editor.leap")
 
   local spec_spectre = "nvim-pack/nvim-spectre"

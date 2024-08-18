@@ -68,6 +68,7 @@ local opts = {
     -- Override C-j(newline) because C-y is harder to type:
     ["<C-j>"] = cmp.mapping.confirm({ select = true }),
 
+    -- TODO: problem on forward when text is "l"?
     ["<C-l>"] = cmp.mapping(snippets.forward, { "i", "s" }),
     ["<C-h>"] = cmp.mapping(snippets.backward, { "i", "s" }),
   }),

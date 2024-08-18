@@ -27,13 +27,10 @@ end
 
 -- Helper ================================================================
 
--- "abcdefghijklmnopqrstuvwxyz"
--- 20 letters:
--- asdfghjkl -- middle row
--- qweruio -- upper row
--- cvnm -- lower row
-H.labels = vim.split("asdfghjklqweruiocvnm", "") -- configurable
-H.virt_clues_pos = { "inline", "eol" } -- configurable { "inline" }, { "eol "}
+-- "acdefhijklmnorstuvwx"
+-- 19 letters, no "bcgpqyz"
+H.labels = vim.split("adefhijklmnorstuvwx", "") -- configurable
+H.virt_clues_pos = { "eol" } -- configurable { "inline", "eol" }, { "eol "}
 
 H.invert = function(tbl_in)
   local tbl_out = {}

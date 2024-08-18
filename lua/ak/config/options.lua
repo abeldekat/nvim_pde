@@ -37,7 +37,7 @@ opt.ignorecase = true -- Ignore case
 -- opt.inccommand = "nosplit" -- preview incremental substitute
 -- Preview substitutions live, as you type!
 opt.inccommand = "split" -- kickstart
-opt.jumpoptions = "view" -- TEST:
+opt.jumpoptions = "view"
 opt.laststatus = 3 -- global statusline
 opt.linebreak = true
 opt.list = true -- Show some invisible characters (tabs...
@@ -85,7 +85,7 @@ vim.g.markdown_recommended_style = 0
 opt.showtabline = 0 -- never show tabs, 1 is default, 2, -- always show tabs
 opt.colorcolumn = "80"
 -- opt.cmdheight = 0 -- on write, the statusline disappears
-opt.guicursor = ""
+opt.guicursor = "a:block"
 
 -- splits
 -- vim.opt.splitbelow = false -- Put new windows below current

@@ -3,6 +3,7 @@
 ---@field color_lazygit ak.util.color_lazygit
 ---@field defer ak.util.defer
 ---@field deps ak.util.deps
+---@field labels ak.util.labels
 ---@field lazyrc ak.util.lazyrc
 ---@field pick ak.util.pick
 ---@field toggle ak.util.toggle
@@ -30,6 +31,16 @@ end)()
 
 M.opened_with_arguments = function() return argc > 0 end
 M.opened_with_dir_argument = function() return has_one_single_dir_arg end
+
+M.full_path_of_current_buffer = function()
+  -- if the filetype is oil, then oil is active
+  if vim.bo.filetype == "oil" then
+    local path = require("oil").get_current_dir()
+    ---@diagnostic disable-next-line: need-check-nil
+    return path:sub(1, -2)
+  end
+  return vim.fn.expand("%:p") -- /home/user....
+end
 
 --          ╭─────────────────────────────────────────────────────────╮
 --          │             Copied code from lazy.core.util             │

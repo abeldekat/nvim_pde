@@ -1,6 +1,7 @@
 local AK = {} -- module using the structure of MiniStatusline
 local H = {} -- helpers, copied, modified or added
 local MiniStatusline = require("mini.statusline")
+local Utils = require("ak.util")
 
 AK.setup = function()
   H.create_diagnostic_hl() -- colored diagnostics
@@ -20,6 +21,7 @@ AK.active = function() -- entrypoint
   local diag = MiniStatusline.section_diagnostics({ trunc_width = 75, icon = "", signs = H.diag_signs })
   local diff = MiniStatusline.section_diff({ trunc_width = 75, icon = "" })
   local fileinfo = AK.section_fileinfo({ trunc_width = 120 })
+  -- local filename = MiniStatusline.section_filename({ trunc_width = 140 })
   local filename = AK.section_filename() -- { trunc_width = 140 }: Use automatic statusline truncation
   local git = MiniStatusline.section_git({ trunc_width = 40, icon = "" })
   local location = AK.section_location({ trunc_width = 75 })
@@ -49,14 +51,12 @@ end
 
 -- overridden: Use relative path if file is in cwd. Remove oil//
 AK.section_filename = function()
-  local function to_result(text) return text .. "%m%r" end -- modified, readonly
+  local flags = "%m%r"
+  local full_path = Utils.full_path_of_current_buffer()
+  if not full_path or full_path == "" then return "[No Name]" .. flags end
 
-  local is_oil = H.oil and vim.bo.filetype == "oil"
-  local full_path = is_oil and H.oil.get_current_dir() or vim.fn.expand("%:p")
-  if not full_path then return to_result("") end
-
-  local fmt = is_oil and ":~" or ":~:." -- always show full path in oil
-  return to_result(vim.fn.fnamemodify(full_path, fmt))
+  local fmt = vim.bo.filetype == "oil" and ":~" or ":~:." -- always show full path in oil
+  return vim.fn.fnamemodify(full_path, fmt) .. flags
 end
 
 -- overridden: removed filesize
@@ -126,8 +126,6 @@ H.fixed_hl = "MiniStatuslineFilename"
 
 H.markerline = nil
 
-H.oil = nil
-
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                  Helper functionality                   │
 --          ╰─────────────────────────────────────────────────────────╯
@@ -168,14 +166,12 @@ H.set_active = function() vim.wo.statusline = "%{%v:lua.MiniStatusline.active()%
 
 -- added
 H.is_blocked_filetype = function()
-  local blocked_filetypes = { ["ministarter"] = true }
+  -- local blocked_filetypes = { ["ministarter"] = true }
+  local blocked_filetypes = {}
   return blocked_filetypes[vim.bo.filetype]
 end
 
 H.optional_dependencies = function() -- See ak.deps.editor
-  local has_oil, oil = pcall(require, "oil")
-  if has_oil then H.oil = oil end
-
   if MiniVisits ~= nil then -- use internal visitsline plugin for mini.visits
     local visitsline = require("ak.config.ui.visitsline")
     visitsline.setup(H.set_active)
@@ -192,9 +188,7 @@ H.optional_dependencies = function() -- See ak.deps.editor
 end
 
 -- added
-H.marker_highlight = function()
-  return H.markerline and H.markerline.is_current_buffer_tagged() and "MiniHipatternsHack" or H.fixed_hl
-end
+H.marker_highlight = function() return H.markerline and H.markerline.has_buffer() and "MiniHipatternsHack" or H.fixed_hl end
 
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                        Activate                         │

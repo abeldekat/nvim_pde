@@ -54,17 +54,20 @@ Leader: `space`
 
 ### Navigation
 
-- Main plugins: grapple, oil, mini.pick and mini.jump2d.
+- Main plugins: mini.visits(configured to operate like grapple.nvim),
+  oil, mini.pick and mini.jump2d.
 - Menu: `mini.clue`
 
-#### Grapple
+#### Visits
 
-- Info in statusline: custom statusline component [grappleline]
+- Info in statusline: custom statusline component [visitsline]
 - Using the shortcuts for window navigation:
   `c-j`, `<c-k>`,`<c-l>`,`<c-h>`, corresponding to file 1-4
 - ui: `<leader>j` ("strongest finger")
-- Switch active list: `<leader>oj`
-- toggle tag: `<leader>a`
+- toggle label: `<leader>a`
+- Switch context: `<leader>oj`
+- maintain visits in label: `<leader>om`
+- clear visits in label: `<leader>or`
 
 Window navigation:
 
@@ -158,7 +161,7 @@ This repo uses code and ideas from the following repositories:
 [ak.deps]: lua/ak/deps
 [ak.config]: lua/ak/config
 [ak.util]: lua/ak/util
-[grappleline]: lua/ak/config/ui/grappleline.lua
+[visitsline]: lua/ak/config/ui/visitsline.lua
 [leader h]: lua/ak/util/color.lua
 [mini.operators]: https://github.com/echasnovski/mini.operators
 [mini.surround]: https://github.com/echasnovski/mini.surround

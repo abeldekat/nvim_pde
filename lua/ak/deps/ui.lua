@@ -7,7 +7,8 @@ vim.o.statusline = " " -- wait till statusline plugin is loaded
 later(function()
   require("ak.config.ui.mini_statusline")
   require("ak.config.ui.mini_indentscope")
-  require("ak.config.ui.mini_animate") -- PERF: :Startuptime is slower....
+  -- PERF: :Startuptime is slower....
+  require("ak.config.ui.mini_animate")
 end)
 
 if Util.opened_with_arguments() then return end
