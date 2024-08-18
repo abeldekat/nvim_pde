@@ -70,7 +70,7 @@ Leader: `space`
 - Maintain label: `<leader>om`
 - Remove label from files: `<leader>or`
 
-Window navigation:
+### Window navigation
 
 - `<c-w>hjkl` (stock `Neovim`)
 - `mw`(next window)
@@ -116,7 +116,7 @@ Ignoring changes to that file:
 git update-index --assume-unchanged lua/ak/colors.lua
 ```
 
-### Key conflicts
+## Key conflicts
 
 Replace **replace** with **substitute** mnemonic:
 
