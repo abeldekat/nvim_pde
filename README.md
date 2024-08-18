@@ -54,20 +54,21 @@ Leader: `space`
 
 ### Navigation
 
-- Main plugins: mini.visits(configured to operate like grapple.nvim),
-  oil, mini.pick and mini.jump2d.
+- Main plugins: mini.visits, oil, mini.pick and mini.jump2d.
+- I configured `mini.visits` to operate in almost the same way as `grapple.nvim`
 - Menu: `mini.clue`
 
 #### Visits
 
 - Info in statusline: custom statusline component [visitsline]
-- Using the shortcuts for window navigation:
-  `c-j`, `<c-k>`,`<c-l>`,`<c-h>`, corresponding to file 1-4
-- ui: `<leader>j` ("strongest finger")
-- toggle label: `<leader>a`
-- Switch context: `<leader>oj`
-- maintain visits in label: `<leader>om`
-- clear visits in label: `<leader>or`
+- Toggle current label on file: `<leader>a`
+- The shortcuts normally used for window navigation correspond to file 1-4:
+  `c-j`, `<c-k>`,`<c-l>`,`<c-h>`,
+- Pick files having current label: `<leader>j` ("strongest finger")
+- Pick all labeled files: `<leader>,`
+- Switch context(label): `<leader>oj`
+- Maintain label: `<leader>om`
+- Remove label from files: `<leader>or`
 
 Window navigation:
 
@@ -121,7 +122,9 @@ Replace **replace** with **substitute** mnemonic:
 
 In my config, the suggested key `gr`("go replace") in [mini.operators] is already used
 for the `lsp`("go references").
+
 I prefer "two character hotkeys" as I use some lsp keys quite often(`gd`, `gr`).
+
 Solution: Change operator `gr` into `gs`, mnemonic for "go substitute".
 
 Consequences:
