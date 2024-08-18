@@ -10,7 +10,7 @@ My _personal development environment_ for Neovim
 >
 > Tag [with_lazynvim] references the version containing `lazy.nvim` and `mini.deps`
 
-### Structure
+## Structure
 
 - `init`: Uses `:h vim.loader` and calls `ak.init`
 - [ak.init]: Invoke [ak.mini_deps]
