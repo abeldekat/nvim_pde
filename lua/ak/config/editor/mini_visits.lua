@@ -37,6 +37,33 @@ H.labels = Utils.labels.visits
 H.label = H.labels[1]
 H.autowrite = false
 
+-- Copied, needed for H.maintain_show
+H.buf_name_counts = {}
+-- Copied
+H.buf_set_name = function(buf_id, name)
+  local n = (H.buf_name_counts[name] or 0) + 1
+  H.buf_name_counts[name] = n
+  local suffix = n == 1 and "" or ("_" .. n)
+  vim.api.nvim_buf_set_name(buf_id, name .. suffix)
+end
+-- Copied
+H.full_path = function(path) return (vim.fn.fnamemodify(path, ":p"):gsub("/+", "/"):gsub("(.)/$", "%1")) end
+if H.is_windows then
+  H.full_path = function(path)
+    return (vim.fn.fnamemodify(path, ":p"):gsub("\\", "/"):gsub("/+", "/"):gsub("(.)/$", "%1"))
+  end
+end
+-- Copied
+H.short_path = function(path, cwd)
+  cwd = cwd or vim.fn.getcwd()
+  -- Ensure `cwd` is treated as directory path (to not match similar prefix)
+  cwd = cwd:sub(-1) == "/" and cwd or (cwd .. "/")
+  if vim.startswith(path, cwd) then return path:sub(cwd:len() + 1) end
+  local res = vim.fn.fnamemodify(path, ":~")
+  if H.is_windows then res = res:gsub("\\", "/") end
+  return res
+end
+
 H.map = function(lhs, rhs, desc) vim.keymap.set("n", lhs, rhs, { desc = desc, silent = true }) end
 
 -- TODO: Good enough, but not guaranteed to be unique
@@ -75,61 +102,29 @@ H.gen_normalize = function() -- keep visits with labels, remove others
   end
 end
 
--- Copied, needed for H.maintain_show
-H.buf_name_counts = {}
--- Copied
-H.buf_set_name = function(buf_id, name)
-  local n = (H.buf_name_counts[name] or 0) + 1
-  H.buf_name_counts[name] = n
-  local suffix = n == 1 and "" or ("_" .. n)
-  vim.api.nvim_buf_set_name(buf_id, name .. suffix)
-end
-
 H.on_change = function()
   vim.api.nvim_exec_autocmds("User", { pattern = "VisitsModified", modeline = false })
   if not H.autowrite then Visits.write_index() end
 end
 
-H.list_paths_to_maintain = function(label)
-  return vim.tbl_map(function(full_path) -- /home/user
-    return vim.fn.fnamemodify(full_path, ":~:.") -- ~/ or relative
-  end, Visits.list_paths(nil, { filter = label }))
-end
-
-H.maintain_update = function(paths, label)
+H.maintain_finish = function(paths_from_user, label)
+  -- KISS: Remove label from all paths in cwd
   for _, path in ipairs(Visits.list_paths(nil, { filter = label })) do
-    Visits.remove_label(label, path) -- just remove all labels...
+    Visits.remove_label(label, path)
   end
 
-  -- Code copied and modified from H.finish in mini.deps
-  local timer, step_delay = vim.loop.new_timer(), 1 -- ms
-  local callback_queue = vim.tbl_keys(paths)
-  local f = nil
-  local os_time_org = os.time
-  f = vim.schedule_wrap(function()
-    local ind = callback_queue[1]
-    if ind == nil then
-      H.on_change()
-      return
-    end
-
-    table.remove(callback_queue, 1)
-    local path = paths[ind]
-
-    -- HACK: Force "latest" to differ one second when registering a visit
-    ---@diagnostic disable-next-line: duplicate-set-field
-    os.time = function()
-      local result = os_time_org()
-      return result + ind -- seconds!
-    end
-    pcall(Visits.register_visit, path) -- pcall, always restore os.time
-    os.time = os_time_org
-    pcall(Visits.add_label, label, path)
-
-    ---@diagnostic disable-next-line: param-type-mismatch
-    timer:start(step_delay, 0, f)
-  end)
-  timer:start(step_delay, 0, f)
+  -- KISS: Add label to paths in the order the user provided
+  local index = Visits.get_index() or {}
+  local cwd_tbl = index[vim.fn.getcwd()] or {}
+  for ind, path in ipairs(paths_from_user) do -- os.time: in seconds
+    local data = cwd_tbl[path] or { count = 0, latest = 0 }
+    data.latest = os.time() + ind -- ensure 1 second difference with previous
+    data.labels = data.labels and data.labels or {}
+    data.labels[label] = true -- add the label
+    cwd_tbl[path] = data
+  end
+  Visits.set_index(index)
+  H.on_change()
 end
 
 H.maintain_show = function(lines, opts)
@@ -165,7 +160,7 @@ H.maintain_show = function(lines, opts)
   vim.bo.buftype, vim.bo.filetype, vim.bo.modified = "acwrite", "visits-label-maintain", false
 end
 
-H.maintain = function(lines, label)
+H.maintain = function(label)
   local report = {
     string.format("Maintain visits that are labeled with [%s]", label),
     "",
@@ -177,14 +172,17 @@ H.maintain = function(lines, label)
     "",
   }
   local n_header = #report
-  vim.list_extend(report, lines)
+  local items = vim.tbl_map(function(full_path) -- show short paths
+    return H.short_path(full_path)
+  end, Visits.list_paths(nil, { filter = label }))
+  vim.list_extend(report, items) -- show short paths
 
   local finish = function(buf_id)
     local paths = {}
     for _, l in ipairs(vim.api.nvim_buf_get_lines(buf_id, n_header, -1, false)) do
-      table.insert(paths, l)
+      table.insert(paths, H.full_path(l)) -- update full paths
     end
-    H.maintain_update(paths, label)
+    H.maintain_finish(paths, label)
   end
   local name = string.format("visits-ak://maintain-%s", label)
   H.maintain_show(report, { name = name, exec_on_write = finish, n_header = n_header })
@@ -202,7 +200,7 @@ local A = {
       vim.api.nvim_exec_autocmds("User", { pattern = "VisitsSwitchedContext", modeline = false, data = H.label })
     end)
   end,
-  maintain = function() H.maintain(H.list_paths_to_maintain(H.label), H.label) end,
+  maintain = function() H.maintain(H.label) end,
   clear = function()
     local visits = Visits.list_paths(nil, { filter = H.label })
     for _, path in ipairs(visits) do
