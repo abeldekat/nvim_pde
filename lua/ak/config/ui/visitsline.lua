@@ -1,5 +1,3 @@
--- Replaces grappleline...
-
 local M = {}
 local Visits = require("mini.visits")
 local Utils = require("ak.util")

@@ -1,5 +1,4 @@
--- Replaces grapple.nvim...
-
+-- Replaces grapple.nvim/harpoon
 -- Approach:
 --
 -- A label provides access to important visits(files/dirs) to work on a task.

@@ -37,13 +37,6 @@ end)
 
 later(function()
   --          ╭─────────────────────────────────────────────────────────╮
-  --          │                         Marking                         │
-  --          ╰─────────────────────────────────────────────────────────╯
-  -- add("cbochs/grapple.nvim") -- download on demand. Used version 0.30.0
-  -- require("ak.config.editor.grapple")
-  require("ak.config.editor.mini_visits")
-
-  --          ╭─────────────────────────────────────────────────────────╮
   --          │                          Mini                           │
   --          ╰─────────────────────────────────────────────────────────╯
   require("ak.config.editor.mini_clue")
@@ -52,6 +45,7 @@ later(function()
   require("ak.config.editor.mini_jump2d")
   require("ak.config.editor.mini_git")
   require("ak.config.editor.mini_diff")
+  require("ak.config.editor.mini_visits") -- marks like grapple.nvim/harpoon
 
   --          ╭─────────────────────────────────────────────────────────╮
   --          │                          Pick                           │

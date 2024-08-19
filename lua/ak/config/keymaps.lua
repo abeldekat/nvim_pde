@@ -52,7 +52,7 @@ map("n", "]w", diagnostic_goto(true, "WARN"), { desc = "Next warning" })
 map("n", "[w", diagnostic_goto(false, "WARN"), { desc = "Prev warning" })
 
 -- edit cwd
--- using grapple, tmux-sessionizer and tmuxp, other explore mappings are not needed
+-- using mini.visits, tmux-sessionizer and tmuxp, other explore mappings are not needed
 map("n", "<leader>e", function() vim.cmd.edit(vim.uv.cwd()) end, { desc = "Edit cwd" })
 
 -- indenting

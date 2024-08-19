@@ -192,33 +192,6 @@ Pick.registry.buffer_lines_current = function()
   MiniExtra.pickers.buf_lines({ scope = "current", preserve_order = true }, { source = { show = show } })
 end
 
-Pick.registry.grapple = function()
-  local ok, Grapple = pcall(require, "grapple")
-  if not ok then return end
-
-  local function tag_to_item(tag, scope)
-    local result = {
-      path = tag.path,
-      text = string.format(" %-12s %s", scope, vim.fn.fnamemodify(tag.path, ":~:.")),
-    }
-    if tag.cursor then
-      result["lnum"] = tag.cursor[1]
-      result["col"] = tag.cursor[2]
-    end
-    return result
-  end
-
-  local picker_items = function()
-    local result = {}
-    for _, scope in ipairs(Utils.labels.grapple) do
-      local tags = Grapple.tags({ scope = scope })
-      if tags then vim.list_extend(result, vim.tbl_map(function(tag) return tag_to_item(tag, scope) end, tags)) end
-    end
-    return result
-  end
-  return Pick.start({ label = true, source = { name = "Grapple all", items = picker_items, show = H.show_with_icons } })
-end
-
 Pick.registry.visits_by_label = function() -- a customized Extra.pickers.visit_paths
   -- Not copied: H.full_path, H.normalize_path,H.is_windows
   -- Copied from mini.extra:
@@ -309,8 +282,7 @@ local function keys()
     builtin.buffers({}, opts)
   end
   map("<leader>;", labeled_buffers, { desc = "Buffers pick" }) -- home row, used often
-  local desc_leader_comma = MiniVisits and "Visits pick" or "Grapple pick"
-  map("<leader>,", MiniVisits and custom.visits_by_label or custom.grapple, { desc = desc_leader_comma })
+  if MiniVisits ~= nil then map("<leader>,", custom.visits_by_label, { desc = "Visits pick" }) end
   local labeled_symbols = function() extra.lsp({ scope = "document_symbol" }, { label = true }) end
   map("<leader>b", labeled_symbols, { desc = "Buffer symbols" })
   map("<leader>l", builtin.grep_live, { desc = "Live grep" })

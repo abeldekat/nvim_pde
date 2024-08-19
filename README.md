@@ -96,7 +96,7 @@ in combination with the forefinger of the left hand
 - `mini.statusline`, no colors, except on:
   - mode change
   - diagnostics
-  - current buffer is tagged(grapple)
+  - current buffer has current label (mini.visits)
   - macro recording
 - many color-schemes
 

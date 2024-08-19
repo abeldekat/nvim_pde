@@ -8,9 +8,4 @@ M.visits = {
   "col", -- Other files of interest, potentially more than four
 }
 
-M.grapple = { -- global, static, cwd, git, git_branch, lsp
-  "git",
-  "git_branch",
-}
-
 return M
