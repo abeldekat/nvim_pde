@@ -3,7 +3,6 @@ local MiniDeps = require("mini.deps")
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 local register = Util.deps.register
 
-local marker_use_grapple = false -- default mini.visits
 local pick_add_fzf = false
 local hardtime_now = false
 
@@ -40,14 +39,9 @@ later(function()
   --          ╭─────────────────────────────────────────────────────────╮
   --          │                         Marking                         │
   --          ╰─────────────────────────────────────────────────────────╯
-  local spec_grapple = "cbochs/grapple.nvim"
-  if marker_use_grapple then
-    add(spec_grapple)
-    require("ak.config.editor.grapple")
-  else
-    -- register(spec_grapple) -- download on demand. Used version 0.30.0
-    require("ak.config.editor.mini_visits")
-  end
+  -- add("cbochs/grapple.nvim") -- download on demand. Used version 0.30.0
+  -- require("ak.config.editor.grapple")
+  require("ak.config.editor.mini_visits")
 
   --          ╭─────────────────────────────────────────────────────────╮
   --          │                          Mini                           │
@@ -58,9 +52,13 @@ later(function()
   require("ak.config.editor.mini_jump2d")
   require("ak.config.editor.mini_git")
   require("ak.config.editor.mini_diff")
+
+  --          ╭─────────────────────────────────────────────────────────╮
+  --          │                          Pick                           │
+  --          ╰─────────────────────────────────────────────────────────╯
   require("ak.config.editor.mini_pick_labeled")
   require("ak.config.editor.mini_pick")
-  if pick_add_fzf then -- download fzf on demand, not registered
+  if pick_add_fzf then -- download fzf on demand
     local spec_fzf = "ibhagwan/fzf-lua"
     register(spec_fzf)
     Util.defer.on_keys(function()
