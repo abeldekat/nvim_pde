@@ -114,11 +114,12 @@ H.maintain_finish = function(paths_from_user, label)
   end
 
   -- KISS: Add label to paths in the order the user provided
-  local index = Visits.get_index() or {}
+  local index = Visits.get_index()
   local cwd_tbl = index[vim.fn.getcwd()] or {}
+  local time = os.time()
   for ind, path in ipairs(paths_from_user) do -- os.time: in seconds
     local data = cwd_tbl[path] or { count = 0, latest = 0 }
-    data.latest = os.time() + ind -- ensure 1 second difference with previous
+    data.latest = time + ind -- ensure 1 second difference with previous
     data.labels = data.labels and data.labels or {}
     data.labels[label] = true -- add the label
     cwd_tbl[path] = data
@@ -175,7 +176,7 @@ H.maintain = function(label)
   local items = vim.tbl_map(function(full_path) -- show short paths
     return H.short_path(full_path)
   end, Visits.list_paths(nil, { filter = label }))
-  vim.list_extend(report, items) -- show short paths
+  vim.list_extend(report, items)
 
   local finish = function(buf_id)
     local paths = {}
@@ -193,7 +194,7 @@ end
 local A = {
   ui = function() Visits.select_path(nil, { filter = H.label }) end,
   select = function(index) H.iterate(H.label, index) end,
-  switch_context = function() -- alternatively: MiniExtra.pickers.visit_labels
+  switch_context = function()
     vim.ui.select(H.labels, { prompt = "Visits switch context" }, function(choice)
       if not choice then return end
       H.label = choice
@@ -202,8 +203,7 @@ local A = {
   end,
   maintain = function() H.maintain(H.label) end,
   clear = function()
-    local visits = Visits.list_paths(nil, { filter = H.label })
-    for _, path in ipairs(visits) do
+    for _, path in ipairs(Visits.list_paths(nil, { filter = H.label })) do
       Visits.remove_label(H.label, path)
     end
     H.on_change()
@@ -213,7 +213,7 @@ local A = {
     if vim.list_contains(Visits.list_paths(nil, { filter = label }), full_path) then
       Visits.remove_label(label, full_path)
     else
-      Visits.register_visit(full_path) -- must change "latest" field
+      Visits.register_visit(full_path) -- must update "latest" field
       Visits.add_label(label, full_path)
     end
     H.on_change()
@@ -250,5 +250,5 @@ Visits.setup({
     normalize = H.gen_normalize(), -- remove visits without labels
     path = H.somewhat_unique_project_name(), -- store per project dir
   },
-  track = { event = "" }, -- visits are added programmatically as a result of actions
+  track = { event = "" }, -- add visits programmatically on action
 })
