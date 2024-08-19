@@ -129,6 +129,24 @@ Consequences:
 - [mini.operators]: Change suggested key `gs`("go sort") into `gS`.
 - [mini.surround]: Change `sr`(surround replace) into `ss`(surround substitute).
 
+## Mini
+
+Many of the excellent modules included in [mini.nvim] are used in this config:
+
+`ai`, `align`, `animate`, `base16`, `clue`, `cursorword`,
+`deps`, `diff`, `git`, `hipatterns`, `hue`, `icons`,
+`indentscope`, `jump2d`, `move`, `notify`, `operators`, `pairs`,
+`pick`, `splitjoin`, `starter`, `statusline`, `surround`, `visits`
+
+Relevant discussions:
+
+- [From `grapple` to `mini.visits`](https://github.com/echasnovski/mini.nvim/discussions/1158)
+- [Augment pickers with labels and hotkeys](https://github.com/echasnovski/mini.nvim/discussions/1109)
+- [Pick bufferlines with treesitter highlighting](https://github.com/echasnovski/mini.nvim/discussions/988)
+- [Apply tokyonight dev environment](https://github.com/echasnovski/mini.nvim/discussions/1012)
+- [Optimized jumping with jump2d](https://github.com/echasnovski/mini.nvim/discussions/1033)
+- [Beta testing mini.deps](https://github.com/echasnovski/mini.nvim/issues/689#issuecomment-1962327624)
+
 ## Environment
 
 [tmux](https://github.com/abeldekat/tmux)
@@ -163,6 +181,7 @@ This repo uses code and ideas from the following repositories:
 [ak.util]: lua/ak/util
 [visitsline]: lua/ak/config/ui/visitsline.lua
 [leader h]: lua/ak/util/color.lua
+[mini.nvim]: https://github.com/echasnovski/mini.nvim
 [mini.operators]: https://github.com/echasnovski/mini.operators
 [mini.surround]: https://github.com/echasnovski/mini.surround
 [peek.nvim]: https://github.com/toppair/peek.nvim
