@@ -9,10 +9,10 @@ local colors = {
   one = function()
     return {
       { source = "catppuccin/nvim", name = "colors_catppuccin" },
-      { source = "folke/tokyonight.nvim", name = "colors_tokyonight" },
       { source = "EdenEast/nightfox.nvim", name = "colors_nightfox" },
       { source = "rose-pine/neovim", name = "colors_rose-pine" },
       { source = "ribru17/bamboo.nvim", name = "colors_bamboo" },
+      { source = "savq/melange-nvim", name = "colors_melange" },
     }
   end,
 
@@ -37,10 +37,10 @@ local colors = {
 
   four = function()
     return {
+      { source = "folke/tokyonight.nvim", name = "colors_tokyonight" },
       { source = "lifepillar/vim-solarized8", name = "colors_solarized8", checkout = "neovim" },
       { source = "AstroNvim/astrotheme", name = "colors_astrotheme" },
       { source = "ronisbr/nano-theme.nvim", name = "colors_nano-theme" },
-      { source = "savq/melange-nvim", name = "colors_melange" },
     }
   end,
 }

@@ -15,14 +15,6 @@ vim.notify = function(msg, level, _) -- opts
   -- end
 end
 
--- vim.keymap.set("n", "<leader>sna", function()
---   local result = vim.tbl_filter(function(notif) return notif.ts_remove == nil end, MiniNotify.get_all())
---   vim.print(vim.inspect(result))
--- end, {
---   desc = "MiniNotify print active",
---   silent = true,
--- })
-
 vim.keymap.set("n", "<leader>un", function() MiniNotify.clear() end, {
   desc = "Notify clear",
   silent = true,
@@ -32,8 +24,3 @@ vim.keymap.set("n", "<leader>on", function() MiniNotify.show_history() end, {
   desc = "Notify history",
   silent = true,
 })
-
--- vim.keymap.set("n", "<leader>snr", function() MiniNotify.refresh() end, {
---   desc = "MiniNotify refresh",
---   silent = true,
--- })

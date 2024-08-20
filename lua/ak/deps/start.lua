@@ -15,7 +15,6 @@ if Util.opened_with_dir_argument() then now(icons) else later(icons) end
 later(function()
   require("ak.config.keymaps")
   require("ak.config.mini_notify") -- better installation process
-
   require("ak.config.mini_extra") -- pickers and ai. No config
   add("nvim-lua/plenary.nvim")
 end)
