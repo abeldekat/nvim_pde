@@ -169,7 +169,7 @@ Pick.registry.buffer_lines_current = function()
     local lines = vim.api.nvim_buf_get_lines(buf_id, 0, -1, false)
     local digit_prefixes = {}
     for i, l in ipairs(lines) do
-      local _, prefix_end, prefix = l:find("^(%d+│)")
+      local _, prefix_end, prefix = l:find("^(%s*%d+│)")
       if prefix_end ~= nil then
         digit_prefixes[i], lines[i] = prefix, l:sub(prefix_end + 1)
       end
@@ -177,9 +177,7 @@ Pick.registry.buffer_lines_current = function()
 
     vim.api.nvim_buf_set_lines(buf_id, 0, -1, false, lines)
     for i, pref in pairs(digit_prefixes) do
-      -- pref = string.sub(pref, 1, -4) -- Remove multi byte char "│"
-      local extmark_opts =
-        { virt_text = { { string.format("%8.8s", pref), "MiniPickNormal" } }, virt_text_pos = "inline" }
+      local extmark_opts = { virt_text = { { pref, "MiniPickNormal" } }, virt_text_pos = "inline" }
       vim.api.nvim_buf_set_extmark(buf_id, H.ns_id.ak, i - 1, 0, extmark_opts)
     end
 
@@ -189,7 +187,9 @@ Pick.registry.buffer_lines_current = function()
     local has_ts, _ = pcall(vim.treesitter.start, buf_id, has_lang and lang or ft)
     if not has_ts and ft then vim.bo[buf_id].syntax = ft end
   end
-  MiniExtra.pickers.buf_lines({ scope = "current" }, { source = { show = show } })
+  -- local local_opts = { scope = "current", preserve_order = true }
+  local local_opts = { scope = "current" }
+  MiniExtra.pickers.buf_lines(local_opts, { source = { show = show } })
 end
 
 Pick.registry.visits_by_label = function() -- a customized Extra.pickers.visit_paths
@@ -308,8 +308,8 @@ local function keys()
   map("<leader>fh", builtin.help, { desc = "Help" })
   map("<leader>fi", function() vim.notify("No picker for fzf-lua builtin") end, { desc = "Fzf-lua builtin" })
   map("<leader>fk", extra.keymaps, { desc = "Key maps" })
-  map("<leader>fl", custom.buffer_lines_current, { desc = "Buffer lines" })
-  map("<leader>fL", function() extra.buf_lines() end, { desc = "Buffers lines" })
+  map("<leader>fl", extra.buf_lines, { desc = "Buffers lines" })
+  map("<leader>fL", function() extra.buf_lines({ scope = "current" }) end, { desc = "Buffer lines" })
   map("<leader>fm", extra.git_hunks, { desc = "Unstaged hunks" })
   local git_hunks = function() extra.git_hunks({ path = vim.fn.expand("%") }) end
   map("<leader>fM", git_hunks, { desc = "Unstaged hunks (current)" })
