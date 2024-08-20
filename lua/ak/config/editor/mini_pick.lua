@@ -189,7 +189,7 @@ Pick.registry.buffer_lines_current = function()
     local has_ts, _ = pcall(vim.treesitter.start, buf_id, has_lang and lang or ft)
     if not has_ts and ft then vim.bo[buf_id].syntax = ft end
   end
-  MiniExtra.pickers.buf_lines({ scope = "current", preserve_order = true }, { source = { show = show } })
+  MiniExtra.pickers.buf_lines({ scope = "current" }, { source = { show = show } })
 end
 
 Pick.registry.visits_by_label = function() -- a customized Extra.pickers.visit_paths

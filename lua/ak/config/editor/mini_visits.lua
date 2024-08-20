@@ -1,13 +1,10 @@
--- Replaces grapple.nvim/harpoon
--- Approach:
+-- Replaces grapple.nvim/harpoon.Approach:
 --
 -- A label provides access to important visits(files/dirs) to work on a task.
 -- As such, a label is contextual. There can be multiple labels.
 -- For the active label, the first four files are on ctrl-{jklh}
 --
 -- <leader>a toggles the current label on a visit.
--- There is a generic 'col'(collection) label for which files can always be toggled using <leader>oa
---
 -- Pick.registry.visits_by_label provides fast sorted access to all labeled visits.
 -- No need to change the current context.
 --
@@ -29,12 +26,10 @@ local Visits = require("mini.visits")
 local Utils = require("ak.util")
 
 -- Helpers:
-
 local H = {}
-
 H.labels = Utils.labels.visits
 H.label = H.labels[1]
-H.autowrite = false
+H.col_label = H.labels[#H.labels] -- special toggle key
 
 -- Copied, needed for H.maintain_show
 H.buf_name_counts = {}
@@ -65,8 +60,7 @@ end
 
 H.map = function(lhs, rhs, desc) vim.keymap.set("n", lhs, rhs, { desc = desc, silent = true }) end
 
--- TODO: Good enough, but not guaranteed to be unique
-H.somewhat_unique_project_name = function()
+H.somewhat_unique_project_name = function() -- Good enough, but not guaranteed to be unique
   local result = string.format("%s/%s", vim.fn.stdpath("data"), "mini-visits-index")
   local cwd = vim.fn.getcwd()
   local cwd_to_number = 1
@@ -76,7 +70,7 @@ H.somewhat_unique_project_name = function()
   return string.format("%s-%d-%s", result, cwd_to_number, vim.fn.fnamemodify(cwd, ":t"))
 end
 
-H.iterate = function(label, index) -- does not track!
+H.iterate = function(label, index)
   Visits.iterate_paths("first", nil, {
     filter = label,
     n_times = index,
@@ -103,16 +97,12 @@ end
 
 H.on_change = function()
   vim.api.nvim_exec_autocmds("User", { pattern = "VisitsModified", modeline = false })
-  if not H.autowrite then Visits.write_index() end
+  Visits.write_index()
 end
 
 H.maintain_finish = function(paths_from_user, label)
-  -- KISS: Remove label from all paths in cwd
-  for _, path in ipairs(Visits.list_paths(nil, { filter = label })) do
-    Visits.remove_label(label, path)
-  end
+  Visits.remove_label(label, "", "")
 
-  -- KISS: Add label to paths in the order the user provided
   local index = Visits.get_index()
   local cwd_tbl = index[vim.fn.getcwd()] or {}
   local time = os.time()
@@ -189,7 +179,6 @@ H.maintain = function(label)
 end
 
 -- Actions:
-
 local A = {
   ui = function() Visits.select_path(nil, { filter = H.label }) end,
   select = function(index) H.iterate(H.label, index) end,
@@ -202,9 +191,7 @@ local A = {
   end,
   maintain = function() H.maintain(H.label) end,
   clear = function()
-    for _, path in ipairs(Visits.list_paths(nil, { filter = H.label })) do
-      Visits.remove_label(H.label, path)
-    end
+    Visits.remove_label(H.label, "", "")
     H.on_change()
   end,
   toggle = function(label)
@@ -220,7 +207,6 @@ local A = {
 }
 
 -- Setup:
-
 for _, key in ipairs({
   -- Most important keys:
   { "<leader>j", A.ui, desc = "Visits ui" },
@@ -233,7 +219,7 @@ for _, key in ipairs({
   { "<c-h>", function() A.select(4) end, desc = "Visit 4" },
 
   -- Other actions:
-  { "<leader>oa", function() A.toggle(H.labels[#H.labels]) end, desc = "Visits 'col' toggle" },
+  { "<leader>oa", function() A.toggle(H.col_label) end, desc = "Visits 'col' toggle" },
   { "<leader>oj", A.switch_context, desc = "Visits switch context" },
   { "<leader>om", A.maintain, desc = "Visits maintain" },
   { "<leader>or", A.clear, desc = "Visits clear" },
@@ -245,7 +231,7 @@ Visits.setup({
   list = { sort = H.sort }, -- only on recency
   silent = true, -- false,
   store = {
-    autowrite = H.autowrite, -- if false, write on action
+    autowrite = false,
     normalize = H.gen_normalize(), -- remove visits without labels
     path = H.somewhat_unique_project_name(), -- store per project dir
   },
