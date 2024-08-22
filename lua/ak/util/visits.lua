@@ -5,6 +5,9 @@ local api_all_cwd = ""
 local api_all_paths = ""
 
 -- The index file is stored per project dir, so the 'cwd' as key can always be the same
+-- Another benefit: A "cd" does not disrupt the workflow
+-- All visits are always added to this 'cwd' key, preventing visits for the same paths
+-- to be registered in multiple places.
 local dummy_cwd = string.format("%s", vim.fn.expand("~")) -- guaranteed to exist
 
 local start_label, generic_label, global_label = "main", "gen", "glo"

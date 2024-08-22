@@ -1,12 +1,10 @@
 -- Replaces grapple.nvim/harpoon.Approach:
 --
--- A label provides access to important visits(files/dirs) to work on a task
--- As such, a label is contextual. There can be multiple labels
+-- A label is contextual and provides access to important visits(files/dirs) to work on a task
 -- The first four files of the active label are on ctrl-{jklh}
 --
 -- <leader>a toggles the current label on a visit
 -- Pick.registry.visits_by_label provides fast sorted access to all labeled visits
--- No need to change the current context
 --
 -- See also:
 -- 1. ak.util.visits
@@ -19,9 +17,6 @@
 -- change the order of paths in that other label. I don't consider this a problem
 
 -- This setup works with one visit index file per project dir
--- The global label uses a separate file and a fixed dummy cwd, in order to
--- prevent the same paths to be stored in multiple cwd. In this setup,
--- those are not useful.
 -- Tested to also operate correctly when using MiniMisc.setup_auto_root:
 -- vim.fn.changedir on BufEnter.
 
