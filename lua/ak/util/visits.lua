@@ -1,23 +1,19 @@
 -- Encapsulate the "label" part of mini.visits
 
 local api_default_store_path = nil -- config.store.path
-local api_current_cwd = nil -- current cwd, vim.fn.getcwd
 local api_all_cwd = ""
 local api_all_paths = ""
+
+-- The index file is stored per project dir, so the 'cwd' as key can always be the same
+local dummy_cwd = string.format("%s", vim.fn.expand("~")) -- guaranteed to exist
 
 local start_label, generic_label, global_label = "main", "gen", "glo"
 
 local overrides = {
   [global_label] = {
-    cwd = string.format("%s", vim.fn.expand("~")), -- a dummy cwd, guaranteed to exist
     store_path = string.format("%s/%s/%s", vim.fn.stdpath("data"), "mini_visits", "index-global"),
   },
 }
-
-local calc_cwd_on_add = function(label)
-  local override = overrides[label]
-  return override and override.cwd or api_current_cwd -- api_all_cwd not allowed!
-end
 
 -- CustomVisits public:
 
@@ -52,13 +48,13 @@ M.write_index = function(label)
   MiniVisits.write_index(override and override.store_path or api_default_store_path)
 end
 
--- MiniVisits api, controlling cwd based on label when adding:
+-- MiniVisits api, controlling cwd when adding:
 
-M.register_visit = function(full_path, label) MiniVisits.register_visit(full_path, calc_cwd_on_add(label)) end
+M.register_visit = function(full_path) MiniVisits.register_visit(full_path, dummy_cwd) end
 
-M.add_label = function(label, full_path) MiniVisits.add_label(label, full_path, calc_cwd_on_add(label)) end
+M.add_label = function(label, full_path) MiniVisits.add_label(label, full_path, dummy_cwd) end
 
--- MiniVisits api, controlling all cwd in index file when retrieve or removing:
+-- MiniVisits api, controlling all cwd in index file when retrieving or removing:
 
 local cwd_to_use = api_all_cwd
 M.list_paths = function(label) return MiniVisits.list_paths(cwd_to_use, { filter = label }) end

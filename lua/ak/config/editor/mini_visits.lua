@@ -179,7 +179,7 @@ local A = {
     if vim.list_contains(CustomVisits.list_paths(label), full_path) then
       CustomVisits.remove_label(label, full_path)
     else
-      CustomVisits.register_visit(full_path, label) -- must update "latest" field
+      CustomVisits.register_visit(full_path) -- must update "latest" field
       CustomVisits.add_label(label, full_path)
     end
     H.on_change(label)
