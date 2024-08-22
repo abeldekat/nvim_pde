@@ -10,6 +10,7 @@
 -- Paths: No filename first option
 
 local Utils = require("ak.util")
+local CustomVisits = Utils.visits
 local Pick = require("mini.pick")
 local Extra = require("mini.extra")
 
@@ -212,8 +213,8 @@ Pick.registry.visits_by_label = function() -- a customized Extra.pickers.visit_p
 
   local picker_items = vim.schedule_wrap(function()
     local items = {}
-    for _, label in ipairs(Utils.labels.visits) do
-      local paths = MiniVisits.list_paths(nil, { filter = label })
+    for _, label in ipairs(CustomVisits.labels) do
+      local paths = CustomVisits.list_paths(label)
       if paths then vim.list_extend(items, paths_to_items(paths, label)) end
     end
     Pick.set_picker_items(items)

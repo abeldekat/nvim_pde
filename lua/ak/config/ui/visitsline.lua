@@ -1,8 +1,8 @@
 local M = {}
-local Visits = require("mini.visits")
 local Utils = require("ak.util")
+local CustomVisits = Utils.visits
 
-local label_name = Utils.labels.visits[1]
+local label_name = CustomVisits.start_label
 local is_current_buffer_labeled = false
 local cached_line
 local notify_cb
@@ -22,7 +22,7 @@ local opts = {
 }
 
 local function produce()
-  local visits = Visits.list_paths(nil, { filter = label_name }) or {}
+  local visits = CustomVisits.list_paths(label_name) or {}
   is_current_buffer_labeled = false
 
   local label = opts.label_names[label_name] or string.format("%s:", label_name)

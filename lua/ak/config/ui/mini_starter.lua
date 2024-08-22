@@ -55,6 +55,7 @@ function M.setup(pm_opts)
     header = header_cb,
     items = { recent_files_items, pm_opts.items, commands_items },
     query_updaters = pm_opts.query_updaters .. "ekq123456789",
+    silent = true, -- works better with pickers
   }
   Starter.setup(opts)
 end
