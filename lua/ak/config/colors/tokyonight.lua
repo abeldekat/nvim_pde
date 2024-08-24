@@ -13,10 +13,8 @@ local plugins = {
   ["kinds"] = true,
   ["semantic_tokens"] = true,
   ["treesitter"] = true,
-  ["aerial"] = true,
   ["fzf"] = true,
   ["headlines"] = true,
-  ["indent-blankline"] = true,
   ["leap"] = true,
   ["mini_animate"] = true,
   ["mini_clue"] = true,
@@ -27,8 +25,8 @@ local plugins = {
   ["mini_files"] = true,
   ["mini_hipatterns"] = true,
   ["mini_icons"] = true,
-  -- ["mini_indentscope"] = false,
-  -- ["mini_jump"] = false,
+  ["mini_indentscope"] = true,
+  ["mini_jump"] = true,
   -- ["mini_map"] = false,
   ["mini_notify"] = true,
   ["mini_operators"] = true,
@@ -50,8 +48,6 @@ local opts = {
   plugins = plugins,
   on_highlights = function(hl, c)
     -- Careful: Do not use the same table instance twice!
-    hl.MiniStatuslineModeNormal = { fg = c.fg_sidebar, bg = c.bg_statusline } -- left and right, dynamic
-    hl.MiniStatuslineFilename = { fg = c.fg_sidebar, bg = c.bg_statusline } -- all inner groups
     hl.MsgArea = { fg = c.comment } -- fg_dark: -- Area for messages and cmdline
   end,
   -- plugins = plugins,

@@ -8,8 +8,6 @@ vim.api.nvim_create_autocmd("Colorscheme", {
   callback = function()
     local set_hl = function(name, data) vim.api.nvim_set_hl(0, name, data) end
 
-    set_hl("MiniStatuslineModeNormal", { link = "MiniStatuslineFilename" })
-
     local red = vim.api.nvim_get_hl(0, { name = "DiagnosticError" }).fg
     local yellow = vim.api.nvim_get_hl(0, { name = "DiagnosticWarn" }).fg
     local blue = vim.api.nvim_get_hl(0, { name = "DiagnosticInfo" }).fg

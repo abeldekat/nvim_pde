@@ -38,7 +38,7 @@ opt.ignorecase = true -- Ignore case
 -- Preview substitutions live, as you type!
 opt.inccommand = "split" -- kickstart
 opt.jumpoptions = "view"
-opt.laststatus = 3 -- global statusline
+opt.laststatus = 2 -- 3 global statusline: on pick, filename disappears
 opt.linebreak = true
 opt.list = true -- Show some invisible characters (tabs...
 opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" } -- kickstart

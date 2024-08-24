@@ -1,30 +1,32 @@
+-- Color schemes without support: astrotheme, ayu, melange, solarized8
+
 local AK = {} -- module using the structure of MiniStatusline
 local H = {} -- helpers, copied, modified or added
 local MiniStatusline = require("mini.statusline")
 local Utils = require("ak.util")
 
 AK.setup = function()
-  H.create_diagnostic_hl() -- colored diagnostics
-  H.optional_dependencies()
   MiniStatusline.setup({
-    use_icons = false,
+    use_icons = true,
     set_vim_settings = false,
-    content = { active = AK.active }, -- entrypoint
+    content = { active = AK.active },
   })
-  H.create_autocommands() -- lsp autocommands for custom lsp section
-  H.set_active() -- lazy loading, missing events, still show statusline
+  H.create_autocommands()
+  H.create_hl() -- colored diagnostics, normal mode override
+  H.set_active() -- lazy loading and missing events: still show statusline
+  H.optional_dependencies() -- visitsline
 end
 
 AK.active = function() -- entrypoint
   if H.is_blocked_filetype() then return "" end
 
-  local diag = MiniStatusline.section_diagnostics({ trunc_width = 75, icon = "", signs = H.diag_signs })
+  local diag = MiniStatusline.section_diagnostics({ trunc_width = 75, signs = H.diag_signs, icon = "" })
   local diff = MiniStatusline.section_diff({ trunc_width = 75, icon = "" })
   local fileinfo = AK.section_fileinfo({ trunc_width = 120 })
   -- local filename = MiniStatusline.section_filename({ trunc_width = 140 })
-  local filename = AK.section_filename() -- { trunc_width = 140 }: Use automatic statusline truncation
-  local git = MiniStatusline.section_git({ trunc_width = 40, icon = "" })
-  local location = AK.section_location({ trunc_width = 75 })
+  local filename = AK.section_filename() -- use automatic statusline truncation
+  local git = MiniStatusline.section_git({ trunc_width = 40 })
+  local location = MiniStatusline.section_location({ trunc_width = 75 })
   local lsp = MiniStatusline.section_lsp({ trunc_width = 75 })
   local macro = AK.section_macro({ trunc_width = 120 })
   local marker_data = AK.section_marker({ trunc_width = 75 })
@@ -32,55 +34,57 @@ AK.active = function() -- entrypoint
   local search = MiniStatusline.section_searchcount({ trunc_width = 75 })
   local tabinfo = AK.section_tabinfo({ trunc_width = 75 })
 
-  diag = diag and diag:gsub(" ", "") or ""
-  diff = diff and diff:sub(2) or "" -- remove first space
-  lsp = lsp and #lsp > 0 and " " or ""
+  mode = string.find(mode, "N", 1, false) and "N" or mode
+  diag = diag and #diag > 0 and string.gsub(diag, " ", "") or diag
+  local git_and_diff = string.format("%s %s", git, diff and diff:sub(2) or "")
+  lsp = lsp and #lsp > 0 and "󰓃" or "" -- speaker --   server -- 󰿘 protocl -- 󰝚 music
   return MiniStatusline.combine_groups({
     { hl = mode_hl, strings = { mode } },
-    { hl = H.marker_highlight(), strings = { marker_data } },
-    { hl = H.fixed_hl, strings = { git, diff } },
-    { hl = H.fixed_hl, strings = { lsp, diag } },
+    { hl = H.group_default_hl, strings = { marker_data } },
+    { hl = H.group_default_hl, strings = { git_and_diff } },
     "%<", -- Mark general truncate point
-    { hl = H.fixed_hl, strings = { filename } },
+    { hl = "MiniStatuslineFilename", strings = { filename } },
     "%=", -- End left alignment
-    { hl = "MiniStatuslineModeCommand", strings = { macro, tabinfo } },
-    { hl = H.fixed_hl, strings = { fileinfo } },
+    { hl = "MiniHipatternsHack", strings = { macro, tabinfo } },
+    { hl = H.group_default_hl, strings = { diag } },
+    { hl = H.group_default_hl, strings = { fileinfo, lsp } },
     { hl = mode_hl, strings = { search, location } },
   })
 end
 
 -- overridden: Use relative path if file is in cwd. Remove oil//
 AK.section_filename = function()
-  local flags = "%m%r"
+  local ft = vim.bo.filetype
   local full_path = Utils.full_path_of_current_buffer()
-  if not full_path or full_path == "" then return "[No Name]" .. flags end
+  if not full_path or ft == "ministarter" then return "" end
 
-  local fmt = vim.bo.filetype == "oil" and ":~" or ":~:." -- always show full path in oil
+  local flags = "%m%r"
+  if full_path == "" then return "[No Name]" .. flags end
+
+  local fmt = ft == "oil" and ":~" or ":~:." -- oil: always show full path
   return vim.fn.fnamemodify(full_path, fmt) .. flags
 end
 
--- overridden: removed filesize
+-- overridden: removed filesize. Optional encoding and format
 AK.section_fileinfo = function(args)
   local filetype = vim.bo.filetype
-  -- Don't show anything if there is no filetype
-  if filetype == "" then return "" end
+  if filetype == "" then return "" end -- no filetype, no show
+
+  -- local icon = _G.MiniIcons and _G.MiniIcons.get("filetype", filetype)
+  -- filetype = icon and icon or filetype -- either show icon or text
 
   -- Construct output string if truncated or buffer is not normal
   if MiniStatusline.is_truncated(args.trunc_width) or vim.bo.buftype ~= "" then return filetype end
 
   -- Construct output string with extra file info
+  local encoding_and_format = ""
   local encoding = vim.bo.fileencoding or vim.bo.encoding
   local format = vim.bo.fileformat
-  return string.format("%s %s[%s]", filetype, encoding, format)
-end
+  if not (encoding == "utf-8" and format == "unix") then
+    encoding_and_format = string.format(" %s[%s]", encoding, format)
+  end
 
--- overridden: changed delimiters
-AK.section_location = function(args)
-  -- Use virtual column number to allow update when past last column
-  if MiniStatusline.is_truncated(args.trunc_width) then return "%l│%2v" end
-
-  -- Use `virtcol()` to correctly handle multi-byte characters
-  return '%l|%L %2v|%-2{virtcol("$") - 1}'
+  return string.format("%s%s", filetype, encoding_and_format)
 end
 
 -- added:
@@ -108,21 +112,22 @@ end
 --          │                       Helper data                       │
 --          ╰─────────────────────────────────────────────────────────╯
 -- added:
+-- H.group_default_hl = "MiniStatuslineFilename"
+H.group_default_hl = "MiniStatuslineDevinfo"
+
 H.diag_hls = {
   error = "DiagnosticErrorStatusline",
   warn = "DiagnosticWarnStatusline",
   info = "DiagnosticInfoStatusline",
   hint = "DiagnosticHintStatusline",
 }
-H.diag_signs = {
+
+H.diag_signs = { -- must be at the end of a section, hl does not close
   ERROR = string.format("%%#%s#%s", H.diag_hls.error, "E"),
   WARN = string.format("%%#%s#%s", H.diag_hls.warn, "W"),
   INFO = string.format("%%#%s#%s", H.diag_hls.info, "I"),
   HINT = string.format("%%#%s#%s", H.diag_hls.hint, "H"),
 }
-
--- added. Colors appear: for diagnostics, any mode except normal, macro recording
-H.fixed_hl = "MiniStatuslineFilename"
 
 H.markerline = nil
 
@@ -136,16 +141,19 @@ H.create_autocommands = function()
     vim.api.nvim_create_autocmd(event, { group = augroup, pattern = pattern, callback = callback, desc = desc })
   end
   -- Colored diagnostics
-  au("ColorScheme", "*", H.create_diagnostic_hl, "Create diagnostic highlight")
+  au("ColorScheme", "*", H.create_hl, "Create diagnostic highlight")
   -- slow lsp(ie marksman): the symbol only shows when moving inside the buffer:
   au("LspDetach", "*", H.set_active, "Track LSP clients")
   au("LspDetach", "*", H.set_active, "Track LSP clients")
 end
 
 -- added
-H.create_diagnostic_hl = function()
+H.create_hl = function()
+  vim.api.nvim_set_hl(0, "MiniStatuslineModeNormal", { link = H.group_default_hl })
+
+  -- Diagnostics:
   local fallback = vim.api.nvim_get_hl(0, { name = "StatusLine", link = false })
-  local fixed_hl = vim.api.nvim_get_hl(0, { name = H.fixed_hl, link = false })
+  local fixed_hl = vim.api.nvim_get_hl(0, { name = H.group_default_hl, link = false })
   local bg = fixed_hl and fixed_hl.bg or fallback.bg
   local function fg(name)
     local hl = vim.api.nvim_get_hl(0, { name = name, link = false })
@@ -166,7 +174,6 @@ H.set_active = function() vim.wo.statusline = "%{%v:lua.MiniStatusline.active()%
 
 -- added
 H.is_blocked_filetype = function()
-  -- local blocked_filetypes = { ["ministarter"] = true }
   local blocked_filetypes = {}
   return blocked_filetypes[vim.bo.filetype]
 end
@@ -174,14 +181,15 @@ end
 H.optional_dependencies = function() -- See ak.deps.editor
   if MiniVisits == nil then return end
 
-  -- use internal visitsline plugin for mini.visits
   local visitsline = require("ak.config.ui.visitsline")
-  visitsline.setup(H.set_active)
+  visitsline.setup({
+    cb = H.set_active,
+    highlight_active = function(text) -- optionally hl active, instead of everything
+      return string.format("%%#%s#-%s-%%#%s#", "MiniHipatternsHack", text, H.group_default_hl)
+    end,
+  })
   H.markerline = visitsline
 end
-
--- added
-H.marker_highlight = function() return H.markerline and H.markerline.has_buffer() and "MiniHipatternsHack" or H.fixed_hl end
 
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                        Activate                         │

@@ -10,7 +10,7 @@ local api_all_paths = ""
 -- to be registered in multiple places.
 local dummy_cwd = string.format("%s", vim.fn.expand("~")) -- guaranteed to exist
 
-local start_label, generic_label, global_label = "main", "gen", "glo"
+local start_label, oth_label, global_label = "core", "oth", "glo"
 
 local overrides = {
   [global_label] = {
@@ -27,11 +27,11 @@ M.labels = {
   start_label, -- Main task context, first label to use
   "side", -- Side task context
   "test", -- Testing context
-  generic_label, -- other files of interest, concept: "Create visits manually"
+  oth_label, -- other files of interest, concept: "Create visits manually"
   global_label, -- shared between projects
 }
 M.start_label = start_label
-M.generic_label = generic_label
+M.oth_label = oth_label
 
 M.remove_label_from_visits = function(label) MiniVisits.remove_label(label, api_all_paths, api_all_cwd) end
 

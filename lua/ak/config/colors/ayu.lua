@@ -16,16 +16,6 @@ require("ayu").setup({
   overrides = function()
     local c = require("ayu.colors")
     return {
-      MiniStatusLineModeInactive = { fg = c.fg, bg = c.panel_border },
-      MiniStatusLineFilename = { fg = c.fg, bg = c.panel_border }, --lualine_c
-      --
-      MiniStatusLineModeNormal = { fg = c.fg, bg = c.panel_border }, -- lualine_c
-      MiniStatusLineModeInsert = { fg = c.bg, bg = c.string },
-      MiniStatusLineModeReplace = { fg = c.bg, bg = c.markup },
-      MiniStatusLineModeVisual = { fg = c.bg, bg = c.accent },
-      MiniStatusLineModeCommand = { fg = c.bg, bg = c.string }, -- added, same as insert
-      MiniStatusLineModeOther = { fg = c.bg, bg = c.string }, -- added, same as insert
-
       MiniHipatternsFixme = { fg = c.bg, bg = c.error, bold = true },
       MiniHipatternsHack = { fg = c.bg, bg = c.keyword, bold = true },
       MiniHipatternsTodo = { fg = c.bg, bg = c.tag, bold = true },

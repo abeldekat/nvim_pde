@@ -29,11 +29,6 @@ vim.api.nvim_create_autocmd("Colorscheme", {
     set_hl("MiniJump2dSpot", palette.orange, palette.none)
     set_hl("MiniJump2dSpotAhead", palette.orange, palette.none)
 
-    -- Override MiniStatuslineFilename, which is just "Grey"
-    set_hl("MiniStatuslineFilename", palette.grey1, palette.bg1) -- like fileinfo
-    -- Override normal
-    set_hl("MiniStatuslineModeNormal", palette.grey1, palette.bg1, "bold") -- like fileinfo
-
     -- without undercurl:
     set_hl("ErrorText", palette.none, palette.none, "NONE", palette.red)
     set_hl("WarningText", palette.none, palette.none, "NONE", palette.yellow)

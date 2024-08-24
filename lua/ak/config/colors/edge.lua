@@ -23,8 +23,6 @@ vim.api.nvim_create_autocmd("Colorscheme", {
     local palette = vim.fn["edge#get_palette"](config.style, config.dim_foreground, config.colors_override)
     local set_hl = vim.fn["edge#highlight"]
 
-    set_hl("MiniStatuslineModeNormal", palette.grey, palette.bg1, "bold") -- like filename
-
     -- without undercurl:
     set_hl("ErrorText", palette.none, palette.none, "NONE", palette.red)
     set_hl("WarningText", palette.none, palette.none, "NONE", palette.yellow)

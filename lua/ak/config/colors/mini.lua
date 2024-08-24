@@ -19,8 +19,6 @@ vim.api.nvim_create_autocmd("Colorscheme", {
 
     -- Is a link to DiagnosticFloatingHint, change to bold orange
     hi("MiniPickMatchRanges", { fg = "orange", bold = true })
-    -- No distinct color for mode normal:
-    hi("MiniStatuslineModeNormal", { link = "MiniStatuslineFilename" })
     -- Area for messages and cmdline, change p.base05
     hi("MsgArea", { fg = p.base03 })
   end,
@@ -53,8 +51,6 @@ vim.api.nvim_create_autocmd("Colorscheme", {
     --
     -- Is a link to DiagnosticFloatingHint, change to bold orange:
     hi("MiniPickMatchRanges", { fg = p.orange, bold = true })
-    -- No distinct color for mode normal:
-    hi("MiniStatuslineModeNormal", { link = "MiniStatuslineFilename" })
     -- Area for messages and cmdline, changed from Normal to Comment.fg
     hi("MsgArea", { fg = p.fg_mid2 })
   end,

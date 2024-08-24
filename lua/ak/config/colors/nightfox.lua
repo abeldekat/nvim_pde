@@ -20,7 +20,6 @@ require("nightfox").setup({
   options = opts,
   groups = {
     all = {
-      MiniStatuslineModeNormal = { link = "MiniStatuslineFilename" },
       MiniJump2dSpotAhead = { link = "MiniJump2dSpot" },
       MsgArea = { fg = "syntax.comment" }, -- Area for messages and cmdline
     },

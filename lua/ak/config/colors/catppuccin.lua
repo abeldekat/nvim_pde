@@ -10,9 +10,7 @@ local opts = {
   flavour = prefer_light and "latte" or "mocha",
   custom_highlights = function(c)
     return { -- left and right, dynamic
-      -- MiniStatuslineFilename is a bit to dark:
       MiniStatuslineFilename = { fg = c.subtext1, bg = c.mantle },
-      MiniStatuslineModeNormal = { link = "MiniStatuslineFilename" },
 
       MiniJump2dSpot = { bg = c.base, fg = c.flamingo, style = { "bold", "underline" } },
       MiniJump2dSpotAhead = { bg = c.base, fg = c.flamingo, style = { "bold", "underline" } },

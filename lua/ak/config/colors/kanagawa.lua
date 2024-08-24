@@ -25,7 +25,6 @@ local opts = {
   overrides = function(c)
     local t = c.theme
     local result = {
-      MiniStatuslineModeNormal = { fg = t.ui.fg_dim, bg = t.ui.bg_dim, bold = false }, -- MiniStatusLineFilename
       MsgArea = { fg = t.syn.comment }, -- theme.ui.fg_dim -- Area for messages and cmdline
     }
     return result

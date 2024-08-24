@@ -22,7 +22,6 @@ vim.api.nvim_create_autocmd("Colorscheme", {
   callback = function()
     local set_hl = function(name, data) vim.api.nvim_set_hl(0, name, data) end
 
-    set_hl("MiniStatuslineModeNormal", { link = "MiniStatuslineFilename" })
     local fg_msg_area = vim.api.nvim_get_hl(0, { name = "Comment" }).fg
     set_hl("MsgArea", { fg = fg_msg_area })
   end,

@@ -10,8 +10,6 @@ Utils.color.add_toggle("rose-pine*", {
 local current_nc = "#16141f"
 
 local hl_config = {
-  -- Same as MiniStatuslineFilename
-  MiniStatuslineModeNormal = { fg = "muted", bg = "surface", current = current_nc },
   -- Same as MiniJump2dSpot
   MiniJump2dSpotAhead = { fg = "gold", bold = true, nocombine = true },
   -- Area for messages and cmdline

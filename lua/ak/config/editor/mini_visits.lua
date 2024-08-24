@@ -179,7 +179,7 @@ local A = {
     end
     H.on_change(label)
   end,
-  add_to_generic = function() CustomVisits.add_label(CustomVisits.generic_label) end,
+  add_to_other = function() CustomVisits.add_label(CustomVisits.oth_label) end,
 }
 
 -- Setup:
@@ -196,7 +196,7 @@ for _, key in ipairs({
   { "<c-h>", function() A.select(4) end, desc = "Visit 4" },
 
   -- Other actions:
-  { "<leader>oa", function() A.add_to_generic() end, desc = "Visits add to generic label" },
+  { "<leader>oa", function() A.add_to_other() end, desc = "Visits add other" },
   { "<leader>oj", A.switch_context, desc = "Visits switch context" },
   { "<leader>om", A.maintain, desc = "Visits maintain" },
   { "<leader>or", A.clear, desc = "Visits clear" },

@@ -18,8 +18,6 @@ vim.api.nvim_create_autocmd("Colorscheme", {
     local config = vim.fn["sonokai#get_configuration"]()
     local palette = vim.fn["sonokai#get_palette"](config.style, config.colors_override)
     local set_hl = vim.fn["sonokai#highlight"]
-    --
-    set_hl("MiniStatuslineModeNormal", palette.grey, palette.bg1, "bold") -- like filename
 
     -- without undercurl:
     set_hl("ErrorText", palette.none, palette.none, "NONE", palette.red)
