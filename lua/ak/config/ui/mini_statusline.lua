@@ -29,7 +29,7 @@ AK.active = function() -- entrypoint
   local location = MiniStatusline.section_location({ trunc_width = 75 })
   local lsp = MiniStatusline.section_lsp({ trunc_width = 75 })
   local macro = AK.section_macro({ trunc_width = 120 })
-  local marker_data = AK.section_marker({ trunc_width = 75 })
+  local marker_data = AK.section_marker({ trunc_width = 140 })
   local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 120 })
   local search = MiniStatusline.section_searchcount({ trunc_width = 75 })
   local tabinfo = AK.section_tabinfo({ trunc_width = 75 })
@@ -70,8 +70,8 @@ AK.section_fileinfo = function(args)
   local filetype = vim.bo.filetype
   if filetype == "" then return "" end -- no filetype, no show
 
-  -- local icon = _G.MiniIcons and _G.MiniIcons.get("filetype", filetype)
-  -- filetype = icon and icon or filetype -- either show icon or text
+  local icon = _G.MiniIcons and _G.MiniIcons.get("filetype", filetype)
+  filetype = icon and icon or filetype -- either show icon or text
 
   -- Construct output string if truncated or buffer is not normal
   if MiniStatusline.is_truncated(args.trunc_width) or vim.bo.buftype ~= "" then return filetype end
