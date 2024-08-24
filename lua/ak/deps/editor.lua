@@ -50,7 +50,6 @@ later(function()
   --          ╭─────────────────────────────────────────────────────────╮
   --          │                          Pick                           │
   --          ╰─────────────────────────────────────────────────────────╯
-  require("ak.config.editor.mini_pick_labeled")
   require("ak.config.editor.mini_pick")
   if pick_add_fzf then -- download fzf on demand
     local spec_fzf = "ibhagwan/fzf-lua"

@@ -100,7 +100,9 @@ function H.lua_ls()
         -- runtime = { version = "LuaJIT" }, -- lazydev or luarc
         codeLens = { enable = true },
         completion = { callSnippet = "Replace" },
-        diagnostics = { globals = { "vim", "describe", "it", "before_each", "after_each", "MiniIcons", "MiniVisits" } },
+        diagnostics = {
+          globals = { "vim", "describe", "it", "before_each", "after_each", "MiniIcons", "MiniVisits", "MiniPick" },
+        },
         doc = { privateName = { "^_" } },
         hint = { -- default no inlay hints
           enable = true, -- must be true in order to toggle hints on or off

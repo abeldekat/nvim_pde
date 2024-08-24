@@ -12,7 +12,6 @@
 local Utils = require("ak.util")
 local CustomVisits = Utils.visits
 local Pick = require("mini.pick")
-local Extra = require("mini.extra")
 
 -- Helper data ================================================================
 
@@ -143,7 +142,7 @@ Pick.registry.colors = function()
   if H.start_hooks[name] == nil then H.start_hooks[name] = on_start end
   if H.stop_hooks[name] == nil then H.stop_hooks[name] = on_stop end
   return MiniPick.start({
-    label = true,
+    use_labels = true,
     source = {
       name = name,
       items = H.colors(),
@@ -221,7 +220,7 @@ Pick.registry.visits_by_label = function() -- a customized Extra.pickers.visit_p
   end)
   local name = "Visits by labels"
   local source = { name = name, items = picker_items, show = H.show_with_icons }
-  return Pick.start({ source = source, label = true })
+  return Pick.start({ source = source, use_labels = true })
 end
 
 -- Apply  ================================================================
@@ -279,20 +278,20 @@ local function keys()
     local show_icons = true
     local source = { show = not show_icons and Pick.default_show or nil }
     local window = false and H.make_centered_window() or nil
-    local opts = { label = true, source = source, window = window }
+    local opts = { use_labels = true, source = source, window = window }
     builtin.buffers({}, opts)
   end
   map("<leader>;", labeled_buffers, { desc = "Buffers pick" }) -- home row, used often
   if MiniVisits ~= nil then map("<leader>,", custom.visits_by_label, { desc = "Visits pick" }) end
-  local labeled_symbols = function() extra.lsp({ scope = "document_symbol" }, { label = true }) end
+  local labeled_symbols = function() extra.lsp({ scope = "document_symbol" }, { use_labels = true }) end
   map("<leader>b", labeled_symbols, { desc = "Buffer symbols" })
   map("<leader>l", builtin.grep_live, { desc = "Live grep" })
-  local labeled_oldfiles = function() extra.oldfiles({ current_dir = true }, { label = true }) end
+  local labeled_oldfiles = function() extra.oldfiles({ current_dir = true }, { use_labels = true }) end
   map("<leader>r", labeled_oldfiles, { desc = "Recent (rel)" })
 
   -- fuzzy main. Free: fe,fj,fn,fq,fv,fy
   map("<leader>f/", function() extra.history({ scope = "/" }) end, { desc = "'/' history" })
-  local labeled_his_cmd = function() extra.history({ scope = ":" }, { label = true }) end
+  local labeled_his_cmd = function() extra.history({ scope = ":" }, { use_labels = true }) end
   map("<leader>f:", labeled_his_cmd, { desc = "':' history" })
   map("<leader>fa", function() extra.git_hunks({ scope = "staged" }) end, { desc = "Staged hunks" })
   local staged_buffer = function() extra.git_hunks({ path = vim.fn.expand("%"), scope = "staged" }) end
@@ -351,9 +350,11 @@ local function setup()
 
   H.setup_autocommands()
 
-  -- See ak.config.editor.mini_pick_labeled
-  Extra.pickers_enable_label_in_options() -- also uses MiniPickStart event
-  vim.ui.select = Extra.pickers.labeled_ui_select -- Pick.ui_select
+  local PickLabeled = require("ak.mini.pick_labeled")
+  PickLabeled.setup({ -- 19 letters, no "bcgpqyz"
+    labeled = { chars = vim.split("adefhijklmnorstuvwx", "") },
+  })
+  vim.ui.select = PickLabeled.ui_select -- Pick.ui_select
 
   keys()
   provide_picker()
