@@ -83,7 +83,7 @@ vim.g.markdown_recommended_style = 0
 
 -- basic
 opt.showtabline = 0 -- never show tabs, 1 is default, 2, -- always show tabs
-opt.colorcolumn = "80"
+opt.colorcolumn = "+1" -- Draw colored column one step to the right of desired maximum width
 -- opt.cmdheight = 0 -- on write, the statusline disappears
 opt.guicursor = "a:block"
 
