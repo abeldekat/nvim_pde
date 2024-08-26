@@ -51,21 +51,26 @@ I touch type using the right hand
 in combination with the forefinger of the left hand
 
 - Leader: `space`
-- Main plugins: `mini.visits`, `oil`, `mini.pick`and `mini.jump2d`
-- I configured `mini.visits` to operate in almost the same way as `grapple.nvim`
-- Menu: `mini.clue`
+- Main plugins: [ak.mini.visits_harpooned], [oil.nvim], [mini.pick] and [mini.jump2d]
+- Menu: [mini.clue]
 
-### Visits
+### VisitsHarpooned
 
-- Info in statusline: custom statusline component [visitsline]
+Internal plugin [ak.mini.visits_harpooned] is a customized [mini.visits] configuration,
+operating in almost the same way as `harpoon`
+
+- Info in statusline: [ak.mini.visits_harpooned_line]
 - Toggle current label on file: `<leader>a`
-- The shortcuts normally used for window navigation correspond to file 1-4:
+- Add file to "uncategorised" label: `<leader>oa`
+- The shortcuts normally used for window navigation correspond to file 1-4 with current label:
   `c-j`, `<c-k>`,`<c-l>`,`<c-h>`
+- Pick files from all labels: `<leader>,`
 - Pick files having current label: `<leader>j` ("strongest finger")
-- Pick all labeled files: `<leader>,`
-- Switch context(label): `<leader>oj`
-- Maintain label: `<leader>om`
+- Switch current label: `<leader>oj`
+- Maintain files with label: `<leader>om`
 - Remove label from files: `<leader>or`
+
+Pickers can display hints using internal plugin [ak.mini.pick_hinted]
 
 ### Window navigation
 
@@ -140,12 +145,14 @@ Many of the excellent modules included in [mini.nvim] are used in this config:
 
 Relevant discussions:
 
-- [From `grapple` to `mini.visits`](https://github.com/echasnovski/mini.nvim/discussions/1158)
-- [Augment pickers with labels and hotkeys](https://github.com/echasnovski/mini.nvim/discussions/1109)
-- [Pick bufferlines with treesitter highlighting](https://github.com/echasnovski/mini.nvim/discussions/988)
-- [Apply tokyonight dev environment](https://github.com/echasnovski/mini.nvim/discussions/1012)
-- [Optimized jumping with jump2d](https://github.com/echasnovski/mini.nvim/discussions/1033)
-- [Beta testing mini.deps](https://github.com/echasnovski/mini.nvim/issues/689#issuecomment-1962327624)
+- [From `grapple` to `mini.visits`](https://github.com/echasnovski/mini.nvim/discussions/1158).
+  See internal plugin [ak.mini.visits_harpooned]
+- [Augment pickers with labels and hotkeys](https://github.com/echasnovski/mini.nvim/discussions/1109).
+  See internal plugin [ak.mini.pick_hinted]
+- [Pick bufferlines with treesitter highlighting](https://github.com/echasnovski/mini.nvim/discussions/988).
+- [Apply tokyonight dev environment](https://github.com/echasnovski/mini.nvim/discussions/1012).
+- [Optimized jumping with jump2d](https://github.com/echasnovski/mini.nvim/discussions/1033).
+- [Beta testing mini.deps](https://github.com/echasnovski/mini.nvim/issues/689#issuecomment-1962327624).
 
 ## Environment
 
@@ -179,11 +186,17 @@ This repo uses code and ideas from the following repositories:
 [ak.deps]: lua/ak/deps
 [ak.config]: lua/ak/config
 [ak.util]: lua/ak/util
-[visitsline]: lua/ak/config/ui/visitsline.lua
 [leader h]: lua/ak/util/color.lua
 [mini.nvim]: https://github.com/echasnovski/mini.nvim
 [mini.operators]: https://github.com/echasnovski/mini.operators
 [mini.surround]: https://github.com/echasnovski/mini.surround
+[mini.pick]: https://github.com/echasnovski/mini.pick
+[mini.visits]: https://github.com/echasnovski/mini.visits
+[mini.jump2d]: https://github.com/echasnovski/mini.jum2d
+[ak.mini.visits_harpooned]: lua/ak/mini/visits_harpooned.lua
+[ak.mini.visits_harpooned_line]: lua/ak/mini/visits_harpooned_line.lua
+[ak.mini.pick_hinted]: lua/ak/mini/pick_hinted.lua
+[oil.nvim]: https://github.com/stevearc/oil.nvim
 [peek.nvim]: https://github.com/toppair/peek.nvim
 [deno]: https://deno.land
 [with_submodules]: https://github.com/abeldekat/nvim_pde/tree/with_submodules
