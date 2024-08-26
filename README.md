@@ -16,6 +16,7 @@ My _personal development environment_ for Neovim
 - [ak.init]: Invoke [ak.mini_deps]
 - [ak.deps]: Load plugins
 - [ak.config]: All setup for plugins, options, key-mappings, auto-commands, and colors
+- [ak.mini]: Internal plugins [ak.mini.visits_harpooned] and [ak.mini.pick_hinted]
 - [ak.util]: Shared code
 
 ## Install
@@ -62,7 +63,7 @@ operating in almost the same way as `harpoon`
 - Info in statusline: [ak.mini.visits_harpooned_line]
 - Toggle current label on file: `<leader>a`
 - Add file to "uncategorised" label: `<leader>oa`
-- The shortcuts normally used for window navigation correspond to file 1-4 with current label:
+- The shortcuts normally used for window navigation correspond to file 1-4 in current label:
   `c-j`, `<c-k>`,`<c-l>`,`<c-h>`
 - Pick files from all labels: `<leader>,`
 - Pick files having current label: `<leader>j` ("strongest finger")
@@ -185,6 +186,7 @@ This repo uses code and ideas from the following repositories:
 [ak.mini_deps]: lua/ak/mini_deps.lua
 [ak.deps]: lua/ak/deps
 [ak.config]: lua/ak/config
+[ak.mini]: lua/ak/mini
 [ak.util]: lua/ak/util
 [leader h]: lua/ak/util/color.lua
 [mini.nvim]: https://github.com/echasnovski/mini.nvim
