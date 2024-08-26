@@ -1,10 +1,8 @@
+# Neovim pde
+
 ![1724703495](https://github.com/user-attachments/assets/af8a209d-7707-430e-926c-70f12821adfc)
 
 ![1724703946](https://github.com/user-attachments/assets/4fac0567-81fe-48c2-8d79-88b9744803a0)
-
-
-
-# Neovim pde
 
 My _personal development environment_ for Neovim
 
