@@ -45,11 +45,6 @@ later(function()
   require("ak.config.editor.mini_jump2d")
   require("ak.config.editor.mini_git")
   require("ak.config.editor.mini_diff")
-  require("ak.config.editor.mini_visits") -- marks like grapple.nvim/harpoon
-
-  --          ╭─────────────────────────────────────────────────────────╮
-  --          │                          Pick                           │
-  --          ╰─────────────────────────────────────────────────────────╯
   require("ak.config.editor.mini_pick")
   if pick_add_fzf then -- download fzf on demand
     local spec_fzf = "ibhagwan/fzf-lua"
@@ -61,6 +56,7 @@ later(function()
       end)
     end, "<leader>fi", "Picker builtin")
   end
+  require("ak.config.editor.mini_visits") -- marks like grapple.nvim/harpoon, uses mini.pick
 
   --          ╭─────────────────────────────────────────────────────────╮
   --          │                         Quickfix                        │

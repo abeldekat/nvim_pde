@@ -179,13 +179,13 @@ H.is_blocked_filetype = function()
 end
 
 H.optional_dependencies = function() -- See ak.deps.editor
-  if MiniVisits == nil then return end
+  if VisitsHarpooned == nil then return end
 
-  local visitsline = require("ak.config.ui.visitsline")
+  local visitsline = require("ak.mini.visits_harpooned_line")
   visitsline.setup({
     cb = H.set_active,
     highlight_active = function(text) -- optionally hl active, instead of everything
-      return string.format("%%#%s#-%s-%%#%s#", "MiniHipatternsHack", text, H.group_default_hl)
+      return string.format("%%#%s# %s %%#%s#", "MiniHipatternsHack", text, H.group_default_hl)
     end,
   })
   H.markerline = visitsline

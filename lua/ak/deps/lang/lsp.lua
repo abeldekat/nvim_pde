@@ -31,7 +31,7 @@ local function lsp()
     depends = {
       "folke/lazydev.nvim",
       "williamboman/mason-lspconfig.nvim",
-      { source = "mrcjkb/rustaceanvim", checkout = "5.2.1" },
+      { source = "mrcjkb/rustaceanvim", checkout = "5.2.2" },
     },
   })
   require("ak.config.lang.diagnostics")

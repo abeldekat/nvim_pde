@@ -6,10 +6,9 @@
 ---@field lazyrc ak.util.lazyrc
 ---@field pick ak.util.pick
 ---@field toggle ak.util.toggle
----@field visits ak.util.visits
 local M = {}
 
-M.has_mini_ai = false -- treesitter textobjects and mini.ai
+M.has_mini_ai = false -- initial value. Treesitter textobjects and mini.ai
 
 setmetatable(M, {
   __index = function(t, k)

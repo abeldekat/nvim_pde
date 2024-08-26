@@ -10,7 +10,6 @@
 -- Paths: No filename first option
 
 local Utils = require("ak.util")
-local CustomVisits = Utils.visits
 local Pick = require("mini.pick")
 
 -- Helper data ================================================================
@@ -85,7 +84,7 @@ end
 
 -- https://github.com/echasnovski/mini.nvim/discussions/518#discussioncomment-7373556
 -- Implements: For TODOs in a project, use builtin.grep.
--- Note: label is possible, but prevents preview on other items
+-- Note: hints are possible, but prevent preview on other items
 Pick.registry.todo_comments = function(patterns) --hipatterns.config.highlighters
   local function find_todo(item)
     for _, hl in pairs(patterns) do
@@ -128,7 +127,7 @@ end
 -- https://github.com/echasnovski/mini.nvim/discussions/951
 -- Previewing multiple themes:
 -- Press tab for preview, and continue with ctrl-n and ctrl-p
--- Note: label is possible, but most relevant items are not on top
+-- Note: hints are possible, but most relevant items are not on top
 local selected_colorscheme = nil
 Pick.registry.colors = function()
   local on_start = function()
@@ -142,7 +141,7 @@ Pick.registry.colors = function()
   if H.start_hooks[name] == nil then H.start_hooks[name] = on_start end
   if H.stop_hooks[name] == nil then H.stop_hooks[name] = on_stop end
   return MiniPick.start({
-    use_labels = true,
+    hinted = { enable = true },
     source = {
       name = name,
       items = H.colors(),
@@ -190,37 +189,6 @@ Pick.registry.buffer_lines_current = function()
   -- local local_opts = { scope = "current", preserve_order = true }
   local local_opts = { scope = "current" }
   MiniExtra.pickers.buf_lines(local_opts, { source = { show = show } })
-end
-
-Pick.registry.visits_by_label = function() -- a customized Extra.pickers.visit_paths
-  -- Not copied: H.full_path, H.normalize_path,H.is_windows
-  -- Copied from mini.extra:
-  local short_path = function(path, cwd)
-    cwd = cwd or vim.fn.getcwd()
-    -- Ensure `cwd` is treated as directory path (to not match similar prefix)
-    cwd = cwd:sub(-1) == "/" and cwd or (cwd .. "/")
-    return vim.startswith(path, cwd) and path:sub(cwd:len() + 1) or vim.fn.fnamemodify(path, ":~")
-  end
-
-  local paths_to_items = function(paths, label)
-    return vim.tbl_map(function(visit_path)
-      local path_path = visit_path -- needed, otherwise files outside cwd are not opened
-      local text_path = short_path(visit_path)
-      return { path = path_path, text = string.format(" %-6s %s", label, text_path) }
-    end, paths)
-  end
-
-  local picker_items = vim.schedule_wrap(function()
-    local items = {}
-    for _, label in ipairs(CustomVisits.labels) do
-      local paths = CustomVisits.list_paths(label)
-      if paths then vim.list_extend(items, paths_to_items(paths, label)) end
-    end
-    Pick.set_picker_items(items)
-  end)
-  local name = "Visits by labels"
-  local source = { name = name, items = picker_items, show = H.show_with_icons }
-  return Pick.start({ source = source, use_labels = true })
 end
 
 -- Apply  ================================================================
@@ -274,25 +242,25 @@ local function keys()
   -- hotkeys:
   map("<leader><leader>", files, { desc = "Files pick" })
   map("<leader>/", custom.buffer_lines_current, { desc = "Buffer lines" })
-  local labeled_buffers = function()
+  local buffers_hinted = function()
     local show_icons = true
     local source = { show = not show_icons and Pick.default_show or nil }
     local window = false and H.make_centered_window() or nil
-    local opts = { use_labels = true, source = source, window = window }
+    local opts = { hinted = { enable = true }, source = source, window = window }
     builtin.buffers({}, opts)
   end
-  map("<leader>;", labeled_buffers, { desc = "Buffers pick" }) -- home row, used often
-  if MiniVisits ~= nil then map("<leader>,", custom.visits_by_label, { desc = "Visits pick" }) end
-  local labeled_symbols = function() extra.lsp({ scope = "document_symbol" }, { use_labels = true }) end
-  map("<leader>b", labeled_symbols, { desc = "Buffer symbols" })
+  map("<leader>;", buffers_hinted, { desc = "Buffers pick" }) -- home row, used often
+  -- <leader>,: pick_visits_by_labels, see ak.mini.visits_harpooned
+  local symbols_hinted = function() extra.lsp({ scope = "document_symbol" }, { hinted = { enable = true } }) end
+  map("<leader>b", symbols_hinted, { desc = "Buffer symbols" })
   map("<leader>l", builtin.grep_live, { desc = "Live grep" })
-  local labeled_oldfiles = function() extra.oldfiles({ current_dir = true }, { use_labels = true }) end
-  map("<leader>r", labeled_oldfiles, { desc = "Recent (rel)" })
+  local oldfiles_hinted = function() extra.oldfiles({ current_dir = true }, { hinted = { enable = true } }) end
+  map("<leader>r", oldfiles_hinted, { desc = "Recent (rel)" })
 
   -- fuzzy main. Free: fe,fj,fn,fq,fv,fy
   map("<leader>f/", function() extra.history({ scope = "/" }) end, { desc = "'/' history" })
-  local labeled_his_cmd = function() extra.history({ scope = ":" }, { use_labels = true }) end
-  map("<leader>f:", labeled_his_cmd, { desc = "':' history" })
+  local his_cmd_hinted = function() extra.history({ scope = ":" }, { hinted = { enable = true } }) end
+  map("<leader>f:", his_cmd_hinted, { desc = "':' history" })
   map("<leader>fa", function() extra.git_hunks({ scope = "staged" }) end, { desc = "Staged hunks" })
   local staged_buffer = function() extra.git_hunks({ path = vim.fn.expand("%"), scope = "staged" }) end
   map("<leader>fA", staged_buffer, { desc = "Staged hunks (current)" })
@@ -350,11 +318,11 @@ local function setup()
 
   H.setup_autocommands()
 
-  local PickLabeled = require("ak.mini.pick_labeled")
-  PickLabeled.setup({ -- 19 letters, no "bcgpqyz"
-    labeled = { chars = vim.split("adefhijklmnorstuvwx", "") },
+  local PickHinted = require("ak.mini.pick_hinted")
+  PickHinted.setup({ -- 19 letters, no "bcgpqyz"
+    hinted = { chars = vim.split("adefhijklmnorstuvwx", "") },
   })
-  vim.ui.select = PickLabeled.ui_select -- Pick.ui_select
+  vim.ui.select = PickHinted.ui_select -- Pick.ui_select
 
   keys()
   provide_picker()
