@@ -135,8 +135,8 @@ H.make_override_match = function(match, ctx, picker_opts)
   end
 end
 
-H.add_hints = function(buf_id, max_hints, autosubmit, picker_opts)
-  local hl = autosubmit and "MiniPickMatchRanges" or "Comment"
+H.add_hints = function(buf_id, max_hints, do_autosubmit, picker_opts)
+  local hl = do_autosubmit and "MiniPickMatchRanges" or "Comment"
   for i, hint in ipairs(picker_opts.hinted.chars) do
     if i > max_hints then break end
     local virt_text = { { string.format("[%s]", hint), hl } }
@@ -156,7 +156,8 @@ H.init_show_ctx = function(items, ctx, picker_opts)
 
   local result = {}
   result.first_item = items[1] or {}
-  result.autosubmit = ctx.use_autosubmit and #all_items == ctx.max_hints
+  result.do_autosubmit = ctx.use_autosubmit and #all_items == ctx.max_hints
+  result.did_autosubmit = false
 
   return result
 end
@@ -186,7 +187,7 @@ H.make_override_show = function(show, ctx, picker_opts)
 
       -- Only add hint when query is empty and window is not scrolled
       if #query == 0 and show_ctx.first_item == items[1] then
-        H.add_hints(buf_id, ctx.max_hints, show_ctx.autosubmit, picker_opts)
+        H.add_hints(buf_id, ctx.max_hints, show_ctx.do_autosubmit, picker_opts)
       end
       return
     end
@@ -198,12 +199,14 @@ H.make_override_show = function(show, ctx, picker_opts)
       return
     end
 
-    -- Either autosubmit hinted item or show items with item first in the list
-    if show_ctx.autosubmit then
-      vim.api.nvim_feedkeys(H.keys.cr, "n", false)
-      vim.api.nvim_feedkeys("<Ignore>", "n", false)
-    else
+    if not show_ctx.do_autosubmit then -- no autosubmit, show
       show(buf_id, items, query, opts)
+      return
+    end
+
+    if not show_ctx.did_autosubmit then -- autosubmit, prevent doing so twice
+      show_ctx.did_autosubmit = true
+      vim.api.nvim_feedkeys(H.keys.cr, "n", true)
     end
   end
 end

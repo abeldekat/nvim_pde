@@ -251,7 +251,9 @@ local function keys()
   end
   map("<leader>;", buffers_hinted, { desc = "Buffers pick" }) -- home row, used often
   -- <leader>,: pick_visits_by_labels, see ak.mini.visits_harpooned
-  local symbols_hinted = function() extra.lsp({ scope = "document_symbol" }, { hinted = { enable = true } }) end
+  local symbols_hinted = function()
+    extra.lsp({ scope = "document_symbol" }, { hinted = { enable = true, use_autosubmit = true } })
+  end
   map("<leader>b", symbols_hinted, { desc = "Buffer symbols" })
   map("<leader>l", builtin.grep_live, { desc = "Live grep" })
   local oldfiles_hinted = function() extra.oldfiles({ current_dir = true }, { hinted = { enable = true } }) end
