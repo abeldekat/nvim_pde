@@ -45,7 +45,7 @@ end
 
 H.default_config = vim.deepcopy(PickHinted.config)
 H.ns_id = { hinted = vim.api.nvim_create_namespace("PickHinted") }
-H.ui_select_marker = "+ELP+"
+H.ui_select_marker = "+MPH+" -- "mini pick hinted"
 H.keys = {
   cr = vim.api.nvim_replace_termcodes("<CR>", true, true, true),
 }
@@ -217,9 +217,10 @@ H.on_pick_start_event = function()
   local src = picker_opts.source
   local use_autosubmit = picker_opts.hinted.use_autosubmit
   if string.sub(src.name, 1, #H.ui_select_marker) == H.ui_select_marker then
-    src.name = string.sub(src.name, #H.ui_select_marker + 1)
+    -- vim.ui.select is set to PickHinted.ui_select:
+    use_hints = true
     use_autosubmit = picker_opts.hinted.use_autosubmit_ui_select
-    use_hints = true -- vim.ui.select is set to PickHinted.ui_select
+    src.name = string.sub(src.name, #H.ui_select_marker + 1) -- restore name
   end
   if not use_hints then return end
 
