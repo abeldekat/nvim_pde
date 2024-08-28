@@ -65,15 +65,16 @@ Internal plugin [ak.mini.visits_harpooned] is a customized [mini.visits] configu
 operating in almost the same way as `harpoon`
 
 - Info in statusline: [ak.mini.visits_harpooned_line]
-- Toggle current label on file: `<leader>a`
-- Add file to "uncategorised" label: `<leader>oa`
-- The shortcuts normally used for window navigation correspond to file 1-4 in current label:
+- The shortcuts normally used for window navigation correspond to visit 1-4 in current label:
   `c-j`, `<c-k>`,`<c-l>`,`<c-h>`
-- Pick files from all labels: `<leader>,`
-- Pick files having current label: `<leader>j` ("strongest finger")
-- Switch current label: `<leader>oj`
-- Maintain files with label: `<leader>om`
-- Remove label from files: `<leader>or`
+- Toggle current label on visit: `<leader>a`
+- Add visit to "uncategorised" label: `<leader>oa`
+- Pick visits from all labels: `<leader>j` ("strongest finger")
+- Pick visits having current label: `<leader>ol`
+- Change current label: `<leader>oj`
+- Maintain visits having active label: `<leader>om`
+- Remove active label from visits: `<leader>or`
+- Copy global visits to "uncategorised" label: `<leader>oc`
 
 Pickers can display hints using internal plugin [ak.mini.pick_hinted]
 

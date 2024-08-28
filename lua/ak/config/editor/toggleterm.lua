@@ -58,7 +58,7 @@ vim.keymap.set("n", "<leader>ot", function() vim.cmd("ToggleTermToggleAll") end,
 -- see :h filename-modifiers
 -- in normal mode, in a toggle term, cd to dir of alternate file
 -- toggle first to update the alternate file...
-vim.keymap.set("n", "<leader>oc", function()
+vim.keymap.set("n", "<leader>oC", function()
   local id = terminal.get_focused_id()
   local target = terminal.get(id)
   local alternate_dir = vim.fn.expand("#:~:h")

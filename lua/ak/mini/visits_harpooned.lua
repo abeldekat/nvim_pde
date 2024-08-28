@@ -37,13 +37,14 @@ VisitsHarpooned.config = {
   labels = { "core", "oth", "glo" }, -- must contain one label
   start_label = "core", -- required
   uncategorized_label = "oth", -- uncategorized, disable with ""
-  global_label = "glo", -- global, disable with ""
+  global_label = "glo", -- global, used to transfer visits, disable with ""
   mappings = { -- disable a mapping with "":
-    ui_all = "<leader>,",
-    ui = "<leader>j",
+    ui_all = "<leader>j",
+    ui = "<leader>ol",
     toggle = "<leader>a",
     change_active_label = "<leader>oj",
     add_to_uncategorized = "<leader>oa",
+    copy_from_global = "<leader>oc",
     maintain = "<leader>om",
     clear = "<leader>or",
     selects = { "ma", "ms", "md", "mf" }, -- { "<c-j>", "<c-k>", "<c-l>", "<c-h>" }
@@ -106,6 +107,7 @@ H.setup_config = function(config)
     ["mappings.toggle"] = { config.mappings.toggle, "string" },
     ["mappings.change_active_label"] = { config.mappings.change_active_label, "string" },
     ["mappings.add_to_uncategorized"] = { config.mappings.add_to_uncategorized, "string" },
+    ["mappings.copy_from_global"] = { config.mappings.copy_from_global, "string" },
     ["mappings.maintain"] = { config.mappings.maintain, "string" },
     ["mappings.clear"] = { config.mappings.clear, "string" },
     ["mappings.selects"] = { config.mappings.selects, "table" },
@@ -130,13 +132,15 @@ H.apply_config = function(config)
 
   -- -- Apply mappings
   H.map("n", keys.ui_all, function() H.pick_visits_by_labels(config.labels) end, { desc = "Visits pick all" })
-  H.map("n", keys.ui, function() H.pick_visits_by_labels({ H.current_label }) end, { desc = "Visits pick" })
+  H.map("n", keys.ui, function() H.pick_visits_by_labels({ H.current_label }) end, { desc = "Visits pick active" })
   H.map("n", keys.toggle, H.toggle, { desc = "Visits toggle" })
   H.map("n", keys.change_active_label, H.pick_labels, { desc = "Visits change active label" })
 
-  local uncategorized_desc = { desc = "Visits add uncategorized" }
-  local uncategorized_label = config.uncategorized_label
-  H.map("n", keys.add_to_uncategorized, function() H.add(uncategorized_label) end, uncategorized_desc)
+  local unc_label = config.uncategorized_label
+  local unc_desc = { desc = "Visits add to uncategorized" }
+  H.map("n", keys.add_to_uncategorized, function() H.add(unc_label) end, unc_desc)
+  unc_desc = { desc = "Visits copy from global" }
+  H.map("n", keys.copy_from_global, function() H.copy_from_global(unc_label) end, unc_desc)
 
   H.map("n", keys.maintain, function() H.maintain(H.current_label) end, { desc = "Visits maintain" })
   H.map("n", keys.clear, H.clear_visits, { desc = "Visits clear" })
@@ -218,6 +222,26 @@ H.toggle = function()
   else
     H.add(H.current_label, full_path)
   end
+end
+
+H.change_active_label = function(from_label, to_label)
+  Api.ensure_index(from_label, to_label)
+  H.current_label = to_label
+  vim.api.nvim_exec_autocmds(
+    "User",
+    { pattern = "VisitsHarpoonedChangedActiveLabel", modeline = false, data = H.current_label }
+  )
+end
+
+H.copy_from_global = function(local_label)
+  local global_label = H.get_config().global_label
+
+  if H.current_label ~= global_label then Api.ensure_index(local_label, global_label) end
+  local global_visits = Api.list_paths(global_label)
+  H.change_active_label(global_label, local_label)
+
+  local to_update = vim.list_extend(Api.list_paths(local_label), global_visits)
+  H.batch_update(to_update, local_label)
 end
 
 H.batch_update = function(paths_from_user, label)
@@ -312,15 +336,7 @@ H.pick_labels = function()
   local conf = H.get_config()
   local name = "Visits change active label"
   local picker_items = conf.labels
-  local choose = function(item)
-    local oldlabel = H.current_label
-    H.current_label = item
-    Api.ensure_index(oldlabel, H.current_label)
-    vim.api.nvim_exec_autocmds(
-      "User",
-      { pattern = "VisitsHarpoonedChangedActiveLabel", modeline = false, data = H.current_label }
-    )
-  end
+  local choose = function(item) H.change_active_label(H.current_label, item) end
   local source = { name = name, items = picker_items, choose = choose }
   local hinted = { enable = true, use_autosubmit = true, chars = conf.picker_hints_on_change_active_label }
   return MiniPick.start({ source = source, hinted = hinted })

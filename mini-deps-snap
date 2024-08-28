@@ -1,6 +1,6 @@
 return {
   LuaSnip = "7ad2eaeaca56d6ed63acacbfc114b99f1f67b982",
-  ["SchemaStore.nvim"] = "d53c62be8899c53b8f9efaf34e0c3cafabaa59a3",
+  ["SchemaStore.nvim"] = "6c521f7a8aee8728bff0782d368418bd8d24bf22",
   ["cmp-buffer"] = "3022dbc9166796b644a841a02de8dd1cc1d311fa",
   ["cmp-nvim-lsp"] = "39e2eda76828d88b773cc27a3f61d2ad782c922d",
   ["cmp-path"] = "91ff86cd9c29299a64f968ebb45846c485725f23",
@@ -48,7 +48,7 @@ return {
   ["nvim-nio"] = "a428f309119086dc78dd4b19306d2d67be884eee",
   ["nvim-pqf"] = "148ee2ca8b06d83fd9bf6f9b9497724ad39a07d6",
   ["nvim-spectre"] = "ba7fb777edff6c1fbbeffd343e113af64c04e90a",
-  ["nvim-treesitter"] = "2eb50352c039009cf046f43241b649b162ee5148",
+  ["nvim-treesitter"] = "7a64148896289a91cb2a92e9da3f76d5512a3fb8",
   ["nvim-treesitter-context"] = "0f3332788e0bd37716fbd25f39120dcfd557c90f",
   ["nvim-treesitter-textobjects"] = "41e3abf6bfd9a9a681eb1f788bdeba91c9004b2b",
   ["nvim-ts-autotag"] = "e239a560f338be31337e7abc3ee42515daf23f5e",
