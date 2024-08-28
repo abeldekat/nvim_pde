@@ -220,21 +220,19 @@ H.toggle = function()
   end
 end
 
-H.maintain_finish = function(paths_from_user, label)
+H.batch_update = function(paths_from_user, label)
   Api.remove_label_from_visits(label)
 
   local index = MiniVisits.get_index()
+  index = vim.tbl_isempty(index) and { [Api.dummy_cwd] = {} } or index
   local time = os.time()
-  for _, paths in pairs(index) do
-    for ind, path in ipairs(paths_from_user) do -- os.time: in seconds
-      local data = paths[path] -- only for existing paths
-      if data then
-        data.latest = time + ind -- ensure 1 second difference with previous
-        data.labels = data.labels and data.labels or {}
-        data.labels[label] = true -- add the label
-        paths[path] = data
-      end
-    end
+  local for_cwd = index[Api.dummy_cwd]
+  for ind, path in ipairs(paths_from_user) do -- os.time: in seconds
+    local data = for_cwd[path] or { latest = 0, count = 0 }
+    data.latest = time + ind -- ensure 1 second difference with previous
+    data.labels = data.labels and data.labels or {}
+    data.labels[label] = true -- add the label
+    for_cwd[path] = data
   end
   MiniVisits.set_index(index)
   Api.on_change(label)
@@ -304,7 +302,7 @@ H.maintain = function(label) -- mini.deps, H.update_feedback_confirm, copied and
     for _, l in ipairs(vim.api.nvim_buf_get_lines(buf_id, n_header, -1, false)) do
       table.insert(paths, H.full_path(l)) -- update full paths...
     end
-    H.maintain_finish(paths, label)
+    H.batch_update(paths, label)
   end
   local name = string.format("visits-ak://maintain-%s", label)
   H.maintain_show(report, { name = name, exec_on_write = finish, n_header = n_header })
