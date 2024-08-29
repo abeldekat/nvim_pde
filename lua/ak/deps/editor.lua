@@ -69,12 +69,16 @@ later(function()
   require("ak.config.editor.quickfix")
 
   --          ╭─────────────────────────────────────────────────────────╮
-  --          │                          Other                          │
+  --          │                         Terminal                        │
   --          ╰─────────────────────────────────────────────────────────╯
   add("akinsho/toggleterm.nvim")
   require("ak.config.editor.toggleterm")
 
-  add("ggandor/leap.nvim") -- using treesitter incremental selection
+  --          ╭─────────────────────────────────────────────────────────╮
+  --          │                          Other                          │
+  --          ╰─────────────────────────────────────────────────────────╯
+
+  add("ggandor/leap.nvim") -- only using treesitter incremental selection
   require("ak.config.editor.leap")
 
   local spec_spectre = "nvim-pack/nvim-spectre"
@@ -85,4 +89,13 @@ later(function()
       require("ak.config.editor.spectre")
     end)
   end, "<leader>cR", "Replace in files (spectre)")
+
+  local spec_overseer = "stevearc/overseer.nvim"
+  register(spec_overseer)
+  Util.defer.on_keys(function()
+    now(function()
+      add(spec_overseer)
+      require("ak.config.editor.overseer")
+    end)
+  end, "<leader>sl", "Load overseer")
 end)

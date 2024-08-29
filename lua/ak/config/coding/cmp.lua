@@ -85,14 +85,16 @@ local opts = {
     completion = cmp.config.window.bordered({
       -- Default winhighlight: "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None"
       winhighlight = "Normal:Normal,FloatBorder:None,CursorLine:PmenuSel,Search:None",
-      scrollbar = false,
+      -- scrollbar = false,
     }),
     -- Default winhighlight = 'FloatBorder:NormalFloat',
     documentation = cmp.config.window.bordered({
       -- Default winhighlight: "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None"
       winhighlight = "Normal:Normal,FloatBorder:None,CursorLine:PmenuSel,Search:None",
-      scrollbar = false,
+      -- scrollbar = false,
     }),
   },
+  view = { entries = { follow_cursor = true } },
+  -- TODO: scroll max entries in window?
 }
 cmp.setup(opts)
