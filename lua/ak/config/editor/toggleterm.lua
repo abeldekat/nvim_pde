@@ -9,7 +9,7 @@ local direction = "horizontal"
 require("toggleterm").setup({
   size = function(term)
     if term.direction == "horizontal" then
-      return vim.o.lines * 0.6
+      return vim.o.lines * 0.8
     elseif term.direction == "vertical" then
       return vim.o.columns * 0.5
     end

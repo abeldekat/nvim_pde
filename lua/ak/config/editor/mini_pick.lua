@@ -322,7 +322,10 @@ local function setup()
 
   local PickHinted = require("ak.mini.pick_hinted")
   PickHinted.setup({ -- 19 letters, no "bcgpqyz"
-    hinted = { chars = vim.split("adefhijklmnorstuvwx", "") },
+    hinted = {
+      -- virt_clues_pos = { "inline", "eol" },
+      chars = vim.split("adefhijklmnorstuvwx", ""),
+    },
   })
   vim.ui.select = PickHinted.ui_select -- Pick.ui_select
 

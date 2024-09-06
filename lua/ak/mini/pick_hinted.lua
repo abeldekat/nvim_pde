@@ -213,14 +213,14 @@ end
 
 H.on_pick_start_event = function()
   local picker_opts = vim.tbl_deep_extend("force", H.get_config(), MiniPick.get_picker_opts() or {})
-  local use_hints = picker_opts.hinted.enable -- opt-in per picker...
   local src = picker_opts.source
+  local use_hints = picker_opts.hinted.enable -- opt-in per picker...
   local use_autosubmit = picker_opts.hinted.use_autosubmit
   if string.sub(src.name, 1, #H.ui_select_marker) == H.ui_select_marker then
     -- vim.ui.select is set to PickHinted.ui_select:
+    src.name = string.sub(src.name, #H.ui_select_marker + 1) -- restore name
     use_hints = true
     use_autosubmit = picker_opts.hinted.use_autosubmit_ui_select
-    src.name = string.sub(src.name, #H.ui_select_marker + 1) -- restore name
   end
   if not use_hints then return end
 

@@ -72,6 +72,10 @@ local opts = {
     ["<C-l>"] = cmp.mapping(snippets.forward, { "i", "s" }),
     ["<C-h>"] = cmp.mapping(snippets.backward, { "i", "s" }),
   }),
+
+  -- TESTING:
+  performance = { max_view_entries = 15 }, --- there is also sources.max_item_count
+
   snippet = snippets.expand,
   sources = cmp.config.sources({
     { name = "nvim_lsp" },
@@ -85,16 +89,13 @@ local opts = {
     completion = cmp.config.window.bordered({
       -- Default winhighlight: "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None"
       winhighlight = "Normal:Normal,FloatBorder:None,CursorLine:PmenuSel,Search:None",
-      -- scrollbar = false,
     }),
     -- Default winhighlight = 'FloatBorder:NormalFloat',
     documentation = cmp.config.window.bordered({
       -- Default winhighlight: "Normal:Normal,FloatBorder:FloatBorder,CursorLine:Visual,Search:None"
       winhighlight = "Normal:Normal,FloatBorder:None,CursorLine:PmenuSel,Search:None",
-      -- scrollbar = false,
     }),
   },
   view = { entries = { follow_cursor = true } },
-  -- TODO: scroll max entries in window?
 }
 cmp.setup(opts)

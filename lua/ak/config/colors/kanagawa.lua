@@ -12,7 +12,6 @@ vim.o.background = prefer_light and "light" or "dark"
 
 local opts = {
   dimInactive = true,
-
   colors = {
     theme = {
       all = {
@@ -25,6 +24,8 @@ local opts = {
   overrides = function(c)
     local t = c.theme
     local result = {
+      MiniJump2dSpotAhead = { link = "MiniJump2dSpot" },
+      MiniPickMatchRanges = { link = "MiniJump2dSpot" },
       MsgArea = { fg = t.syn.comment }, -- theme.ui.fg_dim -- Area for messages and cmdline
     }
     return result
