@@ -1,6 +1,6 @@
 local MiniDeps = require("mini.deps")
 local Util = require("ak.util")
-local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
+local now, later = MiniDeps.now, MiniDeps.later
 
 now(function()
   require("ak.config.options")
@@ -16,5 +16,4 @@ later(function()
   require("ak.config.keymaps")
   require("ak.config.mini_notify") -- better installation process
   require("ak.config.mini_extra") -- pickers and ai. Pickers are not registered.
-  add("nvim-lua/plenary.nvim")
 end)

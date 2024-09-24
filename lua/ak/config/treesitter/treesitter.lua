@@ -12,10 +12,11 @@
 ---@type TSConfig
 ---@diagnostic disable-next-line: missing-fields
 local opts = {
-  highlight = { enable = true },
+  highlight = { enable = true, disable = { "latex" } },
   indent = { enable = true },
   ensure_installed = {
     "bash",
+    "bibtex",
     "c",
     "diff",
     "html",

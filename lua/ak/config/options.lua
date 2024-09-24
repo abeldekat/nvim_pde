@@ -1,5 +1,7 @@
 vim.g.mapleader = " "
-vim.g.maplocalleader = "\\"
+
+-- vim.g.maplocalleader = "\\"
+vim.g.maplocalleader = "s" -- used for vimtex: s is unused in normal mode and easier to type than "\"
 
 local opt = vim.opt
 vim.schedule(function() -- includes system call responsible for 40% startuptime!

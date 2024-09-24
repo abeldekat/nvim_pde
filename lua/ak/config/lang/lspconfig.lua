@@ -180,22 +180,14 @@ function H.yamlls()
 end
 
 function H.ruff()
+  local desc = "Organize imports"
+  local opts_code_action = {
+    apply = true,
+    context = { only = { "source.organizeImports" }, diagnostics = {} },
+  }
+  local code_action = function() vim.lsp.buf.code_action(opts_code_action) end
   H.on_attach(function(client, buffer)
-    vim.keymap.set(
-      "n",
-      "<leader>co",
-      function()
-        vim.lsp.buf.code_action({
-          apply = true,
-          context = {
-            only = { "source.organizeImports" },
-            diagnostics = {},
-          },
-        })
-      end,
-      { desc = "Organize imports", silent = true, buffer = buffer }
-    )
-
+    vim.keymap.set("n", "<leader>co", code_action, { desc = desc, silent = true, buffer = buffer })
     -- Disable hover in favor of Pyright
     client.server_capabilities.hoverProvider = false
   end, "ruff")
@@ -253,6 +245,14 @@ function H.rust_analyzer(_) -- capabilities setup by rustaceanvim
   vim.g.rustaceanvim = vim.tbl_deep_extend("keep", vim.g.rustaceanvim or {}, opts or {})
 end
 
+function H.texlab()
+  local desc = "Vimtex Docs"
+  H.on_attach(function(_, buffer) -- client
+    vim.keymap.set("n", "<Leader>K", "<plug>(vimtex-doc-package)", { desc = desc, silent = true, buffer = buffer })
+  end, "texlab")
+  return {}
+end
+
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                          Setup                          │
 --          ╰─────────────────────────────────────────────────────────╯
@@ -271,11 +271,13 @@ capabilities = vim.tbl_deep_extend("force", capabilities, has_cmp and cmp_nvim_l
 local servers = {
   bashls = {},
   jsonls = H.jsonls(),
+  -- ltex = {}, -- grammar/spelling checker, needs jre(installed jre-openjdk-headless)
   lua_ls = H.lua_ls(),
   marksman = {},
   pyright = {}, -- test basedpyright, semantic highlighting
   ruff = H.ruff(), -- test, replaced ruff_lsp
   taplo = {}, -- toml
+  texlab = H.texlab(), -- latex
   yamlls = H.yamlls(),
 }
 local ensure_installed = vim.tbl_keys(servers or {})

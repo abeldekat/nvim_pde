@@ -1,3 +1,5 @@
+-- Not used at the moment:
+
 vim.keymap.set("n", "<leader>sl", function() end, { desc = "No-op overseer", silent = true })
 
 local keys = { -- LazyVim: leader o, already used for "other"

@@ -29,7 +29,7 @@ AK.active = function() -- entrypoint
   local location = MiniStatusline.section_location({ trunc_width = 75 })
   local lsp = MiniStatusline.section_lsp({ trunc_width = 75 })
   local macro = AK.section_macro({ trunc_width = 120 })
-  local marker_data = AK.section_marker({ trunc_width = 140 })
+  local marker_data = AK.section_marker({ trunc_width = 100 })
   local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 120 })
   local search = MiniStatusline.section_searchcount({ trunc_width = 75 })
   local tabinfo = AK.section_tabinfo({ trunc_width = 75 })
