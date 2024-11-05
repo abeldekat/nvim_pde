@@ -264,8 +264,12 @@ if H.opts.inlay_hints.auto then H.auto_inlay_hints() end
 if H.opts.codeLens.auto then H.codelens() end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-local has_cmp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
-capabilities = vim.tbl_deep_extend("force", capabilities, has_cmp and cmp_nvim_lsp.default_capabilities() or {})
+if Util.has_blink then
+  capabilities = vim.tbl_deep_extend("force", {}, require("blink.cmp").get_lsp_capabilities(capabilities))
+else
+  local has_cmp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
+  capabilities = vim.tbl_deep_extend("force", capabilities, has_cmp and cmp_nvim_lsp.default_capabilities() or {})
+end
 
 -- the servers below are setup by mason
 local servers = {

@@ -9,6 +9,7 @@
 local M = {}
 
 M.has_mini_ai = false -- initial value. Treesitter textobjects and mini.ai
+M.has_blink = false -- initial value. Completion and lsp
 
 setmetatable(M, {
   __index = function(t, k)
