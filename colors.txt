@@ -1,6 +1,7 @@
 akhue
 astrotheme
 ayu
+base16-gruvbox-dark-hard
 bamboo
 carbonfox
 catppuccin

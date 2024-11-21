@@ -13,6 +13,7 @@ local colors = {
       { source = "rose-pine/neovim", name = "colors_rose-pine" },
       { source = "ribru17/bamboo.nvim", name = "colors_bamboo" },
       { source = "savq/melange-nvim", name = "colors_melange" },
+      { source = "wincent/base16-nvim", name = "colors_base16" }, -- TESTING: Base16
     }
   end,
 

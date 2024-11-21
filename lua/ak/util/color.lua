@@ -62,6 +62,8 @@ function M.from_color_name(color_name) -- color names: ak.colors.txt
     tmp = "nightfox" -- ie nordfox becomes nightfox
   elseif tmp:find("solarized8", 1, true) then
     tmp = "solarized8" -- ie solarized8_flat becomes solarized8
+  elseif tmp:find("base16", 1, true) then -- TESTING: base16
+    tmp = "base16" -- ie base16-gruvbox-dark-hard becomes base16
   elseif tmp:find("hue", 1, true) then
     tmp = "mini"
     is_mini = true
