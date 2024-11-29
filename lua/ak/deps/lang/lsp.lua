@@ -19,7 +19,6 @@ local function lsp()
   })
   require("ak.config.lang.mason")
 
-  register("Bilal2453/luvit-meta") -- does not need to be loaded
   register("folke/lazydev.nvim")
   Util.defer.on_events(function()
     add("folke/lazydev.nvim")
@@ -31,7 +30,7 @@ local function lsp()
     depends = {
       "folke/lazydev.nvim",
       "williamboman/mason-lspconfig.nvim",
-      { source = "mrcjkb/rustaceanvim", checkout = "v5.15.0" },
+      { source = "mrcjkb/rustaceanvim", checkout = "v5.15.3" },
     },
   })
   require("ak.config.lang.diagnostics")

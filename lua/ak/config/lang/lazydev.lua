@@ -85,7 +85,7 @@ Lazydev.setup({
   end,
   integrations = { cmp = false },
 
-  -- library = { { path = "luvit-meta/library", words = { "vim%.uv" } } },
+  library = { { path = "${3rd}/luv/library", words = { "vim%.uv" } } },
   -- Loading only uv directly:
-  library = { { path = require("lazydev.pkg").get_plugin_path("luvit-meta") .. "/library/uv.lua" } },
+  -- library = { { path = "${3rd}/luv/library/uv.lua" } },
 })

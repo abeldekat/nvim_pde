@@ -74,7 +74,7 @@ local opts = {
   }),
 
   -- TESTING:
-  performance = { max_view_entries = 15 }, --- there is also sources.max_item_count
+  -- performance = { max_view_entries = 15 }, --- there is also sources.max_item_count
 
   snippet = snippets.expand,
   sources = cmp.config.sources({
@@ -96,6 +96,6 @@ local opts = {
       winhighlight = "Normal:Normal,FloatBorder:None,CursorLine:PmenuSel,Search:None",
     }),
   },
-  view = { entries = { follow_cursor = true } },
+  -- view = { entries = { follow_cursor = true } },
 }
 cmp.setup(opts)
