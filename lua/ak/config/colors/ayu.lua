@@ -13,13 +13,13 @@ Utils.color.add_toggle("ayu*", {
 
 require("ayu").setup({
   mirage = true,
-  overrides = function()
-    local c = require("ayu.colors")
-    return {
-      MiniHipatternsFixme = { fg = c.bg, bg = c.error, bold = true },
-      MiniHipatternsHack = { fg = c.bg, bg = c.keyword, bold = true },
-      MiniHipatternsTodo = { fg = c.bg, bg = c.tag, bold = true },
-      MiniHipatternsNote = { fg = c.bg, bg = c.regexp, bold = true },
-    }
-  end,
+  -- overrides = function()
+  --   local c = require("ayu.colors")
+  --   return {
+  --     MiniHipatternsFixme = { fg = c.bg, bg = c.error, bold = true },
+  --     MiniHipatternsHack = { fg = c.bg, bg = c.keyword, bold = true },
+  --     MiniHipatternsTodo = { fg = c.bg, bg = c.tag, bold = true },
+  --     MiniHipatternsNote = { fg = c.bg, bg = c.regexp, bold = true },
+  --   }
+  -- end,
 })

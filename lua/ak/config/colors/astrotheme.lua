@@ -11,10 +11,10 @@ Utils.color.add_toggle("astro*", {
 })
 
 local function highlights(hl, c)
-  hl.MiniHipatternsFixme = { fg = c.ui.base, bg = c.ui.red, bold = true }
-  hl.MiniHipatternsHack = { fg = c.ui.base, bg = c.ui.yellow, bold = true }
-  hl.MiniHipatternsTodo = { fg = c.ui.base, bg = c.ui.blue, bold = true }
-  hl.MiniHipatternsNote = { fg = c.ui.base, bg = c.ui.cyan, bold = true }
+  -- hl.MiniHipatternsFixme = { fg = c.ui.base, bg = c.ui.red, bold = true }
+  -- hl.MiniHipatternsHack = { fg = c.ui.base, bg = c.ui.yellow, bold = true }
+  -- hl.MiniHipatternsTodo = { fg = c.ui.base, bg = c.ui.blue, bold = true }
+  -- hl.MiniHipatternsNote = { fg = c.ui.base, bg = c.ui.cyan, bold = true }
 
   hl.MsgArea = { fg = c.syntax.comment } -- Area for messages and cmdline
 end

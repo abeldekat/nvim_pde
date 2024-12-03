@@ -23,17 +23,29 @@ local opts = {
       enabled = true, -- default false
     },
   },
+
+  -- experimental signature help support
   -- trigger = {
   --   -- completion = {}, -- defaults
   --   signature_help = {
   --     enabled = false, -- default false
   --   },
   -- },
+
   -- fuzzy = {}, -- defaults
-  -- sources = {}, -- defaults
+
+  sources = {
+    -- adding any nvim-cmp sources here will enable them
+    -- with blink.compat
+    compat = {},
+    completion = {
+      -- remember to enable your providers here
+      enabled_providers = { "lsp", "path", "snippets", "buffer" },
+    },
+  },
   windows = {
     autocomplete = {
-      draw = "reversed",
+      -- draw = "reversed",
       winblend = vim.o.pumblend,
     },
     documentation = {
@@ -48,8 +60,11 @@ local opts = {
   highlight = {
     use_nvim_cmp_as_default = false,
   },
+
   -- nerd_font_variant = "mono", -- default mono
+
   -- blocked_filetypes = {}, -- defaults
+
   kind_icons = { -- TODO: override with mini.icons
     Text = "󰉿",
     Method = "󰊕",

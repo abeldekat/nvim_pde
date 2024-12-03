@@ -5,7 +5,7 @@ local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 Util.has_mini_ai = true -- ai and textobjects with gen_treesitter...
 if Util.has_mini_ai then later(function() require("ak.config.coding.mini_ai") end) end
 
-Util.has_blink = false -- Testing blink
+Util.has_blink = true -- Testing blink
 if Util.has_blink then -- 2 plugins, blink and friendly-snippets
   later(function() -- NOTE: Blink adds 7 ms to startuptime using now()
     -- use a release tag to download pre-built binaries
@@ -14,7 +14,7 @@ if Util.has_blink then -- 2 plugins, blink and friendly-snippets
       depends = {
         "rafamadriz/friendly-snippets",
       },
-      checkout = "v0.5.1", -- check releases for latest tag
+      checkout = "v0.7.1",
     })
     require("ak.config.coding.blink") -- includes snippets
   end)
