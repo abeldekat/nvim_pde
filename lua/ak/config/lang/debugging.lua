@@ -85,13 +85,18 @@ end
 local function keys()
   ---@param config {args?:string[]|fun():string[]?}
   local function get_args(config)
-    local args = type(config.args) == "function" and (config.args() or {}) or config.args or {}
+    local args = type(config.args) == "function" and (config.args() or {}) or config.args or {} --[[@as string[] | string ]]
+    local args_str = type(args) == "table" and table.concat(args, " ") or args --[[@as string]]
+
     config = vim.deepcopy(config)
     ---@cast args string[]
     config.args = function()
-      ---@diagnostic disable-next-line: redundant-parameter
-      local new_args = vim.fn.input("Run with args: ", table.concat(args, " ")) --[[@as string]]
-      return vim.split(vim.fn.expand(new_args) --[[@as string]], " ")
+      local new_args = vim.fn.expand(vim.fn.input("Run with args: ", args_str)) --[[@as string]]
+      if config.type and config.type == "java" then
+        ---@diagnostic disable-next-line: return-type-mismatch
+        return new_args
+      end
+      return require("dap.utils").splitstr(new_args)
     end
     return config
   end
@@ -101,7 +106,7 @@ local function keys()
     { desc = "Breakpoint condition" }
   )
   map("<leader>db", function() dap.toggle_breakpoint() end, { desc = "Toggle breakpoint" })
-  map("<leader>dc", function() dap.continue() end, { desc = "Continue" })
+  map("<leader>dc", function() dap.continue() end, { desc = "Run/Continue" })
   map("<leader>da", function() dap.continue({ before = get_args }) end, { desc = "Run with args" })
   map("<leader>dC", function() dap.run_to_cursor() end, { desc = "Run to cursor" })
   map("<leader>dg", function() dap.goto_() end, { desc = "Go to line (no execute)" })

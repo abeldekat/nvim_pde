@@ -205,9 +205,9 @@ local opts = {
 
     documentation = {
       -- Controls whether the documentation window will automatically show when selecting a completion item
-      auto_show = true, -- TODO: Blink activated documentation autoshow
+      auto_show = true,
       -- -- Delay before showing the documentation window
-      -- auto_show_delay_ms = 500,
+      auto_show_delay_ms = 200,
       -- -- Delay before updating the documentation window when selecting a new item,
       -- -- while an existing item is still visible
       -- update_delay_ms = 50,

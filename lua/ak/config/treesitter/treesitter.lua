@@ -18,6 +18,7 @@ local opts = {
     "bash",
     "bibtex",
     "c",
+    "css",
     "diff",
     "html",
     "javascript",

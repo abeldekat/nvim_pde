@@ -10,6 +10,7 @@ local plugins = {
   all = false,
   auto = false,
   ["base"] = true,
+  ["blink_cmp"] = true,
   ["kinds"] = true,
   ["semantic_tokens"] = true,
   ["treesitter"] = true,

@@ -65,9 +65,9 @@ function H.keys(_, buffer) -- client
   map("gr", Picker.lsp_references, { desc = "References", nowait = true })
   map("gI", Picker.lsp_implementations, { desc = "Goto implementation" })
   map("gy", Picker.lsp_type_definitions, { desc = "Goto type definition" })
-  --   map("K", vim.lsp.buf.hover, { desc = "Hover" }) -- builtin, see lsp-defaults
-  map("gK", vim.lsp.buf.signature_help, { desc = "Signature help" })
-  map("<c-k>", vim.lsp.buf.signature_help, { desc = "Signature help" }, "i")
+  --   map("K", function() vim.lsp.buf.hover() end, { desc = "Hover" }) -- builtin, see lsp-defaults
+  map("gK", function() vim.lsp.buf.signature_help() end, { desc = "Signature help" })
+  map("<c-k>", function() vim.lsp.buf.signature_help() end, { desc = "Signature help" }, "i")
   map("<leader>ca", vim.lsp.buf.code_action, { desc = "Code action" }, { "n", "v" })
   map(
     "<leader>cA",

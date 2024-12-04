@@ -61,7 +61,6 @@ opt.smartcase = true -- Don't ignore case with capitals
 opt.smartindent = true -- Insert indents automatically
 opt.smoothscroll = true
 opt.spelllang = { "en" }
-opt.spelloptions:append("noplainbuffer") -- when available, treesitter spell regions
 opt.splitbelow = false -- Put new windows below current
 opt.splitkeep = "screen"
 opt.splitright = false -- Put new windows right of current

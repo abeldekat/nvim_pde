@@ -24,6 +24,7 @@ local opts = {
   integrations = {
     aerial = true,
     alpha = false,
+    blink_cmp = true,
     cmp = true,
     dashboard = false,
     dropbar = { enabled = false },

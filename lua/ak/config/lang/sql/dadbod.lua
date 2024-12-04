@@ -2,6 +2,26 @@
 -- use dadbod for autocompletion, combine with vim-slime and mysql cli
 -- in .envrc construct $DATABASE_URL
 -- or in .lazy.lua: w:db b:db g:db
+
+-- TODO: blink.cmp integration in LazyVim
+-- {
+--   "saghen/blink.cmp",
+--   optional = true,
+--   opts = {
+--     sources = {
+--       completion = {
+--         enabled_providers = { "dadbod" },
+--       },
+--       providers = {
+--         dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
+--       },
+--     },
+--   },
+--   dependencies = {
+--     "kristijanhusak/vim-dadbod-completion",
+--   },
+-- },
+
 local function add_completion()
   local ok, cmp = pcall(require, "cmp")
   if ok then cmp.setup.buffer({ sources = { { name = "vim-dadbod-completion" } } }) end
