@@ -84,31 +84,31 @@ local opts = {
     --   },
     -- },
 
-    -- accept = {
-    --   -- Create an undo point when accepting a completion item
-    --   create_undo_point = true,
-    --   -- Experimental auto-brackets support
-    --   auto_brackets = {
-    --     -- Whether to auto-insert brackets for functions
-    --     enabled = false, -- TODO: Blink activate?
-    --     -- Default brackets to use for unknown languages
-    --     default_brackets = { "(", ")" },
-    --     -- Overrides the default blocked filetypes
-    --     override_brackets_for_filetypes = {},
-    --     -- Synchronously use the kind of the item to determine if brackets should be added
-    --     kind_resolution = {
-    --       enabled = true,
-    --       blocked_filetypes = { "typescriptreact", "javascriptreact", "vue" },
-    --     },
-    --     -- Asynchronously use semantic token to determine if brackets should be added
-    --     semantic_token_resolution = {
-    --       enabled = true,
-    --       blocked_filetypes = {},
-    --       -- How long to wait for semantic tokens to return before assuming no brackets should be added
-    --       timeout_ms = 400,
-    --     },
-    --   },
-    -- },
+    accept = {
+      -- Create an undo point when accepting a completion item
+      -- create_undo_point = true,
+      -- Experimental auto-brackets support
+      auto_brackets = {
+        -- Whether to auto-insert brackets for functions
+        enabled = true,
+        -- Default brackets to use for unknown languages
+        -- default_brackets = { "(", ")" },
+        -- Overrides the default blocked filetypes
+        -- override_brackets_for_filetypes = {},
+        -- Synchronously use the kind of the item to determine if brackets should be added
+        -- kind_resolution = {
+        --   enabled = true,
+        --   blocked_filetypes = { "typescriptreact", "javascriptreact", "vue" },
+        -- },
+        -- Asynchronously use semantic token to determine if brackets should be added
+        -- semantic_token_resolution = {
+        --   enabled = true,
+        --   blocked_filetypes = {},
+        --   -- How long to wait for semantic tokens to return before assuming no brackets should be added
+        --   timeout_ms = 400,
+        -- },
+      },
+    },
 
     menu = {
       -- enabled = true,
@@ -233,7 +233,7 @@ local opts = {
     },
     -- Displays a preview of the selected item on the current line
     ghost_text = {
-      enabled = false, -- TODO: Blink enable ghost text?
+      enabled = true,
     },
   },
 
