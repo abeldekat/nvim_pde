@@ -245,6 +245,7 @@ function H.rust_analyzer(_) -- capabilities setup by rustaceanvim
   vim.g.rustaceanvim = vim.tbl_deep_extend("keep", vim.g.rustaceanvim or {}, opts or {})
 end
 
+-- TODO: test ltex-plus
 function H.texlab()
   local desc = "Vimtex Docs"
   H.on_attach(function(_, buffer) -- client
