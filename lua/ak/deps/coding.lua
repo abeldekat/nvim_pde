@@ -6,13 +6,13 @@ local add, later = MiniDeps.add, MiniDeps.later
 Util.has_mini_ai = true -- ai and textobjects with gen_treesitter...
 Util.has_blink = true -- switched to blink, in beta. Keep cmp around
 
-local function blink() -- use a release tag to download pre-built binaries
+local function blink()
   add({ -- 2 plugins, blink and friendly-snippets
     source = "saghen/blink.cmp",
     depends = {
       "rafamadriz/friendly-snippets",
     },
-    checkout = "v0.7.3",
+    checkout = "v0.7.5",
   })
   require("ak.config.coding.blink") -- includes snippets
 end

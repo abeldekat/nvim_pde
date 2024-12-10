@@ -137,7 +137,7 @@ local opts = {
         -- -- Gap between columns
         -- gap = 1,
         -- Use treesitter to highlight the label text
-        treesitter = true, -- TODO: Blink: activated treesitter hl label
+        treesitter = true,
 
         --   -- Components to render, grouped by column
         --   columns = { { "kind_icon" }, { "label", "label_description", gap = 1 } },

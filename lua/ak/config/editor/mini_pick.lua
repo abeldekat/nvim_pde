@@ -191,6 +191,44 @@ Pick.registry.buffer_lines_current = function()
   MiniExtra.pickers.buf_lines(local_opts, { source = { show = show } })
 end
 
+-- Buffers show name in cwd format: https://github.com/echasnovski/mini.nvim/issues/1290
+-- Show buffers: If in cwd, show in cwd format
+-- Code taken from builtin.buffers
+--
+-- Default pick buffers just shows parsed output from buffers command
+-- As a consequence, the cwd part is not removed from buffers opened with:
+-- oil in cwd
+-- dashboard in cwd
+Pick.registry.buffers_hinted_truncated = function()
+  local cwd = vim.fn.fnamemodify(vim.fs.normalize(vim.fn.getcwd()) .. "/", ":~")
+  local include_unlisted = false
+  local include_current = false
+
+  local items = {}
+  local cur_buf_id = vim.api.nvim_get_current_buf()
+  local buffers_output = vim.api.nvim_exec2("buffers" .. (include_unlisted and "!" or ""), { output = true })
+  local buffers_string = buffers_output.output and buffers_output.output or ""
+  if buffers_string ~= "" then
+    for _, l in ipairs(vim.split(buffers_string, "\n")) do
+      local buf_id_str, buf_name = l:match("^%s*%d+"), l:match('"(.*)"')
+      if vim.startswith(buf_name, cwd) then buf_name = vim.fn.fnamemodify(buf_name, ":.") end
+
+      local buf_id = tonumber(buf_id_str)
+      local item = { text = buf_name, bufnr = buf_id }
+      if buf_id ~= cur_buf_id or include_current then table.insert(items, item) end
+    end
+  end
+
+  local hinted = { enable = true, use_autosubmit = true }
+  local source = {
+    name = "Buffers hinted truncated",
+    items = items,
+    show = true and Pick.default_show or nil, -- true: icons
+    window = false and H.make_centered_window() or nil, -- true: centered_window
+  }
+  MiniPick.start({ hinted = hinted, source = source })
+end
+
 -- Apply  ================================================================
 
 local cwd_cache = {}
@@ -242,15 +280,8 @@ local function keys()
   -- hotkeys:
   map("<leader><leader>", files, { desc = "Files pick" })
   map("<leader>/", custom.buffer_lines_current, { desc = "Buffer lines" })
-  local buffers_hinted = function()
-    local show_icons = true
-    local source = { show = not show_icons and Pick.default_show or nil }
-    local window = false and H.make_centered_window() or nil
-    local opts = { hinted = { enable = true, use_autosubmit = true }, source = source, window = window }
-    builtin.buffers({}, opts)
-  end
-  map("<leader>;", buffers_hinted, { desc = "Buffers pick" }) -- home row, used often
-  -- <leader>,: pick_visits_by_labels, see ak.mini.visits_harpooned
+  map("<leader>;", custom.buffers_hinted_truncated, { desc = "Buffers pick" }) -- home row, used often
+  -- <leader>j and <leader>ol: pick_visits_by_labels , see ak.mini.visits_harpooned
   local symbols_hinted = function()
     extra.lsp({ scope = "document_symbol" }, { hinted = { enable = true, use_autosubmit = true } })
   end

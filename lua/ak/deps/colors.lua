@@ -13,7 +13,6 @@ local colors = {
       { source = "rose-pine/neovim", name = "colors_rose-pine" },
       { source = "ribru17/bamboo.nvim", name = "colors_bamboo" },
       { source = "savq/melange-nvim", name = "colors_melange" },
-      { source = "wincent/base16-nvim", name = "colors_base16" }, -- TESTING: Base16
     }
   end,
 
@@ -23,7 +22,6 @@ local colors = {
       { source = "sainnhe/everforest", name = "colors_everforest" },
       { source = "sainnhe/gruvbox-material", name = "colors_gruvbox-material" },
       { source = "sainnhe/edge", name = "colors_edge" },
-      { source = "craftzdog/solarized-osaka.nvim", name = "colors_solarized-osaka" },
     }
   end,
 
@@ -39,8 +37,8 @@ local colors = {
   four = function()
     return {
       { source = "folke/tokyonight.nvim", name = "colors_tokyonight" },
+      { source = "craftzdog/solarized-osaka.nvim", name = "colors_solarized-osaka" },
       { source = "lifepillar/vim-solarized8", name = "colors_solarized8", checkout = "neovim" },
-      { source = "AstroNvim/astrotheme", name = "colors_astrotheme" },
       { source = "ronisbr/nano-theme.nvim", name = "colors_nano-theme" },
     }
   end,

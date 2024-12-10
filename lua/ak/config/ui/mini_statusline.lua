@@ -1,4 +1,4 @@
--- Color schemes without support: astrotheme, ayu, melange, solarized8
+-- Color schemes without support: ayu, melange, solarized8
 
 local AK = {} -- module using the structure of MiniStatusline
 local H = {} -- helpers, copied, modified or added

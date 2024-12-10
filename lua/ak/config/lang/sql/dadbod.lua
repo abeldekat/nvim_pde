@@ -31,7 +31,7 @@ local function apply()
     -- ...initialize the provider if it hasn't been initialized yet...
     sources.providers[new_provider_id] = provider.new(new_provider_id, new_provider_in_config)
 
-    -- Now the public function can be used. Only dadbod will be relaoded
+    -- Now the public function can be used. Only dadbod will be reloaded
     require("blink-cmp").reload(new_provider_id)
   else
     local has_nvim_cmp, cmp = pcall(require, "cmp")
