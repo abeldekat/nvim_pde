@@ -11,28 +11,7 @@ local Util = require("ak.util")
 -- 2. in .envrc construct $DATABASE_URL
 local function apply()
   if Util.has_blink then -- If true, must have been loaded on "later" in deps.coding
-    --
-    -- HACK: There is no public method to add a provider once blink has been setup:
-    --
-    local new_provider_in_config = { name = "Dadbod", module = "vim_dadbod_completion.blink" }
-    local new_provider_id = "dadbod"
-
-    local config = require("blink.cmp.config")
-    -- Add to config, otherwise internal checks fail:
-    -- HACK: With this hack, do not configure enabled_providers as function in blink setup!
-    ---@diagnostic disable-next-line: param-type-mismatch -- enabled_providers, function or string...
-    table.insert(config.sources.completion.enabled_providers, new_provider_id)
-    -- HACK: Adding to config directly bypasses validation for new_provider_in_config!
-    config.sources.providers[new_provider_id] = new_provider_in_config
-    -- Add to internal providers:
-    local sources = require("blink.cmp.sources.lib")
-    local provider = require("blink.cmp.sources.lib.provider")
-    -- Line taken from blink.cmp.sources.lib.init, get_enabled_providers:
-    -- ...initialize the provider if it hasn't been initialized yet...
-    sources.providers[new_provider_id] = provider.new(new_provider_id, new_provider_in_config)
-
-    -- Now the public function can be used. Only dadbod will be reloaded
-    require("blink-cmp").reload(new_provider_id)
+    require("blink-cmp").add_provider("dadbod", { name = "Dadbod", module = "vim_dadbod_completion.blink" })
   else
     local has_nvim_cmp, cmp = pcall(require, "cmp")
     if has_nvim_cmp then cmp.setup.buffer({ sources = { { name = "vim-dadbod-completion" } } }) end

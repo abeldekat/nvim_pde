@@ -7,12 +7,26 @@ Util.has_mini_ai = true -- ai and textobjects with gen_treesitter...
 Util.has_blink = true -- switched to blink, in beta. Keep cmp around
 
 local function blink()
+  local function build_blink(params)
+    vim.notify("Building blink.cmp", vim.log.levels.INFO)
+    local obj = vim.system({ "cargo", "build", "--release" }, { cwd = params.path }):wait()
+    if obj.code == 0 then
+      vim.notify("Building blink.cmp done", vim.log.levels.INFO)
+    else
+      vim.notify("Building blink.cmp failed", vim.log.levels.ERROR)
+    end
+  end
+
   add({ -- 2 plugins, blink and friendly-snippets
     source = "saghen/blink.cmp",
     depends = {
       "rafamadriz/friendly-snippets",
     },
-    checkout = "v0.7.5",
+    -- checkout = "v0.7.6",
+    hooks = {
+      post_install = build_blink,
+      post_checkout = build_blink,
+    },
   })
   require("ak.config.coding.blink") -- includes snippets
 end
