@@ -12,15 +12,9 @@ local opts = {
   },
 
   completion = {
-    accept = {
-      auto_brackets = { -- Experimental auto-brackets support
-        enabled = true,
-      },
-    },
-
     menu = {
       draw = {
-        treesitter = true,
+        treesitter = { "lsp" },
       },
     },
 
@@ -33,6 +27,10 @@ local opts = {
     ghost_text = {
       enabled = true,
     },
+  },
+
+  sources = { -- disable cmdline:
+    cmdline = {},
   },
 
   appearance = {
