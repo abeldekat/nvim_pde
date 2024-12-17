@@ -34,7 +34,7 @@ local opts = {
   },
 
   appearance = {
-    use_nvim_cmp_as_default = true, --TODO: Blink nvim_cmp_as_default
+    use_nvim_cmp_as_default = false,
   },
 }
 
