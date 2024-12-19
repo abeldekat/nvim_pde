@@ -33,6 +33,10 @@ local opts = {
     cmdline = {},
   },
 
+  signature = {
+    enabled = true,
+  },
+
   appearance = {
     use_nvim_cmp_as_default = false,
   },
