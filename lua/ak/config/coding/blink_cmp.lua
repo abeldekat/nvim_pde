@@ -2,6 +2,13 @@
 --          │                   Also see: lsp                         │
 --          ╰─────────────────────────────────────────────────────────╯
 
+-- Blink completion:
+-- crust of rust declarative macros:
+-- let mut y = Some(42);
+-- let x: Vec<u32> = avec![42; 2];
+-- > Now, change 42 in avec to y and type .take: No completion in blink 0.8.0, does work in 0.7.6
+-- Reported bug https://github.com/Saghen/blink.cmp/issues/719
+
 local opts = {
   keymap = {
     preset = "default", -- lazyvim uses enter

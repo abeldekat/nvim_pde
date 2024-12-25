@@ -10,9 +10,9 @@ local Util = require("ak.util")
 -- 1. use dadbod for autocompletion, combine with vim-slime and mysql cli
 -- 2. in .envrc construct $DATABASE_URL
 local function apply()
-  if Util.has_blink then -- If true, must have been loaded on "later" in deps.coding
+  if Util.completion == "blink" then -- If true, must have been loaded on "later" in deps.coding
     require("blink-cmp").add_provider("dadbod", { name = "Dadbod", module = "vim_dadbod_completion.blink" })
-  else
+  elseif Util.completion == "nvim-cmp" then
     local has_nvim_cmp, cmp = pcall(require, "cmp")
     if has_nvim_cmp then cmp.setup.buffer({ sources = { { name = "vim-dadbod-completion" } } }) end
   end

@@ -1,36 +1,29 @@
--- Using blink.cmp. Keep this config for a while
-
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                   Also see: lsp                         │
 --          ╰─────────────────────────────────────────────────────────╯
 
-local function snip_native()
-  require("snippets").setup({ friendly_snippets = true, global_snippets = { "all", "global" } })
+-- NOTE: mini.snippets: for now, not connected to cmp
+
+local Util = require("ak.util")
+
+local function snip_native_lsp_expansion() -- just lsp expansion, no plugin needed
   return {
-    source = { name = "snippets" },
+    source = nil,
     expand = nil, -- { expand = function(args) vim.snippet.expand(args.body) end },
     forward = function()
       if vim.snippet.active({ direction = 1 }) then vim.snippet.jump(1) end
     end,
+    -- TODO: "callsnippet": ctrl-h does not work when at the end of snippet
+    -- Fortunately, it does work when there are more than 2 place holders
     backward = function()
-      if vim.snippet.active({ direction = -1 }) then vim.snippet.jump(-1) end
+      -- if vim.snippet.active({ direction = -1 }) then vim.snippet.jump(-1) end
+      vim.snippet.jump(-1)
     end,
   }
 end
 
 local function snip_luasnip()
-  -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
-  --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
   local luasnip = require("luasnip")
-  require("luasnip.loaders.from_vscode").lazy_load()
-  -- Adds default user snippets location:
-  -- require("luasnip.loaders.from_vscode").lazy_load({ paths = { vim.fn.stdpath("config") .. "/snippets" } })
-
-  luasnip.config.setup({
-    history = true,
-    delete_check_events = "TextChanged",
-  })
-
   return {
     source = { name = "luasnip" },
     expand = { expand = function(args) require("luasnip").lsp_expand(args.body) end },
@@ -46,7 +39,7 @@ end
 vim.api.nvim_set_hl(0, "CmpGhostText", { link = "Comment", default = true })
 
 local cmp = require("cmp")
-local snippets = false and snip_native() or snip_luasnip()
+local snippets = Util.snippets == "luasnip" and snip_luasnip() or snip_native_lsp_expansion()
 
 local formatting_style = {
   format = function(_, item)
@@ -63,8 +56,8 @@ local opts = {
   experimental = { ghost_text = { hl_group = "CmpGhostText" } },
   formatting = formatting_style,
   mapping = cmp.mapping.preset.insert({
-    ["<C-n>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
-    ["<C-p>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
+    -- ["<C-n>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }), -- = default
+    -- ["<C-p>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }), -- = default
     ["<C-b>"] = cmp.mapping.scroll_docs(-4),
     ["<C-f>"] = cmp.mapping.scroll_docs(4),
     ["<C-Space>"] = cmp.mapping.complete(), -- invoke cmp manually
@@ -84,7 +77,7 @@ local opts = {
   snippet = snippets.expand,
   sources = cmp.config.sources({
     { name = "nvim_lsp" },
-    snippets.source,
+    snippets.source, -- can be nil
     { name = "buffer" },
     { name = "path" },
   }),
@@ -103,4 +96,5 @@ local opts = {
   },
   -- view = { entries = { follow_cursor = true } },
 }
+
 cmp.setup(opts)
