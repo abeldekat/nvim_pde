@@ -13,11 +13,6 @@ M.has_mini_ai = false -- initial value. Treesitter textobjects and mini.ai
 ---@type "luasnip" | "mini" | "none"
 M.snippets = "none"
 
--- Switch between completion engines
--- 1. nvim-cmp and luasnip
--- 2. blink
--- 3. mini completion and snippets
--- 4. none
 ---@type "nvim-cmp" | "blink" | "mini" | "none"
 M.completion = "none" -- set in ak.deps.coding
 

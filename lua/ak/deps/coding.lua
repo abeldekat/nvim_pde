@@ -4,9 +4,10 @@ local add, later = MiniDeps.add, MiniDeps.later
 -- local now = MiniDeps.now
 
 Util.has_mini_ai = true -- coordinate mini.ai and textobjects with gen_treesitter...
-Util.snippets = "luasnip"
+Util.snippets = "mini"
 Util.completion = "nvim-cmp"
 
+-- luasnip, friendly-snippets: 2 plugins
 local function luasnip()
   local function make_jsregexp(path)
     vim.cmd("lcd " .. path)
@@ -25,8 +26,8 @@ local function luasnip()
   require("ak.config.coding.luasnip")
 end
 
+-- blink and friendly-snippets: 2 plugins
 local function blink_cmp()
-  -- 2 plugins, blink and friendly-snippets
   local function build_blink(params)
     vim.notify("Building blink.cmp", vim.log.levels.INFO)
     local obj = vim.system({ "cargo", "build", "--release" }, { cwd = params.path }):wait()
@@ -51,18 +52,15 @@ local function blink_cmp()
   require("ak.config.coding.blink_cmp") -- includes snippets
 end
 
+-- cmp and 3 sources: 4 plugins
+-- add source cmp_luasnip if using luasnip: 5 plugins
 local function nvim_cmp()
-  -- luasnip, friendly-snippets, cmp and 4 sources: 7 plugins
   local cmp_depends = {
     "hrsh7th/cmp-nvim-lsp",
     "hrsh7th/cmp-buffer",
     "hrsh7th/cmp-path",
   }
-
-  if Util.snippets == "luasnip" then
-    luasnip()
-    table.insert(cmp_depends, "saadparwaiz1/cmp_luasnip")
-  end
+  if Util.snippets == "luasnip" then table.insert(cmp_depends, "saadparwaiz1/cmp_luasnip") end
 
   add({
     source = "hrsh7th/nvim-cmp",
@@ -71,20 +69,26 @@ local function nvim_cmp()
   require("ak.config.coding.nvim_cmp")
 end
 
-local function mini_cmp() -- not in use, wait for snippet support
-  add("rafamadriz/friendly-snippets")
-  require("ak.config.coding.mini_completion")
-end
-
-if Util.completion == "blink" then -- NOTE: Blink adds 7 ms to startuptime using now().
-  later(function() blink_cmp() end)
-elseif Util.completion == "nvim-cmp" then
-  later(function() nvim_cmp() end)
-elseif Util.completion == "mini" then
-  later(function() mini_cmp() end)
-end
+-- not usable at the moment unless snippet support is removed from all lsp
+-- --> wait for upcoming snippet support
+local function mini_cmp() require("ak.config.coding.mini_completion") end
 
 later(function()
+  -- standalone, has no source in completion engine, is used for lsp expansion
+  if Util.snippets == "mini" and Util.completion ~= "blink" then
+    add("rafamadriz/friendly-snippets")
+    require("ak.config.coding.mini_snippets")
+  end
+
+  if Util.completion == "nvim-cmp" then -- with luasnip, mini.snippets or native lsp snippet expansion:
+    if Util.snippets == "luasnip" then luasnip() end
+    nvim_cmp()
+  elseif Util.completion == "blink" then -- NOTE: Blink adds 7 ms to startuptime using now().
+    blink_cmp() -- without external snippet engine
+  elseif Util.completion == "mini" then
+    mini_cmp()
+  end
+
   if Util.has_mini_ai then require("ak.config.coding.mini_ai") end
 
   require("ak.config.coding.mini_align") -- using a selection...
