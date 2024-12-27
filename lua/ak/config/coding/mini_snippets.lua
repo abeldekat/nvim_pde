@@ -10,11 +10,13 @@
 -- - Prefer `*.json` files with dict-like content if you want more cross platfrom
 -- setup. Otherwise use `*.lua` files with array-like content.
 
-local gen_loader = require("mini.snippets").gen_loader
-require("mini.snippets").setup({
+local snippets, config_path = require("mini.snippets"), vim.fn.stdpath("config")
+local lang_patterns = { tex = { "latex.json" }, plaintex = { "latex.json" } }
+
+snippets.setup({
   snippets = {
-    gen_loader.from_file("~/.config/nvim/snippets/global.json"),
-    gen_loader.from_lang(),
+    snippets.gen_loader.from_file(config_path .. "/snippets/global.json"),
+    snippets.gen_loader.from_lang({ lang_patterns = lang_patterns }),
   },
 
   -- Created globally. I use <c-j> to confirm completion
