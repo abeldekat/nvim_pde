@@ -1,7 +1,6 @@
 local Util = require("ak.util")
 local MiniDeps = require("mini.deps")
-local add, later = MiniDeps.add, MiniDeps.later
--- local now = MiniDeps.now
+local add, later = MiniDeps.add, MiniDeps.later -- local now = MiniDeps.now
 
 Util.has_mini_ai = true -- coordinate mini.ai and textobjects with gen_treesitter...
 Util.snippets = "mini"
@@ -69,8 +68,8 @@ local function nvim_cmp()
   require("ak.config.coding.nvim_cmp")
 end
 
--- not usable at the moment unless snippet support is removed from all lsp
 -- --> wait for upcoming snippet support
+-- only when snippet support is removed from each lsp configuration
 local function mini_cmp() require("ak.config.coding.mini_completion") end
 
 later(function()
