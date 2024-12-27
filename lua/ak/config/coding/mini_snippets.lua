@@ -10,6 +10,7 @@
 -- - Prefer `*.json` files with dict-like content if you want more cross platfrom
 -- setup. Otherwise use `*.lua` files with array-like content.
 
+local Util = require("ak.util")
 local snippets, config_path = require("mini.snippets"), vim.fn.stdpath("config")
 local lang_patterns = { tex = { "latex.json" }, plaintex = { "latex.json" } }
 
@@ -19,9 +20,35 @@ snippets.setup({
     snippets.gen_loader.from_lang({ lang_patterns = lang_patterns }),
   },
 
-  -- Created globally. I use <c-j> to confirm completion
-  mappings = { expand = "<C-S>" }, -- TODO: find a better key
+  -- Created globally. I already use <c-j> to confirm completion.
+  --
+  -- CTRL-K {char1} [char2] Enter digraph (see |digraphs|).
+  -- I almost never enter a digraph.
+  -- The key used to be overriden in ak.config.lang.lspconfig for signature help in insert mode.
+  -- I also seldomly invoke signature help in insert mode.
+  -- Solution: use <c-k> for snippets and <c-s> for signature help in insert mode.
+  -- To enter a digraph, start nvim without plugins.
+  mappings = { expand = "" }, -- map expand to <c-k> in this module
 })
 
-local rhs = function() MiniSnippets.expand({ match = false }) end
-vim.keymap.set("i", "<C-g><C-j>", rhs, { desc = "Expand all" })
+local expand = function() MiniSnippets.expand() end
+local expand_all = function() MiniSnippets.expand({ match = false }) end
+if Util.completion == "nvim-cmp" then
+  local function close_cmp()
+    local cmp = require("cmp")
+    if cmp.visible then cmp.close() end
+  end
+  expand = function()
+    close_cmp()
+    MiniSnippets.expand()
+  end
+  expand_all = function()
+    close_cmp()
+    MiniSnippets.expand({ match = false })
+  end
+end
+-- create customized expand mapping:
+-- vim.keymap.set("i", "<c-k>", "<Cmd>lua MiniSnippets.expand()<CR>", { desc = "Expand snippet" })
+vim.keymap.set("i", "<c-k>", expand, { desc = "Expand snippet" })
+-- add extra expand all mapping:
+vim.keymap.set("i", "<C-g><C-k>", expand_all, { desc = "Expand all snippet" })

@@ -67,7 +67,10 @@ function H.keys(_, buffer) -- client
   map("gy", Picker.lsp_type_definitions, { desc = "Goto type definition" })
   --   map("K", function() vim.lsp.buf.hover() end, { desc = "Hover" }) -- builtin, see lsp-defaults
   map("gK", function() vim.lsp.buf.signature_help() end, { desc = "Signature help" })
-  map("<c-k>", function() vim.lsp.buf.signature_help() end, { desc = "Signature help" }, "i")
+  --
+  -- used to be <c-k>, now used for snippet expansion:
+  map("<c-s>", function() vim.lsp.buf.signature_help() end, { desc = "Signature help" }, "i")
+  --
   map("<leader>ca", vim.lsp.buf.code_action, { desc = "Code action" }, { "n", "v" })
   map(
     "<leader>cA",
