@@ -29,6 +29,15 @@ snippets.setup({
   -- Solution: use <c-k> for snippets and <c-s> for signature help in insert mode.
   -- To enter a digraph, start nvim without plugins.
   mappings = { expand = "" }, -- map expand to <c-k> in this module
+  expand = {
+    select = function(...)
+      if Util.completion == "nvim-cmp" then
+        local cmp = require("cmp")
+        if cmp.visible() then cmp.close() end
+      end
+      MiniSnippets.default_select(...)
+    end,
+  },
 })
 
 -- create customized expand mapping:
