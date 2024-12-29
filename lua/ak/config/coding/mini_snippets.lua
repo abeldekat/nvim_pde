@@ -30,20 +30,29 @@ snippets.setup({
   -- To enter a digraph, start nvim without plugins.
   mappings = { expand = "" }, -- map expand to <c-k> in this module
   expand = {
-    select = function(...)
+    select = function(the_snippets, insert, opts)
       if Util.completion == "nvim-cmp" then
         local cmp = require("cmp")
         if cmp.visible() then cmp.close() end
+        MiniSnippets.default_select(the_snippets, insert, opts)
+      elseif Util.completion == "blink" then
+        -- Cancel uses vim.schedule
+        require("blink.cmp").cancel() -- overriden in blink config!
+        -- Schedule default_select, otherwise blink's virtual text is not removed
+        -- when mini.snippets opens vim.ui.select
+        vim.schedule(function() MiniSnippets.default_select(the_snippets, insert, opts) end)
       end
-      MiniSnippets.default_select(...)
     end,
   },
 })
 
--- create customized expand mapping:
+-- create customized expand mappings:
+
+-- The default:
 -- vim.keymap.set("i", "<c-k>", "<Cmd>lua MiniSnippets.expand()<CR>", { desc = "Expand snippet" })
 local expand = function() MiniSnippets.expand() end
 vim.keymap.set("i", "<c-k>", expand, { desc = "Expand snippet" })
--- add extra expand all mapping:
+
+-- Add extra expand all mapping:
 local expand_all = function() MiniSnippets.expand({ match = false }) end
 vim.keymap.set("i", "<C-g><C-k>", expand_all, { desc = "Expand all snippet" })
