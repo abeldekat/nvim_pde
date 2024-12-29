@@ -105,7 +105,17 @@ function H.lua_ls()
         completion = { callSnippet = "Replace" },
         -- completion = { callSnippet = "Disable" }, -- needed for mini.completion
         diagnostics = {
-          globals = { "vim", "describe", "it", "before_each", "after_each", "MiniIcons", "MiniVisits", "MiniPick" },
+          globals = {
+            "vim",
+            "describe",
+            "it",
+            "before_each",
+            "after_each",
+            "MiniIcons",
+            "MiniVisits",
+            "MiniPick",
+            "MiniSnippets",
+          },
         },
         doc = { privateName = { "^_" } },
         hint = { -- default no inlay hints
