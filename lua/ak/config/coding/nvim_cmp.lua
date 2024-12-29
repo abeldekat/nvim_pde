@@ -6,7 +6,7 @@ local snip_engine = require("ak.util").snippets
 local cmp = require("cmp")
 
 -- Formatting:
-local formatting_style = {
+local formatting = {
   format = function(_, item)
     local icon = MiniIcons and MiniIcons.get("lsp", item.kind)
     icon = icon and (" " .. icon .. " ") or icon
@@ -52,12 +52,13 @@ end
 local mapping = cmp.mapping.preset.insert(mapping_override)
 
 -- Sources:
-local sources = cmp.config.sources({ -- NOTE: only luasnip has a source
+local sources = { -- NOTE: only luasnip has a source
   { name = "nvim_lsp" },
-  snip_engine == "luasnip" and { name = "luasnip" } or nil,
   { name = "buffer" },
   { name = "path" },
-})
+}
+if snip_engine == "luasnip" then table.insert(sources, 2, { name = "luasnip" }) end
+sources = cmp.config.sources(sources)
 
 -- Snippet expansion:
 local snippet = {
@@ -73,7 +74,7 @@ elseif snip_engine == "none" then
   snippet["expand"] = nil -- defaults to native without expand
 end
 
--- mini.snippets: Close cmp:
+-- Mini snippets, close cmp:
 if snip_engine == "mini" then -- event "MiniSnippetsSessionStart" is too late...
   local org_expand = MiniSnippets.expand
   ---@diagnostic disable-next-line: duplicate-set-field
@@ -99,13 +100,13 @@ local window = {
 
 -- ---@type cmp.ConfigSchema
 local opts = {
-  formatting = formatting_style,
+  formatting = formatting,
   mapping = mapping,
   snippet = snippet,
   sources = sources,
+  window = window,
   completion = { completeopt = "menu,menuone,noinsert" },
   experimental = { ghost_text = { hl_group = "CmpGhostText" } },
-  window = window,
   -- performance = { max_view_entries = 15 }, --- there is also sources.max_item_count
   -- view = { entries = { follow_cursor = true, }, }, --docs_auto_open
 }

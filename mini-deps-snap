@@ -51,7 +51,7 @@ return {
   ["oil.nvim"] = "ba858b662599eab8ef1cba9ab745afded99cb180",
   ["one-small-step-for-vimkind"] = "5d2edc8937978585881d97a8fec4c2903fa4d72c",
   ["peek.nvim"] = "5820d937d5414baea5f586dc2a3d912a74636e5b",
-  rustaceanvim = "0a618c1d1c05a8059880076feccb15301da6993d",
+  rustaceanvim = "6db1fe9e3f005b2e0921c7302d2c195eeb90a451",
   ["toggleterm.nvim"] = "344fc1810292785b3d962ddac2de57669e1a7ff9",
   ["vim-dadbod"] = "f740950d0703099e0f172016f10e0e39f50fd0ba",
   ["vim-dadbod-completion"] = "71eb73d1f7399be6a56cc43b928276cd5ca27ffd",
