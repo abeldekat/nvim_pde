@@ -73,6 +73,16 @@ elseif snip_engine == "none" then
   snippet["expand"] = nil -- defaults to native without expand
 end
 
+-- mini.snippets: Close cmp:
+if snip_engine == "mini" then -- event "MiniSnippetsSessionStart" is too late...
+  local org_expand = MiniSnippets.expand
+  ---@diagnostic disable-next-line: duplicate-set-field
+  MiniSnippets.expand = function(opts)
+    if cmp.visible() then cmp.close() end
+    org_expand(opts)
+  end
+end
+
 -- Window
 local window = {
   -- Default winhighlight = 'Normal:Pmenu,FloatBorder:Pmenu,CursorLine:PmenuSel,Search:None',

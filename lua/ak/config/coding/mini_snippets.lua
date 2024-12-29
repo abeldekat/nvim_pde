@@ -31,24 +31,10 @@ snippets.setup({
   mappings = { expand = "" }, -- map expand to <c-k> in this module
 })
 
-local expand = function() MiniSnippets.expand() end
-local expand_all = function() MiniSnippets.expand({ match = false }) end
-if Util.completion == "nvim-cmp" then
-  local function close_cmp()
-    local cmp = require("cmp")
-    if cmp.visible then cmp.close() end
-  end
-  expand = function()
-    close_cmp()
-    MiniSnippets.expand()
-  end
-  expand_all = function()
-    close_cmp()
-    MiniSnippets.expand({ match = false })
-  end
-end
 -- create customized expand mapping:
 -- vim.keymap.set("i", "<c-k>", "<Cmd>lua MiniSnippets.expand()<CR>", { desc = "Expand snippet" })
+local expand = function() MiniSnippets.expand() end
 vim.keymap.set("i", "<c-k>", expand, { desc = "Expand snippet" })
 -- add extra expand all mapping:
+local expand_all = function() MiniSnippets.expand({ match = false }) end
 vim.keymap.set("i", "<C-g><C-k>", expand_all, { desc = "Expand all snippet" })
