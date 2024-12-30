@@ -10,7 +10,7 @@
 -- - Prefer `*.json` files with dict-like content if you want more cross platfrom
 -- setup. Otherwise use `*.lua` files with array-like content.
 
-local no_supertab = false
+local test_supertab = false
 local Util = require("ak.util")
 local snippets, config_path = require("mini.snippets"), vim.fn.stdpath("config")
 local lang_patterns = { tex = { "latex.json" }, plaintex = { "latex.json" } }
@@ -31,10 +31,8 @@ end
 -- Testing: Supertab as described in the help
 local function add_supertab_keys(opts)
   local expand_or_jump = function()
-    vim.print("*************************************")
     local can_expand = #MiniSnippets.expand({ insert = false }) > 0
     if can_expand then
-      vim.print("expand")
       vim.schedule(MiniSnippets.expand)
       return ""
     end
@@ -42,7 +40,6 @@ local function add_supertab_keys(opts)
     ---@diagnostic disable-next-line: missing-parameter
     local is_active = MiniSnippets.session.get() ~= nil
     if is_active then
-      vim.print("active")
       MiniSnippets.session.jump("next")
       return ""
     end
@@ -100,7 +97,7 @@ local opts = {
   expand = { select = select_override },
 }
 
-if no_supertab then
+if not test_supertab then
   add_expand_keys()
 else
   opts = add_supertab_keys(opts) -- override mappings.expand...
