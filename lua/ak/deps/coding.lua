@@ -73,7 +73,7 @@ end
 local function mini_cmp() require("ak.config.coding.mini_completion") end
 
 later(function()
-  -- standalone, has no source in completion engine, is used for lsp expansion
+  -- Independent, has no sources yet for completion engines, can be used for lsp expansion
   if Util.snippets == "mini" then
     add("rafamadriz/friendly-snippets")
     require("ak.config.coding.mini_snippets")

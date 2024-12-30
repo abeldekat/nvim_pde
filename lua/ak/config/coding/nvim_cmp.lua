@@ -16,7 +16,7 @@ local formatting = {
 }
 
 -- Mappings
-local mapping_override = {
+local mapping_override = { -- Does not map "tab"...
   ["<C-b>"] = cmp.mapping.scroll_docs(-4),
   ["<C-f>"] = cmp.mapping.scroll_docs(4),
   ["<C-Space>"] = cmp.mapping.complete(), -- invoke cmp manually
@@ -62,7 +62,7 @@ sources = cmp.config.sources(sources)
 
 -- Snippet expansion:
 local snippet = {
-  expand = function(args)
+  expand = function(args) -- mini.snippets
     ---@diagnostic disable-next-line: undefined-global
     local insert = MiniSnippets.config.expand.insert or MiniSnippets.default_insert
     insert({ body = args.body }) -- Insert at cursor
@@ -71,7 +71,7 @@ local snippet = {
 if snip_engine == "luasnip" then
   snippet["expand"] = function(args) require("luasnip").lsp_expand(args.body) end
 elseif snip_engine == "none" then
-  snippet["expand"] = nil -- defaults to native without expand
+  snippet["expand"] = nil -- without expand, cmp defaults to native
 end
 
 -- Window
