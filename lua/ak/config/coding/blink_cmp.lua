@@ -4,14 +4,8 @@
 
 local Util = require("ak.util")
 
--- Blink completion:
--- crust of rust declarative macros:
--- let mut y = Some(42);
--- let x: Vec<u32> = avec![42; 2];
--- > Now, change 42 in avec to y and type .take: No completion in blink 0.8.0, does work in 0.7.6
--- Reported bug https://github.com/Saghen/blink.cmp/issues/719
-
-local sources = { cmdline = {} } -- disable cmdline:
+-- Disable cmdline. Sources.default includes builtin snippets using friendly-snippets:
+local sources = { cmdline = {} }
 local signature = { enabled = true } -- false by default
 local appearance = {} ---  use_nvim_cmp_as_default = false
 
@@ -33,10 +27,10 @@ local completion = {
 -- blink does not have any c-j, c-l or c-h mappings
 local keymap = {
   preset = "default", -- lazyvim uses enter
-  -- c-e is hide
   ["<C-j>"] = { "select_and_accept" }, -- default c-y
-  ["<C-l>"] = { "snippet_forward", "fallback" }, -- default tab
-  ["<C-h>"] = { "snippet_backward", "fallback" }, -- default s-tab
+  -- c-e is hide
+  -- using builtin snippets: blink defines tab and shift-tab
+  -- using mini.snippets: keymappings defined in mini.snippets
 }
 
 local snippets = {} -- blink defaults to vim.snippet builtin

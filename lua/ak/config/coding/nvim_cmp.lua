@@ -23,42 +23,25 @@ local mapping_override = { -- Does not map "tab"...
   -- Cmp assigns: ctrl-y and ctrl-e.
   ["<C-j>"] = cmp.mapping.confirm({ select = true }), -- like c-y, easier to type
 }
-local snippet_jump = { -- not for mini, has its own mapping
-  luasnip = {
-    -- TODO: problem on forward when text is "l"?
-    ["<c-l>"] = function()
-      local luasnip = require("luasnip")
-      if luasnip.expand_or_locally_jumpable() then luasnip.expand_or_jump() end
-    end,
-    ["<c-h>"] = function()
-      local luasnip = require("luasnip")
-      if luasnip.locally_jumpable(-1) then luasnip.jump(-1) end
-    end,
-  },
-  none = {
-    ["<c-l>"] = function()
-      if vim.snippet.active({ direction = 1 }) then vim.snippet.jump(1) end
-    end,
-    ["<c-h>"] = function()
-      if vim.snippet.active({ direction = -1 }) then vim.snippet.jump(-1) end
-    end,
-  },
-}
-local tmp = snippet_jump[snip_engine]
-if tmp then
-  mapping_override["<c-l>"] = cmp.mapping(tmp["<c-l>"], { "i", "s" })
-  mapping_override["<c-h>"] = cmp.mapping(tmp["<c-h>"], { "i", "s" })
+if snip_engine == "none" then
+  local next = function()
+    if vim.snippet.active({ direction = 1 }) then vim.snippet.jump(1) end
+  end
+  local prev = function()
+    if vim.snippet.active({ direction = -1 }) then vim.snippet.jump(-1) end
+  end
+
+  mapping_override["<c-l>"] = cmp.mapping(next, { "i", "s" })
+  mapping_override["<c-h>"] = cmp.mapping(prev, { "i", "s" })
 end
 local mapping = cmp.mapping.preset.insert(mapping_override)
 
 -- Sources:
-local sources = { -- NOTE: only luasnip has a source
+local sources = cmp.config.sources({
   { name = "nvim_lsp" },
   { name = "buffer" },
   { name = "path" },
-}
-if snip_engine == "luasnip" then table.insert(sources, 2, { name = "luasnip" }) end
-sources = cmp.config.sources(sources)
+})
 
 -- Snippet expansion:
 local snippet = {
@@ -68,9 +51,7 @@ local snippet = {
     insert({ body = args.body }) -- Insert at cursor
   end,
 }
-if snip_engine == "luasnip" then
-  snippet["expand"] = function(args) require("luasnip").lsp_expand(args.body) end
-elseif snip_engine == "none" then
+if snip_engine == "none" then
   snippet["expand"] = nil -- without expand, cmp defaults to native
 end
 

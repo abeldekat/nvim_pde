@@ -10,19 +10,18 @@
 -- - Prefer `*.json` files with dict-like content if you want more cross platfrom
 -- setup. Otherwise use `*.lua` files with array-like content.
 
-local test_supertab = false
 local Util = require("ak.util")
+
+local no_supertab = true
 local snippets, config_path = require("mini.snippets"), vim.fn.stdpath("config")
 local lang_patterns = { tex = { "latex.json" }, plaintex = { "latex.json" } }
 
 local function add_expand_keys()
-  -- create customized expand mappings:
-
   -- The default:
   -- vim.keymap.set("i", "<c-k>", "<Cmd>lua MiniSnippets.expand()<CR>", { desc = "Expand snippet" })
+  -- Create customized expand mappings:
   local expand = function() MiniSnippets.expand() end
   vim.keymap.set("i", "<c-k>", expand, { desc = "Expand snippet" })
-
   -- Add extra expand all mapping:
   local expand_all = function() MiniSnippets.expand({ match = false }) end
   vim.keymap.set("i", "<C-g><C-k>", expand_all, { desc = "Expand all snippet" })
@@ -97,9 +96,9 @@ local opts = {
   expand = { select = select_override },
 }
 
-if not test_supertab then
+if no_supertab then
   add_expand_keys()
 else
-  opts = add_supertab_keys(opts) -- override mappings.expand...
+  opts = add_supertab_keys(opts) -- testing...
 end
 snippets.setup(opts)

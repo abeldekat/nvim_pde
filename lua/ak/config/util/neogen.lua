@@ -1,6 +1,5 @@
-local has_luasnip, _ = pcall(require, "luasnip")
 require("neogen").setup({
-  snippet_engine = has_luasnip and "luasnip" or "nvim",
+  snippet_engine = "nvim",
   -- languages = {
   --   lua = { template = { annotation_convention = "emmylua" } },
   -- },

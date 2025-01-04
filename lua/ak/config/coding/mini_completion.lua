@@ -1,7 +1,5 @@
 -- NOTE: Wait for mini completion to support snippets
 -- Currently, lots of expansion contains $ placeholders. Ie "require"
--- nvim-cmp(tested with luasnip) and blink(without external snippets engine) are able to use that:
--- requ, accept, name in double brackets and ctrl-l: Now cursor is after require("something")
 --
 -- https://github.com/echasnovski/mini.nvim/issues/1277
 -- https://github.com/echasnovski/mini.nvim/issues/886

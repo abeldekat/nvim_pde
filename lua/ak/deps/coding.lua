@@ -6,25 +6,6 @@ Util.has_mini_ai = true -- coordinate mini.ai and textobjects with gen_treesitte
 Util.snippets = "mini"
 Util.completion = "nvim-cmp"
 
--- luasnip, friendly-snippets: 2 plugins
-local function luasnip()
-  local function make_jsregexp(path)
-    vim.cmd("lcd " .. path)
-    vim.cmd("!make -s install_jsregexp")
-    vim.cmd("lcd -")
-    Util.info("luasnip: cannot rm is not an error!")
-  end
-  add({
-    source = "L3MON4D3/LuaSnip",
-    hooks = {
-      post_install = function(params) make_jsregexp(params.path) end,
-      post_checkout = function(params) make_jsregexp(params.path) end,
-    },
-    depends = { "rafamadriz/friendly-snippets" },
-  })
-  require("ak.config.coding.luasnip")
-end
-
 -- blink and friendly-snippets: 2 plugins
 local function blink_cmp()
   local function build_blink(params)
@@ -48,19 +29,16 @@ local function blink_cmp()
       post_checkout = build_blink,
     },
   })
-  require("ak.config.coding.blink_cmp") -- includes snippets
+  require("ak.config.coding.blink_cmp")
 end
 
 -- cmp and 3 sources: 4 plugins
--- add source cmp_luasnip if using luasnip: 5 plugins
 local function nvim_cmp()
   local cmp_depends = {
     "hrsh7th/cmp-nvim-lsp",
     "hrsh7th/cmp-buffer",
     "hrsh7th/cmp-path",
   }
-  if Util.snippets == "luasnip" then table.insert(cmp_depends, "saadparwaiz1/cmp_luasnip") end
-
   add({
     source = "hrsh7th/nvim-cmp",
     depends = cmp_depends,
@@ -79,11 +57,11 @@ later(function()
     require("ak.config.coding.mini_snippets")
   end
 
-  if Util.completion == "nvim-cmp" then -- with luasnip, mini.snippets or native lsp snippet expansion:
-    if Util.snippets == "luasnip" then luasnip() end
+  if Util.completion == "nvim-cmp" then -- with mini.snippets(standalone) or native lsp snippet expansion
     nvim_cmp()
-  elseif Util.completion == "blink" then -- NOTE: Blink adds 7 ms to startuptime using now().
-    blink_cmp() -- without external snippet engine
+  elseif Util.completion == "blink" then -- with mini.snippets(standalone) or blink's builtin snippets
+    -- NOTE: Blink adds 7 ms to startuptime when using now().
+    blink_cmp()
   elseif Util.completion == "mini" then
     mini_cmp()
   end

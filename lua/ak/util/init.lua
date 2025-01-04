@@ -10,7 +10,7 @@ local M = {}
 
 M.has_mini_ai = false -- initial value. Treesitter textobjects and mini.ai
 
----@type "luasnip" | "mini" | "none"
+---@type "mini" | "none"
 M.snippets = "none"
 
 ---@type "nvim-cmp" | "blink" | "mini" | "none"
