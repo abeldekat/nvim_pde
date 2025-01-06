@@ -3,6 +3,7 @@
 --          ╰─────────────────────────────────────────────────────────╯
 
 local snip_engine = require("ak.util").snippets
+local mini_snippets_standalone = require("ak.util").mini_snippets_standalone
 local cmp = require("cmp")
 
 -- Formatting:
@@ -37,22 +38,24 @@ end
 local mapping = cmp.mapping.preset.insert(mapping_override)
 
 -- Sources:
-local sources = cmp.config.sources({
+local sources = {
   { name = "nvim_lsp" },
   { name = "buffer" },
   { name = "path" },
-})
+}
+if snip_engine == "mini" and not mini_snippets_standalone then table.insert(sources, 2, { name = "mini_snippets" }) end
+sources = cmp.config.sources(sources)
 
 -- Snippet expansion:
-local snippet = {
-  expand = function(args) -- mini.snippets
+local snippet = { -- configure mini.snippets by default
+  expand = function(args)
     ---@diagnostic disable-next-line: undefined-global
     local insert = MiniSnippets.config.expand.insert or MiniSnippets.default_insert
-    insert({ body = args.body }) -- Insert at cursor
+    insert({ body = args.body }) -- insert at cursor
   end,
 }
 if snip_engine == "none" then
-  snippet["expand"] = nil -- without expand, cmp defaults to native
+  snippet["expand"] = nil -- cmp defaults to native snippets
 end
 
 -- Window

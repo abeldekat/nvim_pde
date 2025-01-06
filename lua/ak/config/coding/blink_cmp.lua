@@ -5,7 +5,9 @@
 local Util = require("ak.util")
 
 -- Disable cmdline. Sources.default includes builtin snippets using friendly-snippets:
-local sources = { cmdline = {} }
+local sources = { default = { "lsp", "path", "buffer" }, cmdline = {} }
+if Util.snippets == "none" then table.insert(sources.default, 3, "snippets") end
+
 local signature = { enabled = true } -- false by default
 local appearance = {} ---  use_nvim_cmp_as_default = false
 

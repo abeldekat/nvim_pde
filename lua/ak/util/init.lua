@@ -8,10 +8,14 @@
 ---@field toggle ak.util.toggle
 local M = {}
 
-M.has_mini_ai = false -- initial value. Treesitter textobjects and mini.ai
+---@type boolean for the integration of treesitter textobjects and mini.ai
+M.has_mini_ai = false
 
----@type "mini" | "none"
+---@type "mini" | "none" value none for nvim-cmp uses native snippets, for blink its builtin
 M.snippets = "none"
+
+---@type boolean by default, don't integrate non-lsp snippets with completion engine
+M.mini_snippets_standalone = true
 
 ---@type "nvim-cmp" | "blink" | "mini" | "none"
 M.completion = "none" -- set in ak.deps.coding

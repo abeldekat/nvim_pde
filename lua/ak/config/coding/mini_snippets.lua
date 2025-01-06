@@ -14,7 +14,6 @@ local Util = require("ak.util")
 
 local no_supertab = true
 local snippets, config_path = require("mini.snippets"), vim.fn.stdpath("config")
-local lang_patterns = { tex = { "latex.json" }, plaintex = { "latex.json" } }
 
 local function add_expand_keys()
   -- The default:
@@ -87,6 +86,7 @@ end
 -- To enter a digraph, start nvim without plugins.
 local mappings = { expand = "" }
 
+local lang_patterns = { tex = { "latex.json" }, plaintex = { "latex.json" } }
 local opts = {
   snippets = {
     snippets.gen_loader.from_file(config_path .. "/snippets/global.json"),

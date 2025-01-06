@@ -2,8 +2,10 @@ local Util = require("ak.util")
 local MiniDeps = require("mini.deps")
 local add, later = MiniDeps.add, MiniDeps.later -- local now = MiniDeps.now
 
-Util.has_mini_ai = true -- coordinate mini.ai and textobjects with gen_treesitter...
+-- Change the default values here for use in ak.config:
+Util.has_mini_ai = true
 Util.snippets = "mini"
+Util.mini_snippets_standalone = true
 Util.completion = "nvim-cmp"
 
 -- blink and friendly-snippets: 2 plugins
@@ -39,6 +41,10 @@ local function nvim_cmp()
     "hrsh7th/cmp-buffer",
     "hrsh7th/cmp-path",
   }
+  if Util.snippets == "mini" and not Util.mini_snippets_standalone then
+    table.insert(cmp_depends, "abeldekat/cmp-mini-snippets")
+  end
+
   add({
     source = "hrsh7th/nvim-cmp",
     depends = cmp_depends,
@@ -51,7 +57,6 @@ end
 local function mini_cmp() require("ak.config.coding.mini_completion") end
 
 later(function()
-  -- Independent, has no sources yet for completion engines, can be used for lsp expansion
   if Util.snippets == "mini" then
     add("rafamadriz/friendly-snippets")
     require("ak.config.coding.mini_snippets")
