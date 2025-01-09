@@ -7,6 +7,7 @@ Util.has_mini_ai = true
 Util.snippets = "mini"
 Util.mini_snippets_standalone = true
 Util.completion = "nvim-cmp"
+-- Util.completion = "blink"
 
 -- blink and friendly-snippets: 2 plugins
 local function blink_cmp()
@@ -22,14 +23,9 @@ local function blink_cmp()
 
   add({
     source = "saghen/blink.cmp",
-    depends = {
-      "rafamadriz/friendly-snippets",
-    },
+    depends = { "rafamadriz/friendly-snippets" },
     -- checkout = "0.8.1",
-    hooks = {
-      post_install = build_blink,
-      post_checkout = build_blink,
-    },
+    hooks = { post_install = build_blink, post_checkout = build_blink },
   })
   require("ak.config.coding.blink_cmp")
 end
@@ -45,10 +41,7 @@ local function nvim_cmp()
     table.insert(cmp_depends, "abeldekat/cmp-mini-snippets")
   end
 
-  add({
-    source = "hrsh7th/nvim-cmp",
-    depends = cmp_depends,
-  })
+  add({ source = "hrsh7th/nvim-cmp", depends = cmp_depends })
   require("ak.config.coding.nvim_cmp")
 end
 
@@ -62,9 +55,9 @@ later(function()
     require("ak.config.coding.mini_snippets")
   end
 
-  if Util.completion == "nvim-cmp" then -- with mini.snippets(standalone) or native lsp snippet expansion
+  if Util.completion == "nvim-cmp" then
     nvim_cmp()
-  elseif Util.completion == "blink" then -- with mini.snippets(standalone) or blink's builtin snippets
+  elseif Util.completion == "blink" then
     -- NOTE: Blink adds 7 ms to startuptime when using now().
     blink_cmp()
   elseif Util.completion == "mini" then

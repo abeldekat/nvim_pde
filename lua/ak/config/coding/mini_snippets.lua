@@ -11,11 +11,9 @@
 -- setup. Otherwise use `*.lua` files with array-like content.
 
 local Util = require("ak.util")
-
 local no_supertab = true
-local snippets, config_path = require("mini.snippets"), vim.fn.stdpath("config")
 
-local function add_expand_keys()
+local function add_expand_mapping()
   -- The default:
   -- vim.keymap.set("i", "<c-k>", "<Cmd>lua MiniSnippets.expand()<CR>", { desc = "Expand snippet" })
   -- Create customized expand mappings:
@@ -26,8 +24,7 @@ local function add_expand_keys()
   vim.keymap.set("i", "<C-g><C-k>", expand_all, { desc = "Expand all snippet" })
 end
 
--- Testing: Supertab as described in the help
-local function add_supertab_keys(opts)
+local function add_expand_supertab_mapping(opts) -- testing supertab
   local expand_or_jump = function()
     local can_expand = #MiniSnippets.expand({ insert = false }) > 0
     if can_expand then
@@ -35,8 +32,7 @@ local function add_supertab_keys(opts)
       return ""
     end
 
-    ---@diagnostic disable-next-line: missing-parameter
-    local is_active = MiniSnippets.session.get() ~= nil
+    local is_active = MiniSnippets.session.get(false) ~= nil
     if is_active then
       MiniSnippets.session.jump("next")
       return ""
@@ -47,7 +43,7 @@ local function add_supertab_keys(opts)
   local jump_prev = function() MiniSnippets.session.jump("prev") end
   local match_strict = function(candidate_snippets)
     -- Do not match with whitespace to cursor's left
-    return snippets.default_match(candidate_snippets, { pattern_fuzzy = "%S+" })
+    return MiniSnippets.default_match(candidate_snippets, { pattern_fuzzy = "%S+" })
   end
 
   opts.mappings = { expand = "", jump_next = "", jump_prev = "" } -- override mappings
@@ -60,22 +56,45 @@ local function add_supertab_keys(opts)
   return opts
 end
 
-local function select_override(the_snippets, insert)
+-- Fixed select - vim.ui.select: ghost_text appearing
+local function select_override_standalone(snippets, insert)
   if Util.completion == "nvim-cmp" then
     local cmp = require("cmp")
     if cmp.visible() then cmp.close() end
-    MiniSnippets.default_select(the_snippets, insert)
+    MiniSnippets.default_select(snippets, insert)
   elseif Util.completion == "blink" then
-    -- Cancel uses vim.schedule
-    require("blink.cmp").cancel() -- overriden in blink config!
-    -- Schedule default_select, otherwise blink's virtual text is not removed
-    -- when mini.snippets opens vim.ui.select
-    vim.schedule(function() MiniSnippets.default_select(the_snippets, insert) end)
+    require("blink.cmp").cancel() -- cancel uses vim.schedule
+    vim.schedule(function() MiniSnippets.default_select(snippets, insert) end)
   else
-    MiniSnippets.default_select(the_snippets, insert)
+    MiniSnippets.default_select(snippets, insert)
   end
 end
 
+local function insert_override_standalone(snippet)
+  if Util.completion == "nvim-cmp" then
+    MiniSnippets.default_insert(snippet)
+    -- require("cmp.config").set_onetime({ -- testing...
+    --   sources = {},
+    -- })
+  else
+    MiniSnippets.default_insert(snippet)
+  end
+end
+
+local mini_snippets, config_path = require("mini.snippets"), vim.fn.stdpath("config")
+
+local lang_patterns = { tex = { "latex.json" }, plaintex = { "latex.json" } }
+local snippets = {
+  -- completion on direct expand, no completion via cmp-mini-snippets:
+  { prefix = "a1", body = "T1=fu$1", desc = "fu before $1" },
+  -- completion on direct expand, no completion via cmp-mini-snippets:
+  { prefix = "a2", body = "T1=fu$1 $0", desc = "fu before $1 and space after" },
+  -- no completion on direct expand, completion via cmp-mini-snippets
+  { prefix = "a3", body = "T1=${1:9} T2=${2:<$1>}", desc = "test test" },
+
+  mini_snippets.gen_loader.from_file(config_path .. "/snippets/global.json"),
+  mini_snippets.gen_loader.from_lang({ lang_patterns = lang_patterns }),
+}
 -- I already use <c-j> to confirm completion.
 --
 -- Digraph: CTRL-K {char1} [char2] Enter digraph (see |digraphs|).
@@ -86,19 +105,22 @@ end
 -- To enter a digraph, start nvim without plugins.
 local mappings = { expand = "" }
 
-local lang_patterns = { tex = { "latex.json" }, plaintex = { "latex.json" } }
+local expand = Util.mini_snippets_standalone
+    and {
+      select = select_override_standalone,
+      insert = insert_override_standalone,
+    }
+  or nil
+
 local opts = {
-  snippets = {
-    snippets.gen_loader.from_file(config_path .. "/snippets/global.json"),
-    snippets.gen_loader.from_lang({ lang_patterns = lang_patterns }),
-  },
-  mappings = mappings, -- map expand from <c-j> to <c-k> in this module
-  expand = { select = select_override },
+  snippets = snippets,
+  mappings = mappings,
+  expand = expand,
 }
 
 if no_supertab then
-  add_expand_keys()
+  add_expand_mapping() -- map expand from <c-j> to <c-k> in this module
 else
-  opts = add_supertab_keys(opts) -- testing...
+  opts = add_expand_supertab_mapping(opts) -- testing...
 end
-snippets.setup(opts)
+mini_snippets.setup(opts)

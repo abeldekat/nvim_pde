@@ -79,7 +79,8 @@ local opts = {
   snippet = snippet,
   sources = sources,
   window = window,
-  completion = { completeopt = "menu,menuone,noinsert" },
+  -- instead of noselect, use noinsert
+  completion = { completeopt = "menu,menuone,noinsert" }, -- in general you don't need to change this
   experimental = { ghost_text = { hl_group = "CmpGhostText" } },
   -- performance = { max_view_entries = 15 }, --- there is also sources.max_item_count
   -- view = { entries = { follow_cursor = true, }, }, --docs_auto_open
