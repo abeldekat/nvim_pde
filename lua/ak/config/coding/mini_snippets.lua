@@ -56,7 +56,9 @@ local function add_expand_supertab_mapping(opts) -- testing supertab
   return opts
 end
 
--- Fixed select - vim.ui.select: ghost_text appearing
+-- Fixes:
+-- select - vim.ui.select: ghost_text appearing
+-- select - vim.ui.select: cmp popups cover picker
 local function select_override_standalone(snippets, insert)
   if Util.completion == "nvim-cmp" then
     local cmp = require("cmp")
@@ -70,6 +72,7 @@ local function select_override_standalone(snippets, insert)
   end
 end
 
+-- TODO:
 local function insert_override_standalone(snippet)
   if Util.completion == "nvim-cmp" then
     MiniSnippets.default_insert(snippet)
@@ -86,12 +89,12 @@ local mini_snippets, config_path = require("mini.snippets"), vim.fn.stdpath("con
 local lang_patterns = { tex = { "latex.json" }, plaintex = { "latex.json" } }
 local snippets = {
   -- completion on direct expand, no completion via cmp-mini-snippets:
-  { prefix = "a1", body = "T1=fu$1", desc = "fu before $1" },
+  { prefix = "aaa1", body = "T1=fu$1", desc = "fu before $1" },
   -- completion on direct expand, no completion via cmp-mini-snippets:
-  { prefix = "a2", body = "T1=fu$1 $0", desc = "fu before $1 and space after" },
+  { prefix = "aaa2", body = "T1=fu$1 $0", desc = "fu before $1 and space after" },
   -- no completion on direct expand, completion via cmp-mini-snippets
-  { prefix = "a3", body = "T1=${1:9} T2=${2:<$1>}", desc = "test test" },
-
+  { prefix = "aaa9", body = "T1=${1:9} T2=${2:<$1>}", desc = "test test" },
+  --
   mini_snippets.gen_loader.from_file(config_path .. "/snippets/global.json"),
   mini_snippets.gen_loader.from_lang({ lang_patterns = lang_patterns }),
 }
