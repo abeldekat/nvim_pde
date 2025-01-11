@@ -1,5 +1,3 @@
--- NOTE: supports choices in tabstop as well as variable transformations
-
 -- The help:
 --
 -- General advice:
@@ -59,7 +57,7 @@ end
 -- Fixes:
 -- select - vim.ui.select: ghost_text appearing
 -- select - vim.ui.select: cmp popups cover picker
-local function select_override_standalone(snippets, insert)
+local function select_override(snippets, insert)
   if Util.completion == "nvim-cmp" then
     local cmp = require("cmp")
     if cmp.visible() then cmp.close() end
@@ -72,14 +70,14 @@ local function select_override_standalone(snippets, insert)
   end
 end
 
--- TODO:
-local function insert_override_standalone(snippet)
+-- Prevent completion suggestions directly after snippet insert
+local function insert_override(snippet)
   if Util.completion == "nvim-cmp" then
     MiniSnippets.default_insert(snippet)
-    -- require("cmp.config").set_onetime({ -- testing...
-    --   sources = {},
-    -- })
-  else
+    require("cmp.config").set_onetime({ -- testing...
+      sources = {},
+    })
+  else -- blink does not offer suggestions directly after snippet insert...
     MiniSnippets.default_insert(snippet)
   end
 end
@@ -108,12 +106,10 @@ local snippets = {
 -- To enter a digraph, start nvim without plugins.
 local mappings = { expand = "" }
 
-local expand = Util.mini_snippets_standalone
-    and {
-      select = select_override_standalone,
-      insert = insert_override_standalone,
-    }
-  or nil
+local expand = {
+  insert = insert_override,
+}
+if Util.mini_snippets_standalone then expand["select"] = select_override end
 
 local opts = {
   snippets = snippets,
