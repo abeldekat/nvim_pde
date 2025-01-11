@@ -115,23 +115,23 @@ H.make_override_match = function(match, ctx, picker_opts)
   local hinted_chars_inv = H.invert(picker_opts.hinted.chars)
 
   -- premisse: items and stritems are constant and related, having the same ordering and length.
-  return function(stritems, inds, query, do_sync)
+  return function(stritems, inds, query, opts)
     -- Restore previously modified stritem if present
     if ctx.hinted_index then stritems[ctx.hinted_index] = string.sub(stritems[ctx.hinted_index], 2) end
     ctx.hinted_index = nil
 
     -- Query only holds a potential hint when it contains 1 single char
-    if #query ~= 1 then return match(stritems, inds, query, do_sync) end
+    if #query ~= 1 then return match(stritems, inds, query, opts) end
 
     -- Find index of potential hint
     local char = query[1]
     local hinted_index = hinted_chars_inv[char]
-    if not hinted_index or hinted_index > ctx.max_hints then return match(stritems, inds, query, do_sync) end
+    if not hinted_index or hinted_index > ctx.max_hints then return match(stritems, inds, query, opts) end
 
     -- Valid hint: Make sure the item is matched
     ctx.hinted_index = hinted_index
     stritems[hinted_index] = string.format("%s%s", char, stritems[hinted_index])
-    return match(stritems, inds, query, do_sync)
+    return match(stritems, inds, query, opts)
   end
 end
 
