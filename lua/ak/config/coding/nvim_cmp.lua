@@ -47,7 +47,7 @@ if snip_engine == "mini" and not mini_snippets_standalone then table.insert(sour
 sources = cmp.config.sources(sources)
 
 -- Snippet expansion:
-local snippet = { -- configure mini.snippets by default
+local snippet = {
   expand = function(args)
     ---@diagnostic disable-next-line: undefined-global
     local insert = MiniSnippets.config.expand.insert or MiniSnippets.default_insert
@@ -56,6 +56,46 @@ local snippet = { -- configure mini.snippets by default
 }
 if snip_engine == "none" then
   snippet["expand"] = nil -- cmp defaults to native snippets
+end
+
+-- Snippet fix outdated completion items:
+-- https://github.com/hrsh7th/nvim-cmp/pull/2126
+if snip_engine == "mini" then
+  local group = vim.api.nvim_create_augroup("mini_snippets_nvim_cmp", { clear = true })
+
+  -- NOTE: Firstly, make sure that nvim-cmp never provides completion items directly after snippet insert
+  -- See https://github.com/abeldekat/cmp-mini-snippets/issues/6
+  vim.api.nvim_create_autocmd("User", {
+    group = group,
+    pattern = "MiniSnippetsSessionStart",
+    callback = function() require("cmp.config").set_onetime({ sources = {} }) end,
+  })
+
+  -- HACK: Secondly, it's now possible to prevent outdated completion items
+  -- See https://github.com/hrsh7th/nvim-cmp/issues/2119
+  local function make_complete_override(complete_fn)
+    return function(self, params, callback)
+      local override_fn = complete_fn
+      if MiniSnippets.session.get(false) ~= nil then override_fn = vim.schedule_wrap(override_fn) end
+      override_fn(self, params, callback)
+    end
+  end
+  local function find_cmp_nvim_lsp(id)
+    for _, source in ipairs(require("cmp").get_registered_sources()) do
+      if source.id == id and source.name == "nvim_lsp" then return source.source end
+    end
+  end
+  vim.api.nvim_create_autocmd("User", {
+    group = group,
+    pattern = "CmpRegisterSource",
+    callback = function(ev)
+      local cmp_nvim_lsp = find_cmp_nvim_lsp(ev.data.source_id)
+      if cmp_nvim_lsp then
+        local org_complete = cmp_nvim_lsp.complete
+        cmp_nvim_lsp.complete = make_complete_override(org_complete)
+      end
+    end,
+  })
 end
 
 -- Window
@@ -79,7 +119,7 @@ local opts = {
   snippet = snippet,
   sources = sources,
   window = window,
-  -- instead of noselect, use noinsert
+  -- instead of noselect, use noinsert:
   completion = { completeopt = "menu,menuone,noinsert" }, -- in general you don't need to change this
   experimental = { ghost_text = { hl_group = "CmpGhostText" } },
   -- performance = { max_view_entries = 15 }, --- there is also sources.max_item_count
