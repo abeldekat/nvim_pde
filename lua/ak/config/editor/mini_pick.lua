@@ -219,7 +219,7 @@ Pick.registry.buffers_hinted_truncated = function()
     end
   end
 
-  local hinted = { enable = true, use_autosubmit = true }
+  local hinted = { enable = true, use_autosubmit = true, chars = vim.split("abcdefg", "") }
   local source = {
     name = "Buffers hinted truncated",
     items = items,
@@ -358,7 +358,12 @@ local function setup()
       chars = vim.split("adefhijklmnorstuvwx", ""),
     },
   })
-  vim.ui.select = PickHinted.ui_select -- Pick.ui_select
+
+  ---@diagnostic disable-next-line: duplicate-set-field
+  vim.ui.select = function(items, opts, on_choice)
+    local start_opts = { hinted = { enable = true, use_autosubmit = true } }
+    return MiniPick.ui_select(items, opts, on_choice, start_opts)
+  end
 
   keys()
   provide_picker()

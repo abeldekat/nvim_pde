@@ -31,21 +31,13 @@ PickHinted.config = {
     chars = vim.split("abcdefghijklmnopqrstuvwxyz", ""),
     virt_clues_pos = { "eol" }, -- or { "inline", "eol" }, { "eol "}
     use_autosubmit = false, -- if possible, use autosubmit
-    use_autosubmit_ui_select = true, -- if possible, use autosubmit
   },
 }
-
-PickHinted.ui_select = function(items, opts, on_choice)
-  if not opts.prompt then opts.prompt = "Select one of:" end
-  opts.prompt = string.format("%s%s", H.ui_select_marker, opts.prompt)
-  MiniPick.ui_select(items, opts, on_choice)
-end
 
 -- Helper ================================================================
 
 H.default_config = vim.deepcopy(PickHinted.config)
 H.ns_id = { hinted = vim.api.nvim_create_namespace("PickHinted") }
-H.ui_select_marker = "+MPH+" -- "mini pick hinted"
 H.keys = {
   cr = vim.api.nvim_replace_termcodes("<CR>", true, true, true),
 }
@@ -76,7 +68,6 @@ H.setup_config = function(config)
       function(x) return H.is_list_of(x, "hinted.virt_clues_pos", "string") end,
     },
     ["hinted.use_autosubmit"] = { config.hinted.use_autosubmit, "boolean" },
-    ["hinted.use_autosubmit_ui_select"] = { config.hinted.use_autosubmit_ui_select, "boolean" },
   })
   return config
 end
@@ -215,15 +206,9 @@ H.on_pick_start_event = function()
   local picker_opts = vim.tbl_deep_extend("force", H.get_config(), MiniPick.get_picker_opts() or {})
   local src = picker_opts.source
   local use_hints = picker_opts.hinted.enable -- opt-in per picker...
-  local use_autosubmit = picker_opts.hinted.use_autosubmit
-  if string.sub(src.name, 1, #H.ui_select_marker) == H.ui_select_marker then
-    -- vim.ui.select is set to PickHinted.ui_select:
-    src.name = string.sub(src.name, #H.ui_select_marker + 1) -- restore name
-    use_hints = true
-    use_autosubmit = picker_opts.hinted.use_autosubmit_ui_select
-  end
   if not use_hints then return end
 
+  local use_autosubmit = picker_opts.hinted.use_autosubmit
   local runtime_ctx = { hinted_index = nil, max_hints = nil, use_autosubmit = use_autosubmit }
   src.match = H.make_override_match(src.match, runtime_ctx, picker_opts)
   src.show = H.make_override_show(src.show, runtime_ctx, picker_opts)
