@@ -52,6 +52,9 @@ local snippet = {
     ---@diagnostic disable-next-line: undefined-global
     local insert = MiniSnippets.config.expand.insert or MiniSnippets.default_insert
     insert({ body = args.body }) -- insert at cursor
+
+    -- TODO: The trick:
+    -- require("cmp").resubscribe({ "TextChangedI", "TextChangedP" })
   end,
 }
 if snip_engine == "none" then
@@ -63,16 +66,12 @@ end
 if snip_engine == "mini" then
   local group = vim.api.nvim_create_augroup("mini_snippets_nvim_cmp", { clear = true })
 
-  -- NOTE: Firstly, make sure that nvim-cmp never provides completion items directly after snippet insert
-  -- See https://github.com/abeldekat/cmp-mini-snippets/issues/6
   vim.api.nvim_create_autocmd("User", {
     group = group,
     pattern = "MiniSnippetsSessionStart",
     callback = function() require("cmp.config").set_onetime({ sources = {} }) end,
   })
 
-  -- HACK: Secondly, it's now possible to prevent outdated completion items
-  -- See https://github.com/hrsh7th/nvim-cmp/issues/2119
   local function make_complete_override(complete_fn)
     return function(self, params, callback)
       local override_fn = complete_fn

@@ -140,6 +140,9 @@ Consequences:
 - [mini.operators]: Change suggested key `gs`("go sort") into `gS`.
 - [mini.surround]: Change `sr`(surround replace) into `ss`(surround substitute).
 
+The expand key in `mini.snippets` is `<c-j>` by default. That key is already
+used to accept completions. I changed the key to `<c-k>`.
+
 ## Mini
 
 Many of the excellent modules included in [mini.nvim] are used in this config:
@@ -147,7 +150,8 @@ Many of the excellent modules included in [mini.nvim] are used in this config:
 `ai`, `align`, `animate`, `base16`, `clue`, `cursorword`,
 `deps`, `diff`, `git`, `hipatterns`, `hue`, `icons`,
 `indentscope`, `jump2d`, `move`, `notify`, `operators`, `pairs`,
-`pick`, `splitjoin`, `starter`, `statusline`, `surround`, `visits`
+`pick`, `snippets`, `splitjoin`, `starter`, `statusline`, `surround`,
+`visits`
 
 Relevant discussions:
 
