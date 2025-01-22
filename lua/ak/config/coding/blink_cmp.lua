@@ -62,5 +62,11 @@ local opts = {
   sources = sources,
 }
 
+-- HACK: See blink cmp completion init, line 20
+-- Fix outdated completion items:
+local sources_lib = require("blink.cmp.sources.lib")
+local orig_request_completions = sources_lib.request_completions
+sources_lib.request_completions = vim.schedule_wrap(orig_request_completions)
+
 local blink = require("blink.cmp")
 blink.setup(opts)
