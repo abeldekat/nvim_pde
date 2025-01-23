@@ -5,6 +5,7 @@
 local snip_engine = require("ak.util").snippets
 local mini_snippets_standalone = require("ak.util").mini_snippets_standalone
 local cmp = require("cmp")
+local cmp_config = require("cmp.config")
 
 -- Formatting:
 local formatting = {
@@ -49,52 +50,14 @@ sources = cmp.config.sources(sources)
 -- Snippet expansion:
 local snippet = {
   expand = function(args)
-    ---@diagnostic disable-next-line: undefined-global
     local insert = MiniSnippets.config.expand.insert or MiniSnippets.default_insert
     insert({ body = args.body }) -- insert at cursor
-
-    -- TODO: The trick:
-    -- require("cmp").resubscribe({ "TextChangedI", "TextChangedP" })
+    cmp.resubscribe({ "TextChangedI", "TextChangedP" })
+    cmp_config.set_onetime({ sources = {} })
   end,
 }
 if snip_engine == "none" then
   snippet["expand"] = nil -- cmp defaults to native snippets
-end
-
--- Snippet fix outdated completion items:
--- https://github.com/hrsh7th/nvim-cmp/pull/2126
-if snip_engine == "mini" then
-  local group = vim.api.nvim_create_augroup("mini_snippets_nvim_cmp", { clear = true })
-
-  vim.api.nvim_create_autocmd("User", {
-    group = group,
-    pattern = "MiniSnippetsSessionStart",
-    callback = function() require("cmp.config").set_onetime({ sources = {} }) end,
-  })
-
-  local function make_complete_override(complete_fn)
-    return function(self, params, callback)
-      local override_fn = complete_fn
-      if MiniSnippets.session.get(false) ~= nil then override_fn = vim.schedule_wrap(override_fn) end
-      override_fn(self, params, callback)
-    end
-  end
-  local function find_cmp_nvim_lsp(id)
-    for _, source in ipairs(require("cmp").get_registered_sources()) do
-      if source.id == id and source.name == "nvim_lsp" then return source.source end
-    end
-  end
-  vim.api.nvim_create_autocmd("User", {
-    group = group,
-    pattern = "CmpRegisterSource",
-    callback = function(ev)
-      local cmp_nvim_lsp = find_cmp_nvim_lsp(ev.data.source_id)
-      if cmp_nvim_lsp then
-        local org_complete = cmp_nvim_lsp.complete
-        cmp_nvim_lsp.complete = make_complete_override(org_complete)
-      end
-    end,
-  })
 end
 
 -- Window
