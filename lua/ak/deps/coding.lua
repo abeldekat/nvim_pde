@@ -7,7 +7,7 @@ Util.has_mini_ai = true
 --
 -- Util.snippets = "none"
 Util.snippets = "mini"
-Util.mini_snippets_standalone = true
+Util.mini_snippets_standalone = false
 --
 Util.completion = "nvim-cmp"
 -- Util.completion = "blink"
