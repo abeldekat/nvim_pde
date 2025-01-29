@@ -3,6 +3,7 @@
 --          ╰─────────────────────────────────────────────────────────╯
 
 local Util = require("ak.util")
+local blink = require("blink.cmp")
 
 local sources = { default = { "lsp", "path", "buffer" }, cmdline = {} } -- disable cmdline
 
@@ -13,6 +14,7 @@ if Util.snippets == "mini" then
       expand = function(snippet)
         local insert = MiniSnippets.config.expand.insert or MiniSnippets.default_insert
         insert({ body = snippet })
+        blink.resubscribe()
       end,
       active = function(_) return MiniSnippets.session.get(false) ~= nil end,
       jump = function(direction) MiniSnippets.session.jump(direction == -1 and "prev" or "next") end,
@@ -68,5 +70,4 @@ local sources_lib = require("blink.cmp.sources.lib")
 local orig_request_completions = sources_lib.request_completions
 sources_lib.request_completions = vim.schedule_wrap(orig_request_completions)
 
-local blink = require("blink.cmp")
 blink.setup(opts)
