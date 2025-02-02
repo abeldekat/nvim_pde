@@ -5,6 +5,30 @@
 local Util = require("ak.util")
 local blink = require("blink.cmp")
 
+local completion = {
+  menu = {
+    draw = {
+      treesitter = { "lsp" },
+    },
+  },
+  documentation = {
+    -- Controls whether the documentation window will automatically show when selecting a completion item
+    auto_show = true,
+    -- -- Delay before showing the documentation window
+    auto_show_delay_ms = 200,
+  },
+  ghost_text = { enabled = true },
+}
+
+-- blink does not have any c-j, c-l or c-h mappings, c-e is hide
+local keymap = {
+  preset = "default",
+  ["<C-j>"] = { "select_and_accept" }, -- like default c-y
+  ["<c-k>"] = {}, -- in use by mini.snippets { 'show_signature', 'hide_signature', 'fallback' }
+}
+local signature = { enabled = true } -- false by default
+if signature.enabled then keymap["<c-s>"] = { "show_signature", "hide_signature", "fallback" } end
+
 local sources = { default = { "lsp", "path", "buffer" }, cmdline = {} } -- disable cmdline
 
 local snippets = {} -- blink defaults to it's own builtin with friendly snippets
@@ -27,47 +51,11 @@ elseif Util.snippets == "none" then
   table.insert(sources.default, 2, "snippets")
 end
 
-local signature = { enabled = true } -- false by default
-
-local appearance = {} ---  use_nvim_cmp_as_default = false
-
-local completion = {
-  menu = {
-    draw = {
-      treesitter = { "lsp" },
-    },
-  },
-  documentation = {
-    -- Controls whether the documentation window will automatically show when selecting a completion item
-    auto_show = true,
-    -- -- Delay before showing the documentation window
-    auto_show_delay_ms = 200,
-  },
-  ghost_text = { enabled = true },
-}
-
--- blink does not have any c-j, c-l or c-h mappings
-local keymap = {
-  preset = "default", -- lazyvim uses enter
-  ["<C-j>"] = { "select_and_accept" }, -- default c-y
-  -- c-e is hide
-  -- using builtin snippets: blink defines tab and shift-tab
-  -- using mini.snippets: keymappings defined in mini.snippets
-}
-
 local opts = {
-  appearance = appearance,
   completion = completion,
   keymap = keymap,
   signature = signature,
   snippets = snippets,
   sources = sources,
 }
-
--- HACK: See blink cmp completion init, line 20
--- Fix outdated completion items:
-local sources_lib = require("blink.cmp.sources.lib")
-local orig_request_completions = sources_lib.request_completions
-sources_lib.request_completions = vim.schedule_wrap(orig_request_completions)
-
 blink.setup(opts)
