@@ -253,13 +253,13 @@ local function provide_picker() -- picker to use in other modules
     -- mini.pick: no direct jump to definition(#978):
     lsp_definitions = function() vim.lsp.buf.definition({ reuse_win = true }) end,
 
-    -- pickers.lsp does not add previous position to jumplist(#979):
-    -- lsp_references = function() extra.lsp({ scope = "references" }) end,
-    -- lsp_implementations = function() extra.lsp({ scope = "implementation" }) end,
-    -- lsp_type_definitions = function() extra.lsp({ scope = "type_definition" }) end,
-    lsp_references = function() vim.lsp.buf.references(nil, { reuse_win = true }) end,
-    lsp_implementations = function() vim.lsp.buf.implementation({ reuse_win = true }) end,
-    lsp_type_definitions = function() vim.lsp.buf.type_definition({ reuse_win = true }) end,
+    lsp_references = function() extra.lsp({ scope = "references" }) end,
+    lsp_implementations = function() extra.lsp({ scope = "implementation" }) end,
+    lsp_type_definitions = function() extra.lsp({ scope = "type_definition" }) end,
+    -- Or, via the quickfix:
+    -- lsp_references = function() vim.lsp.buf.references(nil, { reuse_win = true }) end,
+    -- lsp_implementations = function() vim.lsp.buf.implementation({ reuse_win = true }) end,
+    -- lsp_type_definitions = function() vim.lsp.buf.type_definition({ reuse_win = true }) end,
 
     colors = custom.colors,
     todo_comments = custom.todo_comments,
