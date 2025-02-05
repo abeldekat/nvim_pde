@@ -1,5 +1,4 @@
-local function augroup(name) return vim.api.nvim_create_augroup("abeldekat_" .. name, { clear = true }) end
-
+local function augroup(name) return vim.api.nvim_create_augroup("abeldekat_" .. name, {}) end
 local autocmd = vim.api.nvim_create_autocmd
 
 -- Check if we need to reload the file when it changed
@@ -59,16 +58,6 @@ vim.api.nvim_create_autocmd("FileType", {
   callback = function(event) vim.bo[event.buf].buflisted = false end,
 })
 
--- wrap and check for spell in text filetypes
-vim.api.nvim_create_autocmd("FileType", {
-  group = augroup("wrap_spell"),
-  pattern = { "text", "plaintex", "typst", "gitcommit", "markdown" },
-  callback = function()
-    vim.opt_local.wrap = true
-    vim.opt_local.spell = true
-  end,
-})
-
 -- Fix conceallevel for json files
 vim.api.nvim_create_autocmd({ "FileType" }, {
   group = augroup("json_conceal"),
@@ -91,11 +80,12 @@ autocmd({ "BufWritePre" }, {
 
 -- Don't continue comments with o and O
 autocmd("Filetype", {
-  pattern = { "*" },
-  callback = function()
-    vim.opt.formatoptions = vim.opt.formatoptions + {
-      o = false,
-    }
-  end,
   group = augroup("continue_comments"),
+  callback = function()
+    -- Don't auto-wrap comments and don't insert comment leader after hitting 'o'
+    -- If don't do this on `FileType`, this keeps reappearing due to being set in
+    -- filetype plugins.
+    vim.cmd("setlocal formatoptions-=c formatoptions-=o")
+  end,
+  desc = [[Ensure proper 'formatoptions']],
 })

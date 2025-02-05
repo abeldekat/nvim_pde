@@ -1,6 +1,4 @@
--- Note: localleader is set to s, unused in normal mode and easier to type
---
--- ...The two exceptions are code folding and formating, which are disabled by default and must be manually enabled...
+-- ...The two exceptions are code folding and formatting, which are disabled by default and must be manually enabled...
 --
 -- Note: mini.clue, localleader triggers not that useful. Use mini.pick and search for "\"
 -- \ll start or stop compiling

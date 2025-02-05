@@ -7,12 +7,13 @@ local icons = {
 
 ---@type vim.diagnostic.Opts
 local opts = {
-  underline = true,
+  -- underline = true,
   update_in_insert = false,
+  float = { border = "double" },
+
   virtual_text = {
     -- Show virtual text only for errors
-    -- severity = { min = "ERROR", max = "ERROR" },
-
+    severity = { min = "ERROR", max = "ERROR" },
     spacing = 4,
     source = "if_many",
     prefix = function(diagnostic)
@@ -22,14 +23,19 @@ local opts = {
       return "●"
     end,
   },
-  severity_sort = true,
-  signs = {
+
+  -- severity_sort = true,
+  signs = { -- show gutter signs
     text = {
       [vim.diagnostic.severity.ERROR] = icons.Error,
       [vim.diagnostic.severity.WARN] = icons.Warn,
       [vim.diagnostic.severity.HINT] = icons.Hint,
       [vim.diagnostic.severity.INFO] = icons.Info,
     },
+    -- With highest priority
+    priority = 9999,
+    -- Only for warnings and errors
+    severity = { min = "WARN", max = "ERROR" },
   },
 }
 vim.diagnostic.config(vim.deepcopy(opts))

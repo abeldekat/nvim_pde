@@ -102,7 +102,7 @@ function H.lua_ls()
       Lua = {
         -- runtime = { version = "LuaJIT" }, -- lazydev or luarc
         codeLens = { enable = true },
-        completion = { callSnippet = "Replace" },
+        completion = { callSnippet = "Replace", keywordSnippet = "Disable" },
         -- completion = { callSnippet = "Disable" }, -- needed for mini.completion
         diagnostics = {
           globals = {

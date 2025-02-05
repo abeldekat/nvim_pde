@@ -1,49 +1,75 @@
 vim.g.mapleader = " "
+vim.g.maplocalleader = "\\"
 
--- vim.g.maplocalleader = "\\"
-vim.g.maplocalleader = "s" -- used for vimtex: s is unused in normal mode and easier to type than "\"
+local o = vim.o -- all "o" are taken from nvim echasnovski
 
 local opt = vim.opt
 vim.schedule(function() -- includes system call responsible for 40% startuptime!
   opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus" -- Sync with system clipboard
 end)
 
-opt.autowrite = true -- Enable auto write
 opt.breakindent = true
-opt.completeopt = "menu,menuone,noselect"
+o.breakindentopt = "list:-1" -- Add padding for lists when 'wrap' is on
+
+o.complete = ".,b,kspell" -- Use spell check and don't use tags for completion
+opt.completeopt = "menuone,noselect" -- Show popup even with one item and don't autoselect first
+if vim.fn.has("nvim-0.11") == 1 then
+  o.completeopt = "menuone,noselect,fuzzy" -- Use fuzzy matching for built-in completion
+end
+
+opt.colorcolumn = "+1" -- Draw colored column one step to the right of desired maximum width
 opt.conceallevel = 2 -- Hide * markup for bold and italic, but not markers with substitutions
 opt.confirm = true -- Confirm to save changes before exiting modified buffer
 opt.cursorline = true -- Enable highlighting of the current line
+o.cursorlineopt = "screenline,number" -- Show cursor line only screen line when wrapped
 opt.expandtab = true -- Use spaces instead of tabs
 
--- opt.fillchars = "fold: " -- overriding earlier fillchars?
-opt.fillchars = {
-  foldopen = "",
-  foldclose = "",
-  -- fold = " ",
-  foldsep = " ",
-  diff = "╱",
-  eob = " ",
-}
+-- Special UI symbols:
+-- Note that "horiz", "horizup", "horizdown", "vertleft", "vertright" and
+-- "verthoriz" are only used when 'laststatus' is 3, since only vertical
+-- window separators are used otherwise.
+o.fillchars = table.concat({
+  "eob: ",
+  "fold:╌",
+  "horiz:═",
+  "horizdown:╦",
+  "horizup:╩",
+  "vert:║",
+  "verthoriz:╬",
+  "vertleft:╣",
+  "vertright:╠",
+}, ",")
 
--- Folding:
-opt.foldlevel = 99
-opt.foldmethod = "expr"
+opt.foldmethod = "expr" -- TODO: "indent" perhaps?
 opt.foldexpr = "nvim_treesitter#foldexpr()"
--- opt.foldtext = ""
+o.foldlevel = 1 -- Display all folds except top ones
+o.foldnestmax = 10 -- Create folds only for some number of nested levels
+-- o.foldtext = "" -- Use underlying text with its highlighting
 
-opt.formatoptions = "jcroqlnt" -- tcqj
+-- Improve comment editing:
+-- Changed: Added r,n, l, 1. Removed t and c
+o.formatoptions = "rqnl1j"
+
 opt.grepformat = "%f:%l:%c:%m"
 opt.grepprg = "rg --vimgrep"
+opt.guicursor = "a:block"
 opt.ignorecase = true -- Ignore case
--- opt.inccommand = "nosplit" -- preview incremental substitute
+
 -- Preview substitutions live, as you type!
-opt.inccommand = "split" -- kickstart
+opt.inccommand = "split" -- kickstart. Also: nosplit preview incremental substitute
+
+o.infercase = true -- Infer letter cases for a richer built-in keyword completion
+-- o.iskeyword     = '@,48-57,_,192-255,-' -- Treat dash separated words as a word text object
 opt.jumpoptions = "view"
 opt.laststatus = 2 -- 3 global statusline: on pick, filename disappears
 opt.linebreak = true
 opt.list = true -- Show some invisible characters (tabs...
-opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" } -- kickstart
+
+-- Special text symbols:
+o.listchars = table.concat({ "extends:…", "nbsp:␣", "precedes:…", "tab:> " }, ",")
+-- Kickstart:
+-- opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
+
 opt.mouse = "" -- Disable mouse mode
 opt.number = true -- Print line number
 -- opt.pumblend = 10 -- Popup blend
@@ -51,21 +77,28 @@ opt.number = true -- Print line number
 opt.relativenumber = true -- Relative line numbers
 opt.scrolloff = 4 -- Lines of context
 opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "globals", "skiprtp", "folds" }
+opt.shada = "'100,<50,s10,:1000,/100,@100,h" -- Limit what is stored in ShaDa file
 opt.shiftround = true -- Round indent
 opt.shiftwidth = 2 -- Size of an indent
-opt.shortmess:append({ W = true, I = true, c = true, C = true })
+
+-- Disable certain messages from |ins-completion-menu|
+-- The default: "ltToOCF", or alphabetically: "CFOTlto"
+-- Changed: Added S, W, a and c, Removed T, l and t
+o.shortmess = "CFOSWaco"
+
 opt.showmode = false -- Dont show mode since we have a statusline
-opt.sidescrolloff = 6 -- Columns of context, used to be 8
+opt.showtabline = 0 -- never show tabs, 1 is default, 2, -- always show tabs
+-- opt.sidescrolloff = 6 -- Columns of context, used to be 8
 opt.signcolumn = "yes" -- Always show the signcolumn, otherwise it would shift the text each time
 opt.smartcase = true -- Don't ignore case with capitals
 opt.smartindent = true -- Insert indents automatically
 opt.smoothscroll = true
-opt.spelllang = { "en" }
-opt.splitbelow = false -- Put new windows below current
+o.spelllang = "en,nl"
+o.spelloptions = "camel"
+opt.splitbelow = true -- Put new windows below current
 opt.splitkeep = "screen"
-opt.splitright = false -- Put new windows right of current
+opt.splitright = true -- Put new windows right of current
 opt.tabstop = 2 -- Number of spaces tabs count for
--- opt.termguicolors = true -- True color support
 opt.timeoutlen = 600 -- 300
 opt.undofile = true
 opt.undolevels = 10000
@@ -74,23 +107,15 @@ opt.virtualedit = "block" -- Allow cursor to move where there is no text in visu
 opt.wildmode = "longest:full,full" -- Command-line completion mode
 opt.winminwidth = 5 -- Minimum window width
 opt.wrap = false -- Disable line wrap
+opt.writebackup = false -- Don't store backup (better performance)
+
+--          ╭─────────────────────────────────────────────────────────╮
+--          │                         OTHER                           │
+--          ╰─────────────────────────────────────────────────────────╯
 
 -- Fix markdown indentation settings
 vim.g.markdown_recommended_style = 0
-
---          ╭─────────────────────────────────────────────────────────╮
---          │                         ADDED                           │
---          ╰─────────────────────────────────────────────────────────╯
-
--- basic
-opt.showtabline = 0 -- never show tabs, 1 is default, 2, -- always show tabs
-opt.colorcolumn = "+1" -- Draw colored column one step to the right of desired maximum width
--- opt.cmdheight = 0 -- on write, the statusline disappears
-opt.guicursor = "a:block"
-
--- splits
--- vim.opt.splitbelow = false -- Put new windows below current
--- vim.opt.splitright = false -- Put new windows right of current
+vim.g.markdown_folding = 1 -- Use folding by heading in markdown files
 
 -- checkhealth:
 vim.g.python3_host_prog = "/usr/bin/python" -- archlinux: global python-pynvim
