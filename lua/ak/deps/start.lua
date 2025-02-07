@@ -4,7 +4,6 @@ local now, later = MiniDeps.now, MiniDeps.later
 
 now(function()
   require("ak.config.options")
-  require("ak.config.autocmds")
   require("ak.config.mini_misc") -- ie last cursor position autocmd
 end)
 

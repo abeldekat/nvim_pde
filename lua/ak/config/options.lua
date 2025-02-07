@@ -1,130 +1,224 @@
+local o = vim.o
+vim.schedule(function() -- includes system call responsible for 40% startuptime!
+  o.clipboard = vim.env.SSH_TTY and "" or "unnamedplus" -- Sync with system clipboard
+end)
+
+-- Leader key =================================================================
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
-local o = vim.o -- all "o" are taken from nvim echasnovski
-
-local opt = vim.opt
-vim.schedule(function() -- includes system call responsible for 40% startuptime!
-  opt.clipboard = vim.env.SSH_TTY and "" or "unnamedplus" -- Sync with system clipboard
-end)
-
-opt.breakindent = true
-o.breakindentopt = "list:-1" -- Add padding for lists when 'wrap' is on
-
-o.complete = ".,b,kspell" -- Use spell check and don't use tags for completion
-opt.completeopt = "menuone,noselect" -- Show popup even with one item and don't autoselect first
+-- Completion =================================================================
+o.complete = ".,b,kspell" -- use spell check and don't use tags for completion
+o.completeopt = "menuone,noselect" -- show popup even with one item and don't autoselect first
 if vim.fn.has("nvim-0.11") == 1 then
-  o.completeopt = "menuone,noselect,fuzzy" -- Use fuzzy matching for built-in completion
+  o.completeopt = "menuone,noselect,fuzzy" -- use fuzzy matching for built-in completion
 end
+o.wildmode = "longest:full,full" -- command-line completion mode
 
-opt.colorcolumn = "+1" -- Draw colored column one step to the right of desired maximum width
-opt.conceallevel = 2 -- Hide * markup for bold and italic, but not markers with substitutions
-opt.confirm = true -- Confirm to save changes before exiting modified buffer
-opt.cursorline = true -- Enable highlighting of the current line
-o.cursorlineopt = "screenline,number" -- Show cursor line only screen line when wrapped
-opt.expandtab = true -- Use spaces instead of tabs
-
--- Special UI symbols:
--- Note that "horiz", "horizup", "horizdown", "vertleft", "vertright" and
--- "verthoriz" are only used when 'laststatus' is 3, since only vertical
--- window separators are used otherwise.
-o.fillchars = table.concat({
-  "eob: ",
-  "fold:╌",
-  "horiz:═",
-  "horizdown:╦",
-  "horizup:╩",
-  "vert:║",
-  "verthoriz:╬",
-  "vertleft:╣",
-  "vertright:╠",
-}, ",")
-
-opt.foldmethod = "expr" -- TODO: "indent" perhaps?
-opt.foldexpr = "nvim_treesitter#foldexpr()"
-o.foldlevel = 1 -- Display all folds except top ones
-o.foldnestmax = 10 -- Create folds only for some number of nested levels
--- o.foldtext = "" -- Use underlying text with its highlighting
-
--- Improve comment editing:
--- Changed: Added r,n, l, 1. Removed t and c
-o.formatoptions = "rqnl1j"
-
-opt.grepformat = "%f:%l:%c:%m"
-opt.grepprg = "rg --vimgrep"
-opt.guicursor = "a:block"
-opt.ignorecase = true -- Ignore case
-
--- Preview substitutions live, as you type!
-opt.inccommand = "split" -- kickstart. Also: nosplit preview incremental substitute
-
-o.infercase = true -- Infer letter cases for a richer built-in keyword completion
+-- Editing ====================================================================
+o.expandtab = true -- use spaces instead of tabs
+o.formatoptions = "rqnl1j" -- improve comment editing. Added r,n, l, 1. Removed t and c
+o.ignorecase = true -- ignore case
+o.infercase = true -- infer letter cases for a richer built-in keyword completion
 -- o.iskeyword     = '@,48-57,_,192-255,-' -- Treat dash separated words as a word text object
-opt.jumpoptions = "view"
-opt.laststatus = 2 -- 3 global statusline: on pick, filename disappears
-opt.linebreak = true
-opt.list = true -- Show some invisible characters (tabs...
+o.shiftwidth = 2 -- size of an indent
+o.shiftround = true -- round indent
+o.smartcase = true -- don't ignore case with capitals
+o.smartindent = true -- insert indents automatically
+o.tabstop = 2 -- number of spaces tabs count for
+o.virtualedit = "block" -- allow going past the end of line in visual block mode
 
--- Special text symbols:
-o.listchars = table.concat({ "extends:…", "nbsp:␣", "precedes:…", "tab:> " }, ",")
--- Kickstart:
--- opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
+-- Folds ======================================================================
+o.foldmethod = "expr" -- TODO: "indent" perhaps?
+o.foldexpr = "nvim_treesitter#foldexpr()"
+o.foldlevel = 1 -- display all folds except top ones
+o.foldnestmax = 10 -- create folds only for some number of nested levels
+-- o.foldtext = "" -- use underlying text with its highlighting
+vim.g.markdown_folding = 1 -- use folding by heading in markdown files
 
-opt.mouse = "" -- Disable mouse mode
-opt.number = true -- Print line number
--- opt.pumblend = 10 -- Popup blend
--- opt.pumheight = 10 -- Maximum number of entries in a popup
-opt.relativenumber = true -- Relative line numbers
-opt.scrolloff = 4 -- Lines of context
-opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "globals", "skiprtp", "folds" }
-opt.shada = "'100,<50,s10,:1000,/100,@100,h" -- Limit what is stored in ShaDa file
-opt.shiftround = true -- Round indent
-opt.shiftwidth = 2 -- Size of an indent
+-- General ====================================================================
+o.backup = false -- don't store backup
+o.confirm = true -- confirm to save changes before exiting modified buffer
+o.mouse = "a"
+o.shada = "'100,<50,s10,:1000,/100,@100,h" -- limit what is stored in ShaDa file
+-- o.switchbuf = "usetab" -- use already opened buffers when switching
+o.timeoutlen = 600 -- 300
+o.undofile = true
+o.updatetime = 200 -- save swap file and trigger CursorHold
+o.writebackup = false -- don't store backup (better performance)
 
--- Disable certain messages from |ins-completion-menu|
--- The default: "ltToOCF", or alphabetically: "CFOTlto"
--- Changed: Added S, W, a and c, Removed T, l and t
-o.shortmess = "CFOSWaco"
-
-opt.showmode = false -- Dont show mode since we have a statusline
-opt.showtabline = 0 -- never show tabs, 1 is default, 2, -- always show tabs
--- opt.sidescrolloff = 6 -- Columns of context, used to be 8
-opt.signcolumn = "yes" -- Always show the signcolumn, otherwise it would shift the text each time
-opt.smartcase = true -- Don't ignore case with capitals
-opt.smartindent = true -- Insert indents automatically
-opt.smoothscroll = true
+-- Spelling ===================================================================
 o.spelllang = "en,nl"
 o.spelloptions = "camel"
-opt.splitbelow = true -- Put new windows below current
-opt.splitkeep = "screen"
-opt.splitright = true -- Put new windows right of current
-opt.tabstop = 2 -- Number of spaces tabs count for
-opt.timeoutlen = 600 -- 300
-opt.undofile = true
-opt.undolevels = 10000
-opt.updatetime = 200 -- Save swap file and trigger CursorHold
-opt.virtualedit = "block" -- Allow cursor to move where there is no text in visual block mode
-opt.wildmode = "longest:full,full" -- Command-line completion mode
-opt.winminwidth = 5 -- Minimum window width
-opt.wrap = false -- Disable line wrap
-opt.writebackup = false -- Don't store backup (better performance)
 
---          ╭─────────────────────────────────────────────────────────╮
---          │                         OTHER                           │
---          ╰─────────────────────────────────────────────────────────╯
+-- UI =========================================================================
+o.breakindent = true -- Indent wrapped lines to match line start
+o.breakindentopt = "list:-1" -- Add padding for lists when 'wrap' is on
+o.colorcolumn = "+1" -- Draw colored column one step to the right of desired maximum width
+-- TODO: conceallevel default?
+o.conceallevel = 2 -- Hide * markup for bold and italic, but not markers with substitutions
+o.cursorline = true -- Enable highlighting of the current line
+o.cursorlineopt = "screenline,number" -- show cursor line only screen line when wrapped
+-- stylua: ignore start
+o.fillchars = table.concat({ -- special UI symbols:
+  "eob: ", "fold:╌", "horiz:═", "horizdown:╦", "horizup:╩", "vert:║",
+  "verthoriz:╬", "vertleft:╣", "vertright:╠", }, ",")
+-- stylua: ignore end
+o.guicursor = "a:block"
+-- Preview substitutions live, as you type!
+o.inccommand = "split" -- kickstart. Also: nosplit preview incremental substitute
+o.linebreak = true -- wrap long lines at 'breakat' (if 'wrap' is set)
+o.list = true -- show helpful character indicators
+o.listchars = table.concat({ "extends:…", "nbsp:␣", "precedes:…", "tab:> " }, ",")
+o.number = true -- print line number
+-- o.pumblend = 10 -- popup blend
+-- o.pumheight = 10 -- maximum number of entries in a popup
+o.relativenumber = true -- relative line numbers
+o.ruler = false -- don't show cursor position
+-- o.scrolloff = 4 -- lines of context
+-- Default: "ltToOCF", or alphabetically: "CFOTlto". Added S, W, a and c, Removed T, l and t:
+o.shortmess = "CFOSWaco" -- disable certain messages from |ins-completion-menu|
+o.showmode = false -- don't show mode in command line
+o.showtabline = 0 -- never show tabs, 1 is default, 2, -- always show tabs
+o.signcolumn = "yes" -- always show signcolumn or it would frequently shift
+o.splitbelow = true -- put new windows below current
+o.splitkeep = "screen"
+o.splitright = true -- put new windows right of current
+o.wrap = false -- display long lines as just one line
 
--- Fix markdown indentation settings
-vim.g.markdown_recommended_style = 0
-vim.g.markdown_folding = 1 -- Use folding by heading in markdown files
-
--- checkhealth:
+-- Other settings =============================================================
 vim.g.python3_host_prog = "/usr/bin/python" -- archlinux: global python-pynvim
-
--- allow local .nvim.lua .vimrc .exrc files
--- vim.opt.exrc = true
-
--- checkhealth:
-vim.g.loaded_perl_provider = 0
+vim.g.loaded_perl_provider = 0 -- checkhealth
 vim.g.loaded_ruby_provider = 0
 -- vim.g.loaded_node_provider = 0
 -- vim.g.loaded_python3_provider = 0
+-- allow local .nvim.lua .vimrc .exrc files:
+-- vim.opt.exrc = true
+vim.g.markdown_recommended_style = 0 -- fix markdown indentation settings
+
+-- Custom autocommands ========================================================
+local function augroup(name) return vim.api.nvim_create_augroup("abeldekat_" .. name, {}) end
+local autocmd = vim.api.nvim_create_autocmd
+
+-- Check if we need to reload the file when it changed
+autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
+  group = augroup("checktime"),
+  callback = function()
+    if vim.o.buftype ~= "nofile" then vim.cmd("checktime") end
+  end,
+})
+
+-- Highlight on yank
+autocmd("TextYankPost", {
+  group = augroup("highlight_yank"),
+  callback = function() vim.highlight.on_yank() end,
+})
+
+-- Resize splits if window got resized
+autocmd({ "VimResized" }, {
+  group = augroup("resize_splits"),
+  callback = function()
+    local current_tab = vim.fn.tabpagenr()
+    vim.cmd("tabdo wincmd =")
+    vim.cmd("tabnext " .. current_tab)
+  end,
+})
+
+-- Go to last loc when opening a buffer: See mini.misc
+
+-- Close some filetypes with <q>
+-- stylua: ignore start
+autocmd("FileType", {
+  group = augroup("close_with_q"),
+  pattern = {
+    "help", "lspinfo", "notify", "qf", "startuptime", "neotest-output", "checkhealth",
+    "neotest-summary", "neotest-output-panel", "dbout", "git",
+  },
+  callback = function(event)
+    vim.bo[event.buf].buflisted = false
+    vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true })
+  end,
+})
+-- stylua: ignore end
+
+-- make it easier to close man-files when opened inline
+vim.api.nvim_create_autocmd("FileType", {
+  group = augroup("man_unlisted"),
+  pattern = { "man" },
+  callback = function(event) vim.bo[event.buf].buflisted = false end,
+})
+
+-- Fix conceallevel for json files
+vim.api.nvim_create_autocmd({ "FileType" }, {
+  group = augroup("json_conceal"),
+  pattern = { "json", "jsonc", "json5" },
+  callback = function()
+    vim.wo.spell = false
+    vim.opt_local.conceallevel = 0
+  end,
+})
+
+-- Auto create dir when saving a file, in case some intermediate directory does not exist
+autocmd({ "BufWritePre" }, {
+  group = augroup("auto_create_dir"),
+  callback = function(event)
+    if event.match:match("^%w%w+://") then return end
+    local file = vim.uv.fs_realpath(event.match) or event.match
+    vim.fn.mkdir(vim.fn.fnamemodify(file, ":p:h"), "p")
+  end,
+})
+
+-- Don't continue comments with o and O
+autocmd("Filetype", {
+  group = augroup("continue_comments"),
+  callback = function()
+    -- Don't auto-wrap comments and don't insert comment leader after hitting 'o'
+    -- If don't do this on `FileType`, this keeps reappearing due to being set in
+    -- filetype plugins.
+    vim.cmd("setlocal formatoptions-=c formatoptions-=o")
+  end,
+  desc = [[Ensure proper 'formatoptions']],
+})
+
+-- Diagnostics ================================================================
+local icons = {
+  Error = " ",
+  Warn = " ",
+  Hint = " ",
+  Info = " ",
+}
+
+---@type vim.diagnostic.Opts
+local opts = {
+  -- underline = true,
+  update_in_insert = false,
+  float = { border = "double" },
+
+  virtual_text = {
+    -- Show virtual text only for errors
+    severity = { min = "ERROR", max = "ERROR" },
+    spacing = 4,
+    source = "if_many",
+    prefix = function(diagnostic)
+      for d, icon in pairs(icons) do
+        if diagnostic.severity == vim.diagnostic.severity[d:upper()] then return icon end
+      end
+      return "●"
+    end,
+  },
+
+  -- severity_sort = true,
+  signs = { -- show gutter signs
+    text = {
+      [vim.diagnostic.severity.ERROR] = icons.Error,
+      [vim.diagnostic.severity.WARN] = icons.Warn,
+      [vim.diagnostic.severity.HINT] = icons.Hint,
+      [vim.diagnostic.severity.INFO] = icons.Info,
+    },
+    -- With highest priority
+    priority = 9999,
+    -- Only for warnings and errors
+    severity = { min = "WARN", max = "ERROR" },
+  },
+}
+vim.diagnostic.config(vim.deepcopy(opts))

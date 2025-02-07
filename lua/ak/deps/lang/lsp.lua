@@ -33,7 +33,6 @@ local function lsp()
       { source = "mrcjkb/rustaceanvim", checkout = "v5.24.3" },
     },
   })
-  require("ak.config.lang.diagnostics")
   require("ak.config.lang.lspconfig")
 
   add("j-hui/fidget.nvim")
