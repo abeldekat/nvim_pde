@@ -29,11 +29,11 @@ o.tabstop = 2 -- number of spaces tabs count for
 o.virtualedit = "block" -- allow going past the end of line in visual block mode
 
 -- Folds ======================================================================
-o.foldmethod = "expr" -- TODO: "indent" perhaps?
-o.foldexpr = "nvim_treesitter#foldexpr()"
+-- o.foldmethod = "expr" o.foldexpr = "nvim_treesitter#foldexpr()"
+o.foldmethod = "indent"
 o.foldlevel = 1 -- display all folds except top ones
 o.foldnestmax = 10 -- create folds only for some number of nested levels
--- o.foldtext = "" -- use underlying text with its highlighting
+o.foldtext = "" -- use underlying text with its highlighting
 vim.g.markdown_folding = 1 -- use folding by heading in markdown files
 
 -- General ====================================================================
@@ -55,8 +55,6 @@ o.spelloptions = "camel"
 o.breakindent = true -- Indent wrapped lines to match line start
 o.breakindentopt = "list:-1" -- Add padding for lists when 'wrap' is on
 o.colorcolumn = "+1" -- Draw colored column one step to the right of desired maximum width
--- TODO: conceallevel default?
-o.conceallevel = 2 -- Hide * markup for bold and italic, but not markers with substitutions
 o.cursorline = true -- Enable highlighting of the current line
 o.cursorlineopt = "screenline,number" -- show cursor line only screen line when wrapped
 -- stylua: ignore start
