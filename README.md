@@ -56,7 +56,7 @@ I touch type using the right hand
 in combination with the forefinger of the left hand
 
 - Leader: `space`
-- Main plugins: [ak.mini.visits_harpooned], [oil.nvim], [mini.pick] and [mini.jump2d]
+- Main plugins: [ak.mini.visits_harpooned], [mini.files], [mini.pick] and [mini.jump2d]
 - Menu: [mini.clue]
 
 ### VisitsHarpooned
@@ -84,11 +84,9 @@ Pickers can display hints using internal plugin [ak.mini.pick_hinted]
 - `mw`(next window)
 - `me`(last accessed window)
 
-### Oil
+### Explorer
 
-- `mk`("rolling fingers"), opening oil
-- `h` up one level
-- `l` down one level, open file
+- `mk`("rolling fingers"), opening mini.files
 
 ### Tmux
 
@@ -109,13 +107,13 @@ Pickers can display hints using internal plugin [ak.mini.pick_hinted]
   - diagnostics
   - current buffer has current label (mini.visits)
   - macro recording
-- many color-schemes
+- many color schemes
 
-Change color-schemes:
+Change color schemes:
 
 - on each startup, see [scripts], `vim_menu_owns`
-- mini.pick, `leader f o c`, loads all colors, does not show builtin color-schemes
-- change the palette of the current color-scheme using [leader h]
+- mini.pick, `leader f o c`, loads all colors, does not show builtin color schemes
+- change the palette of the current color scheme using [leader h]
 
 Script `vim_menu_owns` writes to `lua.ak.colors`.
 Ignoring changes to that file:
@@ -148,10 +146,10 @@ used to accept completions. I changed the key to `<c-k>`.
 Many of the excellent modules included in [mini.nvim] are used in this config:
 
 `ai`, `align`, `animate`, `base16`, `clue`, `cursorword`,
-`deps`, `diff`, `git`, `hipatterns`, `hue`, `icons`,
-`indentscope`, `jump2d`, `move`, `notify`, `operators`, `pairs`,
-`pick`, `snippets`, `splitjoin`, `starter`, `statusline`, `surround`,
-`visits`
+`deps`, `diff`, `files`, `git`, `hipatterns`, `hue`,
+`icons`, `indentscope`, `jump2d`, `move`, `notify`, `operators`,
+`pairs`, `pick`, `snippets`, `splitjoin`, `starter`, `statusline`,
+`surround`, `visits`
 
 Relevant discussions:
 
@@ -199,6 +197,7 @@ This repo uses code and ideas from the following repositories:
 [ak.util]: lua/ak/util
 [leader h]: lua/ak/util/color.lua
 [mini.nvim]: https://github.com/echasnovski/mini.nvim
+[mini.files]: https://github.com/echasnovski/mini.files
 [mini.operators]: https://github.com/echasnovski/mini.operators
 [mini.surround]: https://github.com/echasnovski/mini.surround
 [mini.pick]: https://github.com/echasnovski/mini.pick
@@ -208,7 +207,6 @@ This repo uses code and ideas from the following repositories:
 [ak.mini.visits_harpooned]: lua/ak/mini/visits_harpooned.lua
 [ak.mini.visits_harpooned_line]: lua/ak/mini/visits_harpooned_line.lua
 [ak.mini.pick_hinted]: lua/ak/mini/pick_hinted.lua
-[oil.nvim]: https://github.com/stevearc/oil.nvim
 [peek.nvim]: https://github.com/toppair/peek.nvim
 [deno]: https://deno.land
 [with_submodules]: https://github.com/abeldekat/nvim_pde/tree/with_submodules

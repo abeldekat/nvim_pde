@@ -77,7 +77,7 @@ local function get_opts()
       },
     },
   }
-  if not Util.has_mini_ai then
+  if not Util.use_mini_ai then
     opts.select.keymaps["af"] = { query = "@function.outer", desc = "around function" }
     opts.select.keymaps["if"] = { query = "@function.inner", desc = "inside function" }
     opts.select.keymaps["aa"] = { query = "@parameter.outer", desc = "around argument" }

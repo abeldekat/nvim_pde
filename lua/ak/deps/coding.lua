@@ -3,14 +3,14 @@ local MiniDeps = require("mini.deps")
 local add, later = MiniDeps.add, MiniDeps.later -- local now = MiniDeps.now
 
 -- Change the default values here for use in ak.config:
-Util.has_mini_ai = true
+Util.use_mini_ai = true
 
 -- Util.snippets = "none"
 Util.snippets = "mini"
-Util.mini_snippets_standalone = true
+Util.snippets_standalone = true
 
--- Util.completion = "blink"
-Util.completion = "nvim-cmp"
+-- Util.cmp = "blink"
+Util.cmp = "nvim-cmp"
 
 -- blink and friendly-snippets: 2 plugins
 local function blink_cmp()
@@ -40,7 +40,7 @@ local function nvim_cmp()
     "hrsh7th/cmp-buffer",
     "hrsh7th/cmp-path",
   }
-  if Util.snippets == "mini" and not Util.mini_snippets_standalone then
+  if Util.snippets == "mini" and not Util.snippets_standalone then
     table.insert(cmp_depends, "abeldekat/cmp-mini-snippets")
   end
 
@@ -58,16 +58,16 @@ later(function()
     require("ak.config.coding.mini_snippets")
   end
 
-  if Util.completion == "nvim-cmp" then
+  if Util.cmp == "nvim-cmp" then
     nvim_cmp()
-  elseif Util.completion == "blink" then
+  elseif Util.cmp == "blink" then
     -- NOTE: Blink adds 7 ms to startuptime when using now().
     blink_cmp()
-  elseif Util.completion == "mini" then
+  elseif Util.cmp == "mini" then
     mini_cmp()
   end
 
-  if Util.has_mini_ai then require("ak.config.coding.mini_ai") end
+  if Util.use_mini_ai then require("ak.config.coding.mini_ai") end
 
   require("ak.config.coding.mini_align") -- using a selection...
   require("ak.config.coding.mini_basics") -- using a selection...

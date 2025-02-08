@@ -57,11 +57,11 @@ end
 -- select - vim.ui.select: ghost_text appearing
 -- select - vim.ui.select: cmp popups cover picker
 local function expand_select_override(snippets, insert)
-  if Util.completion == "nvim-cmp" then
+  if Util.cmp == "nvim-cmp" then
     local cmp = require("cmp")
     if cmp.visible() then cmp.close() end
     MiniSnippets.default_select(snippets, insert)
-  elseif Util.completion == "blink" then
+  elseif Util.cmp == "blink" then
     require("blink.cmp").cancel() -- cancel uses vim.schedule
     vim.schedule(function() MiniSnippets.default_select(snippets, insert) end)
   else
@@ -88,7 +88,7 @@ local snippets = {
 local mappings = { expand = "" }
 
 local expand = {}
-if Util.mini_snippets_standalone then expand["select"] = expand_select_override end
+if Util.snippets_standalone then expand["select"] = expand_select_override end
 
 local opts = {
   snippets = snippets,

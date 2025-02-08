@@ -1,9 +1,12 @@
 local Util = require("ak.util")
 
 local function setup_performance()
-  for _, disable in ipairs({ "gzip", "netrwPlugin", "tarPlugin", "tohtml", "tutor", "zipPlugin" }) do
+  for _, disable in ipairs({ "gzip", "tarPlugin", "tohtml", "tutor", "zipPlugin" }) do
     vim.g["loaded_" .. disable] = 0
   end
+  -- NOTE: No performance gain from disabling netrw: netrwPlugin
+  -- The plugin is needed to download spell files.
+  -- if Util.explorer ~= "none" then vim.g["loaded_netrwPlugin"] = 0 end
 end
 
 ---@diagnostic disable:assign-type-mismatch

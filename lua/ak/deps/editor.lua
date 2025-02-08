@@ -3,19 +3,29 @@ local MiniDeps = require("mini.deps")
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 local register = Util.deps.register
 
+Util.explorer = "mini"
 local pick_add_fzf = false
 local hardtime_now = false
+
+local explorer = Util.explorer
 
 now(function()
   --          ╭─────────────────────────────────────────────────────────╮
   --          │                           Oil                           │
   --          ╰─────────────────────────────────────────────────────────╯
-  local function oil()
-    add("stevearc/oil.nvim")
-    require("ak.config.editor.oil")
+  local oil = "stevearc/oil.nvim"
+  local function add_explorer()
+    if explorer == "mini" then
+      -- register(oil)
+      require("ak.config.editor.mini_files")
+    elseif explorer == "oil" then
+      -- ["oil.nvim"] = "add50252b5e9147c0a09d36480d418c7e2737472",
+      add(oil)
+      require("ak.config.editor.oil")
+    end
   end
   -- stylua: ignore
-  if Util.opened_with_dir_argument() then oil() else later(oil) end
+  if Util.opened_with_dir_argument() then add_explorer() else later(add_explorer) end
 
   --          ╭─────────────────────────────────────────────────────────╮
   --          │                         Hardtime                        │

@@ -29,26 +29,30 @@ local keymap = {
 local signature = { enabled = true } -- false by default
 if signature.enabled then keymap["<c-s>"] = { "show_signature", "hide_signature", "fallback" } end
 
-local sources = { default = { "lsp", "path", "buffer" }, cmdline = {} } -- disable cmdline
+local sources = {
+  default = { "lsp", "path", "buffer" },
+  cmdline = {
+    -- disable cmdline
+  },
+  term = {
+    -- disable future term
+  },
+}
 
-local snippets = {} -- blink defaults to it's own builtin with friendly snippets
-if Util.snippets == "mini" then
-  if Util.mini_snippets_standalone then -- don't add the snippets source
-    snippets = {
-      expand = function(snippet)
-        local insert = MiniSnippets.config.expand.insert or MiniSnippets.default_insert
-        insert({ body = snippet })
-        blink.resubscribe()
-      end,
-      active = function(_) return MiniSnippets.session.get(false) ~= nil end,
-      jump = function(direction) MiniSnippets.session.jump(direction == -1 and "prev" or "next") end,
-    }
-  else
-    snippets = { preset = "mini_snippets" }
-    table.insert(sources.default, 2, "snippets")
-  end
-elseif Util.snippets == "none" then
+local snippets = {} -- blink defaults to it's own builtin
+if Util.snippets == "mini" and Util.snippets_standalone then
+  snippets = { -- don't add sources.snippets, copy expand active and jump from config-snippets
+    expand = function(snippet)
+      local insert = MiniSnippets.config.expand.insert or MiniSnippets.default_insert
+      insert({ body = snippet })
+      blink.resubscribe()
+    end,
+    active = function(_) return MiniSnippets.session.get(false) ~= nil end,
+    jump = function(direction) MiniSnippets.session.jump(direction == -1 and "prev" or "next") end,
+  }
+else
   table.insert(sources.default, 2, "snippets")
+  if Util.snippets == "mini" then snippets = { preset = "mini_snippets" } end
 end
 
 local opts = {

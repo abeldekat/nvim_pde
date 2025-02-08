@@ -3,7 +3,7 @@
 --          ╰─────────────────────────────────────────────────────────╯
 
 local snip_engine = require("ak.util").snippets
-local mini_snippets_standalone = require("ak.util").mini_snippets_standalone
+local snippets_standalone = require("ak.util").snippets_standalone
 local cmp = require("cmp")
 local cmp_config = require("cmp.config")
 
@@ -44,7 +44,7 @@ local sources = {
   { name = "buffer" },
   { name = "path" },
 }
-if snip_engine == "mini" and not mini_snippets_standalone then table.insert(sources, 2, { name = "mini_snippets" }) end
+if snip_engine == "mini" and not snippets_standalone then table.insert(sources, 2, { name = "mini_snippets" }) end
 sources = cmp.config.sources(sources)
 
 -- Snippet expansion:

@@ -61,7 +61,8 @@ AK.section_filename = function()
   local flags = "%m%r"
   if full_path == "" then return "[No Name]" .. flags end
 
-  local fmt = ft == "oil" and ":~" or ":~:." -- oil: always show full path
+  -- oil: always show full path
+  local fmt = Utils.explorer == "oil" and ft == "oil" and ":~" or ":~:."
   return vim.fn.fnamemodify(full_path, fmt) .. flags
 end
 

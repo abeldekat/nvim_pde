@@ -39,7 +39,7 @@ vim.g.markdown_folding = 1 -- use folding by heading in markdown files
 -- General ====================================================================
 o.backup = false -- don't store backup
 o.confirm = true -- confirm to save changes before exiting modified buffer
-o.mouse = "a"
+o.mouse = "" -- disable mouse impractical with laptop and touchpad
 o.shada = "'100,<50,s10,:1000,/100,@100,h" -- limit what is stored in ShaDa file
 -- o.switchbuf = "usetab" -- use already opened buffers when switching
 o.timeoutlen = 600 -- 300

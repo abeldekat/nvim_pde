@@ -1,3 +1,5 @@
+-- Not used at the moment. See mini.files
+
 local opts = {
   keymaps = { -- ["g?"] = "actions.show_help",
     ["<CR>"] = false,

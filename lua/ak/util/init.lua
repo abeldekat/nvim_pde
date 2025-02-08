@@ -8,17 +8,20 @@
 ---@field toggle ak.util.toggle
 local M = {}
 
----@type boolean for the integration of treesitter textobjects and mini.ai
-M.has_mini_ai = false
+---@type "nvim-cmp" | "blink" | "mini" | "none"
+M.cmp = "none" -- set in ak.deps.coding
+
+---@type "mini" | "oil" | "none"
+M.explorer = "none" -- set in ak.deps.editor
 
 ---@type "mini" | "none" value none for nvim-cmp uses native snippets, for blink its builtin
-M.snippets = "none"
+M.snippets = "none" -- set in ak.deps.coding
 
----@type boolean by default, don't integrate non-lsp snippets with completion engine
-M.mini_snippets_standalone = true
+---@type boolean don't integrate non-lsp snippets with completion engine
+M.snippets_standalone = true -- currently only for mini, set in ak.deps.coding
 
----@type "nvim-cmp" | "blink" | "mini" | "none"
-M.completion = "none" -- set in ak.deps.coding
+---@type boolean for the integration of treesitter textobjects and mini.ai
+M.use_mini_ai = false -- set in ak.deps.coding
 
 setmetatable(M, {
   __index = function(t, k)
@@ -60,7 +63,9 @@ end
 ---@param msg string|string[]
 ---@param opts? AkNotifyOpts
 local function notify(msg, opts)
-  if vim.in_fast_event() then return vim.schedule(function() notify(msg, opts) end) end
+  if vim.in_fast_event() then
+    return vim.schedule(function() notify(msg, opts) end)
+  end
 
   opts = opts or {}
   if type(msg) == "table" then

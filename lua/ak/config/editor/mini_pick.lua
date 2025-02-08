@@ -60,7 +60,7 @@ H.colors = function()
   )
 end
 
-H.bdir = function() -- note: in oil dir, return nil and fallback to root cwd
+H.bdir = function() -- can return nil
   if vim["bo"].buftype == "" then return vim.fn.expand("%:p:h") end
 end
 

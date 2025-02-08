@@ -1,5 +1,6 @@
 local M = {}
 
+local Util = require("ak.util")
 local Starter = require("mini.starter")
 local Picker = require("ak.util").pick
 local StarterOverride = {}
@@ -37,8 +38,14 @@ end
 -- that letter is still highlighted
 function M.setup(pm_opts)
   local commands_section = "Commands"
+  local explore_action = "e ."
+  if Util.explorer == "mini" then
+    explore_action = "lua MiniFiles.open()"
+  elseif Util.explorer == "oil" then
+    explore_action = "Oil"
+  end
   local commands_items = {
-    { action = "Oil", name = "e. explore('mk')", section = commands_section },
+    { action = explore_action, name = "e. explore('mk')", section = commands_section },
     { action = Picker.keymaps, name = "k. keymaps", section = commands_section },
     { action = "qa", name = "q. quit", section = commands_section },
   }

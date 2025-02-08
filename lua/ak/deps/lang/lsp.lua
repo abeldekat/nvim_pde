@@ -45,7 +45,7 @@ later(lsp)
 if Util.opened_with_arguments() then
   later(function() -- The lsp does not attach when directly opening a file:
     local ft = vim.bo.filetype
-    if ft and ft ~= "oil" then
+    if ft and ft ~= "oil" and ft ~= "minifiles" then
       vim.api.nvim_exec_autocmds("FileType", {
         modeline = false,
         pattern = vim.bo.filetype,
