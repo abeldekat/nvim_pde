@@ -1,6 +1,6 @@
 vim.g.hardtime_default_on = 1
 
-vim.g.hardtime_ignore_buffer_patterns = { "oil.*", "dbui.*", "dbout.*" }
+vim.g.hardtime_ignore_buffer_patterns = { "dbui.*", "dbout.*" }
 vim.g.hardtime_showmsg = 0
 vim.g.hardtime_timeout = 2000
 vim.g.hardtime_ignore_quickfix = 1

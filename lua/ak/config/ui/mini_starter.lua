@@ -32,20 +32,14 @@ local function header_cb()
 end
 
 -- Lazy loading mini.starter causes problems when using vim with stdin
--- Keymap "mk"(oil) is not available when letter m is in query_updaters
+-- Keymap "mk"(explorer) is not available when letter m is in query_updaters
 -- When using leap, the letter s cannot be a query updater
 -- General problem: When a letter is removed from query_updaters
 -- that letter is still highlighted
 function M.setup(pm_opts)
   local commands_section = "Commands"
-  local explore_action = "e ."
-  if Util.explorer == "mini" then
-    explore_action = "lua MiniFiles.open()"
-  elseif Util.explorer == "oil" then
-    explore_action = "Oil"
-  end
   local commands_items = {
-    { action = explore_action, name = "e. explore('mk')", section = commands_section },
+    { action = "e .", name = "e. explore('mk')", section = commands_section },
     { action = Picker.keymaps, name = "k. keymaps", section = commands_section },
     { action = "qa", name = "q. quit", section = commands_section },
   }

@@ -3,7 +3,7 @@
 local AK = {} -- module using the structure of MiniStatusline
 local H = {} -- helpers, copied, modified or added
 local MiniStatusline = require("mini.statusline")
-local Utils = require("ak.util")
+local Util = require("ak.util")
 
 AK.setup = function()
   MiniStatusline.setup({
@@ -52,17 +52,17 @@ AK.active = function() -- entrypoint
   })
 end
 
--- overridden: Use relative path if file is in cwd. Remove oil//
+-- overridden: Use relative path if file is in cwd.
 AK.section_filename = function()
   local ft = vim.bo.filetype
-  local full_path = Utils.full_path_of_current_buffer()
+  local full_path = Util.full_path_of_current_buffer()
   if not full_path or ft == "ministarter" then return "" end
 
   local flags = "%m%r"
-  if full_path == "" then return "[No Name]" .. flags end
+  -- if full_path == "" then return "[No Name]" .. flags end
+  if full_path == "" then return "" .. flags end
 
-  -- oil: always show full path
-  local fmt = Utils.explorer == "oil" and ft == "oil" and ":~" or ":~:."
+  local fmt = ":~:."
   return vim.fn.fnamemodify(full_path, fmt) .. flags
 end
 

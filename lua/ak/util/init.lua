@@ -11,9 +11,6 @@ local M = {}
 ---@type "nvim-cmp" | "blink" | "mini" | "none"
 M.cmp = "none" -- set in ak.deps.coding
 
----@type "mini" | "oil" | "none"
-M.explorer = "none" -- set in ak.deps.editor
-
 ---@type "mini" | "none" value none for nvim-cmp uses native snippets, for blink its builtin
 M.snippets = "none" -- set in ak.deps.coding
 
@@ -32,7 +29,7 @@ setmetatable(M, {
 })
 
 local argc = vim.fn.argc()
-local has_one_single_dir_arg = (function() -- oil
+local has_one_single_dir_arg = (function() -- explorer
   if argc == 1 then
     ---@diagnostic disable-next-line: param-type-mismatch
     local stat = vim.uv.fs_stat(vim.fn.argv(0))
@@ -45,12 +42,6 @@ M.opened_with_arguments = function() return argc > 0 end
 M.opened_with_dir_argument = function() return has_one_single_dir_arg end
 
 M.full_path_of_current_buffer = function()
-  -- if the filetype is oil, then oil is active
-  if vim.bo.filetype == "oil" then
-    local path = require("oil").get_current_dir()
-    ---@diagnostic disable-next-line: need-check-nil
-    return path:sub(1, -2)
-  end
   return vim.fn.expand("%:p") -- /home/user....
 end
 

@@ -82,6 +82,7 @@ o.signcolumn = "yes" -- always show signcolumn or it would frequently shift
 o.splitbelow = true -- put new windows below current
 o.splitkeep = "screen"
 o.splitright = true -- put new windows right of current
+o.laststatus = 3 -- global statusline on pick filename disappears
 o.wrap = false -- display long lines as just one line
 
 -- Other settings =============================================================

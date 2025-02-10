@@ -196,9 +196,7 @@ end
 -- Code taken from builtin.buffers
 --
 -- Default pick buffers just shows parsed output from buffers command
--- As a consequence, the cwd part is not removed from buffers opened with:
--- oil in cwd
--- dashboard in cwd
+-- As a consequence, the cwd part is not removed from buffers opened from dashboard
 Pick.registry.buffers_hinted_truncated = function()
   local cwd = vim.fn.fnamemodify(vim.fs.normalize(vim.fn.getcwd()) .. "/", ":~")
   local include_unlisted = false

@@ -50,14 +50,7 @@ VisitsHarpooned.config = {
     selects = { "ma", "ms", "md", "mf" }, -- { "<c-j>", "<c-k>", "<c-l>", "<c-h>" }
   },
   picker_hints_on_change_active_label = { "a", "s", "d", "f" }, -- predictable picker hints
-  full_path_of_current_buffer = function() -- also account for oil buffers
-    if vim.bo.filetype == "oil" then -- if the filetype is oil, then oil is active
-      local path = require("oil").get_current_dir()
-      ---@diagnostic disable-next-line: need-check-nil
-      return path:sub(1, -2)
-    end
-    return vim.fn.expand("%:p")
-  end,
+  full_path_of_current_buffer = function() return vim.fn.expand("%:p") end,
 }
 
 VisitsHarpooned.get_start_label = function() return H.get_config().start_label end
@@ -65,6 +58,15 @@ VisitsHarpooned.get_start_label = function() return H.get_config().start_label e
 VisitsHarpooned.list_paths = function(label) return Api.list_paths(label) end
 
 VisitsHarpooned.full_path_of_current_buffer = function() return H.get_config().full_path_of_current_buffer() end
+
+VisitsHarpooned.toggle = function(full_path)
+  full_path = full_path or VisitsHarpooned.full_path_of_current_buffer()
+  if vim.list_contains(Api.list_paths(H.current_label), full_path) then
+    H.remove(H.current_label, full_path)
+  else
+    H.add(H.current_label, full_path)
+  end
+end
 
 -- Helper ================================================================
 
@@ -133,7 +135,7 @@ H.apply_config = function(config)
   -- -- Apply mappings
   H.map("n", keys.ui_all, function() H.pick_visits_by_labels(config.labels) end, { desc = "Visits pick all" })
   H.map("n", keys.ui, function() H.pick_visits_by_labels({ H.current_label }) end, { desc = "Visits pick active" })
-  H.map("n", keys.toggle, H.toggle, { desc = "Visits toggle" })
+  H.map("n", keys.toggle, VisitsHarpooned.toggle, { desc = "Visits toggle" })
   H.map("n", keys.change_active_label, H.pick_labels, { desc = "Visits change active label" })
 
   local unc_label = config.uncategorized_label
@@ -213,15 +215,6 @@ H.add = function(label, full_path)
   Api.register_visit(full_path) -- must update "latest" field
   Api.add_label(label, full_path)
   Api.on_change(label)
-end
-
-H.toggle = function()
-  local full_path = VisitsHarpooned.full_path_of_current_buffer()
-  if vim.list_contains(Api.list_paths(H.current_label), full_path) then
-    H.remove(H.current_label, full_path)
-  else
-    H.add(H.current_label, full_path)
-  end
 end
 
 H.change_active_label = function(from_label, to_label)
