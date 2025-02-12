@@ -1,5 +1,3 @@
--- Mini: not supported
-
 local prefer_light = require("ak.color").prefer_light
 vim.o.background = prefer_light and "light" or "dark"
 
@@ -14,11 +12,6 @@ vim.api.nvim_create_autocmd("Colorscheme", {
     -- local cyan = vim.api.nvim_get_hl(0, { name = "DiagnosticHint" }).fg
     local orange = "#E49B5D" --"#BC5C00"
 
-    -- set_hl("MiniHipatternsFixme", { bg = red, fg = "black", bold = true })
-    -- set_hl("MiniHipatternsHack", { bg = yellow, fg = "black", bold = true })
-    -- set_hl("MiniHipatternsTodo", { bg = blue, fg = "black", bold = true })
-    -- set_hl("MiniHipatternsNote", { bg = cyan, fg = "black", bold = true })
-    set_hl("MiniJump2dSpotAhead", { link = "MiniJump2dSpot" })
     set_hl("MiniPickMatchRanges", { fg = orange, bold = true })
     set_hl("MiniPickNormal", { link = "Normal" }) -- NormalFloat
 

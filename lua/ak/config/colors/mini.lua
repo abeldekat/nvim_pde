@@ -44,11 +44,6 @@ vim.api.nvim_create_autocmd("Colorscheme", {
   callback = function()
     if p == nil then return end
 
-    -- MiniJump2dSpot MiniJump2dSpotAhead MiniJump2dSpotUnique
-    -- Defaults are more white:
-    hi("MiniJump2dSpot", { fg = p.orange })
-    hi("MiniJump2dSpotAhead", { fg = p.orange })
-    --
     -- Is a link to DiagnosticFloatingHint, change to bold orange:
     hi("MiniPickMatchRanges", { fg = p.orange, bold = true })
     -- Area for messages and cmdline, changed from Normal to Comment.fg

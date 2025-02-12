@@ -33,13 +33,15 @@ now(function()
 end)
 
 later(function()
+  add("ggandor/leap.nvim")
+  require("ak.config.editor.leap")
+
   --          ╭─────────────────────────────────────────────────────────╮
   --          │                          Mini                           │
   --          ╰─────────────────────────────────────────────────────────╯
   require("ak.config.editor.mini_clue")
   require("ak.config.editor.mini_cursorword")
   require("ak.config.editor.mini_hipatterns")
-  require("ak.config.editor.mini_jump2d")
   require("ak.config.editor.mini_git")
   require("ak.config.editor.mini_diff")
   require("ak.config.editor.mini_pick")
@@ -74,9 +76,6 @@ later(function()
   --          ╭─────────────────────────────────────────────────────────╮
   --          │                          Other                          │
   --          ╰─────────────────────────────────────────────────────────╯
-
-  add("ggandor/leap.nvim") -- only using treesitter incremental selection
-  require("ak.config.editor.leap")
 
   local spec_spectre = "nvim-pack/nvim-spectre"
   register(spec_spectre)

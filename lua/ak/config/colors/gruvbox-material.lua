@@ -24,10 +24,6 @@ vim.api.nvim_create_autocmd("Colorscheme", {
     local palette = vim.fn["gruvbox_material#get_palette"](config.background, config.foreground, config.colors_override)
     local set_hl = vim.fn["gruvbox_material#highlight"]
 
-    -- Highlight all characters to type (mostly 2)
-    set_hl("MiniJump2dSpot", palette.orange, palette.none)
-    set_hl("MiniJump2dSpotAhead", palette.orange, palette.none)
-
     -- without undercurl:
     set_hl("ErrorText", palette.none, palette.none, "NONE", palette.red)
     set_hl("WarningText", palette.none, palette.none, "NONE", palette.yellow)

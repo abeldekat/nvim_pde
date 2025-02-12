@@ -12,56 +12,52 @@ local opts = {
     return { -- left and right, dynamic
       MiniStatuslineFilename = { fg = c.subtext1, bg = c.mantle },
 
-      MiniJump2dSpot = { bg = c.base, fg = c.flamingo, style = { "bold", "underline" } },
-      MiniJump2dSpotAhead = { bg = c.base, fg = c.flamingo, style = { "bold", "underline" } },
-
       MiniPickMatchRanges = { fg = c.peach, style = { "bold" } },
       MiniPickNormal = { link = "Normal" }, -- DiagnosticFloatingHint
 
       MsgArea = { fg = c.overlay0 }, -- Area for messages and cmdline
     }
   end,
+  default_integrations = false,
   integrations = {
-    aerial = true,
-    alpha = false,
     blink_cmp = true,
     cmp = true,
-    dashboard = false,
-    dropbar = { enabled = false },
+    dadbod_ui = true,
+    dap = true,
+    dap_ui = true,
     fidget = true,
-    flash = false,
-    gitsigns = false,
     headlines = true,
-    illuminate = { enabled = false },
-    indent_blankline = { enabled = true },
-    leap = false,
-    lsp_trouble = false,
-    mason = true,
+    leap = true,
     markdown = true,
-    mini = true, -- enabled by default
-    native_lsp = {
+    mason = true,
+    mini = {
       enabled = true,
+      indentscope_color = "text",
+    },
+    native_lsp = { -- must copy...
+      enabled = true,
+      virtual_text = {
+        errors = { "italic" },
+        hints = { "italic" },
+        warnings = { "italic" },
+        information = { "italic" },
+        ok = { "italic" },
+      },
       underlines = {
         errors = { "undercurl" },
         hints = { "undercurl" },
         warnings = { "undercurl" },
         information = { "undercurl" },
+        ok = { "underline" },
       },
+      inlay_hints = { background = true },
     },
-    navic = { enabled = false },
-    neogit = false,
     neotest = true,
-    neotree = false,
-    noice = false,
-    notify = false,
-    nvimtree = false,
-    rainbow_delimiters = false,
+    -- overseer = true,
+    render_markdown = true,
     semantic_tokens = true,
-    telescope = false,
     treesitter = true,
     treesitter_context = true,
-    ufo = false,
-    which_key = false,
   },
 }
 

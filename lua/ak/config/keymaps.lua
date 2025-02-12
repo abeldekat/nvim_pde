@@ -109,6 +109,7 @@ map("n", "<leader>uw", function() Util.toggle("wrap") end, { desc = "Toggle word
 map("n", "<leader>uL", function() Util.toggle("relativenumber") end, { desc = "Toggle relative line numbers" })
 map("n", "<leader>ul", function() Util.toggle.number() end, { desc = "Toggle line numbers" })
 map("n", "<leader>ud", function() Util.toggle.diagnostic() end, { desc = "Toggle diagnostic" })
+
 local conceallevel = vim.o.conceallevel > 0 and vim.o.conceallevel or 3
 map(
   "n",
@@ -116,6 +117,7 @@ map(
   function() Util.toggle("conceallevel", false, { 0, conceallevel }) end,
   { desc = "Toggle conceal" }
 )
+
 map("n", "<leader>uh", function() Util.toggle.inlay_hints() end, { desc = "Toggle inlay hints" })
 map("n", "<leader>uT", function()
   ---@diagnostic disable-next-line: undefined-field
@@ -125,9 +127,16 @@ map("n", "<leader>uT", function()
     vim.treesitter.start()
   end --
 end, { desc = "Toggle treesitter highlight" })
--- highlights under cursor
+
 map("n", "<leader>ui", vim.show_pos, { desc = "Inspect pos" })
 map("n", "<leader>uI", "<cmd>InspectTree<cr>", { desc = "Inspect Tree" })
+map("n", "<leader>uo", function()
+  if vim.o.foldlevel == 1 then
+    vim.o.foldlevel = 99
+  else
+    vim.o.foldlevel = 1
+  end
+end, { desc = "Toggle foldlevel" })
 
 -- undo break-points
 map("i", ",", ",<c-g>u")

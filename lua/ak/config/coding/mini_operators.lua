@@ -7,7 +7,7 @@
 --          ╰─────────────────────────────────────────────────────────╯
 
 local opts = {
-  replace = { prefix = "gs" }, --> "go substitute", lsp uses gr, go references
+  replace = { prefix = "gs" }, --> "go substitute", lsp uses gr for "go references"
   sort = { prefix = "gS" }, --> "go sort"
 }
 require("mini.operators").setup(opts)

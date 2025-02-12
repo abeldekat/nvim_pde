@@ -31,7 +31,7 @@ o.virtualedit = "block" -- allow going past the end of line in visual block mode
 -- Folds ======================================================================
 -- o.foldmethod = "expr" o.foldexpr = "nvim_treesitter#foldexpr()"
 o.foldmethod = "indent"
-o.foldlevel = 1 -- display all folds except top ones
+o.foldlevel = 99 -- 1: display all folds except top ones
 o.foldnestmax = 10 -- create folds only for some number of nested levels
 o.foldtext = "" -- use underlying text with its highlighting
 vim.g.markdown_folding = 1 -- use folding by heading in markdown files

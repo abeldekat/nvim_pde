@@ -56,7 +56,7 @@ I touch type using the right hand
 in combination with the forefinger of the left hand
 
 - Leader: `space`
-- Main plugins: [ak.mini.visits_harpooned], [mini.files], [mini.pick] and [mini.jump2d]
+- Main plugins: [ak.mini.visits_harpooned], [mini.files], [mini.pick] and [leap]
 - Menu: [mini.clue]
 
 ### VisitsHarpooned
@@ -124,7 +124,7 @@ git update-index --assume-unchanged lua/ak/colors.lua
 
 ## Key conflicts
 
-Replace **replace** with **substitute** mnemonic:
+### operators
 
 In my config, the suggested key `gr`("go replace") in [mini.operators] is already used
 for the `lsp`("go references").
@@ -133,10 +133,18 @@ I prefer "two character hotkeys" as I use some lsp keys quite often(`gd`, `gr`).
 
 Solution: Change operator `gr` into `gs`, mnemonic for "go substitute".
 
-Consequences:
+As a consequence, suggested key `gs`("go sort") is changed into `gS`.
 
-- [mini.operators]: Change suggested key `gs`("go sort") into `gS`.
-- [mini.surround]: Change `sr`(surround replace) into `ss`(surround substitute).
+### surround
+
+Using [mini.surround]. Suggested keys: `sa sd sr sf sF sh sn`
+
+The "s" is already used by [leap.nvim].
+Solution: Use the `m` key in combination with `asdf`,
+adjacent keys on a qwerty keyboard.
+Key `ms` is a mnemonic for `surround substitute`, performing a surround replace.
+
+### snippets
 
 The expand key in `mini.snippets` is `<c-j>` by default. That key is already
 used to accept completions. I changed the key to `<c-k>`.
@@ -147,9 +155,9 @@ Many of the excellent modules included in [mini.nvim] are used in this config:
 
 `ai`, `align`, `animate`, `base16`, `clue`, `cursorword`,
 `deps`, `diff`, `files`, `git`, `hipatterns`, `hue`,
-`icons`, `indentscope`, `jump2d`, `move`, `notify`, `operators`,
-`pairs`, `pick`, `snippets`, `splitjoin`, `starter`, `statusline`,
-`surround`, `visits`
+`icons`, `indentscope`, `move`, `notify`, `operators`, `pairs`,
+`pick`, `snippets`, `splitjoin`, `starter`, `statusline`, `surround`,
+`visits`
 
 Relevant discussions:
 
@@ -202,11 +210,11 @@ This repo uses code and ideas from the following repositories:
 [mini.surround]: https://github.com/echasnovski/mini.surround
 [mini.pick]: https://github.com/echasnovski/mini.pick
 [mini.visits]: https://github.com/echasnovski/mini.visits
-[mini.jump2d]: https://github.com/echasnovski/mini.jum2d
 [mini.clue]: https://github.com/echasnovski/mini.clue
 [ak.mini.visits_harpooned]: lua/ak/mini/visits_harpooned.lua
 [ak.mini.visits_harpooned_line]: lua/ak/mini/visits_harpooned_line.lua
 [ak.mini.pick_hinted]: lua/ak/mini/pick_hinted.lua
+[leap]: https://github.com/ggandor/leap.nvim
 [peek.nvim]: https://github.com/toppair/peek.nvim
 [deno]: https://deno.land
 [with_submodules]: https://github.com/abeldekat/nvim_pde/tree/with_submodules

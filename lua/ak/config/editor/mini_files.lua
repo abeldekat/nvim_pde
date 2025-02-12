@@ -1,11 +1,8 @@
---[[
+-- TODO: Rename file. See LSP utilities from LazyVim and MiniFilesActionRename.
+-- Discussions/563. Issue 747
 
--- TODO: Rename file? See LSP utilities from LazyVim and MiniFilesActionRename. Discussions/563. Issue 747
-
--- Visits_harpooned: to add directory of a file, use <leader>a inside explorer
+-- Visits_harpooned: to add a visit to directory , use <leader>a inside mini.files
 -- Auto bookmark: discussions/1197
-
---]]
 
 local H = {}
 local setup = function()
@@ -43,7 +40,7 @@ H.create_autocommmands = function()
     vim.keymap.set("n", "g.", H.toggle_dotfiles, { buffer = b })
     vim.keymap.set("n", "g~", H.set_cwd, { buffer = b, desc = "Set cwd" })
     vim.keymap.set("n", "gy", H.yank_path, { buffer = b, desc = "Yank path" })
-    vim.keymap.set("n", "<leader>a", H.visits_harpooned_toggle_path, { buffer = b, desc = "Visits toggle path" })
+    vim.keymap.set("n", "<leader>a", H.toggle_path, { buffer = b, desc = "Visits toggle path" })
     H.map_split(b, "<C-s>", "belowright horizontal")
     H.map_split(b, "<C-v>", "belowright vertical")
   end)
@@ -78,10 +75,7 @@ H.map_split = function(buf_id, lhs, direction)
       return vim.api.nvim_get_current_win()
     end)
     MiniFiles.set_target_window(new_target)
-
-    -- This intentionally doesn't act on file under cursor in favor of
-    -- explicit "go in" action (`l` / `L`). To immediately open file,
-    -- add appropriate `MiniFiles.go_in()` call instead of this comment.
+    MiniFiles.go_in({ close_on_file = true })
   end
   local desc = "Split " .. direction
   vim.keymap.set("n", lhs, rhs, { buffer = buf_id, desc = desc })
@@ -99,11 +93,11 @@ H.yank_path = function() -- yank in register full path of entry under cursor
   vim.fn.setreg(vim.v.register, path)
 end
 
-H.visits_harpooned_toggle_path = function()
+H.toggle_path = function()
   if not VisitsHarpooned then return end
-
   local path = (MiniFiles.get_fs_entry() or {}).path
   if path == nil then return vim.notify("Cursor is not on valid entry") end
+
   VisitsHarpooned.toggle(vim.fs.dirname(path))
 end
 
