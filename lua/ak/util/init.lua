@@ -8,17 +8,18 @@
 ---@field toggle ak.util.toggle
 local M = {}
 
----@type "nvim-cmp" | "blink" | "mini" | "none"
-M.cmp = "none" -- set in ak.deps.coding
-
----@type "mini" | "none" value none for nvim-cmp uses native snippets, for blink its builtin
-M.snippets = "none" -- set in ak.deps.coding
-
----@type boolean don't integrate non-lsp snippets with completion engine
-M.snippets_standalone = true -- currently only for mini, set in ak.deps.coding
+-- Start shared variables, overridden in ak.deps.coding and used in ak.config:
 
 ---@type boolean for the integration of treesitter textobjects and mini.ai
-M.use_mini_ai = false -- set in ak.deps.coding
+M.use_mini_ai = false
+
+---@type boolean don't integrate non-lsp snippets with completion engine
+M.snippets_standalone = false
+
+---@type "nvim-cmp" | "blink" | "mini" | "none"
+M.cmp = "none"
+
+-- End shared variables
 
 setmetatable(M, {
   __index = function(t, k)

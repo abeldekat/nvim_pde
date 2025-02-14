@@ -28,6 +28,10 @@ vim.keymap.set(o, "S", "<Plug>(leap-backward)", { desc = "Leap backward" })
 -- `vg/{leap}apy`,
 -- `yg/{leap}ap`,
 -- `yr{leap}ap` -- in operator pending mode, "r"(as used in flash) is shorter than "g/"
+--
+-- Example swapping two words:
+-- `diwg/{leap}viwpP`
+--
 local function remote() require("leap.remote").action() end
 vim.keymap.set(nxo, "g/", remote, { desc = "Leap remote" })
 -- Prefer this mapping, thus using remote in operator pending mode:

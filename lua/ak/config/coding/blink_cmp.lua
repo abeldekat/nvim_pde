@@ -2,8 +2,10 @@
 --          │                   Also see: lsp                         │
 --          ╰─────────────────────────────────────────────────────────╯
 
-local Util = require("ak.util")
 local blink = require("blink.cmp")
+
+local snippets_standalone = require("ak.util").snippets_standalone
+local snip_engine = "mini" -- nil
 
 local completion = {
   menu = {
@@ -40,7 +42,7 @@ local sources = {
 }
 
 local snippets = {} -- blink defaults to it's own builtin
-if Util.snippets == "mini" and Util.snippets_standalone then
+if snip_engine == "mini" and snippets_standalone then
   snippets = { -- don't add sources.snippets, copy expand active and jump from config-snippets
     expand = function(snippet)
       local insert = MiniSnippets.config.expand.insert or MiniSnippets.default_insert
@@ -52,7 +54,7 @@ if Util.snippets == "mini" and Util.snippets_standalone then
   }
 else
   table.insert(sources.default, 2, "snippets")
-  if Util.snippets == "mini" then snippets = { preset = "mini_snippets" } end
+  if snip_engine == "mini" then snippets = { preset = "mini_snippets" } end
 end
 
 local opts = {

@@ -4,11 +4,7 @@ local add, later = MiniDeps.add, MiniDeps.later -- local now = MiniDeps.now
 
 -- Change the default values here for use in ak.config:
 Util.use_mini_ai = true
-
--- Util.snippets = "none"
-Util.snippets = "mini"
-Util.snippets_standalone = true
-
+Util.snippets_standalone = false
 -- Util.cmp = "blink"
 Util.cmp = "nvim-cmp"
 
@@ -27,7 +23,7 @@ local function blink_cmp()
   add({
     source = "saghen/blink.cmp",
     depends = { "rafamadriz/friendly-snippets" },
-    -- checkout = "0.8.1",
+    -- checkout = "v0.11.0",
     hooks = { post_install = build_blink, post_checkout = build_blink },
   })
   require("ak.config.coding.blink_cmp")
@@ -40,9 +36,7 @@ local function nvim_cmp()
     "hrsh7th/cmp-buffer",
     "hrsh7th/cmp-path",
   }
-  if Util.snippets == "mini" and not Util.snippets_standalone then
-    table.insert(cmp_depends, "abeldekat/cmp-mini-snippets")
-  end
+  if Util.snippets_standalone then table.insert(cmp_depends, "abeldekat/cmp-mini-snippets") end
 
   add({ source = "hrsh7th/nvim-cmp", depends = cmp_depends })
   require("ak.config.coding.nvim_cmp")
@@ -53,10 +47,8 @@ end
 local function mini_cmp() require("ak.config.coding.mini_completion") end
 
 later(function()
-  if Util.snippets == "mini" then
-    add("rafamadriz/friendly-snippets")
-    require("ak.config.coding.mini_snippets")
-  end
+  add("rafamadriz/friendly-snippets")
+  require("ak.config.coding.mini_snippets")
 
   if Util.cmp == "nvim-cmp" then
     nvim_cmp()

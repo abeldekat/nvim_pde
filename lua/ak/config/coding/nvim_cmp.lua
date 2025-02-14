@@ -2,8 +2,8 @@
 --          │                   Also see: lsp                         │
 --          ╰─────────────────────────────────────────────────────────╯
 
-local snip_engine = require("ak.util").snippets
 local snippets_standalone = require("ak.util").snippets_standalone
+local snip_engine = "mini" -- nil
 local cmp = require("cmp")
 local cmp_config = require("cmp.config")
 
@@ -25,7 +25,7 @@ local mapping_override = { -- Does not map "tab"...
   -- Cmp assigns: ctrl-y and ctrl-e.
   ["<C-j>"] = cmp.mapping.confirm({ select = true }), -- like c-y, easier to type
 }
-if snip_engine == "none" then
+if not snip_engine then
   local next = function()
     if vim.snippet.active({ direction = 1 }) then vim.snippet.jump(1) end
   end
@@ -56,7 +56,7 @@ local snippet = {
     cmp_config.set_onetime({ sources = {} })
   end,
 }
-if snip_engine == "none" then
+if not snip_engine then
   snippet["expand"] = nil -- cmp defaults to native snippets
 end
 
