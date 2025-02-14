@@ -20,7 +20,7 @@ return {
   colors_solarized8 = "cddfb6e61f4c92f22b1ddce7d60e32688d700ed8",
   colors_sonokai = "59c0778ee93f52d8895e8947e123b6acf1744d07",
   colors_tokyonight = "84ea0b5f4651afdf50ececaf6f110fe9d9dc9458",
-  ["conform.nvim"] = "a68240af6c402577bd534857b7151956f38fbc0e",
+  ["conform.nvim"] = "8ed162b0637d4c4f69ebe3e8e49b35662a82e137",
   ["crates.nvim"] = "1d92a7f449a2a76d8f4c3459bd98f450e76d2ea3",
   ["dial.nvim"] = "34bbd9c387c358190e61ce71017faad3dffa7a74",
   ["fidget.nvim"] = "d9ba6b7bfe29b3119a610892af67602641da778e",
@@ -31,7 +31,7 @@ return {
   ["mason-lspconfig.nvim"] = "805c31ec6bfb557975143712ecff6956d3227141",
   ["mason-nvim-dap.nvim"] = "26ea08fd5c7028ea54a3347ac139fc916baf1aa9",
   ["mason.nvim"] = "e2f7f9044ec30067bc11800a9e266664b88cda22",
-  ["mini.nvim"] = "b9440aed49221f0dbcaf481937b73a61f9ef32bf",
+  ["mini.nvim"] = "1bd64e3ce49964cdfa9ee0e84c56f42d53b89052",
   neogen = "d633d2ef572479792f6a09665fe5e897ed49f85c",
   neotest = "d66cf4e05a116957f0d3a7755a24291c7d1e1f72",
   ["nvim-bqf"] = "ebb6d2689e4427452180f17c53f29f7e460236f1",
@@ -40,11 +40,11 @@ return {
   ["nvim-dap-ui"] = "bc81f8d3440aede116f821114547a476b082b319",
   ["nvim-dap-virtual-text"] = "df66808cd78b5a97576bbaeee95ed5ca385a9750",
   ["nvim-lint"] = "6e9dd545a1af204c4022a8fcd99727ea41ffdcc8",
-  ["nvim-lspconfig"] = "6c17f8656f667727b27f5f598463afedb7791b18",
+  ["nvim-lspconfig"] = "31226f6736a8150e323b346e4748e3c9bdd6bef5",
   ["nvim-nio"] = "21f5324bfac14e22ba26553caf69ec76ae8a7662",
   ["nvim-pqf"] = "148ee2ca8b06d83fd9bf6f9b9497724ad39a07d6",
   ["nvim-spectre"] = "ddd7383e856a7c939cb4f5143278fe041bbb8cb9",
-  ["nvim-treesitter"] = "e411cf2c8adea87acda6c3d634a375addbfff88e",
+  ["nvim-treesitter"] = "80e6de9d24eec68d82d5f4e6feae94c9c753ebd6",
   ["nvim-treesitter-context"] = "03f382ef224c27a8508cdab2d0b463dcb8ca12a6",
   ["nvim-treesitter-textobjects"] = "ad8f0a472148c3e0ae9851e26a722ee4e29b1595",
   ["nvim-ts-autotag"] = "1cca23c9da708047922d3895a71032bc0449c52d",
@@ -57,5 +57,5 @@ return {
   ["vim-hardtime"] = "91177392e9372a1cf09a4b9b79532d2490bd405f",
   ["vim-slime"] = "9bc2e13f8441b09fd7352a11629a4da0ea4cb058",
   ["vim-startuptime"] = "9aaa3c0880e63a8934ba58a430c6139225bba238",
-  vimtex = "dfaf26c2cafddf61963ebeff28437352002691ac"
+  vimtex = "10c6c1672919db9d0687e5cb74d613dc811b1684"
 }
