@@ -64,7 +64,9 @@ function H.keys(_, buffer) -- client
   map("gD", vim.lsp.buf.declaration, { desc = "Goto declaration" })
   map("gr", Picker.lsp_references, { desc = "References", nowait = true })
   map("gI", Picker.lsp_implementations, { desc = "Goto implementation" })
-  map("gy", Picker.lsp_type_definitions, { desc = "Goto type definition" })
+  --
+  -- Used to be gy. gy can also be used to copy to clipboard
+  map("gY", Picker.lsp_type_definitions, { desc = "Goto type definition" })
   --   map("K", function() vim.lsp.buf.hover() end, { desc = "Hover" }) -- builtin, see lsp-defaults
   map("gK", function() vim.lsp.buf.signature_help() end, { desc = "Signature help" })
   --

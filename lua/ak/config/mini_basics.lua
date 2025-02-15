@@ -1,8 +1,5 @@
 -- The module has "\" mappings for toggling options like vim-unimpaired,
 --
--- TODO: Interesting mapping  copy/paste with system clipboard! gy gp
--- TODO: gy: Now used by lsp type definition.
--- Also:
 -- TODO: Mappings: Reselect latest changed, put, or yanked text: gV
 --
 -- Mappings: go and gO: add empty line before or after:
@@ -24,6 +21,7 @@ local config = {
 
   mappings = {
     -- Basic mappings (better 'jk', save with Ctrl+S, ...)
+    -- copy/paste with system clipboard! gy gp
     basic = true, -- especially: go and gO
     -- Prefix for mappings that toggle common options ('wrap', 'spell', ...).
     option_toggle_prefix = "", -- [[\]],  disable... See keymaps leader u

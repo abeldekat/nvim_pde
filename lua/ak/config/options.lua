@@ -1,7 +1,9 @@
 local o = vim.o
-vim.schedule(function() -- includes system call responsible for 40% startuptime!
-  o.clipboard = vim.env.SSH_TTY and "" or "unnamedplus" -- Sync with system clipboard
-end)
+
+-- TESTING: mini.basics: gy and gp mappings
+-- vim.schedule(function() -- includes system call responsible for 40% startuptime!
+--   o.clipboard = vim.env.SSH_TTY and "" or "unnamedplus" -- Sync with system clipboard
+-- end)
 
 -- Leader key =================================================================
 vim.g.mapleader = " "
