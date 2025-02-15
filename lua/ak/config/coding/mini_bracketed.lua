@@ -1,30 +1,20 @@
 local bracketed = require("mini.bracketed")
 
-local config = {
-  -- First-level elements are tables describing behavior of a target:
-  --
-  -- - <suffix> - single character suffix. Used after `[` / `]` in mappings.
-  --   For example, with `b` creates `[B`, `[b`, `]b`, `]B` mappings.
-  --   Supply empty string `''` to not create mappings.
-  --
-  -- - <options> - table overriding target options.
-  --
-  -- See `:h MiniBracketed.config` for more info.
-
+local config = { --   ... Supply empty string `''` to not create mappings. ...
   -- buffer = { suffix = "b", options = {} },
   -- comment = { suffix = "c", options = {} },
-  -- conflict = { suffix = "x", options = {} },
+  -- conflict = { suffix = "x", options = {} }, -- see notes in :h!
   -- diagnostic = { suffix = "d", options = {} },
   -- file = { suffix = "f", options = {} },
-  -- indent = { suffix = "i", options = {} },
-  -- jump = { suffix = "j", options = {} },
+  indent = { suffix = "" }, -- favor mappings of mini.indentscope...
+  jump = { suffix = "" }, -- not needing jump brackets...
+  oldfile = { suffix = "" }, -- favor picker...
   -- location = { suffix = "l", options = {} },
-  -- oldfile = { suffix = "o", options = {} },
   -- quickfix = { suffix = "q", options = {} },
   -- treesitter = { suffix = "t", options = {} },
-  -- undo = { suffix = "u", options = {} },
+  undo = { suffix = "" }, -- not doing much with undo...
   -- window = { suffix = "w", options = {} },
-  -- yank = { suffix = "y", options = {} },
+  yank = { suffix = "" }, -- not needing yank brackets...
 }
 bracketed.setup(config)
 
