@@ -1,8 +1,6 @@
--- TODO: Rename file. See LSP utilities from LazyVim and MiniFilesActionRename.
--- Discussions/563. Issue 747
-
 -- Visits_harpooned: to add a visit to directory , use <leader>a inside mini.files
--- Auto bookmark: discussions/1197
+-- Discussions/563. Issue 747. Rename file
+-- Discussions/1197. Auto bookmakr
 
 local H = {}
 local setup = function()
@@ -55,6 +53,32 @@ H.create_autocommmands = function()
       })
     end
   end)
+
+  -- TODO: 11 warnings!
+  -- HACK: Notify LSPs that a file got renamed.
+  -- MariaSolos borrowed this from snacks.nvim.
+  -- au("MiniFilesActionRename", function(args)
+  --   local changes = {
+  --     files = {
+  --       {
+  --         oldUri = vim.uri_from_fname(args.data.from),
+  --         newUri = vim.uri_from_fname(args.data.to),
+  --       },
+  --     },
+  --   }
+  --   local will_rename_method, did_rename_method =
+  --     vim.lsp.protocol.Methods.workspace_willRenameFiles, vim.lsp.protocol.Methods.workspace_didRenameFiles
+  --   local clients = vim.lsp.get_clients()
+  --   for _, client in ipairs(clients) do
+  --     if client:supports_method(will_rename_method) then
+  --       local res = client:request_sync(will_rename_method, changes, 1000, 0)
+  --       if res and res.result then vim.lsp.util.apply_workspace_edit(res.result, client.offset_encoding) end
+  --     end
+  --   end
+  --   for _, client in ipairs(clients) do
+  --     if client:supports_method(did_rename_method) then client:notify(did_rename_method, changes) end
+  --   end
+  -- end)
 end
 
 H.show_dotfiles = false
@@ -84,12 +108,14 @@ end
 H.set_cwd = function() -- set focused directory as current working directory
   local path = (MiniFiles.get_fs_entry() or {}).path
   if path == nil then return vim.notify("Cursor is not on valid entry") end
+
   vim.fn.chdir(vim.fs.dirname(path))
 end
 
 H.yank_path = function() -- yank in register full path of entry under cursor
   local path = (MiniFiles.get_fs_entry() or {}).path
   if path == nil then return vim.notify("Cursor is not on valid entry") end
+
   vim.fn.setreg(vim.v.register, path)
 end
 

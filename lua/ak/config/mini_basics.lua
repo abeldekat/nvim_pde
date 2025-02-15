@@ -1,7 +1,5 @@
 -- The module has "\" mappings for toggling options like vim-unimpaired,
 --
--- TODO: Mappings: Reselect latest changed, put, or yanked text: gV
---
 -- Mappings: go and gO: add empty line before or after:
 -- gO:
 -- gO			Show a filetype-specific, navigable "outline" of the
@@ -21,7 +19,7 @@ local config = {
 
   mappings = {
     -- Basic mappings (better 'jk', save with Ctrl+S, ...)
-    -- copy/paste with system clipboard! gy gp
+    -- Also copy/paste with system clipboard, gy gp
     basic = true, -- especially: go and gO
     -- Prefix for mappings that toggle common options ('wrap', 'spell', ...).
     option_toggle_prefix = "", -- [[\]],  disable... See keymaps leader u
@@ -50,6 +48,10 @@ basics.setup(config)
 -- Search inside visually highlighted text. Use `silent = false` for it to
 -- make effect immediately.
 vim.keymap.del("x", "g/")
+--
+-- Mappings.basic:
+-- Reselect latest changed, put, or yanked text
+vim.keymap.del("n", "gV") -- Not working?
 --
 -- Mappings.basic:
 -- Alternative way to save and exit in Normal mode.
