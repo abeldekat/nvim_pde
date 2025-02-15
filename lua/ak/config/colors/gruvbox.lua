@@ -1,3 +1,7 @@
+-- Not actively used...
+-- Last commit downloaded: 089b60e92aa0a1c6fa76ff527837cd35b6f5ac81
+-- Add to colors.txt: gruvbox
+
 local Utils = require("ak.util")
 
 local prefer_light = require("ak.color").prefer_light
@@ -12,6 +16,7 @@ Utils.color.add_toggle("gruvbox", {
   },
   toggle = function(flavour)
     vim.o.background = flavour[1]
+    ---@diagnostic disable-next-line: missing-fields
     require("gruvbox").setup({ contrast = flavour[2] })
     vim.cmd.colorscheme("gruvbox")
   end,

@@ -10,14 +10,10 @@ local colors = {
     return {
       { source = "catppuccin/nvim", name = "colors_catppuccin" },
       { source = "EdenEast/nightfox.nvim", name = "colors_nightfox" },
-      { source = "rose-pine/neovim", name = "colors_rose-pine" },
+      { source = "folke/tokyonight.nvim", name = "colors_tokyonight" },
       { source = "ribru17/bamboo.nvim", name = "colors_bamboo" },
       { source = "savq/melange-nvim", name = "colors_melange" },
-    }
-  end,
-
-  two = function()
-    return {
+      { source = "rebelot/kanagawa.nvim", name = "colors_kanagawa" },
       { source = "sainnhe/sonokai", name = "colors_sonokai" },
       { source = "sainnhe/everforest", name = "colors_everforest" },
       { source = "sainnhe/gruvbox-material", name = "colors_gruvbox-material" },
@@ -25,23 +21,23 @@ local colors = {
     }
   end,
 
-  three = function()
+  two = function()
     return {
-      { source = "rebelot/kanagawa.nvim", name = "colors_kanagawa" },
-      { source = "ellisonleao/gruvbox.nvim", name = "colors_gruvbox" },
-      { source = "navarasu/onedark.nvim", name = "colors_onedark" },
-      { source = "Shatur/neovim-ayu", name = "colors_ayu" },
+      --
     }
   end,
 
-  four = function()
-    return {
-      { source = "folke/tokyonight.nvim", name = "colors_tokyonight" },
-      { source = "craftzdog/solarized-osaka.nvim", name = "colors_solarized-osaka" },
-      { source = "lifepillar/vim-solarized8", name = "colors_solarized8", checkout = "neovim" },
-      { source = "ronisbr/nano-theme.nvim", name = "colors_nano-theme" },
-    }
-  end,
+  -- three = function()
+  --   return {
+  --     { source = "navarasu/onedark.nvim", name = "colors_onedark" },
+  --     { source = "rose-pine/neovim", name = "colors_rose-pine" },
+  --     { source = "Shatur/neovim-ayu", name = "colors_ayu" },
+  --     { source = "craftzdog/solarized-osaka.nvim", name = "colors_solarized-osaka" },
+  --     { source = "ellisonleao/gruvbox.nvim", name = "colors_gruvbox" },
+  --     { source = "lifepillar/vim-solarized8", name = "colors_solarized8", checkout = "neovim" },
+  --     { source = "ronisbr/nano-theme.nvim", name = "colors_nano-theme" },
+  --   }
+  -- end,
 }
 
 local function filter_specs_to_use(groups)
@@ -85,8 +81,6 @@ local color_info = Util.color.from_color_name(color_name)
 local specs = filter_specs_to_use({ -- key: spec_name, value: spec
   colors.one,
   colors.two,
-  colors.three,
-  colors.four,
 })
 
 now(function()

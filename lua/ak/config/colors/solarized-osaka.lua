@@ -1,3 +1,7 @@
+-- Not actively used...
+-- Last commit downloaded: d775b4bbb02790068fa3034ab4734fc7c09728ff
+-- Add to colors.txt: solarized-osaka
+
 local Utils = require("ak.util")
 local prefer_light = require("ak.color").prefer_light
 

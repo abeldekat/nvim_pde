@@ -1,3 +1,7 @@
+-- Not actively used...
+-- Last commit downloaded: 0b1158c4911f4bd9d5a1e2e7669ebff893435b64
+-- Add to colors.txt: nano-theme
+
 --          ╭─────────────────────────────────────────────────────────╮
 --          │             mini.statusline: not supported              │
 --          ╰─────────────────────────────────────────────────────────╯

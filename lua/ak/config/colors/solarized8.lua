@@ -1,3 +1,7 @@
+-- Not actively used...
+-- Last commit downloaded: cddfb6e61f4c92f22b1ddce7d60e32688d700ed8
+-- Add to colors.txt: solarized8_flat
+
 --          ╭─────────────────────────────────────────────────────────╮
 --          │             mini.statusline: not supported              │
 --          ╰─────────────────────────────────────────────────────────╯

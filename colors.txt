@@ -1,5 +1,4 @@
 akhue
-ayu
 bamboo
 carbonfox
 catppuccin
@@ -8,21 +7,15 @@ dayfox
 duskfox
 edge
 everforest
-gruvbox
 gruvbox-material
 kanagawa
 melange
 minibuddy
 minicyan
 minischeme
-nano-theme
 nightfox
 nordfox
-onedark
 randomhue
-rose-pine
-solarized-osaka
-solarized8_flat
 sonokai
 terafox
 tokyonight

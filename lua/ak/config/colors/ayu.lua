@@ -1,6 +1,7 @@
---          ╭─────────────────────────────────────────────────────────╮
---          │             mini.statusline: not supported              │
---          ╰─────────────────────────────────────────────────────────╯
+-- Not actively used...
+-- Last commit downloaded: 283badaa983234c90e857c12c1f1c18e1544360a
+-- Add to colors.txt: ayu
+
 local Utils = require("ak.util")
 local prefer_light = require("ak.color").prefer_light
 vim.o.background = prefer_light and "light" or "dark"

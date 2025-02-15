@@ -99,11 +99,6 @@ map("n", "<leader>ur", ur.cmd, { desc = ur.desc })
 map("n", "<leader>uT", toggle_ts_hl, { desc = "Toggle treesitter highlight" })
 map("n", "<leader>uw", function() Util.toggle("wrap") end, { desc = "Toggle word wrap" })
 
--- TODO: Undo break-points
-map("i", ",", ",<c-g>u")
-map("i", ".", ".<c-g>u")
-map("i", ";", ";<c-g>u")
-
 -- Up/down:
 map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
 map({ "n", "x" }, "<Down>", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
