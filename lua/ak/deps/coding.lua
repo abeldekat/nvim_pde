@@ -63,6 +63,7 @@ later(function()
 
   require("ak.config.coding.mini_align") -- using a selection...
   require("ak.config.coding.mini_basics") -- using a selection...
+  require("ak.config.coding.mini_bracketed")
   -- require("ak.config.coding.mini_comment") -- now builtin
   require("ak.config.coding.mini_move")
   require("ak.config.coding.mini_operators")

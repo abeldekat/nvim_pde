@@ -153,11 +153,11 @@ used to accept completions. I changed the key to `<c-k>`.
 
 Many of the excellent modules included in [mini.nvim] are used in this config:
 
-`ai`, `align`, `animate`, `base16`, `clue`, `cursorword`,
-`deps`, `diff`, `files`, `git`, `hipatterns`, `hue`,
-`icons`, `indentscope`, `move`, `notify`, `operators`, `pairs`,
-`pick`, `snippets`, `splitjoin`, `starter`, `statusline`, `surround`,
-`visits`
+`ai`, `align`, `animate`, `base16`, `bracketed`, `clue`,
+`cursorword`, `deps`, `diff`, `extra`, `git`, `files`,
+`hipatterns`, `hue`, `icons`, `indentscope`, `misc`, `move`,
+`notify`, `operators`, `pairs`, `pick`, `snippets`, `splitjoin`,
+`starter`, `statusline`, `surround`, `visits`
 
 Relevant discussions:
 
