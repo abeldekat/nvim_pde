@@ -58,15 +58,16 @@ map("n", "<leader><tab>]", "<cmd>tabnext<cr>", { desc = "Next tab" })
 map("n", "<leader><tab>d", "<cmd>tabclose<cr>", { desc = "Close tab" })
 map("n", "<leader><tab>[", "<cmd>tabprevious<cr>", { desc = "Previous tab" })
 map("n", "<leader><tab>o", "<cmd>tabonly<cr>", { desc = "Close Other Tabs" })
+map("n", "<leader><tab>s", "<cmd>tabs<cr>", { desc = "Show tabs" })
 map("n", "<leader>1", "1gt", { desc = "Tab 1" })
 map("n", "<leader>2", "2gt", { desc = "Tab 2" })
 map("n", "<leader>3", "3gt", { desc = "Tab 3" })
-map("n", "<leader><tab>s", "<cmd>tabs<cr>", { desc = "Show tabs" })
 
 -- Terminal mappings: esc is slow when using vi-mode in the terminal:
 map("t", "<c-j>", "<c-\\><c-n>", { desc = "Enter normal mode" })
 
--- Toggle options, UI:
+-- Toggle options:
+-- Not used but possible: mini.basics, option_toggle_prefix...
 local conceallevel = vim.o.conceallevel > 0 and vim.o.conceallevel or 3
 local toggle_conceal = function() Util.toggle("conceallevel", false, { 0, conceallevel }) end
 local toggle_foldlevel = function()
@@ -100,10 +101,6 @@ map("n", "<leader>uT", toggle_ts_hl, { desc = "Toggle treesitter highlight" })
 map("n", "<leader>uw", function() Util.toggle("wrap") end, { desc = "Toggle word wrap" })
 
 -- Up/down:
-map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
-map({ "n", "x" }, "<Down>", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
-map({ "n", "x" }, "k", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
-map({ "n", "x" }, "<Up>", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 -- Down half page combining left and right hand:
 -- c-n can behave like j and enter, also sometimes "next":
 map("n", "<C-N>", "<C-d>", { desc = "Down half page" })
@@ -115,15 +112,3 @@ map("n", "<leader>|", "<C-W>v", { desc = "Win split right", remap = true })
 -- Window navigation combining right and left hand:
 map("n", "me", "<C-W>p", { desc = "Last accessed win", remap = true })
 map("n", "mw", "<C-W>w", { desc = "Next win", remap = true })
-
--- Window resize (respecting `v:count`) -> mini.basics:
--- stylua: ignore start
-map('n', '<C-Left>', '"<Cmd>vertical resize -" . v:count1 . "<CR>"',
-  { expr = true, replace_keycodes = false, desc = 'Decrease window width' })
-map('n', '<C-Down>', '"<Cmd>resize -"          . v:count1 . "<CR>"',
-  { expr = true, replace_keycodes = false, desc = 'Decrease window height' })
-map('n', '<C-Up>', '"<Cmd>resize +"          . v:count1 . "<CR>"',
-  { expr = true, replace_keycodes = false, desc = 'Increase window height' })
-map('n', '<C-Right>', '"<Cmd>vertical resize +" . v:count1 . "<CR>"',
-  { expr = true, replace_keycodes = false, desc = 'Increase window width' })
--- stylua: ignore end

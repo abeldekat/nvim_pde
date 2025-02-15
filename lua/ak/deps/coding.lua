@@ -1,6 +1,6 @@
 local Util = require("ak.util")
 local MiniDeps = require("mini.deps")
-local add, later = MiniDeps.add, MiniDeps.later -- local now = MiniDeps.now
+local add, later = MiniDeps.add, MiniDeps.later
 
 -- Change the default values here for use in ak.config:
 Util.use_mini_ai = true
@@ -61,8 +61,7 @@ later(function()
 
   if Util.use_mini_ai then require("ak.config.coding.mini_ai") end
 
-  require("ak.config.coding.mini_align") -- using a selection...
-  require("ak.config.coding.mini_basics") -- using a selection...
+  require("ak.config.coding.mini_align")
   require("ak.config.coding.mini_bracketed")
   -- require("ak.config.coding.mini_comment") -- now builtin
   require("ak.config.coding.mini_move")
