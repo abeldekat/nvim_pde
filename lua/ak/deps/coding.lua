@@ -36,7 +36,7 @@ local function nvim_cmp()
     "hrsh7th/cmp-buffer",
     "hrsh7th/cmp-path",
   }
-  if Util.snippets_standalone then table.insert(cmp_depends, "abeldekat/cmp-mini-snippets") end
+  if not Util.snippets_standalone then table.insert(cmp_depends, "abeldekat/cmp-mini-snippets") end
 
   add({ source = "hrsh7th/nvim-cmp", depends = cmp_depends })
   require("ak.config.coding.nvim_cmp")
