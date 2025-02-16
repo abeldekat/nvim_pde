@@ -28,18 +28,14 @@ local keymap = {
   ["<C-j>"] = { "select_and_accept" }, -- like default c-y
   ["<c-k>"] = {}, -- in use by mini.snippets { 'show_signature', 'hide_signature', 'fallback' }
 }
-local signature = { enabled = true } -- false by default
+local signature = { enabled = false } -- false by default
 if signature.enabled then keymap["<c-s>"] = { "show_signature", "hide_signature", "fallback" } end
 
 local sources = {
   default = { "lsp", "path", "buffer" },
-  cmdline = {
-    -- disable cmdline
-  },
-  term = {
-    -- disable future term
-  },
 }
+local mode_cmdline = { enabled = false }
+local mode_term = { enabled = false }
 
 local snippets = {} -- blink defaults to it's own builtin
 if snip_engine == "mini" and snippets_standalone then
@@ -53,7 +49,7 @@ if snip_engine == "mini" and snippets_standalone then
     jump = function(direction) MiniSnippets.session.jump(direction == -1 and "prev" or "next") end,
   }
 else
-  table.insert(sources.default, 2, "snippets")
+  table.insert(sources.default, 3, "snippets")
   if snip_engine == "mini" then snippets = { preset = "mini_snippets" } end
 end
 
@@ -63,5 +59,7 @@ local opts = {
   signature = signature,
   snippets = snippets,
   sources = sources,
+  cmdline = mode_cmdline,
+  term = mode_term,
 }
 blink.setup(opts)

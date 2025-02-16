@@ -22,9 +22,9 @@ local function blink_cmp()
 
   add({
     source = "saghen/blink.cmp",
-    depends = { "rafamadriz/friendly-snippets" },
-    -- checkout = "v0.11.0",
-    hooks = { post_install = build_blink, post_checkout = build_blink },
+    -- depends = { "rafamadriz/friendly-snippets" },
+    checkout = "v0.12.3",
+    -- hooks = { post_install = build_blink, post_checkout = build_blink },
   })
   require("ak.config.coding.blink_cmp")
 end
