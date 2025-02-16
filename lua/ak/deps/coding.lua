@@ -4,7 +4,7 @@ local add, later = MiniDeps.add, MiniDeps.later
 
 -- Change the default values here for use in ak.config:
 Util.use_mini_ai = true
-Util.snippets_standalone = false
+Util.snippets_standalone = true
 -- Util.cmp = "blink"
 Util.cmp = "nvim-cmp"
 

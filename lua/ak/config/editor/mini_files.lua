@@ -1,13 +1,17 @@
 -- Visits_harpooned: to add a visit to directory , use <leader>a inside mini.files
 -- Discussions/563. Issue 747. Rename file
--- Discussions/1197. Auto bookmakr
+-- Discussions/1197. Auto bookmarks
 
 local H = {}
 local setup = function()
   local config = {
     content = { filter = H.filter_hide }, -- no dotfiles by default
     mappings = { go_in = "L", go_in_plus = "l" }, -- close explorer after opening file with `l`
-    windows = { preview = true },
+
+    -- More like oil: By default, don't add more windows
+    -- Easier for the eyes.
+    -- windows = { max_number = H.max_nr_of_windows, preview = true },
+    windows = { max_number = H.max_windows },
   }
   local minifiles = require("mini.files")
   minifiles.setup(config)
@@ -35,10 +39,12 @@ H.create_autocommmands = function()
 
   au("MiniFilesBufferCreate", function(args) -- toggle hidden files, map splits
     local b = args.data.buf_id
+    vim.keymap.set("n", "<leader>a", H.toggle_path, { buffer = b, desc = "Visits toggle path" })
+
     vim.keymap.set("n", "g.", H.toggle_dotfiles, { buffer = b })
     vim.keymap.set("n", "g~", H.set_cwd, { buffer = b, desc = "Set cwd" })
+    vim.keymap.set("n", "gm", H.toggle_max_windows, { buffer = b, desc = "Toggle max windows" })
     vim.keymap.set("n", "gy", H.yank_path, { buffer = b, desc = "Yank path" })
-    vim.keymap.set("n", "<leader>a", H.toggle_path, { buffer = b, desc = "Visits toggle path" })
     H.map_split(b, "<C-s>", "belowright horizontal")
     H.map_split(b, "<C-v>", "belowright vertical")
   end)
@@ -125,5 +131,16 @@ H.toggle_path = function()
 
   VisitsHarpooned.toggle(vim.fs.dirname(path))
 end
+
+H.toggle_max_windows = function()
+  H.max_windows = H.max_windows == 1 and math.huge or 1
+  local opts = {
+    windows = { max_number = H.max_windows },
+  }
+  if opts.windows.max_number > 1 then opts.windows.preview = true end
+  MiniFiles.refresh(opts)
+end
+
+H.max_windows = 1
 
 setup()
