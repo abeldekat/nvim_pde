@@ -1,15 +1,9 @@
 ---@diagnostic disable: duplicate-set-field
 
--- If patch_active == true when staring Neovim then:
+-- If patch_active == true when starting Neovim then:
 -- Each workspace has the initial settings + completions for current buffer
 -- 1. Completions can be added on the fly for subsequent buffers
 -- 2. Or: Deactive the patch. Some buffers might not be attached to Lazydev. See 1.
-
--- Measurements with this config, Neovim in one tmux pane:
--- no arguments: +/- 20M ( 453 -> 470 )
--- init.lua(no plugin requirements): +/- 210M ( 463 -> 675)
--- lua/ak/config/editor/telescope(large plugin): +/- 320M ( 465 -> 780 )
--- open all files in ak/config: +- 1400M (480 -> 1.900). Lsp processes +/- 2400 files...
 
 -- Prevent lazydev from attaching to other buffers in the same workspace.
 -- A workspace is guaranteed to be initialized

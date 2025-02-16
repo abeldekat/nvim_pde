@@ -9,6 +9,24 @@
 -- :[range]go[to] [count]					*:go* *:goto* *go*
 -- [count]go		Go to [count] byte in the buffer.
 
+local function remove_mappings_basic()
+  -- map("n", "gp", '"+p', { desc = "Paste from system clipboard" })
+  -- -- - Paste in Visual with `P` to not copy selected text (`:h v_P`)
+  -- map("x", "gp", '"+P', { desc = "Paste from system clipboard" })
+  vim.keymap.del({ "n", "x" }, "gp") -- Use terminal: shift-ctrl-v
+
+  -- Reselect latest changed, put, or yanked text
+  vim.keymap.del("n", "gV") -- Not working?
+
+  -- Search inside visually highlighted text. Use `silent = false` for it to
+  -- make effect immediately.
+  vim.keymap.del("x", "g/")
+  --
+  -- Alternative way to save and exit in Normal mode.
+  -- Adding `redraw` helps with `cmdheight=0` if buffer is not modified
+  vim.keymap.del({ "n", "x", "i" }, "<C-S>")
+end
+
 local basics = require("mini.basics")
 local config = {
 
@@ -41,22 +59,6 @@ local config = {
 }
 
 basics.setup(config)
-
 -- vim.keymap.del for mappings you don't want...
---
--- Mappings.basic:
--- Search inside visually highlighted text. Use `silent = false` for it to
--- make effect immediately.
-vim.keymap.del("x", "g/")
---
--- Mappings.basic:
--- Reselect latest changed, put, or yanked text
-vim.keymap.del("n", "gV") -- Not working?
---
--- Mappings.basic:
--- Alternative way to save and exit in Normal mode.
--- Adding `redraw` helps with `cmdheight=0` if buffer is not modified
-vim.keymap.del({ "n", "x", "i" }, "<C-S>")
---
--- Mappings.windows:
--- ctrl-hjkl will be overridden in ak.config.editor.mini_visits
+remove_mappings_basic()
+-- Mappings.windows, ctrl-hjkl will be overridden in ak.config.editor.mini_visits
