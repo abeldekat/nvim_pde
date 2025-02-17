@@ -117,6 +117,7 @@ function H.lua_ls()
             "MiniVisits",
             "MiniPick",
             "MiniSnippets",
+            "MiniFiles",
           },
         },
         doc = { privateName = { "^_" } },

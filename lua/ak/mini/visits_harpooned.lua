@@ -50,22 +50,21 @@ VisitsHarpooned.config = {
     selects = { "ma", "ms", "md", "mf" }, -- { "<c-j>", "<c-k>", "<c-l>", "<c-h>" }
   },
   picker_hints_on_change_active_label = { "a", "s", "d", "f" }, -- predictable picker hints
-  full_path_of_current_buffer = function() return vim.fn.expand("%:p") end,
 }
 
 VisitsHarpooned.get_start_label = function() return H.get_config().start_label end
 
 VisitsHarpooned.list_paths = function(label) return Api.list_paths(label) end
 
-VisitsHarpooned.full_path_of_current_buffer = function() return H.get_config().full_path_of_current_buffer() end
+VisitsHarpooned.full_path_of_current_buffer = function()
+  local ft = vim.bo.ft
+  if ft and ft == "minifiles" then
+    local curpath = vim.fs.dirname((MiniFiles.get_fs_entry() or {}).path)
+    if curpath == nil then return vim.notify("Cursor is not on valid entry") end
 
-VisitsHarpooned.toggle = function(full_path)
-  full_path = full_path or VisitsHarpooned.full_path_of_current_buffer()
-  if vim.list_contains(Api.list_paths(H.current_label), full_path) then
-    H.remove(H.current_label, full_path)
-  else
-    H.add(H.current_label, full_path)
+    return curpath
   end
+  return vim.fn.expand("%:p")
 end
 
 -- Helper ================================================================
@@ -100,7 +99,6 @@ H.setup_config = function(config)
     global_label = { config.global_label, "string" },
     mappings = { config.mappings, "table" },
     picker_hints_on_change_active_label = { config.mappings, "table" },
-    full_path_of_current_buffer = { config.full_path_of_current_buffer, "function" },
   })
   vim.validate({
     labels = { #config.labels, function(val) return val > 0 end, "at least 1 label" },
@@ -135,7 +133,7 @@ H.apply_config = function(config)
   -- -- Apply mappings
   H.map("n", keys.ui_all, function() H.pick_visits_by_labels(config.labels) end, { desc = "Visits pick all" })
   H.map("n", keys.ui, function() H.pick_visits_by_labels({ H.current_label }) end, { desc = "Visits pick active" })
-  H.map("n", keys.toggle, VisitsHarpooned.toggle, { desc = "Visits toggle" })
+  H.map("n", keys.toggle, H.toggle, { desc = "Visits toggle" })
   H.map("n", keys.change_active_label, H.pick_labels, { desc = "Visits change active label" })
 
   local unc_label = config.uncategorized_label
@@ -148,7 +146,12 @@ H.apply_config = function(config)
   H.map("n", keys.clear, H.clear_visits, { desc = "Visits clear" })
 
   for i = 1, #keys.selects do
-    H.map("n", keys.selects[i], function() Api.iterate(H.current_label, i) end, { desc = "Visit " .. i })
+    H.map("n", keys.selects[i], function()
+      local ft = vim.bo.ft
+      if ft and ft == "minifiles" then MiniFiles.close() end
+
+      Api.iterate(H.current_label, i)
+    end, { desc = "Visit " .. i })
   end
 end
 
@@ -160,15 +163,21 @@ H.get_config = function()
 end
 
 H.create_autocommands = function()
-  local augroup = vim.api.nvim_create_augroup("visits_harpooned_close_with_q", { clear = true })
-  vim.api.nvim_create_autocmd("FileType", {
-    group = augroup,
-    pattern = { H.maintain_ft },
-    callback = function(event)
-      vim.bo[event.buf].buflisted = false
-      vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true })
-    end,
-  })
+  local augroup = vim.api.nvim_create_augroup("VisitsHarpooned", { clear = true })
+  local au = function(event, pattern, callback, desc)
+    vim.api.nvim_create_autocmd(event, { group = augroup, pattern = pattern, callback = callback, desc = desc })
+  end
+
+  au("FileType", H.maintain_ft, function(event)
+    vim.bo[event.buf].buflisted = false
+    vim.keymap.set("n", "q", "<cmd>close<cr>", { buffer = event.buf, silent = true })
+  end)
+
+  au("User", "MiniFilesExplorerClose", function(ev) -- No BufEnter on close
+    vim.schedule(
+      function() vim.api.nvim_exec_autocmds("User", { pattern = "VisitsHarpoonedModified", modeline = false }) end
+    )
+  end)
 end
 
 H.map = function(mode, lhs, rhs, opts)
@@ -178,7 +187,7 @@ H.map = function(mode, lhs, rhs, opts)
 end
 
 -- Copied from mini.visits
-H.is_windows = vim.loop.os_uname().sysname == "Windows_NT"
+H.is_windows = vim.uv.os_uname().sysname == "Windows_NT"
 
 -- Copied from mini.visits
 H.full_path = function(path) return (vim.fn.fnamemodify(path, ":p"):gsub("/+", "/"):gsub("(.)/$", "%1")) end
@@ -215,6 +224,15 @@ H.add = function(label, full_path)
   Api.register_visit(full_path) -- must update "latest" field
   Api.add_label(label, full_path)
   Api.on_change(label)
+end
+
+H.toggle = function()
+  local full_path = VisitsHarpooned.full_path_of_current_buffer()
+  if vim.list_contains(Api.list_paths(H.current_label), full_path) then
+    H.remove(H.current_label, full_path)
+  else
+    H.add(H.current_label, full_path)
+  end
 end
 
 H.change_active_label = function(from_label, to_label)

@@ -76,10 +76,10 @@ H.create_autocommands = function()
     vim.api.nvim_create_autocmd(event, { group = augroup, pattern = pattern, callback = callback, desc = desc })
   end
 
-  au("BufEnter", "*", H.produce_and_cb)
-  au("User", "VisitsHarpoonedModified", H.produce_and_cb)
-  au("User", "VisitsHarpoonedChangedActiveLabel", function(event)
-    H.current_label = event.data
+  au("BufEnter", "*", function(ev) H.produce_and_cb() end)
+  au("User", "VisitsHarpoonedModified", function(ev) H.produce_and_cb() end)
+  au("User", "VisitsHarpoonedChangedActiveLabel", function(ev)
+    H.current_label = ev.data
     H.produce_and_cb()
   end)
 end
@@ -92,13 +92,14 @@ H.produce_item = function(is_active, text, conf)
 end
 
 H.produce = function()
+  local curpath = VisitsHarpooned.full_path_of_current_buffer()
+
   local conf = H.get_config()
   H.is_current_buffer_labeled = false
   local header = string.format("%s %s:", conf.icon, H.current_label)
 
   local visits = VisitsHarpooned.list_paths(H.current_label) or {}
   local nr_of_visits = #visits
-  local curpath = VisitsHarpooned.full_path_of_current_buffer()
   local slot = 0
   local ele = vim.tbl_map(function(visit_path) -- slots and corresponding visits
     slot = slot + 1

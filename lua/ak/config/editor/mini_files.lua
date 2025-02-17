@@ -1,4 +1,3 @@
--- Visits_harpooned: to add a visit to directory , use <leader>a inside mini.files
 -- Discussions/563. Issue 747. Rename file
 -- Discussions/1197. Auto bookmarks
 
@@ -9,8 +8,7 @@ local setup = function()
     mappings = { go_in = "L", go_in_plus = "l" }, -- close explorer after opening file with `l`
 
     -- More like oil: By default, don't add more windows
-    -- Easier for the eyes.
-    -- windows = { max_number = H.max_nr_of_windows, preview = true },
+    -- Easier for the eyes to focus on one single spot.
     windows = { max_number = H.max_windows },
   }
   local minifiles = require("mini.files")
@@ -37,9 +35,9 @@ H.create_autocommmands = function()
     MiniFiles.set_bookmark("w", vim.fn.getcwd, { desc = "Working directory" })
   end)
 
+  -- See also: lua/ak/mini/visits_harpooned
   au("MiniFilesBufferCreate", function(args) -- toggle hidden files, map splits
     local b = args.data.buf_id
-    vim.keymap.set("n", "<leader>a", H.toggle_path, { buffer = b, desc = "Visits toggle path" })
 
     vim.keymap.set("n", "g.", H.toggle_dotfiles, { buffer = b })
     vim.keymap.set("n", "g~", H.set_cwd, { buffer = b, desc = "Set cwd" })
@@ -124,14 +122,6 @@ H.yank_path = function() -- yank in register full path of entry under cursor
   vim.fn.setreg(vim.v.register, path)
 end
 
-H.toggle_path = function()
-  if not VisitsHarpooned then return end
-  local path = (MiniFiles.get_fs_entry() or {}).path
-  if path == nil then return vim.notify("Cursor is not on valid entry") end
-
-  VisitsHarpooned.toggle(vim.fs.dirname(path))
-end
-
 H.toggle_max_windows = function()
   H.max_windows = H.max_windows == 1 and math.huge or 1
   local opts = {
@@ -141,6 +131,6 @@ H.toggle_max_windows = function()
   MiniFiles.refresh(opts)
 end
 
-H.max_windows = 1
+H.max_windows = 1 -- math.huge
 
 setup()
