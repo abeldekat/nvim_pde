@@ -319,7 +319,7 @@ H.maintain = function(label) -- mini.deps, H.update_feedback_confirm, copied and
   local report = {
     string.format("Maintain visits that are labeled with [%s]", label),
     "",
-    string.format("1. Remove lines to remove [%s]", label),
+    string.format("1. Remove lines to remove visits from [%s]", label),
     string.format("2. Reorder lines to define the order of files in [%s]", label),
     "3. Otherwise, use toggle visits(leader a)",
     "",
