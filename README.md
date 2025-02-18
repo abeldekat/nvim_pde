@@ -133,7 +133,8 @@ I prefer "two character hotkeys" as I use some lsp keys quite often(`gd`, `gr`).
 
 Solution: Change operator `gr` into `gs`, mnemonic for "go substitute".
 
-As a consequence, suggested key `gs`("go sort") is changed into `gS`.
+As a consequence, suggested key `gs`("go sort")
+is changed into `gZ`(`gS` is used in leap).
 
 ### surround
 
@@ -143,6 +144,21 @@ The "s" is already used by [leap.nvim].
 Solution: Use the `m` key in combination with `asdf`,
 adjacent keys on a qwerty keyboard.
 Key `ms` is a mnemonic for `surround substitute`, performing a surround replace.
+
+### leap
+
+- `s`: Bidirectional
+- `gS`: Leap from window
+
+Operator pending mode:
+
+- s: Leap forward
+- gs: Leap backward
+
+Extras:
+
+- Remote operations: `gl`("go leap remote") and `r`("remote", in operator pending mode)
+- Incremental treesitter node selection: `S`(like flash.nvim)
 
 ### snippets
 
