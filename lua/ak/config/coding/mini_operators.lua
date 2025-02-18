@@ -14,6 +14,6 @@
 
 local opts = {
   replace = { prefix = "gs" }, --> "go substitute", lsp uses gr for "go references"
-  sort = { prefix = "gZ" }, --> "go [Z]sort", used rarely. Use gS for leap.
+  sort = { prefix = "gS" }, --> "go sort", used rarely.
 }
 require("mini.operators").setup(opts)

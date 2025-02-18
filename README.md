@@ -133,8 +133,7 @@ I prefer "two character hotkeys" as I use some lsp keys quite often(`gd`, `gr`).
 
 Solution: Change operator `gr` into `gs`, mnemonic for "go substitute".
 
-As a consequence, suggested key `gs`("go sort")
-is changed into `gZ`(`gS` is used in leap).
+As a consequence, use `gS` instead of suggested key `gs`("go sort") for sort.
 
 ### surround
 
@@ -148,7 +147,7 @@ Key `ms` is a mnemonic for `surround substitute`, performing a surround replace.
 ### leap
 
 - `s`: Bidirectional
-- `gS`: Leap from window
+- `g/`: Leap from window("leap search")
 
 Operator pending mode:
 

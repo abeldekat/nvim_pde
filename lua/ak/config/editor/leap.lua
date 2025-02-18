@@ -1,4 +1,4 @@
--- Cannot use gs in both normal and visual mode because of mini.operators...
+-- Cannot use gs and gS in both normal and visual mode because of mini.operators...
 -- It is possible to use "gs" in operator pending mode though!
 
 -- Jump2d discussion:
@@ -19,26 +19,25 @@ local nx = { "n", "x" }
 local n = "n"
 local o = "o"
 
--- Normal and visual mode: Bidirectional
+-- Normal and visual mode: Bidirectional:
 vim.keymap.set(nx, "s", "<Plug>(leap)", { desc = "Leap" })
 -- Leap to other windows in normal mode, not used often:
--- Changed from S(now treesitter) to gS
-vim.keymap.set(n, "gS", "<Plug>(leap-from-window)", { desc = "Leap from window" })
+-- Changed from S(now treesitter) to g/. Mnemonic: leap search
+vim.keymap.set(n, "g/", "<Plug>(leap-from-window)", { desc = "Leap from window" })
 
--- Operator pending mode mappings are not bidirectional, per recommendation:
+-- Operator pending mode mappings are not bidirectional per recommendation:
 vim.keymap.set(o, "s", "<Plug>(leap-forward)", { desc = "Leap forward" })
--- Changed form S(now treesitter) to gs
+-- Changed form S(now treesitter) to gs.
 vim.keymap.set(o, "gs", "<Plug>(leap-backward)", { desc = "Leap backward" })
 
 -- Remote:
 -- Examples yanking the paragraph at the position specified by `{leap}`:
 -- `gl{leap}yap`,
--- `vl/{leap}apy`,
--- `yr{leap}ap` -- in operator pending mode, "r"(as used in flash) is shorter than "g/"
+-- `vgl{leap}apy`,
+-- `yr{leap}ap` -- in operator pending mode, "r"(as used in flash) is shorter than "gl"
 --
 -- Example swapping two words:
 -- `diwgl{leap}viwpP`
---
 local function remote() require("leap.remote").action() end
 vim.keymap.set(o, "r", remote, { desc = "Leap remote" })
 -- Changed from gs/gS to gl, mnemonic for "go leap remote"
@@ -57,15 +56,13 @@ vim.api.nvim_create_autocmd("User", {
   end,
 })
 
--- Treesitter incremental selection: Use S instead of ga
+-- Treesitter incremental selection: Use S instead of suggested ga
 -- Note: <C-Space> is used for tmux itself.
 -- From the help:
---
 -- Besides choosing a label (`ga{label}`), in Normal/Visual mode you can also use
 -- the traversal keys for incremental selection (`;` and `,` are automatically
 -- added to the default keys). The labels are forced to be safe, so you can
 -- operate on the current selection right away (`ga;;y`).
---
 -- **Tips**
 -- * The traversal can "wrap around" backwards, so you can select the root node
 --   right away (`ga,`), instead of going forward (`ga;;;...`).
