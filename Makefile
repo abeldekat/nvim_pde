@@ -51,7 +51,7 @@ has:
 	fi
 
 to_gh:
-	@cp README.md init.lua filetype.lua mini-deps-snap stylua.toml colors.txt .luarc.*.jsonc .prettierrc .gitignore Makefile ../nvimak
+	@cp README.md init.lua filetype.lua mini-deps-snap stylua.toml colors.txt .luarc*.jsonc .prettierrc .gitignore Makefile ../nvimak
 	@rm -rf ../nvimak/after
 	@rsync -av after ../nvimak
 	@rm -rf ../nvimak/lua

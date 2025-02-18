@@ -19,16 +19,9 @@ local function lsp()
   })
   require("ak.config.lang.mason")
 
-  register("folke/lazydev.nvim")
-  Util.defer.on_events(function()
-    add("folke/lazydev.nvim")
-    require("ak.config.lang.lazydev")
-  end, "FileType", "lua")
-
   add({
     source = "neovim/nvim-lspconfig",
     depends = {
-      "folke/lazydev.nvim",
       "williamboman/mason-lspconfig.nvim",
       { source = "mrcjkb/rustaceanvim", checkout = "v5.24.3" },
     },
