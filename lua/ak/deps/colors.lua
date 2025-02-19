@@ -17,7 +17,6 @@ local colors = {
       { source = "sainnhe/sonokai", name = "colors_sonokai" },
       { source = "sainnhe/everforest", name = "colors_everforest" },
       { source = "sainnhe/gruvbox-material", name = "colors_gruvbox-material" },
-      { source = "sainnhe/edge", name = "colors_edge" },
     }
   end,
 
@@ -31,9 +30,10 @@ local colors = {
   --   return {
   --     { source = "navarasu/onedark.nvim", name = "colors_onedark" },
   --     { source = "rose-pine/neovim", name = "colors_rose-pine" },
-  --     { source = "Shatur/neovim-ayu", name = "colors_ayu" },
+  --     { source = "sainnhe/edge", name = "colors_edge" },
   --     { source = "craftzdog/solarized-osaka.nvim", name = "colors_solarized-osaka" },
   --     { source = "ellisonleao/gruvbox.nvim", name = "colors_gruvbox" },
+  --     { source = "Shatur/neovim-ayu", name = "colors_ayu" },
   --     { source = "lifepillar/vim-solarized8", name = "colors_solarized8", checkout = "neovim" },
   --     { source = "ronisbr/nano-theme.nvim", name = "colors_nano-theme" },
   --   }

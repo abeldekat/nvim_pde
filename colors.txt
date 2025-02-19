@@ -5,7 +5,6 @@ catppuccin
 dawnfox
 dayfox
 duskfox
-edge
 everforest
 gruvbox-material
 kanagawa

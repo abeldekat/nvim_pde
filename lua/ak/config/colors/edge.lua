@@ -1,3 +1,7 @@
+-- Not actively used...
+-- Last commit downloaded: 8dc187c5bbfd0127eb0ebc3b4f0968bba6716264
+-- Add to colors.txt: edge
+
 local Utils = require("ak.util")
 local prefer_light = require("ak.color").prefer_light
 
