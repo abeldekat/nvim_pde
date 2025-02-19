@@ -2,6 +2,8 @@ local MiniDeps = require("mini.deps")
 local Util = require("ak.util")
 local now, later = MiniDeps.now, MiniDeps.later
 
+Util.use_notify_for_lsp = true
+
 local function icons() require("ak.config.mini_icons") end -- cmp, explorer, etc...
 
 now(function()
