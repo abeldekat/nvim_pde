@@ -3,12 +3,6 @@ local MiniDeps = require("mini.deps")
 local add, later = MiniDeps.add, MiniDeps.later
 local register = Util.deps.register
 
-local extra_lazyvim_support = false
-if extra_lazyvim_support then later(function()
-  register("folke/lazy.nvim")
-  register("LazyVim/LazyVim")
-end) end
-
 local function lsp()
   local build_mason = function()
     later(function() vim.cmd("MasonUpdate") end)
