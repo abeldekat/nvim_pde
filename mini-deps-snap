@@ -33,7 +33,6 @@ return {
   ["nvim-lspconfig"] = "1110787f1b464888c59a044c48c5119d14078044",
   ["nvim-nio"] = "21f5324bfac14e22ba26553caf69ec76ae8a7662",
   ["nvim-pqf"] = "148ee2ca8b06d83fd9bf6f9b9497724ad39a07d6",
-  ["nvim-spectre"] = "ddd7383e856a7c939cb4f5143278fe041bbb8cb9",
   ["nvim-treesitter"] = "36bbf518420918e965d11dad3d3f194803c47731",
   ["nvim-treesitter-context"] = "198720b4016af04c9590f375d714d5bf8afecc1a",
   ["nvim-treesitter-textobjects"] = "ad8f0a472148c3e0ae9851e26a722ee4e29b1595",

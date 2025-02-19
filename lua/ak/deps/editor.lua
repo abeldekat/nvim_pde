@@ -77,14 +77,14 @@ later(function()
   --          │                          Other                          │
   --          ╰─────────────────────────────────────────────────────────╯
 
-  local spec_spectre = "nvim-pack/nvim-spectre"
-  register(spec_spectre)
-  Util.defer.on_keys(function()
-    now(function()
-      add(spec_spectre)
-      require("ak.config.editor.spectre")
-    end)
-  end, "<leader>cR", "Replace in files (spectre)")
+  -- local spec_spectre = "nvim-pack/nvim-spectre"
+  -- register(spec_spectre)
+  -- Util.defer.on_keys(function()
+  --   now(function()
+  --     add(spec_spectre)
+  --     require("ak.config.editor.spectre")
+  --   end)
+  -- end, "<leader>cR", "Replace in files (spectre)")
 
   -- local spec_overseer = "stevearc/overseer.nvim"
   -- register(spec_overseer)
