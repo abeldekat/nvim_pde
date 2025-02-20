@@ -333,6 +333,7 @@ local servers = {
   taplo = {}, -- toml
   texlab = H.texlab(), -- latex
   yamlls = H.yamlls(),
+  zls = {}, -- zig
 }
 local ensure_installed = vim.tbl_keys(servers or {})
 
