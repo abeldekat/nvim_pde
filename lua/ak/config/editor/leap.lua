@@ -4,6 +4,9 @@
 -- Jump2d discussion:
 -- https://github.com/echasnovski/mini.nvim/discussions/1033#discussioncomment-10289232
 
+-- Note: Leap also has a f across lines mode, like mini.jump.
+-- Use s[some letter]enter. Very handy in for example MiniFiles explorer.
+
 -- Flash:
 -- The "s" is "anywhere" and the "S" is dedicated to treesitter selection.
 -- Remote ("r") is only mapped in operator pending mode

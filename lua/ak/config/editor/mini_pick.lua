@@ -288,7 +288,7 @@ local function keys()
   local oldfiles_hinted = function() extra.oldfiles({ current_dir = true }, { hinted = { enable = true } }) end
   map("<leader>r", oldfiles_hinted, { desc = "Recent (rel)" })
 
-  -- fuzzy main. Free: fe,fj,fn,fq,fv,fy
+  -- fuzzy main. Free: fe,fn,fq,fv,fy
   map("<leader>f/", function() extra.history({ scope = "/" }) end, { desc = "'/' history" })
   local his_cmd_hinted = function() extra.history({ scope = ":" }, { hinted = { enable = true } }) end
   map("<leader>f:", his_cmd_hinted, { desc = "':' history" })
@@ -306,6 +306,7 @@ local function keys()
   map("<leader>fG", function() builtin.grep_live(nil, { source = { cwd = H.bdir() } }) end, { desc = "Grep (rel)" })
   map("<leader>fh", builtin.help, { desc = "Help" })
   map("<leader>fi", function() vim.notify("No picker for fzf-lua builtin") end, { desc = "Fzf-lua builtin" })
+  map("<leader>fj", function() extra.list({ scope = "jump" }) end, { desc = "Jumps" })
   map("<leader>fk", extra.keymaps, { desc = "Key maps" })
   map("<leader>fl", extra.buf_lines, { desc = "Buffers lines" })
   map("<leader>fL", function() extra.buf_lines({ scope = "current" }) end, { desc = "Buffer lines" })
@@ -336,7 +337,6 @@ local function keys()
   -- <leader>foc: colors, see provide_picker and ak.deps.colors.lua
   map("<leader>foC", function() extra.list({ scope = "change" }) end, { desc = "Changes" })
   map("<leader>fof", builtin.files, { desc = "Files rg" })
-  map("<leader>foj", function() extra.list({ scope = "jump" }) end, { desc = "Jumps" })
   map("<leader>foh", extra.hl_groups, { desc = "Highlights" })
   map("<leader>fom", extra.marks, { desc = "Marks" })
   map("<leader>foo", extra.options, { desc = "Options" })

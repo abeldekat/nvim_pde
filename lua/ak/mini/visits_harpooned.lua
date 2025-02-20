@@ -355,7 +355,7 @@ end
 
 H.pick_visits_by_labels = function(labels) -- a customized Extra.pickers.visit_paths
   -- Copied from mini.extra:
-  -- Not copied: H.full_path, H.normalize_path,H.is_windows
+  -- Not copied: H.full_path, H.normalize_path, H.is_windows
   local short_path = function(path, cwd)
     cwd = cwd or vim.fn.getcwd()
     -- Ensure `cwd` is treated as directory path (to not match similar prefix)
@@ -370,7 +370,6 @@ H.pick_visits_by_labels = function(labels) -- a customized Extra.pickers.visit_p
       return { path = path_path, text = string.format(" %-6s %s", label, text_path) }
     end, paths)
   end
-
   local picker_items = vim.schedule_wrap(function()
     local items = {}
     for _, label in ipairs(labels) do
@@ -379,9 +378,20 @@ H.pick_visits_by_labels = function(labels) -- a customized Extra.pickers.visit_p
     end
     MiniPick.set_picker_items(items)
   end)
+  local choose = function(item) -- adapted from MiniExtra.pickers.explore
+    local path = item.path
+    if vim.fn.filereadable(path) == 1 then return MiniPick.default_choose(path) end
+
+    if vim.fn.isdirectory(path) == 1 then -- path does not exist or is a directory
+      vim.schedule(function()
+        vim.cmd("edit " .. path) -- must schedule, else error
+      end)
+    end
+    return false -- nil and false will stop picker
+  end
   local name = #labels > 1 and "Visits(all labels)" or string.format("Visits(%s)", labels[1])
   local show = function(buf_id, items, query) MiniPick.default_show(buf_id, items, query, { show_icons = true }) end
-  local source = { name = name, items = picker_items, show = show }
+  local source = { name = name, items = picker_items, show = show, choose = choose }
   local hinted = { enable = true, use_autosubmit = true }
   return MiniPick.start({ source = source, hinted = hinted })
 end

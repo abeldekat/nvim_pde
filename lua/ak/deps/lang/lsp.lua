@@ -22,10 +22,8 @@ local function lsp()
   })
   require("ak.config.lang.lspconfig")
 
-  if not Util.use_notify_for_lsp then
-    add("j-hui/fidget.nvim")
-    require("ak.config.lang.fidget")
-  end
+  -- add("j-hui/fidget.nvim")
+  -- require("fidget").setup({})
 
   add("b0o/SchemaStore.nvim")
 end

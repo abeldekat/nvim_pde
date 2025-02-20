@@ -1,5 +1,5 @@
 local Util = require("ak.util")
-local use_lsp_progress = Util.use_notify_for_lsp
+local use_lsp_progress = true
 
 local not_lua_diagnosing = function(notif) return not vim.startswith(notif.msg, "lua_ls: Diagnosing") end
 local filterout_lua_diagnosing = function(notif_arr)

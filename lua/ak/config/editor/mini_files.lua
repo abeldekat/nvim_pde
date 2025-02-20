@@ -9,7 +9,7 @@ local setup = function()
 
     -- More like oil: By default, don't add more windows
     -- Easier for the eyes to focus on one single spot.
-    windows = { max_number = H.max_windows },
+    windows = { max_number = H.max_windows, preview = H.can_preview() },
   }
   local minifiles = require("mini.files")
   minifiles.setup(config)
@@ -128,15 +128,14 @@ H.yank_path = function() -- yank in register full path of entry under cursor
 end
 
 H.toggle_max_windows = function()
-  H.max_windows = H.max_windows == 1 and math.huge or 1
-  local opts = {
-    windows = { max_number = H.max_windows },
-  }
-  if opts.windows.max_number > 1 then opts.windows.preview = true end
-  MiniFiles.refresh(opts)
+  H.max_windows = H.max_windows == H.min_windows and math.huge or H.min_windows
+  MiniFiles.refresh({ windows = { max_number = H.max_windows, preview = H.can_preview() } })
 end
 
-H.max_windows = 1 -- math.huge
+H.can_preview = function() return H.max_windows > 1 end
+
+H.min_windows = 2
+H.max_windows = H.min_windows -- math.huge
 
 H.nmap_leader = function(suffix, rhs, desc, opts)
   opts = opts or {}
