@@ -56,6 +56,7 @@ local opts = {
     "ninja", -- python
     "rst", -- python
     "rasi", -- rofi
+    "zig",
   },
   -- incremental_selection = { -- leap provides incremental_selection
   --   enable = true, -- using default keymaps gnn
