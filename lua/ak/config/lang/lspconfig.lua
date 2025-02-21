@@ -14,7 +14,7 @@ local Picker = Util.pick
 local H = {}
 
 H.opts = {
-  inlay_hints = { auto = false, filter = { "lua" } },
+  inlay_hints = { auto = true, filter = { "lua", "zig" } },
   codeLens = { auto = false, filter = { "lua" } },
 }
 

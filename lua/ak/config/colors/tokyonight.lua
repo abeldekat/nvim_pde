@@ -6,15 +6,14 @@ Utils.color.add_toggle("tokyonight*", {
   flavours = { "tokyonight-storm", "tokyonight-moon", "tokyonight-night", "tokyonight-day" },
 })
 
+-- These groups from tokyonight.groups.init are always included!
+-- local groups = { base = true, kinds = true, semantic_tokens = true, treesitter = true }
 local plugins = {
-  all = false,
-  auto = false,
-  ["base"] = true,
+  all = false, -- the default is true when not using lazy.nvim
+  auto = false, -- only supported for lazy.nvim
+  --
   ["blink_cmp"] = true,
-  ["kinds"] = true,
-  ["semantic_tokens"] = true,
-  ["treesitter"] = true,
-  ["fzf"] = true,
+  ["fzf"] = true, -- fzf-lua on demand...
   ["headlines"] = true,
   ["leap"] = true,
   ["mini_animate"] = true,
@@ -27,15 +26,12 @@ local plugins = {
   ["mini_hipatterns"] = true,
   ["mini_icons"] = true,
   ["mini_indentscope"] = true,
-  -- ["mini_jump"] = false,
-  -- ["mini_map"] = false,
   ["mini_notify"] = true,
   ["mini_operators"] = true,
   ["mini_pick"] = true,
   ["mini_starter"] = true,
   ["mini_statusline"] = true,
   ["mini_surround"] = true,
-  -- ["mini_tabline"] = false,
   -- ["mini_test"] = false,
   -- ["mini_trailspace"] = false,
   ["neotest"] = true,
@@ -51,8 +47,7 @@ local opts = {
     -- Careful: Do not use the same table instance twice!
     hl.MsgArea = { fg = c.comment } -- fg_dark: -- Area for messages and cmdline
   end,
-  -- plugins = plugins,
-  style = prefer_light and "day" or "storm",
+  style = prefer_light and "day" or "moon",
 }
 
 require("tokyonight").setup(opts)

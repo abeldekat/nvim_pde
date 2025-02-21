@@ -1,11 +1,3 @@
---          ╭─────────────────────────────────────────────────────────╮
---          │             The following keys are created:             │
---          │                                                         │
---          │     { "<c-space>", desc = "Increment selection" },      │
---          │  { "<bs>", desc = "Decrement selection", mode = "x" },  │
---          │                                                         │
---          ╰─────────────────────────────────────────────────────────╯
-
 -- The query editor can be opened by pressing o in the :InspectTree window,
 -- with the :EditQuery command, or by calling vim.treesitter.query.edit() directly.
 
