@@ -2,7 +2,7 @@
 -- See: colors.txt
 
 -- using sed for color and prefer_light:
-local color = "tokyonight"
+local color = "randomhue"
 local prefer_light = false
 -- end using sed
 
