@@ -184,6 +184,7 @@ Relevant discussions:
 - [Apply tokyonight dev environment](https://github.com/echasnovski/mini.nvim/discussions/1012).
 - [Optimized jumping with jump2d](https://github.com/echasnovski/mini.nvim/discussions/1033).
 - [Beta testing mini.deps](https://github.com/echasnovski/mini.nvim/issues/689#issuecomment-1962327624).
+- [MiniNotify replacing fidget](https://github.com/echasnovski/mini.nvim/discussions/1602)
 
 ## Environment
 

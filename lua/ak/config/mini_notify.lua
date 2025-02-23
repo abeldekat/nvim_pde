@@ -24,20 +24,18 @@ H.create_autocommmands = function()
   local au = function(event, pattern, callback)
     vim.api.nvim_create_autocmd(event, { group = gr, pattern = pattern, callback = callback })
   end
-
-  -- Remember the id of the last mininotify buffer
-  local notify_buffer
+  local au_local = function(event, callback)
+    vim.api.nvim_create_autocmd(event, { group = gr, buffer = 0, callback = callback })
+  end
 
   -- MiniNotify created a new buffer:
-  au("FileType", "mininotify", function(ev) notify_buffer = ev.buf end)
+  au("FileType", "mininotify", function()
+    --  When the notify buffer is no longer displayed, make sure the buffer config falls back to default:
+    au_local("BufHidden", function() vim.b.mininotify_config = nil end)
+  end)
 
   -- Make sure that correct buffer config is set when lsp emits messages:
   au("LspProgress", "begin", function() vim.b.mininotify_config = H.config_on_lsp_progress end)
-
-  --  When the notify buffer is no longer displayed, make sure the buffer config is the default:
-  au("BufHidden", "*", function(ev)
-    if ev.buf == notify_buffer then vim.b.mininotify_config = nil end
-  end)
 end
 
 H.not_lua_diagnosing = function(notif) return not vim.startswith(notif.msg, "lua_ls: Diagnosing") end
