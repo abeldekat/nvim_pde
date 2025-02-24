@@ -10,20 +10,29 @@
 -- Paths: No filename first option
 
 local Utils = require("ak.util")
-local Pick = require("mini.pick")
-
--- Helper data ================================================================
-
 local H = {} -- Helper functions
 
-H.ns_id = { ak = vim.api.nvim_create_namespace("MiniPickAk") }
+local function setup()
+  ---@diagnostic disable-next-line: duplicate-set-field
+  vim.ui.select = function(items, opts, on_choice)
+    local start_opts = { hinted = { enable = true, use_autosubmit = true } }
+    return MiniPick.ui_select(items, opts, on_choice, start_opts)
+  end
 
--- Copied
-H.show_with_icons = function(buf_id, items, query) Pick.default_show(buf_id, items, query, { show_icons = true }) end
----@type table<string,function>  event MiniPickStart
-H.start_hooks = {}
----@type table<string,function> event MiniPickStop
-H.stop_hooks = {}
+  require("mini.pick").setup({})
+
+  H.setup_autocommands()
+  H.add_custom_pickers()
+  H.provide_picker()
+  H.add_keys()
+
+  require("ak.mini.pick_hinted").setup({ -- 19 letters, no "bcgpqyz"
+    hinted = {
+      -- virt_clues_pos = { "inline", "eol" },
+      chars = vim.split("adefhijklmnorstuvwx", ""),
+    },
+  })
+end
 
 H.setup_autocommands = function()
   local group = vim.api.nvim_create_augroup("minipick-custom-hooks", { clear = true })
@@ -33,7 +42,7 @@ H.setup_autocommands = function()
       group = group,
       desc = desc,
       callback = function(...)
-        local opts = Pick.get_picker_opts() or {}
+        local opts = MiniPick.get_picker_opts() or {}
         if opts and opts.source then
           local hook = hooks[opts.source.name] or function(...) end
           hook(...)
@@ -45,204 +54,16 @@ H.setup_autocommands = function()
   au("MiniPickStop", "Picker stop hook for source.name", H.stop_hooks)
 end
 
-H.colors = function()
-  -- stylua: ignore
-  local builtins = { -- source code telescope.nvim ignore_builtins
-      "blue", "darkblue", "default", "delek", "desert", "elflord", "evening",
-      "habamax", "industry", "koehler", "lunaperche", "morning", "murphy",
-      "pablo", "peachpuff", "quiet", "retrobox", "ron", "shine", "slate",
-      "sorbet", "torte", "vim", "wildcharm", "zaibatsu", "zellner",
-  }
-
-  return vim.tbl_filter(
-    function(color) return not vim.tbl_contains(builtins, color) end, --
-    vim.fn.getcompletion("", "color")
-  )
+H.add_custom_pickers = function()
+  MiniPick.registry.todo_comments = H.todo_comments
+  MiniPick.registry.colors_with_preview = H.colors_with_preview
+  MiniPick.registry.buffer_lines_current = H.buffer_lines_current
+  MiniPick.registry.buffers_hinted_truncated = H.buffer_lines_current
 end
 
-H.bdir = function() -- can return nil
-  if vim["bo"].buftype == "" then return vim.fn.expand("%:p:h") end
-end
-
-H.make_centered_window = function() -- copied from :h MiniPick
-  return {
-    config = function()
-      local height = math.floor(0.618 * vim.o.lines)
-      local width = math.floor(0.618 * vim.o.columns)
-      return {
-        anchor = "NW",
-        height = height,
-        width = width,
-        row = math.floor(0.5 * (vim.o.lines - height)),
-        col = math.floor(0.5 * (vim.o.columns - width)),
-      }
-    end,
-  }
-end
-
--- Custom pickers  ================================================================
-
--- https://github.com/echasnovski/mini.nvim/discussions/518#discussioncomment-7373556
--- Implements: For TODOs in a project, use builtin.grep.
--- Note: hints are possible, but prevent preview on other items
-Pick.registry.todo_comments = function(patterns) --hipatterns.config.highlighters
-  local function find_todo(item)
-    for _, hl in pairs(patterns) do
-      local pattern = hl.pattern:sub(2) -- remove the prepending space
-      if item:find(pattern, 1, true) then return hl end
-    end
-    return patterns[1] -- prevent nil
-  end
-  local change_display = function(items)
-    return vim.tbl_map(function(item)
-      local s = string.gsub(item, "│", "") -- remove character used by comment box
-      s = string.gsub(s, "%s+", " ") -- change multiple spaces into one space
-      local todo = find_todo(s).pattern:sub(1, -2) -- remove the : to prevent hl on first col
-      return todo .. " " .. s
-    end, items)
-  end
-  local search_regex = function(keywords)
-    local pattern = [[\b(KEYWORDS):]]
-    local upper = vim.tbl_filter(function(keyword)
-      local match = string.match(keyword, "^%u+$")
-      return match and true or false
-    end, keywords)
-    return pattern:gsub("KEYWORDS", table.concat(upper, "|"))
-  end
-  local on_start = function()
-    if MiniHipatterns then MiniHipatterns.enable(vim.api.nvim_get_current_buf()) end
-  end
-  local show = function(buf_id, items, query)
-    Pick.default_show(buf_id, change_display(items), query, { show_icons = true }) --
-  end
-
-  local name = "Todo-comments"
-  if H.start_hooks[name] == nil then H.start_hooks[name] = on_start end
-  Pick.builtin.grep(
-    { tool = "rg", pattern = search_regex(vim.tbl_keys(patterns)) },
-    { source = { name = name, show = show } }
-  )
-end
-
--- https://github.com/echasnovski/mini.nvim/discussions/951
--- Previewing multiple themes:
--- Press tab for preview, and continue with ctrl-n and ctrl-p
--- Note: hints are possible, but most relevant items are not on top
-local selected_colorscheme = nil
-Pick.registry.colors = function()
-  local on_start = function()
-    selected_colorscheme = vim.g.colors_name --
-  end
-  local on_stop = function()
-    vim.schedule(function() vim.cmd.colorscheme(selected_colorscheme) end)
-  end
-
-  local name = "Colors with preview"
-  if H.start_hooks[name] == nil then H.start_hooks[name] = on_start end
-  if H.stop_hooks[name] == nil then H.stop_hooks[name] = on_stop end
-  return MiniPick.start({
-    hinted = { enable = true },
-    source = {
-      name = name,
-      items = H.colors(),
-      choose = function(item) selected_colorscheme = item end,
-      preview = function(buf_id, item)
-        vim.cmd.colorscheme(item)
-        vim.api.nvim_buf_set_lines(buf_id, 0, -1, false, { item })
-      end,
-    },
-  })
-end
-
--- https://github.com/echasnovski/mini.nvim/discussions/988
--- Fuzzy search the current buffer with syntax highlighting
--- Last attempt: linenr as extmarks, but no MiniPickMatchRanges highlighting
-Pick.registry.buffer_lines_current = function()
-  local show = function(buf_id, items, query, opts)
-    if items == nil or #items == 0 then return end
-
-    -- Show as usual
-    Pick.default_show(buf_id, items, query, opts)
-
-    -- Move prefix line numbers into inline extmarks
-    local lines = vim.api.nvim_buf_get_lines(buf_id, 0, -1, false)
-    local digit_prefixes = {}
-    for i, l in ipairs(lines) do
-      local _, prefix_end, prefix = l:find("^(%s*%d+│)")
-      if prefix_end ~= nil then
-        digit_prefixes[i], lines[i] = prefix, l:sub(prefix_end + 1)
-      end
-    end
-
-    vim.api.nvim_buf_set_lines(buf_id, 0, -1, false, lines)
-    for i, pref in pairs(digit_prefixes) do
-      local extmark_opts = { virt_text = { { pref, "MiniPickNormal" } }, virt_text_pos = "inline" }
-      vim.api.nvim_buf_set_extmark(buf_id, H.ns_id.ak, i - 1, 0, extmark_opts)
-    end
-
-    -- Set highlighting based on the curent filetype
-    local ft = vim.bo[items[1].bufnr].filetype
-    local has_lang, lang = pcall(vim.treesitter.language.get_lang, ft)
-    local has_ts, _ = pcall(vim.treesitter.start, buf_id, has_lang and lang or ft)
-    if not has_ts and ft then vim.bo[buf_id].syntax = ft end
-  end
-  -- local local_opts = { scope = "current", preserve_order = true }
-  local local_opts = { scope = "current" }
-  MiniExtra.pickers.buf_lines(local_opts, { source = { show = show } })
-end
-
--- Buffers show name in cwd format: https://github.com/echasnovski/mini.nvim/issues/1290
--- Show buffers: If in cwd, show in cwd format
--- Code taken from builtin.buffers
---
--- Default pick buffers just shows parsed output from buffers command
--- As a consequence, the cwd part is not removed from buffers opened from dashboard
-Pick.registry.buffers_hinted_truncated = function()
-  local cwd = vim.fn.fnamemodify(vim.fs.normalize(vim.fn.getcwd()) .. "/", ":~")
-  local include_unlisted = false
-  local include_current = false
-
-  local items = {}
-  local cur_buf_id = vim.api.nvim_get_current_buf()
-  local buffers_output = vim.api.nvim_exec2("buffers" .. (include_unlisted and "!" or ""), { output = true })
-  local buffers_string = buffers_output.output and buffers_output.output or ""
-  if buffers_string ~= "" then
-    for _, l in ipairs(vim.split(buffers_string, "\n")) do
-      local buf_id_str, buf_name = l:match("^%s*%d+"), l:match('"(.*)"')
-      if vim.startswith(buf_name, cwd) then buf_name = vim.fn.fnamemodify(buf_name, ":.") end
-
-      local buf_id = tonumber(buf_id_str)
-      local item = { text = buf_name, bufnr = buf_id }
-      if buf_id ~= cur_buf_id or include_current then table.insert(items, item) end
-    end
-  end
-
-  local hinted = { enable = true, use_autosubmit = true, chars = vim.split("abcdefg", "") }
-  local source = {
-    name = "Buffers hinted truncated",
-    items = items,
-    show = true and Pick.default_show or nil, -- true: icons
-    window = false and H.make_centered_window() or nil, -- true: centered_window
-  }
-  MiniPick.start({ hinted = hinted, source = source })
-end
-
--- Apply  ================================================================
-
-local cwd_cache = {}
-local function files() -- either files or git_files
-  local builtin = Pick.builtin
-  local cwd = vim.uv.cwd()
-  if cwd and cwd_cache[cwd] == nil then cwd_cache[cwd] = vim.uv.fs_stat(".git") and true or false end
-
-  local opts = {}
-  if cwd_cache[cwd] then opts.tool = "git" end
-  builtin.files(opts)
-end
-
-local function provide_picker() -- picker to use in other modules
+H.provide_picker = function() -- interface to picker to be used in other modules
   local extra = MiniExtra.pickers
-  local custom = Pick.registry
+  local custom = MiniPick.registry
 
   ---@type Picker
   local Picker = {
@@ -259,21 +80,31 @@ local function provide_picker() -- picker to use in other modules
     -- lsp_implementations = function() vim.lsp.buf.implementation({ reuse_win = true }) end,
     -- lsp_type_definitions = function() vim.lsp.buf.type_definition({ reuse_win = true }) end,
 
-    colors = custom.colors,
+    colors = custom.colors_with_preview,
     todo_comments = custom.todo_comments,
   }
   Utils.pick.use_picker(Picker)
 end
 
-local function keys()
+local cwd_cache = {}
+H.add_keys = function()
+  local function files() -- either files or git_files
+    local builtin = MiniPick.builtin
+    local cwd = vim.uv.cwd()
+    if cwd and cwd_cache[cwd] == nil then cwd_cache[cwd] = vim.uv.fs_stat(".git") and true or false end
+
+    local opts = {}
+    if cwd_cache[cwd] then opts.tool = "git" end
+    builtin.files(opts)
+  end
   local function map(l, r, opts, mode)
     mode = mode or "n"
     opts["silent"] = opts.silent ~= false
     vim.keymap.set(mode, l, r, opts)
   end
-  local builtin = Pick.builtin
+  local builtin = MiniPick.builtin
   local extra = MiniExtra.pickers
-  local custom = Pick.registry
+  local custom = MiniPick.registry
 
   -- hotkeys:
   map("<leader><leader>", files, { desc = "Files pick" })
@@ -344,27 +175,200 @@ local function keys()
   map("<leader>fot", extra.treesitter, { desc = "Treesitter" })
 end
 
-local function setup()
-  Pick.setup({})
+-- Helper data ================================================================
 
-  H.setup_autocommands()
+H.ns_id = { ak = vim.api.nvim_create_namespace("MiniPickAk") }
 
-  local PickHinted = require("ak.mini.pick_hinted")
-  PickHinted.setup({ -- 19 letters, no "bcgpqyz"
-    hinted = {
-      -- virt_clues_pos = { "inline", "eol" },
-      chars = vim.split("adefhijklmnorstuvwx", ""),
-    },
-  })
+-- Copied
+H.show_with_icons = function(buf_id, items, query) MiniPick.default_show(buf_id, items, query, { show_icons = true }) end
+---@type table<string,function>  event MiniPickStart
+H.start_hooks = {}
+---@type table<string,function> event MiniPickStop
+H.stop_hooks = {}
 
-  ---@diagnostic disable-next-line: duplicate-set-field
-  vim.ui.select = function(items, opts, on_choice)
-    local start_opts = { hinted = { enable = true, use_autosubmit = true } }
-    return MiniPick.ui_select(items, opts, on_choice, start_opts)
-  end
+H.colors = function()
+  -- stylua: ignore
+  local builtins = { -- source code telescope.nvim ignore_builtins
+      "blue", "darkblue", "default", "delek", "desert", "elflord", "evening",
+      "habamax", "industry", "koehler", "lunaperche", "morning", "murphy",
+      "pablo", "peachpuff", "quiet", "retrobox", "ron", "shine", "slate",
+      "sorbet", "torte", "vim", "wildcharm", "zaibatsu", "zellner",
+  }
 
-  keys()
-  provide_picker()
+  return vim.tbl_filter(
+    function(color) return not vim.tbl_contains(builtins, color) end, --
+    vim.fn.getcompletion("", "color")
+  )
 end
 
+H.bdir = function() -- can return nil
+  if vim["bo"].buftype == "" then return vim.fn.expand("%:p:h") end
+end
+
+H.make_centered_window = function() -- copied from :h MiniPick
+  return {
+    config = function()
+      local height = math.floor(0.618 * vim.o.lines)
+      local width = math.floor(0.618 * vim.o.columns)
+      return {
+        anchor = "NW",
+        height = height,
+        width = width,
+        row = math.floor(0.5 * (vim.o.lines - height)),
+        col = math.floor(0.5 * (vim.o.columns - width)),
+      }
+    end,
+  }
+end
+
+-- Custom pickers  ================================================================
+
+-- https://github.com/echasnovski/mini.nvim/discussions/518#discussioncomment-7373556
+-- Implements: For TODOs in a project, use builtin.grep.
+-- Note: hints are possible, but prevent preview on other items
+H.todo_comments = function(patterns) --hipatterns.config.highlighters
+  local function find_todo(item)
+    for _, hl in pairs(patterns) do
+      local pattern = hl.pattern:sub(2) -- remove the prepending space
+      if item:find(pattern, 1, true) then return hl end
+    end
+    return patterns[1] -- prevent nil
+  end
+  local change_display = function(items)
+    return vim.tbl_map(function(item)
+      local s = string.gsub(item, "│", "") -- remove character used by comment box
+      s = string.gsub(s, "%s+", " ") -- change multiple spaces into one space
+      local todo = find_todo(s).pattern:sub(1, -2) -- remove the : to prevent hl on first col
+      return todo .. " " .. s
+    end, items)
+  end
+  local search_regex = function(keywords)
+    local pattern = [[\b(KEYWORDS):]]
+    local upper = vim.tbl_filter(function(keyword)
+      local match = string.match(keyword, "^%u+$")
+      return match and true or false
+    end, keywords)
+    return pattern:gsub("KEYWORDS", table.concat(upper, "|"))
+  end
+  local on_start = function()
+    if MiniHipatterns then MiniHipatterns.enable(vim.api.nvim_get_current_buf()) end
+  end
+  local show = function(buf_id, items, query)
+    MiniPick.default_show(buf_id, change_display(items), query, { show_icons = true }) --
+  end
+
+  local name = "Todo-comments"
+  if H.start_hooks[name] == nil then H.start_hooks[name] = on_start end
+  MiniPick.builtin.grep(
+    { tool = "rg", pattern = search_regex(vim.tbl_keys(patterns)) },
+    { source = { name = name, show = show } }
+  )
+end
+
+-- https://github.com/echasnovski/mini.nvim/discussions/951
+-- Previewing multiple themes:
+-- Press tab for preview, and continue with ctrl-n and ctrl-p
+-- Note: hints are possible, but most relevant items are not on top
+local selected_colorscheme = nil
+H.colors_with_preview = function()
+  local on_start = function()
+    selected_colorscheme = vim.g.colors_name --
+  end
+  local on_stop = function()
+    vim.schedule(function() vim.cmd.colorscheme(selected_colorscheme) end)
+  end
+
+  local name = "Colors with preview"
+  if H.start_hooks[name] == nil then H.start_hooks[name] = on_start end
+  if H.stop_hooks[name] == nil then H.stop_hooks[name] = on_stop end
+  return MiniPick.start({
+    hinted = { enable = true },
+    source = {
+      name = name,
+      items = H.colors(),
+      choose = function(item) selected_colorscheme = item end,
+      preview = function(buf_id, item)
+        vim.cmd.colorscheme(item)
+        vim.api.nvim_buf_set_lines(buf_id, 0, -1, false, { item })
+      end,
+    },
+  })
+end
+
+-- https://github.com/echasnovski/mini.nvim/discussions/988
+-- Fuzzy search the current buffer with syntax highlighting
+-- Last attempt: linenr as extmarks, but no MiniPickMatchRanges highlighting
+H.buffer_lines_current = function()
+  local show = function(buf_id, items, query, opts)
+    if items == nil or #items == 0 then return end
+
+    -- Show as usual
+    MiniPick.default_show(buf_id, items, query, opts)
+
+    -- Move prefix line numbers into inline extmarks
+    local lines = vim.api.nvim_buf_get_lines(buf_id, 0, -1, false)
+    local digit_prefixes = {}
+    for i, l in ipairs(lines) do
+      local _, prefix_end, prefix = l:find("^(%s*%d+│)")
+      if prefix_end ~= nil then
+        digit_prefixes[i], lines[i] = prefix, l:sub(prefix_end + 1)
+      end
+    end
+
+    vim.api.nvim_buf_set_lines(buf_id, 0, -1, false, lines)
+    for i, pref in pairs(digit_prefixes) do
+      local extmark_opts = { virt_text = { { pref, "MiniPickNormal" } }, virt_text_pos = "inline" }
+      vim.api.nvim_buf_set_extmark(buf_id, H.ns_id.ak, i - 1, 0, extmark_opts)
+    end
+
+    -- Set highlighting based on the curent filetype
+    local ft = vim.bo[items[1].bufnr].filetype
+    local has_lang, lang = pcall(vim.treesitter.language.get_lang, ft)
+    local has_ts, _ = pcall(vim.treesitter.start, buf_id, has_lang and lang or ft)
+    if not has_ts and ft then vim.bo[buf_id].syntax = ft end
+  end
+  -- local local_opts = { scope = "current", preserve_order = true }
+  local local_opts = { scope = "current" }
+  MiniExtra.pickers.buf_lines(local_opts, { source = { show = show } })
+end
+
+-- Buffers show name in cwd format: https://github.com/echasnovski/mini.nvim/issues/1290
+-- Show buffers: If in cwd, show in cwd format
+-- Code taken from builtin.buffers
+--
+-- Default pick buffers just shows parsed output from buffers command
+-- As a consequence, the cwd part is not removed from buffers opened from dashboard
+H.buffers_hinted_truncated = function()
+  local cwd = vim.fn.fnamemodify(vim.fs.normalize(vim.fn.getcwd()) .. "/", ":~")
+  local include_unlisted = false
+  local include_current = false
+
+  local items = {}
+  local cur_buf_id = vim.api.nvim_get_current_buf()
+  local buffers_output = vim.api.nvim_exec2("buffers" .. (include_unlisted and "!" or ""), { output = true })
+  ---@diagnostic disable-next-line: undefined-field
+  local buffers_string = buffers_output.output and buffers_output.output or ""
+
+  if buffers_string ~= "" then
+    for _, l in ipairs(vim.split(buffers_string, "\n")) do
+      local buf_id_str, buf_name = l:match("^%s*%d+"), l:match('"(.*)"')
+      if vim.startswith(buf_name, cwd) then buf_name = vim.fn.fnamemodify(buf_name, ":.") end
+
+      local buf_id = tonumber(buf_id_str)
+      local item = { text = buf_name, bufnr = buf_id }
+      if buf_id ~= cur_buf_id or include_current then table.insert(items, item) end
+    end
+  end
+
+  local hinted = { enable = true, use_autosubmit = true, chars = vim.split("abcdefg", "") }
+  local source = {
+    name = "Buffers hinted truncated",
+    items = items,
+    show = true and MiniPick.default_show or nil, -- true: icons
+    window = false and H.make_centered_window() or nil, -- true: centered_window
+  }
+  MiniPick.start({ hinted = hinted, source = source })
+end
+
+-- Apply  ================================================================
 setup()
