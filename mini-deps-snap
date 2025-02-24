@@ -1,5 +1,5 @@
 return {
-  ["SchemaStore.nvim"] = "a72f390eafa06abed53427a29bf073d69199d9cf",
+  ["SchemaStore.nvim"] = "503f3221543d4fe897d600f66816cc54c4bf825f",
   ["cmp-buffer"] = "3022dbc9166796b644a841a02de8dd1cc1d311fa",
   ["cmp-nvim-lsp"] = "99290b3ec1322070bcfb9e846450a46f6efa50f0",
   ["cmp-path"] = "91ff86cd9c29299a64f968ebb45846c485725f23",
@@ -33,7 +33,7 @@ return {
   ["nvim-lspconfig"] = "9e932edb0af4e20880685ddb96a231669fbe8091",
   ["nvim-nio"] = "21f5324bfac14e22ba26553caf69ec76ae8a7662",
   ["nvim-pqf"] = "148ee2ca8b06d83fd9bf6f9b9497724ad39a07d6",
-  ["nvim-treesitter"] = "f2bd62c6568de54ca1b8fb0a8de04a41442934cb",
+  ["nvim-treesitter"] = "e6d02ec9efd396d294a7793f2066e2527b07b03a",
   ["nvim-treesitter-context"] = "198720b4016af04c9590f375d714d5bf8afecc1a",
   ["nvim-treesitter-textobjects"] = "ad8f0a472148c3e0ae9851e26a722ee4e29b1595",
   ["nvim-ts-autotag"] = "a1d526af391f6aebb25a8795cbc05351ed3620b5",
