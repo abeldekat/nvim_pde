@@ -58,7 +58,7 @@ H.add_custom_pickers = function()
   MiniPick.registry.todo_comments = H.todo_comments
   MiniPick.registry.colors_with_preview = H.colors_with_preview
   MiniPick.registry.buffer_lines_current = H.buffer_lines_current
-  MiniPick.registry.buffers_hinted_truncated = H.buffer_lines_current
+  MiniPick.registry.buffers_hinted_truncated = H.buffers_hinted_truncated
 end
 
 H.provide_picker = function() -- interface to picker to be used in other modules
