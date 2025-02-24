@@ -1,71 +1,50 @@
 --[[
-
 Use a notification window like fidget.nvim for messages from the lsp,
 and a regular window otherwise.
 
 Do note that when the lsp emits messages, any regular message
 from vim.notify will be displayed in the same lsp window.
 This is acceptable.
-
 --]]
 
-local H = {}
-local function setup()
-  H.map("<leader>un", function() MiniNotify.clear() end, "Notify clear")
-  H.map("<leader>on", function() MiniNotify.show_history() end, "Notify history")
-  H.create_autocommmands()
+--- LSP
+local n_progress = 0
+local in_lsp_progress = function() return n_progress > 0 end
 
-  require("mini.notify").setup({}) -- just the defaults...
-  vim.notify = MiniNotify.make_notify()
-
-  -- The idea: Based on context, use two separate configs:
-  H.config_default = MiniNotify.config -- the config constructed by mini
-  H.config_on_lsp_progress = vim.tbl_deep_extend("force", {}, H.config_default, {
-    lsp_progress = { duration_last = 500 }, -- default 1000
-    content = { format = H.format_on_lsp_progress }, -- sort = H.filterout_lua_diagnosing
-    window = { config = H.win_config_on_lsp_progress(), winblend = 95 }, -- default blend 25
-  })
+local lsp_progress_plus = function() n_progress = n_progress + 1 end
+vim.api.nvim_create_autocmd("LspProgress", { pattern = "begin", callback = lsp_progress_plus })
+local lsp_progress_minus = function()
+  vim.defer_fn(function() n_progress = n_progress - 1 end, MiniNotify.config.lsp_progress.duration_last + 1)
 end
+vim.api.nvim_create_autocmd("LspProgress", { pattern = "end", callback = lsp_progress_minus })
 
-H.create_autocommmands = function()
-  local gr = vim.api.nvim_create_augroup("ak_mini_notify", {})
-  local au = function(event, pattern, callback)
-    vim.api.nvim_create_autocmd(event, { group = gr, pattern = pattern, callback = callback })
-  end
-  local au_local = function(event, callback)
-    vim.api.nvim_create_autocmd(event, { group = gr, buffer = 0, callback = callback })
-  end
-
-  -- MiniNotify created a new buffer:
-  au("FileType", "mininotify", function()
-    --  When the notify buffer is no longer displayed, use the default config
-    au_local("BufHidden", function() MiniNotify.config = H.config_default end)
-  end)
-  -- On LspProgress, use the lsp progress config
-  au("LspProgress", "begin", function() MiniNotify.config = H.config_on_lsp_progress end)
-end
-
--- H.not_lua_diagnosing = function(notif) return not vim.startswith(notif.msg, "lua_ls: Diagnosing") end
--- H.filterout_lua_diagnosing = function(notif_arr)
---   return MiniNotify.default_sort(vim.tbl_filter(H.not_lua_diagnosing, notif_arr))
--- end
-
---- Skip the time and the bar (|)
-H.format_on_lsp_progress = function(notif)
+--- Helpers for custom setup
+local format = function(notif)
+  if not in_lsp_progress() then return MiniNotify.default_format(notif) end
+  -- Weird that this works, as this is not the right place to do it (not sure
+  -- if there is the one better, though)
   notif.hl_group = "Comment"
   return notif.msg
 end
 
---- Customize window to be more "fidget" like
-H.win_config_on_lsp_progress = function()
-  local has_statusline = vim.o.laststatus > 0
-  local pad = vim.o.cmdheight + (has_statusline and 2 or 0) -- 2 looks better than 1
+--- The window config differs between "vim.notify"  and "in lsp progress"
+local window_config = function()
+  if not in_lsp_progress() then return {} end -- by default no override
+
+  -- Customize window to be more "fidget" like
+  local pad = vim.o.cmdheight + (vim.o.laststatus > 0 and 2 or 0) -- 2 looks better than 1
   return { anchor = "SE", col = vim.o.columns, row = vim.o.lines - pad, border = "none" }
 end
 
-H.map = function(lhs, rhs, desc) vim.keymap.set("n", lhs, rhs, { desc = desc, silent = true }) end
+-- Setup 'mini.notify'
+require("mini.notify").setup({
+  lsp_progress = { duration_last = 500 }, -- default duration: 1000
+  content = { format = format }, -- sort = H.filterout_lua_diagnosing
+  window = { winblend = 95, config = window_config },
+})
+vim.notify = MiniNotify.make_notify()
 
-H.config_default = {}
-H.config_on_lsp_progress = {}
-
-setup()
+-- Make mappings
+local map = function(lhs, rhs, desc) vim.keymap.set("n", lhs, rhs, { desc = desc, silent = true }) end
+map("<leader>un", function() MiniNotify.clear() end, "Notify clear")
+map("<leader>on", function() MiniNotify.show_history() end, "Notify history")
