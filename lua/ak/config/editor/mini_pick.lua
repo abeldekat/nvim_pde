@@ -18,10 +18,10 @@ local function setup()
     local start_opts = { hinted = { enable = true, use_autosubmit = true } }
     return MiniPick.ui_select(items, opts, on_choice, start_opts)
   end
+  H.create_autocommands()
 
   require("mini.pick").setup({})
 
-  H.setup_autocommands()
   H.add_custom_pickers()
   H.provide_picker()
   H.add_keys()
@@ -34,7 +34,7 @@ local function setup()
   })
 end
 
-H.setup_autocommands = function()
+H.create_autocommands = function()
   local group = vim.api.nvim_create_augroup("minipick-custom-hooks", { clear = true })
   local function au(pattern, desc, hooks)
     vim.api.nvim_create_autocmd({ "User" }, {
