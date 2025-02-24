@@ -22,10 +22,8 @@ local function setup()
   H.config_default = MiniNotify.config -- the config constructed by mini
   H.config_on_lsp_progress = vim.tbl_deep_extend("force", {}, H.config_default, {
     lsp_progress = { duration_last = 500 }, -- default 1000
-    -- Add format, removes timestamp and bar(|):
     content = { format = H.format_on_lsp_progress }, -- sort = H.filterout_lua_diagnosing
-    -- Default blend is 25. Add window like fidget.nvim:
-    window = { config = H.win_config_on_lsp_progress(), winblend = 95 },
+    window = { config = H.win_config_on_lsp_progress(), winblend = 95 }, -- default blend 25
   })
 end
 
@@ -51,11 +49,14 @@ end
 -- H.filterout_lua_diagnosing = function(notif_arr)
 --   return MiniNotify.default_sort(vim.tbl_filter(H.not_lua_diagnosing, notif_arr))
 -- end
-H.format_on_lsp_progress = function(notif) -- skip the time and the bar (|)
+
+--- Skip the time and the bar (|)
+H.format_on_lsp_progress = function(notif)
   notif.hl_group = "Comment"
   return notif.msg
 end
 
+--- Customize window to be more "fidget" like
 H.win_config_on_lsp_progress = function()
   local has_statusline = vim.o.laststatus > 0
   local pad = vim.o.cmdheight + (has_statusline and 2 or 0) -- 2 looks better than 1
