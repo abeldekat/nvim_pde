@@ -19,12 +19,13 @@ function M.on_events(cb, events, pattern)
 end
 
 function M.on_keys(cb, keys, desc)
+  local cb_scheduled = vim.schedule_wrap(cb)
   keys = type(keys) == "string" and { keys } or keys
+
   for _, key in ipairs(keys) do
     vim.keymap.set("n", key, function()
       vim.keymap.del("n", key)
-      cb()
-      vim.api.nvim_input(vim.api.nvim_replace_termcodes(key, true, true, true))
+      cb_scheduled()
     end, { desc = desc, silent = true })
   end
 end
