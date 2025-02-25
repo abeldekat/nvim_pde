@@ -69,12 +69,18 @@ H.provide_picker = function() -- interface to picker to be used in other modules
   local Picker = {
     keymaps = extra.keymaps,
 
-    -- mini.pick: no direct jump to definition(#978):
-    lsp_definitions = function() vim.lsp.buf.definition({ reuse_win = true }) end,
+    lsp_definitions = function() -- mini.pick: no direct jump to definition(#978):
+      -- https://github.com/echasnovski/mini.nvim/issues/979
+      -- NOTE: Overridden for lua_ls, unique definition...
+      -- TODO: Needed? vim.cmd("normal! m'")
+      vim.lsp.buf.definition({ scope = "definition" })
+    end,
 
     lsp_references = function() extra.lsp({ scope = "references" }) end,
     lsp_implementations = function() extra.lsp({ scope = "implementation" }) end,
     lsp_type_definitions = function() extra.lsp({ scope = "type_definition" }) end,
+
+    -- Issue # 979 Jump using ctrl-o not correct after navigating with lsp picker(solved)
     -- Or, via the quickfix:
     -- lsp_references = function() vim.lsp.buf.references(nil, { reuse_win = true }) end,
     -- lsp_implementations = function() vim.lsp.buf.implementation({ reuse_win = true }) end,

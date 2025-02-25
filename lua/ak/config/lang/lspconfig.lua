@@ -128,7 +128,12 @@ function H.lua_ls() -- Mostly copied from nvim echasnovski...
     show_location(items[1])
   end
 
-  local luals_unique_definition = function() return vim.lsp.buf.definition({ on_list = on_list }) end
+  local luals_unique_definition = function()
+    -- Using ctrl-o and ctrl-i from jumplist:
+    vim.cmd("normal! m'") -- See mini.nvim issue 979, and ak.config.editor.mini_pick.lua
+
+    return vim.lsp.buf.definition({ on_list = on_list })
+  end
 
   return {
     on_attach = function(client, bufnr)

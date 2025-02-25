@@ -17,7 +17,7 @@ local function lsp()
     source = "neovim/nvim-lspconfig",
     depends = {
       "williamboman/mason-lspconfig.nvim",
-      { source = "mrcjkb/rustaceanvim", checkout = "v5.24.3" },
+      { source = "mrcjkb/rustaceanvim", checkout = "v5.25.0" },
     },
   })
   require("ak.config.lang.lspconfig")
