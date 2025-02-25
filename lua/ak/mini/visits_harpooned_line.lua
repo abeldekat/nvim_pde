@@ -118,10 +118,11 @@ H.produce = function()
   H.cached_line = string.format("%s%s%s", header, sep, line)
 end
 
-H.produce_and_cb = function()
+-- Must be wrapped, mini.files might not have a state yet...
+H.produce_and_cb = vim.schedule_wrap(function()
   H.produce()
   local conf = H.get_config()
   if conf.cb then conf.cb() end
-end
+end)
 
 return VisitsHarpoonedLine

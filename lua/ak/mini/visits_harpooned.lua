@@ -58,13 +58,10 @@ VisitsHarpooned.list_paths = function(label) return Api.list_paths(label) end
 
 VisitsHarpooned.full_path_of_current_buffer = function()
   local ft = vim.bo.ft
-  if ft and ft == "minifiles" then
-    local curpath = vim.fs.dirname((MiniFiles.get_fs_entry() or {}).path)
-    if curpath == nil then return vim.notify("Cursor is not on valid entry") end
+  if not (ft and ft == "minifiles") then return vim.fn.expand("%:p") end
 
-    return curpath
-  end
-  return vim.fn.expand("%:p")
+  local state = MiniFiles.get_explorer_state()
+  return state and state.branch[state.depth_focus] or nil
 end
 
 -- Helper ================================================================

@@ -42,15 +42,14 @@
       //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-ts-autotag/lua",
 
       //// coding:
-      //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/friendly-snippets/lua",
       //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-cmp/lua",
       //// cmp-nvim-lsp, cmp-buffer, cmp-path, cmp_luasnip
+      //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/friendly-snippets/lua",
       //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/dial.nvim/lua",
 
       //// editor
       //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/vim-hardtime",
       //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/leap.nvim/lua",
-      //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-spectre/lua",
       //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/toggleterm.nvim/lua",
       //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-bqf/lua",
       //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-pqf/lua",
@@ -66,11 +65,10 @@
       //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/conform.nvim/lua",
       //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-lint/lua",
       //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/mason.nvim/lua",
+      //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-lspconfig/lua",
       //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/mason-lspconfig.nvim/lua",
-      //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/fidget.nvim/lua",
       //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/SchemaStore.nvim/lua",
       //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/rustaceanvim/lua/",
-      //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-lspconfig/lua",
 
       //// lang test debug
       //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/neotest/lua",
