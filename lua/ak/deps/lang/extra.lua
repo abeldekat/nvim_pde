@@ -43,6 +43,7 @@ local function sql()
   local function load()
     add(spec)
     require("ak.config.lang.sql.dadbod")
+    vim.notify("Loaded dadbod", vim.log.levels.INFO)
   end
   register(spec)
   Util.defer.on_events(function()

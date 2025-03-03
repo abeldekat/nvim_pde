@@ -18,14 +18,26 @@ function M.on_events(cb, events, pattern)
   vim.api.nvim_create_autocmd(events, opts)
 end
 
-function M.on_keys(cb, keys, desc)
-  local cb_scheduled = vim.schedule_wrap(cb)
-  keys = type(keys) == "string" and { keys } or keys
+local function resubmit_key_if_present(key_to_resubmit)
+  local key_to_use = vim.api.nvim_replace_termcodes(key_to_resubmit, true, true, true)
 
+  local keys = vim.api.nvim_get_keymap("n")
+  for _, key in ipairs(keys) do
+    ---@diagnostic disable-next-line: undefined-field
+    if key.lhs == key_to_use then
+      vim.api.nvim_input(key_to_use)
+      break
+    end
+  end
+end
+
+function M.on_keys(cb, keys, desc)
+  keys = type(keys) == "string" and { keys } or keys
   for _, key in ipairs(keys) do
     vim.keymap.set("n", key, function()
       vim.keymap.del("n", key)
-      cb_scheduled()
+      cb() -- key used for lazy loading might be redefined here...
+      resubmit_key_if_present(key)
     end, { desc = desc, silent = true })
   end
 end

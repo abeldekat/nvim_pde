@@ -31,6 +31,3 @@ vim.api.nvim_create_autocmd("FileType", {
 
 vim.cmd("DBCompletionClearCache") -- current buffer completion
 apply()
-
--- dadbod is loaded, change the key to no-op
-vim.keymap.set("n", "<leader>od", function() vim.print("Loaded dadbod") end, { desc = "Load dadbod", silent = true })

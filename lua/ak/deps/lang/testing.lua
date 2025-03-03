@@ -12,6 +12,7 @@ later(function()
   local function load()
     add(spec)
     require("ak.config.lang.testing")
+    vim.notify("Loaded neotest", vim.log.levels.INFO)
   end
   Util.defer.on_keys(function() now(load) end, "<leader>tL", "Load neotest")
 end)

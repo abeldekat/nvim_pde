@@ -19,6 +19,7 @@ later(function()
     now(function()
       require("ak.config.util.slime")
       add(spec_slime)
+      vim.notify("Loaded vim-slime", vim.log.levels.INFO)
     end)
   end, "<leader>oR", "Load slime(repl)")
 

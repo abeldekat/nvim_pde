@@ -1,5 +1,3 @@
-local function no_op() end
-
 local get_opts = function()
   return {
     status = { virtual_text = true },
@@ -41,8 +39,6 @@ local function keys()
   map("<leader>tO", function() require("neotest").output_panel.toggle() end, { desc = "Toggle output panel" })
   map("<leader>tS", function() require("neotest").run.stop() end, { desc = "Stop" })
   map("<leader>tw", function() require("neotest").watch.toggle(vim.fn.expand("%")) end, { desc = "Toggle watch" })
-
-  map("<leader>tL", no_op, { desc = "No-op neotest" })
 end
 
 local function setup()

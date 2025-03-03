@@ -18,6 +18,7 @@ later(function()
   local function load()
     add(spec)
     require("ak.config.lang.debugging")
+    vim.notify("Loaded nvim-dap", vim.log.levels.INFO)
   end
   Util.defer.on_keys(function() now(load) end, "<leader>dL", "Load dap")
 end)
