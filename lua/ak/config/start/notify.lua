@@ -18,14 +18,10 @@ local lsp_progress_minus = function()
 end
 vim.api.nvim_create_autocmd("LspProgress", { pattern = "end", callback = lsp_progress_minus })
 
---- Helpers for custom setup
 local format = function(notif)
-  if not in_lsp_progress() then return MiniNotify.default_format(notif) end
-  -- Weird that this works, as this is not the right place to do it (not sure
-  -- if there is the one better, though)
-  notif.hl_group = "Comment"
-  return notif.msg
+  return notif.data.source == "lsp_progress" and notif.msg or MiniNotify.default_format(notif)
 end
+vim.api.nvim_set_hl(0, "MiniNotifyLspProgress", { link = "Comment" })
 
 --- The window config differs between "vim.notify"  and "in lsp progress"
 local window_config = function()

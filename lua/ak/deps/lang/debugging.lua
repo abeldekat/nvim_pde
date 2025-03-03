@@ -14,10 +14,10 @@ later(function()
       "jbyuki/one-small-step-for-vimkind", -- lua
     },
   }
+  register(spec)
   local function load()
     add(spec)
     require("ak.config.lang.debugging")
   end
-  register(spec)
   Util.defer.on_keys(function() now(load) end, "<leader>dL", "Load dap")
 end)

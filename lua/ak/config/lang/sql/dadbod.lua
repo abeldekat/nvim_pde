@@ -12,7 +12,7 @@ local Util = require("ak.util")
 local function apply()
   if Util.cmp == "blink" then -- If true, must have been loaded on "later" in deps.coding
     require("blink-cmp").add_provider("dadbod", { name = "Dadbod", module = "vim_dadbod_completion.blink" })
-  elseif Util.cmp == "nvim-cmp" then
+  elseif Util.cmp == "cmp" then
     local has_nvim_cmp, cmp = pcall(require, "cmp")
     if has_nvim_cmp then cmp.setup.buffer({ sources = { { name = "vim-dadbod-completion" } } }) end
   end

@@ -10,7 +10,7 @@ now(function()
   --          ╭─────────────────────────────────────────────────────────╮
   --          │                         Explorer                        │
   --          ╰─────────────────────────────────────────────────────────╯
-  local function add_explorer() require("ak.config.editor.mini_files") end
+  local function add_explorer() require("ak.config.editor.files") end
   -- stylua: ignore
   if Util.opened_with_dir_argument() then add_explorer() else later(add_explorer) end
 
@@ -39,23 +39,23 @@ later(function()
   --          ╭─────────────────────────────────────────────────────────╮
   --          │                          Mini                           │
   --          ╰─────────────────────────────────────────────────────────╯
-  require("ak.config.editor.mini_clue")
-  require("ak.config.editor.mini_cursorword")
-  require("ak.config.editor.mini_hipatterns")
-  require("ak.config.editor.mini_git")
-  require("ak.config.editor.mini_diff")
-  require("ak.config.editor.mini_pick")
+  require("ak.config.editor.clue")
+  require("ak.config.editor.cursorword")
+  require("ak.config.editor.hipatterns")
+  require("ak.config.editor.git")
+  require("ak.config.editor.diff")
+  require("ak.config.editor.pick")
   if pick_add_fzf then -- download fzf on demand
     local spec_fzf = "ibhagwan/fzf-lua"
     register(spec_fzf)
     Util.defer.on_keys(function()
       now(function()
         add(spec_fzf)
-        require("ak.config.editor.mini_pick_fzf_lua")
+        require("ak.config.editor.pick_fzf_lua")
       end)
     end, "<leader>fi", "Picker builtin")
   end
-  require("ak.config.editor.mini_visits") -- marks like grapple.nvim/harpoon, uses mini.pick
+  require("ak.config.editor.visits") -- marks like grapple.nvim/harpoon, uses mini.pick
 
   --          ╭─────────────────────────────────────────────────────────╮
   --          │                         Quickfix                        │
@@ -76,15 +76,6 @@ later(function()
   --          ╭─────────────────────────────────────────────────────────╮
   --          │                          Other                          │
   --          ╰─────────────────────────────────────────────────────────╯
-
-  -- local spec_spectre = "nvim-pack/nvim-spectre"
-  -- register(spec_spectre)
-  -- Util.defer.on_keys(function()
-  --   now(function()
-  --     add(spec_spectre)
-  --     require("ak.config.editor.spectre")
-  --   end)
-  -- end, "<leader>cR", "Replace in files (spectre)")
 
   -- local spec_overseer = "stevearc/overseer.nvim"
   -- register(spec_overseer)

@@ -33,6 +33,6 @@ later(function()
   end, "<leader>oN", "Neogen")
 
   -- Util.defer.on_keys(function()
-  --   now(function() require("ak.config.util.mini_doc") end)
+  --   now(function() require("ak.config.util.doc") end)
   -- end, "<leader>oD", "Mini doc")
 end)

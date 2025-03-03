@@ -31,7 +31,7 @@
       // // busted, only for reference: "${3rd}/busted/library",
 
       //// start
-      // "$XDG_DATA_HOME/nvim/site/pack/deps/start/mini.nvim/lua",
+      "$XDG_DATA_HOME/nvim/site/pack/deps/start/mini.nvim/lua",
 
       //// colors: no completion needed
 

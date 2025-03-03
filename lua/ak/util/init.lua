@@ -16,7 +16,7 @@ M.use_mini_ai = false
 ---@type boolean don't integrate non-lsp snippets with completion engine
 M.snippets_standalone = false
 
----@type "nvim-cmp" | "blink" | "mini" | "none"
+---@type "cmp" | "blink" | "mini" | "none"
 M.cmp = "none"
 
 -- End shared variables

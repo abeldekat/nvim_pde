@@ -8,11 +8,10 @@ later(function()
     source = "nvim-neotest/neotest",
     depends = { "nvim-neotest/nvim-nio" },
   }
+  register(spec)
   local function load()
     add(spec)
     require("ak.config.lang.testing")
   end
-
-  register(spec)
   Util.defer.on_keys(function() now(load) end, "<leader>tL", "Load neotest")
 end)
