@@ -11,38 +11,41 @@
 --          ╰─────────────────────────────────────────────────────────╯
 local Util = require("ak.util")
 local Picker = Util.pick
-local H = {}
 
-H.opts = {
+local toggles = {
   inlay_hints = { auto = true, filter = { "lua", "zig" } },
   codeLens = { auto = false, filter = { "lua" } },
 }
 
----@param on_attach fun(client, buffer)
+local custom_on_attach = function(_, buf_id) -- client
+  if Util.cmp == "mini" then vim.bo[buf_id].omnifunc = "v:lua.MiniCompletion.completefunc_lsp" end
+end
+
+---@param cb fun(client, buffer)
 ---@param name? string
-function H.on_attach(on_attach, name)
+local au_lsp_attach = function(cb, name)
   vim.api.nvim_create_autocmd("LspAttach", {
     callback = function(args)
       local buffer = args.buf ---@type number
       local client = vim.lsp.get_client_by_id(args.data.client_id)
-      if client and (not name or client.name == name) then on_attach(client, buffer) end
+      if client and (not name or client.name == name) then cb(client, buffer) end
     end,
   })
 end
 
-function H.auto_inlay_hints()
-  H.on_attach(function(_, buffer)
+local auto_inlay_hints = function()
+  au_lsp_attach(function(_, buffer)
     -- if client.supports_method("textDocument/inlayHint") then
-    if vim.tbl_contains(H.opts.inlay_hints.filter, vim.bo[buffer].filetype) then
+    if vim.tbl_contains(toggles.inlay_hints.filter, vim.bo[buffer].filetype) then
       Util.toggle.inlay_hints(buffer, true) --
     end
   end)
 end
 
-function H.codelens()
-  H.on_attach(function(_, buffer)
+local codelens = function()
+  au_lsp_attach(function(_, buffer)
     -- if client.supports_method("textDocument/codeLens") then
-    if vim.tbl_contains(H.opts.codeLens.filter, vim.bo[buffer].filetype) then
+    if vim.tbl_contains(toggles.codeLens.filter, vim.bo[buffer].filetype) then
       vim.lsp.codelens.refresh()
       vim.api.nvim_create_autocmd({ "BufEnter", "InsertLeave" }, { --  "CursorHold"
         buffer = buffer,
@@ -52,7 +55,7 @@ function H.codelens()
   end)
 end
 
-function H.keys(_, buffer) -- client
+local keys = function(_, buffer) -- client
   local function map(l, r, opts, mode)
     mode = mode or "n"
     opts["buffer"] = buffer
@@ -91,7 +94,7 @@ end
 -- NOTE: when uncommenting a library block in .luarc.jsonc, the completion
 -- becomes available without restarting nvim
 --
-function H.lua_ls() -- Mostly copied from nvim echasnovski...
+local lua_ls = function() -- Mostly copied from nvim echasnovski...
   --
   -- LuaLS "Go to source" =======================================================
   -- Deal with the fact that LuaLS in case of `local a = function()` style
@@ -137,13 +140,14 @@ function H.lua_ls() -- Mostly copied from nvim echasnovski...
 
   return {
     on_attach = function(client, bufnr)
+      custom_on_attach(client, bufnr)
+
       -- Reduce unnecessarily long list of completion triggers for better
       -- 'mini.completion' experience
       client.server_capabilities.completionProvider.triggerCharacters = { ".", ":" }
 
       -- Override global "Go to source" mapping with dedicated buffer-local
-      local opts = { buffer = bufnr, desc = "Goto definition" }
-      vim.keymap.set("n", "gd", luals_unique_definition, opts)
+      vim.keymap.set("n", "gd", luals_unique_definition, { buffer = bufnr, desc = "Goto definition" })
     end,
     settings = {
       Lua = {
@@ -166,13 +170,14 @@ function H.lua_ls() -- Mostly copied from nvim echasnovski...
   }
 end
 
-function H.jsonls()
+local jsonls = function()
   return {
     -- lazy-load schemastore when needed
     on_new_config = function(new_config)
       new_config.settings.json.schemas = new_config.settings.json.schemas or {}
       vim.list_extend(new_config.settings.json.schemas, require("schemastore").json.schemas())
     end,
+    on_attach = custom_on_attach,
     settings = {
       json = {
         format = {
@@ -184,7 +189,7 @@ function H.jsonls()
   }
 end
 
-function H.yamlls()
+local yamlls = function()
   return {
     -- Have to add this for yamlls to understand that we support line folding
     capabilities = {
@@ -200,6 +205,7 @@ function H.yamlls()
       new_config.settings.yaml.schemas =
         vim.tbl_deep_extend("force", new_config.settings.yaml.schemas or {}, require("schemastore").yaml.schemas())
     end,
+    on_attach = custom_on_attach,
     settings = {
       redhat = { telemetry = { enabled = false } },
       yaml = {
@@ -220,23 +226,23 @@ function H.yamlls()
   }
 end
 
-function H.ruff()
+local ruff = function()
   local desc = "Organize imports"
   local opts_code_action = {
     apply = true,
     context = { only = { "source.organizeImports" }, diagnostics = {} },
   }
   local code_action = function() vim.lsp.buf.code_action(opts_code_action) end
-  H.on_attach(function(client, buffer)
+  au_lsp_attach(function(client, buffer)
     vim.keymap.set("n", "<leader>co", code_action, { desc = desc, silent = true, buffer = buffer })
     -- Disable hover in favor of Pyright
     client.server_capabilities.hoverProvider = false
   end, "ruff")
-  return {}
+  return { on_attach = custom_on_attach }
 end
 
 -- Rust analyzer: Not installed by mason
-function H.rust_analyzer(_) -- capabilities setup by rustaceanvim
+local rust_analyzer_setup = function(_) -- capabilities setup by rustaceanvim
   -- local lspconfig = require("lspconfig")
   -- local ca = {}
   -- lspconfig.rust_analyzer.setup({
@@ -245,7 +251,8 @@ function H.rust_analyzer(_) -- capabilities setup by rustaceanvim
 
   local opts = {
     server = {
-      on_attach = function(_, bufnr)
+      on_attach = function(client, bufnr)
+        custom_on_attach(client, bufnr)
         vim.keymap.set(
           "n",
           "<leader>cR",
@@ -299,46 +306,46 @@ function H.rust_analyzer(_) -- capabilities setup by rustaceanvim
   vim.g.rustaceanvim = vim.tbl_deep_extend("keep", vim.g.rustaceanvim or {}, opts or {})
 end
 
--- TODO: test ltex-plus
-function H.texlab()
+local texlab = function() -- TODO: test ltex-plus
   local desc = "Vimtex Docs"
-  H.on_attach(function(_, buffer) -- client
+  au_lsp_attach(function(_, buffer) -- client
     vim.keymap.set("n", "<Leader>K", "<plug>(vimtex-doc-package)", { desc = desc, silent = true, buffer = buffer })
   end, "texlab")
-  return {}
+  return { on_attach = custom_on_attach }
 end
 
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                          Setup                          │
 --          ╰─────────────────────────────────────────────────────────╯
-H.on_attach(function(client, buffer) -- keymaps
-  H.keys(client, buffer) -- are always set regardles of capabilities
+
+au_lsp_attach(function(client, buffer) -- keymaps
+  keys(client, buffer) -- are always set regardles of capabilities
 end)
 
-if H.opts.inlay_hints.auto then H.auto_inlay_hints() end
-if H.opts.codeLens.auto then H.codelens() end
+if toggles.inlay_hints.auto then auto_inlay_hints() end
+if toggles.codeLens.auto then codelens() end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 if Util.cmp == "blink" then
   capabilities = vim.tbl_deep_extend("force", {}, require("blink.cmp").get_lsp_capabilities(capabilities))
-elseif Util.cmp == "nvim-cmp" then
+elseif Util.cmp == "cmp" then
   local has_cmp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
   capabilities = vim.tbl_deep_extend("force", capabilities, has_cmp and cmp_nvim_lsp.default_capabilities() or {})
 end
 
--- the servers below are setup by mason
+-- servers setup by mason:
 local servers = {
-  bashls = {},
-  jsonls = H.jsonls(),
+  bashls = { on_attach = custom_on_attach },
+  jsonls = jsonls(),
   -- ltex = {}, -- grammar/spelling checker, needs jre(installed jre-openjdk-headless)
-  lua_ls = H.lua_ls(),
-  marksman = {},
-  pyright = {}, -- test basedpyright, semantic highlighting
-  ruff = H.ruff(), -- test, replaced ruff_lsp
-  taplo = {}, -- toml
-  texlab = H.texlab(), -- latex
-  yamlls = H.yamlls(),
-  zls = {}, -- zig
+  lua_ls = lua_ls(),
+  marksman = { on_attach = custom_on_attach },
+  pyright = { on_attach = custom_on_attach }, -- test basedpyright
+  ruff = ruff(),
+  taplo = { on_attach = custom_on_attach }, -- toml
+  texlab = texlab(), -- latex
+  yamlls = yamlls(),
+  zls = { on_attach = custom_on_attach }, -- zig
 }
 local ensure_installed = vim.tbl_keys(servers or {})
 
@@ -357,4 +364,4 @@ require("mason-lspconfig").setup({
 })
 
 -- servers without mason:
-H.rust_analyzer(capabilities)
+rust_analyzer_setup(capabilities)

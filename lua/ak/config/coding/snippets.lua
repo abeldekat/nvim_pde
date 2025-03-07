@@ -8,19 +8,6 @@
 -- - Prefer `*.json` files with dict-like content if you want more cross platfrom
 -- setup. Otherwise use `*.lua` files with array-like content.
 
-local Util = require("ak.util")
-
-local function add_expand_mapping()
-  -- The default:
-  -- vim.keymap.set("i", "<c-k>", "<Cmd>lua MiniSnippets.expand()<CR>", { desc = "Expand snippet" })
-  -- Create customized expand mappings:
-  local expand = function() MiniSnippets.expand() end
-  vim.keymap.set("i", "<c-k>", expand, { desc = "Expand snippet" })
-  -- Add extra expand all mapping:
-  local expand_all = function() MiniSnippets.expand({ match = false }) end
-  vim.keymap.set("i", "<C-g><C-k>", expand_all, { desc = "Expand all snippet" })
-end
-
 -- local function add_expand_supertab_mapping(opts) -- testing supertab
 --   local expand_or_jump = function()
 --     local can_expand = #MiniSnippets.expand({ insert = false }) > 0
@@ -53,11 +40,22 @@ end
 --   return opts
 -- end
 
+local Util = require("ak.util")
+local expand_mapping = Util.cmp == "mini" and "<c-j>" or "<c-k>"
+
+local function add_expand_mapping()
+  local expand = function() MiniSnippets.expand() end
+  vim.keymap.set("i", expand_mapping, expand, { desc = "Expand snippet" })
+
+  local expand_all = function() MiniSnippets.expand({ match = false }) end
+  vim.keymap.set("i", "<C-g>" .. expand_mapping, expand_all, { desc = "Expand all snippet" })
+end
+
 -- Fixes:
 -- select - vim.ui.select: ghost_text appearing
 -- select - vim.ui.select: cmp popups cover picker
 local function expand_select_override(snippets, insert)
-  if Util.cmp == "nvim-cmp" then
+  if Util.cmp == "cmp" then
     local cmp = require("cmp")
     if cmp.visible() then cmp.close() end
     MiniSnippets.default_select(snippets, insert)
@@ -77,7 +75,7 @@ local snippets = {
   mini_snippets.gen_loader.from_lang({ lang_patterns = lang_patterns }),
 }
 
--- I already use <c-j> to confirm completion.
+-- I already use <c-j> to confirm completion in cmp and blink.
 --
 -- Digraph: CTRL-K {char1} [char2] Enter digraph (see |digraphs|).
 -- I almost never enter a digraph.
@@ -96,5 +94,5 @@ local opts = {
   expand = expand,
 }
 
-add_expand_mapping() -- map expand from <c-j> to <c-k> in this module
+add_expand_mapping()
 mini_snippets.setup(opts)

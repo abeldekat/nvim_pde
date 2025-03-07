@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/LuaLS/vscode-lua/master/setting/schema.json",
   "codeLens": { "enable": true },
-  "completion": { "callSnippet": "Replace", "keywordSnippet": "Disable" },
+  "completion": { "callSnippet": "Replace", "keywordSnippet": "Replace" },
   "diagnostics": {
     "globals": ["vim", "describe", "it", "before-each", "after-each"],
     // Don't make workspace diagnostic, as it consumes too much CPU and RAM

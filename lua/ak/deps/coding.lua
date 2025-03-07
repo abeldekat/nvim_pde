@@ -6,7 +6,8 @@ local add, later = MiniDeps.add, MiniDeps.later
 Util.use_mini_ai = true
 Util.snippets_standalone = true
 -- Util.cmp = "blink"
-Util.cmp = "cmp"
+-- Util.cmp = "cmp"
+Util.cmp = "mini"
 
 -- blink and friendly-snippets: 2 plugins
 local function blink_completion()
@@ -29,6 +30,7 @@ local function blink_completion()
   require("ak.config.coding.blink_completion")
 end
 
+-- mini-deps-snap: ["nvim-cmp"] = "c27370703e798666486e3064b64d59eaf4bdc6d5",
 -- cmp and 3 sources: 4 plugins
 local function cmp_completion()
   local cmp_depends = {
@@ -42,8 +44,6 @@ local function cmp_completion()
   require("ak.config.coding.cmp_completion")
 end
 
--- --> wait for upcoming snippet support
--- only when snippet support is removed from each lsp configuration
 local function mini_completion() require("ak.config.coding.mini_completion") end
 
 later(function()

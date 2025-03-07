@@ -1,16 +1,3 @@
--- NOTE: Wait for mini completion to support snippets
--- Currently, lots of expansion contains $ placeholders. Ie "require"
---
--- https://github.com/echasnovski/mini.nvim/issues/1277
--- https://github.com/echasnovski/mini.nvim/issues/886
--- https://github.com/echasnovski/mini.nvim/issues/882
--- https://github.com/echasnovski/mini.nvim/issues/241
--- One downside of 'mini.completion' is that it (maybe yet) doesn't support expanding LSP snippets.
--- And it probably never will. I think that most people are using only a handful of snippets which are better off with setting up manually.
--- #180 has some good advice on this.
--- https://github.com/echasnovski/mini.nvim/issues/193
--- https://github.com/echasnovski/mini.nvim/discussions/180
-
 -- In insertmode, words in buffer, ctrl-n
 -- Also ctrl-x ctrl-n. See :h ins-completion
 -- ctrl-x ctrl-u: user defined completion
@@ -39,36 +26,29 @@
 -- - Makes |mini.completion| show icons, as it uses built-in protocol map.
 -- - Results in loading whole `vim.lsp` module, so might add significant amount
 --   of time on startup. Call it lazily. For example, with |MiniDeps.later()|: >
--- MiniIcons.tweak_lsp_kind()
+MiniIcons.tweak_lsp_kind()
 
-local cmp = require("mini.completion")
-
-local opts = {
-  mappings = {
-    -- Tmux conflict:
+require("mini.completion").setup({
+  mappings = { -- Tmux conflict:
     force_twostep = "", --  "<C-Space>", -- Force two-step completion
     force_fallback = "", -- "<A-Space>", -- Force fallback completion
   },
 
-  -- lsp_completion = { -- current setup echasnovski
-  --   source_func = "omnifunc",
-  --   auto_setup = false,
-  --   process_items = function(items, base)
-  --     -- Don't show 'Text' and 'Snippet' suggestions
-  --     items = vim.tbl_filter(function(x) return x.kind ~= 1 and x.kind ~= 15 end, items)
-  --     return MiniCompletion.default_process_items(items, base)
-  --   end,
-  -- },
-
-  -- set_vim_settings = true, -- better experience, modifies `shortmess` and `completeopt`
+  lsp_completion = { -- current setup echasnovski
+    source_func = "omnifunc",
+    auto_setup = false,
+    -- process_items = function(items, base)
+    --   -- Don't show 'Text' and 'Snippet' suggestions
+    --   items = vim.tbl_filter(function(x) return x.kind ~= 1 and x.kind ~= 15 end, items)
+    --   return MiniCompletion.default_process_items(items, base)
+    -- end,
+  },
 
   window = {
     info = { border = "double" },
     signature = { border = "double" },
   },
-}
-
-cmp.setup(opts)
+})
 
 if vim.fn.has("nvim-0.11") == 1 then
   vim.opt.completeopt:append("fuzzy") -- Use fuzzy matching for built-in completion
