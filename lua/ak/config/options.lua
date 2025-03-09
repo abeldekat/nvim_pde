@@ -110,9 +110,10 @@ autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
 })
 
 -- Highlight on yank
+local hl = vim.fn.has("nvim-0.11") == 1 and vim.hl or vim.highlight
 autocmd("TextYankPost", {
   group = augroup("highlight_yank"),
-  callback = function() vim.highlight.on_yank() end,
+  callback = function() hl.on_yank() end,
 })
 
 -- Resize splits if window got resized
@@ -182,6 +183,7 @@ autocmd("Filetype", {
 })
 
 -- Diagnostics ================================================================
+
 local icons = {
   Error = " ",
   Warn = " ",
@@ -191,10 +193,8 @@ local icons = {
 
 ---@type vim.diagnostic.Opts
 local opts = {
-  -- underline = true,
   update_in_insert = false,
   float = { border = "double" },
-
   virtual_text = {
     -- Show virtual text only for errors
     severity = { min = "ERROR", max = "ERROR" },
@@ -207,19 +207,6 @@ local opts = {
       return "●"
     end,
   },
-
-  -- severity_sort = true,
-  signs = { -- show gutter signs
-    text = {
-      [vim.diagnostic.severity.ERROR] = icons.Error,
-      [vim.diagnostic.severity.WARN] = icons.Warn,
-      [vim.diagnostic.severity.HINT] = icons.Hint,
-      [vim.diagnostic.severity.INFO] = icons.Info,
-    },
-    -- With highest priority
-    priority = 9999,
-    -- Only for warnings and errors
-    severity = { min = "WARN", max = "ERROR" },
-  },
+  signs = { priority = 9999, severity = { min = "WARN", max = "ERROR" } },
 }
 vim.diagnostic.config(vim.deepcopy(opts))

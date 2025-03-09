@@ -25,6 +25,11 @@ local function remove_mappings_basic()
   -- Alternative way to save and exit in Normal mode.
   -- Adding `redraw` helps with `cmdheight=0` if buffer is not modified
   vim.keymap.del({ "n", "x", "i" }, "<C-S>")
+  --
+  -- In nvim-0.11, gO is used for lsp.  New built-in mappings: [space and ]space
+  -- if vim.fn.has("nvim-0.11") == 1 then
+  --   vim.keymap.del("n", "gO")
+  -- end
 end
 
 local basics = require("mini.basics")

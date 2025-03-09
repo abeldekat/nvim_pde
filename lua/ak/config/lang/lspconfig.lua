@@ -35,7 +35,7 @@ end
 
 local auto_inlay_hints = function()
   au_lsp_attach(function(_, buffer)
-    -- if client.supports_method("textDocument/inlayHint") then
+    -- supports_method("textDocument/inlayHint")
     if vim.tbl_contains(toggles.inlay_hints.filter, vim.bo[buffer].filetype) then
       Util.toggle.inlay_hints(buffer, true) --
     end
@@ -44,7 +44,7 @@ end
 
 local codelens = function()
   au_lsp_attach(function(_, buffer)
-    -- if client.supports_method("textDocument/codeLens") then
+    -- supports_method("textDocument/codeLens")
     if vim.tbl_contains(toggles.codeLens.filter, vim.bo[buffer].filetype) then
       vim.lsp.codelens.refresh()
       vim.api.nvim_create_autocmd({ "BufEnter", "InsertLeave" }, { --  "CursorHold"
@@ -55,6 +55,8 @@ local codelens = function()
   end)
 end
 
+-- see lsp-defaults
+-- in 0.11, gr, go refactor
 local keys = function(_, buffer) -- client
   local function map(l, r, opts, mode)
     mode = mode or "n"
@@ -62,29 +64,35 @@ local keys = function(_, buffer) -- client
     opts["silent"] = opts.silent ~= false
     vim.keymap.set(mode, l, r, opts)
   end
-  map("<leader>cl", "<cmd>LspInfo<cr>", { desc = "Lsp info" })
+
+  -- The lsp client sets tagfunc, the default <c-]>. A popular custom mapping:
   map("gd", Picker.lsp_definitions, { desc = "Goto definition" })
-  map("gD", vim.lsp.buf.declaration, { desc = "Goto declaration" })
-  map("gr", Picker.lsp_references, { desc = "References", nowait = true })
-  map("gI", Picker.lsp_implementations, { desc = "Goto implementation" })
-  --
   -- Used to be gy. gy can also be used to copy to clipboard
   map("gY", Picker.lsp_type_definitions, { desc = "Goto type definition" })
-  --   map("K", function() vim.lsp.buf.hover() end, { desc = "Hover" }) -- builtin, see lsp-defaults
+  map("gD", vim.lsp.buf.declaration, { desc = "Goto declaration" })
+
+  if vim.fn.has("nvim-0.11") == 1 then -- override some mappings created unconditionally
+    map("grr", Picker.lsp_references, { desc = "References", nowait = true }) -- override
+    map("gri", Picker.lsp_implementations, { desc = "Goto implementation" }) -- override
+    -- gra is code action
+    -- grn is rename
+    -- <c-s> is signature help -- in insert mode --
+    -- gO is buf document symbol
+  else
+    map("gr", Picker.lsp_references, { desc = "References", nowait = true })
+    map("gI", Picker.lsp_implementations, { desc = "Goto implementation" })
+    map("<leader>ca", vim.lsp.buf.code_action, { desc = "Code action" }, { "n", "v" })
+    map("<leader>cr", vim.lsp.buf.rename, { desc = "Rename" })
+    map("<c-s>", function() vim.lsp.buf.signature_help() end, { desc = "Signature help" }, "i")
+  end
   map("gK", function() vim.lsp.buf.signature_help() end, { desc = "Signature help" })
-  --
-  -- used to be <c-k>, now used for snippet expansion:
-  map("<c-s>", function() vim.lsp.buf.signature_help() end, { desc = "Signature help" }, "i")
-  --
-  map("<leader>ca", vim.lsp.buf.code_action, { desc = "Code action" }, { "n", "v" })
-  map(
-    "<leader>cA",
-    function() vim.lsp.buf.code_action({ context = { only = { "source" }, diagnostics = {} } }) end,
-    { desc = "Source action" }
-  )
-  map("<leader>cr", vim.lsp.buf.rename, { desc = "Rename" })
+  -- K is vim.lsp.buf.hover() unless customized `keywordprog` exists
+
+  local function source_action() vim.lsp.buf.code_action({ context = { only = { "source" }, diagnostics = {} } }) end
+  map("<leader>cA", source_action, { desc = "Source action" })
   map("<leader>cc", vim.lsp.codelens.run, { desc = "Run Codelens" }, { "n", "v" })
   map("<leader>cC", vim.lsp.codelens.refresh, { desc = "Refresh & Display Codelens" })
+  map("<leader>cl", "<cmd>LspInfo<cr>", { desc = "Lsp info" })
 end
 
 -- Assumption: .luarc.jsonc takes precendence. Individual values override,

@@ -1,4 +1,4 @@
-if vim.loader then vim.loader.enable() end
+vim.loader.enable()
 
 -- Caching: Do all init in ak/init.lua
 require("ak")({})
