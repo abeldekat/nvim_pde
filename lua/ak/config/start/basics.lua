@@ -9,7 +9,7 @@
 -- :[range]go[to] [count]					*:go* *:goto* *go*
 -- [count]go		Go to [count] byte in the buffer.
 
-local function remove_mappings_basic()
+local function remove_mappings_basic() -- pre nvim-0.11
   -- map("n", "gp", '"+p', { desc = "Paste from system clipboard" })
   -- -- - Paste in Visual with `P` to not copy selected text (`:h v_P`)
   -- map("x", "gp", '"+P', { desc = "Paste from system clipboard" })
@@ -25,25 +25,33 @@ local function remove_mappings_basic()
   -- Alternative way to save and exit in Normal mode.
   -- Adding `redraw` helps with `cmdheight=0` if buffer is not modified
   vim.keymap.del({ "n", "x", "i" }, "<C-S>")
-  --
-  -- In nvim-0.11, gO is used for lsp.  New built-in mappings: [space and ]space
-  -- if vim.fn.has("nvim-0.11") == 1 then
-  --   vim.keymap.del("n", "gO")
-  -- end
 end
 
-local basics = require("mini.basics")
-local config = {
+local function map(mode, lhs, rhs, opts)
+  if lhs == "" then return end
+  opts = vim.tbl_deep_extend("force", { silent = true }, opts or {})
+  vim.keymap.set(mode, lhs, rhs, opts)
+end
 
-  options = { -- not using options in favor of own options...
-    -- Basic options ('number', 'ignorecase', and many more)
-    basic = false, -- true. Also optional: win_borders, extra_ui
-  },
+-- In nvim-0.11, gO is used for lsp.  Use new built-in mappings: [space and ]space
+local function add_mappings_basic() -- >= nvim-0.11, copied from mini.basics
+  -- Move by visible lines.
+  map({ "n", "x" }, "j", [[v:count == 0 ? 'gj' : 'j']], { expr = true })
+  map({ "n", "x" }, "k", [[v:count == 0 ? 'gk' : 'k']], { expr = true })
 
+  -- Copy/paste with system clipboard ( not using the provided gp)
+  map({ "n", "x" }, "gy", '"+y', { desc = "Copy to system clipboard" })
+end
+
+local skip_mappings_basic = vim.fn.has("nvim-0.11") == 1 and true or false
+
+require("mini.basics").setup({
+  -- Not using options in favor of own options...
+  options = { basic = false },
   mappings = {
     -- Basic mappings (better 'jk', save with Ctrl+S, ...)
     -- Also copy/paste with system clipboard, gy gp
-    basic = true, -- especially: go and gO
+    basic = not skip_mappings_basic, -- especially: go and gO
     -- Prefix for mappings that toggle common options ('wrap', 'spell', ...).
     option_toggle_prefix = "", -- [[\]],  disable... See keymaps leader u
     -- Window navigation with <C-hjkl>, resize with <C-arrow>
@@ -51,19 +59,17 @@ local config = {
     -- Move cursor in Insert, Command, and Terminal mode with <M-hjkl>
     move_with_alt = true,
   },
-
   -- Autocommands. Set to `false` to disable
-  autocommands = {
-    -- Highlight on yank: See own options
-    -- Start terminal with insert: Using toggleterm mostly
-    basic = false, -- true -- Also optional: relnum_in_visual_mode
-  },
-
+  -- Highlight on yank: See own options
+  -- Start terminal with insert: Using toggleterm mostly
+  autocommands = { basic = false },
   -- Whether to disable showing non-error feedback
   silent = false,
-}
+})
 
-basics.setup(config)
--- vim.keymap.del for mappings you don't want...
-remove_mappings_basic()
+if skip_mappings_basic then
+  add_mappings_basic()
+else
+  remove_mappings_basic() -- vim.keymap.del for mappings you don't want...
+end
 -- Mappings.windows, ctrl-hjkl will be overridden in ak.config.editor.mini_visits
