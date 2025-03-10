@@ -19,7 +19,7 @@ My _personal development environment_ for Neovim
 - `init`: Uses `:h vim.loader` and calls `ak.init`
 - [ak.init]: Invoke [ak.mini_deps]
 - [ak.deps]: Load plugins
-- [ak.config]: All setup for plugins, options, key-mappings, auto-commands, and colors
+- [ak.config]: All setup for plugins, options, keys, auto commands, and colors
 - [ak.mini]: Internal plugins [ak.mini.visits_harpooned] and [ak.mini.pick_hinted]
 - [ak.util]: Shared code
 
@@ -169,14 +169,14 @@ used to accept completions. I changed the key to `<c-k>`.
 Many of the excellent modules included in [mini.nvim] are used in this config:
 
 `ai`, `align`, `animate`, `base16`, `basics`, `bracketed`,
-`clue`, `cursorword`, `deps`, `diff`, `extra`, `git`,
-`files`, `hipatterns`, `hue`, `icons`, `indentscope`, `misc`,
-`move`, `notify`, `operators`, `pairs`, `pick`, `snippets`,
-`splitjoin`, `starter`, `statusline`, `surround`, `visits`
+`clue`, `completion`, `cursorword`, `deps`, `diff`, `extra`,
+`git`, `files`, `hipatterns`, `hue`, `icons`, `indentscope`,
+`misc`, `move`, `notify`, `operators`, `pairs`, `pick`,
+`snippets`, `splitjoin`, `starter`, `statusline`, `surround`, `visits`
 
 Relevant discussions:
 
-- [From `grapple` to `mini.visits`](https://github.com/echasnovski/mini.nvim/discussions/1158).
+- [Visits tweaked to operate like `grapple` or `harpoon`](https://github.com/echasnovski/mini.nvim/discussions/1158).
   See internal plugin [ak.mini.visits_harpooned]
 - [Augment pickers with labels and hotkeys](https://github.com/echasnovski/mini.nvim/discussions/1109).
   See internal plugin [ak.mini.pick_hinted]

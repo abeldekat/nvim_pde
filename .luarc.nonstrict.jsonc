@@ -2,6 +2,11 @@
   "$schema": "https://raw.githubusercontent.com/LuaLS/vscode-lua/master/setting/schema.json",
   "codeLens": { "enable": true },
   "completion": { "callSnippet": "Replace" },
+  "diagnostics": {
+    "globals": ["vim", "describe", "it", "before-each", "after-each"]
+    // Don't make workspace diagnostic, as it consumes too much CPU and RAM
+    // "workspaceDelay": -1
+  },
   "doc": { "privateName": ["^_"] },
   "hint": {
     "enable": true,
@@ -21,7 +26,6 @@
     "ignoreDir": ["colors_*/"],
     "library": [
       "$VIMRUNTIME/lua",
-      // Using Bilal2453/luvit-meta:
       // "${3rd}/luv/library",
 
       // Add everything:

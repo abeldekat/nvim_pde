@@ -1,7 +1,6 @@
 local Util = require("ak.util")
 local MiniDeps = require("mini.deps")
 local add, later = MiniDeps.add, MiniDeps.later
-local register = Util.deps.register
 
 local function lsp()
   local build_mason = function()
