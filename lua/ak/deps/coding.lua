@@ -5,9 +5,10 @@ local add, later = MiniDeps.add, MiniDeps.later
 -- Change the default values here for use in ak.config:
 Util.use_mini_ai = true
 Util.snippets_standalone = true
--- Util.cmp = "blink"
--- Util.cmp = "cmp"
 Util.cmp = "mini"
+-- Util.cmp = "none"
+-- Util.cmp = "cmp"
+-- Util.cmp = "blink"
 
 -- blink and friendly-snippets: 2 plugins
 local function blink_completion()
@@ -24,7 +25,7 @@ local function blink_completion()
   add({
     source = "saghen/blink.cmp",
     -- depends = { "rafamadriz/friendly-snippets" },
-    checkout = "v0.12.4",
+    checkout = "v0.13.1",
     -- hooks = { post_install = build_blink, post_checkout = build_blink },
   })
   require("ak.config.coding.blink_completion")
@@ -52,7 +53,7 @@ later(function()
 
   if Util.cmp == "cmp" then
     cmp_completion()
-  elseif Util.cmp == "blink" then
+  elseif Util.cmp == "blink" then -- lua_ls does not support, #1333
     -- NOTE: Blink adds 7 ms to startuptime when using now().
     blink_completion()
   elseif Util.cmp == "mini" then
