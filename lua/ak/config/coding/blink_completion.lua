@@ -8,32 +8,15 @@ local snippets_standalone = require("ak.util").snippets_standalone
 local snip_engine = "mini" -- nil
 
 local completion = {
-  menu = {
-    draw = {
-      treesitter = { "lsp" },
-    },
-  },
-  documentation = {
-    -- Controls whether the documentation window will automatically show when selecting a completion item
-    auto_show = true,
-    -- -- Delay before showing the documentation window
-    auto_show_delay_ms = 200,
-  },
+  menu = { draw = { treesitter = { "lsp" } } },
+  documentation = { auto_show = true, auto_show_delay_ms = 200 },
   ghost_text = { enabled = true },
 }
 
--- blink does not have any c-j, c-l or c-h mappings, c-e is hide
-local keymap = {
-  preset = "default",
-  ["<C-j>"] = { "select_and_accept" }, -- like default c-y
-  ["<c-k>"] = {}, -- in use by mini.snippets { 'show_signature', 'hide_signature', 'fallback' }
-}
-local signature = { enabled = false } -- false by default
-if signature.enabled then keymap["<c-s>"] = { "show_signature", "hide_signature", "fallback" } end
+local keymap = { preset = "default" }
+local signature = { enabled = true } -- false by default
 
-local sources = {
-  default = { "lsp", "path", "buffer" },
-}
+local sources = { default = { "lsp", "path", "buffer" } }
 local mode_cmdline = { enabled = false }
 local mode_term = { enabled = false }
 

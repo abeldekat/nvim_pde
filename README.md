@@ -159,11 +159,6 @@ Extras:
 - Remote operations: `gl`("go leap remote") and `r`("remote", in operator pending mode)
 - Incremental treesitter node selection: `S`(like flash.nvim)
 
-### snippets
-
-The expand key in `mini.snippets` is `<c-j>` by default. That key is already
-used to accept completions. I changed the key to `<c-k>`.
-
 ## Mini
 
 Many of the excellent modules included in [mini.nvim] are used in this config:

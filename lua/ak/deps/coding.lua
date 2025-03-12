@@ -6,9 +6,9 @@ local add, later = MiniDeps.add, MiniDeps.later
 Util.use_mini_ai = true
 Util.snippets_standalone = true
 Util.cmp = "mini"
--- Util.cmp = "none"
 -- Util.cmp = "cmp"
 -- Util.cmp = "blink"
+-- Util.cmp = "none"
 
 -- blink and friendly-snippets: 2 plugins
 local function blink_completion()

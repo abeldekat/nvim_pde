@@ -23,7 +23,6 @@ local mapping_override = { -- Does not map "tab"...
   ["<C-f>"] = cmp.mapping.scroll_docs(4),
   ["<C-Space>"] = cmp.mapping.complete(), -- invoke cmp manually
   -- Cmp assigns: ctrl-y and ctrl-e.
-  ["<C-j>"] = cmp.mapping.confirm({ select = true }), -- like c-y, easier to type
 }
 if not snip_engine then
   local next = function()
@@ -81,8 +80,7 @@ local opts = {
   snippet = snippet,
   sources = sources,
   window = window,
-  -- instead of noselect, use noinsert:
-  completion = { completeopt = "menu,menuone,noinsert" }, -- in general you don't need to change this
+  completion = { completeopt = "menuone,noinsert" },
   experimental = { ghost_text = { hl_group = "CmpGhostText" } },
   -- performance = { max_view_entries = 15 }, --- there is also sources.max_item_count
   -- view = { entries = { follow_cursor = true, }, }, --docs_auto_open
