@@ -134,7 +134,7 @@ autocmd("FileType", {
   group = augroup("close_with_q"),
   pattern = {
     "help", "lspinfo", "notify", "qf", "startuptime", "neotest-output", "checkhealth",
-    "neotest-summary", "neotest-output-panel", "dbout", "git",
+    "neotest-summary", "neotest-output-panel", "dbout", "git", "minideps-confirm",
   },
   callback = function(event)
     vim.bo[event.buf].buflisted = false

@@ -1,7 +1,3 @@
--- Not actively used...
--- Last commit downloaded: 67a74c275d1116d575ab25485d1bfa6b2a9c38a6
--- Add to colors.txt: onedark
-
 vim.api.nvim_create_autocmd("Colorscheme", {
   pattern = "onedark",
   callback = function()

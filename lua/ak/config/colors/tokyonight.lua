@@ -1,3 +1,6 @@
+-- Not actively used...
+-- Last commit downloaded: 057ef5d260c1931f1dffd0f052c685dcd14100a3
+-- Add to colors.txt: tokyonight
 local Utils = require("ak.util")
 local prefer_light = require("ak.color").prefer_light
 

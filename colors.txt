@@ -14,7 +14,7 @@ minicyan
 minischeme
 nightfox
 nordfox
+onedark
 randomhue
 sonokai
 terafox
-tokyonight
