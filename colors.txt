@@ -1,4 +1,4 @@
-akhue
+autumnhue
 bamboo
 carbonfox
 catppuccin
@@ -6,15 +6,19 @@ dawnfox
 dayfox
 duskfox
 everforest
+greyhue
 gruvbox-material
 kanagawa
 melange
 minibuddy
 minicyan
 minischeme
+springhue
+summerhue
 nightfox
 nordfox
 onedark
 randomhue
 sonokai
 terafox
+winterhue

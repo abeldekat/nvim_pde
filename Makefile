@@ -54,5 +54,11 @@ to_gh:
 	@cp README.md init.lua filetype.lua mini-deps-snap stylua.toml colors.txt .luarc*.jsonc .prettierrc .gitignore Makefile ../nvimak
 	@rm -rf ../nvimak/after
 	@rsync -av after ../nvimak
+	@rm -rf ../nvimak/colors
+	@rsync -av colors ../nvimak
 	@rm -rf ../nvimak/lua
 	@rsync -av lua ../nvimak
+	@rm -rf ../nvimak/queries
+	@rsync -av queries ../nvimak
+	@rm -rf ../nvimak/snippets
+	@rsync -av snippets ../nvimak

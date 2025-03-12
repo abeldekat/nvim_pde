@@ -20,18 +20,18 @@ local colors = {
     }
   end,
 
-  -- two = function()
-  --   return {
-  --     { source = "folke/tokyonight.nvim", name = "colors_tokyonight" },
-  --     { source = "rose-pine/neovim", name = "colors_rose-pine" },
-  --     { source = "sainnhe/edge", name = "colors_edge" },
-  --     { source = "craftzdog/solarized-osaka.nvim", name = "colors_solarized-osaka" },
-  --     { source = "ellisonleao/gruvbox.nvim", name = "colors_gruvbox" },
-  --     { source = "Shatur/neovim-ayu", name = "colors_ayu" },
-  --     { source = "lifepillar/vim-solarized8", name = "colors_solarized8", checkout = "neovim" },
-  --     { source = "ronisbr/nano-theme.nvim", name = "colors_nano-theme" },
-  --   }
-  -- end,
+  two = function()
+    return {
+      --     { source = "folke/tokyonight.nvim", name = "colors_tokyonight" },
+      --     { source = "rose-pine/neovim", name = "colors_rose-pine" },
+      --     { source = "sainnhe/edge", name = "colors_edge" },
+      --     { source = "craftzdog/solarized-osaka.nvim", name = "colors_solarized-osaka" },
+      --     { source = "ellisonleao/gruvbox.nvim", name = "colors_gruvbox" },
+      --     { source = "Shatur/neovim-ayu", name = "colors_ayu" },
+      --     { source = "lifepillar/vim-solarized8", name = "colors_solarized8", checkout = "neovim" },
+      --     { source = "ronisbr/nano-theme.nvim", name = "colors_nano-theme" },
+    }
+  end,
 }
 
 local function filter_specs_to_use(groups)

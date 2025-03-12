@@ -1,3 +1,5 @@
+-- NOTE: The "hues" are also very nice as light theme!
+
 local Utils = require("ak.util")
 local prefer_light = require("ak.color").prefer_light
 vim.o.background = prefer_light and "light" or "dark"
@@ -29,11 +31,14 @@ vim.api.nvim_create_autocmd("Colorscheme", {
 --          ╰─────────────────────────────────────────────────────────╯
 Utils.color.add_toggle("*hue", { -- toggle randoms with leader h
   name = "mini_hues",
-  flavours = { "randomhue" },
+  -- In order to have a different random: `:colo randomhue`
+  flavours = { "autumnhue", "greyhue", "springhue", "summerhue", "randomhue", "winterhue" },
 })
+
 local Hues = require("mini.hues") -- "capture" the palette on hues.setup
 local orig_make_palette = Hues.make_palette
 local p = nil
+
 ---@diagnostic disable-next-line: duplicate-set-field
 Hues.make_palette = function(config)
   p = orig_make_palette(config)

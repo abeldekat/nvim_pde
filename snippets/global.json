@@ -1,0 +1,3 @@
+{
+  "Basic": { "prefix": "ba", "body": "T1=$1 T2=$2 T0=$0" }
+}
