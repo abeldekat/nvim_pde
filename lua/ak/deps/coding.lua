@@ -10,7 +10,8 @@ Util.cmp = "mini"
 -- Util.cmp = "blink"
 -- Util.cmp = "none"
 
--- blink and friendly-snippets: 2 plugins
+-- Blink adds 7 ms to startuptime when using now():
+-- lua_ls does not support, #1333
 local function blink_completion()
   local function build_blink(params)
     vim.notify("Building blink.cmp", vim.log.levels.INFO)
@@ -24,7 +25,6 @@ local function blink_completion()
 
   add({
     source = "saghen/blink.cmp",
-    -- depends = { "rafamadriz/friendly-snippets" },
     checkout = "v0.13.1",
     -- hooks = { post_install = build_blink, post_checkout = build_blink },
   })
@@ -47,18 +47,18 @@ end
 
 local function mini_completion() require("ak.config.coding.mini_completion") end
 
+local cmp_plugins = {
+  mini = mini_completion,
+  cmp = cmp_completion,
+  blink = blink_completion,
+}
+
 later(function()
   add("rafamadriz/friendly-snippets")
   require("ak.config.coding.snippets")
 
-  if Util.cmp == "cmp" then
-    cmp_completion()
-  elseif Util.cmp == "blink" then -- lua_ls does not support, #1333
-    -- NOTE: Blink adds 7 ms to startuptime when using now().
-    blink_completion()
-  elseif Util.cmp == "mini" then
-    mini_completion()
-  end
+  local cmp_plugin = cmp_plugins[Util.cmp]
+  if cmp_plugin then cmp_plugin() end
 
   if Util.use_mini_ai then require("ak.config.coding.ai") end
 
