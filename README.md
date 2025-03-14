@@ -139,7 +139,7 @@ As a consequence, use `gS` instead of suggested key `gs`("go sort") for sort.
 
 Using [mini.surround]. Suggested keys: `sa sd sr sf sF sh sn`
 
-The "s" is already used by [leap.nvim].
+The "s" is already used by [leap].
 Solution: Use the `m` key in combination with `asdf`,
 adjacent keys on a qwerty keyboard.
 Key `ms` is a mnemonic for `surround substitute`, performing a surround replace.

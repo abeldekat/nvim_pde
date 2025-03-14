@@ -1,3 +1,4 @@
 local icons = require("mini.icons")
 icons.setup({})
-icons.mock_nvim_web_devicons()
+-- Not needed anymore, no plugins in config using nvim_web_devicons
+-- icons.mock_nvim_web_devicons()
