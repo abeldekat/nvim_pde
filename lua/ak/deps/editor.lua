@@ -4,7 +4,7 @@ local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 local register = Util.deps.register
 
 local pick_add_fzf = false
-local use_hardtime = false
+local use_hardtime = true
 
 now(function()
   --          ╭─────────────────────────────────────────────────────────╮
@@ -68,7 +68,7 @@ later(function()
     hardtime()
   else
     register(spec_hardtime)
-    Util.defer.on_keys(hardtime, "<leader>uh", "Hardtime")
+    Util.defer.on_keys(hardtime, "<leader>oh", "Hardtime start/report")
   end
 
   --          ╭─────────────────────────────────────────────────────────╮

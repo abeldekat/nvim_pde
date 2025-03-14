@@ -2,12 +2,11 @@
 Use a notification window like fidget.nvim for messages from the lsp,
 and a regular window otherwise.
 
-Do note that when the lsp emits messages, any regular message
-from vim.notify will be displayed in the same lsp window.
+Do note that when the lsp emits messages, 
+any regular message from vim.notify will be displayed in the same lsp window.
 This is acceptable.
 --]]
 
---- LSP
 local n_progress = 0
 local in_lsp_progress = function() return n_progress > 0 end
 
@@ -43,4 +42,7 @@ vim.notify = MiniNotify.make_notify()
 -- Make mappings
 local map = function(lhs, rhs, desc) vim.keymap.set("n", lhs, rhs, { desc = desc, silent = true }) end
 map("<leader>un", function() MiniNotify.clear() end, "Notify clear")
-map("<leader>on", function() MiniNotify.show_history() end, "Notify history")
+map("<leader>on", function()
+  vim.cmd("tabnew<cr>") -- close with q...
+  MiniNotify.show_history()
+end, "Notify history")

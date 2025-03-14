@@ -133,8 +133,8 @@ autocmd({ "VimResized" }, {
 autocmd("FileType", {
   group = augroup("close_with_q"),
   pattern = {
-    "help", "lspinfo", "notify", "qf", "startuptime", "neotest-output", "checkhealth",
-    "neotest-summary", "neotest-output-panel", "dbout", "git", "minideps-confirm",
+    "help", "lspinfo", "qf", "checkhealth", "startuptime", "neotest-output",
+    "neotest-summary", "neotest-output-panel", "dbout", "git", "minideps-confirm","mininotify-history"
   },
   callback = function(event)
     vim.bo[event.buf].buflisted = false
