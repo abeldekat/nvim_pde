@@ -89,7 +89,7 @@ local ur = -- clear search, diff update and redraw, taken from runtime/lua/_edit
   { cmd = "<Cmd>nohlsearch<Bar>diffupdate<Bar>normal! <C-L><CR>", desc = "Redraw / clear hlsearch / diff update" }
 map("n", "<leader>uc", toggle_conceal, { desc = "Toggle conceal" })
 map("n", "<leader>ud", function() Util.toggle.diagnostic() end, { desc = "Toggle diagnostic" })
-map("n", "<leader>uh", function() Util.toggle.inlay_hints() end, { desc = "Toggle inlay hints" })
+map("n", "<leader>uH", function() Util.toggle.inlay_hints() end, { desc = "Toggle inlay hints" })
 map("n", "<leader>ui", vim.show_pos, { desc = "Inspect pos" })
 map("n", "<leader>uI", "<cmd>InspectTree<cr>", { desc = "Inspect Tree" })
 map("n", "<leader>ul", function() Util.toggle.number() end, { desc = "Toggle line numbers" })

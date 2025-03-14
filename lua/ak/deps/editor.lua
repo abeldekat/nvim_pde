@@ -27,7 +27,7 @@ now(function()
   else
     later(function()
       register(spec_hardtime)
-      Util.defer.on_keys(hardtime, "<leader>uH", "Hardtime")
+      Util.defer.on_keys(hardtime, "<leader>uh", "Hardtime")
     end)
   end
 end)

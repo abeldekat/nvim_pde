@@ -47,5 +47,5 @@ local report = function()
 end
 
 require("hardtime").setup()
-vim.keymap.set("n", "<leader>uH", "<cmd>Hardtime toggle<cr>", { desc = "Toggle hardime", silent = true })
-vim.keymap.set("n", "<leader>oH", report, { desc = "Report hardime", silent = true })
+vim.keymap.set("n", "<leader>uh", "<cmd>Hardtime toggle<cr>", { desc = "Toggle hardime", silent = true })
+vim.keymap.set("n", "<leader>oh", report, { desc = "Report hardime", silent = true })
