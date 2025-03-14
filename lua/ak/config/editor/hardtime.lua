@@ -1,17 +1,4 @@
--- -- takac/vim-hardtime:
--- vim.g.hardtime_default_on = 1
---
--- vim.g.hardtime_ignore_buffer_patterns = { "dbui.*", "dbout.*" }
--- vim.g.hardtime_showmsg = 0
--- vim.g.hardtime_timeout = 2000
--- vim.g.hardtime_ignore_quickfix = 1
--- vim.g.hardtime_maxcount = 2
--- vim.g.hardtime_allow_different_key = 1
--- vim.g.hardtime_motion_with_count_resets = 1
-
--- vim.keymap.set("n", "<leader>uH", "<cmd>HardTimeToggle<cr>", { desc = "Toggle hardime", silent = true })
-
--- -- m4xshen/hardtime.nvim:
+-- Replace takac/vim-hardtime with m4xshen/hardtime.nvim:
 -- :Hardtime report -> has nui plugin dependency.
 -- Copy the code(hardtime.report.lua) and use vim.notify instead:
 local report = function()
@@ -34,6 +21,7 @@ local report = function()
   for hint, count in pairs(hints) do
     table.insert(sorted_hints, { hint, count })
   end
+  -- Modified the code from here:
   if vim.tbl_isempty(sorted_hints) then return end
 
   -- There are messages:

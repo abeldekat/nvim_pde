@@ -4,7 +4,7 @@ local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 local register = Util.deps.register
 
 local pick_add_fzf = false
-local hardtime_now = false
+local use_hardtime = false
 
 now(function()
   --          ╭─────────────────────────────────────────────────────────╮
@@ -13,23 +13,6 @@ now(function()
   local function add_explorer() require("ak.config.editor.files") end
   -- stylua: ignore
   if Util.opened_with_dir_argument() then add_explorer() else later(add_explorer) end
-
-  --          ╭─────────────────────────────────────────────────────────╮
-  --          │                         Hardtime                        │
-  --          ╰─────────────────────────────────────────────────────────╯
-  local spec_hardtime = "m4xshen/hardtime.nvim"
-  local function hardtime()
-    add(spec_hardtime)
-    require("ak.config.editor.hardtime")
-  end
-  if hardtime_now then
-    hardtime()
-  else
-    later(function()
-      register(spec_hardtime)
-      Util.defer.on_keys(hardtime, "<leader>uh", "Hardtime")
-    end)
-  end
 end)
 
 later(function()
@@ -72,6 +55,21 @@ later(function()
   --          ╰─────────────────────────────────────────────────────────╯
   add("akinsho/toggleterm.nvim")
   require("ak.config.editor.toggleterm")
+
+  --          ╭─────────────────────────────────────────────────────────╮
+  --          │                         Hardtime                        │
+  --          ╰─────────────────────────────────────────────────────────╯
+  local spec_hardtime = "m4xshen/hardtime.nvim"
+  local function hardtime()
+    add(spec_hardtime)
+    require("ak.config.editor.hardtime")
+  end
+  if use_hardtime then
+    hardtime()
+  else
+    register(spec_hardtime)
+    Util.defer.on_keys(hardtime, "<leader>uh", "Hardtime")
+  end
 
   --          ╭─────────────────────────────────────────────────────────╮
   --          │                          Other                          │
