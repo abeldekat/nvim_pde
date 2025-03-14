@@ -17,10 +17,10 @@ now(function()
   --          ╭─────────────────────────────────────────────────────────╮
   --          │                         Hardtime                        │
   --          ╰─────────────────────────────────────────────────────────╯
-  local spec_hardtime = "takac/vim-hardtime"
+  local spec_hardtime = "m4xshen/hardtime.nvim"
   local function hardtime()
-    require("ak.config.editor.hardtime")
     add(spec_hardtime)
+    require("ak.config.editor.hardtime")
   end
   if hardtime_now then
     hardtime()

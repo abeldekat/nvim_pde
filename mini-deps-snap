@@ -13,6 +13,7 @@ return {
   ["crates.nvim"] = "403a0abef0e2aec12749a534dc468d6fd50c6741",
   ["dial.nvim"] = "34bbd9c387c358190e61ce71017faad3dffa7a74",
   ["friendly-snippets"] = "efff286dd74c22f731cdec26a70b46e5b203c619",
+  ["hardtime.nvim"] = "f87c86d1aa1e05dcf3c6ecd97fbfd237e2de0bf5",
   ["headlines.nvim"] = "bf17c96a836ea27c0a7a2650ba385a7783ed322e",
   ["leap.nvim"] = "346a16ef942635a8ca5ff92e603d07e7e8be6cbe",
   ["mason-lspconfig.nvim"] = "1a31f824b9cd5bc6f342fc29e9a53b60d74af245",
@@ -39,7 +40,6 @@ return {
   ["toggleterm.nvim"] = "9a88eae817ef395952e08650b3283726786fb5fb",
   ["vim-dadbod"] = "9f0ca8bcef704659820a95c3bbd2c262583a66a1",
   ["vim-dadbod-completion"] = "3f5783c12e184e4b6f05dfcbd7c1a6da05b4d66e",
-  ["vim-hardtime"] = "91177392e9372a1cf09a4b9b79532d2490bd405f",
   ["vim-slime"] = "9bc2e13f8441b09fd7352a11629a4da0ea4cb058",
   ["vim-startuptime"] = "b6f0d93f6b8cf6eee0b4c94450198ba2d6a05ff6",
   vimtex = "691ee15e1459e4420d207cfbc4a79b383f32b411"
