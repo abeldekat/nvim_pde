@@ -1,3 +1,5 @@
+-- TODO: Neovim v0.11 now defines tab for snippets in _defaults. Unmap?
+
 -- The help:
 --
 -- General advice:

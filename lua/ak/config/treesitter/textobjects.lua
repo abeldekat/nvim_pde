@@ -89,14 +89,7 @@ end
 local function toggle_repeatable_move()
   local modes = { "n", "x", "o" }
 
-  -- local function notify()
-  --   vim.api.nvim_exec_autocmds(
-  --     "User",
-  --     { pattern = "AkRepeatableMoveToggled", modeline = false, data = { enabled = repeatable_move_enabled } }
-  --   )
-  -- end
   local function enable()
-    -- notify()
     local ts_repeat_move = require("nvim-treesitter.textobjects.repeatable_move")
     vim.keymap.set(modes, ";", ts_repeat_move.repeat_last_move)
     vim.keymap.set(modes, ",", ts_repeat_move.repeat_last_move_opposite)
@@ -109,7 +102,6 @@ local function toggle_repeatable_move()
     for _, key in ipairs({ ";", ",", "f", "F", "t", "T" }) do
       pcall(vim.keymap.del, modes, key)
     end
-    -- notify()
   end
 
   repeatable_move_enabled = not repeatable_move_enabled
@@ -117,7 +109,7 @@ local function toggle_repeatable_move()
   if repeatable_move_enabled then enable() else disable() end
 end
 
-vim.keymap.set("n", "<leader>um", toggle_repeatable_move, { desc = "Toggle treesitter repeatable move" })
+vim.keymap.set("n", "<leader>uM", toggle_repeatable_move, { desc = "Toggle treesitter repeatable move" })
 -- If treesitter is already loaded, we need to run config again for textobjects:
 -- In diff mode, use the default vim text objects c & C instead of the treesitter ones.
 ---@diagnostic disable-next-line: missing-fields

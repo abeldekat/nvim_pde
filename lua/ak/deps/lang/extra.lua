@@ -34,7 +34,7 @@ local function markdown()
   end
   add_md("toppair/peek.nvim", "peek", build_peek)
 
-  add_md("lukas-reineke/headlines.nvim", "headlines")
+  add_md("MeanderingProgrammer/render-markdown.nvim", "render_markdown")
 end
 
 local function sql()

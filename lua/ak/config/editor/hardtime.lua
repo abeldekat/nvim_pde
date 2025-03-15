@@ -2,9 +2,8 @@
 -- :Hardtime report -> has nui plugin dependency.
 -- Copy the code(hardtime.report.lua) and use vim.notify instead:
 local report = function()
-  -- In .local/state/nvim:
   local file_path = vim.api.nvim_call_function("stdpath", { "log" }) .. "/hardtime.nvim.log"
-  local file = io.open(file_path, "r")
+  local file = io.open(file_path, "r") -- in .local/state/nvim
   if file == nil then
     vim.notify("No hardtime messages.", vim.log.levels.INFO) -- Not an error...
     return
@@ -34,6 +33,12 @@ local report = function()
   vim.notify("\n" .. table.concat(hints_iter:totable(), "\n"), vim.log.levels.INFO)
 end
 
-require("hardtime").setup()
+require("hardtime").setup({
+  -- restriction_mode = "block" -- hint
+  -- max_count = 3,
+  restricted_keys = {
+    ["<C-N>"] = { "x" }, -- using c-n for ctrl-d in normal mode
+  },
+})
 vim.keymap.set("n", "<leader>uh", "<cmd>Hardtime toggle<cr>", { desc = "Toggle hardime", silent = true })
 vim.keymap.set("n", "<leader>oh", report, { desc = "Report hardime", silent = true })
