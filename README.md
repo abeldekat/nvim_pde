@@ -209,7 +209,7 @@ This repo uses code and ideas from the following repositories:
 [scripts]: https://github.com/abeldekat/scripts
 [tmux-sessionizer]: https://github.com/abeldekat/scripts/blob/main/tmux-sessionizer
 [ak.init]: lua/ak/init.lua
-[ak.start_using_mini_deps]: lua/ak/start_using_mini_deps
+[ak.start_using_mini_deps]: lua/ak/start_using_mini_deps.lua
 [ak.deps]: lua/ak/deps
 [ak.config]: lua/ak/config
 [ak.mini]: lua/ak/mini
