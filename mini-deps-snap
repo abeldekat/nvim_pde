@@ -18,7 +18,7 @@ return {
   ["mason-lspconfig.nvim"] = "1a31f824b9cd5bc6f342fc29e9a53b60d74af245",
   ["mason-nvim-dap.nvim"] = "09220b99d63d5363f219daa2785242ee5fddba7f",
   ["mason.nvim"] = "fc98833b6da5de5a9c5b1446ac541577059555be",
-  ["mini.nvim"] = "9d728ef916f8443996e43199fe249d11a3d2ea72",
+  ["mini.nvim"] = "88f18a7d018d8bb4d32f6be4c712134a10e826d3",
   neogen = "05d754004da8c89115b291f2a23ca530a8cac8fd",
   neotest = "dddbe8fe358b05b2b7e54fe4faab50563171a76d",
   ["nvim-bqf"] = "ebb6d2689e4427452180f17c53f29f7e460236f1",
