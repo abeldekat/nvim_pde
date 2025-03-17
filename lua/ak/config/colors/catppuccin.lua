@@ -7,7 +7,7 @@ Utils.color.add_toggle("catppuccin*", {
 })
 
 local opts = {
-  flavour = prefer_light and "latte" or "mocha",
+  flavour = prefer_light and "latte" or "frappe",
   custom_highlights = function(c)
     return { -- left and right, dynamic
       MiniStatuslineFilename = { fg = c.subtext1, bg = c.mantle },
@@ -26,7 +26,6 @@ local opts = {
     dap = true,
     dap_ui = true,
     fidget = true,
-    headlines = true,
     leap = true,
     markdown = true,
     mason = true,

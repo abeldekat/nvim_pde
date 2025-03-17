@@ -7,4 +7,5 @@ misc.setup_restore_cursor()
 -- Terminal: misc.setup_termbg_sync() -- not working in tmux
 
 -- Zoom
-vim.keymap.set("n", "<leader>uz", function() misc.zoom() end, { desc = "Toggle zoom buffer", silent = true })
+local zoom = function() misc.zoom(0, { title = "zoom", border = "double" }) end
+vim.keymap.set("n", "<leader>uz", zoom, { desc = "Toggle zoom buffer", silent = true })

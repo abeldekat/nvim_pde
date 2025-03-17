@@ -10,7 +10,7 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
 -- Completion =================================================================
-o.complete = ".,b,kspell" -- use spell check and don't use tags for completion
+o.complete = ".,w,b,kspell" -- use spell check and don't use tags for completion
 o.completeopt = "menuone,noselect" -- show popup even with one item and don't autoselect first
 if vim.fn.has("nvim-0.11") == 1 then
   o.completeopt = "menuone,noselect,fuzzy" -- use fuzzy matching for built-in completion
