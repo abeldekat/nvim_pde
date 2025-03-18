@@ -41,6 +41,8 @@ local function add_mappings_basic() -- >= nvim-0.11, copied from mini.basics
 
   -- Copy/paste with system clipboard ( not using the provided gp)
   map({ "n", "x" }, "gy", '"+y', { desc = "Copy to system clipboard" })
+  -- From hardtime.nvim, when using gy$: Use Y instead of y$
+  map({ "n", "x" }, "gY", '"+y$', { desc = "Copy (Y) to system clipboard" })
 end
 
 local skip_mappings_basic = vim.fn.has("nvim-0.11") == 1 and true or false

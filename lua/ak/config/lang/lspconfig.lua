@@ -67,8 +67,6 @@ local keys = function(_, buffer) -- client
 
   -- The lsp client sets tagfunc, the default <c-]>. A popular custom mapping:
   map("gd", Picker.lsp_definitions, { desc = "Goto definition" })
-  -- Used to be gy. gy can also be used to copy to clipboard
-  map("gY", Picker.lsp_type_definitions, { desc = "Goto type definition" })
   map("gD", vim.lsp.buf.declaration, { desc = "Goto declaration" })
 
   if vim.fn.has("nvim-0.11") == 1 then -- override some mappings created unconditionally
@@ -93,6 +91,8 @@ local keys = function(_, buffer) -- client
   map("<leader>cc", vim.lsp.codelens.run, { desc = "Run Codelens" }, { "n", "v" })
   map("<leader>cC", vim.lsp.codelens.refresh, { desc = "Refresh & Display Codelens" })
   map("<leader>cl", "<cmd>LspInfo<cr>", { desc = "Lsp info" })
+  -- Used to be gy. Mappings gy and gY are used to copy to clipboard
+  map("<leader>cy", Picker.lsp_type_definitions, { desc = "Goto type definition" })
 end
 
 -- Assumption: .luarc.jsonc takes precendence. Individual values override,
