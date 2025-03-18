@@ -25,8 +25,10 @@ end
 
 require("mini.completion").setup({
   mappings = { -- Tmux conflict <C-Space>:
-    force_fallback = "<C-A-Space>", -- "<A-Space>", -- Force fallback completion
-    force_twostep = "<A-Space>", --  "<C-Space>", -- Force two-step completion
+    force_twostep = "<C-A-Space>", --  "<C-Space>",
+    -- Force fallback is very usefull when completing a function *reference*
+    -- using lsp snippets. No need to remove the arguments...
+    force_fallback = "<A-Space>", -- Force fallback completion
   },
   lsp_completion = {
     auto_setup = false,
