@@ -6,7 +6,7 @@
 -- - Sorting is done to first minimize match width and then match start.
 --   Nothing more: no favoring certain places in string, etc.
 
--- Manpages, autocommands and quickfixhis: Use fzf-lua builtin
+-- No Manpages, autocommands and quickfixhis
 -- Paths: No filename first option
 
 local Utils = require("ak.util")
@@ -125,7 +125,7 @@ H.add_keys = function()
   local oldfiles_hinted = function() extra.oldfiles({ current_dir = true }, { hinted = { enable = true } }) end
   map("<leader>r", oldfiles_hinted, { desc = "Recent (rel)" })
 
-  -- fuzzy main. Free: fe,fn,fq,fv,fy
+  -- fuzzy main. Free: fe,fi,fn,fq,fv,fy
   map("<leader>f/", function() extra.history({ scope = "/" }) end, { desc = "'/' history" })
   local his_cmd_hinted = function() extra.history({ scope = ":" }, { hinted = { enable = true } }) end
   map("<leader>f:", his_cmd_hinted, { desc = "':' history" })
@@ -142,7 +142,6 @@ H.add_keys = function()
   map("<leader>fg", builtin.grep_live, { desc = "Grep" })
   map("<leader>fG", function() builtin.grep_live(nil, { source = { cwd = H.bdir() } }) end, { desc = "Grep (rel)" })
   map("<leader>fh", builtin.help, { desc = "Help" })
-  map("<leader>fi", function() vim.notify("No picker for fzf-lua builtin") end, { desc = "Fzf-lua builtin" })
   map("<leader>fj", function() extra.list({ scope = "jump" }) end, { desc = "Jumps" })
   map("<leader>fk", extra.keymaps, { desc = "Key maps" })
   map("<leader>fl", extra.buf_lines, { desc = "Buffers lines" })

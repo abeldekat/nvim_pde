@@ -16,12 +16,12 @@ local plugins = {
   auto = false, -- only supported for lazy.nvim
   --
   ["blink_cmp"] = true,
-  ["fzf"] = true, -- fzf-lua on demand...
+  -- ["fzf"] = true,
   ["headlines"] = true,
   ["leap"] = true,
   ["mini_animate"] = true,
   ["mini_clue"] = true,
-  -- ["mini_completion"] = false,
+  ["mini_completion"] = true,
   ["mini_cursorword"] = true,
   ["mini_deps"] = true,
   ["mini_diff"] = true,

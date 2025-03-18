@@ -3,7 +3,6 @@ local MiniDeps = require("mini.deps")
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 local register = Util.deps.register
 
-local pick_add_fzf = false
 local use_hardtime = true
 
 now(function()
@@ -28,16 +27,6 @@ later(function()
   require("ak.config.editor.git")
   require("ak.config.editor.diff")
   require("ak.config.editor.pick")
-  if pick_add_fzf then -- download fzf on demand
-    local spec_fzf = "ibhagwan/fzf-lua"
-    register(spec_fzf)
-    Util.defer.on_keys(function()
-      now(function()
-        add(spec_fzf)
-        require("ak.config.editor.pick_fzf_lua")
-      end)
-    end, "<leader>fi", "Picker builtin")
-  end
   require("ak.config.editor.visits") -- marks like grapple.nvim/harpoon, uses mini.pick
 
   --          ╭─────────────────────────────────────────────────────────╮
