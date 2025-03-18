@@ -39,7 +39,6 @@ local opts = {
     { mode = "x", keys = "z" },
   },
 
-  -- { mode = "n", keys = "<leader>s", desc = "+overseer" },
   clues = { -- currently available: i, k, m, n, p, s, v, z
     { mode = "n", keys = "<leader><tab>", desc = "+tabs" },
     { mode = "n", keys = "<leader>c", desc = "+code" },

@@ -59,17 +59,4 @@ later(function()
     register(spec_hardtime)
     Util.defer.on_keys(hardtime, "<leader>oh", "Hardtime start/report")
   end
-
-  --          ╭─────────────────────────────────────────────────────────╮
-  --          │                          Other                          │
-  --          ╰─────────────────────────────────────────────────────────╯
-
-  -- local spec_overseer = "stevearc/overseer.nvim"
-  -- register(spec_overseer)
-  -- Util.defer.on_keys(function()
-  --   now(function()
-  --     add(spec_overseer)
-  --     require("ak.config.editor.overseer")
-  --   end)
-  -- end, "<leader>sl", "Load overseer")
 end)
