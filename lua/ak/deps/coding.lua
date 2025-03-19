@@ -25,8 +25,8 @@ local function blink_completion()
 
   add({
     source = "saghen/blink.cmp",
-    -- checkout = "v0.13.1",
-    hooks = { post_install = build_blink, post_checkout = build_blink },
+    checkout = "v0.14.0",
+    -- hooks = { post_install = build_blink, post_checkout = build_blink },
   })
   require("ak.config.coding.blink_completion")
 end
