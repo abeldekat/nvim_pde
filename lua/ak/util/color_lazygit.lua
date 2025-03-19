@@ -24,7 +24,8 @@ local theme = {
 
 local theme_path = vim.fn.stdpath("cache") .. "/lazygit-theme.yml"
 
-local config_dir = vim.env.XDG_CONFIG_HOME .. "/lazygit"
+local xdg_config = vim.env.XDG_CONFIG_HOME or vim.env.HOME .. "/.config"
+local config_dir = xdg_config .. "/lazygit"
 vim.env.LG_CONFIG_FILE = config_dir .. "/config.yml" .. "," .. theme_path
 
 local dirty = true -- re-create config file on startup
