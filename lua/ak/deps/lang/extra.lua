@@ -51,17 +51,6 @@ local function sql()
   end, "FileType", "sql")
 end
 
-local function rust()
-  local crates = { source = "Saecki/crates.nvim" }
-  register(crates)
-  Util.defer.on_events(function()
-    later(function()
-      add(crates) -- can also be a cmp source
-      require("ak.config.lang.rust.crates")
-    end)
-  end, "BufRead", "Cargo.toml")
-end
-
 local function latex() -- Note: Not "lazy" loaded as per plugin requirements
   require("ak.config.lang.latex.vimtex") -- Vimscript variables
   add("lervag/vimtex")
@@ -71,7 +60,6 @@ local langs = {
   latex,
   markdown,
   sql,
-  rust,
 }
 for _, lang in ipairs(langs) do
   now(lang)
