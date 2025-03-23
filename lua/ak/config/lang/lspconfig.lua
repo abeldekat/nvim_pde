@@ -18,7 +18,7 @@ local toggles = {
 }
 
 local custom_on_attach = function(_, buf_id) -- client
-  if Util.cmp == "mini" then vim.bo[buf_id].omnifunc = "v:lua.MiniCompletion.completefunc_lsp" end
+  if Util.completion == "mini" then vim.bo[buf_id].omnifunc = "v:lua.MiniCompletion.completefunc_lsp" end
 end
 
 ---@param cb fun(client, buffer)
@@ -334,9 +334,9 @@ if toggles.inlay_hints.auto then auto_inlay_hints() end
 if toggles.codeLens.auto then codelens() end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-if Util.cmp == "blink" then
+if Util.completion == "blink" then
   capabilities = vim.tbl_deep_extend("force", {}, require("blink.cmp").get_lsp_capabilities(capabilities))
-elseif Util.cmp == "cmp" then
+elseif Util.completion == "cmp" then
   local has_cmp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
   capabilities = vim.tbl_deep_extend("force", capabilities, has_cmp and cmp_nvim_lsp.default_capabilities() or {})
 end

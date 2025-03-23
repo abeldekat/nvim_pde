@@ -5,13 +5,12 @@ local add, later = MiniDeps.add, MiniDeps.later
 -- Change the default values here for use in ak.config:
 Util.use_mini_ai = true
 Util.snippets_standalone = true
-Util.cmp = "mini"
--- Util.cmp = "cmp"
--- Util.cmp = "blink"
--- Util.cmp = "none"
+Util.completion = "mini"
+-- Util.completion = "cmp"
+-- Util.completion = "blink"
+-- Util.completion = "none"
 
 -- Blink adds 7 ms to startuptime when using now():
--- lua_ls does not support, #1333
 local function blink_completion()
   local function build_blink(params)
     vim.notify("Building blink.cmp", vim.log.levels.INFO)
@@ -25,14 +24,13 @@ local function blink_completion()
 
   add({
     source = "saghen/blink.cmp",
-    checkout = "v0.14.0",
+    checkout = "v0.14.1",
     -- hooks = { post_install = build_blink, post_checkout = build_blink },
   })
   require("ak.config.coding.blink_completion")
 end
 
 -- mini-deps-snap: ["nvim-cmp"] = "c27370703e798666486e3064b64d59eaf4bdc6d5",
--- cmp and 3 sources: 4 plugins
 local function cmp_completion()
   local cmp_depends = {
     "hrsh7th/cmp-nvim-lsp",
@@ -45,9 +43,12 @@ local function cmp_completion()
   require("ak.config.coding.cmp_completion")
 end
 
-local function mini_completion() require("ak.config.coding.mini_completion") end
+local function mini_completion()
+  --
+  require("ak.config.coding.mini_completion")
+end
 
-local cmp_plugins = {
+local completion_plugins = {
   mini = mini_completion,
   cmp = cmp_completion,
   blink = blink_completion,
@@ -57,8 +58,8 @@ later(function()
   add("rafamadriz/friendly-snippets")
   require("ak.config.coding.snippets")
 
-  local cmp_plugin = cmp_plugins[Util.cmp]
-  if cmp_plugin then cmp_plugin() end
+  local completion_setup = completion_plugins[Util.completion]
+  if completion_setup then completion_setup() end
 
   if Util.use_mini_ai then require("ak.config.coding.ai") end
 

@@ -17,7 +17,7 @@ M.use_mini_ai = false
 M.snippets_standalone = false
 
 ---@type "cmp" | "blink" | "mini" | "none"
-M.cmp = "none"
+M.completion = "none"
 
 -- End shared variables
 

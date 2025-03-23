@@ -42,13 +42,11 @@
       //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-ts-autotag/lua",
 
       //// coding:
-      //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-cmp/lua",
-      //// cmp-nvim-lsp, cmp-buffer, cmp-path, cmp_luasnip
       //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/friendly-snippets/lua",
       //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/dial.nvim/lua",
 
       //// editor
-      //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/vim-hardtime",
+      //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/hardtime.nvim",
       //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/leap.nvim/lua",
       //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/toggleterm.nvim/lua",
       //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-bqf/lua",
@@ -80,12 +78,11 @@
       //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-dap/lua",
 
       //// lang extra
-      //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/headlines.nvim/lua",
+      //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/render-markdown.nvim/lua",
       //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/markdown-preview.nvim",
       //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/peek.nvim/lua",
       //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/vim-dadbod",
       //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/vim-dadbod-completion/lua",
-      //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/crates.nvim/lua",
 
       //// --> important, add this last:
       "$XDG_CONFIG_HOME/nvim/lua"
