@@ -40,6 +40,7 @@ end
 -- rust = { "rustfmt", lsp_format = "fallback" },
 local formatters_by_ft = {
   ["css"] = { "prettier" },
+  ["go"] = { "goimports", "gofumpt" },
   ["graphql"] = { "prettier" },
   ["handlebars"] = { "prettier" },
   ["html"] = { "prettier" },

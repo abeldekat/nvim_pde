@@ -49,6 +49,10 @@ local opts = {
     "rst", -- python
     "rasi", -- rofi
     "zig",
+    "go",
+    "gomod",
+    "gowork",
+    "gosum",
   },
   -- incremental_selection = { -- leap provides incremental_selection
   --   enable = true, -- using default keymaps gnn

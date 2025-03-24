@@ -178,6 +178,50 @@ local lua_ls = function() -- Mostly copied from nvim echasnovski...
   }
 end
 
+-- About semanticTokens:
+-- https://github.com/golang/go/issues/54531#issuecomment-1464982242
+-- Ignored for now, see LazyVim
+local gopls = function()
+  return {
+    on_attach = custom_on_attach,
+    settings = {
+      gopls = {
+        gofumpt = true,
+        codelenses = {
+          gc_details = false,
+          generate = true,
+          regenerate_cgo = true,
+          run_govulncheck = true,
+          test = true,
+          tidy = true,
+          upgrade_dependency = true,
+          vendor = true,
+        },
+        hints = {
+          assignVariableTypes = true,
+          compositeLiteralFields = true,
+          compositeLiteralTypes = true,
+          constantValues = true,
+          functionTypeParameters = true,
+          parameterNames = true,
+          rangeVariableTypes = true,
+        },
+        analyses = {
+          nilness = true,
+          unusedparams = true,
+          unusedwrite = true,
+          useany = true,
+        },
+        usePlaceholders = true,
+        completeUnimported = true,
+        staticcheck = true,
+        directoryFilters = { "-.git", "-.vscode", "-.idea", "-.vscode-test", "-node_modules" },
+        semanticTokens = true,
+      },
+    },
+  }
+end
+
 local jsonls = function()
   return {
     -- lazy-load schemastore when needed
@@ -344,6 +388,7 @@ end
 -- servers setup by mason:
 local servers = {
   bashls = { on_attach = custom_on_attach },
+  gopls = gopls(),
   jsonls = jsonls(),
   -- ltex = {}, -- grammar/spelling checker, needs jre(installed jre-openjdk-headless)
   lua_ls = lua_ls(),
