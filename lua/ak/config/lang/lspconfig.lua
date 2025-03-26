@@ -55,8 +55,6 @@ local codelens = function()
   end)
 end
 
--- see lsp-defaults
--- in 0.11, gr, go refactor
 local keys = function(_, buffer) -- client
   local function map(l, r, opts, mode)
     mode = mode or "n"
@@ -69,20 +67,14 @@ local keys = function(_, buffer) -- client
   map("gd", Picker.lsp_definitions, { desc = "Goto definition" })
   map("gD", vim.lsp.buf.declaration, { desc = "Goto declaration" })
 
-  if vim.fn.has("nvim-0.11") == 1 then -- override some mappings created unconditionally
-    map("grr", Picker.lsp_references, { desc = "References", nowait = true }) -- override
-    map("gri", Picker.lsp_implementations, { desc = "Goto implementation" }) -- override
-    -- gra is code action
-    -- grn is rename
-    -- <c-s> is signature help -- in insert mode --
-    -- gO is buf document symbol
-  else
-    map("gr", Picker.lsp_references, { desc = "References", nowait = true })
-    map("gI", Picker.lsp_implementations, { desc = "Goto implementation" })
-    map("<leader>ca", vim.lsp.buf.code_action, { desc = "Code action" }, { "n", "v" })
-    map("<leader>cr", vim.lsp.buf.rename, { desc = "Rename" })
-    map("<c-s>", function() vim.lsp.buf.signature_help() end, { desc = "Signature help" }, "i")
-  end
+  -- override some mappings created unconditionally
+  -- see lsp-defaults, gr, go refactor...
+  map("grr", Picker.lsp_references, { desc = "References", nowait = true }) -- override
+  map("gri", Picker.lsp_implementations, { desc = "Goto implementation" }) -- override
+  -- gra is code action
+  -- grn is rename
+  -- <c-s> is signature help -- in insert mode --
+  -- gO is buf document symbol
   map("gK", function() vim.lsp.buf.signature_help() end, { desc = "Signature help" })
   -- K is vim.lsp.buf.hover() unless customized `keywordprog` exists
 

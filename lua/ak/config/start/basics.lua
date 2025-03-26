@@ -1,20 +1,5 @@
 -- The module has "\" mappings for toggling options like vim-unimpaired,
 
-local function remove_mappings_basic() -- pre nvim-0.11
-  -- map("n", "gp", '"+p', { desc = "Paste from system clipboard" })
-  -- -- - Paste in Visual with `P` to not copy selected text (`:h v_P`)
-  -- map("x", "gp", '"+P', { desc = "Paste from system clipboard" })
-  vim.keymap.del({ "n", "x" }, "gp") -- Use terminal: shift-ctrl-v
-
-  -- Search inside visually highlighted text. Use `silent = false` for it to
-  -- make effect immediately.
-  vim.keymap.del("x", "g/")
-  --
-  -- Alternative way to save and exit in Normal mode.
-  -- Adding `redraw` helps with `cmdheight=0` if buffer is not modified
-  vim.keymap.del({ "n", "x", "i" }, "<C-S>")
-end
-
 local function map(mode, lhs, rhs, opts)
   if lhs == "" then return end
   opts = vim.tbl_deep_extend("force", { silent = true }, opts or {})
@@ -38,15 +23,13 @@ local function add_mappings_basic() -- >= nvim-0.11, copied from mini.basics
   map("n", "gV", '"`[" . strpart(getregtype(), 0, 1) . "`]"', mapping_opts)
 end
 
-local skip_mappings_basic = vim.fn.has("nvim-0.11") == 1 and true or false
-
 require("mini.basics").setup({
   -- Not using options in favor of own options...
   options = { basic = false },
   mappings = {
     -- Basic mappings (better 'jk', save with Ctrl+S, ...)
     -- Also copy/paste with system clipboard, gy gp
-    basic = not skip_mappings_basic, -- especially: go and gO
+    basic = false,
     -- Prefix for mappings that toggle common options ('wrap', 'spell', ...).
     option_toggle_prefix = "", -- [[\]],  disable... See keymaps leader u
     -- Window navigation with <C-hjkl>, resize with <C-arrow>
@@ -62,9 +45,5 @@ require("mini.basics").setup({
   silent = false,
 })
 
-if skip_mappings_basic then
-  add_mappings_basic()
-else
-  remove_mappings_basic() -- vim.keymap.del for mappings you don't want...
-end
+add_mappings_basic()
 -- Mappings.windows, ctrl-hjkl will be overridden in ak.config.editor.mini_visits

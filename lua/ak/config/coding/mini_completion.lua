@@ -41,6 +41,4 @@ require("mini.completion").setup({
   },
 })
 
-if vim.fn.has("nvim-0.11") == 1 then
-  vim.opt.completeopt:append("fuzzy") -- Use fuzzy matching for built-in completion
-end
+vim.opt.completeopt:append("fuzzy") -- Use fuzzy matching for built-in completion
