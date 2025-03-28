@@ -10,24 +10,16 @@ local function lsp()
     source = "williamboman/mason.nvim",
     hooks = { post_install = build_mason, post_checkout = build_mason },
   })
-  require("ak.config.lang.mason")
-
-  add({
-    source = "neovim/nvim-lspconfig",
-    depends = {
-      "williamboman/mason-lspconfig.nvim",
-      { source = "mrcjkb/rustaceanvim", checkout = "v5.25.1" },
-    },
-  })
-  require("ak.config.lang.lspconfig")
-
-  -- add("j-hui/fidget.nvim")
-  -- require("fidget").setup({})
-
+  add({ source = "mrcjkb/rustaceanvim", checkout = "v5.25.1" })
   add("b0o/SchemaStore.nvim")
+  add("neovim/nvim-lspconfig")
+
+  require("ak.config.lang.mason")
+  require("ak.config.lang.lsp")
 end
 
 later(lsp)
+
 if Util.opened_with_arguments() then
   later(function() -- The lsp does not attach when directly opening a file:
     local ft = vim.bo.filetype

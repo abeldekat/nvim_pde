@@ -1,0 +1,6 @@
+-- https://github.com/detachhead/basedpyright
+-- Using mason. pip install basedpyright
+
+-- The basedpyright config in nvim-lspconfig is extensive...
+-- Has commands...
+return {}

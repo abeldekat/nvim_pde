@@ -1,3 +1,4 @@
+local Util = require("ak.util")
 local mason_ensure_installed = {
   "black", -- formatter python
   "codelldb", -- rust debugger
@@ -10,8 +11,19 @@ local mason_ensure_installed = {
   "sqlfluff", -- formatter
   "stylua", -- formatter
 }
+
+-- Ensure lsp installed
+local lsp_files = {}
+vim.list_extend(lsp_files, vim.api.nvim_get_runtime_file("lsp/*", true))
+vim.list_extend(lsp_files, vim.api.nvim_get_runtime_file("lua/ak/config/lang/with_lspconfig/*", true))
+for _, v in ipairs(lsp_files) do -- by gpanders
+  local name = vim.fn.fnamemodify(v, ":t:r")
+  if not name == "rust-analyzer" then table.insert(mason_ensure_installed, name) end
+end
+
 require("mason").setup()
 
+local mr = require("mason-registry")
 local function trigger_filetype() -- possibly load newly installed LSP
   vim.api.nvim_exec_autocmds("FileType", {
     buffer = vim.api.nvim_get_current_buf(),
@@ -19,7 +31,6 @@ local function trigger_filetype() -- possibly load newly installed LSP
     data = {},
   })
 end
-local mr = require("mason-registry")
 mr:on("package:install:success", function() vim.defer_fn(trigger_filetype, 100) end)
 
 local function ensure_installed()
