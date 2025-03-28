@@ -1,4 +1,3 @@
-local Util = require("ak.util")
 local mason_ensure_installed = {
   "black", -- formatter python
   "codelldb", -- rust debugger

@@ -23,25 +23,6 @@ end
 
 local function virtual_text() require("nvim-dap-virtual-text").setup({}) end
 
-local function mason_dap()
-  local opts = {
-    -- Makes a best effort to setup the various debuggers with
-    -- reasonable debug configurations
-    automatic_installation = true,
-
-    -- You can provide additional configuration to the handlers,
-    -- see mason-nvim-dap README for more information
-    handlers = { python = function() end }, -- nvim-dap-python handlers
-
-    -- You'll need to check that you have the required things installed
-    -- online, please don't ask me how to install them :)
-    ensure_installed = {
-      -- Update this to ensure that you have the debuggers for the langs you want
-    },
-  }
-  require("mason-nvim-dap").setup(opts)
-end
-
 -- local function python_dap()
 --   local path = require("mason-registry").get_package("debugpy"):get_install_path()
 --   require("dap-python").setup(path .. "/venv/bin/python")
@@ -128,7 +109,6 @@ local function keys()
 end
 
 local function setup()
-  mason_dap()
   ui()
   virtual_text()
   -- python_dap()
