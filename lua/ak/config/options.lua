@@ -83,6 +83,7 @@ o.splitbelow = true -- put new windows below current
 o.splitkeep = "screen"
 o.splitright = true -- put new windows right of current
 o.laststatus = 3 -- global statusline on pick filename disappears
+o.winborder = "rounded" -- since 0.11
 o.wrap = false -- display long lines as just one line
 
 -- Other settings =============================================================
@@ -181,30 +182,14 @@ autocmd("Filetype", {
 })
 
 -- Diagnostics ================================================================
-
-local icons = {
-  Error = " ",
-  Warn = " ",
-  Hint = " ",
-  Info = " ",
-}
-
 ---@type vim.diagnostic.Opts
-local opts = {
-  update_in_insert = false,
-  float = { border = "double" },
-  virtual_text = {
-    -- Show virtual text only for errors
-    severity = { min = "ERROR", max = "ERROR" },
-    spacing = 4,
-    source = "if_many",
-    prefix = function(diagnostic)
-      for d, icon in pairs(icons) do
-        if diagnostic.severity == vim.diagnostic.severity[d:upper()] then return icon end
-      end
-      return "●"
-    end,
+vim.diagnostic.config({
+  underline = false,
+  signs = { -- show gutter sings
+    priority = 9999, -- with highest priority
+    severity = { min = "WARN", max = "ERROR" }, -- only warnings and errors
   },
-  signs = { priority = 9999, severity = { min = "WARN", max = "ERROR" } },
-}
-vim.diagnostic.config(vim.deepcopy(opts))
+  virtual_text = { severity = { min = "ERROR", max = "ERROR" } },
+  -- virtual_lines = { current_line = true }, -- pretty but too jumpy...
+  update_in_insert = false, -- don't update diagnostics when typing
+})

@@ -120,6 +120,6 @@ vim.lsp.enable({
 with_lspconfig({ "basedpyright", "gopls", "texlab", "zls" }, capabilities)
 
 -- Rust with rust-analyzer, not installed by mason, setup is done in rustacenvim plugin
--- inclusing capabilities
+-- including capabilities
 local rust_opts = require("ak.config.lang.with_lspconfig.rust-analyzer")
 vim.g.rustaceanvim = vim.tbl_deep_extend("keep", vim.g.rustaceanvim or {}, rust_opts or {})
