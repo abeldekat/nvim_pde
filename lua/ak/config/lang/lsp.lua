@@ -96,7 +96,9 @@ vim.lsp.handlers["client/registerCapability"] = (function(overridden)
 end)(vim.lsp.handlers["client/registerCapability"])
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
-if Util.completion == "blink" then
+if Util.completion == "mini" then
+  capabilities = vim.tbl_deep_extend("force", {}, capabilities, MiniCompletion.get_lsp_capabilities())
+elseif Util.completion == "blink" then
   capabilities = vim.tbl_deep_extend("force", {}, require("blink.cmp").get_lsp_capabilities(capabilities))
 elseif Util.completion == "cmp" then
   local has_cmp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")

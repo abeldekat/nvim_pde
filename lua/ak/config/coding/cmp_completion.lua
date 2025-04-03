@@ -80,11 +80,11 @@ local opts = {
   snippet = snippet,
   sources = sources,
   window = window,
-  completion = { completeopt = "menuone,noinsert" },
-  experimental = { ghost_text = { hl_group = "CmpGhostText" } },
+  -- completion = { completeopt = "menuone,noinsert" }, -- Test working with the defaults...
+  -- experimental = { ghost_text = { hl_group = "CmpGhostText" } },
   -- performance = { max_view_entries = 15 }, --- there is also sources.max_item_count
   -- view = { entries = { follow_cursor = true, }, }, --docs_auto_open
 }
 
 cmp.setup(opts)
-vim.api.nvim_set_hl(0, "CmpGhostText", { link = "Comment", default = true })
+-- vim.api.nvim_set_hl(0, "CmpGhostText", { link = "Comment", default = true })

@@ -1,5 +1,3 @@
--- NOTE: The "hues" are also very nice as light theme!
-
 local Utils = require("ak.util")
 local prefer_light = require("ak.color").prefer_light
 vim.o.background = prefer_light and "light" or "dark"

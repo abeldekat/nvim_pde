@@ -72,7 +72,6 @@ H.provide_picker = function() -- interface to picker to be used in other modules
     lsp_definitions = function() -- mini.pick: no direct jump to definition(#978):
       -- https://github.com/echasnovski/mini.nvim/issues/979
       -- NOTE: Overridden for lua_ls, unique definition...
-      -- TODO: Needed? vim.cmd("normal! m'")
       vim.lsp.buf.definition({ scope = "definition" })
     end,
 
