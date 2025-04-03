@@ -12,7 +12,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("ak_lsp_ruff", {}),
   callback = function(args)
     local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
-    if not client.name == "ruff" then return end
+    if client.name ~= "ruff" then return end
 
     -- Disable hover in favor of Pyright
     vim.keymap.set("n", "<leader>co", code_action, { desc = desc, silent = true, buffer = args.buf })

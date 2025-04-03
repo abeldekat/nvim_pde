@@ -5,7 +5,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("ak_lsp_rust_analyzer", {}),
   callback = function(args)
     local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
-    if not client.name == "rust-analyzer" then return end
+    if client.name ~= "rust-analyzer" then return end
 
     -- Disable deprecation messages in rust projects originating from rustacenvim:
     ---@diagnostic disable-next-line: duplicate-set-field
