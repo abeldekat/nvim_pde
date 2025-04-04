@@ -6,11 +6,7 @@ local Util = require("ak.util")
 -- select - vim.ui.select: ghost_text appearing
 -- select - vim.ui.select: cmp popups cover picker
 local function expand_select_override(snippets, insert)
-  if Util.completion == "cmp" then
-    local cmp = require("cmp")
-    if cmp.visible() then cmp.close() end
-    MiniSnippets.default_select(snippets, insert)
-  elseif Util.completion == "blink" then
+  if Util.completion == "blink" then
     require("blink.cmp").cancel() -- cancel uses vim.schedule
     vim.schedule(function() MiniSnippets.default_select(snippets, insert) end)
   else

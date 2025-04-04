@@ -1,5 +1,3 @@
--- How to use dadbod completion? Omnifunc? Trouble typing ctrl-x
-
 MiniIcons.tweak_lsp_kind() -- performance, call lazily
 
 -- local lsp_get_filterword = function(x) return x.filterText or x.label end

@@ -2,7 +2,8 @@
 
 local Util = require("ak.util")
 
--- Add dadbod completion to either nvim-cmp or blink.cmp
+-- Add dadbod completion to blink.cmp
+-- TODO: dadbod completion for mini.completion
 -- Related: https://github.com/Saghen/blink.cmp/issues/208 Allow providers to disable themselves
 -- Related: https://github.com/Saghen/blink.cmp/pull/465 The line: enabled_providers should be reworked
 --
@@ -12,9 +13,6 @@ local Util = require("ak.util")
 local function apply()
   if Util.completion == "blink" then
     require("blink-cmp").add_provider("dadbod", { name = "Dadbod", module = "vim_dadbod_completion.blink" })
-  elseif Util.completion == "cmp" then
-    local has_nvim_cmp, cmp = pcall(require, "cmp")
-    if has_nvim_cmp then cmp.setup.buffer({ sources = { { name = "vim-dadbod-completion" } } }) end
   end
 
   -- execute a query without vim-slime and the mysql cli:

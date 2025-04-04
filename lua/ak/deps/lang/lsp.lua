@@ -10,7 +10,7 @@ local function lsp()
     source = "williamboman/mason.nvim",
     hooks = { post_install = build_mason, post_checkout = build_mason },
   })
-  add({ source = "mrcjkb/rustaceanvim", checkout = "v5.26.0" })
+  add({ source = "mrcjkb/rustaceanvim", checkout = "v6.0.0" })
 
   add("b0o/SchemaStore.nvim")
   add("neovim/nvim-lspconfig")

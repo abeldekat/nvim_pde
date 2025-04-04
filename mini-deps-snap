@@ -1,5 +1,5 @@
 return {
-  ["SchemaStore.nvim"] = "e659e0c6ca06727ed898aaaeea3850f528898684",
+  ["SchemaStore.nvim"] = "87cf380f6ecc0b5aed0cba353fd6d8a1397e1167",
   colors_bamboo = "97124a0b81f886abc0d666ebec512b92425d67b6",
   colors_catppuccin = "5b5e3aef9ad7af84f463d17b5479f06b87d5c429",
   colors_everforest = "29d1f4f8b63dc91db277e977068f912939c8cae8",
@@ -32,12 +32,12 @@ return {
   ["nvim-ts-autotag"] = "a1d526af391f6aebb25a8795cbc05351ed3620b5",
   ["one-small-step-for-vimkind"] = "b9def31568d20b16f7da9479a4174d165046fe8a",
   ["peek.nvim"] = "5820d937d5414baea5f586dc2a3d912a74636e5b",
-  ["render-markdown.nvim"] = "d2285137fa4fbc0b4152cb444008166962b727b5",
-  rustaceanvim = "e9c5aaba16fead831379d5f44617547a90b913c7",
+  ["render-markdown.nvim"] = "0ed141a60ca4befcaf923b21c36f6f2971d61b9e",
+  rustaceanvim = "34f0f9761b2f3d861fc15845b42d543da1c1b555",
   ["toggleterm.nvim"] = "9a88eae817ef395952e08650b3283726786fb5fb",
   ["vim-dadbod"] = "9f0ca8bcef704659820a95c3bbd2c262583a66a1",
   ["vim-dadbod-completion"] = "a8dac0b3cf6132c80dc9b18bef36d4cf7a9e1fe6",
   ["vim-slime"] = "9bc2e13f8441b09fd7352a11629a4da0ea4cb058",
   ["vim-startuptime"] = "b6f0d93f6b8cf6eee0b4c94450198ba2d6a05ff6",
-  vimtex = "40e4fa610fd44d644b7a022cf2b5ce30cb9621e0"
+  vimtex = "a531f6bf9ce61172e4ea8eea2ecbf59fd08c232a"
 }

@@ -95,18 +95,14 @@ vim.lsp.handlers["client/registerCapability"] = (function(overridden)
   end
 end)(vim.lsp.handlers["client/registerCapability"])
 
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-if Util.completion == "mini" then
-  capabilities = vim.tbl_deep_extend("force", {}, capabilities, MiniCompletion.get_lsp_capabilities())
-elseif Util.completion == "blink" then
-  capabilities = vim.tbl_deep_extend("force", {}, require("blink.cmp").get_lsp_capabilities(capabilities))
-elseif Util.completion == "cmp" then
-  local has_cmp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
-  capabilities = vim.tbl_deep_extend("force", capabilities, has_cmp and cmp_nvim_lsp.default_capabilities() or {})
-end
-
 -- Servers with "simple" configuration:
-vim.lsp.config("*", { capabilities = capabilities, root_markers = { ".git" } }) -- all clients
+vim.lsp.config( -- no need to add capabilities for blink.cmp
+  "*", -- applied to all clients
+  {
+    capabilities = Util.completion == "mini" and MiniCompletion.get_lsp_capabilities() or nil,
+    root_markers = { ".git" },
+  }
+)
 vim.lsp.enable({
   "bash-language-server",
   "json-lsp",
@@ -116,12 +112,16 @@ vim.lsp.enable({
   "taplo",
   "yaml-language-server",
 })
+-- Rust with rust-analyzer, not installed by mason, setup is done in rustacenvim plugin
+local rust_opts = require("ak.config.lang.with_lspconfig.rust-analyzer")
+vim.g.rustaceanvim = vim.tbl_deep_extend("force", vim.g.rustaceanvim or {}, rust_opts or {})
 
 -- Servers with more complicated configuration, using nvim-lspconfig
--- ltex = {}, -- grammar/spelling checker, needs jre(installed jre-openjdk-headless)
+local capabilities = {}
+if Util.completion == "mini" then
+  capabilities =
+    vim.tbl_deep_extend("force", vim.lsp.protocol.make_client_capabilities(), MiniCompletion.get_lsp_capabilities())
+elseif Util.completion == "blink" then
+  capabilities = require("blink.cmp").get_lsp_capabilities({}, true)
+end
 with_lspconfig({ "basedpyright", "gopls", "texlab", "zls" }, capabilities)
-
--- Rust with rust-analyzer, not installed by mason, setup is done in rustacenvim plugin
--- including capabilities
-local rust_opts = require("ak.config.lang.with_lspconfig.rust-analyzer")
-vim.g.rustaceanvim = vim.tbl_deep_extend("keep", vim.g.rustaceanvim or {}, rust_opts or {})

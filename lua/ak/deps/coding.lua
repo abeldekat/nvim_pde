@@ -6,7 +6,6 @@ local add, later = MiniDeps.add, MiniDeps.later
 Util.use_mini_ai = true
 Util.snippets_standalone = true
 Util.completion = "mini"
--- Util.completion = "cmp"
 -- Util.completion = "blink"
 -- Util.completion = "none"
 
@@ -30,27 +29,10 @@ local function blink_completion()
   require("ak.config.coding.blink_completion")
 end
 
--- mini-deps-snap: ["nvim-cmp"] = "c27370703e798666486e3064b64d59eaf4bdc6d5",
-local function cmp_completion()
-  local cmp_depends = {
-    "hrsh7th/cmp-nvim-lsp",
-    "hrsh7th/cmp-buffer",
-    "hrsh7th/cmp-path",
-  }
-  if not Util.snippets_standalone then table.insert(cmp_depends, "abeldekat/cmp-mini-snippets") end
-
-  add({ source = "hrsh7th/nvim-cmp", depends = cmp_depends })
-  require("ak.config.coding.cmp_completion")
-end
-
-local function mini_completion()
-  --
-  require("ak.config.coding.mini_completion")
-end
+local function mini_completion() require("ak.config.coding.mini_completion") end
 
 local completion_plugins = {
   mini = mini_completion,
-  cmp = cmp_completion,
   blink = blink_completion,
 }
 
