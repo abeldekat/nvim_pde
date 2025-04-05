@@ -1,12 +1,6 @@
--- Language components are configurated in: treesitter, lintiner, formatting
--- mason, diagnostics, lsp, test and debug, language specific plugins
--- find symbols under <leader>f...
--- Minifiles, rename files...
-
 local Util = require("ak.util")
 local Picker = Util.pick
 local methods = vim.lsp.protocol.Methods
-
 local inlay_hints = { "lua" } -- automatically for these filetypes...
 
 local add_keymaps = function(client, buffer) -- see :h lsp-quickstart
@@ -96,7 +90,7 @@ vim.lsp.handlers["client/registerCapability"] = (function(overridden)
 end)(vim.lsp.handlers["client/registerCapability"])
 
 -- Servers with "simple" configuration:
-vim.lsp.config( -- no need to add capabilities for blink.cmp
+vim.lsp.config(
   "*", -- applied to all clients
   {
     capabilities = Util.completion == "mini" and MiniCompletion.get_lsp_capabilities() or nil,

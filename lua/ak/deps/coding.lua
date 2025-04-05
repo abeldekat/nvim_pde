@@ -4,9 +4,8 @@ local add, later = MiniDeps.add, MiniDeps.later
 
 -- Change the default values here for use in ak.config:
 Util.use_mini_ai = true
-Util.snippets_standalone = true
-Util.completion = "mini"
 -- Util.completion = "blink"
+Util.completion = "mini"
 -- Util.completion = "none"
 
 -- Blink adds 7 ms to startuptime when using now():
@@ -23,7 +22,7 @@ local function blink_completion()
 
   add({
     source = "saghen/blink.cmp",
-    checkout = "v1.0.0",
+    checkout = "v1.1.1",
     -- hooks = { post_install = build_blink, post_checkout = build_blink },
   })
   require("ak.config.coding.blink_completion")

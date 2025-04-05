@@ -22,12 +22,9 @@ local snippets = {
   mini_snippets.gen_loader.from_lang({ lang_patterns = lang_patterns }),
 }
 
-local expand = {}
-if Util.snippets_standalone then expand["select"] = expand_select_override end
-
 mini_snippets.setup({
   snippets = snippets,
-  expand = expand,
+  expand = { select = expand_select_override },
 })
 
 local rhs = function() MiniSnippets.expand({ match = false }) end

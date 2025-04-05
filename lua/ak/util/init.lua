@@ -13,9 +13,6 @@ local M = {}
 ---@type boolean for the integration of treesitter textobjects and mini.ai
 M.use_mini_ai = false
 
----@type boolean don't integrate non-lsp snippets with completion engine
-M.snippets_standalone = false
-
 ---@type "blink" | "mini" | "none"
 M.completion = "none"
 
