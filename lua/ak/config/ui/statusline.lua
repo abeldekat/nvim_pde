@@ -8,7 +8,6 @@ local Util = require("ak.util")
 AK.setup = function()
   MiniStatusline.setup({
     use_icons = true,
-    set_vim_settings = false,
     content = { active = AK.active },
   })
   H.create_autocommands()

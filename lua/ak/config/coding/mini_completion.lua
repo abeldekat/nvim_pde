@@ -25,4 +25,3 @@ require("mini.completion").setup({
   },
   lsp_completion = { auto_setup = false, source_func = "omnifunc" },
 })
-vim.opt.completeopt:append("fuzzy") -- Use fuzzy matching for built-in completion

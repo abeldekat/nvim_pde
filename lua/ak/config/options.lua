@@ -6,8 +6,7 @@ vim.g.maplocalleader = "\\"
 
 -- Completion =================================================================
 o.complete = ".,w,b,kspell" -- use spell check and don't use tags for completion
-o.completeopt = "menuone,noselect" -- show popup even with one item and don't autoselect first
--- o.completeopt = "menuone,noselect,fuzzy" -- use fuzzy matching for built-in completion
+o.completeopt = "menuone,noselect,fuzzy" -- show popup even with one item and don't autoselect first
 o.wildmode = "longest:full,full" -- command-line completion mode
 
 -- Editing ====================================================================
@@ -70,6 +69,7 @@ o.relativenumber = true -- relative line numbers
 o.ruler = false -- don't show cursor position
 -- o.scrolloff = 4 -- lines of context
 -- Default: "ltToOCF", or alphabetically: "CFOTlto". Added S, W, a and c, Removed T, l and t:
+-- Also see mini.completion, suggested option values.
 o.shortmess = "CFOSWaco" -- disable certain messages from |ins-completion-menu|
 o.showmode = false -- don't show mode in command line
 o.showtabline = 0 -- never show tabs, 1 is default, 2, -- always show tabs
