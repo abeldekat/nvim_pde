@@ -23,5 +23,8 @@ require("mini.completion").setup({
     -- using lsp snippets. No need to remove the arguments...
     force_fallback = "<A-Space>", -- Force fallback completion
   },
-  lsp_completion = { auto_setup = false, source_func = "omnifunc" },
+  -- Using the default completefunc to be able to use ctrl-o to temporarily
+  -- escape to normal mode. See mini discussions #1736
+  lsp_completion = { auto_setup = false },
+  -- lsp_completion = { auto_setup = false, source_func = "omnifunc" },
 })

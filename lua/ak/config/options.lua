@@ -69,7 +69,7 @@ o.relativenumber = true -- relative line numbers
 o.ruler = false -- don't show cursor position
 -- o.scrolloff = 4 -- lines of context
 -- Default: "ltToOCF", or alphabetically: "CFOTlto". Added S, W, a and c, Removed T, l and t:
--- Also see mini.completion, suggested option values.
+-- Also see mini.completion, suggested option values:
 o.shortmess = "CFOSWaco" -- disable certain messages from |ins-completion-menu|
 o.showmode = false -- don't show mode in command line
 o.showtabline = 0 -- never show tabs, 1 is default, 2, -- always show tabs

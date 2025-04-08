@@ -6,10 +6,9 @@ local add, later = MiniDeps.add, MiniDeps.later
 Util.use_mini_ai = true
 -- Util.completion = "blink"
 Util.completion = "mini"
--- Util.completion = "none"
+-- Util.completion = "native"
 
--- Blink adds 7 ms to startuptime when using now():
-local function blink_completion()
+local function blink_completion() -- blink adds 7 ms to startuptime when using now()
   local function build_blink(params)
     vim.notify("Building blink.cmp", vim.log.levels.INFO)
     local obj = vim.system({ "cargo", "build", "--release" }, { cwd = params.path }):wait()
@@ -19,7 +18,6 @@ local function blink_completion()
       vim.notify("Building blink.cmp failed", vim.log.levels.ERROR)
     end
   end
-
   add({
     source = "saghen/blink.cmp",
     checkout = "v1.1.1",
@@ -27,19 +25,20 @@ local function blink_completion()
   })
   require("ak.config.coding.blink_completion")
 end
-
 local function mini_completion() require("ak.config.coding.mini_completion") end
+local function native_completion() require("ak.config.coding.native_completion") end
 
-local completion_plugins = {
-  mini = mini_completion,
+local completion_providers = {
   blink = blink_completion,
+  mini = mini_completion,
+  native = native_completion,
 }
 
 later(function()
   add("rafamadriz/friendly-snippets")
   require("ak.config.coding.snippets")
 
-  local completion_setup = completion_plugins[Util.completion]
+  local completion_setup = completion_providers[Util.completion]
   if completion_setup then completion_setup() end
 
   if Util.use_mini_ai then require("ak.config.coding.ai") end

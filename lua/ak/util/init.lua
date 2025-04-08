@@ -13,7 +13,7 @@ local M = {}
 ---@type boolean for the integration of treesitter textobjects and mini.ai
 M.use_mini_ai = false
 
----@type "blink" | "mini" | "none"
+---@type "blink" | "mini" | "native" | "none"
 M.completion = "none"
 
 -- End shared variables

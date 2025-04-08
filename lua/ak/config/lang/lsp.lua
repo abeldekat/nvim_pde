@@ -44,7 +44,9 @@ local add_keymaps = function(client, buffer) -- see :h lsp-quickstart
 end
 
 local add_completion = function(buffer)
-  if Util.completion == "mini" then vim.bo[buffer].omnifunc = "v:lua.MiniCompletion.completefunc_lsp" end
+  -- Using completefunc to be able to use ctrl-o to temporarily
+  -- escape to normal mode. See mini discussions #1736
+  if Util.completion == "mini" then vim.bo[buffer].completefunc = "v:lua.MiniCompletion.completefunc_lsp" end
 end
 
 local add_inlay_hints = function(client, buffer)
