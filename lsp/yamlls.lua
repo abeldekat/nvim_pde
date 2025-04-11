@@ -1,6 +1,6 @@
 -- https://github.com/redhat-developer/yaml-language-server
--- Using mason. Arch linux: sudo pacman -S yaml-language-server
--- Mason name: yaml-language-server. Nvim-lspconfig name: yaml_ls
+-- Arch linux: sudo pacman -S yaml-language-server
+-- Nvim-lspconfig name: yamlls
 
 return {
   cmd = { "yaml-language-server", "--stdio" },

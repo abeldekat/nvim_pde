@@ -1,21 +1,17 @@
 local Util = require("ak.util")
 local MiniDeps = require("mini.deps")
 local add, later = MiniDeps.add, MiniDeps.later
+local use_mason = false
 
 local function lsp()
-  local build_mason = function()
-    later(function() vim.cmd("MasonUpdate") end)
+  if use_mason then
+    add("williamboman/mason.nvim")
+    require("mason").setup()
   end
-  add({
-    source = "williamboman/mason.nvim",
-    hooks = { post_install = build_mason, post_checkout = build_mason },
-  })
-  add({ source = "mrcjkb/rustaceanvim", checkout = "v6.0.2" })
 
+  add({ source = "mrcjkb/rustaceanvim", checkout = "v6.0.2" })
   add("b0o/SchemaStore.nvim")
   add("neovim/nvim-lspconfig")
-
-  require("ak.config.lang.mason")
   require("ak.config.lang.lsp")
 end
 

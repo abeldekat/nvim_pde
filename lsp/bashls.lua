@@ -1,6 +1,7 @@
 -- https://github.com/bash-lsp/bash-language-server
--- Using mason. Arch linux: sudo pacman -S bash-language-server
--- Mason name: bash-language-server. Nvim-lspconfig name: bash_ls
+-- Arch linux: sudo pacman -S bash-language-server shfmt shellcheck
+-- Nvim-lspconfig name: bashls
+
 return {
   cmd = { "bash-language-server", "start" },
   settings = {

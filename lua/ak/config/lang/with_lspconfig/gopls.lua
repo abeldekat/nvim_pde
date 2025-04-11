@@ -1,9 +1,13 @@
 -- https://github.com/golang/tools/tree/master/gopls
 -- https://pkg.go.dev/golang.org/x/tools/gopls
--- Using mason. Arch linux: sudo pacman -S gopls
+-- Arch linux: sudo pacman -S gopls gofumpt
+-- Perhaps goimports:
+-- https://pkg.go.dev/golang.org/x/tools/cmd/goimports
+-- A golang formatter which formats your code in the same style as gofmt and additionally updates your Go import lines,
+-- adding missing ones and removing unreferenced ones.
 
 -- gopls in nvim-lspconfig has a root_dir function that is not easy to copy:
-return {
+return { -- copied from lazyvim:
   settings = {
     gopls = {
       gofumpt = true,

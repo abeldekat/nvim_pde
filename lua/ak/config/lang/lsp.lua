@@ -1,3 +1,10 @@
+-- All language related config:
+-- lsp/*.lua
+-- lua/ak/config/lang/with_lspconfig/*.lua
+--
+-- Tools used without lsp:
+-- prettier, arch linux: sudo pacman -S prettier
+
 local Util = require("ak.util")
 local Picker = Util.pick
 local methods = vim.lsp.protocol.Methods
@@ -100,15 +107,15 @@ vim.lsp.config(
   }
 )
 vim.lsp.enable({
-  "bash-language-server",
-  "json-lsp",
-  "lua-language-server",
+  "bashls",
+  "jsonls",
+  "lua_ls",
   "marksman",
   "ruff",
   "taplo",
-  "yaml-language-server",
+  "yamlls",
 })
--- Rust with rust-analyzer, not installed by mason, setup is done in rustacenvim plugin
+-- Rust with rust-analyzer, setup is done in rustacenvim plugin:
 local rust_opts = require("ak.config.lang.with_lspconfig.rust-analyzer")
 vim.g.rustaceanvim = vim.tbl_deep_extend("force", vim.g.rustaceanvim or {}, rust_opts or {})
 

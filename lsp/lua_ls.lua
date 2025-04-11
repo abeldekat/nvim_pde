@@ -1,6 +1,6 @@
 -- https://github.com/luals/lua-language-server
--- Using mason. Arch linux: sudo pacman -S lua-language-server
--- Mason name: lua-language-server. Nvim-lspconfig name: lua_ls
+-- Arch linux: sudo pacman -S lua-language-server stylua
+-- Nvim-lspconfig name: lua_ls
 
 -- assumption: .luarc.jsonc takes precendence. individual values override,
 -- arrays are not merged

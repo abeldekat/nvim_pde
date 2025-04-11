@@ -1,5 +1,14 @@
 -- https://rust-analyzer.github.io/
--- Install with cargo
+-- Install rust-analyzer with cargo
+--
+-- Debugger:
+-- https://github.com/vadimcn/codelldb, version 1.11.4 with mason on 20250411
+-- A native debugger extension for vscode based on lldb
+-- https://aur.archlinux.org/packages/codelldb-bin, version 1.11.0 on 20250411
+-- git clone https://aur.archlinux.org/codelldb-bin.git/
+-- cd and makepkg -si, essentially fetching the release from github
+--
+-- Also see: mason-registry, packages/codelldb/package.yaml
 
 vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("ak_lsp_rust_analyzer", {}),

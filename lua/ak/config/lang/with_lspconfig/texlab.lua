@@ -1,5 +1,5 @@
 -- https://github.com/latex-lsp/texlab
--- Using mason.
+-- Arch linux: sudo pacman -S texlab
 -- The texlab config in nvim-lspconfig is extensive...
 
 local desc = "Vimtex Docs"

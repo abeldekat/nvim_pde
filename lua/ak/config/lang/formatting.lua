@@ -37,7 +37,6 @@ OnSave.info = function()
 end
 
 -- -- You can also customize some of the format options for the filetype
--- rust = { "rustfmt", lsp_format = "fallback" },
 local formatters_by_ft = {
   ["css"] = { "prettier" },
   ["go"] = { "goimports", "gofumpt" },
@@ -52,12 +51,12 @@ local formatters_by_ft = {
   ["less"] = { "prettier" },
   ["markdown"] = { "prettier", "markdownlint-cli2", "markdown-toc" },
   ["markdown.mdx"] = { "prettier", "markdownlint-cli2", "markdown-toc" },
-  ["mysql"] = { "sqlfluff" }, -- consider sleek
-  ["plsql"] = { "sqlfluff" },
+  -- ["mysql"] = { "sqlfluff" }, -- consider sleek
+  -- ["plsql"] = { "sqlfluff" },
   ["python "] = { "black" },
   ["scss"] = { "prettier" },
   ["sh"] = { "shfmt" },
-  ["sql"] = { "sqlfluff" },
+  -- ["sql"] = { "sqlfluff" },
   ["typescript"] = { "prettier" },
   ["typescriptreact"] = { "prettier" },
   ["vue"] = { "prettier" },
@@ -79,7 +78,7 @@ local formatters = {
       return #diag > 0
     end,
   },
-  sqlfluff = { args = { "format", "--dialect=ansi", "-" } },
+  -- sqlfluff = { args = { "format", "--dialect=ansi", "-" } },
 }
 
 local function setup()

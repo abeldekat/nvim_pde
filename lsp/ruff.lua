@@ -1,5 +1,5 @@
 -- https://github.com/astral-sh/ruff/
--- Using mason. Arch linux: various installation candidates
+-- Arch linux: sudo pacman -S ruff
 
 local desc = "Organize imports"
 local opts_code_action = {

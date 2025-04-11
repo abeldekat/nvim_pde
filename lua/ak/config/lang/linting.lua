@@ -47,9 +47,9 @@ local function get_opts()
     events = { "BufWritePost", "BufReadPost", "InsertLeave" },
     linters_by_ft = {
       markdown = { "markdownlint-cli2" },
-      sql = { "sqlfluff" },
-      mysql = { "sqlfluff" },
-      plsql = { "sqlfluff" },
+      -- sql = { "sqlfluff" },
+      -- mysql = { "sqlfluff" },
+      -- plsql = { "sqlfluff" },
     },
   }
 end

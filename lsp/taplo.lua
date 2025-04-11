@@ -1,6 +1,6 @@
 -- https://taplo.tamasfe.dev/
--- Using Mason. Arch linux: sudo pacman -S taplo
--- Can be installed via cargo
+-- Arch linux: sudo pacman -S taplo
+-- Can also be installed via cargo
 
 return {
   cmd = { "taplo", "lsp", "stdio" },
