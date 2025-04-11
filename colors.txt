@@ -17,8 +17,8 @@ springhue
 summerhue
 nightfox
 nordfox
-onedark
 randomhue
 sonokai
 terafox
+tokyonight
 winterhue
