@@ -157,29 +157,27 @@ H.make_override_show = function(show, ctx, picker_opts)
   local show_ctx
   return function(buf_id, items, query, opts) -- items contain as many as displayed
     if not show_ctx then show_ctx = H.init_show_ctx(items, ctx, picker_opts) end
-    local matches = MiniPick.get_picker_matches()
     H.clear_namespace(buf_id, H.ns_id.hinted) -- remove hints
 
     -- No hint, create hints if applicable
     if ctx.hinted_index == nil then
       show(buf_id, items, query, opts)
-
-      -- Only add hints when query is empty and window is not scrolled
       if #query == 0 and show_ctx.first_item == items[1] then
+        -- Only add hints when query is empty and window is not scrolled
         H.add_hints(buf_id, ctx.max_hints, show_ctx.do_autosubmit, picker_opts)
       end
       return
     end
 
-    -- Valid hint, make sure its current and autosubmit or show
-    ---@diagnostic disable-next-line: need-check-nil
+    -- Valid hint, make sure its current before autosubmit or show
+    local matches = MiniPick.get_picker_matches() or {}
     if ctx.hinted_index ~= matches.all_inds[1] then MiniPick.set_picker_match_inds({ ctx.hinted_index }, "current") end
     if show_ctx.do_autosubmit then
       if not show_ctx.did_autosubmit then
         show_ctx.did_autosubmit = true
         vim.api.nvim_feedkeys(H.keys.cr, "n", true)
       end
-    else -- no autosubmit, show
+    else -- no autosubmit
       show(buf_id, items, query, opts)
     end
   end
