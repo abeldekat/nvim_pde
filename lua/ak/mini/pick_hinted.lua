@@ -153,63 +153,45 @@ H.init_show_ctx = function(items, ctx, picker_opts)
   return result
 end
 
-H.set_hinted_as_first_item = function(all_inds, hinted_index)
-  local hinted_index_pos
-  for i, index in ipairs(all_inds) do
-    if index == hinted_index then
-      hinted_index_pos = i
-      break
-    end
-  end
-  table.remove(all_inds, hinted_index_pos)
-  table.insert(all_inds, 1, hinted_index)
-  MiniPick.set_picker_match_inds(all_inds)
-end
-
 H.make_override_show = function(show, ctx, picker_opts)
   local show_ctx
   return function(buf_id, items, query, opts) -- items contain as many as displayed
     if not show_ctx then show_ctx = H.init_show_ctx(items, ctx, picker_opts) end
+    local matches = MiniPick.get_picker_matches()
     H.clear_namespace(buf_id, H.ns_id.hinted) -- remove hints
 
-    -- Query does not contain a valid hint
-    if not ctx.hinted_index then
+    -- No hint, create hints if applicable
+    if ctx.hinted_index == nil then
       show(buf_id, items, query, opts)
 
-      -- Only add hint when query is empty and window is not scrolled
+      -- Only add hints when query is empty and window is not scrolled
       if #query == 0 and show_ctx.first_item == items[1] then
         H.add_hints(buf_id, ctx.max_hints, show_ctx.do_autosubmit, picker_opts)
       end
       return
     end
 
-    -- Query contains valid hint. Make sure item is first in the list
-    local all_inds = (MiniPick.get_picker_matches() or {}).all_inds
-    if ctx.hinted_index ~= all_inds[1] then
-      H.set_hinted_as_first_item(all_inds, ctx.hinted_index)
-      return
-    end
-
-    if not show_ctx.do_autosubmit then -- no autosubmit, show
+    -- Valid hint, make sure its current and autosubmit or show
+    ---@diagnostic disable-next-line: need-check-nil
+    if ctx.hinted_index ~= matches.all_inds[1] then MiniPick.set_picker_match_inds({ ctx.hinted_index }, "current") end
+    if show_ctx.do_autosubmit then
+      if not show_ctx.did_autosubmit then
+        show_ctx.did_autosubmit = true
+        vim.api.nvim_feedkeys(H.keys.cr, "n", true)
+      end
+    else -- no autosubmit, show
       show(buf_id, items, query, opts)
-      return
-    end
-
-    if not show_ctx.did_autosubmit then -- autosubmit, prevent doing so twice
-      show_ctx.did_autosubmit = true
-      vim.api.nvim_feedkeys(H.keys.cr, "n", true)
     end
   end
 end
 
 H.on_pick_start_event = function()
   local picker_opts = vim.tbl_deep_extend("force", H.get_config(), MiniPick.get_picker_opts() or {})
-  local src = picker_opts.source
-  local use_hints = picker_opts.hinted.enable -- opt-in per picker...
-  if not use_hints then return end
+  if not picker_opts.hinted.enable then return end -- opt-in per picker...
 
   local use_autosubmit = picker_opts.hinted.use_autosubmit
   local runtime_ctx = { hinted_index = nil, max_hints = nil, use_autosubmit = use_autosubmit }
+  local src = picker_opts.source
   src.match = H.make_override_match(src.match, runtime_ctx, picker_opts)
   src.show = H.make_override_show(src.show, runtime_ctx, picker_opts)
   MiniPick.set_picker_opts(picker_opts)

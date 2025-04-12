@@ -31,12 +31,12 @@ return {
   ["nvim-ts-autotag"] = "a1d526af391f6aebb25a8795cbc05351ed3620b5",
   ["one-small-step-for-vimkind"] = "b9def31568d20b16f7da9479a4174d165046fe8a",
   ["peek.nvim"] = "5820d937d5414baea5f586dc2a3d912a74636e5b",
-  ["render-markdown.nvim"] = "05e6a6d119f90b99829ecb7eb85428a226c0c05f",
+  ["render-markdown.nvim"] = "8bb0d4725cc4909a603158d44ff28b6158ad9278",
   rustaceanvim = "3f327d15a3c1ed48b1e1087e16873a28a39768c2",
   ["toggleterm.nvim"] = "9a88eae817ef395952e08650b3283726786fb5fb",
   ["vim-dadbod"] = "9f0ca8bcef704659820a95c3bbd2c262583a66a1",
   ["vim-dadbod-completion"] = "a8dac0b3cf6132c80dc9b18bef36d4cf7a9e1fe6",
   ["vim-slime"] = "9bc2e13f8441b09fd7352a11629a4da0ea4cb058",
   ["vim-startuptime"] = "b6f0d93f6b8cf6eee0b4c94450198ba2d6a05ff6",
-  vimtex = "a531f6bf9ce61172e4ea8eea2ecbf59fd08c232a"
+  vimtex = "c6bab47449b9b14c70d91f5f7f08e2d84298bea4"
 }

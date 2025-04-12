@@ -1,3 +1,4 @@
+-- Install rust with rustup script. Also possible with sudo pacman -S rustup
 -- https://rust-analyzer.github.io/
 -- Install rust-analyzer with cargo
 --
