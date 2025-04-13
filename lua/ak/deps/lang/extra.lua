@@ -13,7 +13,7 @@ local function add_md(source, to_require, hook)
 
   local function load()
     add(_source)
-    require("ak.config.lang.markdown." .. to_require)
+    require("ak.config.lang.extra." .. to_require)
   end
   register(_source)
   Util.defer.on_events(function() later(load) end, "FileType", "markdown")
@@ -42,7 +42,7 @@ local function sql()
 
   local function load()
     add(spec)
-    require("ak.config.lang.sql.dadbod")
+    require("ak.config.lang.extra.dadbod")
     vim.notify("Loaded dadbod", vim.log.levels.INFO)
   end
   register(spec)
@@ -52,7 +52,7 @@ local function sql()
 end
 
 local function latex() -- Note: Not "lazy" loaded as per plugin requirements
-  require("ak.config.lang.latex.vimtex") -- Vimscript variables
+  require("ak.config.lang.extra.vimtex") -- Vimscript variables
   add("lervag/vimtex")
 end
 

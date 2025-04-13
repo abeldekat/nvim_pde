@@ -16,13 +16,13 @@ return {
   ["leap.nvim"] = "03eaa2e0c0ec9436dea0e954bc47564ff3ca9196",
   ["mini.nvim"] = "b418d585d99bd1c1a4b04dc8b2c585471665173a",
   neogen = "05d754004da8c89115b291f2a23ca530a8cac8fd",
-  neotest = "dddbe8fe358b05b2b7e54fe4faab50563171a76d",
+  neotest = "c54a08504e53faeeed784a0e24eb073f1048ef58",
   ["nvim-bqf"] = "e20417d5e589e03eaaaadc4687904528500608be",
   ["nvim-dap"] = "7aade9e99bef5f0735cf966e715b3ce45515d786",
-  ["nvim-dap-ui"] = "bc81f8d3440aede116f821114547a476b082b319",
+  ["nvim-dap-ui"] = "3c744a8262b6526d02015c2c09c6d6b2017dd3c3",
   ["nvim-dap-virtual-text"] = "df66808cd78b5a97576bbaeee95ed5ca385a9750",
   ["nvim-lint"] = "5b1bdf306bd3e565908145279e8bbfc594dac3b3",
-  ["nvim-lspconfig"] = "b6936cb85d1e95b5ff00016b1185ab1a14450579",
+  ["nvim-lspconfig"] = "62e1955d7e9a3dca543635effad54d29947cb91e",
   ["nvim-nio"] = "21f5324bfac14e22ba26553caf69ec76ae8a7662",
   ["nvim-pqf"] = "148ee2ca8b06d83fd9bf6f9b9497724ad39a07d6",
   ["nvim-treesitter"] = "0e21ee8df6235511c02bab4a5b391d18e165a58d",
@@ -37,5 +37,5 @@ return {
   ["vim-dadbod-completion"] = "a8dac0b3cf6132c80dc9b18bef36d4cf7a9e1fe6",
   ["vim-slime"] = "9bc2e13f8441b09fd7352a11629a4da0ea4cb058",
   ["vim-startuptime"] = "b6f0d93f6b8cf6eee0b4c94450198ba2d6a05ff6",
-  vimtex = "408125296383af83fc53b2d03c9a0b8961c455d8"
+  vimtex = "237671ff5852e30f1ad47a572d55a9c2e2dbe91d"
 }
