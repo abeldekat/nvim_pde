@@ -1,5 +1,8 @@
 # LSP
 
+Tools used without lsp:
+prettier, arch linux: `sudo pacman -S prettier`
+
 ## bash
 
 [github](https://github.com/bash-lsp/bash-language-server)

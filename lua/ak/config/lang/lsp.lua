@@ -1,6 +1,3 @@
--- Tools used without lsp:
--- prettier, arch linux: sudo pacman -S prettier
-
 local Util = require("ak.util")
 local Picker = Util.pick
 local methods = vim.lsp.protocol.Methods
@@ -109,6 +106,4 @@ if Util.completion == "mini" then
 elseif Util.completion == "blink" then
   capabilities = require("blink.cmp").get_lsp_capabilities({}, true)
 end
-require("lspconfig").zls.setup({
-  capabilities = vim.tbl_deep_extend("force", {}, capabilities),
-})
+require("lspconfig").zls.setup({ capabilities = vim.tbl_deep_extend("force", {}, capabilities) })
