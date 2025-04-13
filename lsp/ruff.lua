@@ -1,6 +1,3 @@
--- https://github.com/astral-sh/ruff/
--- Arch linux: sudo pacman -S ruff
-
 local desc = "Organize imports"
 local opts_code_action = {
   apply = true,
@@ -19,5 +16,3 @@ vim.api.nvim_create_autocmd("LspAttach", {
     client.server_capabilities.hoverProvider = false
   end,
 })
-
-return {}

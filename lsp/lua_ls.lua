@@ -1,7 +1,3 @@
--- https://github.com/luals/lua-language-server
--- Arch linux: sudo pacman -S lua-language-server stylua
--- Nvim-lspconfig name: lua_ls
-
 -- assumption: .luarc.jsonc takes precendence. individual values override,
 -- arrays are not merged
 -- example: diagnostics global array, "one" in lua_ls settings,
@@ -51,7 +47,7 @@ local luals_unique_definition = function()
   return vim.lsp.buf.definition({ on_list = on_list })
 end
 
-return {
+vim.lsp.config.lua_ls = {
   on_attach = function(client, bufnr)
     -- reduce unnecessarily long list of completion triggers for better 'mini.completion' experience
     client.server_capabilities.completionProvider.triggerCharacters = { ".", ":" }

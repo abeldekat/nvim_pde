@@ -1,7 +1,3 @@
--- https://github.com/latex-lsp/texlab
--- Arch linux: sudo pacman -S texlab
--- The texlab config in nvim-lspconfig is extensive...
-
 local desc = "Vimtex Docs"
 vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("ak_lsp_texlab", {}),
@@ -12,4 +8,3 @@ vim.api.nvim_create_autocmd("LspAttach", {
     vim.keymap.set("n", "<Leader>K", "<plug>(vimtex-doc-package)", { desc = desc, silent = true, buffer = args.buf })
   end,
 })
-return {}

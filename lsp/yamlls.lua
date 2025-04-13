@@ -1,8 +1,4 @@
--- https://github.com/redhat-developer/yaml-language-server
--- Arch linux: sudo pacman -S yaml-language-server
--- Nvim-lspconfig name: yamlls
-
-return {
+vim.lsp.config.yamlls = {
   -- Lazy-load schemastore when needed:
   before_init = function(_, config) -- used to be on_new_config using nvim-lspconfig
     config.settings.yaml.schemas =

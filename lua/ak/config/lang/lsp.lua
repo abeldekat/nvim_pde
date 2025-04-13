@@ -67,13 +67,6 @@ local on_attach = function(client, buffer)
   add_inlay_hints(client, buffer)
 end
 
-local enable = function(names)
-  for _, name in ipairs(names) do
-    vim.lsp.config(name, require("ak.config.lang.servers." .. name))
-  end
-  vim.lsp.enable(names)
-end
-
 vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("ak_lsp", {}),
   callback = function(args)
@@ -94,7 +87,7 @@ vim.lsp.handlers["client/registerCapability"] = (function(overridden)
 end)(vim.lsp.handlers["client/registerCapability"])
 
 vim.lsp.config("*", { capabilities = Util.completion == "mini" and MiniCompletion.get_lsp_capabilities() or nil })
-enable({
+vim.lsp.enable({
   "basedpyright",
   "bashls",
   "gopls",
@@ -109,13 +102,6 @@ enable({
 })
 
 -- TODO: Remove when PR 3666 lands. Zig is not ported yet to vim.lsp.config
-local with_classic_lspconfig = function(names, capabilities)
-  for _, name in ipairs(names) do
-    local opts = require("ak.config.lang.servers." .. name)
-    opts.capabilities = vim.tbl_deep_extend("force", {}, capabilities, opts.capabilities or {})
-    require("lspconfig")[name].setup(opts)
-  end
-end
 local capabilities = {}
 if Util.completion == "mini" then
   capabilities =
@@ -123,4 +109,6 @@ if Util.completion == "mini" then
 elseif Util.completion == "blink" then
   capabilities = require("blink.cmp").get_lsp_capabilities({}, true)
 end
-with_classic_lspconfig({ "zls" }, capabilities)
+require("lspconfig").zls.setup({
+  capabilities = vim.tbl_deep_extend("force", {}, capabilities),
+})

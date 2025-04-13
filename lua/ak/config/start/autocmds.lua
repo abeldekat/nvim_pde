@@ -1,23 +1,20 @@
+-- Go to last loc when opening a buffer: See mini.misc
 local function augroup(name) return vim.api.nvim_create_augroup("abeldekat_" .. name, {}) end
 local autocmd = vim.api.nvim_create_autocmd
 
--- Check if we need to reload the file when it changed
 autocmd({ "FocusGained", "TermClose", "TermLeave" }, {
-  group = augroup("checktime"),
+  group = augroup("checktime"), -- check if file needs to be reloaded when it changed
   callback = function()
     if vim.o.buftype ~= "nofile" then vim.cmd("checktime") end
   end,
 })
 
--- Highlight on yank
-local hl = vim.fn.has("nvim-0.11") == 1 and vim.hl or vim.highlight
-autocmd("TextYankPost", {
+autocmd("TextYankPost", { -- highlight on yank
   group = augroup("highlight_yank"),
-  callback = function() hl.on_yank() end,
+  callback = function() vim.hl.on_yank() end,
 })
 
--- Resize splits if window got resized
-autocmd({ "VimResized" }, {
+autocmd({ "VimResized" }, { -- resize splits if window got resized
   group = augroup("resize_splits"),
   callback = function()
     local current_tab = vim.fn.tabpagenr()
@@ -25,8 +22,6 @@ autocmd({ "VimResized" }, {
     vim.cmd("tabnext " .. current_tab)
   end,
 })
-
--- Go to last loc when opening a buffer: See mini.misc
 
 -- Close some filetypes with <q>
 -- stylua: ignore start
@@ -43,15 +38,13 @@ autocmd("FileType", {
 })
 -- stylua: ignore end
 
--- make it easier to close man-files when opened inline
-vim.api.nvim_create_autocmd("FileType", {
+vim.api.nvim_create_autocmd("FileType", { -- close man-files when opened inline
   group = augroup("man_unlisted"),
   pattern = { "man" },
   callback = function(event) vim.bo[event.buf].buflisted = false end,
 })
 
--- Fix conceallevel for json files
-vim.api.nvim_create_autocmd({ "FileType" }, {
+vim.api.nvim_create_autocmd({ "FileType" }, { -- fix conceallevel for json files
   group = augroup("json_conceal"),
   pattern = { "json", "jsonc", "json5" },
   callback = function()
@@ -60,8 +53,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
   end,
 })
 
--- Auto create dir when saving a file, in case some intermediate directory does not exist
-autocmd({ "BufWritePre" }, {
+autocmd({ "BufWritePre" }, { -- auto create dir when saving a file
   group = augroup("auto_create_dir"),
   callback = function(event)
     if event.match:match("^%w%w+://") then return end
@@ -70,8 +62,7 @@ autocmd({ "BufWritePre" }, {
   end,
 })
 
--- Don't continue comments with o and O
-autocmd("Filetype", {
+autocmd("Filetype", { -- don't continue comments with o and O
   group = augroup("continue_comments"),
   callback = function()
     -- Don't auto-wrap comments and don't insert comment leader after hitting 'o'
