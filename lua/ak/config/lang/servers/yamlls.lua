@@ -3,8 +3,6 @@
 -- Nvim-lspconfig name: yamlls
 
 return {
-  cmd = { "yaml-language-server", "--stdio" },
-  filetypes = { "yaml", "yaml.docker-compose", "yaml.gitlab" },
   -- Lazy-load schemastore when needed:
   before_init = function(_, config) -- used to be on_new_config using nvim-lspconfig
     config.settings.yaml.schemas =

@@ -7,4 +7,4 @@
 -- Most commonly, this is used to inject additional arguments into `cmd`.
 -- --> new_config.cmd = { 'zls', '--config-path', 'zls.json' }
 
-return {} -- no override
+return {}

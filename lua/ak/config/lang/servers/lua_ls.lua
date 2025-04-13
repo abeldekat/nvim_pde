@@ -57,19 +57,6 @@ return {
     client.server_capabilities.completionProvider.triggerCharacters = { ".", ":" }
     vim.keymap.set("n", "gd", luals_unique_definition, { buffer = bufnr, desc = "goto definition" })
   end,
-  cmd = { "lua-language-server" },
-  filetypes = { "lua" },
-  root_markers = {
-    ".luarc.json",
-    ".luarc.jsonc",
-    ".luacheckrc",
-    ".stylua.toml",
-    "stylua.toml",
-    "selene.toml",
-    "selene.yml",
-    ".git",
-  },
-  log_level = vim.lsp.protocol.MessageType.Warning,
   settings = {
     lua = {
       runtime = { version = "luajit", path = vim.split(package.path, ";") },

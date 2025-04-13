@@ -8,6 +8,4 @@
 --
 -- See also: ruff
 
--- The basedpyright config in nvim-lspconfig is extensive...
--- Has commands...
-return {} -- no override
+return {}

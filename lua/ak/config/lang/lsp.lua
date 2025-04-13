@@ -1,7 +1,3 @@
--- All language related config:
--- lsp/*.lua
--- lua/ak/config/lang/with_lspconfig/*.lua
---
 -- Tools used without lsp:
 -- prettier, arch linux: sudo pacman -S prettier
 
@@ -43,7 +39,7 @@ local add_keymaps = function(client, buffer) -- see :h lsp-quickstart
     keymap("<leader>cc", vim.lsp.codelens.run, "Run Codelens", { "n", "v" })
     keymap("<leader>cC", vim.lsp.codelens.refresh, "Refresh & Display Codelens")
   end
-  keymap("<leader>cl", "<cmd>checkhealth vim.lsp<cr>", "Lsp info")
+  keymap("<leader>cl", "<cmd>LspInfo<cr>", "Lsp info")
   -- Used to be gy. Mappings gy and gY are used to copy to clipboard
   if client:supports_method(methods.textDocument_typeDefinition) then
     keymap("<leader>cy", Picker.lsp_type_definitions, "Goto type definition")
@@ -71,12 +67,11 @@ local on_attach = function(client, buffer)
   add_inlay_hints(client, buffer)
 end
 
-local with_lspconfig = function(names, capabilities)
+local enable = function(names)
   for _, name in ipairs(names) do
-    local opts = require("ak.config.lang.with_lspconfig." .. name)
-    opts.capabilities = vim.tbl_deep_extend("force", {}, capabilities, opts.capabilities or {})
-    require("lspconfig")[name].setup(opts)
+    vim.lsp.config(name, require("ak.config.lang.servers." .. name))
   end
+  vim.lsp.enable(names)
 end
 
 vim.api.nvim_create_autocmd("LspAttach", {
@@ -98,28 +93,32 @@ vim.lsp.handlers["client/registerCapability"] = (function(overridden)
   end
 end)(vim.lsp.handlers["client/registerCapability"])
 
--- Servers with "simple" configuration:
-vim.lsp.config(
-  "*", -- applied to all clients
-  {
-    capabilities = Util.completion == "mini" and MiniCompletion.get_lsp_capabilities() or nil,
-    root_markers = { ".git" },
-  }
-)
-vim.lsp.enable({
+vim.lsp.config("*", { capabilities = Util.completion == "mini" and MiniCompletion.get_lsp_capabilities() or nil })
+enable({
+  "basedpyright",
   "bashls",
+  "gopls",
   "jsonls",
   "lua_ls",
   "marksman",
   "ruff",
   "taplo",
+  "texlab",
   "yamlls",
 })
+
 -- Rust with rust-analyzer, setup is done in rustacenvim plugin:
-local rust_opts = require("ak.config.lang.with_lspconfig.rust-analyzer")
+local rust_opts = require("ak.config.lang.servers.rust-analyzer")
 vim.g.rustaceanvim = vim.tbl_deep_extend("force", vim.g.rustaceanvim or {}, rust_opts or {})
 
--- Servers with more complicated configuration, using nvim-lspconfig
+-- TODO: Remove when PR 3666 lands. Zig is not ported yet to vim.lsp.config
+local with_classic_lspconfig = function(names, capabilities)
+  for _, name in ipairs(names) do
+    local opts = require("ak.config.lang.servers." .. name)
+    opts.capabilities = vim.tbl_deep_extend("force", {}, capabilities, opts.capabilities or {})
+    require("lspconfig")[name].setup(opts)
+  end
+end
 local capabilities = {}
 if Util.completion == "mini" then
   capabilities =
@@ -127,4 +126,4 @@ if Util.completion == "mini" then
 elseif Util.completion == "blink" then
   capabilities = require("blink.cmp").get_lsp_capabilities({}, true)
 end
-with_lspconfig({ "basedpyright", "gopls", "texlab", "zls" }, capabilities)
+with_classic_lspconfig({ "zls" }, capabilities)
