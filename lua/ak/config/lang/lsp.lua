@@ -39,7 +39,7 @@ local add_keymaps = function(client, buffer) -- see :h lsp-quickstart
     keymap("<leader>cc", vim.lsp.codelens.run, "Run Codelens", { "n", "v" })
     keymap("<leader>cC", vim.lsp.codelens.refresh, "Refresh & Display Codelens")
   end
-  keymap("<leader>cl", "<cmd>LspInfo<cr>", "Lsp info")
+  keymap("<leader>cl", "<cmd>checkhealth vim.lsp<cr>", "Lsp info")
   -- Used to be gy. Mappings gy and gY are used to copy to clipboard
   if client:supports_method(methods.textDocument_typeDefinition) then
     keymap("<leader>cy", Picker.lsp_type_definitions, "Goto type definition")
@@ -102,14 +102,11 @@ enable({
   "lua_ls",
   "marksman",
   "ruff",
+  "rust_analyzer",
   "taplo",
   "texlab",
   "yamlls",
 })
-
--- Rust with rust-analyzer, setup is done in rustacenvim plugin:
-local rust_opts = require("ak.config.lang.servers.rust-analyzer")
-vim.g.rustaceanvim = vim.tbl_deep_extend("force", vim.g.rustaceanvim or {}, rust_opts or {})
 
 -- TODO: Remove when PR 3666 lands. Zig is not ported yet to vim.lsp.config
 local with_classic_lspconfig = function(names, capabilities)

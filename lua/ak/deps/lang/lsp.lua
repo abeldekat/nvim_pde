@@ -9,7 +9,7 @@ local function lsp()
     require("mason").setup()
   end
 
-  add({ source = "mrcjkb/rustaceanvim", checkout = "v6.0.2" })
+  -- add({ source = "mrcjkb/rustaceanvim", checkout = "v6.0.2" })
   add("b0o/SchemaStore.nvim")
   add("neovim/nvim-lspconfig")
   require("ak.config.lang.lsp")
