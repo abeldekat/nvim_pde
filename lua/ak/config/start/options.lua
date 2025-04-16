@@ -4,6 +4,11 @@ local o = vim.o
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
+if vim.fn.has("nvim-0.12") == 1 then
+  vim.o.pummaxwidth = 100 -- Limit maximum width of popup menu
+  vim.o.completefuzzycollect = "keyword,files,whole_line" -- Use fuzzy matching when collecting candidates
+end
+
 -- Completion =================================================================
 o.complete = ".,w,b,kspell" -- use spell check and don't use tags for completion
 o.completeopt = "menuone,noselect,fuzzy" -- show popup even with one item and don't autoselect first

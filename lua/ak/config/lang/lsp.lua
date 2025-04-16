@@ -97,13 +97,3 @@ vim.lsp.enable({
   "texlab",
   "yamlls",
 })
-
--- TODO: Remove when PR 3666 lands. Zig is not ported yet to vim.lsp.config
-local capabilities = {}
-if Util.completion == "mini" then
-  capabilities =
-    vim.tbl_deep_extend("force", vim.lsp.protocol.make_client_capabilities(), MiniCompletion.get_lsp_capabilities())
-elseif Util.completion == "blink" then
-  capabilities = require("blink.cmp").get_lsp_capabilities({}, true)
-end
-require("lspconfig").zls.setup({ capabilities = vim.tbl_deep_extend("force", {}, capabilities) })

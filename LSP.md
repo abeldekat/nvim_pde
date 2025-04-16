@@ -103,7 +103,7 @@ Can also be installed via cargo
 [redhat](https://github.com/redhat-developer/yaml-language-server)
 Arch linux: `sudo pacman -S yaml-language-server`
 
-## zig
+## ~zig~
 
 [github](https://github.com/zigtools/zls)
 Arch linux: `sudo pacman -S zls`

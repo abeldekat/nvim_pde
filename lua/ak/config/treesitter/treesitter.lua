@@ -48,7 +48,6 @@ local opts = {
     "ninja", -- python
     "rst", -- python
     "rasi", -- rofi
-    "zig",
     "go",
     "gomod",
     "gowork",
