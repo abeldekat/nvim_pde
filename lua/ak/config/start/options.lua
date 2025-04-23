@@ -11,7 +11,8 @@ end
 
 -- Completion =================================================================
 o.complete = ".,w,b,kspell" -- use spell check and don't use tags for completion
-o.completeopt = "menuone,noselect,fuzzy" -- show popup even with one item and don't autoselect first
+-- o.completeopt = "menuone,noselect,fuzzy" -- show popup even with one item and don't autoselect first
+o.completeopt = "menuone,noinsert,fuzzy" -- show popup even with one item but *do* autoselect first
 o.wildmode = "longest:full,full" -- command-line completion mode
 
 -- Editing ====================================================================
@@ -69,7 +70,7 @@ o.list = true -- show helpful character indicators
 o.listchars = table.concat({ "extends:…", "nbsp:␣", "precedes:…", "tab:> " }, ",")
 o.number = true -- print line number
 -- o.pumblend = 10 -- popup blend
--- o.pumheight = 10 -- maximum number of entries in a popup
+o.pumheight = 10 -- maximum number of entries in a popup
 o.relativenumber = true -- relative line numbers
 o.ruler = false -- don't show cursor position
 -- o.scrolloff = 4 -- lines of context

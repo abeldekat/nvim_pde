@@ -28,3 +28,7 @@ require("mini.completion").setup({
   lsp_completion = { auto_setup = false },
   -- lsp_completion = { auto_setup = false, source_func = "omnifunc" },
 })
+
+-- Prefer typing c-k over c-y to accept completion; add alias for c-k
+local imap_expr = function(lhs, rhs, desc) vim.keymap.set("i", lhs, rhs, { expr = true, desc = desc }) end
+imap_expr("<c-k>", [[pumvisible() ? "\<c-y>" : "\<c-k>"]], "Accept completion or enter digraph")
