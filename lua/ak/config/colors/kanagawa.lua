@@ -1,3 +1,7 @@
+-- Not actively used...
+-- Last commit downloaded: cc3b68b08e6a0cb6e6bf9944932940091e49bb83
+-- Add to colors.txt: kanagawa
+
 local Utils = require("ak.util")
 local prefer_light = require("ak.color").prefer_light
 

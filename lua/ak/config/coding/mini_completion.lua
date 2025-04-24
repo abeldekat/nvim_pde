@@ -27,6 +27,8 @@ require("mini.completion").setup({
   -- escape to normal mode. See mini discussions #1736
   lsp_completion = { auto_setup = false },
   -- lsp_completion = { auto_setup = false, source_func = "omnifunc" },
+
+  window = { info = { border = "single" } },
 })
 
 -- Prefer typing c-k over c-y to accept completion; add alias for c-k

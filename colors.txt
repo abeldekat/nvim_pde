@@ -8,7 +8,6 @@ duskfox
 everforest
 greyhue
 gruvbox-material
-kanagawa
 melange
 minibuddy
 minicyan
@@ -18,6 +17,7 @@ summerhue
 nightfox
 nordfox
 randomhue
+rose-pine
 sonokai
 terafox
 tokyonight

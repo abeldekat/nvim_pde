@@ -1,7 +1,3 @@
--- Not actively used...
--- Last commit downloaded: 20c7940da844aa4f162a64e552ae3c7e9fdc3b93
--- Add to colors.txt: rose-pine
-
 local Utils = require("ak.util")
 local prefer_light = require("ak.color").prefer_light
 
