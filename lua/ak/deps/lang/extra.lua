@@ -51,16 +51,15 @@ local function sql()
   end, "FileType", "sql")
 end
 
-local function latex() -- Note: Not "lazy" loaded as per plugin requirements
+local function latex() -- Not "lazy" loaded as per plugin requirements
   require("ak.config.lang.extra.vimtex") -- Vimscript variables
   add("lervag/vimtex")
 end
 
-local langs = {
+for _, lang in ipairs({
   latex,
   markdown,
   sql,
-}
-for _, lang in ipairs(langs) do
+}) do
   now(lang)
 end

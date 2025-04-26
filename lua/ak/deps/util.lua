@@ -23,8 +23,7 @@ later(function()
     end)
   end, "<leader>oR", "Load slime(repl)")
 
-  -- Documentation generator
-  local spec_neogen = "danymat/neogen"
+  local spec_neogen = "danymat/neogen" -- documentation generator
   register(spec_neogen)
   Util.defer.on_keys(function()
     now(function()

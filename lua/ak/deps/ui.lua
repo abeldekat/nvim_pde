@@ -7,7 +7,6 @@ vim.o.statusline = " " -- wait till statusline plugin is loaded
 later(function()
   require("ak.config.ui.statusline")
   require("ak.config.ui.indentscope")
-  -- PERF: :Startuptime is slower....
   require("ak.config.ui.animate")
 end)
 
