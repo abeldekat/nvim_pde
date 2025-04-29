@@ -1,34 +1,46 @@
 local Util = require("ak.util")
 local MiniDeps = require("mini.deps")
 local add, later = MiniDeps.add, MiniDeps.later
+local blink_version = "v1.1.1" -- nil
 
 -- Change the default values here for use in ak.config:
 Util.use_mini_ai = true
-Util.completion = "blink"
--- Util.completion = "mini"
--- Util.completion = "native"
+-- Util.completion = "blink"
+Util.completion = "mini"
+Util.mini_completion_fuzzy_provider = "blink" -- defaults to native fuzzy (see completeopt)
+
+local function blink_build(params)
+  vim.notify("Building blink.cmp", vim.log.levels.INFO)
+  local obj = vim.system({ "cargo", "build", "--release" }, { cwd = params.path }):wait()
+  if obj.code == 0 then
+    vim.notify("Building blink.cmp done", vim.log.levels.INFO)
+  else
+    vim.notify("Building blink.cmp failed", vim.log.levels.ERROR)
+  end
+end
+
+local function blink_add()
+  local build = blink_build
+  if blink_version then
+    add({ source = "saghen/blink.cmp", checkout = blink_version })
+  else
+    add({ source = "saghen/blink.cmp", hooks = { post_install = build, post_checkout = build } })
+  end
+end
 
 local function blink_completion() -- blink adds 7 ms to startuptime when using now()
-  -- local function build(params)
-  --   vim.notify("Building blink.cmp", vim.log.levels.INFO)
-  --   local obj = vim.system({ "cargo", "build", "--release" }, { cwd = params.path }):wait()
-  --   if obj.code == 0 then
-  --     vim.notify("Building blink.cmp done", vim.log.levels.INFO)
-  --   else
-  --     vim.notify("Building blink.cmp failed", vim.log.levels.ERROR)
-  --   end
-  -- end
-  -- add({ source = "saghen/blink.cmp", hooks = { post_install = build, post_checkout = build } })
-  add({ source = "saghen/blink.cmp", checkout = "v1.1.1" })
+  blink_add()
   require("ak.config.coding.blink_completion")
 end
-local function mini_completion() require("ak.config.coding.mini_completion") end
-local function native_completion() require("ak.config.coding.native_completion") end
+
+local function mini_completion()
+  if Util.mini_completion_fuzzy_provider == "blink" then blink_add() end
+  require("ak.config.coding.mini_completion")
+end
 
 local completion_providers = {
   blink = blink_completion,
   mini = mini_completion,
-  native = native_completion,
 }
 
 later(function()

@@ -1,6 +1,6 @@
 local blink = require("blink.cmp")
 
-local get_icon = function(ctx)
+local get_icon = function(ctx) -- TODO: fixed on "lsp"
   local icon, _, _ = MiniIcons.get("lsp", ctx.kind)
   return icon
 end
@@ -10,6 +10,8 @@ local get_icon_hl = function(ctx)
 end
 
 local completion = {
+  documentation = { auto_show = true, auto_show_delay_ms = 200 },
+  -- Preselect false is less intrusive: no automatic docs, no automatic *visible* selection
   list = { selection = { preselect = false, auto_insert = true } },
   menu = {
     draw = {
@@ -23,19 +25,18 @@ local completion = {
       },
     },
   },
-  documentation = { auto_show = true, auto_show_delay_ms = 200 },
 }
 
 local keymap = {
   preset = "default",
-  ["<c-k>"] = { -- Prefer typing c-k over c-y to accept "kompletion"
+  ["<c-k>"] = { -- prefer typing c-k over c-y to accept "kompletion"
     function(cmp)
       if cmp.is_visible() then return cmp.select_and_accept() end
     end,
     "fallback", -- digraph
   },
-  ["Tab"] = {}, -- using mini.snippets standalone
   ["S-Tab"] = {}, -- using mini.snippets standalone
+  ["Tab"] = {}, -- using mini.snippets standalone
 }
 
 local snippets_standalone = { -- copy expand/active from config-snippets, don't add sources.snippets
@@ -46,7 +47,8 @@ local snippets_standalone = { -- copy expand/active from config-snippets, don't 
   end,
   active = function(_) return MiniSnippets.session.get(false) ~= nil end,
 }
-local sources = { default = { "lsp", "path", "buffer" } }
+
+local sources = { default = { "lsp", "buffer" } } -- "path"
 
 blink.setup({
   cmdline = { enabled = false },

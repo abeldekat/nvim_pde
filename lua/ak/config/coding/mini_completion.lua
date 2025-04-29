@@ -1,36 +1,46 @@
-MiniIcons.tweak_lsp_kind() -- performance, call lazily
+local Util = require("ak.util")
+-- MiniIcons.tweak_lsp_kind()
+MiniIcons.tweak_lsp_kind("replace") -- Only icon instead of icon and text
 
--- local lsp_get_filterword = function(x) return x.filterText or x.label end
+local process_items = function(items, base)
+  local opts = { filtersort = CompletionBlinked.fuzzy }
+  return MiniCompletion.default_process_items(items, base, opts)
+end
 
--- local filtersort = function(items, base)
---   if base == "" then return vim.deepcopy(items) end
---   return vim.fn.matchfuzzy(items, base, { text_cb = lsp_get_filterword })
--- end
-
--- --- @param items table Array of items from LSP response.
--- --- @param base string Base for which completion is done. See |complete-functions|.
--- local process_items = function(items, base)
---   -- filter_sort can also be: prefix, fuzzy, none, or a function
---   -- local opts = { filtersort = "fuzzy" } -- fuzzy is the default if in completeopt
---   local opts = {}
---   return MiniCompletion.default_process_items(items, base, opts)
--- end
-
-require("mini.completion").setup({
+local opts = {
   mappings = { -- Tmux conflict <C-Space>:
     force_twostep = "<C-A-Space>", --  "<C-Space>",
     -- Force fallback is very usefull when completing a function *reference*
     -- using lsp snippets. No need to remove the arguments...
     force_fallback = "<A-Space>", -- Force fallback completion
   },
-  -- Using the default completefunc to be able to use ctrl-o to temporarily
-  -- escape to normal mode. See mini discussions #1736
-  lsp_completion = { auto_setup = false },
-  -- lsp_completion = { auto_setup = false, source_func = "omnifunc" },
-
+  -- Use the default completefunc instead of omnifunc to have
+  -- ctrl-o to temporarily escape to normal mode. See mini discussions #1736
+  lsp_completion = { auto_setup = false }, -- source_func = "omnifunc"
   window = { info = { border = "single" } },
-})
+}
+if Util.mini_completion_fuzzy_provider == "blink" then
+  require("ak.mini.completion_blinked").setup()
+  opts.lsp_completion.process_items = process_items
+end
+require("mini.completion").setup(opts)
 
--- Prefer typing c-k over c-y to accept completion; add alias for c-k
-local imap_expr = function(lhs, rhs, desc) vim.keymap.set("i", lhs, rhs, { expr = true, desc = desc }) end
-imap_expr("<c-k>", [[pumvisible() ? "\<c-y>" : "\<c-k>"]], "Accept completion or enter digraph")
+local keycode = vim.keycode or function(x) return vim.api.nvim_replace_termcodes(x, true, true, true) end
+local keys = {
+  ["ctrl-k"] = keycode("<C-k>"), -- enter digraph, the default
+  ["ctrl-y"] = keycode("<C-y>"), -- confirm selected item
+  ["ctrl-n_ctrl-y"] = keycode("<C-n><C-y>"), -- confirm first item: TODO: Does not autoimport!
+}
+
+---@diagnostic disable-next-line: duplicate-set-field
+_G.confirm_action = function() -- works best with noinsert...
+  if vim.fn.pumvisible() ~= 0 then
+    local item_selected = vim.fn.complete_info()["selected"] ~= -1
+    return item_selected and keys["ctrl-y"] or keys["ctrl-n_ctrl-y"]
+  else
+    return keys["ctrl-k"] -- enter digraph
+  end
+end
+
+-- Prefer typing c-k over c-y to accept completion
+vim.keymap.set("i", "<C-k>", "v:lua._G.confirm_action()", { expr = true })
