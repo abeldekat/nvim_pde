@@ -11,8 +11,7 @@ end
 
 -- Completion =================================================================
 o.complete = ".,w,b,kspell" -- use spell check and don't use tags for completion
--- o.completeopt = "menuone,noselect,fuzzy" -- show popup even with one item and don't autoselect first
-o.completeopt = "menuone,noinsert,fuzzy" -- show popup even with one item and *do* autoselect first
+o.completeopt = "menuone,noselect,fuzzy" -- show popup even with one item and don't autoselect first
 o.wildmode = "longest:full,full" -- command-line completion mode
 
 -- Editing ====================================================================
