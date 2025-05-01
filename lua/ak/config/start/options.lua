@@ -53,7 +53,7 @@ o.spelloptions = "camel"
 -- UI =========================================================================
 o.breakindent = true -- Indent wrapped lines to match line start
 o.breakindentopt = "list:-1" -- Add padding for lists when 'wrap' is on
-o.colorcolumn = "+1" -- Draw colored column one step to the right of desired maximum width
+-- o.colorcolumn = "+1" -- Draw colored column one step to the right of desired maximum width
 o.cursorline = true -- Enable highlighting of the current line
 o.cursorlineopt = "screenline,number" -- show cursor line only screen line when wrapped
 -- stylua: ignore start

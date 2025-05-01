@@ -1,5 +1,6 @@
 local Util = require("ak.util")
 local use_completeopt_noinsert = false
+local no_expandable_indicator = true
 
 if use_completeopt_noinsert then
   vim.o.completeopt = "menuone,noinsert,fuzzy" -- first completion item is preselected
@@ -37,10 +38,10 @@ H.noselect_confirm = function()
 
   ---@diagnostic disable-next-line: duplicate-set-field
   vim.fn.pumvisible = function() return 0 end -- HACK: H.show_info_window: prevent a flashing info window
-  vim.api.nvim_feedkeys(keys["ctrl-n"], "i", false)
+  vim.api.nvim_feedkeys(keys["ctrl-n"], "i", false) -- select first item
 
   local confirm_and_restore = vim.schedule_wrap(function()
-    vim.api.nvim_feedkeys(keys["ctrl-y"], "i", false) -- confirm
+    vim.api.nvim_feedkeys(keys["ctrl-y"], "i", false) -- confirm first item
     vim.fn.pumvisible = pumvisible -- restore
     ---@diagnostic disable-next-line: param-type-mismatch
     vim.api.nvim_set_hl(0, "PmenuSel", pmenusel) -- restore
@@ -89,10 +90,12 @@ local completefunc_lsp = MiniCompletion.completefunc_lsp
 ---@diagnostic disable-next-line: duplicate-set-field
 MiniCompletion.completefunc_lsp = function(findstart, base)
   local res = completefunc_lsp(findstart, base)
-  if res and type(res) == "table" and #res > 0 and res[1].abbr then
-    for _, item in ipairs(res) do
-      item.abbr = MiniIcons.get("lsp", item.kind) .. " " .. item.abbr
-    end
+  if not (res and type(res) == "table" and #res > 0 and res[1].abbr) then return res end
+
+  for _, item in ipairs(res) do
+    item.abbr = MiniIcons.get("lsp", item.kind) .. " " .. item.abbr
+    item.kind = "" -- not needed when using the icon...
+    if no_expandable_indicator and item.user_data.lsp.needs_snippet_insert then item.menu = string.sub(item.menu, 3) end
   end
   return res
 end
