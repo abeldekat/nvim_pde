@@ -66,12 +66,16 @@ local make_process_opts = function() -- see discussion #1771
     return { filtersort = CompletionBlinked.fuzzy }
   end
 
-  local lsp_get_filterword = function(x) return x.filterText or x.label end
-  local filtersort = function(items, base)
-    if base == "" then return vim.deepcopy(items) end
-    return vim.fn.matchfuzzy(items, base, { text_cb = lsp_get_filterword, camelcase = false })
+  if vim.fn.has("nvim-0.12") == 1 then
+    local lsp_get_filterword = function(x) return x.filterText or x.label end
+    local filtersort = function(items, base)
+      if base == "" then return vim.deepcopy(items) end
+      return vim.fn.matchfuzzy(items, base, { text_cb = lsp_get_filterword, camelcase = false })
+    end
+    return { filtersort = filtersort }
   end
-  return { filtersort = filtersort }
+
+  return nil
 end
 local process_opts = make_process_opts()
 local process_items = function(items, base) return MiniCompletion.default_process_items(items, base, process_opts) end
