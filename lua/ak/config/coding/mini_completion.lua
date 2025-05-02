@@ -16,8 +16,8 @@ local keys = {
 local info_delay = 50
 local autoselect_delay = info_delay + 50
 local autoselect_timer = vim.loop.new_timer()
-local pumvisible = vim.fn.pumvisible -- backup
-local H = {} -- needed to restore keymap inside H.noselect_confirm
+local pumvisible = vim.fn.pumvisible -- backup the function
+local H = {} -- needed to restore keymap from inside function H.noselect_confirm
 H.noselect_confirm = function()
   if vim.fn.pumvisible() == 0 then -- digraph
     vim.keymap.del("i", "<C-k>")
@@ -26,14 +26,13 @@ H.noselect_confirm = function()
     return
   end
 
-  local item_selected = vim.fn.complete_info()["selected"] ~= -1 -- user selection
-  if item_selected then
+  if vim.fn.complete_info()["selected"] ~= -1 then -- user selection
     vim.api.nvim_feedkeys(keys["ctrl-y"], "i", false)
     return
   end
 
   -- User did not select an item; select the first and confirm
-  local pmenusel = vim.api.nvim_get_hl(0, { name = "PmenuSel", link = false }) -- backup the hl
+  local pmenusel = vim.api.nvim_get_hl(0, { name = "PmenuSel", link = false }) -- backup the current hl
   vim.api.nvim_set_hl(0, "PmenuSel", { link = "Pmenu" }) -- HACK: prevent flashing on automatic select...
 
   ---@diagnostic disable-next-line: duplicate-set-field
@@ -55,34 +54,41 @@ _G.noinsert_confirm = function()
   return keys[key]
 end
 
--- See discussion #1767: Autoimport on a keymap using ctrl-n and ctrl-y with noselect
-if use_completeopt_noinsert then
+if use_completeopt_noinsert then -- see discussion #1767
   vim.keymap.set("i", "<C-k>", "v:lua._G.noinsert_confirm()", { expr = true })
 else
   vim.keymap.set("i", "<C-k>", H.noselect_confirm, {})
 end
 
-local opts = {
+local make_process_opts = function() -- see discussion #1771
+  if Util.mini_completion_fuzzy_provider == "blink" then
+    require("ak.mini.completion_blinked").setup()
+    return { filtersort = CompletionBlinked.fuzzy }
+  end
+
+  local lsp_get_filterword = function(x) return x.filterText or x.label end
+  local filtersort = function(items, base)
+    if base == "" then return vim.deepcopy(items) end
+    return vim.fn.matchfuzzy(items, base, { text_cb = lsp_get_filterword, camelcase = false })
+  end
+  return { filtersort = filtersort }
+end
+local process_opts = make_process_opts()
+local process_items = function(items, base) return MiniCompletion.default_process_items(items, base, process_opts) end
+
+require("mini.completion").setup({
   delay = { info = info_delay },
-  mappings = { -- Tmux conflict <C-Space>:
+  lsp_completion = { -- use completefunc instead of omnifunc to have ctrl-o available, see discussion #1736
+    auto_setup = false,
+    process_items = process_items,
+    -- source_func = "omnifunc"
+  },
+  mappings = { -- <C-Space> is for tmux:
     force_twostep = "<C-A-Space>", --  "<C-Space>",
-    -- Force fallback is very usefull when completing a function *reference*
-    -- using lsp snippets. No need to remove the arguments...
     force_fallback = "<A-Space>", -- Force fallback completion
   },
-  -- Use completefunc instead of omnifunc to have ctrl-o available
-  -- See mini discussions #1736
-  lsp_completion = { auto_setup = false }, -- source_func = "omnifunc"
   window = { info = { border = "single" } },
-}
-if Util.mini_completion_fuzzy_provider == "blink" then
-  require("ak.mini.completion_blinked").setup()
-  opts.lsp_completion.process_items = function(items, base)
-    local opts = { filtersort = CompletionBlinked.fuzzy }
-    return MiniCompletion.default_process_items(items, base, opts)
-  end
-end
-require("mini.completion").setup(opts)
+})
 
 -- See issue #1768: Show icons first in completion items
 -- MiniIcons.tweak_lsp_kind("replace") -- Only icon instead of icon and text
