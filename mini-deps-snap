@@ -1,6 +1,6 @@
 return {
   ["SchemaStore.nvim"] = "d521e71f9d5ac1c29a7653528d4e5c66ffe229c5",
-  ["blink.cmp"] = "cb5e346d9e0efa7a3eee7fd4da0b690c48d2a98e",
+  ["blink.cmp"] = "4f38ce99a472932d5776337f08f7a8180f1f571a",
   colors_bamboo = "97124a0b81f886abc0d666ebec512b92425d67b6",
   colors_catppuccin = "b7bbdf93b42866f166af98d39a2563eedb7cabac",
   colors_everforest = "ffa5a2032fd41903135fa829bd4b49ba2e1d5d18",

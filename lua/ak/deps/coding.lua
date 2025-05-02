@@ -2,13 +2,13 @@ local Util = require("ak.util")
 local register = Util.deps.register
 local MiniDeps = require("mini.deps")
 local add, later = MiniDeps.add, MiniDeps.later
-local blink_version = "v1.1.1" -- nil
+local blink_version = "v1.2.0" -- nil
 
 Util.use_mini_ai = true
 
 -- Util.completion = "blink"
 Util.completion = "mini"
--- Util.mini_completion_fuzzy_provider = "blink" -- defaults to native fuzzy (see completeopt)
+Util.mini_completion_fuzzy_provider = "blink" -- defaults to native fuzzy (see completeopt)
 
 local function blink(cb)
   local function build(params)
