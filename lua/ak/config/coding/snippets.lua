@@ -2,7 +2,6 @@
 local Util = require("ak.util")
 
 -- Fixes:
--- select - vim.ui.select: ghost_text appearing
 -- select - vim.ui.select: cmp popups cover picker
 local function expand_select_override(snippets, insert)
   if Util.completion == "blink" then
@@ -21,7 +20,20 @@ local snippets = {
   mini_snippets.gen_loader.from_lang({ lang_patterns = lang_patterns }),
 }
 
+local mappings = nil
+if MiniKeymap then
+  local map_multistep = MiniKeymap.map_multistep
+  local next_or_out = { "minisnippets_next", "jump_after_tsnode", "jump_after_close" }
+  map_multistep("i", "<C-l>", next_or_out)
+
+  local prev_or_out = { "minisnippets_prev", "jump_before_tsnode", "jump_before_open" }
+  map_multistep("i", "<C-h>", prev_or_out)
+
+  mappings = { jump_next = "", jump_prev = "" } -- already defined above...
+end
+
 mini_snippets.setup({
+  mappings = mappings,
   snippets = snippets,
   expand = { select = expand_select_override },
 })

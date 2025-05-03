@@ -1,2 +1,1 @@
--- Only creates global MiniExtra
-require("mini.extra").setup() -- extras, for example extra pickers, extra ai
+require("mini.extra").setup() -- use MiniExtra elsewhere: pickers, ai
