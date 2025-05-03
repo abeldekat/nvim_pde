@@ -95,13 +95,12 @@ require("mini.completion").setup({
 })
 
 local tweak = function(item) -- :h complete-items
-  item.abbr = MiniIcons.get("lsp", item.kind) .. " " .. item.abbr
-  item.kind = "" -- not needed when using the icon...
   if item.user_data.lsp.needs_snippet_insert then item.menu = string.sub(item.menu, 3) end -- remove "S ":
 end
-if tweak_menu then -- see issue #1768: Show icons first in completion items
+if tweak_menu then
   local completefunc_lsp = MiniCompletion.completefunc_lsp
 
+  MiniIcons.tweak_lsp_kind("replace") -- only icon instead of icon and text
   ---@diagnostic disable-next-line: duplicate-set-field
   MiniCompletion.completefunc_lsp = function(findstart, base)
     local res = completefunc_lsp(findstart, base)
@@ -111,5 +110,5 @@ if tweak_menu then -- see issue #1768: Show icons first in completion items
     return res
   end
 else
-  MiniIcons.tweak_lsp_kind() -- only icon instead of icon and text
+  MiniIcons.tweak_lsp_kind()
 end
