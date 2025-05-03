@@ -11,8 +11,6 @@ local function lsp()
 
   add("b0o/SchemaStore.nvim")
   add("neovim/nvim-lspconfig")
-  -- add({ source = "mrcjkb/rustaceanvim", checkout = "v6.0.2" })
-
   require("ak.config.lang.lsp")
 end
 

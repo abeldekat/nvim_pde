@@ -8,7 +8,7 @@ Util.use_mini_ai = true
 
 -- Util.completion = "blink"
 Util.completion = "mini"
-Util.mini_completion_fuzzy_provider = "blink" -- defaults to native fuzzy (see completeopt)
+-- Util.mini_completion_fuzzy_provider = "blink" -- defaults to native fuzzy (see completeopt)
 
 local function blink(cb)
   local function build(params)
@@ -25,7 +25,6 @@ local function blink(cb)
     cb({ source = "saghen/blink.cmp", checkout = blink_version })
     return
   end
-
   cb({ source = "saghen/blink.cmp", hooks = { post_install = build, post_checkout = build } })
 end
 

@@ -1,9 +1,9 @@
 local Util = require("ak.util")
-local use_completeopt_noinsert = false
-local no_expandable_indicator = true
+local tweak_menu = true
+local use_completeopt_noinsert = false -- use noselect, less present...
 
 if use_completeopt_noinsert then
-  vim.o.completeopt = "menuone,noinsert,fuzzy" -- first completion item is preselected
+  vim.o.completeopt = "menuone,noinsert,fuzzy" -- first item is preselected, activates info window
 end
 
 local keycode = vim.keycode or function(x) return vim.api.nvim_replace_termcodes(x, true, true, true) end
@@ -94,18 +94,22 @@ require("mini.completion").setup({
   window = { info = { border = "single" } },
 })
 
--- See issue #1768: Show icons first in completion items
--- MiniIcons.tweak_lsp_kind("replace") -- Only icon instead of icon and text
-local completefunc_lsp = MiniCompletion.completefunc_lsp
----@diagnostic disable-next-line: duplicate-set-field
-MiniCompletion.completefunc_lsp = function(findstart, base)
-  local res = completefunc_lsp(findstart, base)
-  if not (res and type(res) == "table" and #res > 0 and res[1].abbr) then return res end
+local tweak = function(item) -- :h complete-items
+  item.abbr = MiniIcons.get("lsp", item.kind) .. " " .. item.abbr
+  item.kind = "" -- not needed when using the icon...
+  if item.user_data.lsp.needs_snippet_insert then item.menu = string.sub(item.menu, 3) end -- remove "S ":
+end
+if tweak_menu then -- see issue #1768: Show icons first in completion items
+  local completefunc_lsp = MiniCompletion.completefunc_lsp
 
-  for _, item in ipairs(res) do
-    item.abbr = MiniIcons.get("lsp", item.kind) .. " " .. item.abbr
-    item.kind = "" -- not needed when using the icon...
-    if no_expandable_indicator and item.user_data.lsp.needs_snippet_insert then item.menu = string.sub(item.menu, 3) end
+  ---@diagnostic disable-next-line: duplicate-set-field
+  MiniCompletion.completefunc_lsp = function(findstart, base)
+    local res = completefunc_lsp(findstart, base)
+    if not (res and type(res) == "table" and #res > 0 and res[1].abbr) then return res end
+
+    vim.iter(res):each(tweak)
+    return res
   end
-  return res
+else
+  MiniIcons.tweak_lsp_kind() -- only icon instead of icon and text
 end
