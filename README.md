@@ -166,8 +166,9 @@ Many of the excellent modules included in [mini.nvim] are used in this config:
 `ai`, `align`, `animate`, `base16`, `basics`, `bracketed`,
 `clue`, `completion`, `cursorword`, `deps`, `diff`, `extra`,
 `git`, `files`, `hipatterns`, `hue`, `icons`, `indentscope`,
-`misc`, `move`, `notify`, `operators`, `pairs`, `pick`,
-`snippets`, `splitjoin`, `starter`, `statusline`, `surround`, `visits`
+`keymap`, `misc`, `move`, `notify`, `operators`, `pairs`,
+`pick`, `snippets`, `splitjoin`, `starter`, `statusline`, `surround`,
+`visits`
 
 Relevant discussions:
 

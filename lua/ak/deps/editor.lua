@@ -3,7 +3,7 @@ local MiniDeps = require("mini.deps")
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 local register = Util.deps.register
 
-local use_hardtime = true
+local use_hardtime = true -- using mini.keymap...
 
 now(function()
   --          ╭─────────────────────────────────────────────────────────╮
@@ -23,6 +23,7 @@ later(function()
   --          ╰─────────────────────────────────────────────────────────╯
   require("ak.config.editor.clue")
   require("ak.config.editor.cursorword")
+  if use_hardtime then require("ak.config.editor.hardtime") end
   require("ak.config.editor.hipatterns")
   require("ak.config.editor.git")
   require("ak.config.editor.diff")
@@ -44,19 +45,4 @@ later(function()
   --          ╰─────────────────────────────────────────────────────────╯
   add("akinsho/toggleterm.nvim")
   require("ak.config.editor.toggleterm")
-
-  --          ╭─────────────────────────────────────────────────────────╮
-  --          │                         Hardtime                        │
-  --          ╰─────────────────────────────────────────────────────────╯
-  local spec_hardtime = "m4xshen/hardtime.nvim"
-  local function hardtime()
-    add(spec_hardtime)
-    require("ak.config.editor.hardtime")
-  end
-  if use_hardtime then
-    hardtime()
-  else
-    register(spec_hardtime)
-    Util.defer.on_keys(hardtime, "<leader>oh", "Hardtime start/report")
-  end
 end)
