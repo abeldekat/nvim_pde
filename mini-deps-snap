@@ -31,7 +31,7 @@ return {
   ["nvim-ts-autotag"] = "a1d526af391f6aebb25a8795cbc05351ed3620b5",
   ["one-small-step-for-vimkind"] = "2321d99ebb28ef1241ce5d3562f8451b4e58510d",
   ["peek.nvim"] = "5820d937d5414baea5f586dc2a3d912a74636e5b",
-  ["render-markdown.nvim"] = "b2d857c848c2c27440c8e5efc8e49a9b5bcf13c6",
+  ["render-markdown.nvim"] = "3484e3ec3831deacc28a5d1e3307693b8c997c6c",
   ["toggleterm.nvim"] = "9a88eae817ef395952e08650b3283726786fb5fb",
   ["vim-dadbod"] = "fa31d0ffeebaa59cf97a81e7f92194cced54a13f",
   ["vim-dadbod-completion"] = "a8dac0b3cf6132c80dc9b18bef36d4cf7a9e1fe6",

@@ -7,8 +7,8 @@ local blink_version = "v1.2.0" -- nil
 Util.use_mini_ai = true
 
 -- Util.completion = "blink"
-Util.completion = "mini"
 -- Util.mini_completion_fuzzy_provider = "blink" -- defaults to native fuzzy (see completeopt)
+Util.completion = "mini"
 
 local function blink(cb)
   local function build(params)
@@ -42,10 +42,7 @@ local function mini_completion()
   require("ak.config.coding.mini_completion")
 end
 
-local completion_providers = {
-  blink = blink_completion,
-  mini = mini_completion,
-}
+local completion_providers = { blink = blink_completion, mini = mini_completion }
 
 later(function()
   add("rafamadriz/friendly-snippets")

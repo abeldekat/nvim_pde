@@ -6,11 +6,10 @@
 -- require('mini.keymap').map_combo('c', 'll', '<BS><BS><C-e>')
 
 -- Fix previous spelling mistake (see |[s| and |z=|) without manually leaving
--- Insert mode:
-
+-- insert mode:
 -- local action = "<BS><BS><Esc>[s1z=gi<Right>"
 -- require("mini.keymap").map_combo("i", "kk", action)
 
--- Use double <Esc><Esc> to execute |:nohlsearch|.
+-- Hungry backspace?
 
 require("mini.keymap").setup() -- use MiniKeymap elsewhere...
