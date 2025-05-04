@@ -40,7 +40,7 @@ require("mini.completion").setup({
 local function make_steps_smart_confirm()
   local autoselect_delay = MiniCompletion.config.delay.info * 2
   local autoselect_timer = vim.loop.new_timer() or {}
-  local keys = { ["ctrl-n"] = vim.keycode("<C-n>"), ["ctrl-y"] = vim.keycode("<C-y>") }
+  local key_ctrl_y = vim.keycode("<C-y>")
   local pumvisible_org = vim.fn.pumvisible -- backup the core function
 
   local condition_selectconfirm = function()
@@ -50,14 +50,13 @@ local function make_steps_smart_confirm()
     vim.fn.pumvisible = function() return 0 end -- HACK: H.show_info_window: prevent flashing info window
     local hl_org = vim.api.nvim_get_hl(0, { name = "PmenuSel", link = false }) --[[@as vim.api.keyset.highlight]]
     vim.api.nvim_set_hl(0, "PmenuSel", { link = "Pmenu" }) -- HACK: prevent flashing on automatic select...
-
-    vim.api.nvim_feedkeys(keys["ctrl-n"], "i", false) -- 1. select first item without extra hl
     local confirm_and_restore = vim.schedule_wrap(function()
-      vim.api.nvim_feedkeys(keys["ctrl-y"], "i", false) -- 2. confirm first item
-      vim.fn.pumvisible = pumvisible_org -- 3. restore
-      vim.api.nvim_set_hl(0, "PmenuSel", hl_org) -- 3. restore
+      vim.api.nvim_feedkeys(key_ctrl_y, "i", false) -- confirm auto-selected first item
+      vim.fn.pumvisible = pumvisible_org -- restore function
+      vim.api.nvim_set_hl(0, "PmenuSel", hl_org) -- restore highlight
     end)
     autoselect_timer:start(autoselect_delay, 0, confirm_and_restore)
+    return "<C-n>" -- select first item, no hl, no info window
   end
 
   local condition_confirm = function() return vim.fn.pumvisible() ~= 0 and vim.fn.complete_info()["selected"] ~= -1 end
