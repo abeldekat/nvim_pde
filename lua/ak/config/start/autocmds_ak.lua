@@ -28,8 +28,8 @@ autocmd({ "VimResized" }, { -- resize splits if window got resized
 autocmd("FileType", {
   group = augroup("close_with_q"),
   pattern = {
-    "help", "lspinfo", "qf", "checkhealth", "startuptime", "neotest-output",
-    "neotest-summary", "neotest-output-panel", "dbout", "git", "minideps-confirm","mininotify-history"
+    "help", "lspinfo", "qf", "checkhealth", "neotest-output", "neotest-summary",
+    "neotest-output-panel", "dbout", "git", "minideps-confirm","mininotify-history"
   },
   callback = function(event)
     vim.bo[event.buf].buflisted = false

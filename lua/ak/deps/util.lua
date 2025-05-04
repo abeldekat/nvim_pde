@@ -4,14 +4,8 @@ local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 local register = Util.deps.register
 
 later(function()
-  local spec_startuptime = "dstein64/vim-startuptime"
-  register(spec_startuptime)
-  Util.defer.on_keys(function()
-    now(function()
-      add(spec_startuptime)
-      require("ak.config.util.startuptime")
-    end)
-  end, "<leader>os", "StartupTime")
+  -- Removed "dstein64/vim-startuptime"
+  -- Use an alias, like: vs='touch vimreport.out && rm vimreport.out && nvim --startuptime vimreport.out'
 
   local spec_slime = { source = "jpalardy/vim-slime" }
   register(spec_slime)

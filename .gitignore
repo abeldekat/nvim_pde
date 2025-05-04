@@ -7,3 +7,4 @@ foo.*
 data
 .repro
 .kickstart
+vimreport.out
