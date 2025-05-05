@@ -171,7 +171,7 @@ H.make_override_show = function(show, ctx, picker_opts)
 
     -- Valid hint, make sure its current before autosubmit or show
     local matches = MiniPick.get_picker_matches() or {}
-    if ctx.hinted_index ~= matches.all_inds[1] then MiniPick.set_picker_match_inds({ ctx.hinted_index }, "current") end
+    if ctx.hinted_index ~= matches.current_ind then MiniPick.set_picker_match_inds({ ctx.hinted_index }, "current") end
     if show_ctx.do_autosubmit then
       if not show_ctx.did_autosubmit then
         show_ctx.did_autosubmit = true

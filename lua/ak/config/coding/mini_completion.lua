@@ -22,6 +22,7 @@ end
 local process_opts = make_process_opts()
 local process_items = function(items, base) return MiniCompletion.default_process_items(items, base, process_opts) end
 
+-- Setup
 require("mini.completion").setup({
   delay = { info = 50 },
   lsp_completion = { -- use completefunc instead of omnifunc to have ctrl-o available, see discussion #1736
@@ -66,7 +67,7 @@ local function make_steps_smart_confirm()
   local steps_confirm = { condition = condition_confirm, action = action_confirm }
   return { steps_selectconfirm, steps_confirm }
 end
-require("mini.keymap").map_multistep("i", "<C-k>", make_steps_smart_confirm(), { desc = "Smart ctrl-k" })
+require("mini.keymap").map_multistep("i", "<C-k>", make_steps_smart_confirm())
 
 -- Last step, see issue 1768: Show icons first in completion items
 local tweak_menu = true
