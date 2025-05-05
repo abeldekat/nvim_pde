@@ -1,4 +1,4 @@
--- NOTE: For now, no rust or go support...
+-- NOTE: Not used at the moment. No rust or go support...Also, consider nvim-dap-view
 
 local Util = require("ak.util")
 local MiniDeps = require("mini.deps")

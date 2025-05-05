@@ -111,7 +111,7 @@ H.make_override_match = function(match, ctx, picker_opts)
     if ctx.hinted_index then stritems[ctx.hinted_index] = string.sub(stritems[ctx.hinted_index], 2) end
     ctx.hinted_index = nil
 
-    -- Query only holds a potential hint when it contains 1 single char
+    -- No hint: Query only holds a potential hint when it contains 1 single char
     if #query ~= 1 then return match(stritems, inds, query, opts) end
 
     -- Find index of potential hint
@@ -119,10 +119,13 @@ H.make_override_match = function(match, ctx, picker_opts)
     local hinted_index = hinted_chars_inv[char]
     if not hinted_index or hinted_index > ctx.max_hints then return match(stritems, inds, query, opts) end
 
-    -- Valid hint: Make sure the item is matched
+    -- Valid hint
+    stritems[hinted_index] = string.format("%s%s", char, stritems[hinted_index]) -- ensure item is matched
+    local result = match(stritems, inds, query, opts)
+    local matches = MiniPick.get_picker_matches() or {} -- ensure item is current
+    if hinted_index ~= matches.current_ind then MiniPick.set_picker_match_inds({ hinted_index }, "current") end
     ctx.hinted_index = hinted_index
-    stritems[hinted_index] = string.format("%s%s", char, stritems[hinted_index])
-    return match(stritems, inds, query, opts)
+    return result
   end
 end
 
@@ -169,17 +172,15 @@ H.make_override_show = function(show, ctx, picker_opts)
       return
     end
 
-    -- Valid hint, make sure its current before autosubmit or show
-    local matches = MiniPick.get_picker_matches() or {}
-    if ctx.hinted_index ~= matches.current_ind then MiniPick.set_picker_match_inds({ ctx.hinted_index }, "current") end
-    if show_ctx.do_autosubmit then
+    -- Valid hint
+    if show_ctx.do_autosubmit then -- autosubmit
       if not show_ctx.did_autosubmit then
         show_ctx.did_autosubmit = true
         vim.api.nvim_feedkeys(H.keys.cr, "n", true)
       end
-    else -- no autosubmit
-      show(buf_id, items, query, opts)
+      return
     end
+    show(buf_id, items, query, opts) -- no autosubmit
   end
 end
 
