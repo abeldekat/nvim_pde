@@ -10,7 +10,7 @@ Util.use_mini_ai = true
 -- Util.mini_completion_fuzzy_provider = "blink" -- defaults to native fuzzy (see completeopt)
 Util.completion = "mini"
 
-local function blink(cb)
+local function blink(add_or_register)
   local function build(params)
     vim.notify("Building blink.cmp", vim.log.levels.INFO)
     local obj = vim.system({ "cargo", "build", "--release" }, { cwd = params.path }):wait()
@@ -21,11 +21,10 @@ local function blink(cb)
     end
   end
 
-  if blink_version then
-    cb({ source = "saghen/blink.cmp", checkout = blink_version })
-    return
-  end
-  cb({ source = "saghen/blink.cmp", hooks = { post_install = build, post_checkout = build } })
+  local source = "saghen/blink.cmp"
+  local spec = { source = source, checkout = blink_version }
+  if not blink_version then spec = { source = source, hooks = { post_install = build, post_checkout = build } } end
+  add_or_register(spec)
 end
 
 local function blink_completion() -- blink adds 7 ms to startuptime when using now()
@@ -34,11 +33,7 @@ local function blink_completion() -- blink adds 7 ms to startuptime when using n
 end
 
 local function mini_completion()
-  if Util.mini_completion_fuzzy_provider == "blink" then
-    blink(add)
-  else
-    blink(register)
-  end
+  blink(Util.mini_completion_fuzzy_provider == "blink" and add or register)
   require("ak.config.coding.mini_completion")
 end
 
