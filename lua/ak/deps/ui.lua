@@ -4,9 +4,7 @@ local now, later = MiniDeps.now, MiniDeps.later
 
 vim.o.statusline = " " -- wait till statusline plugin is loaded
 
-now(function()
-  if vim.fn.has("nvim-0.12") == 1 then require("vim._extui").enable({}) end
-end)
+now(function() require("ak.config.ui.extui") end)
 later(function()
   require("ak.config.ui.statusline")
   require("ak.config.ui.indentscope")
