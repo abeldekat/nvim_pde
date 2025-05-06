@@ -4,7 +4,6 @@ local now, later = MiniDeps.now, MiniDeps.later
 
 vim.o.statusline = " " -- wait till statusline plugin is loaded
 
-now(function() require("ak.config.ui.extui") end)
 later(function()
   require("ak.config.ui.statusline")
   require("ak.config.ui.indentscope")

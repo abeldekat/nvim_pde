@@ -7,7 +7,7 @@ local blink_version = "v1.2.0" -- nil
 Util.use_mini_ai = true
 
 -- Util.completion = "blink"
--- Util.mini_completion_fuzzy_provider = "blink" -- defaults to native fuzzy (see completeopt)
+-- Util.mini_completion_fuzzy_provider = "blink" -- default native fuzzy (see completeopt)
 Util.completion = "mini"
 
 local function blink(add_or_register)
@@ -20,7 +20,6 @@ local function blink(add_or_register)
       vim.notify("Building blink.cmp failed", vim.log.levels.ERROR)
     end
   end
-
   local source = "saghen/blink.cmp"
   local spec = { source = source, checkout = blink_version }
   if not blink_version then spec = { source = source, hooks = { post_install = build, post_checkout = build } } end
@@ -47,7 +46,6 @@ later(function()
   if completion_setup then completion_setup() end
 
   if Util.use_mini_ai then require("ak.config.coding.ai") end
-
   require("ak.config.coding.align")
   require("ak.config.coding.bracketed")
   -- require("ak.config.coding.comment") -- now builtin
