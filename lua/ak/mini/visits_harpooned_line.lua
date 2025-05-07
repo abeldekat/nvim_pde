@@ -63,12 +63,7 @@ end
 
 H.apply_config = function(config) VisitsHarpoonedLine.config = config end
 
-H.get_config = function()
-  -- No buffer override: vim.b.akminivisitsharpoonedline or {}
-  -- No config arg to merge
-  -- return vim.tbl_deep_extend("force", VisitsHarpoonedLine.config or {}, config or {})
-  return VisitsHarpoonedLine.config
-end
+H.get_config = function() return VisitsHarpoonedLine.config end
 
 H.create_autocommands = function()
   local augroup = vim.api.nvim_create_augroup("VisitsHarpoonedLine", { clear = true })
@@ -78,7 +73,7 @@ H.create_autocommands = function()
 
   au("BufEnter", "*", function(ev) H.produce_and_cb() end)
   au("User", "VisitsHarpoonedModified", function(ev) H.produce_and_cb() end)
-  au("User", "VisitsHarpoonedChangedActiveLabel", function(ev)
+  au("User", "VisitsHarpoonedSwitchedLabel", function(ev)
     H.current_label = ev.data
     H.produce_and_cb()
   end)
@@ -98,7 +93,7 @@ H.produce = function()
   H.is_current_buffer_labeled = false
   local header = string.format("%s %s:", conf.icon, H.current_label)
 
-  local visits = VisitsHarpooned.list_paths(H.current_label) or {}
+  local visits = VisitsHarpooned.list_paths() or {}
   local nr_of_visits = #visits
   local slot = 0
   local ele = vim.tbl_map(function(visit_path) -- slots and corresponding visits
