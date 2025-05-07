@@ -13,7 +13,7 @@ local plugins = {
   auto = false, -- only supported for lazy.nvim
   --
   ["blink_cmp"] = true,
-  ["headlines"] = true,
+  ["render-markdown"] = true,
   ["leap"] = true,
   ["mini_animate"] = true,
   ["mini_clue"] = true,
@@ -34,7 +34,6 @@ local plugins = {
   -- ["mini_test"] = false,
   -- ["mini_trailspace"] = false,
   ["neotest"] = true,
-  ["cmp"] = true,
   ["dap"] = true,
   ["treesitter-context"] = true,
 }

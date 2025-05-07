@@ -17,15 +17,6 @@ later(function()
     end)
   end, "<leader>oR", "Load slime(repl)")
 
-  local spec_neogen = "danymat/neogen" -- documentation generator
-  register(spec_neogen)
-  Util.defer.on_keys(function()
-    now(function()
-      add(spec_neogen)
-      require("ak.config.util.neogen")
-    end)
-  end, "<leader>oN", "Neogen")
-
   -- Util.defer.on_keys(function()
   --   now(function() require("ak.config.util.doc") end)
   -- end, "<leader>oD", "Mini doc")

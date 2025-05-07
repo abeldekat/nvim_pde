@@ -21,8 +21,6 @@ local opts = {
   default_integrations = false,
   integrations = {
     blink_cmp = true,
-    cmp = true,
-    dadbod_ui = true,
     dap = true,
     dap_ui = true,
     fidget = true,
@@ -52,7 +50,6 @@ local opts = {
       inlay_hints = { background = true },
     },
     neotest = true,
-    -- overseer = true,
     render_markdown = true,
     semantic_tokens = true,
     treesitter = true,

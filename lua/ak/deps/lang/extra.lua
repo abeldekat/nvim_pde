@@ -38,7 +38,7 @@ local function markdown()
 end
 
 local function sql()
-  local spec = { source = "tpope/vim-dadbod", depends = { "kristijanhusak/vim-dadbod-completion" } }
+  local spec = { source = "tpope/vim-dadbod" }
 
   local function load()
     add(spec)
