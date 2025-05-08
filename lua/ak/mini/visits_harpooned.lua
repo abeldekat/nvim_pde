@@ -1,10 +1,5 @@
 -- Replaces grapple.nvim/harpoon. See https://github.com/echasnovski/mini.nvim/discussions/1158
---
--- A label is contextual and provides access to important visits(files/dirs) to work on a task
-
--- One caveat: Field "latest" applies to a visit, not on individual label
--- Adding a path to a label that is already present in another label might
--- change the order of paths in that other label. I don't consider this a problem
+-- Configures MiniVisits to work with labels in the same way as Harpoon works with lists.
 
 -- This setup works with one visit index file per project dir
 -- Tested to also operate correctly when using MiniMisc.setup_auto_root: vim.fn.changedir on BufEnter.
@@ -36,18 +31,18 @@ VisitsHarpooned.setup = function(config)
 end
 
 VisitsHarpooned.config = {
-  labels = { "core" },
-  start_label = "core", -- required
+  start_label = "core", -- the only label that is always present, even when not attached to visits
   keys = {
-    ui_all = "<leader>j", -- used the most, all labeled visits
     ui = "<leader>ol", -- all visits with current label
-    toggle = "<leader>a",
+    ui_all = "<leader>j", -- used the most, all labeled visits
+    toggle = "<leader>a", -- used the most, toggle current label on current file/dir
     switch_label = "<leader>oj",
+    new_label = "<leader>oa",
     maintain = "<leader>om",
-    clear = "<leader>or",
+    clear_all = "<leader>or",
     selects = { "ma", "ms", "md", "mf" }, -- { "<c-j>", "<c-k>", "<c-l>", "<c-h>" }
   },
-  picker_hints_on_change_active_label = { "a", "s", "d", "f" }, -- predictable picker hints
+  picker_hints_on_switch_label = { "a", "s", "d", "f" }, -- predictable picker hints
 }
 
 VisitsHarpooned.get_start_label = function() return H.get_config().start_label end
@@ -83,33 +78,38 @@ H.setup_config = function(config)
   config = vim.tbl_deep_extend("force", vim.deepcopy(H.default_config), config or {})
 
   vim.validate({
-    labels = { config.labels, "table" },
     start_label = { config.start_label, "string" },
     keys = { config.keys, "table" },
-    picker_hints_on_change_active_label = { config.picker_hints_on_change_active_label, "table" },
+    picker_hints_on_switch_label = { config.picker_hints_on_switch_label, "table" },
   })
   vim.validate({
-    labels = { #config.labels, function(val) return val > 0 end, "at least 1 label" },
     ["keys.ui_all"] = { config.keys.ui_all, "string" },
     ["keys.ui"] = { config.keys.ui, "string" },
     ["keys.toggle"] = { config.keys.toggle, "string" },
     ["keys.switch_label"] = { config.keys.switch_label, "string" },
+    ["keys.new_label"] = { config.keys.new_label, "string" },
     ["keys.maintain"] = { config.keys.maintain, "string" },
-    ["keys.clear"] = { config.keys.clear, "string" },
+    ["keys.clear_all"] = { config.keys.clear_all, "string" },
     ["keys.selects"] = { config.keys.selects, "table" },
   })
   vim.validate({
-    ["labels"] = { config.labels, function(x) return H.is_list_of(x, "labels", "string") end },
     ["keys.selects"] = {
       config.keys.selects,
       function(x) return H.is_list_of(x, "keys.selects", "string") end,
     },
-    ["picker_hints_on_change_active_label"] = {
-      config.picker_hints_on_change_active_label,
-      function(x) return H.is_list_of(x, "picker_hints_on_change_active_label", "string") end,
+    ["picker_hints_on_switch_label"] = {
+      config.picker_hints_on_switch_label,
+      function(x) return H.is_list_of(x, "picker_hints_on_switch_label", "string") end,
     },
   })
   return config
+end
+
+H.list_labels = function()
+  local start_label = H.get_config().start_label
+  local labels = MiniVisits.list_labels(H.all_paths, H.all_cwd)
+  if not vim.tbl_contains(labels, start_label) then table.insert(labels, 1, start_label) end
+  return labels
 end
 
 H.apply_config = function(config)
@@ -119,15 +119,13 @@ H.apply_config = function(config)
   local keys = config.keys
 
   -- Map keys
-  H.map("n", keys.ui_all, function() H.pickers.visits_by_labels(config.labels) end, { desc = "Visits pick all" })
-  H.map("n", keys.ui, function() H.pickers.visits_by_labels({ H.state.label }) end, { desc = "Visits pick active" })
+  H.map("n", keys.ui_all, function() H.pickers.visits_by_labels(H.list_labels()) end, { desc = "Visits pick all" })
+  H.map("n", keys.ui, function() H.pickers.visits_by_labels({ H.state.label }) end, { desc = "Visits pick" })
   H.map("n", keys.toggle, H.toggle, { desc = "Visits toggle" })
   H.map("n", keys.switch_label, H.pickers.labels, { desc = "Visits switch label" })
+  H.map("n", keys.new_label, H.new_label, { desc = "Visits new label" })
   H.map("n", keys.maintain, H.maintain.start, { desc = "Visits maintain" })
-  H.map("n", keys.clear, function()
-    MiniVisits.remove_label(H.state.label, H.all_paths, H.all_cwd)
-    H.on_change()
-  end, { desc = "Visits clear" })
+  H.map("n", keys.clear_all, H.clear_all, { desc = "Visits clear all" })
 
   for i = 1, #keys.selects do
     H.map("n", keys.selects[i], function() H.iterate_paths(i) end, { desc = "Visit " .. i })
@@ -182,6 +180,18 @@ H.switch_label = function(label)
   vim.api.nvim_exec_autocmds("User", exec_opts)
 end
 
+H.new_label = function()
+  MiniVisits.add_label()
+  H.on_change()
+  H.pickers.labels()
+end
+
+H.clear_all = function()
+  MiniVisits.remove_path(H.all_paths, H.all_cwd) -- remove all *visits*
+  H.on_change()
+  H.switch_label(H.get_config().start_label) -- auto-switch to start
+end
+
 H.batch_update = function(paths_from_user)
   MiniVisits.remove_label(H.state.label, H.all_paths, H.all_cwd)
 
@@ -231,26 +241,18 @@ end
 H.pickers.labels = function()
   local conf = H.get_config()
   local name = "Visits change active label"
-  local picker_items = conf.labels
+  local picker_items = H.list_labels()
   local choose = function(label) H.switch_label(label) end
   local source = { name = name, items = picker_items, choose = choose }
-  local hinted = { enable = true, use_autosubmit = true, chars = conf.picker_hints_on_change_active_label }
+  local hinted = { enable = true, use_autosubmit = true, chars = conf.picker_hints_on_switch_label }
   return MiniPick.start({ source = source, hinted = hinted })
 end
 
 H.pickers.visits_by_labels = function(labels) -- a customized Extra.pickers.visit_paths
-  -- Copied from mini.extra, except: H.full_path, H.normalize_path, H.is_windows
-  local short_path = function(path, cwd)
-    cwd = cwd or vim.fn.getcwd()
-    -- Ensure `cwd` is treated as directory path (to not match similar prefix)
-    cwd = cwd:sub(-1) == "/" and cwd or (cwd .. "/")
-    return vim.startswith(path, cwd) and path:sub(cwd:len() + 1) or vim.fn.fnamemodify(path, ":~")
-  end
-
   local paths_to_items = function(paths, label)
     return vim.tbl_map(function(visit_path)
       local path_path = visit_path -- needed, otherwise files outside cwd are not opened
-      local text_path = short_path(visit_path)
+      local text_path = H.short_path(visit_path)
       return { path = path_path, text = string.format(" %-6s %s", label, text_path) }
     end, paths)
   end
