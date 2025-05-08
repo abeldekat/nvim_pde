@@ -105,13 +105,6 @@ H.setup_config = function(config)
   return config
 end
 
-H.list_labels = function()
-  local start_label = H.get_config().start_label
-  local labels = MiniVisits.list_labels(H.all_paths, H.all_cwd)
-  if not vim.tbl_contains(labels, start_label) then table.insert(labels, 1, start_label) end
-  return labels
-end
-
 H.apply_config = function(config)
   VisitsHarpooned.config = config
 
@@ -151,6 +144,16 @@ H.create_autocommands = function()
 end
 
 H.list_paths = function(label) return MiniVisits.list_paths(H.all_cwd, { filter = label or H.state.label }) end
+
+H.list_labels = function()
+  local start_label = H.get_config().start_label
+  local labels = vim.tbl_filter(
+    function(label) return label ~= start_label end,
+    MiniVisits.list_labels(H.all_paths, H.all_cwd)
+  )
+  table.insert(labels, 1, start_label) -- ensure start label at first position
+  return labels
+end
 
 H.iterate_paths = function(n_times)
   local ft = vim.bo.ft
