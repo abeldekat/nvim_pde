@@ -62,7 +62,7 @@ end
 H.default_config = vim.deepcopy(VisitsHarpooned.config)
 H.store_dir = string.format("%s/%s", vim.fn.stdpath("data"), "visits_harpooned")
 H.maintain_ft = "visits-harpooned-maintain"
-H.all_cwd, H.all_paths = "", "" -- constants as expect by MiniVisits
+H.all_cwd, H.all_paths = "", "" -- constants as expected by MiniVisits
 H.pickers, H.maintain = {}, {}
 H.state = { label = nil }
 
@@ -181,9 +181,19 @@ H.switch_label = function(label)
 end
 
 H.new_label = function()
-  MiniVisits.add_label()
-  H.on_change()
-  H.pickers.labels()
+  local full_path = VisitsHarpooned.full_path_of_current_buffer()
+
+  local old = MiniVisits.list_labels(full_path, H.dummy_cwd)
+  MiniVisits.add_label(nil, full_path, H.dummy_cwd)
+  local new = MiniVisits.list_labels(full_path, H.dummy_cwd)
+
+  if #new == #old then return end
+
+  local added = vim.tbl_filter(function(label) return not vim.list_contains(old, label) end, new)
+  if #added ~= 1 then return end
+
+  MiniVisits.write_index()
+  H.switch_label(added[1]) -- auto-switch to the new label
 end
 
 H.clear_all = function()
