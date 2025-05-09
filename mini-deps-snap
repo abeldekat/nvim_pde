@@ -30,7 +30,7 @@ return {
   ["nvim-ts-autotag"] = "a1d526af391f6aebb25a8795cbc05351ed3620b5",
   ["one-small-step-for-vimkind"] = "a675a156f207ceabff20224ff404a4b74036a859",
   ["peek.nvim"] = "5820d937d5414baea5f586dc2a3d912a74636e5b",
-  ["render-markdown.nvim"] = "ff577b44bd3ab642acec0f134a7bf26b7278d137",
+  ["render-markdown.nvim"] = "935c2c70c296d87ed1bcce9ce667c239c9c982b5",
   ["toggleterm.nvim"] = "9a88eae817ef395952e08650b3283726786fb5fb",
   ["vim-dadbod"] = "fa31d0ffeebaa59cf97a81e7f92194cced54a13f",
   ["vim-slime"] = "507107dd24c9b85721fa589462fd5068e0f70266",
