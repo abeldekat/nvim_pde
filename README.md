@@ -62,19 +62,18 @@ in combination with the forefinger of the left hand
 ### VisitsHarpooned
 
 Internal plugin [ak.mini.visits_harpooned] is a customized [mini.visits] configuration,
-operating in almost the same way as `harpoon`
+operating in almost the same way as `harpoon`.
 
 - Info in statusline: [ak.mini.visits_harpooned_line]
-- The shortcuts normally used for window navigation correspond to visit 1-4 in current label:
+- The shortcuts normally used for window navigation correspond to visit 1-4 having label:
   `c-j`, `<c-k>`,`<c-l>`,`<c-h>`
-- Toggle current label on visit: `<leader>a`
-- Add visit to "uncategorised" label: `<leader>oa`
 - Pick visits from all labels: `<leader>j` ("strongest finger")
-- Pick visits having current label: `<leader>ol`
-- Change current label: `<leader>oj`
-- Maintain visits having active label: `<leader>om`
-- Remove active label from visits: `<leader>or`
-- Copy global visits to "uncategorised" label: `<leader>oc`
+- Pick visits: `<leader>ol`
+- Toggle label on visit: `<leader>a`
+- Switch label: `<leader>oj`
+- Add new label: `<leader>oa`
+- Maintain visits having label: `<leader>om`
+- Clear all visits: `<leader>or`
 
 Pickers can display hints using internal plugin [ak.mini.pick_hinted]
 
