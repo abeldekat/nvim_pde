@@ -1,26 +1,17 @@
 local Util = require("ak.util")
 local MiniDeps = require("mini.deps")
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
-local register = Util.deps.register
+local use_hardtime = true --  mini.keymap instead of hardtime...
 
-local use_hardtime = true -- using mini.keymap...
-
-now(function()
-  --          ╭─────────────────────────────────────────────────────────╮
-  --          │                         Explorer                        │
-  --          ╰─────────────────────────────────────────────────────────╯
-  local function add_explorer() require("ak.config.editor.files") end
-  -- stylua: ignore
-  if Util.opened_with_dir_argument() then add_explorer() else later(add_explorer) end
-end)
+local files_now_or_later = Util.opened_with_dir_argument() and now or later
+files_now_or_later(function() require("ak.config.editor.files") end)
 
 later(function()
+  -- Leap:
   add("ggandor/leap.nvim")
   require("ak.config.editor.leap")
 
-  --          ╭─────────────────────────────────────────────────────────╮
-  --          │                          Mini                           │
-  --          ╰─────────────────────────────────────────────────────────╯
+  -- Mini:
   require("ak.config.editor.clue")
   require("ak.config.editor.cursorword")
   if use_hardtime then require("ak.config.editor.hardtime") end
@@ -28,21 +19,11 @@ later(function()
   require("ak.config.editor.git")
   require("ak.config.editor.diff")
   require("ak.config.editor.pick")
-  require("ak.config.editor.visits") -- marks like grapple.nvim/harpoon, uses mini.pick
+  require("ak.config.editor.visits") -- like harpoon, also uses mini.pick
 
-  --          ╭─────────────────────────────────────────────────────────╮
-  --          │                         Quickfix                        │
-  --          ╰─────────────────────────────────────────────────────────╯
-  local spec_bqf = {
-    source = "kevinhwang91/nvim-bqf",
-    depends = { { source = "yorickpeterse/nvim-pqf" } },
-  }
-  add(spec_bqf)
+  -- Other:
+  add({ source = "kevinhwang91/nvim-bqf", depends = { { source = "yorickpeterse/nvim-pqf" } } })
   require("ak.config.editor.quickfix")
-
-  --          ╭─────────────────────────────────────────────────────────╮
-  --          │                         Terminal                        │
-  --          ╰─────────────────────────────────────────────────────────╯
   add("akinsho/toggleterm.nvim")
   require("ak.config.editor.toggleterm")
 end)

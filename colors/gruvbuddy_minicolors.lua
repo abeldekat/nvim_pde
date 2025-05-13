@@ -1,8 +1,9 @@
 -- Made with 'mini.colors' module of https://github.com/echasnovski/mini.nvim
 -- Colors from gruvbuddy(colorbuddy). Gruvbuddy is much slower...
+-- Removed cmp hi
 
 if vim.g.colors_name ~= nil then vim.cmd("highlight clear") end
-vim.g.colors_name = "minibuddy"
+vim.g.colors_name = "gruvbuddy_minicolors"
 
 -- Highlight groups
 local hi = vim.api.nvim_set_hl
@@ -32,37 +33,6 @@ hi(0, "@variable", { fg = "#e0e0e0" })
 hi(0, "@variable.builtin", { bg = "#111111", fg = "#c5b5dd" })
 hi(0, "Boolean", { fg = "#de935f" })
 hi(0, "Character", { fg = "#cc6666" })
-hi(0, "CmpItemAbbrDefault", { fg = "#b4b7b4" })
-hi(0, "CmpItemAbbrDeprecatedDefault", { fg = "#b0b1b0" })
-hi(0, "CmpItemAbbrMatchDefault", { fg = "#b4b7b4" })
-hi(0, "CmpItemAbbrMatchFuzzyDefault", { fg = "#b4b7b4" })
-hi(0, "CmpItemKindClassDefault", { link = "CmpItemKind" })
-hi(0, "CmpItemKindColorDefault", { link = "CmpItemKind" })
-hi(0, "CmpItemKindConstantDefault", { link = "CmpItemKind" })
-hi(0, "CmpItemKindConstructorDefault", { link = "CmpItemKind" })
-hi(0, "CmpItemKindDefault", { fg = "#a992cd" })
-hi(0, "CmpItemKindEnumDefault", { link = "CmpItemKind" })
-hi(0, "CmpItemKindEnumMemberDefault", { link = "CmpItemKind" })
-hi(0, "CmpItemKindEventDefault", { link = "CmpItemKind" })
-hi(0, "CmpItemKindFieldDefault", { link = "CmpItemKind" })
-hi(0, "CmpItemKindFileDefault", { link = "CmpItemKind" })
-hi(0, "CmpItemKindFolderDefault", { link = "CmpItemKind" })
-hi(0, "CmpItemKindFunctionDefault", { link = "CmpItemKind" })
-hi(0, "CmpItemKindInterfaceDefault", { link = "CmpItemKind" })
-hi(0, "CmpItemKindKeywordDefault", { link = "CmpItemKind" })
-hi(0, "CmpItemKindMethodDefault", { link = "CmpItemKind" })
-hi(0, "CmpItemKindModuleDefault", { link = "CmpItemKind" })
-hi(0, "CmpItemKindOperatorDefault", { link = "CmpItemKind" })
-hi(0, "CmpItemKindPropertyDefault", { link = "CmpItemKind" })
-hi(0, "CmpItemKindReferenceDefault", { link = "CmpItemKind" })
-hi(0, "CmpItemKindSnippetDefault", { link = "CmpItemKind" })
-hi(0, "CmpItemKindStructDefault", { link = "CmpItemKind" })
-hi(0, "CmpItemKindTextDefault", { link = "CmpItemKind" })
-hi(0, "CmpItemKindTypeParameterDefault", { link = "CmpItemKind" })
-hi(0, "CmpItemKindUnitDefault", { link = "CmpItemKind" })
-hi(0, "CmpItemKindValueDefault", { link = "CmpItemKind" })
-hi(0, "CmpItemKindVariableDefault", { link = "CmpItemKind" })
-hi(0, "CmpItemMenuDefault", { fg = "#b4b7b4" })
 hi(0, "Comment", { fg = "#b0b1b0", italic = true })
 hi(0, "Conceal", { bg = "#4e545d", fg = "#111111", italic = true })
 hi(0, "Conditional", { fg = "#b294bb" })
