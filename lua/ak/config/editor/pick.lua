@@ -20,7 +20,11 @@ local function setup()
   end
   H.create_autocommands()
 
-  require("mini.pick").setup({})
+  require("mini.pick").setup({
+    source = {
+      preview = function(buf_id, item) return MiniPick.default_preview(buf_id, item, { line_position = "center" }) end,
+    },
+  })
 
   H.add_custom_pickers()
   H.provide_picker()
