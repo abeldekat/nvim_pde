@@ -93,5 +93,5 @@ vim.g.loaded_ruby_provider = 0
 -- vim.g.loaded_node_provider = 0
 -- vim.g.loaded_python3_provider = 0
 -- allow local .nvim.lua .vimrc .exrc files:
--- vim.opt.exrc = true
+-- vim.o.exrc = true -- searches upward...
 vim.g.markdown_recommended_style = 0 -- fix markdown indentation settings

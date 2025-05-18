@@ -1,51 +1,49 @@
--- A statusline component for VisitsHarpooned
--- Requirements:
--- 1. VisitsHarpooned active
-
-local VisitsHarpoonedLine = {}
+-- A statusline component for a harpoon-like workflow
+local HarpoonLine = {}
 local H = {}
 
-VisitsHarpoonedLine.setup = function(config)
-  _G.VisitsHarpoonedLine = VisitsHarpoonedLine
-  config = H.setup_config(config)
-  H.apply_config(config)
+HarpoonLine.setup = function(config, provider)
+  _G.HarpoonLine = HarpoonLine
+
+  config = H.setup_config(config, provider)
+  H.apply_config(config, provider)
   H.create_autocommands()
 
-  H.current_label = VisitsHarpooned.get_start_label()
   H.produce()
 end
 
-VisitsHarpoonedLine.config = {
+HarpoonLine.config = {
   icon = "󰖃", -- visitor: nf-md-walk f0583 -- grapple: "󰛢" nf-md-hook f06e2
   max_slots = 4,
   fmt_inactive = "%s",
   fmt_active = "[%s]",
   text = function(full_path)
     local result = vim.fn.fnamemodify(full_path, ":t") -- visit is full path
-    return result:sub(1, math.min(#result, 2))
+    return result:sub(1, math.min(#result, 2)) -- first two letters
   end,
   sep = "·",
   more_marks = "…", -- #slots < #visits, horizontal elipsis
-  cb = nil, -- function updating the statusline
+  on_produce = nil, -- function to call when a new line is produced
   highlight_active = nil, -- function, param text, return hl + text
 }
 
-VisitsHarpoonedLine.has_buffer = function() return H.is_current_buffer_labeled end
+HarpoonLine.has_buffer = function() return H.is_current_buffer_labeled end
 
-VisitsHarpoonedLine.line = function() return H.cached_line end
+HarpoonLine.line = function() return H.cached_line end
 
 -- Helper ================================================================
 
-H.default_config = vim.deepcopy(VisitsHarpoonedLine.config)
-H.current_label = nil
+H.default_config = vim.deepcopy(HarpoonLine.config)
+H.provider = nil -- the plugin providing a harpoon-like workflow...
 H.is_current_buffer_labeled = false
 H.cached_line = nil
 
-H.setup_config = function(config)
+H.setup_config = function(config, provider)
   vim.validate({
-    VisitsHarpooned = { VisitsHarpooned, "table" },
     config = { config, "table" },
+    provider = { provider, "table" },
   })
+
   config = vim.tbl_deep_extend("force", vim.deepcopy(H.default_config), config or {})
 
   vim.validate({
@@ -61,9 +59,12 @@ H.setup_config = function(config)
   return config
 end
 
-H.apply_config = function(config) VisitsHarpoonedLine.config = config end
+H.apply_config = function(config, provider)
+  HarpoonLine.config = config
+  H.provider = provider
+end
 
-H.get_config = function() return VisitsHarpoonedLine.config end
+H.get_config = function() return HarpoonLine.config end
 
 H.create_autocommands = function()
   local augroup = vim.api.nvim_create_augroup("VisitsHarpoonedLine", { clear = true })
@@ -71,12 +72,8 @@ H.create_autocommands = function()
     vim.api.nvim_create_autocmd(event, { group = augroup, pattern = pattern, callback = callback, desc = desc })
   end
 
-  au("BufEnter", "*", function(ev) H.produce_and_cb() end)
-  au("User", "VisitsHarpoonedModified", function(ev) H.produce_and_cb() end)
-  au("User", "VisitsHarpoonedSwitchedLabel", function(ev)
-    H.current_label = ev.data
-    H.produce_and_cb()
-  end)
+  au("BufEnter", "*", H.produce_and_cb)
+  au("User", H.provider.events.modified, H.produce_and_cb)
 end
 
 H.produce_item = function(is_active, text, conf)
@@ -87,13 +84,13 @@ H.produce_item = function(is_active, text, conf)
 end
 
 H.produce = function()
-  local curpath = VisitsHarpooned.full_path_of_current_buffer()
-
   local conf = H.get_config()
-  H.is_current_buffer_labeled = false
-  local header = string.format("%s %s:", conf.icon, H.current_label)
+  local curpath = H.provider.full_path_of_current_buffer()
 
-  local visits = VisitsHarpooned.list_paths() or {}
+  H.is_current_buffer_labeled = false
+  local header = string.format("%s %s:", conf.icon, H.provider.get_label())
+
+  local visits = H.provider.list_paths() or {}
   local nr_of_visits = #visits
   local slot = 0
   local ele = vim.tbl_map(function(visit_path) -- slots and corresponding visits
@@ -117,7 +114,7 @@ end
 H.produce_and_cb = vim.schedule_wrap(function()
   H.produce()
   local conf = H.get_config()
-  if conf.cb then conf.cb() end
+  if conf.on_produce then conf.on_produce() end
 end)
 
-return VisitsHarpoonedLine
+return HarpoonLine

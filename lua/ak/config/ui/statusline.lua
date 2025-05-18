@@ -28,7 +28,7 @@ AK.active = function() -- entrypoint
   local location = MiniStatusline.section_location({ trunc_width = 75 })
   local lsp = MiniStatusline.section_lsp({ trunc_width = 75 })
   local macro = AK.section_macro({ trunc_width = 120 })
-  local marker_data = AK.section_marker({ trunc_width = 100 })
+  local harpoon_data = AK.section_harpoon({ trunc_width = 100 })
   local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 120 })
   local search = MiniStatusline.section_searchcount({ trunc_width = 75 })
   local tabinfo = AK.section_tabinfo({ trunc_width = 75 })
@@ -39,7 +39,7 @@ AK.active = function() -- entrypoint
   lsp = lsp and #lsp > 0 and "󰓃" or "" -- speaker --   server -- 󰿘 protocl -- 󰝚 music
   return MiniStatusline.combine_groups({
     { hl = mode_hl, strings = { mode } },
-    { hl = H.group_default_hl, strings = { marker_data } },
+    { hl = H.group_default_hl, strings = { harpoon_data } },
     { hl = H.group_default_hl, strings = { git_and_diff } },
     "%<", -- Mark general truncate point
     { hl = "MiniStatuslineFilename", strings = { filename } },
@@ -87,9 +87,9 @@ AK.section_fileinfo = function(args)
 end
 
 -- added:
-AK.section_marker = function(args)
-  if not H.markerline or MiniStatusline.is_truncated(args.trunc_width) then return "" end
-  return H.markerline.line()
+AK.section_harpoon = function(args)
+  if not HarpoonLine or MiniStatusline.is_truncated(args.trunc_width) then return "" end
+  return HarpoonLine.line()
 end
 
 -- added:
@@ -127,8 +127,6 @@ H.diag_signs = { -- must be at the end of a section, hl does not close
   INFO = string.format("%%#%s#%s", H.diag_hls.info, "I"),
   HINT = string.format("%%#%s#%s", H.diag_hls.hint, "H"),
 }
-
-H.markerline = nil
 
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                  Helper functionality                   │
@@ -180,14 +178,12 @@ end
 H.optional_dependencies = function() -- See ak.deps.editor
   if VisitsHarpooned == nil then return end
 
-  local visitsline = require("ak.mini.visits_harpooned_line")
-  visitsline.setup({
-    cb = H.set_active,
-    highlight_active = function(text) -- optionally hl active, instead of everything
+  require("ak.mini.harpoonline").setup({
+    on_produce = H.set_active, -- callback on_produce, update the statusline
+    highlight_active = function(text) -- optionally highlight active buffer
       return string.format("%%#%s# %s %%#%s#", "MiniHipatternsHack", text, H.group_default_hl)
     end,
-  })
-  H.markerline = visitsline
+  }, VisitsHarpooned.as_provider())
 end
 
 --          ╭─────────────────────────────────────────────────────────╮
