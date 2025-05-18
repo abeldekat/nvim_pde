@@ -1,6 +1,6 @@
--- Replaces grapple.nvim/harpoon. See https://github.com/echasnovski/mini.nvim/discussions/1158
+-- Replaces harpoon. See https://github.com/echasnovski/mini.nvim/discussions/1158
 -- Configures MiniVisits to work with labels in the same way as Harpoon works with lists.
-
+--
 -- This setup works with one visit index file per project dir
 -- Tested to also operate correctly when using MiniMisc.setup_auto_root: vim.fn.changedir on BufEnter.
 --
@@ -122,10 +122,8 @@ end
 
 -- Helper ================================================================
 
-H.config = {
-  start_label = "core", -- the only label that is always present, even when not attached to visits
-  picker_hints_on_switch_label = { "j", "k", "l", "h" }, -- predictable picker hints
-}
+-- start_label is the only label that is always present, even when not attached to visits:
+H.config = { start_label = "core", picker_hints_on_switch_label = { "j", "k", "l", "h" } }
 H.default_config = vim.deepcopy(H.config)
 H.store_dir = string.format("%s/%s", vim.fn.stdpath("data"), "visits_harpooned")
 H.maintain_ft = "visits-harpooned-maintain"
@@ -187,12 +185,11 @@ H.full_path_of_current_buffer = function()
 end
 
 H.list_labels = function()
-  local start_label = H.config.start_label
   local labels = vim.tbl_filter(
-    function(label) return label ~= start_label end,
+    function(label) return label ~= H.config.start_label end,
     MiniVisits.list_labels(H.all_paths, H.all_cwd)
   )
-  table.insert(labels, 1, start_label) -- ensure start label at first position
+  table.insert(labels, 1, H.config.start_label) -- ensure start label at first position
   return labels
 end
 
@@ -258,9 +255,8 @@ H.visits_by_labels = function(labels) -- a customized Extra.pickers.visit_paths
 
   local paths_to_items = function(paths, label)
     return vim.tbl_map(function(visit_path)
-      local path_path = visit_path -- needed, otherwise files outside cwd are not opened
       local text_path = H.short_path(visit_path)
-      return { path = path_path, text = string.format(" %-6s %s", label, text_path) }
+      return { path = visit_path, text = string.format(" %-6s %s", label, H.short_path(visit_path)) }
     end, paths)
   end
   local picker_items = vim.schedule_wrap(function()

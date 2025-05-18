@@ -64,12 +64,12 @@ in combination with the forefinger of the left hand
 Internal plugin [ak.mini.visits_harpooned] is a customized [mini.visits] configuration,
 operating in almost the same way as `harpoon`.
 
-- Info in statusline: [ak.mini.visits_harpooned_line]
+- Info in statusline: [ak.mini.harpoonline]
+- Pick visits from all labels: `<leader>j` ("strongest finger")
+- Toggle label on visit: `<leader>a`
 - The shortcuts normally used for window navigation correspond to visit 1-4 having label:
   `c-j`, `<c-k>`,`<c-l>`,`<c-h>`
-- Pick visits from all labels: `<leader>j` ("strongest finger")
-- Pick visits: `<leader>ol`
-- Toggle label on visit: `<leader>a`
+- Pick visits from current label: `<leader>ol`
 - Switch label: `<leader>oj`
 - Add new label: `<leader>oa`
 - Maintain visits having label: `<leader>om`
@@ -224,7 +224,7 @@ This repo uses code and ideas from the following repositories:
 [mini.visits]: https://github.com/echasnovski/mini.visits
 [mini.clue]: https://github.com/echasnovski/mini.clue
 [ak.mini.visits_harpooned]: lua/ak/mini/visits_harpooned.lua
-[ak.mini.visits_harpooned_line]: lua/ak/mini/visits_harpooned_line.lua
+[ak.mini.harpoonline]: lua/ak/mini/visits_harpooned_line.lua
 [ak.mini.pick_hinted]: lua/ak/mini/pick_hinted.lua
 [leap]: https://github.com/ggandor/leap.nvim
 [peek.nvim]: https://github.com/toppair/peek.nvim

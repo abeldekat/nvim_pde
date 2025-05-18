@@ -1,12 +1,10 @@
 -- A statusline component for a harpoon-like workflow
-local HarpoonLine = {}
-local H = {}
+local HarpoonLine, H = {}, {}
 
 HarpoonLine.setup = function(config, provider)
   _G.HarpoonLine = HarpoonLine
   H.setup_config(config, provider)
   H.create_autocommands()
-
   H.produce()
 end
 
