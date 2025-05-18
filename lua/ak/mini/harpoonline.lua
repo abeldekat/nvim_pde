@@ -4,15 +4,19 @@ local H = {}
 
 HarpoonLine.setup = function(config, provider)
   _G.HarpoonLine = HarpoonLine
-
-  config = H.setup_config(config, provider)
-  H.apply_config(config, provider)
+  H.setup_config(config, provider)
   H.create_autocommands()
 
   H.produce()
 end
 
-HarpoonLine.config = {
+HarpoonLine.has_buffer = function() return H.is_current_buffer_labeled end
+
+HarpoonLine.line = function() return H.cached_line end
+
+-- Helper ================================================================
+
+H.config = {
   icon = "󰖃", -- visitor: nf-md-walk f0583 -- grapple: "󰛢" nf-md-hook f06e2
   max_slots = 4,
   fmt_inactive = "%s",
@@ -26,14 +30,7 @@ HarpoonLine.config = {
   on_produce = nil, -- function to call when a new line is produced
   highlight_active = nil, -- function, param text, return hl + text
 }
-
-HarpoonLine.has_buffer = function() return H.is_current_buffer_labeled end
-
-HarpoonLine.line = function() return H.cached_line end
-
--- Helper ================================================================
-
-H.default_config = vim.deepcopy(HarpoonLine.config)
+H.default_config = vim.deepcopy(H.config)
 H.provider = nil -- the plugin providing a harpoon-like workflow...
 H.is_current_buffer_labeled = false
 H.cached_line = nil
@@ -56,15 +53,10 @@ H.setup_config = function(config, provider)
     cb = { config.cb, "function", true },
     highlight_active = { config.highlight_active, "function", true },
   })
-  return config
-end
 
-H.apply_config = function(config, provider)
-  HarpoonLine.config = config
+  H.config = config
   H.provider = provider
 end
-
-H.get_config = function() return HarpoonLine.config end
 
 H.create_autocommands = function()
   local augroup = vim.api.nvim_create_augroup("VisitsHarpoonedLine", { clear = true })
@@ -76,7 +68,8 @@ H.create_autocommands = function()
   au("User", H.provider.events.modified, H.produce_and_cb)
 end
 
-H.produce_item = function(is_active, text, conf)
+H.produce_item = function(is_active, text)
+  local conf = H.config
   if not is_active then return string.format(conf.fmt_inactive, text) end
 
   H.is_current_buffer_labeled = true
@@ -84,7 +77,7 @@ H.produce_item = function(is_active, text, conf)
 end
 
 H.produce = function()
-  local conf = H.get_config()
+  local conf = H.config
   local curpath = H.provider.full_path_of_current_buffer()
 
   H.is_current_buffer_labeled = false
@@ -95,7 +88,7 @@ H.produce = function()
   local slot = 0
   local ele = vim.tbl_map(function(visit_path) -- slots and corresponding visits
     slot = slot + 1
-    return H.produce_item(curpath == visit_path, conf.text(visit_path), conf)
+    return H.produce_item(curpath == visit_path, conf.text(visit_path))
   end, vim.list_slice(visits, 1, math.min(conf.max_slots, nr_of_visits)))
 
   if conf.max_slots < nr_of_visits then -- visits without slots
@@ -103,7 +96,7 @@ H.produce = function()
       function(visit_path) return curpath == visit_path end,
       vim.list_slice(visits, conf.max_slots + 1)
     )
-    ele[slot + 1] = H.produce_item(#active > 0, conf.more_marks, conf)
+    ele[slot + 1] = H.produce_item(#active > 0, conf.more_marks)
   end
   local line = table.concat(ele, conf.sep)
   local sep = line == "" and " -" or " "
@@ -113,8 +106,7 @@ end
 -- Must be wrapped, mini.files might not have a state yet...
 H.produce_and_cb = vim.schedule_wrap(function()
   H.produce()
-  local conf = H.get_config()
-  if conf.on_produce then conf.on_produce() end
+  if H.config.on_produce then H.config.on_produce() end
 end)
 
 return HarpoonLine

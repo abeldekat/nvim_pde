@@ -13,8 +13,7 @@ local VisitsHarpooned, H = {}, {}
 
 VisitsHarpooned.setup = function(config)
   _G.VisitsHarpooned = VisitsHarpooned
-  config = H.setup_config(config)
-  H.apply_config(config)
+  H.setup_config(config)
   H.create_autocommands()
 
   local Visits = require("mini.visits")
@@ -30,11 +29,6 @@ VisitsHarpooned.setup = function(config)
   })
 end
 
-VisitsHarpooned.config = {
-  start_label = "core", -- the only label that is always present, even when not attached to visits
-  picker_hints_on_switch_label = { "j", "k", "l", "h" }, -- predictable picker hints
-}
-
 -- Intended to be used when generating a statusline component
 VisitsHarpooned.as_provider = function()
   return {
@@ -45,7 +39,6 @@ VisitsHarpooned.as_provider = function()
   }
 end
 
--- Actions to map:
 VisitsHarpooned.toggle = function()
   local full_path = H.full_path_of_current_buffer()
   if vim.list_contains(H.list_paths(), full_path) then
@@ -68,12 +61,11 @@ VisitsHarpooned.pick_from_all = function() H.visits_by_labels(H.list_labels()) e
 VisitsHarpooned.pick_from_current = function() H.visits_by_labels(H.state.label) end
 
 VisitsHarpooned.switch_label = function()
-  local conf = H.get_config()
   local name = "Visits change active label"
   local picker_items = H.list_labels()
   local choose = function(label) H.switch_label(label) end
   local source = { name = name, items = picker_items, choose = choose }
-  local hinted = { enable = true, use_autosubmit = true, chars = conf.picker_hints_on_switch_label }
+  local hinted = { enable = true, use_autosubmit = true, chars = H.config.picker_hints_on_switch_label }
   return MiniPick.start({ source = source, hinted = hinted })
 end
 
@@ -125,12 +117,16 @@ end
 VisitsHarpooned.clear_all_visits = function()
   MiniVisits.remove_path(H.all_paths, H.all_cwd) -- remove all *visits*
   H.on_change()
-  H.switch_label(H.get_config().start_label) -- auto-switch to start
+  H.switch_label(H.config.start_label) -- auto-switch to start
 end
 
 -- Helper ================================================================
 
-H.default_config = vim.deepcopy(VisitsHarpooned.config)
+H.config = {
+  start_label = "core", -- the only label that is always present, even when not attached to visits
+  picker_hints_on_switch_label = { "j", "k", "l", "h" }, -- predictable picker hints
+}
+H.default_config = vim.deepcopy(H.config)
 H.store_dir = string.format("%s/%s", vim.fn.stdpath("data"), "visits_harpooned")
 H.maintain_ft = "visits-harpooned-maintain"
 H.maintain = {}
@@ -149,7 +145,6 @@ H.setup_config = function(config)
     MiniPick = { MiniPick, "table" },
     config = { config, "table" },
   })
-
   vim.validate({
     start_label = { config.start_label, "string" },
     picker_hints_on_switch_label = { config.picker_hints_on_switch_label, "table" },
@@ -160,15 +155,10 @@ H.setup_config = function(config)
       function(x) return H.is_list_of(x, "picker_hints_on_switch_label", "string") end,
     },
   })
-  return config
-end
 
-H.apply_config = function(config)
-  VisitsHarpooned.config = config
+  H.config = config
   H.state.label = config.start_label
 end
-
-H.get_config = function() return VisitsHarpooned.config end
 
 H.create_autocommands = function()
   local augroup = vim.api.nvim_create_augroup("VisitsHarpooned", { clear = true })
@@ -197,7 +187,7 @@ H.full_path_of_current_buffer = function()
 end
 
 H.list_labels = function()
-  local start_label = H.get_config().start_label
+  local start_label = H.config.start_label
   local labels = vim.tbl_filter(
     function(label) return label ~= start_label end,
     MiniVisits.list_labels(H.all_paths, H.all_cwd)
