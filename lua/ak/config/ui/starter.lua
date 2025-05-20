@@ -5,24 +5,6 @@ local Starter = require("mini.starter")
 local Picker = require("ak.util").pick
 local StarterOverride = {}
 
--- Optimized recent_files, only testing for filereadable on items < n
-StarterOverride.recent_files_in_cwd = function(n)
-  return function()
-    local section = "Recent files (cwd)"
-    local cwd = vim.fn.getcwd() .. "/"
-    local items = {}
-    for _, f in ipairs(vim.v.oldfiles or {}) do
-      if #items == n then break end
-      if vim.fn.filereadable(f) == 1 and vim.startswith(f, cwd) then
-        table.insert(items, { action = "edit " .. f, name = vim.fn.fnamemodify(f, ":t"), section = section })
-      end
-    end
-
-    local msg = "There are no recent files in current directory"
-    return #items == 0 and { { name = msg, action = "", section = section } } or items
-  end
-end
-
 local function header_cb()
   local versioninfo = vim.version() or {}
   local major = versioninfo.major or ""
@@ -37,13 +19,13 @@ end
 -- General problem: When a letter is removed from query_updaters
 -- that letter is still highlighted
 function M.setup(pm_opts)
+  local recent_files = Starter.sections.recent_files(4, true, false)
   local commands_section = "Commands"
-  local commands_items = {
+  local commands = {
     { action = "e .", name = "e. explore('mk')", section = commands_section },
     { action = Picker.keymaps, name = "k. keymaps", section = commands_section },
     { action = "qa", name = "q. quit", section = commands_section },
   }
-  local recent_files_items = StarterOverride.recent_files_in_cwd(4)
 
   local opts = {
     content_hooks = {
@@ -54,7 +36,7 @@ function M.setup(pm_opts)
     evaluate_single = true,
     footer = function() return "  Press space for the menu" end,
     header = header_cb,
-    items = { recent_files_items, pm_opts.items, commands_items },
+    items = { recent_files, pm_opts.items, commands },
     query_updaters = pm_opts.query_updaters .. "ekq123456789",
     silent = true, -- works better with pickers
   }

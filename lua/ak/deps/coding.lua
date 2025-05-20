@@ -44,7 +44,6 @@ later(function()
   if Util.use_mini_ai then require("ak.config.coding.ai") end
   require("ak.config.coding.align")
   require("ak.config.coding.bracketed")
-  -- require("ak.config.coding.comment") -- now builtin
   require("ak.config.coding.move")
   require("ak.config.coding.operators")
   require("ak.config.coding.pairs")

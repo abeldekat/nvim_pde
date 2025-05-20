@@ -2,6 +2,8 @@ local Util = require("ak.util")
 
 local mini_snippets, config_path = require("mini.snippets"), vim.fn.stdpath("config")
 local lang_patterns = { tex = { "latex.json" }, plaintex = { "latex.json" } }
+local stop_session_after_jumping_to_final_tabstop = false
+local stop_all_sessions_on_normal_mode_exit = false
 
 mini_snippets.setup({
   expand = {
@@ -26,3 +28,25 @@ MiniKeymap.map_multistep("i", "<C-h>", { "minisnippets_prev", "jump_before_tsnod
 
 local rhs = function() MiniSnippets.expand({ match = false }) end
 vim.keymap.set("i", "<C-g><C-j>", rhs, { desc = "Expand all" })
+
+if stop_session_after_jumping_to_final_tabstop then
+  local fin_stop = function(args)
+    if args.data.tabstop_to == "0" then MiniSnippets.session.stop() end
+  end
+  local au_opts = { pattern = "MiniSnippetsSessionJump", callback = fin_stop }
+  vim.api.nvim_create_autocmd("User", au_opts)
+end
+
+if stop_all_sessions_on_normal_mode_exit then
+  local make_stop = function()
+    local au_opts = { pattern = "*:n", once = true }
+    au_opts.callback = function()
+      while MiniSnippets.session.get() do
+        MiniSnippets.session.stop()
+      end
+    end
+    vim.api.nvim_create_autocmd("ModeChanged", au_opts)
+  end
+  local opts = { pattern = "MiniSnippetsSessionStart", callback = make_stop }
+  vim.api.nvim_create_autocmd("User", opts)
+end
