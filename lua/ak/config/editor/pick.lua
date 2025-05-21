@@ -19,10 +19,8 @@ local function setup()
   local preview = function(buf_id, item) return MiniPick.default_preview(buf_id, item, { line_position = "center" }) end
   require("mini.pick").setup({ source = { preview = preview } })
 
-  H.add_custom_pickers()
-  H.provide_picker()
+  H.to_provide()
   H.add_keys()
-
   require("ak.mini.pick_hinted").setup({ -- 19 letters, no "bcgpqyz"
     hinted = {
       -- virt_clues_pos = { "inline", "eol" },
@@ -31,48 +29,12 @@ local function setup()
   })
 end
 
-H.create_autocommands = function()
-  local group = vim.api.nvim_create_augroup("minipick-custom-hooks", { clear = true })
-  local function au(pattern, desc, hooks)
-    vim.api.nvim_create_autocmd({ "User" }, {
-      pattern = pattern,
-      group = group,
-      desc = desc,
-      callback = function(...)
-        local opts = MiniPick.get_picker_opts() or {}
-        if opts and opts.source then
-          local hook = hooks[opts.source.name] or function(...) end
-          hook(...)
-        end
-      end,
-    })
-  end
-  au("MiniPickStart", "Picker start hook for source.name", H.start_hooks)
-  au("MiniPickStop", "Picker stop hook for source.name", H.stop_hooks)
-end
-
--- MiniPick.registry:
--- Place for users and extensions to manage pickers with their commonly used
--- local options. By default contains all |MiniPick.builtin| pickers.
--- All entries should accept only a single `local_opts` table argument.
--- Serves as a source for |:Pick| command.
-H.add_custom_pickers = function()
-  -- Using MiniPick.builtin.grep:
-  MiniPick.registry.todo_comments = H.todo_comments
-  -- Using MiniPick.start:
-  MiniPick.registry.colors_with_preview = H.colors_with_preview
-  -- Using MiniExtra.pickers.buf_lines:
-  MiniPick.registry.buffer_lines_current = H.buffer_lines_current
-  -- Example from the help:
-  MiniPick.registry.registry = H.registry
-end
-
-H.provide_picker = function() -- interface to picker to be used in other modules
-  local extra, reg = MiniExtra.pickers, MiniPick.registry
+H.to_provide = function() -- interface to picker to be used in other modules
+  local e = MiniExtra.pickers
 
   ---@type Picker
   local Picker = {
-    keymaps = extra.keymaps,
+    keymaps = e.keymaps,
 
     -- Issue # 979 Jump using ctrl-o not correct after navigating with lsp picker(solved)
     -- Or, via the quickfix:
@@ -85,143 +47,95 @@ H.provide_picker = function() -- interface to picker to be used in other modules
       -- NOTE: Overridden for lua_ls, unique definition...
       vim.lsp.buf.definition({ scope = "definition" })
     end,
-    lsp_references = function() extra.lsp({ scope = "references" }) end,
-    lsp_implementations = function() extra.lsp({ scope = "implementation" }) end,
-    lsp_type_definitions = function() extra.lsp({ scope = "type_definition" }) end,
-    colors = reg.colors_with_preview,
-    todo_comments = reg.todo_comments,
+    lsp_references = function() e.lsp({ scope = "references" }) end,
+    lsp_implementations = function() e.lsp({ scope = "implementation" }) end,
+    lsp_type_definitions = function() e.lsp({ scope = "type_definition" }) end,
+    colors = H.custom.colors_with_preview,
+    todo_comments = H.custom.todo_comments,
   }
   Utils.pick.use_picker(Picker)
 end
 
 local cwd_cache = {}
 H.add_keys = function()
-  local function files() -- either files or git_files
-    local builtin = MiniPick.builtin
-    local cwd = vim.uv.cwd()
-    if cwd and cwd_cache[cwd] == nil then cwd_cache[cwd] = vim.uv.fs_stat(".git") and true or false end
+  local b, e = MiniPick.builtin, MiniExtra.pickers
 
-    local opts = {}
-    if cwd_cache[cwd] then opts.tool = "git" end
-    builtin.files(opts)
-  end
-  local function map(l, r, opts, mode)
-    mode = mode or "n"
-    opts["silent"] = opts.silent ~= false
-    vim.keymap.set(mode, l, r, opts)
-  end
-  local builtin, extra, reg = MiniPick.builtin, MiniExtra.pickers, MiniPick.registry
+  -- Hotkeys:
+  H.mapl("<leader>", H.files, { desc = "Files pick" })
+  H.mapl("/", H.custom.buffer_lines_current, { desc = "Buffer lines" })
+  H.mapl(";", H.custom.buffers_hinted, { desc = "Buffers pick" }) -- home row, used often
+  -- j and <leader>ol: pick_visits_by_labels , see ak.mini.visits_harpooned
+  H.mapl("b", H.custom.symbols_hinted, { desc = "Buffer symbols" })
+  H.mapl("l", b.grep_live, { desc = "Live grep" })
+  H.mapl("r", H.custom.oldfiles_hinted, { desc = "Recent (rel)" })
 
-  local buffer_hints = vim.split("abcdefg", "")
-  local buffers_hinted = function() -- Perhaps: Add modified buffers visualization, issue 1810
-    local hinted = { enable = true, use_autosubmit = true, chars = buffer_hints }
-    MiniPick.builtin.buffers({ include_current = false }, { hinted = hinted })
-  end
-  local symbols_hinted = function()
-    extra.lsp({ scope = "document_symbol" }, { hinted = { enable = true, use_autosubmit = true } })
-  end
-  local oldfiles_hinted = function() extra.oldfiles({ current_dir = true }, { hinted = { enable = true } }) end
-  local his_cmd_hinted = function() extra.history({ scope = ":" }, { hinted = { enable = true } }) end
-
-  -- hotkeys:
-  map("<leader><leader>", files, { desc = "Files pick" })
-  map("<leader>/", reg.buffer_lines_current, { desc = "Buffer lines" })
-  map("<leader>;", buffers_hinted, { desc = "Buffers pick" }) -- home row, used often
-  -- <leader>j and <leader>ol: pick_visits_by_labels , see ak.mini.visits_harpooned
-  map("<leader>b", symbols_hinted, { desc = "Buffer symbols" })
-  map("<leader>l", builtin.grep_live, { desc = "Live grep" })
-  map("<leader>r", oldfiles_hinted, { desc = "Recent (rel)" })
-
-  -- fuzzy main. Free: fe,fi,fn,fq,fv,fy
-  map("<leader>f/", function() extra.history({ scope = "/" }) end, { desc = "'/' history" })
-  map("<leader>f:", his_cmd_hinted, { desc = "':' history" })
-  map("<leader>fa", function() extra.git_hunks({ scope = "staged" }) end, { desc = "Staged hunks" })
-  local staged_buffer = function() extra.git_hunks({ path = vim.fn.expand("%"), scope = "staged" }) end
-  map("<leader>fA", staged_buffer, { desc = "Staged hunks (current)" })
-  map("<leader>fb", builtin.buffers, { desc = "Buffer pick" })
-  map("<leader>fc", extra.git_commits, { desc = "Git commits" })
-  map("<leader>fC", function() extra.git_commits({ path = vim.fn.expand("%") }) end, { desc = "Git commits buffer" })
-  map("<leader>fd", function() extra.diagnostic({ scope = "current" }) end, { desc = "Diagnostic buffer" })
-  map("<leader>fD", function() extra.diagnostic({ scope = "all" }) end, { desc = "Diagnostic workspace" })
-  map("<leader>ff", files, { desc = "Files" })
-  map("<leader>fF", function() builtin.files(nil, { source = { cwd = H.bdir() } }) end, { desc = "Files (rel)" })
-  map("<leader>fg", builtin.grep_live, { desc = "Grep" })
-  map("<leader>fG", function() builtin.grep_live(nil, { source = { cwd = H.bdir() } }) end, { desc = "Grep (rel)" })
-  map("<leader>fh", builtin.help, { desc = "Help" })
-  map("<leader>fj", function() extra.list({ scope = "jump" }) end, { desc = "Jumps" })
-  map("<leader>fk", extra.keymaps, { desc = "Key maps" })
-  map("<leader>fl", extra.buf_lines, { desc = "Buffers lines" })
-  map("<leader>fL", function() extra.buf_lines({ scope = "current" }) end, { desc = "Buffer lines" })
-  map("<leader>fm", extra.git_hunks, { desc = "Unstaged hunks" })
-  local git_hunks = function() extra.git_hunks({ path = vim.fn.expand("%") }) end
-  map("<leader>fM", git_hunks, { desc = "Unstaged hunks (current)" })
-  map("<leader>fp", extra.hipatterns, { desc = "Hipatterns" })
-  map("<leader>fr", extra.oldfiles, { desc = "Recent" }) -- could also use fv fV for visits
-  map("<leader>fR", function() extra.oldfiles({ current_dir = true }) end, { desc = "Recent (rel)" })
-  map("<leader>fs", function() extra.lsp({ scope = "document_symbol" }) end, { desc = "Symbols buffer" })
-  map("<leader>fS", function() extra.lsp({ scope = "workspace_symbol" }) end, { desc = "Symbols workspace" })
-  -- <leader>ft: todo comments, see provide_picker and ak.config.editor.mini_hipatterns.lua
-  map("<leader>fu", builtin.resume, { desc = "Resume picker" })
-  -- In visual mode: Yank some text, :Pick grep and put(ctrl-r ")
-  map("<leader>fw", function() builtin.grep({ pattern = vim.fn.expand("<cword>") }) end, { desc = "Word" })
-  local grep_cword_cwd = function()
-    builtin.grep({ pattern = vim.fn.expand("<cword>") }, { source = { cwd = H.bdir() } })
-  end
-  map("<leader>fW", grep_cword_cwd, { desc = "Word (rel)" })
-  map("<leader>fx", function()
+  -- Fuzzy main. Free: fe,fi,fn,fq,fv,fy
+  H.mapl("f/", function() e.history({ scope = "/" }) end, { desc = "'/' history" })
+  H.mapl("f:", H.custom.his_cmd_hinted, { desc = "':' history" })
+  H.mapl("fa", function() e.git_hunks({ scope = "staged" }) end, { desc = "Staged hunks" })
+  local local_opts_staged = { path = vim.fn.expand("%"), scope = "staged" }
+  H.mapl("fA", function() e.git_hunks(local_opts_staged) end, { desc = "Staged hunks (current)" })
+  H.mapl("fb", b.buffers, { desc = "Buffer pick" })
+  H.mapl("fc", e.git_commits, { desc = "Git commits" })
+  H.mapl("fC", function() e.git_commits({ path = vim.fn.expand("%") }) end, { desc = "Git commits buffer" })
+  H.mapl("fd", function() e.diagnostic({ scope = "current" }) end, { desc = "Diagnostic buffer" })
+  H.mapl("fD", function() e.diagnostic({ scope = "all" }) end, { desc = "Diagnostic workspace" })
+  H.mapl("ff", H.files, { desc = "Files" })
+  H.mapl("fF", function() b.files(nil, { source = { cwd = H.bdir() } }) end, { desc = "Files (rel)" })
+  H.mapl("fg", b.grep_live, { desc = "Grep" })
+  H.mapl("fG", function() b.grep_live(nil, { source = { cwd = H.bdir() } }) end, { desc = "Grep (rel)" })
+  H.mapl("fh", b.help, { desc = "Help" })
+  H.mapl("fj", function() e.list({ scope = "jump" }) end, { desc = "Jumps" })
+  H.mapl("fk", e.keymaps, { desc = "Key maps" })
+  H.mapl("fl", e.buf_lines, { desc = "Buffers lines" })
+  H.mapl("fL", function() e.buf_lines({ scope = "current" }) end, { desc = "Buffer lines" })
+  H.mapl("fm", e.git_hunks, { desc = "Unstaged hunks" })
+  H.mapl("fM", function() e.git_hunks({ path = vim.fn.expand("%") }) end, { desc = "Unstaged hunks (current)" })
+  H.mapl("fp", e.hipatterns, { desc = "Hipatterns" })
+  H.mapl("fr", e.oldfiles, { desc = "Recent" })
+  H.mapl("fR", function() e.oldfiles({ current_dir = true }) end, { desc = "Recent (rel)" })
+  H.mapl("fs", function() e.lsp({ scope = "document_symbol" }) end, { desc = "Symbols buffer" })
+  H.mapl("fS", function() e.lsp({ scope = "workspace_symbol" }) end, { desc = "Symbols workspace" })
+  -- ft: todo comments, see provide_picker and ak.config.editor.mini_hipatterns.lua
+  H.mapl("fu", b.resume, { desc = "Resume picker" })
+  -- Tip: In visual mode: Yank some text, :Pick grep and put(ctrl-r ")
+  local local_opt_cword = { pattern = vim.fn.expand("<cword>") }
+  H.mapl("fw", function() b.grep(local_opt_cword) end, { desc = "Word" })
+  H.mapl("fW", function() b.grep(local_opt_cword, { source = { cwd = H.bdir() } }) end, { desc = "Word (rel)" })
+  H.mapl("fx", function()
     vim.cmd.cclose() -- In quickfix, "bql" hides the picker
-    extra.list({ scope = "quickfix" })
+    e.list({ scope = "quickfix" })
   end, { desc = "Quickfix" })
-  map("<leader>fX", function() extra.list({ scope = "location" }) end, { desc = "Loclist" })
+  H.mapl("fX", function() e.list({ scope = "location" }) end, { desc = "Loclist" })
 
-  -- fuzzy other
-  map("<leader>fo:", extra.commands, { desc = "Commands" })
-  -- <leader>foc: colors, see provide_picker and ak.deps.colors.lua
-  map("<leader>foC", function() extra.list({ scope = "change" }) end, { desc = "Changes" })
-  map("<leader>fof", builtin.files, { desc = "Files rg" })
-  map("<leader>foh", extra.hl_groups, { desc = "Highlights" })
-  map("<leader>fom", extra.marks, { desc = "Marks" })
-  map("<leader>foo", extra.options, { desc = "Options" })
-  map("<leader>for", extra.registers, { desc = "Registers" })
-  map("<leader>fot", extra.treesitter, { desc = "Treesitter" })
+  -- Fuzzy other
+  H.mapl("fo:", e.commands, { desc = "Commands" })
+  -- foc: colors, see provide_picker and ak.deps.colors.lua
+  H.mapl("foC", function() e.list({ scope = "change" }) end, { desc = "Changes" })
+  H.mapl("fof", b.files, { desc = "Files rg" })
+  H.mapl("foh", e.hl_groups, { desc = "Highlights" })
+  H.mapl("fom", e.marks, { desc = "Marks" })
+  H.mapl("foo", e.options, { desc = "Options" })
+  H.mapl("for", e.registers, { desc = "Registers" })
+  H.mapl("fot", e.treesitter, { desc = "Treesitter" })
 end
 
 -- Helper data ================================================================
 
 H.ns_id = { ak = vim.api.nvim_create_namespace("MiniPickAk") }
+H.custom = {} -- all pickers in custom meaningfully modify the opts for MiniPick.start
 
--- Copied
-H.show_with_icons = function(buf_id, items, query) MiniPick.default_show(buf_id, items, query, { show_icons = true }) end
 ---@type table<string,function>  event MiniPickStart
 H.start_hooks = {}
 ---@type table<string,function> event MiniPickStop
 H.stop_hooks = {}
-
-H.colors = function()
-  -- stylua: ignore
-  local builtins = { -- source code telescope.nvim ignore_builtins
-      "blue", "darkblue", "default", "delek", "desert", "elflord", "evening",
-      "habamax", "industry", "koehler", "lunaperche", "morning", "murphy",
-      "pablo", "peachpuff", "quiet", "retrobox", "ron", "shine", "slate",
-      "sorbet", "torte", "vim", "wildcharm", "zaibatsu", "zellner",
-  }
-
-  return vim.tbl_filter(
-    function(color) return not vim.tbl_contains(builtins, color) end,
-    vim.fn.getcompletion("", "color")
-  )
-end
-
-H.bdir = function() -- can return nil
-  if vim["bo"].buftype == "" then return vim.fn.expand("%:p:h") end
-end
 
 -- Custom pickers  ================================================================
 
 -- https://github.com/echasnovski/mini.nvim/discussions/518#discussioncomment-7373556
 -- Implements: For TODOs in a project, use builtin.grep.
 -- Note: hints are possible, but prevent preview on other items
-H.todo_comments = function(patterns) --hipatterns.config.highlighters
+H.custom.todo_comments = function(patterns) --hipatterns.config.highlighters
   local function find_todo(item)
     for _, hl in pairs(patterns) do
       local pattern = hl.pattern:sub(2) -- remove the prepending space
@@ -265,7 +179,7 @@ end
 -- Press tab for preview, and continue with ctrl-n and ctrl-p
 -- Note: hints are possible, but most relevant items are not on top
 local selected_colorscheme = nil
-H.colors_with_preview = function()
+H.custom.colors_with_preview = function()
   local on_start = function()
     selected_colorscheme = vim.g.colors_name --
   end
@@ -293,7 +207,7 @@ end
 -- https://github.com/echasnovski/mini.nvim/discussions/988
 -- Fuzzy search the current buffer with syntax highlighting
 -- Last attempt: linenr as extmarks, but no MiniPickMatchRanges highlighting
-H.buffer_lines_current = function()
+H.custom.buffer_lines_current = function()
   local show = function(buf_id, items, query, opts)
     if items == nil or #items == 0 then return end
 
@@ -327,13 +241,76 @@ H.buffer_lines_current = function()
   MiniExtra.pickers.buf_lines(local_opts, { source = { show = show } })
 end
 
-H.registry = function()
-  local items = vim.tbl_keys(MiniPick.registry)
-  table.sort(items)
-  local source = { items = items, name = "Registry", choose = function() end }
-  local chosen_picker_name = MiniPick.start({ source = source })
-  if chosen_picker_name == nil then return end
-  return MiniPick.registry[chosen_picker_name]()
+local buffer_hints = vim.split("abcdefg", "")
+H.custom.buffers_hinted = function() -- Perhaps: Add modified buffers visualization, issue 1810
+  local hinted = { enable = true, use_autosubmit = true, chars = buffer_hints }
+  MiniPick.builtin.buffers({ include_current = false }, { hinted = hinted })
+end
+
+H.custom.symbols_hinted = function()
+  MiniExtra.pickers.lsp({ scope = "document_symbol" }, { hinted = { enable = true, use_autosubmit = true } })
+end
+
+H.custom.oldfiles_hinted = function() MiniExtra.pickers.oldfiles({ current_dir = true }, { hinted = { enable = true } }) end
+
+H.custom.his_cmd_hinted = function() MiniExtra.pickers.history({ scope = ":" }, { hinted = { enable = true } }) end
+
+H.files = function() -- either files or git_files
+  local builtin = MiniPick.builtin
+  local cwd = vim.uv.cwd()
+  if cwd and cwd_cache[cwd] == nil then cwd_cache[cwd] = vim.uv.fs_stat(".git") and true or false end
+
+  local opts = {}
+  if cwd_cache[cwd] then opts.tool = "git" end
+  builtin.files(opts)
+end
+
+-- Copied
+H.show_with_icons = function(buf_id, items, query) MiniPick.default_show(buf_id, items, query, { show_icons = true }) end
+
+H.colors = function()
+  -- stylua: ignore
+  local builtins = { -- source code telescope.nvim ignore_builtins
+      "blue", "darkblue", "default", "delek", "desert", "elflord", "evening",
+      "habamax", "industry", "koehler", "lunaperche", "morning", "murphy",
+      "pablo", "peachpuff", "quiet", "retrobox", "ron", "shine", "slate",
+      "sorbet", "torte", "vim", "wildcharm", "zaibatsu", "zellner",
+  }
+
+  return vim.tbl_filter(
+    function(color) return not vim.tbl_contains(builtins, color) end,
+    vim.fn.getcompletion("", "color")
+  )
+end
+
+H.create_autocommands = function()
+  local group = vim.api.nvim_create_augroup("minipick-custom-hooks", { clear = true })
+  local function au(pattern, desc, hooks)
+    vim.api.nvim_create_autocmd({ "User" }, {
+      pattern = pattern,
+      group = group,
+      desc = desc,
+      callback = function(...)
+        local opts = MiniPick.get_picker_opts() or {}
+        if opts and opts.source then
+          local hook = hooks[opts.source.name] or function(...) end
+          hook(...)
+        end
+      end,
+    })
+  end
+  au("MiniPickStart", "Picker start hook for source.name", H.start_hooks)
+  au("MiniPickStop", "Picker stop hook for source.name", H.stop_hooks)
+end
+
+H.bdir = function() -- can return nil
+  if vim["bo"].buftype == "" then return vim.fn.expand("%:p:h") end
+end
+
+H.mapl = function(l, r, opts, mode)
+  mode = mode or "n"
+  opts["silent"] = opts.silent ~= false
+  vim.keymap.set(mode, "<leader>" .. l, r, opts)
 end
 
 -- Apply  ================================================================
