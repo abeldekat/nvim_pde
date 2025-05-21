@@ -26,7 +26,7 @@ return {
   ["nvim-pqf"] = "148ee2ca8b06d83fd9bf6f9b9497724ad39a07d6",
   ["nvim-treesitter"] = "066fd6505377e3fd4aa219e61ce94c2b8bdb0b79",
   ["nvim-treesitter-context"] = "4976d8b90401cba9b85f6861e4e5a6edef2f2086",
-  ["nvim-treesitter-textobjects"] = "a91cd95f50bf991106403cb02c5851b92e45820e",
+  ["nvim-treesitter-textobjects"] = "15f945eabde2a293ccf48eb28c214a69b643d6e1",
   ["nvim-ts-autotag"] = "a1d526af391f6aebb25a8795cbc05351ed3620b5",
   ["one-small-step-for-vimkind"] = "69c0dc61f2298862b3a38bdf3c4158c181cf15be",
   ["peek.nvim"] = "5820d937d5414baea5f586dc2a3d912a74636e5b",

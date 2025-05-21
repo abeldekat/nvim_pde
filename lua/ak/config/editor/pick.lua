@@ -1,3 +1,4 @@
+---@diagnostic disable: duplicate-set-field
 -- - If query starts with `'`, the match is exact.
 -- - If query starts with `^`, the match is exact at start.
 -- - If query ends with `$`, the match is exact at end.
@@ -5,15 +6,10 @@
 -- - Otherwise match is fuzzy.
 -- - Sorting is done to first minimize match width and then match start.
 --   Nothing more: no favoring certain places in string, etc.
-
--- No Manpages, autocommands and quickfixhis
--- Paths: No filename first option
-
 local Utils = require("ak.util")
 local H = {} -- Helper functions
 
 local function setup()
-  ---@diagnostic disable-next-line: duplicate-set-field
   vim.ui.select = function(items, opts, on_choice)
     local start_opts = { hinted = { enable = true, use_autosubmit = true } }
     return MiniPick.ui_select(items, opts, on_choice, start_opts)
@@ -55,29 +51,28 @@ H.create_autocommands = function()
   au("MiniPickStop", "Picker stop hook for source.name", H.stop_hooks)
 end
 
+-- MiniPick.registry:
+-- Place for users and extensions to manage pickers with their commonly used
+-- local options. By default contains all |MiniPick.builtin| pickers.
+-- All entries should accept only a single `local_opts` table argument.
+-- Serves as a source for |:Pick| command.
 H.add_custom_pickers = function()
+  -- Using MiniPick.builtin.grep:
   MiniPick.registry.todo_comments = H.todo_comments
+  -- Using MiniPick.start:
   MiniPick.registry.colors_with_preview = H.colors_with_preview
+  -- Using MiniExtra.pickers.buf_lines:
   MiniPick.registry.buffer_lines_current = H.buffer_lines_current
-  MiniPick.registry.buffers = H.buffers -- also overrides `:Pick buffers`
+  -- Example from the help:
+  MiniPick.registry.registry = H.registry
 end
 
 H.provide_picker = function() -- interface to picker to be used in other modules
-  local extra, custom = MiniExtra.pickers, MiniPick.registry
+  local extra, reg = MiniExtra.pickers, MiniPick.registry
 
   ---@type Picker
   local Picker = {
     keymaps = extra.keymaps,
-
-    lsp_definitions = function() -- mini.pick: no direct jump to definition(#978):
-      -- https://github.com/echasnovski/mini.nvim/issues/979
-      -- NOTE: Overridden for lua_ls, unique definition...
-      vim.lsp.buf.definition({ scope = "definition" })
-    end,
-
-    lsp_references = function() extra.lsp({ scope = "references" }) end,
-    lsp_implementations = function() extra.lsp({ scope = "implementation" }) end,
-    lsp_type_definitions = function() extra.lsp({ scope = "type_definition" }) end,
 
     -- Issue # 979 Jump using ctrl-o not correct after navigating with lsp picker(solved)
     -- Or, via the quickfix:
@@ -85,8 +80,16 @@ H.provide_picker = function() -- interface to picker to be used in other modules
     -- lsp_implementations = function() vim.lsp.buf.implementation({ reuse_win = true }) end,
     -- lsp_type_definitions = function() vim.lsp.buf.type_definition({ reuse_win = true }) end,
 
-    colors = custom.colors_with_preview,
-    todo_comments = custom.todo_comments,
+    lsp_definitions = function() -- mini.pick: no direct jump to definition(#978):
+      -- https://github.com/echasnovski/mini.nvim/issues/979
+      -- NOTE: Overridden for lua_ls, unique definition...
+      vim.lsp.buf.definition({ scope = "definition" })
+    end,
+    lsp_references = function() extra.lsp({ scope = "references" }) end,
+    lsp_implementations = function() extra.lsp({ scope = "implementation" }) end,
+    lsp_type_definitions = function() extra.lsp({ scope = "type_definition" }) end,
+    colors = reg.colors_with_preview,
+    todo_comments = reg.todo_comments,
   }
   Utils.pick.use_picker(Picker)
 end
@@ -107,24 +110,30 @@ H.add_keys = function()
     opts["silent"] = opts.silent ~= false
     vim.keymap.set(mode, l, r, opts)
   end
-  local builtin, extra, custom = MiniPick.builtin, MiniExtra.pickers, MiniPick.registry
+  local builtin, extra, reg = MiniPick.builtin, MiniExtra.pickers, MiniPick.registry
 
-  -- hotkeys:
-  map("<leader><leader>", files, { desc = "Files pick" })
-  map("<leader>/", custom.buffer_lines_current, { desc = "Buffer lines" })
-  map("<leader>;", custom.buffers, { desc = "Buffers pick" }) -- home row, used often
-  -- <leader>j and <leader>ol: pick_visits_by_labels , see ak.mini.visits_harpooned
+  local buffer_hints = vim.split("abcdefg", "")
+  local buffers_hinted = function() -- Perhaps: Add modified buffers visualization, issue 1810
+    local hinted = { enable = true, use_autosubmit = true, chars = buffer_hints }
+    MiniPick.builtin.buffers({ include_current = false }, { hinted = hinted })
+  end
   local symbols_hinted = function()
     extra.lsp({ scope = "document_symbol" }, { hinted = { enable = true, use_autosubmit = true } })
   end
+  local oldfiles_hinted = function() extra.oldfiles({ current_dir = true }, { hinted = { enable = true } }) end
+  local his_cmd_hinted = function() extra.history({ scope = ":" }, { hinted = { enable = true } }) end
+
+  -- hotkeys:
+  map("<leader><leader>", files, { desc = "Files pick" })
+  map("<leader>/", reg.buffer_lines_current, { desc = "Buffer lines" })
+  map("<leader>;", buffers_hinted, { desc = "Buffers pick" }) -- home row, used often
+  -- <leader>j and <leader>ol: pick_visits_by_labels , see ak.mini.visits_harpooned
   map("<leader>b", symbols_hinted, { desc = "Buffer symbols" })
   map("<leader>l", builtin.grep_live, { desc = "Live grep" })
-  local oldfiles_hinted = function() extra.oldfiles({ current_dir = true }, { hinted = { enable = true } }) end
   map("<leader>r", oldfiles_hinted, { desc = "Recent (rel)" })
 
   -- fuzzy main. Free: fe,fi,fn,fq,fv,fy
   map("<leader>f/", function() extra.history({ scope = "/" }) end, { desc = "'/' history" })
-  local his_cmd_hinted = function() extra.history({ scope = ":" }, { hinted = { enable = true } }) end
   map("<leader>f:", his_cmd_hinted, { desc = "':' history" })
   map("<leader>fa", function() extra.git_hunks({ scope = "staged" }) end, { desc = "Staged hunks" })
   local staged_buffer = function() extra.git_hunks({ path = vim.fn.expand("%"), scope = "staged" }) end
@@ -198,7 +207,7 @@ H.colors = function()
   }
 
   return vim.tbl_filter(
-    function(color) return not vim.tbl_contains(builtins, color) end, --
+    function(color) return not vim.tbl_contains(builtins, color) end,
     vim.fn.getcompletion("", "color")
   )
 end
@@ -318,10 +327,13 @@ H.buffer_lines_current = function()
   MiniExtra.pickers.buf_lines(local_opts, { source = { show = show } })
 end
 
-local buffer_hints = vim.split("abcdefg", "")
-H.buffers = function()
-  local hinted = { enable = true, use_autosubmit = true, chars = buffer_hints }
-  MiniPick.builtin.buffers({ include_current = false }, { hinted = hinted })
+H.registry = function()
+  local items = vim.tbl_keys(MiniPick.registry)
+  table.sort(items)
+  local source = { items = items, name = "Registry", choose = function() end }
+  local chosen_picker_name = MiniPick.start({ source = source })
+  if chosen_picker_name == nil then return end
+  return MiniPick.registry[chosen_picker_name]()
 end
 
 -- Apply  ================================================================
