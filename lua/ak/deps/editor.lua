@@ -1,10 +1,9 @@
-local Util = require("ak.util")
 local MiniDeps = require("mini.deps")
-local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
+local add, later = MiniDeps.add, MiniDeps.later
+local now_if_dir_arg = require("ak.util").opened_with_dir_argument() and MiniDeps.now or later
 local use_hardtime = true --  mini.keymap instead of hardtime...
 
-local files_now_or_later = Util.opened_with_dir_argument() and now or later
-files_now_or_later(function() require("ak.config.editor.files") end)
+now_if_dir_arg(function() require("ak.config.editor.files") end)
 
 later(function()
   -- Leap:

@@ -1,19 +1,15 @@
-local Util = require("ak.util")
 local MiniDeps = require("mini.deps")
 local add, later = MiniDeps.add, MiniDeps.later
-local now = MiniDeps.now
+local now_if_args = require("ak.util").opened_with_arguments() and MiniDeps.now or later
 
-local function treesitter()
-  local ts_spec = {
+now_if_args(function()
+  add({
     source = "nvim-treesitter/nvim-treesitter",
     checkout = "master",
     hooks = { post_checkout = function() vim.cmd("TSUpdate") end },
-  }
-  add(ts_spec)
+  })
   require("ak.config.treesitter.treesitter")
-end
--- stylua: ignore
-if Util.opened_with_arguments() then now(treesitter) else later(treesitter) end
+end)
 
 later(function()
   add("nvim-treesitter/nvim-treesitter-textobjects")

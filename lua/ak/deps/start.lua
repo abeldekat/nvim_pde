@@ -1,8 +1,7 @@
 local MiniDeps = require("mini.deps")
 local Util = require("ak.util")
 local now, later = MiniDeps.now, MiniDeps.later
-
-local function icons() require("ak.config.start.icons") end -- cmp, explorer, etc...
+local now_if_dir_arg = Util.opened_with_dir_argument() and now or later
 
 now(function()
   require("ak.config.start.options_ak")
@@ -10,11 +9,7 @@ now(function()
   require("ak.config.start.misc") -- ie last cursor position autocmd
 end)
 
-if Util.opened_with_dir_argument() then
-  now(icons)
-else
-  later(icons)
-end
+now_if_dir_arg(function() require("ak.config.start.icons") end)
 
 later(function()
   require("ak.config.start.keymaps_ak")
