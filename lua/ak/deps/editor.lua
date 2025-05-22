@@ -1,19 +1,23 @@
 local MiniDeps = require("mini.deps")
 local add, later = MiniDeps.add, MiniDeps.later
 local now_if_dir_arg = require("ak.util").opened_with_dir_argument() and MiniDeps.now or later
-local use_hardtime = true --  mini.keymap instead of hardtime...
+local use_hardtime_mini = true
+local use_leap = false
 
 now_if_dir_arg(function() require("ak.config.editor.files") end)
 
 later(function()
-  -- Leap:
-  add("ggandor/leap.nvim")
-  require("ak.config.editor.leap")
+  if use_leap then
+    add("ggandor/leap.nvim")
+    require("ak.config.editor.leap")
+  else
+    require("ak.config.editor.jump2d")
+  end
 
   -- Mini:
   require("ak.config.editor.clue")
   require("ak.config.editor.cursorword")
-  if use_hardtime then require("ak.config.editor.hardtime") end
+  if use_hardtime_mini then require("ak.config.editor.hardtime_mini") end
   require("ak.config.editor.hipatterns")
   require("ak.config.editor.git")
   require("ak.config.editor.diff")
