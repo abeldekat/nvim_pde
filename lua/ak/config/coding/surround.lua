@@ -1,12 +1,7 @@
 local MiniSurround = require("mini.surround")
-local using_leap = true
-
-local mappings_with_jump2d = { -- use substitute mnemonic for consistency with mini.operators
-  replace = "ss",
-}
 
 -- asdf cannot be used for marks. Easy to remember, adjacent on keyboard.
-local mappings_with_leap = {
+local mappings_without_s_key = {
   add = "ma",
   delete = "md",
   find = "mf", -- Find surrounding (to the right)
@@ -17,7 +12,7 @@ local mappings_with_leap = {
 }
 
 local opts = {
-  mappings = using_leap and mappings_with_leap or mappings_with_jump2d,
+  mappings = mappings_without_s_key,
 }
 
 MiniSurround.setup(opts)

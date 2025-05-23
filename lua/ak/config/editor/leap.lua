@@ -1,3 +1,5 @@
+-- WIP: Replace with mini.jump2d
+
 -- Cannot use gs and gS in both normal and visual mode because of mini.operators...
 -- It is possible to use "gs" in operator pending mode though!
 

@@ -8,7 +8,7 @@ now_if_dir_arg(function() require("ak.config.editor.files") end)
 
 later(function()
   if use_leap then
-    add("ggandor/leap.nvim")
+    add({ source = "ggandor/leap.nvim", checkout = "189102b07cdd" })
     require("ak.config.editor.leap")
   else
     require("ak.config.editor.jump2d")

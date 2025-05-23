@@ -21,7 +21,6 @@ end
 local getleapedstr = function(msg) -- gets two chars
   local _, char1 = pcall(vim.fn.getcharstr)
   local _, char2 = pcall(vim.fn.getcharstr)
-
   return char1 .. char2
 end
 
@@ -38,8 +37,8 @@ require("mini.jump2d").setup({
 })
 
 local start = function() -- two chars, based on MiniJump2d.builtin_opts.single_character
-  local leaped = user_input_opts(function() return getleapedstr() end)
-  MiniJump2d.start(leaped)
+  local leaped_table = user_input_opts(function() return getleapedstr() end)
+  MiniJump2d.start(leaped_table)
 end
 
 -- No repeat in operator pending mode... See mini.jump2d H.apply_config.

@@ -56,7 +56,7 @@ I touch type using the right hand
 in combination with the forefinger of the left hand
 
 - Leader: `space`
-- Main plugins: [ak.mini.visits_harpooned], [mini.files], [mini.pick] and [leap]
+- Main plugins: [ak.mini.visits_harpooned], [mini.files], [mini.pick] and [mini.jump2d]
 - Menu: [mini.clue]
 
 ### VisitsHarpooned
@@ -143,31 +143,16 @@ Solution: Use the `m` key in combination with `asdf`,
 adjacent keys on a qwerty keyboard.
 Key `ms` is a mnemonic for `surround substitute`, performing a surround replace.
 
-### leap
-
-- `s`: Bidirectional
-- `g/`: Leap from window("leap search")
-
-Operator pending mode:
-
-- s: Leap forward
-- gs: Leap backward
-
-Extras:
-
-- Remote operations: `gl`("go leap remote") and `r`("remote", in operator pending mode)
-- Incremental treesitter node selection: `S`(like flash.nvim)
-
 ## Mini
 
 Many of the excellent modules included in [mini.nvim] are used in this config:
 
 `ai`, `align`, `animate`, `base16`, `basics`, `bracketed`,
 `clue`, `completion`, `cursorword`, `deps`, `diff`, `extra`,
-`git`, `files`, `hipatterns`, `hue`, `icons`, `indentscope`,
-`keymap`, `misc`, `move`, `notify`, `operators`, `pairs`,
-`pick`, `snippets`, `splitjoin`, `starter`, `statusline`, `surround`,
-`visits`
+`files`, `git`, `hipatterns`, `hue`, `icons`, `indentscope`,
+`jump2d`, `keymap`, `misc`, `move`, `notify`, `operators`,
+`pairs`, `pick`, `snippets`, `splitjoin`, `starter`, `statusline`,
+`surround`, `visits`
 
 Relevant discussions:
 
@@ -217,6 +202,7 @@ This repo uses code and ideas from the following repositories:
 [ak.util]: lua/ak/util
 [leader h]: lua/ak/util/color.lua
 [mini.nvim]: https://github.com/echasnovski/mini.nvim
+[mini.jump2d]: https://github.com/echasnovski/mini.jump2d
 [mini.files]: https://github.com/echasnovski/mini.files
 [mini.operators]: https://github.com/echasnovski/mini.operators
 [mini.surround]: https://github.com/echasnovski/mini.surround
@@ -226,7 +212,6 @@ This repo uses code and ideas from the following repositories:
 [ak.mini.visits_harpooned]: lua/ak/mini/visits_harpooned.lua
 [ak.mini.harpoonline]: lua/ak/mini/visits_harpooned_line.lua
 [ak.mini.pick_hinted]: lua/ak/mini/pick_hinted.lua
-[leap]: https://github.com/ggandor/leap.nvim
 [peek.nvim]: https://github.com/toppair/peek.nvim
 [deno]: https://deno.land
 [with_submodules]: https://github.com/abeldekat/nvim_pde/tree/with_submodules
