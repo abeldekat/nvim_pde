@@ -50,7 +50,7 @@ H.to_provide = function() -- interface to picker to be used in other modules
     lsp_references = function() e.lsp({ scope = "references" }) end,
     lsp_implementations = function() e.lsp({ scope = "implementation" }) end,
     lsp_type_definitions = function() e.lsp({ scope = "type_definition" }) end,
-    colors = H.custom.colors_with_preview,
+    colors = function() e.colorschemes({ names = H.colors_to_use() }, {}) end,
     todo_comments = H.custom.todo_comments,
   }
   Utils.pick.use_picker(Picker)
@@ -127,8 +127,6 @@ H.custom = {} -- all pickers in custom meaningfully modify the opts for MiniPick
 
 ---@type table<string,function>  event MiniPickStart
 H.start_hooks = {}
----@type table<string,function> event MiniPickStop
-H.stop_hooks = {}
 
 -- Custom pickers  ================================================================
 
@@ -172,36 +170,6 @@ H.custom.todo_comments = function(patterns) --hipatterns.config.highlighters
     { tool = "rg", pattern = search_regex(vim.tbl_keys(patterns)) },
     { source = { name = name, show = show } }
   )
-end
-
--- https://github.com/echasnovski/mini.nvim/discussions/951
--- Previewing multiple themes:
--- Press tab for preview, and continue with ctrl-n and ctrl-p
--- Note: hints are possible, but most relevant items are not on top
-local selected_colorscheme = nil
-H.custom.colors_with_preview = function()
-  local on_start = function()
-    selected_colorscheme = vim.g.colors_name --
-  end
-  local on_stop = function()
-    vim.schedule(function() vim.cmd.colorscheme(selected_colorscheme) end)
-  end
-
-  local name = "Colors with preview"
-  if H.start_hooks[name] == nil then H.start_hooks[name] = on_start end
-  if H.stop_hooks[name] == nil then H.stop_hooks[name] = on_stop end
-  return MiniPick.start({
-    hinted = { enable = true },
-    source = {
-      name = name,
-      items = H.colors(),
-      choose = function(item) selected_colorscheme = item end,
-      preview = function(buf_id, item)
-        vim.cmd.colorscheme(item)
-        vim.api.nvim_buf_set_lines(buf_id, 0, -1, false, { item })
-      end,
-    },
-  })
 end
 
 -- https://github.com/echasnovski/mini.nvim/discussions/988
@@ -268,7 +236,7 @@ end
 -- Copied
 H.show_with_icons = function(buf_id, items, query) MiniPick.default_show(buf_id, items, query, { show_icons = true }) end
 
-H.colors = function()
+H.colors_to_use = function()
   -- stylua: ignore
   local builtins = { -- source code telescope.nvim ignore_builtins
       "blue", "darkblue", "default", "delek", "desert", "elflord", "evening",
@@ -300,7 +268,6 @@ H.create_autocommands = function()
     })
   end
   au("MiniPickStart", "Picker start hook for source.name", H.start_hooks)
-  au("MiniPickStop", "Picker stop hook for source.name", H.stop_hooks)
 end
 
 H.bdir = function() -- can return nil
