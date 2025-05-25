@@ -1,45 +1,43 @@
 -- Feature request Improve 'mini.jump2d' default config and jumping experience #1818
--- minor: loss of leap's autojump to nearest on two chars. Requires "safe labels"
--- minor: match not case-insensite
--- inconvenient: the labels don't start from the closest match, but top down
+--
+-- Difference: loss of leap's autojump to nearest on two chars. Requires "safe labels"
+-- Difference: match not case-insensite
+-- Difference: the labels don't start from the closest match, but top down
 
-local user_input_opts = function(input_fun) -- Copied
+local user_input_opts = function(input_fun) -- copied
   local res = {
     spotter = function() return {} end,
     allowed_lines = { blank = false, fold = false },
   }
 
-  res.hooks = {
-    before_start = function()
-      local input = input_fun()
-      if input ~= nil then res.spotter = MiniJump2d.gen_spotter.pattern(vim.pesc(input)) end
-    end,
-  }
+  local before_start = function()
+    local input = input_fun()
+    -- Allow user to cancel input and not show any jumping spots
+    if input == nil then return end
+    res.spotter = MiniJump2d.gen_spotter.pattern(vim.pesc(input))
+  end
+  res.hooks = { before_start = before_start }
   return res
 end
 
-local getleapedstr = function(msg) -- gets two chars
-  local _, char1 = pcall(vim.fn.getcharstr)
-  local _, char2 = pcall(vim.fn.getcharstr)
-  return char1 .. char2
+local getcharstr = function() -- copied H.getcharstr and modified
+  local _, char = pcall(vim.fn.getcharstr)
+  return char
 end
 
 require("mini.jump2d").setup({
-  allowed_lines = {
-    blank = false, -- type j/k after the jump, or use paragraph motions...
-    cursor_at = false, -- use fFtT on current line.
-  },
-  allowed_windows = { not_current = false }, -- I don't work with split windows that much
+  -- character spotter defaults to blank = false: -- type j/k after the jump, or use paragraph motions...
+  allowed_lines = { cursor_at = false }, -- use fFtT on current line.
   labels = "jkl;miosde",
   mappings = { start_jumping = "" },
   silent = true,
   view = { dim = true, n_steps_ahead = 1 },
 })
 
-local start = function() -- two chars, based on MiniJump2d.builtin_opts.single_character
-  local leaped_table = user_input_opts(function() return getleapedstr() end)
-  MiniJump2d.start(leaped_table)
-end
+-- See MiniJump2d.builtin_opts.single_character:
+local double_character = user_input_opts(function() return getcharstr() .. getcharstr() end)
 
 -- No repeat in operator pending mode... See mini.jump2d H.apply_config.
-vim.keymap.set({ "n", "x", "o" }, "s", start, { desc = "Start 2d jumping" })
+local modes = { "n", "x", "o" }
+local desc = "Start 2d jumping"
+vim.keymap.set(modes, "s", function() MiniJump2d.start(double_character) end, { desc = desc })
