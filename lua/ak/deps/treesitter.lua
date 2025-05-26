@@ -15,9 +15,6 @@ later(function()
   add("nvim-treesitter/nvim-treesitter-textobjects")
   require("ak.config.treesitter.textobjects")
 
-  add("windwp/nvim-ts-autotag")
-  require("ak.config.treesitter.autotag")
-
   add("nvim-treesitter/nvim-treesitter-context")
   require("ak.config.treesitter.context")
 end)

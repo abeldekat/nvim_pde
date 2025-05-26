@@ -7,10 +7,11 @@ local use_leap = false
 now_if_dir_arg(function() require("ak.config.editor.files") end)
 
 later(function()
+  add({ source = "ggandor/leap.nvim" })
   if use_leap then
-    add({ source = "ggandor/leap.nvim", checkout = "189102b07cdd" })
     require("ak.config.editor.leap")
   else
+    require("ak.config.editor.leap_treesitter") -- to be replaced by mini.hierarchy, see issue 1818
     require("ak.config.editor.jump2d")
   end
 

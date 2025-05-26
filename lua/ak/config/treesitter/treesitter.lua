@@ -1,8 +1,6 @@
 -- The query editor can be opened by pressing o in the :InspectTree window,
 -- with the :EditQuery command, or by calling vim.treesitter.query.edit() directly.
 
----@type TSConfig
----@diagnostic disable-next-line: missing-fields
 local opts = {
   highlight = { enable = true, disable = { "latex" } },
   indent = { enable = true },
@@ -52,24 +50,6 @@ local opts = {
     "gomod",
     "gowork",
     "gosum",
-  },
-  -- If a function spans more than one page, leap's incremental selection
-  -- cannot select outside the visible page...
-  incremental_selection = {
-    enable = true, -- using default keymaps gnn
-    -- Normal mode:
-    -- gnn : "Start selecting [n]odes with [n]vim treesitter"
-    -- Visual mode, contextual:
-    -- grn : "Inc[r]ement selection to named [n]ode"
-    -- grm : "Sh[r]ink selection to previous named node" (m is next to n on keyboard)
-    -- grc : "Inc[r]ement selection to surrounding s[c]ope"
-    --
-    -- keymaps = { -- "C-space" is not usable in tmux...
-    --   init_selection = "<C-space>", -- gnn
-    --   node_incremental = "<C-space>", -- grn
-    --   scope_incremental = false, -- grc
-    --   node_decremental = "<bs>", -- grm
-    -- },
   },
 }
 require("nvim-treesitter.configs").setup(opts)
