@@ -49,6 +49,7 @@ rm -rf ~/.config/ak
 ```
 
 Note: For [peek.nvim], [deno] needs to be installed.
+Note: For [tree-sitter], the CLI must be installed.
 
 ## Workflow
 
@@ -216,3 +217,4 @@ This repo uses code and ideas from the following repositories:
 [deno]: https://deno.land
 [with_submodules]: https://github.com/abeldekat/nvim_pde/tree/with_submodules
 [with_lazynvim]: https://github.com/abeldekat/nvim_pde/tree/with_lazynvim
+[tree-sitter]: https://github.com/tree-sitter/tree-sitter

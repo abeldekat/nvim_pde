@@ -28,7 +28,6 @@ o.tabstop = 2 -- number of spaces tabs count for
 o.virtualedit = "block" -- allow going past the end of line in visual block mode
 
 -- Folds ======================================================================
--- o.foldmethod = "expr" o.foldexpr = "nvim_treesitter#foldexpr()"
 o.foldmethod = "indent"
 o.foldlevel = 99 -- 1: display all folds except top ones
 o.foldnestmax = 10 -- create folds only for some number of nested levels

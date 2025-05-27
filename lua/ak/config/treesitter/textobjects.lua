@@ -110,7 +110,6 @@ local function toggle_repeatable_move()
 end
 
 vim.keymap.set("n", "<leader>uM", toggle_repeatable_move, { desc = "Toggle treesitter repeatable move" })
--- If treesitter is already loaded, we need to run config again for textobjects:
+
 -- In diff mode, use the default vim text objects c & C instead of the treesitter ones.
----@diagnostic disable-next-line: missing-fields
-if not vim.wo.diff then require("nvim-treesitter.configs").setup({ textobjects = get_opts() }) end
+if not vim.wo.diff then require("nvim-treesitter-textobjects").setup(get_opts()) end
