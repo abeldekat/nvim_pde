@@ -8,7 +8,7 @@
 
 -- ron: rusty object notation, rasi: rofi, rst: python
 -- stylua: ignore
-local ensure_installed = { -- 34
+local ensure_installed = { -- 44
   "awk", "bash", "bibtex", "c", "css", "diff",
   "git_config", "gitcommit", "git_rebase", "gitignore", "gitattributes", "go",
   "gomod", "gowork", "gosum", "html", "javascript", "jsdoc",
