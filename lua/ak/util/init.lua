@@ -29,19 +29,6 @@ setmetatable(M, {
   end,
 })
 
-local argc = vim.fn.argc()
-local has_one_single_dir_arg = (function() -- explorer
-  if argc == 1 then
-    ---@diagnostic disable-next-line: param-type-mismatch
-    local stat = vim.uv.fs_stat(vim.fn.argv(0))
-    if stat and stat.type == "directory" then return true end
-  end
-  return false
-end)()
-
-M.opened_with_arguments = function() return argc > 0 end
-M.opened_with_dir_argument = function() return has_one_single_dir_arg end
-
 M.full_path_of_current_buffer = function()
   return vim.fn.expand("%:p") -- /home/user....
 end

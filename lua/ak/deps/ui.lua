@@ -1,11 +1,11 @@
 local Util = require("ak.util")
 local MiniDeps = require("mini.deps")
 local later = MiniDeps.later
-local now_if_no_arguments = Util.opened_with_arguments() and function() end or MiniDeps.now
+local now_only_if_no_arguments = vim.fn.argc(-1) == 0 and MiniDeps.now or function() end
 
 vim.o.statusline = " " -- wait till statusline plugin is loaded
 
-now_if_no_arguments(function()
+now_only_if_no_arguments(function()
   local deps_cmd = function(cmd)
     Util.deps.load_registered()
     vim.cmd(cmd)

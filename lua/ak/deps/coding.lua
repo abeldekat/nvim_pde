@@ -1,5 +1,4 @@
 local Util = require("ak.util")
-local register = Util.deps.register
 local MiniDeps = require("mini.deps")
 local add, later = MiniDeps.add, MiniDeps.later
 local blink_version = "v1.3.1" -- nil builds from source
@@ -40,6 +39,9 @@ later(function()
 
   local completion_setup = completion_providers[Util.completion]
   if completion_setup then completion_setup() end
+
+  add({ source = "nvim-treesitter/nvim-treesitter-textobjects", checkout = "main" })
+  require("ak.config.coding.textobjects_treesitter")
 
   if Util.use_mini_ai then require("ak.config.coding.ai") end
   require("ak.config.coding.align")

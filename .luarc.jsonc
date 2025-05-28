@@ -32,25 +32,21 @@
 
       //// start
       "$XDG_DATA_HOME/nvim/site/pack/deps/start/mini.nvim/lua",
+      //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-treesitter/lua",
 
       //// colors: no completion needed
-
-      //// treesitter
-      //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-treesitter/lua",
-      //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-treesitter-context/lua",
-      //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-treesitter-textobjects/lua",
-      //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-ts-autotag/lua",
 
       //// coding:
       //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/blink.cmp/lua",
       //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/friendly-snippets/lua",
       //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/dial.nvim/lua",
+      //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-treesitter-textobjects/lua",
 
       //// editor
       //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/leap.nvim/lua",
       //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/toggleterm.nvim/lua",
-      //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-bqf/lua",
-      //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-pqf/lua",
+      //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/quicker.nvim/lua",
+      //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-treesitter-context/lua",
 
       //// ui
 

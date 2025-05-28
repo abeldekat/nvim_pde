@@ -30,7 +30,6 @@ end
 local modules = {
   "ak.deps.start",
   "ak.deps.colors",
-  "ak.deps.treesitter",
   "ak.deps.coding",
   "ak.deps.editor",
   "ak.deps.ui",

@@ -1,4 +1,3 @@
-local Util = require("ak.util")
 local MiniDeps = require("mini.deps")
 local add, later = MiniDeps.add, MiniDeps.later
 local use_mason = false
@@ -13,11 +12,12 @@ later(function()
   add("neovim/nvim-lspconfig")
   require("ak.config.lang.lsp")
 
-  if not Util.opened_with_arguments() then return end
+  if vim.fn.argc(-1) == 0 then return end -- dashboard
 
   -- The lsp does not attach when directly opening a file:
   local ft = vim.bo.filetype
-  if ft and ft ~= "minifiles" then
+  local explorers = { minifiles = true, netrw = true }
+  if ft and explorers[ft] then
     vim.api.nvim_exec_autocmds("FileType", {
       modeline = false,
       pattern = vim.bo.filetype,
