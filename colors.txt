@@ -18,7 +18,6 @@ nightfox
 nordfox
 randomhue
 rose-pine
-sonokai
 terafox
 tokyonight
 winterhue

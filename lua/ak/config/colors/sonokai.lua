@@ -1,3 +1,6 @@
+-- Not actively used...
+-- Add to colors.txt: sonokai
+-- Last commit downloaded: "f59c796780655c3b9da442d310ad2f2d735f2e56"
 local Utils = require("ak.util")
 
 -- monokai variations

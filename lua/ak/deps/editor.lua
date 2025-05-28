@@ -26,8 +26,8 @@ later(function()
   require("ak.config.editor.visits") -- like harpoon, also uses mini.pick
 
   -- Other:
-  add({ source = "kevinhwang91/nvim-bqf", depends = { { source = "yorickpeterse/nvim-pqf" } } })
-  require("ak.config.editor.quickfix")
+  add("stevearc/quicker.nvim")
+  require("ak.config.editor.quicker")
   add("akinsho/toggleterm.nvim")
   require("ak.config.editor.toggleterm")
 end)

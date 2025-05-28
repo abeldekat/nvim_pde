@@ -12,7 +12,6 @@ local colors = {
       { source = "EdenEast/nightfox.nvim", name = "colors_nightfox" },
       { source = "ribru17/bamboo.nvim", name = "colors_bamboo" },
       { source = "savq/melange-nvim", name = "colors_melange" },
-      { source = "sainnhe/sonokai", name = "colors_sonokai" },
       { source = "sainnhe/everforest", name = "colors_everforest" },
       { source = "sainnhe/gruvbox-material", name = "colors_gruvbox-material" },
       { source = "folke/tokyonight.nvim", name = "colors_tokyonight" },
@@ -22,14 +21,15 @@ local colors = {
 
   two = function()
     return {
-      --     { source = "navarasu/onedark.nvim", name = "colors_onedark" },
-      --     { source = "rebelot/kanagawa.nvim", name = "colors_kanagawa" },
-      --     { source = "sainnhe/edge", name = "colors_edge" },
-      --     { source = "craftzdog/solarized-osaka.nvim", name = "colors_solarized-osaka" },
-      --     { source = "ellisonleao/gruvbox.nvim", name = "colors_gruvbox" },
-      --     { source = "Shatur/neovim-ayu", name = "colors_ayu" },
-      --     { source = "lifepillar/vim-solarized8", name = "colors_solarized8", checkout = "neovim" },
-      --     { source = "ronisbr/nano-theme.nvim", name = "colors_nano-theme" },
+      -- { source = "sainnhe/sonokai", name = "colors_sonokai" },
+      -- { source = "navarasu/onedark.nvim", name = "colors_onedark" },
+      -- { source = "rebelot/kanagawa.nvim", name = "colors_kanagawa" },
+      -- { source = "sainnhe/edge", name = "colors_edge" },
+      -- { source = "craftzdog/solarized-osaka.nvim", name = "colors_solarized-osaka" },
+      -- { source = "ellisonleao/gruvbox.nvim", name = "colors_gruvbox" },
+      -- { source = "Shatur/neovim-ayu", name = "colors_ayu" },
+      -- { source = "lifepillar/vim-solarized8", name = "colors_solarized8", checkout = "neovim" },
+      -- { source = "ronisbr/nano-theme.nvim", name = "colors_nano-theme" },
     }
   end,
 }

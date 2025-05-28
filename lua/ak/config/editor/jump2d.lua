@@ -40,4 +40,5 @@ local double_character = user_input_opts(function() return getcharstr() .. getch
 -- No repeat in operator pending mode... See mini.jump2d H.apply_config.
 local modes = { "n", "x", "o" }
 local desc = "Start 2d jumping"
+-- vim.keymap.set(modes, "s", function() MiniJump2d.start(MiniJump2d.builtin_opts.single_character) end, { desc = desc })
 vim.keymap.set(modes, "s", function() MiniJump2d.start(double_character) end, { desc = desc })
