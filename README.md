@@ -16,10 +16,10 @@ My _personal development environment_ for Neovim
 
 ## Structure
 
-- `init`: Uses `:h vim.loader` and calls `ak.init`
-- [ak.init]: Invoke [ak.start_using_mini_deps]
-- [ak.deps]: Load plugins
-- [ak.config]: All setup for plugins, options, keys, auto commands, and colors
+- `init`: Use `:h vim.loader` and call `ak.init`
+- [ak.init]: Load all modules in [ak.deps]
+- [ak.deps]: Download and activate plugins, load modules in [ak.config]
+- [ak.config]: Configure options, keys, auto commands, colors and plugins
 - [ak.mini]: Internal plugins [ak.mini.visits_harpooned] and [ak.mini.pick_hinted]
 - [ak.util]: Shared code
 
@@ -195,7 +195,6 @@ This repo uses code and ideas from the following repositories:
 [scripts]: https://github.com/abeldekat/scripts
 [tmux-sessionizer]: https://github.com/abeldekat/scripts/blob/main/tmux-sessionizer
 [ak.init]: lua/ak/init.lua
-[ak.start_using_mini_deps]: lua/ak/start_using_mini_deps.lua
 [ak.deps]: lua/ak/deps
 [ak.config]: lua/ak/config
 [ak.mini]: lua/ak/mini
