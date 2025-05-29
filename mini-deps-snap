@@ -20,7 +20,7 @@ return {
   ["nvim-lint"] = "b47cbb249351873e3a571751c3fb66ed6369852f",
   ["nvim-lspconfig"] = "b8e7957bde4cbb3cb25a13a62548f7c273b026e9",
   ["nvim-nio"] = "21f5324bfac14e22ba26553caf69ec76ae8a7662",
-  ["nvim-treesitter"] = "ce903fde5d36d7955d34faaf0b812a186417e746",
+  ["nvim-treesitter"] = "ff770d718b34db10e33d18594153b4d1e0954882",
   ["nvim-treesitter-context"] = "ed1cf48d5af252248c55f50b9427e8ce883a2c6b",
   ["nvim-treesitter-textobjects"] = "fa32a45fdbab9c9c3bda9ecec9b12dddb221b927",
   ["one-small-step-for-vimkind"] = "76642dc962bcfafe5dcc693d95a61c29845f6127",
