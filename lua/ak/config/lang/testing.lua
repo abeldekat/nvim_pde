@@ -5,7 +5,7 @@ local get_opts = function()
     quickfix = {
       open = function() vim.cmd("copen") end,
     },
-    adapters = { require("rustaceanvim.neotest") },
+    -- adapters = { require("rustaceanvim.neotest") },
   }
 end
 

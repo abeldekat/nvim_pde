@@ -1,3 +1,4 @@
+-- Appearance
 local Util = require("ak.util")
 local MiniDeps = require("mini.deps")
 local later = MiniDeps.later
@@ -22,6 +23,8 @@ end)
 
 later(function()
   require("ak.config.ui.statusline")
-  require("ak.config.ui.indentscope")
   require("ak.config.ui.animate")
+  require("ak.config.ui.cursorword")
+  require("ak.config.ui.indentscope")
+  require("ak.config.ui.hipatterns")
 end)

@@ -1,3 +1,4 @@
+-- General workflow...
 local MiniDeps = require("mini.deps")
 local add, later = MiniDeps.add, MiniDeps.later
 local use_hardtime_mini = true
@@ -13,11 +14,10 @@ later(function()
   end
 
   -- Mini:
+  require("ak.config.editor.bracketed")
   require("ak.config.editor.clue")
-  require("ak.config.editor.cursorword")
   if use_hardtime_mini then require("ak.config.editor.hardtime_mini") end
   require("ak.config.editor.files")
-  require("ak.config.editor.hipatterns")
   require("ak.config.editor.git")
   require("ak.config.editor.diff")
   require("ak.config.editor.pick")
