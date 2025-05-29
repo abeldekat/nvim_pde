@@ -4,7 +4,7 @@
 local H = {}
 local setup = function()
   local config = {
-    content = { filter = H.filter_hide }, -- no dotfiles by default
+    content = { filter = H.filter_show },
     mappings = { go_in = "L", go_in_plus = "l" }, -- close explorer after opening file with `l`
 
     -- More like oil: By default, don't add more windows
@@ -91,7 +91,7 @@ H.create_autocommmands = function()
   end)
 end
 
-H.show_dotfiles = false
+H.show_dotfiles = true
 H.filter_show = function(_) return true end
 H.filter_hide = function(fs_entry) return not vim.startswith(fs_entry.name, ".") end
 H.toggle_dotfiles = function()
