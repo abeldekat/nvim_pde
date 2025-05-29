@@ -62,5 +62,7 @@ to_gh:
 	@rsync -av lua ../nvimak
 	@rm -rf ../nvimak/queries
 	@rsync -av queries ../nvimak
+	@rm -rf ../nvimak/plugin
+	@rsync -av plugin ../nvimak
 	@rm -rf ../nvimak/snippets
 	@rsync -av snippets ../nvimak

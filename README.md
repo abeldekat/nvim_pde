@@ -14,15 +14,6 @@ My _personal development environment_ for Neovim
 >
 > Tag [with_lazynvim] references the version containing `lazy.nvim` and `mini.deps`
 
-## Structure
-
-- `init`: Use `:h vim.loader` and call `ak.init`
-- [ak.init]: Load all modules in [ak.deps]
-- [ak.deps]: Download and activate plugins, load modules in [ak.config]
-- [ak.config]: Configure options, keys, auto commands, colors and plugins
-- [ak.mini]: Internal plugins [ak.mini.visits_harpooned] and [ak.mini.pick_hinted]
-- [ak.util]: Shared code
-
 ## Install
 
 > Requirements: Neovim latest version or nightly.
@@ -194,11 +185,6 @@ This repo uses code and ideas from the following repositories:
 [tmuxp]: https://github.com/tmux-python/tmuxp
 [scripts]: https://github.com/abeldekat/scripts
 [tmux-sessionizer]: https://github.com/abeldekat/scripts/blob/main/tmux-sessionizer
-[ak.init]: lua/ak/init.lua
-[ak.deps]: lua/ak/deps
-[ak.config]: lua/ak/config
-[ak.mini]: lua/ak/mini
-[ak.util]: lua/ak/util
 [leader h]: lua/ak/util/color.lua
 [mini.nvim]: https://github.com/echasnovski/mini.nvim
 [mini.jump2d]: https://github.com/echasnovski/mini.jump2d
