@@ -7,8 +7,6 @@ local setup = function()
     content = { filter = H.filter_show },
     mappings = { go_in = "L", go_in_plus = "l" }, -- close explorer after opening file with `l`
 
-    -- More like oil: By default, don't add more windows
-    -- Easier for the eyes to focus on one single spot.
     windows = { max_number = H.max_windows, preview = H.can_preview() },
   }
   local minifiles = require("mini.files")
@@ -137,7 +135,7 @@ end
 H.can_preview = function() return H.max_windows > 1 end
 
 H.min_windows = 2
-H.max_windows = H.min_windows -- math.huge
+H.max_windows = math.huge -- H.min_windows
 
 H.nmap_leader = function(suffix, rhs, desc, opts)
   opts = opts or {}

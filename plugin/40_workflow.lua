@@ -1,4 +1,3 @@
--- General workflow...
 local MiniDeps = require("mini.deps")
 local add, later = MiniDeps.add, MiniDeps.later
 local use_hardtime_mini = true

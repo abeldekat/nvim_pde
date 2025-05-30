@@ -1,4 +1,3 @@
--- Appearance
 local Util = require("ak.util")
 local MiniDeps = require("mini.deps")
 local later = MiniDeps.later
