@@ -195,7 +195,7 @@ This repo uses code and ideas from the following repositories:
 [mini.visits]: https://github.com/echasnovski/mini.visits
 [mini.clue]: https://github.com/echasnovski/mini.clue
 [ak.mini.visits_harpooned]: lua/ak/mini/visits_harpooned.lua
-[ak.mini.harpoonline]: lua/ak/mini/visits_harpooned_line.lua
+[ak.mini.harpoonline]: lua/ak/mini/harpoonline.lua
 [ak.mini.pick_hinted]: lua/ak/mini/pick_hinted.lua
 [peek.nvim]: https://github.com/toppair/peek.nvim
 [deno]: https://deno.land
