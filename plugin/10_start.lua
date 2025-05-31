@@ -9,12 +9,13 @@ now(function()
 end)
 
 now_if_args(function() -- no need for treesitter or icons on the dashboard
+  local ts_ak = require("ak.config.start.treesitter")
   add({
     source = "nvim-treesitter/nvim-treesitter",
     checkout = "main",
-    hooks = { post_checkout = function() vim.cmd("TSUpdate") end },
+    hooks = { post_checkout = ts_ak.install_or_update },
   })
-  require("ak.config.start.treesitter")
+  ts_ak.setup()
 end)
 
 later(function()

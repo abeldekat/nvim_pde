@@ -17,3 +17,6 @@ local opts = {
   sort = { prefix = "gS" }, --> "go sort", used rarely.
 }
 require("mini.operators").setup(opts)
+
+-- Discussion 1835 duplicate and comment:
+vim.keymap.set("n", "gCC", "gmmgcck", { remap = true, desc = "Duplicate and comment line" })

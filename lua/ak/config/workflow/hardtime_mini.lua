@@ -17,7 +17,7 @@ local notify_many_keys = function(key)
     if do_action then return end
 
     do_action = true
-    vim.notify(string.format("After all these years, still too many %s. \n Shutdown in %ds!", key, action_delay))
+    vim.notify(string.format("Too many %s. \n **Shutdown** in %ds!", key, action_delay))
 
     local shutdown = vim.schedule_wrap(function()
       vim.cmd("qa!")
