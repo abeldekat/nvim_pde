@@ -1,7 +1,7 @@
 local MiniDeps = require("mini.deps")
 local add, later = MiniDeps.add, MiniDeps.later
 local use_hardtime_mini = true
-local use_leap = false
+local use_leap = true
 
 later(function()
   add({ source = "ggandor/leap.nvim" })

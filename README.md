@@ -47,7 +47,7 @@ I touch type using the right hand
 in combination with the forefinger of the left hand
 
 - Leader: `space`
-- Main plugins: [ak.mini.visits_harpooned], [mini.files], [mini.pick] and [mini.jump2d]
+- Main plugins: [ak.mini.visits_harpooned], [mini.files], [mini.pick], [mini.jump2d] and [leap.nvim]
 - Menu: [mini.clue]
 
 ### VisitsHarpooned
@@ -188,6 +188,7 @@ This repo uses code and ideas from the following repositories:
 [leader h]: lua/ak/util/color.lua
 [mini.nvim]: https://github.com/echasnovski/mini.nvim
 [mini.jump2d]: https://github.com/echasnovski/mini.jump2d
+[leap.nvim]: https://github.com/ggandor/leap.nvim
 [mini.files]: https://github.com/echasnovski/mini.files
 [mini.operators]: https://github.com/echasnovski/mini.operators
 [mini.surround]: https://github.com/echasnovski/mini.surround

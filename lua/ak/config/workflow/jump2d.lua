@@ -1,8 +1,10 @@
 -- Feature request Improve 'mini.jump2d' default config and jumping experience #1818
 --
--- Difference: loss of leap's autojump to nearest on two chars. Requires "safe labels"
--- Difference: match not case-insensite
--- Difference: the labels don't start from the closest match, but top down
+-- Differences leap and jump2d:
+-- Autojump to nearest on two chars. Requires "safe labels". Not needed.
+-- Match case-insensitive
+-- Labels start from closest match, not top down
+-- If many matches, still single chars closeby because of groups(press space).
 
 local user_input_opts = function(input_fun) -- copied
   local res = {
@@ -27,7 +29,7 @@ end
 
 require("mini.jump2d").setup({
   -- character spotter defaults to blank = false: -- type j/k after the jump, or use paragraph motions...
-  allowed_lines = { cursor_at = false }, -- use fFtT on current line.
+  allowed_lines = { cursor_at = false }, -- try to minimize matches by using fFtT on current line.
   labels = "jkl;miosde",
   mappings = { start_jumping = "" },
   silent = true,

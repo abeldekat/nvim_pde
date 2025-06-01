@@ -1,5 +1,3 @@
--- Now using mini.jump2d instead...
-
 -- Cannot use gs and gS in both normal and visual mode because of mini.operators...
 -- It is possible to use "gs" in operator pending mode though!
 
@@ -17,7 +15,12 @@
 -- 2 Also use "r" in operator pending mode. Saving one character, good mnemonic.
 -- 3 Also use "S" exclusively for treesitter. This is more inviting than "ga"(from example).
 
-require("leap").opts.equivalence_classes = { " \t\r\n", "([{", ")]}", "'\"`" }
+local leap = require("leap")
+leap.opts.equivalence_classes = { " \t\r\n", "([{", ")]}", "'\"`" }
+
+-- Mimic current setting of mini.jump2d:
+leap.opts.safe_labels = "" -- no autojump
+leap.opts.labels = "jkl;miosde"
 
 local nxo = { "n", "x", "o" }
 local nx = { "n", "x" }
