@@ -2,7 +2,7 @@ local Util = require("ak.util")
 
 local mini_snippets, config_path = require("mini.snippets"), vim.fn.stdpath("config")
 local lang_patterns = { tex = { "latex.json" }, plaintex = { "latex.json" } }
-local stop_session_after_jumping_to_final_tabstop = false
+local stop_session_after_jumping_to_final_tabstop = true
 local stop_all_sessions_on_normal_mode_exit = false
 
 mini_snippets.setup({
@@ -40,6 +40,7 @@ MiniKeymap.map_multistep("i", "<C-h>", steps_ctrl_h)
 local rhs = function() MiniSnippets.expand({ match = false }) end
 vim.keymap.set("i", "<C-g><C-j>", rhs, { desc = "Expand all" })
 
+-- TESTING: Try this setting especially for rust and nested callSnippets
 if stop_session_after_jumping_to_final_tabstop then
   local fin_stop = function(args)
     if args.data.tabstop_to == "0" then MiniSnippets.session.stop() end

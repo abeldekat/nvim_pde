@@ -1,3 +1,4 @@
+-- NOTE: For mini.nvim, use stylua 0.19.0
 local OnSave = { enabled = true }
 
 ---@param buf? number
