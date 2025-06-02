@@ -6,7 +6,7 @@ local Util = require("ak.util")
 local make_process_items = function() -- see discussion #1771
   if Util.mini_completion_fuzzy_provider ~= "blink" then return end
 
-  require("ak.mini.completion_blinked").setup()
+  require("akmini.completion_blinked").setup()
   local process_opts = { filtersort = CompletionBlinked.fuzzy }
   return function(items, base) return MiniCompletion.default_process_items(items, base, process_opts) end
 end

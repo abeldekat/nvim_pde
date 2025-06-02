@@ -4,7 +4,7 @@ local map = function(mode, lhs, rhs, opts)
   vim.keymap.set(mode, lhs, rhs, opts)
 end
 
-require("ak.mini.visits_harpooned").setup()
+require("akmini.visits_harpooned").setup()
 
 map("n", "<leader>j", VisitsHarpooned.pick_from_all, { desc = "Visits pick all" })
 map("n", "<leader>a", VisitsHarpooned.toggle, { desc = "Visits toggle" })

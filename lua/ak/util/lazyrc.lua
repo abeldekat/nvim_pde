@@ -25,6 +25,7 @@ local function initialize()
   local file = vim.secure.read(filepath)
   if not file then return end
 
+  ---@diagnostic disable-next-line: param-type-mismatch
   local lazyspec = loadstring(file)() -- this could error when a require is not inside a function...
   if not lazyspec then return end
   lazyspec = type(lazyspec[1]) == "string" and { lazyspec } or lazyspec

@@ -9,27 +9,17 @@ local H = {}
 local setup = function()
   now(function()
     local info = H.from_color_name(Color.color)
-    if info.spec_name then
-      local spec = vim.iter(H.colors):filter(function(s) return s.name == info.spec_name end):totable()[1]
-      add(spec)
-    end
-    H.cmd_colorscheme(Color.color, info)
+    local spec = info.spec_name and H.find_spec(info.spec_name)
+
+    if spec then add(spec) end
+    require(info.config_name)
+    vim.cmd.colorscheme(Color.color)
   end)
 
   later(function()
     H.add_keymap_all_colors()
-    vim.iter(H.colors):each(function(s) Util.deps.register(s) end)
+    H.register_all_colors()
   end)
-end
-
-H.cmd_colorscheme = function(color_name, info)
-  Util.try(function()
-    require(info.config_name)
-    vim.cmd.colorscheme(color_name)
-  end, {
-    msg = "Could not load your colorscheme",
-    on_error = function(msg) Util.error(msg) end,
-  })
 end
 
 H.colors = {
@@ -65,6 +55,14 @@ H.add_keymap_all_colors = function()
 
     vim.schedule(function() Util.pick.colors() end)
   end, { desc = "Colorscheme picker", silent = true })
+end
+
+H.register_all_colors = function()
+  vim.iter(H.colors):each(function(s) Util.deps.register(s) end)
+end
+
+H.find_spec = function(spec_name)
+  return vim.iter(H.colors):filter(function(s) return s.name == spec_name end):totable()[1]
 end
 
 -- Given the name of a spec, return the name of the config to require

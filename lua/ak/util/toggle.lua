@@ -2,8 +2,6 @@
 --          │       Almost exact copy of lazyvim.util.toggle          │
 --          ╰─────────────────────────────────────────────────────────╯
 
-local Util = require("ak.util")
-
 ---@class ak.util.toggle
 local M = {}
 
@@ -18,15 +16,15 @@ function M.option(option, silent, values)
       ---@diagnostic disable-next-line: no-unknown
       vim.opt_local[option] = values[1]
     end
-    return Util.info("Set " .. option .. " to " .. vim.opt_local[option]:get(), { title = "Option" })
+    return vim.notify("Set " .. option .. " to " .. vim.opt_local[option]:get(), vim.log.levels.INFO)
   end
   ---@diagnostic disable-next-line: no-unknown
   vim.opt_local[option] = not vim.opt_local[option]:get()
   if not silent then
     if vim.opt_local[option]:get() then
-      Util.info("Enabled " .. option, { title = "Option" })
+      vim.notify("Enabled " .. option, vim.log.levels.INFO)
     else
-      Util.warn("Disabled " .. option, { title = "Option" })
+      vim.notify("Disabled " .. option, vim.log.levels.WARN)
     end
   end
 end
@@ -39,18 +37,18 @@ function M.number()
     nu = { number = vim.opt_local.number:get(), relativenumber = vim.opt_local.relativenumber:get() }
     vim.opt_local.number = false
     vim.opt_local.relativenumber = false
-    Util.warn("Disabled line numbers", { title = "Option" })
+    vim.notify("Disabled line numbers", vim.log.levels.WARN)
   else
     vim.opt_local.number = nu.number
     vim.opt_local.relativenumber = nu.relativenumber
-    Util.info("Enabled line numbers", { title = "Option" })
+    vim.notify("Enabled line numbers", vim.log.levels.INFO)
   end
 end
 
 function M.diagnostic()
   local enabled = not vim.diagnostic.is_enabled()
   vim.diagnostic.enable(enabled)
-  Util.info(string.format("Diagnostic %s", enabled and "enabled" or "disabled"), { title = "Diagnostic" })
+  vim.notify(string.format("Diagnostic %s", enabled and "enabled" or "disabled"), vim.log.levels.INFO)
 end
 
 ---@param buf? number

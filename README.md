@@ -47,15 +47,15 @@ I touch type using the right hand
 in combination with the forefinger of the left hand
 
 - Leader: `space`
-- Main plugins: [ak.mini.visits_harpooned], [mini.files], [mini.pick], [mini.jump2d] and [leap.nvim]
+- Main plugins: [akmini.visits_harpooned], [mini.files], [mini.pick], [mini.jump2d] and [leap.nvim]
 - Menu: [mini.clue]
 
 ### VisitsHarpooned
 
-Internal plugin [ak.mini.visits_harpooned] is a customized [mini.visits] configuration,
+Internal plugin [akmini.visits_harpooned] is a customized [mini.visits] configuration,
 operating in almost the same way as `harpoon`.
 
-- Info in statusline: [ak.mini.harpoonline]
+- Info in statusline: [akmini.harpoonline]
 - Pick visits from all labels: `<leader>j` ("strongest finger")
 - Toggle label on visit: `<leader>a`
 - The shortcuts normally used for window navigation correspond to visit 1-4 having label:
@@ -66,7 +66,7 @@ operating in almost the same way as `harpoon`.
 - Maintain visits having label: `<leader>om`
 - Clear all visits: `<leader>or`
 
-Pickers can display hints using internal plugin [ak.mini.pick_hinted]
+Pickers can display hints using internal plugin [akmini.pick_hinted]
 
 ### Window navigation
 
@@ -195,9 +195,9 @@ This repo uses code and ideas from the following repositories:
 [mini.pick]: https://github.com/echasnovski/mini.pick
 [mini.visits]: https://github.com/echasnovski/mini.visits
 [mini.clue]: https://github.com/echasnovski/mini.clue
-[ak.mini.visits_harpooned]: lua/ak/mini/visits_harpooned.lua
-[ak.mini.harpoonline]: lua/ak/mini/harpoonline.lua
-[ak.mini.pick_hinted]: lua/ak/mini/pick_hinted.lua
+[akmini.visits_harpooned]: lua/akmini/visits_harpooned.lua
+[akmini.harpoonline]: lua/akmini/harpoonline.lua
+[akmini.pick_hinted]: lua/akmini/pick_hinted.lua
 [peek.nvim]: https://github.com/toppair/peek.nvim
 [deno]: https://deno.land
 [with_submodules]: https://github.com/abeldekat/nvim_pde/tree/with_submodules

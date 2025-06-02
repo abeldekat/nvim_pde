@@ -1,4 +1,3 @@
-local Util = require("ak.util")
 local enabled = true
 
 require("treesitter-context").setup({ mode = "cursor", max_lines = 3 })
@@ -8,8 +7,8 @@ vim.keymap.set("n", "<leader>ut", function()
   tsc.toggle()
   enabled = not enabled
   if enabled then
-    Util.info("Enabled treesitter context", { title = "Option" })
+    vim.notify("Enabled treesitter context", vim.log.levels.INFO)
   else
-    Util.warn("Disabled treesitter context", { title = "Option" })
+    vim.notify("Disabled treesitter context", vim.log.levels.WARN)
   end
 end, { desc = "Toggle treesitter context", silent = true })

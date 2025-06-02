@@ -1,5 +1,3 @@
-local Util = require("ak.util") -- only for warn...
-
 local function debounce(ms, fn)
   local timer = vim.uv.new_timer()
   return function(...)
@@ -33,7 +31,7 @@ local function lint(lint_module)
   ctx.dirname = vim.fn.fnamemodify(ctx.filename, ":h")
   names = vim.tbl_filter(function(name)
     local linter = lint_module.linters[name]
-    if not linter then Util.warn("Linter not found: " .. name, { title = "nvim-lint" }) end
+    if not linter then vim.notify("Linter not found: " .. name, vim.log.levels.WARN) end
     return linter and not (type(linter) == "table" and linter.condition and not linter.condition(ctx))
   end, names)
 

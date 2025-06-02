@@ -21,7 +21,7 @@ local function setup()
 
   H.to_provide()
   H.add_keys()
-  require("ak.mini.pick_hinted").setup({ -- 19 letters, no "bcgpqyz"
+  require("akmini.pick_hinted").setup({ -- 19 letters, no "bcgpqyz"
     hinted = {
       -- virt_clues_pos = { "inline", "eol" },
       chars = vim.split("adefhijklmnorstuvwx", ""),
