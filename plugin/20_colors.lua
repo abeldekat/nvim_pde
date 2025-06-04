@@ -1,8 +1,8 @@
-local Util = require("ak.util")
-local MiniDeps = require("mini.deps")
+local Picker = require("akshared.pick")
+local DeferredDeps = require("akmini.deps_deferred")
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
-local Color = require("ak.color")
 
+local Color = require("ak.color")
 local colors_loaded = false
 local H = {}
 
@@ -53,12 +53,12 @@ H.add_keymap_all_colors = function()
       colors_loaded = true
     end
 
-    vim.schedule(function() Util.pick.colors() end)
+    vim.schedule(function() Picker.colors() end)
   end, { desc = "Colorscheme picker", silent = true })
 end
 
 H.register_all_colors = function()
-  vim.iter(H.colors):each(function(s) Util.deps.register(s) end)
+  vim.iter(H.colors):each(function(s) DeferredDeps.register(s) end)
 end
 
 H.find_spec = function(spec_name)
@@ -66,7 +66,7 @@ H.find_spec = function(spec_name)
 end
 
 -- Given the name of a spec, return the name of the config to require
-H.to_config_name = function(spec_name) return "ak.config.colors." .. spec_name:gsub("colors_", "") end
+H.to_config_name = function(spec_name) return "ak.colors." .. spec_name:gsub("colors_", "") end
 
 -- Given the name of a color, returns a table containing:
 -- spec_name: The name of the spec, or nil
@@ -88,7 +88,7 @@ H.from_color_name = function(color_name) -- color names: ak.colors.txt
 
   return {
     spec_name = not is_mini and ("colors_" .. tmp) or nil, -- startup plugin
-    config_name = "ak.config.colors." .. tmp,
+    config_name = "ak.colors." .. tmp,
   }
 end
 

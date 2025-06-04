@@ -175,17 +175,12 @@ This repo uses code and ideas from the following repositories:
 - [mini.deps](https://github.com/echasnovski/mini.deps)
 - [LazyVim](https://github.com/LazyVim/LazyVim)
 - [lazy.nvim](https://github.com/folke/lazy.nvim)
-- [dotfiles](https://github.com/folke/dot/tree/master/nvim) `@folke`
-- [dotfiles](https://github.com/dpetka2001/dotfiles/tree/main/dot_config/nvim) `@dpetka2001`
-- [dotfiles](https://github.com/lewis6991/dotfiles/tree/main/config/nvim) `@lewis6991`
-- [dotfiles](https://github.com/savq/dotfiles/tree/master/nvim) `@savq`
 - [dotfiles](https://github.com/MariaSolOs/dotfiles/tree/main/.config/nvim) `@mariasolos`
-- [pckr.nvim](https://github.com/lewis6991/pckr.nvim)
 
 [tmuxp]: https://github.com/tmux-python/tmuxp
 [scripts]: https://github.com/abeldekat/scripts
 [tmux-sessionizer]: https://github.com/abeldekat/scripts/blob/main/tmux-sessionizer
-[leader h]: lua/ak/util/color.lua
+[leader h]: lua/akshared/color_toggle.lua
 [mini.nvim]: https://github.com/echasnovski/mini.nvim
 [mini.jump2d]: https://github.com/echasnovski/mini.jump2d
 [leap.nvim]: https://github.com/ggandor/leap.nvim

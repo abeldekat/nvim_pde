@@ -1,5 +1,3 @@
-local Util = require("ak.util") -- shared code
-
 local function clone()
   local has_cloned = false
   local path_package = vim.fn.stdpath("data") .. "/site/"
@@ -23,14 +21,15 @@ end
 local is_initial_install, path_package = clone()
 
 local MiniDeps = require("mini.deps")
-MiniDeps.setup({ path = { package = path_package } }) -- see the plugin folder
+local DepsDeferred = require("akmini.deps_deferred")
+MiniDeps.setup({ path = { package = path_package } })
 if not is_initial_install then return end
 
 vim.api.nvim_create_autocmd("UIEnter", {
   group = vim.api.nvim_create_augroup("ak_init", {}),
   callback = function()
     MiniDeps.later(function() -- restore all plugins to the versions in mini-deps-snap
-      Util.deps.load_registered()
+      DepsDeferred.load_registered()
       vim.cmd("DepsSnapLoad")
     end)
   end,

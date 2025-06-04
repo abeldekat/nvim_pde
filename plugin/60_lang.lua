@@ -1,7 +1,5 @@
-local Util = require("ak.util")
-local MiniDeps = require("mini.deps")
+local DeferredDeps = require("akmini.deps_deferred")
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
-local register = Util.deps.register
 
 local use_mason = false
 local H = {}
@@ -17,9 +15,9 @@ end)
 
 H.base = function()
   add("stevearc/conform.nvim")
-  require("ak.config.lang.formatting")
+  require("ak.lang.formatting")
   add("mfussenegger/nvim-lint")
-  require("ak.config.lang.linting")
+  require("ak.lang.linting")
 
   if use_mason then
     add("williamboman/mason.nvim")
@@ -28,7 +26,7 @@ H.base = function()
 
   add("b0o/SchemaStore.nvim")
   add("neovim/nvim-lspconfig")
-  require("ak.config.lang.lsp")
+  require("ak.lang.lsp")
 
   if vim.fn.argc(-1) == 0 then return end -- dashboard
   local ft = vim.bo.filetype
@@ -41,23 +39,23 @@ H.base = function()
   })
 end
 
+-- NOTE: Not using testing at the moment.
 H.testing = function()
-  -- NOTE: Not using testing at the moment.
   local test_spec = {
     source = "nvim-neotest/neotest",
     depends = { "nvim-neotest/nvim-nio" },
   }
-  register(test_spec)
+  DeferredDeps.register(test_spec)
   local function load_testing()
     add(test_spec)
-    require("ak.config.lang.testing")
+    require("ak.lang.testing")
     vim.notify("Loaded neotest", vim.log.levels.INFO)
   end
-  Util.defer.on_keys(function() now(load_testing) end, "<leader>tL", "Load neotest")
+  DeferredDeps.on_keys(function() now(load_testing) end, "<leader>tL", "Load neotest")
 end
 
+-- NOTE: Not using dap at the moment. Consider nvim-dap-view
 H.debugging = function()
-  -- NOTE: Not using dap at the moment. Consider nvim-dap-view
   local dap_spec = {
     source = "mfussenegger/nvim-dap",
     depends = {
@@ -67,25 +65,25 @@ H.debugging = function()
       "jbyuki/one-small-step-for-vimkind", -- lua
     },
   }
-  register(dap_spec)
+  DeferredDeps.register(dap_spec)
   local function load_dap()
     add(dap_spec)
-    require("ak.config.lang.debugging")
+    require("ak.lang.debugging")
     vim.notify("Loaded nvim-dap", vim.log.levels.INFO)
   end
-  Util.defer.on_keys(function() now(load_dap) end, "<leader>dL", "Load dap")
+  DeferredDeps.on_keys(function() now(load_dap) end, "<leader>dL", "Load dap")
 end
 
 H.markdown = function()
   local function add_md(source, to_require, hook)
     if hook then source = { source = source, hooks = { post_install = hook, post_checkout = hook } } end
 
-    register(source)
+    DeferredDeps.register(source)
     local function load()
       add(source)
-      require("ak.config.lang." .. to_require)
+      require("ak.lang." .. to_require)
     end
-    Util.defer.on_events(function() later(load) end, "FileType", "markdown")
+    DeferredDeps.on_event(function() later(load) end, "FileType", "markdown")
   end
 
   local function build_peek(params)
@@ -103,18 +101,18 @@ end
 H.sql = function()
   local spec = { source = "tpope/vim-dadbod" }
 
-  register(spec)
+  DeferredDeps.register(spec)
   local function load_dadbod()
     add(spec)
-    require("ak.config.lang.dadbod")
+    require("ak.lang.dadbod")
     vim.notify("Loaded dadbod", vim.log.levels.INFO)
   end
-  Util.defer.on_events(function()
-    Util.defer.on_keys(function() now(load_dadbod) end, "<leader>od", "Load dadbod")
+  DeferredDeps.on_event(function()
+    DeferredDeps.on_keys(function() now(load_dadbod) end, "<leader>od", "Load dadbod")
   end, "FileType", "sql")
 end
 
 H.latex = function() -- not "lazy" loaded as per plugin requirements
-  require("ak.config.lang.vimtex") -- only vimscript variables
+  require("ak.lang.vimtex") -- only vimscript variables
   add("lervag/vimtex")
 end
