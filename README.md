@@ -148,9 +148,9 @@ Many of the excellent modules included in [mini.nvim] are used in this config:
 Relevant discussions:
 
 - [Visits tweaked to operate like `grapple` or `harpoon`](https://github.com/echasnovski/mini.nvim/discussions/1158).
-  See internal plugin [ak.mini.visits_harpooned]
+  See internal plugin [akmini.visits_harpooned]
 - [Augment pickers with labels and hotkeys](https://github.com/echasnovski/mini.nvim/discussions/1109).
-  See internal plugin [ak.mini.pick_hinted]
+  See internal plugin [akmini.pick_hinted]
 - [Pick bufferlines with treesitter highlighting](https://github.com/echasnovski/mini.nvim/discussions/988).
 - [Apply tokyonight dev environment](https://github.com/echasnovski/mini.nvim/discussions/1012).
 - [Optimized jumping with jump2d](https://github.com/echasnovski/mini.nvim/discussions/1033).
