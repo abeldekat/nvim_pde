@@ -76,3 +76,28 @@ vim.api.nvim_create_autocmd("User", {
 --   right away (`ga,`), instead of going forward (`ga;;;...`).
 local function treesitter() require("leap.treesitter").select() end
 vim.keymap.set(nxo, "S", treesitter, { desc = "Leap treesitter" })
+
+-- HACK: Temporarily override nvim_win_set_option to prevent leap from setting conceallevel to 0
+-- NOTE: Both flash.nvim and mini.jump2d do not set the conceallevel...
+-- Leap issues: 1 and 243
+--
+-- Leap sets conceallevel to 0, intending to prevent incorrect or impossible jumps.
+-- As a consequence the text "shifts", especially in markdown and mini.files.
+-- I favor an incidental "conceallevel" limitation over losing focus because of shifting text.
+local nvim_win_set_option = vim.api.nvim_win_set_option -- NOTE: nvim_win_set_option is deprecated...
+local no_conceal_on_leap_enter = function(window, name, value)
+  if name == "conceallevel" then return end
+  return nvim_win_set_option(window, name, value)
+end
+vim.api.nvim_create_autocmd("User", {
+  group = vim.api.nvim_create_augroup("ak_leap", {}),
+  pattern = "LeapEnter",
+  callback = function()
+    -- The following line triggers before leap sets the conceal level in its LeapEnter callback...
+    vim.api.nvim_win_set_option = no_conceal_on_leap_enter
+
+    -- The following line triggers after leap has set the conceal level in its LeapEnter callback...
+    -- Thus, the vim.api override is always restored.
+    vim.schedule(function() vim.api.nvim_win_set_option = nvim_win_set_option end)
+  end,
+})
