@@ -30,18 +30,9 @@ mini_snippets.setup({
   },
 })
 
-local no_pmenu = { -- make sure pmenu is closed after snippets and before jump
-  condition = function() return vim.fn.pumvisible() == 1 end,
-  action = function()
-    vim.schedule(function() -- see mini.snippets, H.hide_completion
-      if vim.fn.mode() == "i" then vim.cmd('silent noautocmd call complete(col("."), [])') end
-    end)
-    return false
-  end,
-}
-local steps_ctrl_l = { "minisnippets_next", no_pmenu, "jump_after_tsnode", "jump_after_close" }
+local steps_ctrl_l = { "minisnippets_next", "jump_after_tsnode", "jump_after_close" }
 MiniKeymap.map_multistep("i", "<C-l>", steps_ctrl_l)
-local steps_ctrl_h = { "minisnippets_prev", no_pmenu, "jump_before_tsnode", "jump_before_open" }
+local steps_ctrl_h = { "minisnippets_prev", "jump_before_tsnode", "jump_before_open" }
 MiniKeymap.map_multistep("i", "<C-h>", steps_ctrl_h)
 
 local rhs = function() MiniSnippets.expand({ match = false }) end
