@@ -93,11 +93,11 @@ vim.api.nvim_create_autocmd("User", {
   group = vim.api.nvim_create_augroup("ak_leap", {}),
   pattern = "LeapEnter",
   callback = function()
-    -- The following line triggers before leap sets the conceal level in its LeapEnter callback...
+    -- Triggers before leap sets the conceal level in its LeapEnter callback:
     vim.api.nvim_win_set_option = no_conceal_on_leap_enter
 
-    -- The following line triggers after leap has set the conceal level in its LeapEnter callback...
-    -- Thus, the vim.api override is always restored.
+    -- Ensure the vim.api override is always restored.
+    -- Triggers after leap has set the conceal level in its LeapEnter callback:
     vim.schedule(function() vim.api.nvim_win_set_option = nvim_win_set_option end)
   end,
 })
