@@ -27,4 +27,4 @@ map("n", "<leader>gL", "<Cmd>Git log --oneline --follow -- %<CR>", "Log buffer")
 map("n", "<leader>gs", "<Cmd>lua MiniGit.show_at_cursor()<CR>", "Show at cursor")
 map("x", "<leader>gs", "<Cmd>lua MiniGit.show_at_cursor()<CR>", "Show at selection")
 
-require("mini.git").setup({})
+require("mini.git").setup()

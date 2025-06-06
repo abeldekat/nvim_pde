@@ -16,12 +16,9 @@
 -- =: Variations on =
 -- ,: , and extra filters
 --  : space, ie keeps indentation
-
-local Align = require("mini.align")
-local opts = {
+require("mini.align").setup({
   mappings = {
     start = "gA",
     start_with_preview = "ga",
   },
-}
-Align.setup(opts)
+})

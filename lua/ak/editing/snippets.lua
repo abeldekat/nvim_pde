@@ -52,9 +52,8 @@ if stop_all_sessions_on_normal_mode_exit then
   local make_stop = function()
     local au_opts = { pattern = "*:n", once = true }
     au_opts.callback = function()
-      while MiniSnippets.session.get() do
-        MiniSnippets.session.stop()
-      end
+      -- stylua: ignore
+      while MiniSnippets.session.get() do MiniSnippets.session.stop() end
     end
     vim.api.nvim_create_autocmd("ModeChanged", au_opts)
   end

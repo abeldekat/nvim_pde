@@ -1,6 +1,5 @@
--- :help quickfixtextfunc
--- Feature: Editing the quickfix like a normal buffer
 -- TODO: bqf has the o key which also closes the list
+-- :help quickfixtextfunc
 
 -- Override leader x defined in keymaps
 vim.keymap.set("n", "<leader>x", function() require("quicker").toggle() end, {
@@ -13,10 +12,9 @@ vim.keymap.set("n", "<leader>x", function() require("quicker").toggle() end, {
 
 local expand = function() require("quicker").expand({ before = 2, after = 2, add_to_existing = true }) end
 local collapse = function() require("quicker").collapse() end
-local opts = {
+require("quicker").setup({
   keys = {
     { ">", expand, desc = "Expand quickfix context" },
     { "<", collapse, desc = "Collapse quickfix context" },
   },
-}
-require("quicker").setup(opts)
+})

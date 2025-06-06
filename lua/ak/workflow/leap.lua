@@ -11,9 +11,8 @@
 -- The "s" is "anywhere" and the "S" is dedicated to treesitter selection.
 -- Remote ("r") is only mapped in operator pending mode
 -- Leap:
--- 1 Don't use anywhere, preserving autojump.
--- 2 Also use "r" in operator pending mode. Saving one character, good mnemonic.
--- 3 Also use "S" exclusively for treesitter. This is more inviting than "ga"(from example).
+-- 1 Also use "r" in operator pending mode. Saving one character, good mnemonic.
+-- 2 Also use "S" exclusively for treesitter. This is more inviting than "ga"(from example).
 
 local leap = require("leap")
 leap.opts.equivalence_classes = { " \t\r\n", "([{", ")]}", "'\"`" }
@@ -77,27 +76,29 @@ vim.api.nvim_create_autocmd("User", {
 local function treesitter() require("leap.treesitter").select() end
 vim.keymap.set(nxo, "S", treesitter, { desc = "Leap treesitter" })
 
--- HACK: Temporarily override nvim_win_set_option to prevent leap from setting conceallevel to 0
+-- HACK: Temporarily override nvim_set_option_value to prevent leap from setting conceallevel to 0
 -- NOTE: Both flash.nvim and mini.jump2d do not set the conceallevel...
 -- Leap issues: 1 and 243
 --
 -- Leap sets conceallevel to 0, intending to prevent incorrect or impossible jumps.
 -- As a consequence the text "shifts", especially in markdown and mini.files.
 -- I favor an incidental "conceallevel" limitation over losing focus because of shifting text.
-local nvim_win_set_option = vim.api.nvim_win_set_option -- NOTE: nvim_win_set_option is deprecated...
-local no_conceal_on_leap_enter = function(window, name, value)
-  if name == "conceallevel" then return end
-  return nvim_win_set_option(window, name, value)
+local leap_is_active = false
+local nvim_set_option_value = vim.api.nvim_set_option_value
+local no_conceal_on_leap_enter = function(name, value, opts)
+  if leap_is_active and name == "conceallevel" then return end
+  return nvim_set_option_value(name, value, opts)
 end
+vim.api.nvim_set_option_value = no_conceal_on_leap_enter
 vim.api.nvim_create_autocmd("User", {
   group = vim.api.nvim_create_augroup("ak_leap", {}),
   pattern = "LeapEnter",
   callback = function()
-    -- Triggers before leap sets the conceal level in its LeapEnter callback:
-    vim.api.nvim_win_set_option = no_conceal_on_leap_enter
+    -- Triggers before leap enters its LeapEnter callback to set the conceallevel:
+    leap_is_active = true
 
-    -- Ensure the vim.api override is always restored.
-    -- Triggers after leap has set the conceal level in its LeapEnter callback:
-    vim.schedule(function() vim.api.nvim_win_set_option = nvim_win_set_option end)
+    -- Ensure vim.api.nvim_set_option_value operates as before.
+    -- Triggers after leap has set the conceallevel:
+    vim.schedule(function() leap_is_active = false end)
   end,
 })

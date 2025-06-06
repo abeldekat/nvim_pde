@@ -1,6 +1,6 @@
 return {
-  ["SchemaStore.nvim"] = "8563ed7d7e9f5e94949a7fa8d99fa318bf4e71d9",
-  colors_bamboo = "97124a0b81f886abc0d666ebec512b92425d67b6",
+  ["SchemaStore.nvim"] = "e702367b99c0763e3e5580998aa6d323c6cdb65e",
+  colors_bamboo = "ab8393d1a314d96314605369b4b1e6bc7737f2b5",
   colors_catppuccin = "a0c769bc7cd04bbbf258b3d5f01e2bdce744108d",
   colors_everforest = "c4bb2ae687ae21938775f436cf213492702a0cf3",
   ["colors_gruvbox-material"] = "f5f912fbc7cf2d45da6928b792d554f85c7aa89a",
@@ -11,7 +11,7 @@ return {
   ["conform.nvim"] = "0e93e0d12d2f7ebdea9e3e444dfaff0050cefbe6",
   ["dial.nvim"] = "2c7e2750372918f072a20f3cf754d845e143d7c9",
   ["friendly-snippets"] = "572f5660cf05f8cd8834e096d7b4c921ba18e175",
-  ["leap.nvim"] = "08ca7ec9e859856251d56c22ea107f82f563ff3c",
+  ["leap.nvim"] = "9958013bd9c41e6f32af0202b9ea41055fe4667e",
   ["mini.nvim"] = "c3d398d8bfbd18ae24cb22a17cde1aaad3764cd3",
   neotest = "ef492755730e59e1d8122c461abbd086bee4c76b",
   ["nvim-dap"] = "ea82027c3447dc1a022be9a9884de276c05cd33a",
@@ -30,5 +30,5 @@ return {
   ["toggleterm.nvim"] = "9a88eae817ef395952e08650b3283726786fb5fb",
   ["vim-dadbod"] = "e95afed23712f969f83b4857a24cf9d59114c2e6",
   ["vim-slime"] = "507107dd24c9b85721fa589462fd5068e0f70266",
-  vimtex = "f20b11458e97250d690ce0dc8670759b838cace9"
+  vimtex = "22d9ae5265df069cb68310449a7218b836875c5b"
 }

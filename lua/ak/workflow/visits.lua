@@ -1,10 +1,10 @@
+require("akmini.visits_harpooned").setup()
+
 local map = function(mode, lhs, rhs, opts)
   if lhs == "" then return end
   opts = vim.tbl_deep_extend("force", { silent = true }, opts or {})
   vim.keymap.set(mode, lhs, rhs, opts)
 end
-
-require("akmini.visits_harpooned").setup()
 
 map("n", "<leader>j", VisitsHarpooned.pick_from_all, { desc = "Visits pick all" })
 map("n", "<leader>a", VisitsHarpooned.toggle, { desc = "Visits toggle" })
