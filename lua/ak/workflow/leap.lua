@@ -79,6 +79,7 @@ vim.keymap.set(nxo, "S", treesitter, { desc = "Leap treesitter" })
 -- HACK: Temporarily override nvim_set_option_value to prevent leap from setting conceallevel to 0
 -- NOTE: Both flash.nvim and mini.jump2d do not set the conceallevel...
 -- Leap issues: 1 and 243
+-- https://github.com/hadronized/hop.nvim/issues/243, conceallevel awareness
 --
 -- Leap sets conceallevel to 0, intending to prevent incorrect or impossible jumps.
 -- As a consequence the text "shifts", especially in markdown and mini.files.

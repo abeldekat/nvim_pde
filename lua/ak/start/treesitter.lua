@@ -30,15 +30,15 @@ end
 
 -- ron: rusty object notation, rasi: rofi, rst: python
 -- stylua: ignore
-H.ensure_installed = { -- 44
+H.ensure_installed = { -- 45
   "awk", "bash", "bibtex", "c", "css", "diff",
-  "git_config", "gitcommit", "git_rebase", "gitignore", "gitattributes", "go",
-  "gomod", "gowork", "gosum", "html", "javascript", "jsdoc",
-  "json", "jsonc", "json5", "lua", "luadoc", "luap",
-  "make", "markdown", "markdown_inline", "ninja", "printf", "python",
-  "query", "rasi", "regex", "ron", "rst", "rust",
-  "sql", "toml", "tsx", "typescript", "vim", "vimdoc",
-  "yaml", "xml",
+  "fennel", "git_config", "gitcommit", "git_rebase", "gitignore", "gitattributes",
+  "go", "gomod", "gowork", "gosum", "html", "javascript",
+  "jsdoc", "json", "jsonc", "json5", "lua", "luadoc",
+  "luap", "make", "markdown", "markdown_inline", "ninja", "printf",
+  "python", "query", "rasi", "regex", "ron", "rst",
+  "rust", "sql", "toml", "tsx", "typescript", "vim",
+  "vimdoc", "yaml", "xml",
 }
 
 H.on_filetype = function(args)

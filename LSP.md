@@ -8,6 +8,22 @@ prettier, arch linux: `sudo pacman -S prettier`
 [github](https://github.com/bash-lsp/bash-language-server)
 Arch linux: `sudo pacman -S bash-language-server shfmt shellcheck`
 
+## fennel
+
+[fennel-ls installation](https://xerool.net/fennel-ls/docs/installation.html)
+
+```
+git clone https://git.sr.ht/~xerool/fennel-ls
+make LUA=luajit
+make install PREFIX=$HOME
+mkdir -p $HOME/.local/share/fennel-ls/docsets/
+curl -o $HOME/.local/share/fennel-ls/docsets/nvim.lua https://git.sr.ht/~micampe/fennel-ls-nvim-docs/blob/main/nvim.lua
+```
+
+Then, in a fennel project, add a file flsproject.fnl, containing the following line:
+
+`{:libraries {:nvim true}}`
+
 ## go
 
 [github](https://github.com/golang/tools/tree/master/gopls)
@@ -30,12 +46,14 @@ Install via aur:
 - `git clone https://aur.archlinux.org/vscode-langservers-extracted.git`
 - `cd and makepkg -si, essentially doing a npm install`
 
-```txt
+```
+
 vscode-langservers-extracted /usr/bin/vscode-css-language-server
 vscode-langservers-extracted /usr/bin/vscode-eslint-language-server
 vscode-langservers-extracted /usr/bin/vscode-html-language-server
 vscode-langservers-extracted /usr/bin/vscode-json-language-server
 vscode-langservers-extracted /usr/bin/vscode-markdown-language-server
+
 ```
 
 Can also be installed with `npm i -g vscode-langservers-extracted`
@@ -110,3 +128,7 @@ Arch linux: `sudo pacman -S zls`
 
 Installed on 20250411:
 `clang18-18.1.8-1  compiler-rt18-18.1.8-1  lld18-18.1.6-2  llvm18-libs-18.1.8-1  zig-0.13.0-2  zls-0.13.0-1`
+
+```
+
+```

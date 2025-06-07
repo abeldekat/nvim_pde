@@ -86,6 +86,7 @@ vim.lsp.config("*", { capabilities = Settings.completion == "mini" and MiniCompl
 vim.lsp.enable({
   "basedpyright",
   "bashls",
+  "fennel_ls",
   "gopls",
   "jsonls",
   "lua_ls",
