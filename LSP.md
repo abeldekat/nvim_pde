@@ -24,6 +24,8 @@ Then, in a fennel project, add a file flsproject.fnl, containing the following l
 
 `{:libraries {:nvim true}}`
 
+[fnlfmt](https://git.sr.ht/~technomancy/fnlfmt) Formatting
+
 ## go
 
 [github](https://github.com/golang/tools/tree/master/gopls)

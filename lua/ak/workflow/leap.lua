@@ -18,7 +18,7 @@ local leap = require("leap")
 leap.opts.equivalence_classes = { " \t\r\n", "([{", ")]}", "'\"`" }
 
 -- Mimic current setting of mini.jump2d:
-leap.opts.safe_labels = "" -- no autojump
+leap.opts.safe_labels = "" -- no autojump, handy characters are more important
 leap.opts.labels = "jkl;miosde"
 
 local nxo = { "n", "x", "o" }
@@ -78,6 +78,8 @@ vim.keymap.set(nxo, "S", treesitter, { desc = "Leap treesitter" })
 
 -- HACK: Temporarily override nvim_set_option_value to prevent leap from setting conceallevel to 0
 -- NOTE: Both flash.nvim and mini.jump2d do not set the conceallevel...
+-- See https://github.com/ggandor/leap.nvim/pull/270:
+--
 -- Leap issues: 1 and 243
 -- https://github.com/hadronized/hop.nvim/issues/243, conceallevel awareness
 --

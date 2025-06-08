@@ -1,4 +1,3 @@
--- NOTE: For mini.nvim, use stylua 0.19.0
 local OnSave = { enabled = true }
 
 ---@param buf? number
@@ -40,6 +39,7 @@ end
 -- -- You can also customize some of the format options for the filetype
 local formatters_by_ft = {
   ["css"] = { "prettier" },
+  -- ["fennel"] = { "fnlfmt" }, -- not useful for leap.nvim, too many changes...
   ["go"] = { "goimports", "gofumpt" },
   ["graphql"] = { "prettier" },
   ["handlebars"] = { "prettier" },
