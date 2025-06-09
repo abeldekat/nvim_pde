@@ -1,12 +1,10 @@
 -- Cannot use gs and gS in both normal and visual mode because of mini.operators...
 -- It is possible to use "gs" in operator pending mode though!
-
--- Jump2d discussion:
--- https://github.com/echasnovski/mini.nvim/discussions/1033#discussioncomment-10289232
-
--- Note: Leap also has a f across lines mode, like mini.jump.
--- Use s[some letter]enter. Very handy in for example MiniFiles explorer.
-
+--
+-- Notes:
+-- https://github.com/echasnovski/mini.nvim/discussions/1033#discussioncomment-10289232 mini.jump2d
+-- Leap also has a f across lines mode, like mini.jump. Use s[some letter]enter.
+--
 -- Flash:
 -- The "s" is "anywhere" and the "S" is dedicated to treesitter selection.
 -- Remote ("r") is only mapped in operator pending mode
@@ -17,9 +15,12 @@
 local leap = require("leap")
 leap.opts.equivalence_classes = { " \t\r\n", "([{", ")]}", "'\"`" }
 
--- Mimic current setting of mini.jump2d:
+-- Mimic labels used in mini.jump2d config:
 leap.opts.safe_labels = "" -- no autojump, handy characters are more important
 leap.opts.labels = "jkl;miosde"
+
+-- PR's in fork abeldekat/leap.nvim
+leap.opts.keep_conceallevel = true -- PR 270, Issue 243
 
 local nxo = { "n", "x", "o" }
 local nx = { "n", "x" }
@@ -76,32 +77,31 @@ vim.api.nvim_create_autocmd("User", {
 local function treesitter() require("leap.treesitter").select() end
 vim.keymap.set(nxo, "S", treesitter, { desc = "Leap treesitter" })
 
--- HACK: Temporarily override nvim_set_option_value to prevent leap from setting conceallevel to 0
--- NOTE: Both flash.nvim and mini.jump2d do not set the conceallevel...
--- See https://github.com/ggandor/leap.nvim/pull/270:
+-- -- HACK: Override nvim_set_option_value to prevent leap from setting conceallevel to 0
+-- -- NOTE: Both flash.nvim and mini.jump2d do not set the conceallevel...
+-- --
+-- -- Leap issues: 1 and 243
+-- -- https://github.com/hadronized/hop.nvim/issues/243, conceallevel awareness
+-- --
+-- -- Leap sets conceallevel to 0, intending to prevent incorrect or impossible jumps.
+-- -- As a consequence the text "shifts", especially in markdown and mini.files.
+-- -- I favor an incidental "conceallevel" limitation over losing focus because of shifting text.
+-- local leap_is_active = false
+-- local nvim_set_option_value = vim.api.nvim_set_option_value
+-- local no_conceal_on_leap_enter = function(name, value, opts)
+--   if leap_is_active and name == "conceallevel" then return end
+--   return nvim_set_option_value(name, value, opts)
+-- end
+-- vim.api.nvim_set_option_value = no_conceal_on_leap_enter
+-- vim.api.nvim_create_autocmd("User", {
+--   group = vim.api.nvim_create_augroup("ak_leap", {}),
+--   pattern = "LeapEnter",
+--   callback = function()
+--     -- Triggers before leap enters its LeapEnter callback to set the conceallevel:
+--     leap_is_active = true
 --
--- Leap issues: 1 and 243
--- https://github.com/hadronized/hop.nvim/issues/243, conceallevel awareness
---
--- Leap sets conceallevel to 0, intending to prevent incorrect or impossible jumps.
--- As a consequence the text "shifts", especially in markdown and mini.files.
--- I favor an incidental "conceallevel" limitation over losing focus because of shifting text.
-local leap_is_active = false
-local nvim_set_option_value = vim.api.nvim_set_option_value
-local no_conceal_on_leap_enter = function(name, value, opts)
-  if leap_is_active and name == "conceallevel" then return end
-  return nvim_set_option_value(name, value, opts)
-end
-vim.api.nvim_set_option_value = no_conceal_on_leap_enter
-vim.api.nvim_create_autocmd("User", {
-  group = vim.api.nvim_create_augroup("ak_leap", {}),
-  pattern = "LeapEnter",
-  callback = function()
-    -- Triggers before leap enters its LeapEnter callback to set the conceallevel:
-    leap_is_active = true
-
-    -- Ensure vim.api.nvim_set_option_value operates as before.
-    -- Triggers after leap has set the conceallevel:
-    vim.schedule(function() leap_is_active = false end)
-  end,
-})
+--     -- Ensure vim.api.nvim_set_option_value operates as before.
+--     -- Triggers after leap has set the conceallevel:
+--     vim.schedule(function() leap_is_active = false end)
+--   end,
+-- })
