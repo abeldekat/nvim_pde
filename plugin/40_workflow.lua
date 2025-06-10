@@ -4,9 +4,9 @@ local use_leap = true
 
 later(function()
   -- Branch "keep_conceallevel" -> Issue 243, PR 270
-  -- Branch "label_at_first_match_char" -> Issue 220, PR ?
-  -- Branch "collect" -> Leap main + PR's
-  add({ source = "abeldekat/leap.nvim", checkout = "collect" }) -- ({ source = "ggandor/leap.nvim" })
+  -- Branch "label_at_first_match_char" -> Issue 220, 271
+  -- Branch "ak" -> Leap main + PR's
+  add({ source = "abeldekat/leap.nvim", checkout = "ak" }) -- ({ source = "ggandor/leap.nvim" })
   if use_leap then
     require("ak.workflow.leap")
   else
