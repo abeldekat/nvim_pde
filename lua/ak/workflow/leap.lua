@@ -21,7 +21,7 @@ leap.opts.labels = "jkl;miosde"
 
 -- PR's in fork abeldekat/leap.nvim
 leap.opts.keep_conceallevel = true -- Issue 243, PR 270
-leap.opts.show_label_on_start_of_match = true -- Issue 220, 271
+leap.opts.show_label_on_start_of_match = true -- Issue 220, PR 271
 
 local nxo = { "n", "x", "o" }
 local nx = { "n", "x" }
