@@ -6,7 +6,4 @@ M.use_mini_ai = false
 ---@type "blink" | "mini" | "none"
 M.completion = "none"
 
----@type "blink" | "native"
-M.mini_completion_fuzzy_provider = "native"
-
 return M

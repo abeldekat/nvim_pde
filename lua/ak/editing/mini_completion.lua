@@ -1,22 +1,9 @@
 ---@diagnostic disable: duplicate-set-field
 
-local Settings = require("akshared.settings")
-
--- See discussion #1771: Fuzzy matching with blink.cmp algorithm
-local make_process_items = function() -- see discussion #1771
-  if Settings.mini_completion_fuzzy_provider ~= "blink" then return end
-
-  require("akmini.completion_blinked").setup()
-  local process_opts = { filtersort = CompletionBlinked.fuzzy }
-  return function(items, base) return MiniCompletion.default_process_items(items, base, process_opts) end
-end
-
--- Setup
 require("mini.completion").setup({
   delay = { info = 50 },
   lsp_completion = { -- use completefunc instead of omnifunc to have ctrl-o available, see discussion #1736
     auto_setup = false,
-    process_items = make_process_items(),
     -- source_func = "omnifunc"
   },
   mappings = { -- <C-Space> is for tmux:
@@ -40,6 +27,7 @@ local function make_steps_smart_confirm()
     vim.fn.pumvisible = function() return 0 end -- HACK: H.show_info_window: prevent flashing info window
     local hl_org = vim.api.nvim_get_hl(0, { name = "PmenuSel", link = false }) --[[@as vim.api.keyset.highlight]]
     vim.api.nvim_set_hl(0, "PmenuSel", { link = "Pmenu" }) -- HACK: prevent flashing on automatic select...
+
     local confirm_and_restore = vim.schedule_wrap(function()
       vim.api.nvim_feedkeys(key_ctrl_y, "i", false) -- confirm auto-selected first item
       vim.fn.pumvisible = pumvisible_org -- restore function
@@ -59,12 +47,7 @@ end
 require("mini.keymap").map_multistep("i", "<C-k>", make_steps_smart_confirm())
 
 -- Last step, see issue 1768: Show icons first in completion items
-local tweak_menu = true
-if not tweak_menu then
-  MiniIcons.tweak_lsp_kind()
-  return
-end
-
+-- MiniIcons.tweak_lsp_kind()
 MiniIcons.tweak_lsp_kind("replace") -- only show icon instead of icon and text
 local tweak = function(item) -- :h complete-items
   if item.user_data.lsp.needs_snippet_insert then item.menu = string.sub(item.menu, 3) end -- remove "S "

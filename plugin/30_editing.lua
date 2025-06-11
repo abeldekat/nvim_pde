@@ -2,7 +2,6 @@ local Settings = require("akshared.settings")
 local add, later = MiniDeps.add, MiniDeps.later
 local H = {}
 
--- Settings.mini_completion_fuzzy_provider = "blink" -- default native fuzzy (see completeopt)
 Settings.completion = "mini" -- "blink"
 Settings.use_mini_ai = true
 
@@ -35,10 +34,7 @@ H.completion_providers = {
     H.blink()
     require("ak.editing.blink_completion")
   end,
-  mini = function()
-    if Settings.mini_completion_fuzzy_provider == "blink" then H.blink() end
-    require("ak.editing.mini_completion")
-  end,
+  mini = function() require("ak.editing.mini_completion") end,
 }
 
 H.blink = function()
