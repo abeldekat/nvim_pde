@@ -7,12 +7,11 @@
 -- If many matches, still single chars closeby because of groups(press space).
 
 require("mini.jump2d").setup({
-  -- character spotter defaults to blank = false: -- type j/k after the jump, or use paragraph motions...
-  allowed_lines = { cursor_at = false }, -- try to minimize matches by using fFtT on current line.
-  labels = "jkl;miosde",
+  -- allowed_lines = { cursor_at = false }, -- try to minimize matches by using fFtT on current line.
+  labels = "jkl;mhniosde",
   mappings = { start_jumping = "" },
   silent = true,
-  view = { dim = true, n_steps_ahead = 1 },
+  view = { dim = true, n_steps_ahead = 100 },
 })
 
 -- No repeat in operator pending mode... See mini.jump2d H.apply_config.

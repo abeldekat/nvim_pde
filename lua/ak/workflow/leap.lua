@@ -17,7 +17,7 @@ leap.opts.equivalence_classes = { " \t\r\n", "([{", ")]}", "'\"`" }
 
 -- Mimic labels used in mini.jump2d config:
 leap.opts.safe_labels = "" -- no autojump, handy characters are more important
-leap.opts.labels = "jkl;miosde"
+leap.opts.labels = "jkl;mhniosde" -- 12 chars
 
 -- PR's in fork abeldekat/leap.nvim
 leap.opts.keep_conceallevel = true -- Issue 243, PR 270
