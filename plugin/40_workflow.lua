@@ -3,10 +3,7 @@ local use_hardtime_mini = true
 local use_leap = true
 
 later(function()
-  -- Branch "keep_conceallevel" -> Issue 243, PR 270
-  -- Branch "label_at_first_match_char" -> Issue 220, PR 271
-  -- Branch "ak" -> Leap main + PR's
-  add({ source = "abeldekat/leap.nvim", checkout = "ak" }) -- ({ source = "ggandor/leap.nvim" })
+  add({ source = "ggandor/leap.nvim" })
   if use_leap then
     require("ak.workflow.leap")
   else

@@ -18,10 +18,15 @@ leap.opts.equivalence_classes = { " \t\r\n", "([{", ")]}", "'\"`" }
 -- Mimic labels used in mini.jump2d config:
 leap.opts.safe_labels = "" -- no autojump, handy characters are more important
 leap.opts.labels = "jkl;mhniosde" -- 12 chars
+leap.opts.vim_opts = {
+  ["wo.scrolloff"] = 0,
+  ["wo.sidescrolloff"] = 0,
+  -- ["wo.conceallevel"] = 0,
+  ["bo.modeline"] = false,
+}
 
--- PR's in fork abeldekat/leap.nvim
-leap.opts.keep_conceallevel = true -- Issue 243, PR 270
-leap.opts.show_label_on_start_of_match = true -- Issue 220, PR 271
+-- PR in fork abeldekat/leap.nvim:
+-- leap.opts.show_label_on_start_of_match = true -- Issue 220, PR 271
 
 local nxo = { "n", "x", "o" }
 local nx = { "n", "x" }
