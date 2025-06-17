@@ -1,4 +1,3 @@
-local Settings = require("akshared.settings")
 local Picker = require("akshared.pick")
 local Toggle = require("akshared.toggle")
 local methods = vim.lsp.protocol.Methods
@@ -47,7 +46,7 @@ end
 local add_completion = function(buffer)
   -- Using completefunc to be able to use ctrl-o to temporarily
   -- escape to normal mode. See mini discussions #1736
-  if Settings.completion == "mini" then vim.bo[buffer].completefunc = "v:lua.MiniCompletion.completefunc_lsp" end
+  if MiniCompletion then vim.bo[buffer].completefunc = "v:lua.MiniCompletion.completefunc_lsp" end
 end
 
 local add_inlay_hints = function(client, buffer)
@@ -82,7 +81,7 @@ vim.lsp.handlers["client/registerCapability"] = (function(overridden)
   end
 end)(vim.lsp.handlers["client/registerCapability"])
 
-vim.lsp.config("*", { capabilities = Settings.completion == "mini" and MiniCompletion.get_lsp_capabilities() or nil })
+vim.lsp.config("*", { capabilities = MiniCompletion and MiniCompletion.get_lsp_capabilities() or nil })
 vim.lsp.enable({
   "basedpyright",
   "bashls",

@@ -1,5 +1,3 @@
-local Settings = require("akshared.settings")
-
 local mini_snippets, config_path = require("mini.snippets"), vim.fn.stdpath("config")
 local stop_session_after_jumping_to_final_tabstop = true
 local stop_all_sessions_on_normal_mode_exit = true
@@ -13,16 +11,6 @@ local lang_patterns = {
 }
 
 mini_snippets.setup({
-  expand = {
-    select = function(snippets, insert)
-      if Settings.completion == "blink" then -- blink popup covers snippet picker
-        require("blink.cmp").cancel() -- cancel uses vim.schedule
-        vim.schedule(function() MiniSnippets.default_select(snippets, insert) end)
-        return
-      end
-      MiniSnippets.default_select(snippets, insert)
-    end,
-  },
   mappings = { jump_next = "", jump_prev = "" }, -- defined in map_multistep
   snippets = {
     mini_snippets.gen_loader.from_file(config_path .. "/snippets/global.json"),
