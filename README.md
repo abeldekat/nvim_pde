@@ -47,7 +47,7 @@ I touch type using the right hand
 in combination with the forefinger of the left hand
 
 - Leader: `space`
-- Main plugins: [akmini.visits_harpooned], [mini.files], [mini.pick], [mini.jump2d] and [leap.nvim]
+- Main plugins: [akmini.visits_harpooned], [mini.files], [mini.pick], [akmini.jump2d_leaped]
 - Menu: [mini.clue]
 
 ### VisitsHarpooned
@@ -67,6 +67,10 @@ operating in almost the same way as `harpoon`.
 - Clear all visits: `<leader>or`
 
 Pickers can display hints using internal plugin [akmini.pick_hinted]
+
+### Jump2d like leap
+
+See [this](https://github.com/echasnovski/mini.nvim/discussions/1860) discussion
 
 ### Window navigation
 
@@ -157,6 +161,7 @@ Relevant discussions:
 - [Beta testing mini.deps](https://github.com/echasnovski/mini.nvim/issues/689#issuecomment-1962327624).
 - [MiniNotify replacing fidget](https://github.com/echasnovski/mini.nvim/discussions/1602).
 - [MiniCompletion using blink fuzzy algorithm](https://github.com/echasnovski/mini.nvim/discussions/1771).
+- [Jump with second character from each spot](https://github.com/echasnovski/mini.nvim/discussions/1860)
 
 ## Environment
 
@@ -182,17 +187,16 @@ This repo uses code and ideas from the following repositories:
 [tmux-sessionizer]: https://github.com/abeldekat/scripts/blob/main/tmux-sessionizer
 [leader h]: lua/akshared/color_toggle.lua
 [mini.nvim]: https://github.com/echasnovski/mini.nvim
-[mini.jump2d]: https://github.com/echasnovski/mini.jump2d
-[leap.nvim]: https://github.com/ggandor/leap.nvim
 [mini.files]: https://github.com/echasnovski/mini.files
 [mini.operators]: https://github.com/echasnovski/mini.operators
 [mini.surround]: https://github.com/echasnovski/mini.surround
 [mini.pick]: https://github.com/echasnovski/mini.pick
 [mini.visits]: https://github.com/echasnovski/mini.visits
 [mini.clue]: https://github.com/echasnovski/mini.clue
-[akmini.visits_harpooned]: lua/akmini/visits_harpooned.lua
 [akmini.harpoonline]: lua/akmini/harpoonline.lua
+[akmini.jump2d_leaped]: lua/akmini/jump2d_leaped.lua
 [akmini.pick_hinted]: lua/akmini/pick_hinted.lua
+[akmini.visits_harpooned]: lua/akmini/visits_harpooned.lua
 [peek.nvim]: https://github.com/toppair/peek.nvim
 [deno]: https://deno.land
 [with_submodules]: https://github.com/abeldekat/nvim_pde/tree/with_submodules
