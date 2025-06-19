@@ -12,7 +12,7 @@ local use_fork = true
 
 local setup = function()
   -- akmini.jump2d_leaped is a copy from lua/mini/jump2d.lua,
-  -- in branch jump2d_include_second_character_refactored,
+  -- in branch jump2d_guarantee_second_character,
   -- in my fork https://github.com/abeldekat/mini.nivm
   local source = use_fork and "akmini.jump2d_leaped" or "mini.jump2d"
   local start = use_fork and H.start_fork or H.start
@@ -21,7 +21,7 @@ local setup = function()
     allowed_windows = H.allowed_windows,
     hl_group = use_fork and "LeapLabel" or nil,
     hl_group_ahead = use_fork and "LeapLabel" or nil,
-    labels = "jkl;mhniosde",
+    labels = "jklsdewmhnio", -- 12 labels
     mappings = { start_jumping = "" },
     silent = true,
     view = { dim = not use_fork and true or false, n_steps_ahead = 100 },
@@ -33,7 +33,7 @@ local setup = function()
   vim.keymap.set(modes, "s", start, { desc = desc })
 end
 
-H.allowed_windows = { current = true, not_current = true }
+H.allowed_windows = { current = true, not_current = false }
 H.ns_id_dim = vim.api.nvim_create_namespace("MiniJump2dDimImmediately")
 
 H.start = function() MiniJump2d.start(MiniJump2d.builtin_opts.single_character) end
