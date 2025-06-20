@@ -364,6 +364,10 @@ MiniJump2d.config = {
 MiniJump2d.start = function(opts)
   if H.is_disabled() then return end
 
+  -- Initialize cache:
+  H.cache.spots_add_steps = H.spots_add_steps
+  H.cache.spots_show = H.spots_show
+
   opts = opts or {}
 
   -- Apply `before_start` before `tbl_deep_extend` to allow it modify options
@@ -392,15 +396,58 @@ MiniJump2d.start = function(opts)
 
   local label_tbl = vim.split(opts.labels, "")
 
-  local spots_add_steps = H.cache.spots_add_steps and H.cache.spots_add_steps or H.spots_add_steps
-  spots = spots_add_steps(spots, label_tbl, opts.view.n_steps_ahead)
+  spots = H.cache.spots_add_steps(spots, label_tbl, opts.view.n_steps_ahead)
 
-  local spots_show = H.cache.spots_show and H.cache.spots_show or H.spots_show
-  spots_show(spots, opts)
+  H.cache.spots_show(spots, opts)
 
   H.cache.spots = spots
 
   H.advance_jump(opts)
+end
+
+--- Wraps MiniJump2d.start with the following opinionated defaults:
+---   - opts.view.dim = false
+---   - opts.view.n_steps_ahead = math.huge
+---
+--- On start, all lines are dimmed.
+MiniJump2d.start_two_characters = function(opts)
+  local dim_all = function(ns, group, wins)
+    for _, win_id in ipairs(wins) do
+      local wininfo = vim.fn.getwininfo(win_id)[1]
+      -- stylua: ignore
+      vim.highlight.range(
+        wininfo.bufnr, ns, group, { wininfo.topline - 1, 0 },
+        { wininfo.botline - 1, -1 }, { priority = 9999 }
+      )
+    end
+    vim.cmd("redraw")
+  end
+
+  local undim_all = function(ns, wins)
+    for _, win_id in ipairs(wins) do
+      pcall(vim.api.nvim_buf_clear_namespace, vim.api.nvim_win_get_buf(win_id), ns, 0, -1)
+    end
+  end
+
+  if H.is_disabled() then return end
+
+  opts = opts or {}
+  opts.view = opts.view or {}
+  opts.view.dim = false -- don't dim per spot
+  opts.view.n_steps_ahead = math.huge -- show all steps
+
+  local allowed_windows = opts.allowed_windows
+    or (vim.b.minijump2d_config or {}).allowed_windows
+    or MiniJump2d.config.allowed_windows
+  local win_id_init = vim.api.nvim_get_current_win()
+  local win_id_arr = vim.tbl_filter(function(win_id)
+    if win_id == win_id_init then return allowed_windows.current end
+    return allowed_windows.not_current
+  end, H.tabpage_list_wins(0))
+
+  dim_all(H.ns_id.dim_all, opts.hl_group_dim or "MiniJump2dDim", win_id_arr)
+  MiniJump2d.start(opts)
+  undim_all(H.ns_id.dim_all, win_id_arr)
 end
 
 --- Stop jumping
@@ -713,53 +760,8 @@ MiniJump2d.builtin_opts.single_character = user_input_opts(
 --- Defines `spotter`, `allowed_lines.blank`, `allowed_lines.fold`,
 --- `overrides.spots_add_steps`, and `hooks.before_start`.
 MiniJump2d.builtin_opts.two_characters = user_input_opts(function()
-  local remove_first_step = function(spots)
-    for _, spot in ipairs(spots) do
-      local steps = spot.steps
-      if #steps > 1 then
-        spot.org_steps = steps
-        local result = {}
-        for i = 2, #steps do
-          table.insert(result, steps[i])
-        end
-        spot.steps = result
-      end
-    end
-  end
-
-  local undo_remove_first_step = function(spots)
-    for _, spot in ipairs(spots) do
-      spot.steps = spot.org_steps or spot.steps
-    end
-  end
-
-  H.cache.spots_add_steps = function(spots, label_tbl, n_steps_ahead)
-    local spots_by_second_character = {}
-    for _, spot in ipairs(spots) do
-      local line = vim.api.nvim_buf_get_lines(spot.buf_id, spot.line - 1, spot.line, false)[1]
-
-      local char = line:sub(spot.column + 1, spot.column + 1)
-      char = char == "" and " " or char -- use space on line end...
-      spots_by_second_character[char] = spots_by_second_character[char] or {}
-      table.insert(spots_by_second_character[char], spot)
-    end
-
-    for char, spots_with_char in pairs(spots_by_second_character) do
-      local opts = { init_steps = function() return { char } end }
-      H.spots_add_steps(spots_with_char, label_tbl, n_steps_ahead, opts)
-    end
-
-    H.cache.spots_add_steps = H.spots_add_steps -- only override on jump initializer
-    return spots
-  end
-
-  H.cache.spots_show = function(spots, opts)
-    remove_first_step(spots)
-    H.spots_show(spots, opts)
-    undo_remove_first_step(spots)
-    H.cache.spots_show = H.spots_show -- only override on jump initializer
-  end
-
+  H.cache.spots_add_steps = H.spots_add_steps_two_characters
+  H.cache.spots_show = H.spots_show_without_second_character
   return H.getcharstr("Enter jump identifier and second character to search")
 end)
 
@@ -776,6 +778,7 @@ H.default_config = vim.deepcopy(MiniJump2d.config)
 -- Namespaces to be used within module
 H.ns_id = {
   dim = vim.api.nvim_create_namespace("MiniJump2dDim"),
+  dim_all = vim.api.nvim_create_namespace("MiniJump2dDimAll"),
   spots = vim.api.nvim_create_namespace("MiniJump2dSpots"),
   input = vim.api.nvim_create_namespace("MiniJump2dInput"),
 }
@@ -944,6 +947,26 @@ H.spots_add_steps = function(spots, label_tbl, n_steps_ahead, opts)
   return spots
 end
 
+H.spots_add_steps_two_characters = function(spots, label_tbl, n_steps_ahead)
+  local spots_per_character = {}
+  for _, spot in ipairs(spots) do
+    local line = vim.api.nvim_buf_get_lines(spot.buf_id, spot.line - 1, spot.line, false)[1]
+
+    local char = line:sub(spot.column + 1, spot.column + 1)
+    char = char == "" and " " or char -- use space on line end...
+    spots_per_character[char] = spots_per_character[char] or {}
+    table.insert(spots_per_character[char], spot)
+  end
+
+  for char, spots_with_char in pairs(spots_per_character) do
+    local opts = { init_steps = function() return { char } end }
+    H.spots_add_steps(spots_with_char, label_tbl, n_steps_ahead, opts)
+  end
+
+  H.cache.spots_add_steps = H.spots_add_steps -- only override on jump initializer
+  return spots
+end
+
 ---@param spot_steps_arr table Array of step arrays. Single step array consists
 ---   from labels user needs to press in order to filter out the spot. Example:
 ---   { { 'a', 'a' }, { 'a', 'b' },  { 'b' } }
@@ -1014,6 +1037,29 @@ H.spots_show = function(spots, opts)
 
   -- Redraw to force showing marks
   vim.cmd("redraw")
+end
+
+H.spots_show_without_second_character = function(spots, opts)
+  local remove_first_steps = function(spot)
+    local steps = spot.steps
+    if #steps < 2 then return end
+
+    spot.org_steps = steps
+    local result = {}
+    for i = 2, #steps do
+      table.insert(result, steps[i])
+    end
+    spot.steps = result
+  end
+
+  for _, spot in ipairs(spots) do
+    remove_first_steps(spot)
+  end
+  H.spots_show(spots, opts)
+  for _, spot in ipairs(spots) do
+    spot.steps = spot.org_steps or spot.steps -- undo remove
+  end
+  H.cache.spots_show = H.spots_show -- only override on jump initializer
 end
 
 H.spots_unshow = function(spots)
@@ -1134,10 +1180,8 @@ H.advance_jump = function(opts)
     spots = vim.tbl_filter(function(x) return x.steps[1] == key end, spots)
 
     if #spots > 1 then
-      local spots_add_steps = H.cache.spots_add_steps and H.cache.spots_add_steps or H.spots_add_steps
-      spots = spots_add_steps(spots, label_tbl, n_steps_ahead)
-      local spots_show = H.cache.spots_show and H.cache.spots_show or H.spots_show
-      spots_show(spots, opts)
+      spots = H.cache.spots_add_steps(spots, label_tbl, n_steps_ahead)
+      H.cache.spots_show(spots, opts)
       H.cache.spots = spots
 
       H.advance_jump(opts)
