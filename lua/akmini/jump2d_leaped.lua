@@ -395,7 +395,8 @@ MiniJump2d.start = function(opts)
   local spots_add_steps = H.cache.spots_add_steps and H.cache.spots_add_steps or H.spots_add_steps
   spots = spots_add_steps(spots, label_tbl, opts.view.n_steps_ahead)
 
-  H.spots_show(spots, opts)
+  local spots_show = H.cache.spots_show and H.cache.spots_show or H.spots_show
+  spots_show(spots, opts)
 
   H.cache.spots = spots
 
@@ -693,16 +694,45 @@ MiniJump2d.builtin_opts.single_character = user_input_opts(
 )
 
 --- Jump to single character taken from user input, ensuring that the second
---- character of each spot is always included in the generated steps
---- If target is last on the line, second char is hardcoded to space.
+--- character of each spot is always included in the generated steps.
+--- After user enters jump identifier, the second character must be typed,
+--- but is *not* shown.
+---
+--- Advantage:
+---   - User sees the generated labels ahead-of-time, at target position
+
+--- Disadvantage:
+---   - User must know that two characters are required. No UI indication.
+---   - Can't be used with a customized MiniJump2dSpotUnique
+
+--- Exception: Jump is performed immediately if there is only one spot.
+---
+--- If target is last on line, second char is hardcoded to space.
 ---
 --- Defines `spotter`, `allowed_lines.blank`, `allowed_lines.fold`,
 --- `overrides.spots_add_steps`, and `hooks.before_start`.
-MiniJump2d.builtin_opts.single_character_extended = user_input_opts(function()
-  H.cache.spots_add_steps = function(spots, label_tbl, n_steps_ahead)
-    n_steps_ahead = n_steps_ahead == 0 and 1 or n_steps_ahead
-    if spots[1].steps then return H.spots_add_steps(spots, label_tbl, n_steps_ahead) end
+MiniJump2d.builtin_opts.two_characters = user_input_opts(function()
+  local remove_first_step = function(spots)
+    for _, spot in ipairs(spots) do
+      local steps = spot.steps
+      if #steps > 1 then
+        spot.org_steps = steps
+        local result = {}
+        for i = 2, #steps do
+          table.insert(result, steps[i])
+        end
+        spot.steps = result
+      end
+    end
+  end
 
+  local undo_remove_first_step = function(spots)
+    for _, spot in ipairs(spots) do
+      spot.steps = spot.org_steps or spot.steps
+    end
+  end
+
+  H.cache.spots_add_steps = function(spots, label_tbl, n_steps_ahead)
     local spots_by_second_character = {}
     for _, spot in ipairs(spots) do
       local line = vim.api.nvim_buf_get_lines(spot.buf_id, spot.line - 1, spot.line, false)[1]
@@ -718,9 +748,18 @@ MiniJump2d.builtin_opts.single_character_extended = user_input_opts(function()
       H.spots_add_steps(spots_with_char, label_tbl, n_steps_ahead, opts)
     end
 
+    H.cache.spots_add_steps = H.spots_add_steps -- only override on jump initializer
     return spots
   end
-  return H.getcharstr("Enter single character to search")
+
+  H.cache.spots_show = function(spots, opts)
+    remove_first_step(spots)
+    H.spots_show(spots, opts)
+    undo_remove_first_step(spots)
+    H.cache.spots_show = H.spots_show -- only override on jump initializer
+  end
+
+  return H.getcharstr("Enter jump identifier and second character to search")
 end)
 
 --- Jump to query taken from user input
@@ -753,6 +792,9 @@ H.cache = {
 
   -- Whether to use a customized H.spots_add_steps
   spots_add_steps = nil,
+
+  -- Whether to use a customized H.spots_show
+  spots_show = nil,
 }
 
 -- Table with special keys
@@ -1093,7 +1135,8 @@ H.advance_jump = function(opts)
     if #spots > 1 then
       local spots_add_steps = H.cache.spots_add_steps and H.cache.spots_add_steps or H.spots_add_steps
       spots = spots_add_steps(spots, label_tbl, n_steps_ahead)
-      H.spots_show(spots, opts)
+      local spots_show = H.cache.spots_show and H.cache.spots_show or H.spots_show
+      spots_show(spots, opts)
       H.cache.spots = spots
 
       H.advance_jump(opts)

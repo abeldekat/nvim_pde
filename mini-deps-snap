@@ -1,5 +1,5 @@
 return {
-  ["SchemaStore.nvim"] = "45fd6c22f30487586c771072dc8c5230931e4c7b",
+  ["SchemaStore.nvim"] = "eeacd3cb53a1991a3ef18fb0456c9b9bda047c70",
   colors_bamboo = "ab8393d1a314d96314605369b4b1e6bc7737f2b5",
   colors_catppuccin = "fa42eb5e26819ef58884257d5ae95dd0552b9a66",
   colors_everforest = "c4bb2ae687ae21938775f436cf213492702a0cf3",
@@ -25,7 +25,7 @@ return {
   ["one-small-step-for-vimkind"] = "d9f832598e14f3b206b06f5738d02cebede65269",
   ["peek.nvim"] = "5820d937d5414baea5f586dc2a3d912a74636e5b",
   ["quicker.nvim"] = "51d3926f183c2d98fbc237cc237ae0926839af3a",
-  ["render-markdown.nvim"] = "76f7ce56ccb913632745714f160faa53164c5574",
+  ["render-markdown.nvim"] = "b8ee8bcefd6f5319beb7d3df5237c68e5c5376ac",
   ["toggleterm.nvim"] = "9a88eae817ef395952e08650b3283726786fb5fb",
   ["vim-dadbod"] = "e95afed23712f969f83b4857a24cf9d59114c2e6",
   ["vim-slime"] = "507107dd24c9b85721fa589462fd5068e0f70266",

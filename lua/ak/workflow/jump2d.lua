@@ -9,39 +9,47 @@
 
 local H = {}
 local use_fork = true
+local use_leap_hl = false
 
 local setup = function()
   -- akmini.jump2d_leaped is a copy from lua/mini/jump2d.lua,
   -- in branch jump2d_guarantee_second_character,
   -- in my fork https://github.com/abeldekat/mini.nivm
   local source = use_fork and "akmini.jump2d_leaped" or "mini.jump2d"
-  local start = use_fork and H.start_fork or H.start
 
   require(source).setup({
     allowed_windows = H.allowed_windows,
-    hl_group = use_fork and "LeapLabel" or nil,
-    hl_group_ahead = use_fork and "LeapLabel" or nil,
-    labels = "jklsdewmhnio", -- 12 labels
+    -- hl_group = use_leap_hl and "LeapLabel" or nil, --"MiniJump2dSpot",
+    -- hl_group_ahead = use_leap_hl and "LeapLabel" or "MiniJump2dSpot", -- "MiniJump2dSpotAhead",
+    -- labels = "sdefhjkl;", -- e and r  instead of g and a 10 labels
+    labels = "jklsdefmioh", -- 11 labels
     mappings = { start_jumping = "" },
     silent = true,
-    view = { dim = not use_fork and true or false, n_steps_ahead = 100 },
+    view = { n_steps_ahead = 100 },
   })
 
   -- No repeat in operator pending mode... See mini.jump2d, H.apply_config.
   local modes = { "n", "x", "o" }
   local desc = "Start 2d jumping"
+  local start_opts_fn = use_fork and H.start_opts_from_fork or H.start_opts
+  local start = H.generate_start(start_opts_fn())
   vim.keymap.set(modes, "s", start, { desc = desc })
 end
 
 H.allowed_windows = { current = true, not_current = false }
-H.ns_id_dim = vim.api.nvim_create_namespace("MiniJump2dDimImmediately")
 
-H.start = function() MiniJump2d.start(MiniJump2d.builtin_opts.single_character) end
+H.start_opts = function() return MiniJump2d.builtin_opts.single_character end
 
-H.start_fork = function()
-  H.dim_immediately(H.ns_id_dim, "LeapBackdrop", H.allowed_windows)
-  MiniJump2d.start(MiniJump2d.builtin_opts.single_character_extended) -- NOTE: New builtin
-  H.dim_remove(H.ns_id_dim, H.allowed_windows)
+H.start_opts_from_fork = function() return MiniJump2d.builtin_opts.two_characters end
+
+H.generate_start = function(start_opts)
+  local ns_id_dim = vim.api.nvim_create_namespace("MiniJump2dDimImmediately")
+  local dim = use_leap_hl and "LeapBackdrop" or "MiniJump2dDim"
+  return function()
+    H.dim_immediately(ns_id_dim, dim, H.allowed_windows)
+    MiniJump2d.start(start_opts)
+    H.dim_remove(ns_id_dim, H.allowed_windows)
+  end
 end
 
 H.dim_immediately = function(ns, group, allowed_windows)
