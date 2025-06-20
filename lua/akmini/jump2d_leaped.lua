@@ -409,6 +409,7 @@ MiniJump2d.stop = function()
   H.cache.spots = nil
   H.cache.msg_shown = false
   H.cache.spots_add_steps = nil
+  H.cache.spots_show = nil
   vim.cmd("redraw")
 
   if H.cache.is_in_getcharstr then vim.api.nvim_input("<C-c>") end
