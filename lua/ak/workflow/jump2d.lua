@@ -25,7 +25,11 @@ require(source).setup({
 -- No repeat in operator pending mode... See mini.jump2d, H.apply_config.
 local modes = { "n", "x", "o" }
 local desc = "Start 2d jumping"
-local builtin_opts = MiniJump2d.builtin_opts.single_character
+local builtin_opts = MiniJump2d.builtin_opts.single_character --[[@as table]]
 local start_single = function() return MiniJump2d.start(builtin_opts) end
-local start_fork = function() return MiniJump2d.start_extended_character(builtin_opts) end
+local start_fork = function()
+  vim.iter({ "hl_group", "hl_group_ahead", "hl_group_unique" }):each(function(hl) builtin_opts[hl] = "LeapLabel" end)
+  builtin_opts.hl_group_dimmed = "LeapBackdrop"
+  return MiniJump2d.start_extended_character(builtin_opts)
+end
 vim.keymap.set(modes, "s", use_fork and start_fork or start_single, { desc = desc })
