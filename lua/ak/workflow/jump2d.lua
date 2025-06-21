@@ -10,7 +10,7 @@
 local use_fork = true
 
 -- akmini.jump2d_leaped is a copy from lua/mini/jump2d.lua,
--- in branch jump2d_two_characters,
+-- in branch jump2d_extended_character,
 -- in my fork https://github.com/abeldekat/mini.nivm
 local source = use_fork and "akmini.jump2d_leaped" or "mini.jump2d"
 
@@ -25,7 +25,7 @@ require(source).setup({
 -- No repeat in operator pending mode... See mini.jump2d, H.apply_config.
 local modes = { "n", "x", "o" }
 local desc = "Start 2d jumping"
-local start_single = function() return MiniJump2d.start(MiniJump2d.builtin_opts.single_character) end
-local start_fork = function() return MiniJump2d.start_two_characters(MiniJump2d.builtin_opts.two_characters) end
-local start = use_fork and start_fork or start_single
-vim.keymap.set(modes, "s", start, { desc = desc })
+local builtin_opts = MiniJump2d.builtin_opts.single_character
+local start_single = function() return MiniJump2d.start(builtin_opts) end
+local start_fork = function() return MiniJump2d.start_extended_character(builtin_opts) end
+vim.keymap.set(modes, "s", use_fork and start_fork or start_single, { desc = desc })
