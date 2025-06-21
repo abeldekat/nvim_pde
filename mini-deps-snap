@@ -11,7 +11,7 @@ return {
   ["conform.nvim"] = "8132ec733eed3bf415b97b76797ca41b59f51d7d",
   ["dial.nvim"] = "2c7e2750372918f072a20f3cf754d845e143d7c9",
   ["friendly-snippets"] = "572f5660cf05f8cd8834e096d7b4c921ba18e175",
-  ["mini.nvim"] = "495f9533cc885f0591c47b2d8f644d092217c16f",
+  ["mini.nvim"] = "a03a9a4f79916579b2debaec629333e2ebdd82b5",
   neotest = "ef492755730e59e1d8122c461abbd086bee4c76b",
   ["nvim-dap"] = "2edd6375692d9ac1053d50acfe415c1eb2ba92d0",
   ["nvim-dap-ui"] = "73a26abf4941aa27da59820fd6b028ebcdbcf932",
