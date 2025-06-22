@@ -932,6 +932,7 @@ H.spots_add_steps = function(spots, label_tbl, n_steps_ahead, opts)
 end
 
 H.spots_add_steps_extended = function(spots, label_tbl, n_steps_ahead)
+  local middle_dot = "\194\183"
   local spots_per_character = {}
   for _, spot in ipairs(spots) do
     local line = vim.api.nvim_buf_get_lines(spot.buf_id, spot.line - 1, spot.line, false)[1]
@@ -943,8 +944,12 @@ H.spots_add_steps_extended = function(spots, label_tbl, n_steps_ahead)
   end
 
   for char, spots_with_char in pairs(spots_per_character) do
-    local opts = { init_steps = function() return { char } end }
-    H.spots_add_steps(spots_with_char, label_tbl, n_steps_ahead, opts)
+    if #spots_with_char == 1 then
+      spots_with_char[1].steps = { char, middle_dot } -- indicator for "no generated label"
+    else
+      local opts = { init_steps = function() return { char } end }
+      H.spots_add_steps(spots_with_char, label_tbl, n_steps_ahead, opts)
+    end
   end
 
   H.cache.spots_add_steps = H.spots_add_steps -- only override on jump initializer
