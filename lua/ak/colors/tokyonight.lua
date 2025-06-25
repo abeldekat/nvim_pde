@@ -43,8 +43,9 @@ local opts = {
   plugins = plugins,
   on_highlights = function(hl, c)
     hl.MiniJump2dSpot = { fg = c.orange, bg = nil, bold = true, nocombine = true }
-    hl.MiniJump2dSpotAhead = { fg = c.orange, bg = nil, bold = true, nocombine = true }
-    hl.MiniJump2dSpotUnique = { fg = c.orange, bg = nil, bold = true, nocombine = true }
+    hl.MiniJump2dSpotAhead = { link = "MiniJump2dSpot" }
+    hl.MiniJump2dSpotUnique = { link = "MiniJump2dSpot" }
+    hl.MiniJump2dDim = { fg = c.comment } -- comment color, no italic
 
     -- Careful: Do not use the same table instance twice!
     hl.MsgArea = { fg = c.comment } -- fg_dark: -- Area for messages and cmdline

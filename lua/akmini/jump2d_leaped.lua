@@ -397,7 +397,6 @@ MiniJump2d.start = function(opts)
   end
 
   local label_tbl = vim.split(opts.labels, "")
-
   spots = H.cache.spots_add_steps(spots, label_tbl, opts.view.n_steps_ahead)
 
   H.cache.spots_show(spots, opts)
@@ -721,10 +720,6 @@ MiniJump2d.builtin_opts.query = user_input_opts(function() return H.input("Enter
 --- Notes:
 --- - Jump is performed immediately if there is only one spot
 --- - If target is last on line, second character is hardcoded to space
---- - On start, all lines are dimmed.
---- - The following options are hardcoded:
----     - `opts.view.dim = false`
----     - `opts.view.n_steps_ahead = math.huge`
 ---
 ---@param opts table|nil Same as |MiniJump2d.start|
 ---   The opts should be taken from |MiniJump2d.builtin_opts.single_character|
@@ -734,24 +729,7 @@ MiniJump2d.start_extended_character = function(opts)
   H.cache.spots_add_steps = H.spots_add_steps_extended
   H.cache.spots_show = H.spots_show_without_second_character
 
-  opts = opts or {}
-  opts.view = opts.view or {}
-  opts.view.dim = false -- Don't dim per spot
-  opts.view.n_steps_ahead = math.huge -- Show all steps
-
-  -- Opts cannot be merged here:
-  local allowed_windows = opts.allowed_windows
-    or (vim.b.minijump2d_config or {}).allowed_windows
-    or MiniJump2d.config.allowed_windows
-  local win_id_init = vim.api.nvim_get_current_win()
-  local win_id_arr = vim.tbl_filter(function(win_id)
-    if win_id == win_id_init then return allowed_windows.current end
-    return allowed_windows.not_current
-  end, H.tabpage_list_wins(0))
-
-  H.dim_all(opts.hl_group_dim or "MiniJump2dDim", win_id_arr)
   MiniJump2d.start(opts)
-  H.undim_all(win_id_arr)
 end
 
 -- Helper data ================================================================
@@ -761,7 +739,6 @@ H.default_config = vim.deepcopy(MiniJump2d.config)
 -- Namespaces to be used within module
 H.ns_id = {
   dim = vim.api.nvim_create_namespace("MiniJump2dDim"),
-  dim_all = vim.api.nvim_create_namespace("MiniJump2dDimAll"),
   spots = vim.api.nvim_create_namespace("MiniJump2dSpots"),
   input = vim.api.nvim_create_namespace("MiniJump2dInput"),
 }
@@ -1344,26 +1321,6 @@ H.merge_unique = function(tbl_1, tbl_2)
   end
 
   return res
-end
-
-H.dim_all = function(group, wins)
-  local ns = H.ns_id.dim_all
-  for _, win_id in ipairs(wins) do
-    local wininfo = vim.fn.getwininfo(win_id)[1]
-      -- stylua: ignore
-      vim.highlight.range(
-        wininfo.bufnr, ns, group, { wininfo.topline - 1, 0 },
-        { wininfo.botline - 1, -1 }, { priority = 9999 }
-      )
-  end
-  vim.cmd("redraw")
-end
-
-H.undim_all = function(wins)
-  local ns = H.ns_id.dim_all
-  for _, win_id in ipairs(wins) do
-    pcall(vim.api.nvim_buf_clear_namespace, vim.api.nvim_win_get_buf(win_id), ns, 0, -1)
-  end
 end
 
 return MiniJump2d

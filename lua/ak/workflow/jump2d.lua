@@ -11,11 +11,12 @@ local use_fork = true
 
 -- akmini.jump2d_leaped is a copy from lua/mini/jump2d.lua,
 -- in branch jump2d_extended_character,
--- in my fork https://github.com/abeldekat/mini.nivm
+-- in fork https://github.com/abeldekat/mini.nivm
 local source = use_fork and "akmini.jump2d_leaped" or "mini.jump2d"
+local ns_id_dim_all = vim.api.nvim_create_namespace("MiniJump2dDimAll")
 
 require(source).setup({
-  allowed_windows = { current = true, not_current = false },
+  allowed_windows = { current = true, not_current = true },
   -- labels = "jklsdewmio", -- 10 labels, without: "a", "f", "g",  "h" and ";"
   --
   -- Have left hand labels grouped around s:
@@ -26,11 +27,48 @@ require(source).setup({
   view = { dim = true, n_steps_ahead = math.huge }, -- not needed for fork
 })
 
--- No repeat in operator pending mode... See mini.jump2d, H.apply_config.
-local modes = { "n", "x", "o" }
-local desc = "Start 2d jumping"
-local builtin_opts = MiniJump2d.builtin_opts.single_character --[[@as table]]
+local get_allowed_window_ids = function(opts)
+  local allowed_windows = (opts or {}).allowed_windows
+    or (vim.b.minijump2d_config or {}).allowed_windows
+    or MiniJump2d.config.allowed_windows
+  local win_id_init = vim.api.nvim_get_current_win()
 
-local start_single = function() return MiniJump2d.start(builtin_opts) end
-local start_fork = function() return MiniJump2d.start_extended_character(builtin_opts) end
-vim.keymap.set(modes, "s", use_fork and start_fork or start_single, { desc = desc })
+  return vim.tbl_filter(function(win_id)
+    if win_id == win_id_init then return allowed_windows.current end
+    return allowed_windows.not_current
+  end, vim.api.nvim_tabpage_list_wins(0))
+end
+
+local dim_all = function(group, wins)
+  for _, win_id in ipairs(wins) do
+    local wininfo = vim.fn.getwininfo(win_id)[1]
+      -- stylua: ignore
+      vim.highlight.range(
+        wininfo.bufnr, ns_id_dim_all, group, { wininfo.topline - 1, 0 },
+        { wininfo.botline - 1, -1 }, { priority = 9999 }
+      )
+  end
+  vim.cmd("redraw")
+end
+
+local undim_all = function(wins)
+  for _, win_id in ipairs(wins) do
+    pcall(vim.api.nvim_buf_clear_namespace, vim.api.nvim_win_get_buf(win_id), ns_id_dim_all, 0, -1)
+  end
+end
+
+-- No repeat in operator pending mode... See mini.jump2d, H.apply_config.
+local builtin_opts = MiniJump2d.builtin_opts.single_character --[[@as table]]
+builtin_opts.view = builtin_opts.view or {}
+builtin_opts.view.dim = not use_fork and builtin_opts.view.dim or false
+
+local start = function() return MiniJump2d.start(builtin_opts) end
+local start_fork = function()
+  local win_id_arr = get_allowed_window_ids()
+
+  dim_all(builtin_opts.hl_group_dim or "MiniJump2dDim", win_id_arr)
+  local result = MiniJump2d.start_extended_character(builtin_opts)
+  undim_all(win_id_arr)
+  return result
+end
+vim.keymap.set({ "n", "x", "o" }, "s", use_fork and start_fork or start, { desc = "Start 2d jumping" })

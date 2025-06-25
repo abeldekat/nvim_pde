@@ -38,6 +38,7 @@ vim.api.nvim_create_autocmd("Colorscheme", {
     set_hl("MiniJump2dSpot", palette.orange, palette.none, "bold,nocombine")
     set_hl("MiniJump2dSpotAhead", palette.orange, palette.none, "bold,nocombine")
     set_hl("MiniJump2dSpotUnique", palette.orange, palette.none, "bold,nocombine")
+    set_hl("MiniJump2dDim", palette.grey1, palette.none) -- comment color, no italic
 
     set_hl("MsgArea", palette.grey1, palette.none) -- Area for messages and cmdline
   end,
@@ -47,6 +48,6 @@ vim.g.gruvbox_material_foreground = "material" -- "mix", "original"
 vim.g.gruvbox_material_better_performance = 1
 vim.g.ruvbox_material_enable_italic = 1
 -- vim.g.gruvbox_material_disable_italic_comment = 1
-vim.g.gruvbox_material_background = "soft"
+vim.g.gruvbox_material_background = "medium"
 vim.g.gruvbox_material_foreground = "material"
 vim.o.background = prefer_light and "light" or "dark"

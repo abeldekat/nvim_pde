@@ -41,6 +41,7 @@ vim.api.nvim_create_autocmd("Colorscheme", {
     set_hl("MiniJump2dSpot", palette.orange, palette.none, "bold,nocombine")
     set_hl("MiniJump2dSpotAhead", palette.orange, palette.none, "bold,nocombine")
     set_hl("MiniJump2dSpotUnique", palette.orange, palette.none, "bold,nocombine")
+    set_hl("MiniJump2dDim", palette.grey1, palette.none) -- comment color, no italic
 
     set_hl("MsgArea", palette.grey0, palette.none) -- Area for messages and cmdline
   end,
