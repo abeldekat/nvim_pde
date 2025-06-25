@@ -17,6 +17,9 @@ require("nightfox").setup({
   options = opts,
   groups = {
     all = {
+      MiniJump2dSpot = { fg = "orange", bg = nil, style = "bold,nocombine" },
+      MiniJump2dSpotAhead = { link = "MiniJump2dSpot" },
+      MiniJump2dSpotUnique = { link = "MiniJump2dSpot" },
       MsgArea = { fg = "syntax.comment" }, -- Area for messages and cmdline
     },
   },

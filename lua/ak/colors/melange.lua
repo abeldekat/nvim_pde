@@ -10,9 +10,11 @@ vim.api.nvim_create_autocmd("Colorscheme", {
     -- local yellow = vim.api.nvim_get_hl(0, { name = "DiagnosticWarn" }).fg
     -- local blue = vim.api.nvim_get_hl(0, { name = "DiagnosticInfo" }).fg
     -- local cyan = vim.api.nvim_get_hl(0, { name = "DiagnosticHint" }).fg
-    local orange = "#E49B5D" --"#BC5C00"
 
-    set_hl("MiniPickMatchRanges", { fg = orange, bold = true })
+    set_hl("MiniJump2dSpot", { fg = "orange", bg = nil, bold = true, nocombine = true })
+    set_hl("MiniJump2dSpotAhead", { link = "MiniJump2dSpot" })
+    set_hl("MiniJump2dSpotUnique", { link = "MiniJump2dSpot" })
+    set_hl("MiniPickMatchRanges", { fg = "orange", bold = true })
     set_hl("MiniPickNormal", { link = "Normal" }) -- NormalFloat
 
     local fg_msg_area = vim.api.nvim_get_hl(0, { name = "Comment" }).fg

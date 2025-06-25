@@ -12,6 +12,9 @@ local opts = {
     return { -- left and right, dynamic
       MiniStatuslineFilename = { fg = c.subtext1, bg = c.mantle },
 
+      MiniJump2dSpot = { fg = c.orange, style = { "bold", "nocombine" } },
+      MiniJump2dSpotAhead = { link = "MiniJump2dSpot" },
+      MiniJump2dSpotUnique = { link = "MiniJump2dSpot" },
       MiniPickMatchRanges = { fg = c.peach, style = { "bold" } },
       MiniPickNormal = { link = "Normal" }, -- DiagnosticFloatingHint
 
@@ -20,13 +23,13 @@ local opts = {
   end,
   default_integrations = false,
   integrations = {
-    blink_cmp = true,
+    -- blink_cmp = true,
     dap = true,
     dap_ui = true,
-    fidget = true,
-    leap = true,
+    -- fidget = true,
+    -- leap = true,
     markdown = true,
-    mason = true,
+    -- mason = true,
     mini = {
       enabled = true,
       indentscope_color = "text",

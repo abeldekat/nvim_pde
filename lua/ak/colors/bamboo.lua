@@ -7,6 +7,9 @@ require("bamboo").setup({
   dim_inactive = true,
   highlights = {
     MsgArea = { fg = "$grey" }, -- Area for messages and cmdline
+    MiniJump2dSpot = { fg = "$orange", bg = nil, bold = true, nocombine = true }, -- reddish
+    MiniJump2dSpotAhead = { link = "MiniJump2dSpot" },
+    MiniJump2dSpotUnique = { link = "MiniJump2dSpot" },
   },
 })
 

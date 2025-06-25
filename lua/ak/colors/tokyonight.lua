@@ -12,9 +12,9 @@ local plugins = {
   all = false, -- the default is true when not using lazy.nvim
   auto = false, -- only supported for lazy.nvim
   --
-  ["blink_cmp"] = true,
+  -- ["blink_cmp"] = true,
   ["render-markdown"] = true,
-  ["leap"] = true,
+  -- ["leap"] = true,
   ["mini_animate"] = true,
   ["mini_clue"] = true,
   ["mini_completion"] = true,
@@ -42,6 +42,10 @@ local opts = {
   dim_inactive = true,
   plugins = plugins,
   on_highlights = function(hl, c)
+    hl.MiniJump2dSpot = { fg = c.orange, bg = nil, bold = true, nocombine = true }
+    hl.MiniJump2dSpotAhead = { fg = c.orange, bg = nil, bold = true, nocombine = true }
+    hl.MiniJump2dSpotUnique = { fg = c.orange, bg = nil, bold = true, nocombine = true }
+
     -- Careful: Do not use the same table instance twice!
     hl.MsgArea = { fg = c.comment } -- fg_dark: -- Area for messages and cmdline
   end,

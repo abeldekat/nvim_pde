@@ -36,6 +36,12 @@ vim.api.nvim_create_autocmd("Colorscheme", {
     set_hl("DiagnosticInfo", palette.blue, palette.none)
     set_hl("DiagnosticHint", palette.green, palette.none)
 
+    -- vim.api.nvim_set_hl(0, "MiniJump2dSpot", { reverse = true })
+    -- Same for all three groups:
+    set_hl("MiniJump2dSpot", palette.orange, palette.none, "bold,nocombine")
+    set_hl("MiniJump2dSpotAhead", palette.orange, palette.none, "bold,nocombine")
+    set_hl("MiniJump2dSpotUnique", palette.orange, palette.none, "bold,nocombine")
+
     set_hl("MsgArea", palette.grey0, palette.none) -- Area for messages and cmdline
   end,
 })
