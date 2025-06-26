@@ -28,14 +28,15 @@ require(source).setup({
 })
 
 local get_allowed_window_ids = function(opts)
-  local allowed_windows = (opts or {}).allowed_windows
+  local allowed = (opts or {}).allowed_windows
     or (vim.b.minijump2d_config or {}).allowed_windows
     or MiniJump2d.config.allowed_windows
   local win_id_init = vim.api.nvim_get_current_win()
 
   return vim.tbl_filter(function(win_id)
-    if win_id == win_id_init then return allowed_windows.current end
-    return allowed_windows.not_current
+    if not vim.api.nvim_win_get_config(win_id).focusable then return false end
+    if win_id == win_id_init then return allowed.current end
+    return allowed.not_current
   end, vim.api.nvim_tabpage_list_wins(0))
 end
 
