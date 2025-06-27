@@ -342,6 +342,8 @@ MiniJump2d.config = {
 ---       Default: `"MiniJump2dDim"`.
 ---     - <hl_group_unique> - highlight group for unique next step.
 ---       Default: `"MiniJump2dSpotUnique"`.
+---     - <force_filtering> - prevent immediate jump to single spot.
+---       Default: `false`.
 ---
 ---@usage >lua
 ---   -- Start default jumping
@@ -391,7 +393,7 @@ MiniJump2d.start = function(opts)
     H.message("No spots to show.")
     return
   end
-  if #spots == 1 then
+  if #spots == 1 and not opts.force_filtering then
     H.perform_jump(spots[1], opts.hooks.after_jump)
     return
   end

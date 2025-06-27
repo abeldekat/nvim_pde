@@ -62,6 +62,7 @@ end
 local builtin_opts = MiniJump2d.builtin_opts.single_character --[[@as table]]
 builtin_opts.view = builtin_opts.view or {}
 builtin_opts.view.dim = not use_fork and builtin_opts.view.dim or false
+builtin_opts.force_filtering = use_fork
 
 local start = function() return MiniJump2d.start(builtin_opts) end
 local start_fork = function()
