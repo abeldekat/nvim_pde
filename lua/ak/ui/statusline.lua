@@ -54,7 +54,7 @@ end
 AK.section_filename = function()
   local ft = vim.bo.filetype
   local full_path = H.full_path_of_current_buffer()
-  if not full_path or ft == "ministarter" then return "" end
+  if not full_path or H.ignored_ft[ft] then return "" end
 
   local flags = "%m%r"
   -- if full_path == "" then return "[No Name]" .. flags end
@@ -125,6 +125,12 @@ H.diag_signs = { -- must be at the end of a section, hl does not close
   WARN = string.format("%%#%s#%s", H.diag_hls.warn, "W"),
   INFO = string.format("%%#%s#%s", H.diag_hls.info, "I"),
   HINT = string.format("%%#%s#%s", H.diag_hls.hint, "H"),
+}
+
+H.ignored_ft = {
+  ministarter = true,
+  minifiles = true,
+  minipick = true,
 }
 
 --          ╭─────────────────────────────────────────────────────────╮
