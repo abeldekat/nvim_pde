@@ -53,22 +53,20 @@ H.is_list_of = function(x, x_name, type_to_test)
 end
 
 H.setup_config = function(config)
-  vim.validate({
-    MiniPick = { MiniPick, "table" },
-    config = { config, "table" },
-  })
+  vim.validate("MiniPick", MiniPick, "table")
+  vim.validate("config", config, "table")
   config = vim.tbl_deep_extend("force", vim.deepcopy(H.default_config), config or {})
 
-  vim.validate({ [config.hinted] = { config.hinted, "table" } })
-  vim.validate({
-    ["hinted.enable"] = { config.hinted.enable, "boolean" },
-    ["hinted.chars"] = { config.hinted.chars, function(x) return H.is_list_of(x, "hinted.chars", "string") end },
-    ["hinted.virt_clues_pos"] = {
-      config.hinted.virt_clues_pos,
-      function(x) return H.is_list_of(x, "hinted.virt_clues_pos", "string") end,
-    },
-    ["hinted.use_autosubmit"] = { config.hinted.use_autosubmit, "boolean" },
-  })
+  vim.validate("config.hinted", config.hinted, "table")
+  vim.validate("hinted.enable", config.hinted.enable, "boolean")
+  vim.validate("hinted.chars", config.hinted.chars, function(x) return H.is_list_of(x, "hinted.chars", "string") end)
+  vim.validate(
+    "hinted.virt_clues_pos",
+    config.hinted.virt_clues_pos,
+    function(x) return H.is_list_of(x, "hinted.virt_text_pos", "string") end
+  )
+  vim.validate("hinted.use_autosubmit", config.hinted.use_autosubmit, "boolean")
+
   return config
 end
 

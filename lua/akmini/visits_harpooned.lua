@@ -137,22 +137,18 @@ H.dummy_cwd = string.format("%s", vim.fn.expand("~")) -- guaranteed to exist
 
 H.setup_config = function(config)
   config = vim.tbl_deep_extend("force", vim.deepcopy(H.default_config), config or {})
+  local val = vim.validate
 
-  vim.validate({
-    MiniVisits = { MiniVisits, "nil" }, -- mini.visits should not be active
-    MiniPick = { MiniPick, "table" },
-    config = { config, "table" },
-  })
-  vim.validate({
-    start_label = { config.start_label, "string" },
-    picker_hints_on_switch_label = { config.picker_hints_on_switch_label, "table" },
-  })
-  vim.validate({
-    ["picker_hints_on_switch_label"] = {
-      config.picker_hints_on_switch_label,
-      function(x) return H.is_list_of(x, "picker_hints_on_switch_label", "string") end,
-    },
-  })
+  vim.validate("MiniVisits", MiniVisits, "nil") -- mini.visits should not be active
+  vim.validate("MiniPick", MiniPick, "table")
+  vim.validate("config", config, "table")
+  vim.validate("start_label", config.start_label, "string")
+  vim.validate("picker_hints_on_switch_label", config.picker_hints_on_switch_label, "table")
+  vim.validate(
+    "picker_hints_on_switch_label",
+    config.picker_hints_on_switch_label,
+    function(x) return H.is_list_of(x, "picker_hints_on_switch_label", "string") end
+  )
 
   H.config = config
   H.state.label = config.start_label

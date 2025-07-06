@@ -34,23 +34,19 @@ H.is_current_buffer_labeled = false
 H.cached_line = nil
 
 H.setup_config = function(config, provider)
-  vim.validate({
-    config = { config, "table" },
-    provider = { provider, "table" },
-  })
+  vim.validate("config", config, "table")
+  vim.validate("provider", provider, "table")
 
   config = vim.tbl_deep_extend("force", vim.deepcopy(H.default_config), config or {})
 
-  vim.validate({
-    icon = { config.icon, "string" },
-    max_slots = { config.max_slots, "number" },
-    fmt_inactive = { config.fmt_inactive, "string" },
-    fmt_active = { config.fmt_active, "string" },
-    text = { config.text, "function" },
-    sep = { config.sep, "string" },
-    cb = { config.cb, "function", true },
-    highlight_active = { config.highlight_active, "function", true },
-  })
+  vim.validate("icon", config.icon, "string")
+  vim.validate("max_slots", config.max_slots, "number")
+  vim.validate("fmt_inactive", config.fmt_inactive, "string")
+  vim.validate("fmt_active", config.fmt_active, "string")
+  vim.validate("text", config.text, "function")
+  vim.validate("sep", config.sep, "string")
+  vim.validate("cb", config.cb, "function", true)
+  vim.validate("highlight_active", config.highlight_active, "function", true)
 
   H.config = config
   H.provider = provider
