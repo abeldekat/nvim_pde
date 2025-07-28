@@ -17,6 +17,7 @@ local function clone()
 end
 
 -- NOTE: No performance gain from disabling netrw: netrwPlugin. Is required to download spell files.
+-- NOTE: ToHtml is lazy loaded....
 for _, disable in ipairs({ "gzip", "tarPlugin", "tohtml", "tutor", "zipPlugin" }) do
   vim.g["loaded_" .. disable] = 0
 end

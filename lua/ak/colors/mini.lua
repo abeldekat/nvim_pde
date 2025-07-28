@@ -7,12 +7,13 @@ local hi = function(name, data) vim.api.nvim_set_hl(0, name, data) end
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                         base16                          │
 --          ╰─────────────────────────────────────────────────────────╯
-add_toggle("mini*", {
+add_toggle({ "minischeme", "minicyan" }, {
   name = "mini_base16",
   flavours = { "minischeme", "minicyan" },
 })
-vim.api.nvim_create_autocmd("Colorscheme", {
-  pattern = { "mini*" },
+
+vim.api.nvim_create_autocmd("ColorScheme", {
+  pattern = { "minischeme", "minicyan" },
   callback = function()
     local p = MiniBase16.config.palette
     if p == nil then return end
@@ -27,25 +28,23 @@ vim.api.nvim_create_autocmd("Colorscheme", {
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                          hues                           │
 --          ╰─────────────────────────────────────────────────────────╯
-add_toggle("*hue", { -- toggle randoms with leader h
-  name = "mini_hues",
+add_toggle({ "miniwinter", "minispring", "minisummer", "miniautumn" }, {
+  name = "mini_seasons",
   -- In order to have a different random: `:colo randomhue`
-  flavours = { "autumnhue", "greyhue", "springhue", "summerhue", "randomhue", "winterhue" },
+  flavours = { "miniwinter", "minispring", "minisummer", "miniautumn" },
+})
+
+add_toggle("randomhue", { -- toggle randoms with leader h
+  name = "mini_hue",
+  -- In order to have a different random: `:colo randomhue`
+  flavours = { "randomhue" },
 })
 
 local Hues = require("mini.hues") -- "capture" the palette on hues.setup
-local orig_make_palette = Hues.make_palette
-local p = nil
-
----@diagnostic disable-next-line: duplicate-set-field
-Hues.make_palette = function(config)
-  p = orig_make_palette(config)
-  return p
-end
-vim.api.nvim_create_autocmd("Colorscheme", {
-  pattern = { "*hue" },
+vim.api.nvim_create_autocmd("ColorScheme", {
+  pattern = { "randomhue", "miniwinter", "minispring", "minisummer", "miniautumn" },
   callback = function()
-    if p == nil then return end
+    local p = Hues.get_palette()
 
     hi("MiniJump2dSpot", { fg = p.orange, bg = nil, bold = true, nocombine = true }) -- yellow
     hi("MiniJump2dSpotAhead", { link = "MiniJump2dSpot" })

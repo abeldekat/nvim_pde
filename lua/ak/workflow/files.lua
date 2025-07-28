@@ -65,7 +65,7 @@ H.create_autocommmands = function()
 
   -- HACK: Notify LSPs that a file got renamed.
   -- Adapted from snacks.nvim(rename.lua) thanks to MariaSolos
-  au("MiniFilesActionRename", function(args)
+  au({ "MiniFilesActionRename", "MiniFilesActionMove" }, function(args)
     local changes = {
       files = {
         {
@@ -79,12 +79,12 @@ H.create_autocommmands = function()
     local clients = vim.lsp.get_clients()
     for _, client in ipairs(clients) do
       if client:supports_method(will_rename_method) then
-        local res = client.request_sync(will_rename_method, changes, 1000, 0)
+        local res = client:request_sync(will_rename_method, changes, 1000, 0)
         if res and res.result then vim.lsp.util.apply_workspace_edit(res.result, client.offset_encoding) end
       end
     end
     for _, client in ipairs(clients) do
-      if client:supports_method(did_rename_method) then client.notify(did_rename_method, changes) end
+      if client:supports_method(did_rename_method) then client:notify(did_rename_method, changes) end
     end
   end)
 end
