@@ -23,13 +23,9 @@ local opts = {
   end,
   default_integrations = false,
   integrations = {
-    -- blink_cmp = true,
     dap = true,
     dap_ui = true,
-    -- fidget = true,
-    -- leap = true,
     markdown = true,
-    -- mason = true,
     mini = {
       enabled = true,
       indentscope_color = "text",
