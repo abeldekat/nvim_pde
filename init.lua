@@ -5,7 +5,7 @@ local function clone()
 
   if not vim.uv.fs_stat(mini_path) then
     vim.cmd('echo "Installing `mini.nvim`" | redraw')
-    local source = "https://github.com/echasnovski/mini.nvim"
+    local source = "https://github.com/nvim-mini/mini.nvim"
     local clone_cmd = { "git", "clone", "--filter=blob:none", source, mini_path }
 
     vim.fn.system(clone_cmd)
