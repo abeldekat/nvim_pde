@@ -12,14 +12,15 @@ local add_selects = function(selects)
   end
 end
 
-map("n", "<leader>j", VisitsHarpooned.pick_from_all, { desc = "Visits pick all" })
+map("n", "<leader>n", VisitsHarpooned.pick_from_current, { desc = "Visits pick" })
 map("n", "<leader>a", VisitsHarpooned.toggle, { desc = "Visits toggle" })
-add_selects({ "<c-j>", "<c-k>", "<c-l>", "<c-h>" })
+add_selects({ "<leader>4", "<leader>5", "<leader>6", "<leader>1" })
 
--- ctrl jklh is not easy with the colemak-dh layout:
+-- ctrl jklh is not easy with the colemak-dh layout...
+-- c-n is in use for half page down...
 map("n", "<c-p>", VisitsHarpooned.forward, { desc = "Visits next wrap" })
 
-map("n", "<leader>oj", VisitsHarpooned.pick_from_current, { desc = "Visits pick" })
+map("n", "<leader>on", VisitsHarpooned.pick_from_all, { desc = "Visits pick all" })
 map("n", "<leader>ol", VisitsHarpooned.switch_label, { desc = "Visits switch label" })
 map("n", "<leader>oa", VisitsHarpooned.new_label, { desc = "Visits new label" })
 map("n", "<leader>om", VisitsHarpooned.maintain, { desc = "Visits maintain" })

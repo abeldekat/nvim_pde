@@ -44,11 +44,13 @@ Notes: For [peek.nvim], [deno] needs to be installed. For [tree-sitter], the CLI
 ## Workflow
 
 I touch type using the right hand
-in combination with the forefinger of the left hand
+in combination with the index finger of the left hand,
+using a customized colemak-dh [layout].
 
 - Leader: `space`
 - Main plugins: [akmini.visits_harpooned], [mini.files], [mini.pick], [akmini.jump2d_leaped]
 - Menu: [mini.clue]
+- Keyboard: Halcyon Ferris, a split keyboard with 34 keys
 
 ### VisitsHarpooned
 
@@ -56,11 +58,9 @@ Internal plugin [akmini.visits_harpooned] is a customized [mini.visits] configur
 operating in almost the same way as `harpoon`.
 
 - Info in statusline: [akmini.harpoonline]
-- Pick visits from all labels: `<leader>j` ("strongest finger")
+- Pick visits from current label: `<leader>n` ("strong finger")
+- Pick visits from all labels: `<leader>on`
 - Toggle label on visit: `<leader>a`
-- The shortcuts normally used for window navigation correspond to visit 1-4 having label:
-  `c-j`, `<c-k>`,`<c-l>`,`<c-h>`
-- Pick visits from current label: `<leader>oj`
 - Switch label: `<leader>ol`
 - Add new label: `<leader>oa`
 - Maintain visits having label: `<leader>om`
@@ -70,7 +70,7 @@ Pickers can display hints using internal plugin [akmini.pick_hinted]
 
 ### Jump2d like leap
 
-See [this](https://github.com/echasnovski/mini.nvim/discussions/1860) discussion
+See [this](https://github.com/nvim-mini/mini.nvim/discussions/1860) discussion
 
 ### Window navigation
 
@@ -151,17 +151,17 @@ Many of the excellent modules included in [mini.nvim] are used in this config:
 
 Relevant discussions:
 
-- [Visits tweaked to operate like `grapple` or `harpoon`](https://github.com/echasnovski/mini.nvim/discussions/1158).
+- [Visits tweaked to operate like `grapple` or `harpoon`](https://github.com/nvim-mini/mini.nvim/discussions/1158).
   See internal plugin [akmini.visits_harpooned]
-- [Augment pickers with labels and hotkeys](https://github.com/echasnovski/mini.nvim/discussions/1109).
+- [Augment pickers with labels and hotkeys](https://github.com/nvim-mini/mini.nvim/discussions/1109).
   See internal plugin [akmini.pick_hinted]
-- [Pick bufferlines with treesitter highlighting](https://github.com/echasnovski/mini.nvim/discussions/988).
-- [Apply tokyonight dev environment](https://github.com/echasnovski/mini.nvim/discussions/1012).
-- [Optimized jumping with jump2d](https://github.com/echasnovski/mini.nvim/discussions/1033).
-- [Beta testing mini.deps](https://github.com/echasnovski/mini.nvim/issues/689#issuecomment-1962327624).
-- [MiniNotify replacing fidget](https://github.com/echasnovski/mini.nvim/discussions/1602).
-- [MiniCompletion using blink fuzzy algorithm](https://github.com/echasnovski/mini.nvim/discussions/1771).
-- [Jump with second character from each spot](https://github.com/echasnovski/mini.nvim/discussions/1860)
+- [Pick bufferlines with treesitter highlighting](https://github.com/nvim-mini/mini.nvim/discussions/988).
+- [Apply tokyonight dev environment](https://github.com/nvim-mini/mini.nvim/discussions/1012).
+- [Optimized jumping with jump2d](https://github.com/nvim-mini/mini.nvim/discussions/1033).
+- [Beta testing mini.deps](https://github.com/nvim-mini/mini.nvim/issues/689#issuecomment-1962327624).
+- [MiniNotify replacing fidget](https://github.com/nvim-mini/mini.nvim/discussions/1602).
+- [MiniCompletion using blink fuzzy algorithm](https://github.com/nvim-mini/mini.nvim/discussions/1771).
+- [Jump with second character from each spot](https://github.com/nvim-mini/mini.nvim/discussions/1860)
 
 ## Environment
 
@@ -177,7 +177,7 @@ Relevant discussions:
 This repo uses code and ideas from the following repositories:
 
 - [nvim](https://github.com/echasnovski/nvim) `@echasnovski`
-- [mini.deps](https://github.com/echasnovski/mini.deps)
+- [mini.deps](https://github.com/nvim-mini/mini.deps)
 - [LazyVim](https://github.com/LazyVim/LazyVim)
 - [lazy.nvim](https://github.com/folke/lazy.nvim)
 - [dotfiles](https://github.com/MariaSolOs/dotfiles/tree/main/.config/nvim) `@mariasolos`
@@ -186,13 +186,13 @@ This repo uses code and ideas from the following repositories:
 [scripts]: https://github.com/abeldekat/scripts
 [tmux-sessionizer]: https://github.com/abeldekat/scripts/blob/main/tmux-sessionizer
 [leader h]: lua/akshared/color_toggle.lua
-[mini.nvim]: https://github.com/echasnovski/mini.nvim
-[mini.files]: https://github.com/echasnovski/mini.files
-[mini.operators]: https://github.com/echasnovski/mini.operators
-[mini.surround]: https://github.com/echasnovski/mini.surround
-[mini.pick]: https://github.com/echasnovski/mini.pick
-[mini.visits]: https://github.com/echasnovski/mini.visits
-[mini.clue]: https://github.com/echasnovski/mini.clue
+[mini.nvim]: https://github.com/nvim-mini/mini.nvim
+[mini.files]: https://github.com/nvim-mini/mini.files
+[mini.operators]: https://github.com/nvim-mini/mini.operators
+[mini.surround]: https://github.com/nvim-mini/mini.surround
+[mini.pick]: https://github.com/nvim-mini/mini.pick
+[mini.visits]: https://github.com/nvim-mini/mini.visits
+[mini.clue]: https://github.com/nvim-mini/mini.clue
 [akmini.harpoonline]: lua/akmini/harpoonline.lua
 [akmini.jump2d_leaped]: lua/akmini/jump2d_leaped.lua
 [akmini.pick_hinted]: lua/akmini/pick_hinted.lua
@@ -202,3 +202,4 @@ This repo uses code and ideas from the following repositories:
 [with_submodules]: https://github.com/abeldekat/nvim_pde/tree/with_submodules
 [with_lazynvim]: https://github.com/abeldekat/nvim_pde/tree/with_lazynvim
 [tree-sitter]: https://github.com/tree-sitter/tree-sitter
+[layout]: https://github.com/abeldekat/qmk_firmware/tree/ak
