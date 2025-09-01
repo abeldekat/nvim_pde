@@ -9,11 +9,6 @@ end
 
 -- Buffers alternate. The back-quote is easier to type:
 map("n", "<leader>`", "<cmd>e #<cr>", { desc = "Buffer '#'" })
--- But, when using the miryoku layout on the ferris keyboard, having 34 keys,
--- the backquote is on the right hand pinky of the num layer(activated by left thumb).
--- Ctrl ^ is easier but requires both ctrl and symbol layer on the left hand.
--- Solution: Use space ^. The ^ is located on the right home row in the symbol layer.
-map("n", "<leader>^", "<cmd>e #<cr>", { desc = "Buffer '#'" })
 
 -- Clear search with <esc>:
 map({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and clear hlsearch" })

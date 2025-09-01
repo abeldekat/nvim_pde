@@ -60,8 +60,8 @@ operating in almost the same way as `harpoon`.
 - Toggle label on visit: `<leader>a`
 - The shortcuts normally used for window navigation correspond to visit 1-4 having label:
   `c-j`, `<c-k>`,`<c-l>`,`<c-h>`
-- Pick visits from current label: `<leader>ol`
-- Switch label: `<leader>oj`
+- Pick visits from current label: `<leader>oj`
+- Switch label: `<leader>ol`
 - Add new label: `<leader>oa`
 - Maintain visits having label: `<leader>om`
 - Clear all visits: `<leader>or`

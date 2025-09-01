@@ -51,9 +51,13 @@ VisitsHarpooned.toggle = function()
 end
 
 VisitsHarpooned.select = function(i)
-  local ft = vim.bo.ft
-  if ft and ft == "minifiles" then MiniFiles.close() end
+  H.close_if_mini_files()
   MiniVisits.iterate_paths("first", H.all_cwd, { filter = H.state.label, n_times = i })
+end
+
+VisitsHarpooned.forward = function()
+  H.close_if_mini_files()
+  MiniVisits.iterate_paths("forward", H.all_cwd, { filter = H.state.label, wrap = true })
 end
 
 VisitsHarpooned.pick_from_all = function() H.visits_by_labels(H.list_labels()) end
@@ -76,7 +80,7 @@ VisitsHarpooned.new_label = function()
   MiniVisits.add_label(nil, full_path, H.dummy_cwd)
   local new = MiniVisits.list_labels(full_path, H.dummy_cwd)
 
-  if #new == #old then return end
+  if #new == #old then return end -- label already existed
 
   local added = vim.tbl_filter(function(label) return not vim.list_contains(old, label) end, new)
   if #added ~= 1 then return end
@@ -348,6 +352,11 @@ H.short_path = function(path, cwd) -- copied from mini.visits
   local res = vim.fn.fnamemodify(path, ":~")
   if H.is_windows then res = res:gsub("\\", "/") end
   return res
+end
+
+H.close_if_mini_files = function()
+  local ft = vim.bo.ft
+  if ft and ft == "minifiles" then MiniFiles.close() end
 end
 
 return VisitsHarpooned
