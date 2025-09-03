@@ -46,4 +46,3 @@ require("mini.basics").setup({
 })
 
 add_mappings_basic()
--- Mappings.windows, ctrl-hjkl will be overridden in ak.config.editor.mini_visits

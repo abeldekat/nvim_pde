@@ -110,5 +110,5 @@ map("n", "<leader>-", "<C-W>s", { desc = "Win split below", remap = true })
 map("n", "<leader>|", "<C-W>v", { desc = "Win split right", remap = true })
 
 -- Window navigation combining right and left hand:
-map("n", "me", "<C-W>p", { desc = "Last accessed win", remap = true })
-map("n", "mw", "<C-W>w", { desc = "Next win", remap = true })
+-- map("n", "me", "<C-W>p", { desc = "Last accessed win", remap = true })
+-- map("n", "mw", "<C-W>w", { desc = "Next win", remap = true })

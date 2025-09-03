@@ -24,7 +24,7 @@ local function setup()
   require("akmini.pick_hinted").setup({ -- 19 letters, no "bcgpqyz"
     hinted = {
       -- virt_clues_pos = { "inline", "eol" },
-      chars = vim.split("adefhijklmnorstuvwx", ""),
+      chars = vim.split("adefhilmnorstu", ""),
     },
   })
 end
