@@ -7,6 +7,8 @@ require("mini.surround").setup({
     find_left = "mF", -- Find surrounding (to the left)
     highlight = "mH", -- Highlight surrounding
     replace = "ms", -- Substitute surrounding(aka change, replace)
-    update_n_lines = "mN", -- Update `n_lines`
   },
 })
+
+-- Not needed:
+--   vim.keymap.set('n', 'sn', '<Cmd>lua MiniSurround.update_n_lines()<CR>')

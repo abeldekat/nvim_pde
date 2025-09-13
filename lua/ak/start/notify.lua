@@ -37,7 +37,6 @@ require("mini.notify").setup({
   content = { format = format }, -- sort = H.filterout_lua_diagnosing
   window = { winblend = 95, config = window_config },
 })
-vim.notify = MiniNotify.make_notify()
 
 -- Make mappings
 local map = function(lhs, rhs, desc) vim.keymap.set("n", lhs, rhs, { desc = desc, silent = true }) end
