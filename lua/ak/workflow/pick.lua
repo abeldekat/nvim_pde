@@ -10,14 +10,14 @@ local Picker = require("akshared.pick")
 local H = {} -- Helper functions
 
 local function setup()
-  vim.ui.select = function(items, opts, on_choice)
-    local start_opts = { hinted = { enable = true, use_autosubmit = true } }
-    return MiniPick.ui_select(items, opts, on_choice, start_opts)
-  end
   H.create_autocommands()
 
   local preview = function(buf_id, item) return MiniPick.default_preview(buf_id, item, { line_position = "center" }) end
   require("mini.pick").setup({ source = { preview = preview } })
+  vim.ui.select = function(items, opts, on_choice)
+    local start_opts = { hinted = { enable = true, use_autosubmit = true } }
+    return MiniPick.ui_select(items, opts, on_choice, start_opts)
+  end
 
   H.to_provide()
   H.add_keys()
