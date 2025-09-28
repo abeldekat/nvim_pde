@@ -21,6 +21,23 @@ local opts = {
       MsgArea = { fg = c.overlay0 }, -- Area for messages and cmdline
     }
   end,
+  lsp_styles = { -- must copy...
+    virtual_text = {
+      errors = { "italic" },
+      hints = { "italic" },
+      warnings = { "italic" },
+      information = { "italic" },
+      ok = { "italic" },
+    },
+    underlines = {
+      errors = { "undercurl" },
+      hints = { "undercurl" },
+      warnings = { "undercurl" },
+      information = { "undercurl" },
+      ok = { "underline" },
+    },
+    inlay_hints = { background = true },
+  },
   default_integrations = false,
   integrations = {
     dap = true,
@@ -30,28 +47,9 @@ local opts = {
       enabled = true,
       indentscope_color = "text",
     },
-    native_lsp = { -- must copy...
-      enabled = true,
-      virtual_text = {
-        errors = { "italic" },
-        hints = { "italic" },
-        warnings = { "italic" },
-        information = { "italic" },
-        ok = { "italic" },
-      },
-      underlines = {
-        errors = { "undercurl" },
-        hints = { "undercurl" },
-        warnings = { "undercurl" },
-        information = { "undercurl" },
-        ok = { "underline" },
-      },
-      inlay_hints = { background = true },
-    },
     neotest = true,
     render_markdown = true,
     semantic_tokens = true,
-    treesitter = true,
     treesitter_context = true,
   },
 }

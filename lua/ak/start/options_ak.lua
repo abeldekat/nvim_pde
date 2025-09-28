@@ -7,6 +7,8 @@ vim.g.maplocalleader = "\\"
 if vim.fn.has("nvim-0.12") == 1 then
   vim.o.pummaxwidth = 65 -- Limit maximum width of popup menu
   vim.o.completefuzzycollect = "keyword,files,whole_line" -- Use fuzzy matching when collecting candidates
+
+  require("vim._extui").enable({ enable = true })
 end
 
 -- Completion =================================================================
