@@ -28,7 +28,7 @@ local setup = function()
 end
 
 H.create_autocommmands = function()
-  local minifiles_augroup = vim.api.nvim_create_augroup("ek-mini-files", {})
+  local minifiles_augroup = vim.api.nvim_create_augroup("ak-mini-files", {})
   local au = function(pattern, callback)
     vim.api.nvim_create_autocmd("User", { group = minifiles_augroup, pattern = pattern, callback = callback })
   end
@@ -50,6 +50,10 @@ H.create_autocommmands = function()
     vim.keymap.set("n", "gy", H.yank_path, { buffer = b, desc = "Yank path" })
     H.map_split(b, "<C-s>", "belowright horizontal")
     H.map_split(b, "<C-v>", "belowright vertical")
+
+    -- split keyboard with miryoku layout and vim layer:
+    vim.keymap.set("n", "<Right>", "l", { buffer = b, remap = true })
+    vim.keymap.set("n", "<Left>", "h", { buffer = b, remap = true })
   end)
 
   au("MiniFilesWindowUpdate", function(args) -- add linenumbers only to active window
