@@ -1,4 +1,4 @@
-vim.lsp.config.gopls = { -- copied from lazyvim:
+return { -- copied from lazyvim:
   settings = {
     gopls = {
       gofumpt = true,

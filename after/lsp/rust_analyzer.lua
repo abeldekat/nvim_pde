@@ -1,4 +1,4 @@
-vim.lsp.config.rust_analyzer = {
+return {
   settings = {
     ["rust-analyzer"] = {
       -- use defaults for cargo {}

@@ -7,6 +7,7 @@ vim.g.maplocalleader = "\\"
 if vim.fn.has("nvim-0.12") == 1 then
   vim.o.pummaxwidth = 65 -- Limit maximum width of popup menu
   vim.o.completefuzzycollect = "keyword,files,whole_line" -- Use fuzzy matching when collecting candidates
+  vim.o.pumborder = "single"
 
   require("vim._extui").enable({ enable = true })
 end
@@ -57,11 +58,7 @@ o.breakindentopt = "list:-1" -- Add padding for lists when 'wrap' is on
 -- o.colorcolumn = "+1" -- Draw colored column one step to the right of desired maximum width
 o.cursorline = true -- Enable highlighting of the current line
 o.cursorlineopt = "screenline,number" -- show cursor line only screen line when wrapped
--- stylua: ignore start
-o.fillchars = table.concat({ -- special UI symbols:
-  "eob: ", "fold:╌", "horiz:═", "horizdown:╦", "horizup:╩", "vert:║",
-  "verthoriz:╬", "vertleft:╣", "vertright:╠", }, ",")
--- stylua: ignore end
+o.fillchars = "eob: ,fold:╌"
 o.guicursor = "a:block"
 -- Preview substitutions live, as you type!
 o.inccommand = "split" -- kickstart. Also: nosplit preview incremental substitute

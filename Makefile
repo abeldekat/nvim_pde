@@ -25,8 +25,6 @@ to_gh:
 	@rsync -av after ../nvimak
 	@rm -rf ../nvimak/colors
 	@rsync -av colors ../nvimak
-	@rm -rf ../nvimak/lsp
-	@rsync -av lsp ../nvimak
 	@rm -rf ../nvimak/lua
 	@rsync -av lua ../nvimak
 	@rm -rf ../nvimak/queries

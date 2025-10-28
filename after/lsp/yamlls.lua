@@ -1,4 +1,4 @@
-vim.lsp.config.yamlls = {
+return {
   -- Lazy-load schemastore when needed:
   before_init = function(_, config) -- used to be on_new_config using nvim-lspconfig
     config.settings.yaml.schemas =

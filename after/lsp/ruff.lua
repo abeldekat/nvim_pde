@@ -16,3 +16,5 @@ vim.api.nvim_create_autocmd("LspAttach", {
     client.server_capabilities.hoverProvider = false
   end,
 })
+
+return {}
