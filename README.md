@@ -43,10 +43,6 @@ Notes: For [peek.nvim], [deno] needs to be installed. For [tree-sitter], the CLI
 
 ## Workflow
 
-I touch type using the right hand
-in combination with the index finger of the left hand,
-using a customized colemak-dh [layout].
-
 - Leader: `space`
 - Main plugins: [akmini.visits_harpooned], [mini.files], [mini.pick], [akmini.jump2d_leaped]
 - Menu: [mini.clue]
@@ -71,12 +67,6 @@ Pickers can display hints using internal plugin [akmini.pick_hinted]
 ### Jump2d like leap
 
 See [this](https://github.com/nvim-mini/mini.nvim/discussions/1860) discussion
-
-### Window navigation
-
-- `<c-w>hjkl` (stock `Neovim`)
-- `mw`(next window)
-- `me`(last accessed window)
 
 ### Explorer
 
@@ -177,6 +167,7 @@ Relevant discussions:
 This repo uses code and ideas from the following repositories:
 
 - [nvim](https://github.com/echasnovski/nvim) `@echasnovski`
+- [MiniMax](https://github.com/nvim-mini/MiniMax)
 - [mini.deps](https://github.com/nvim-mini/mini.deps)
 - [LazyVim](https://github.com/LazyVim/LazyVim)
 - [lazy.nvim](https://github.com/folke/lazy.nvim)
@@ -202,4 +193,3 @@ This repo uses code and ideas from the following repositories:
 [with_submodules]: https://github.com/abeldekat/nvim_pde/tree/with_submodules
 [with_lazynvim]: https://github.com/abeldekat/nvim_pde/tree/with_lazynvim
 [tree-sitter]: https://github.com/tree-sitter/tree-sitter
-[layout]: https://github.com/abeldekat/qmk_firmware/tree/ak

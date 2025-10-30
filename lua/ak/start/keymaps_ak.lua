@@ -112,3 +112,8 @@ map("n", "<leader>|", "<C-W>v", { desc = "Win split right", remap = true })
 -- Window navigation combining right and left hand:
 -- map("n", "me", "<C-W>p", { desc = "Last accessed win", remap = true })
 -- map("n", "mw", "<C-W>w", { desc = "Next win", remap = true })
+
+-- Paste linewise before/after current line. Copied from MiniMax
+local cmd = vim.fn.has("nvim-0.12") == 1 and "iput" or "put"
+vim.keymap.set("n", "[p", '<Cmd>exe "' .. cmd .. '! " . v:register<CR>', { desc = "Paste Above" })
+vim.keymap.set("n", "]p", '<Cmd>exe "' .. cmd .. ' "  . v:register<CR>', { desc = "Paste Below" })
