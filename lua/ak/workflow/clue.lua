@@ -38,10 +38,9 @@ local opts = {
     { mode = "x", keys = "z" },
   },
 
-  clues = { -- currently available: i, k, m, n, p, s, v, z
+  clues = { -- currently available: d, i, k, m, n, p, s, t, v, z
     { mode = "n", keys = "<leader><tab>", desc = "+tabs" },
     { mode = "n", keys = "<leader>c", desc = "+code" },
-    { mode = "n", keys = "<leader>d", desc = "+debug" },
     { mode = "n", keys = "<leader>e", desc = "+explore" },
     { mode = "n", keys = "<leader>f", desc = "+fuzzy find" },
     { mode = "n", keys = "<leader>fo", desc = "+other pickers" },

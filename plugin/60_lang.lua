@@ -6,8 +6,6 @@ local H = {}
 
 later(function()
   H.base()
-  H.testing()
-  H.debugging()
   H.markdown()
   H.sql()
   H.latex()
@@ -37,41 +35,6 @@ H.base = function()
     modeline = false,
     pattern = vim.bo.filetype,
   })
-end
-
--- NOTE: Not using testing at the moment.
-H.testing = function()
-  local test_spec = {
-    source = "nvim-neotest/neotest",
-    depends = { "nvim-neotest/nvim-nio" },
-  }
-  DeferredDeps.register(test_spec)
-  local function load_testing()
-    add(test_spec)
-    require("ak.lang.testing")
-    vim.notify("Loaded neotest", vim.log.levels.INFO)
-  end
-  DeferredDeps.on_keys(function() now(load_testing) end, "<leader>tL", "Load neotest")
-end
-
--- NOTE: Not using dap at the moment. Consider nvim-dap-view
-H.debugging = function()
-  local dap_spec = {
-    source = "mfussenegger/nvim-dap",
-    depends = {
-      "nvim-neotest/nvim-nio", -- dependency for dap ui
-      "rcarriga/nvim-dap-ui",
-      "theHamsta/nvim-dap-virtual-text",
-      "jbyuki/one-small-step-for-vimkind", -- lua
-    },
-  }
-  DeferredDeps.register(dap_spec)
-  local function load_dap()
-    add(dap_spec)
-    require("ak.lang.debugging")
-    vim.notify("Loaded nvim-dap", vim.log.levels.INFO)
-  end
-  DeferredDeps.on_keys(function() now(load_dap) end, "<leader>dL", "Load dap")
 end
 
 H.markdown = function()
