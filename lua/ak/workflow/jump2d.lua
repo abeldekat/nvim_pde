@@ -73,4 +73,6 @@ local start_fork = function()
   undim_all(win_id_arr)
   return result
 end
-vim.keymap.set({ "n", "x", "o" }, "s", use_fork and start_fork or start, { desc = "Start 2d jumping" })
+vim.keymap.set({ "n", "x", "o" }, "sj", use_fork and start_fork or start, { desc = "Start 2d jumping" })
+-- colemakdh:
+vim.keymap.set({ "n", "x", "o" }, "se", use_fork and start_fork or start, { desc = "Start 2d jumping" })
