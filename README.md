@@ -4,15 +4,15 @@
 
 ![1724703946](https://github.com/user-attachments/assets/4fac0567-81fe-48c2-8d79-88b9744803a0)
 
-My _personal development environment_ for Neovim
-
-## Older versions
+My _personal development environment_ for Neovim based on [MiniMax]
 
 > [!NOTE]
 > Tag [with_submodules] references the version containing `git submodules`,
 > `lazy.nvim` and `mini.deps`
 >
 > Tag [with_lazynvim] references the version containing `lazy.nvim` and `mini.deps`
+>
+> Tag [before_minimax] references the version before switching to `minimax`
 
 ## Install
 
@@ -44,7 +44,7 @@ Notes: For [peek.nvim], [deno] needs to be installed. For [tree-sitter], the CLI
 ## Workflow
 
 - Leader: `space`
-- Main plugins: [akmini.visits_harpooned], [mini.files], [mini.pick], [akmini.jump2d_leaped]
+- Main plugins: [akmini.visits_harpooned], [mini.files], [mini.pick], [mini.jump2d]
 - Menu: [mini.clue]
 - Keyboard: Halcyon Ferris, a split keyboard with 34 keys
 
@@ -53,24 +53,9 @@ Notes: For [peek.nvim], [deno] needs to be installed. For [tree-sitter], the CLI
 Internal plugin [akmini.visits_harpooned] is a customized [mini.visits] configuration,
 operating in almost the same way as `harpoon`.
 
-- Info in statusline: [akmini.harpoonline]
-- Pick visits from current label: `<leader>n` ("strong finger")
-- Pick visits from all labels: `<leader>on`
-- Toggle label on visit: `<leader>a`
-- Switch label: `<leader>ol`
-- Add new label: `<leader>oa`
-- Maintain visits having label: `<leader>om`
-- Clear all visits: `<leader>or`
+TODO: The shortcuts changed...
 
 Pickers can display hints using internal plugin [akmini.pick_hinted]
-
-### Jump2d like leap
-
-See [this](https://github.com/nvim-mini/mini.nvim/discussions/1860) discussion
-
-### Explorer
-
-- `mk`("rolling fingers"), opening mini.files
 
 ### Tmux
 
@@ -106,27 +91,7 @@ Ignoring changes to that file:
 git update-index --assume-unchanged lua/ak/colors.lua
 ```
 
-## Key conflicts
-
-### operators
-
-In my config, the suggested key `gr`("go replace") in [mini.operators] is already used
-for the `lsp`("go references").
-
-Solution: Change operator `gr` into `gs`, mnemonic for "go substitute".
-
-As a consequence, use `gS` instead of suggested key `gs`("go sort") for sort.
-
 ## Mini
-
-Many of the excellent modules included in [mini.nvim] are used in this config:
-
-`ai`, `align`, `animate`, `base16`, `basics`, `bracketed`,
-`clue`, `completion`, `cursorword`, `deps`, `diff`, `extra`,
-`files`, `git`, `hipatterns`, `hue`, `icons`, `indentscope`,
-`jump2d`, `keymap`, `misc`, `move`, `notify`, `operators`,
-`pairs`, `pick`, `snippets`, `splitjoin`, `starter`, `statusline`,
-`surround`, `visits`
 
 Relevant discussions:
 
@@ -153,10 +118,9 @@ Relevant discussions:
 
 ## Acknowledgements
 
-This repo uses code and ideas from the following repositories:
+This repo also uses code and ideas from the following repositories:
 
 - [nvim](https://github.com/echasnovski/nvim) `@echasnovski`
-- [MiniMax](https://github.com/nvim-mini/MiniMax)
 - [mini.deps](https://github.com/nvim-mini/mini.deps)
 - [LazyVim](https://github.com/LazyVim/LazyVim)
 - [lazy.nvim](https://github.com/folke/lazy.nvim)
@@ -166,19 +130,17 @@ This repo uses code and ideas from the following repositories:
 [scripts]: https://github.com/abeldekat/scripts
 [tmux-sessionizer]: https://github.com/abeldekat/scripts/blob/main/tmux-sessionizer
 [leader h]: lua/akshared/color_toggle.lua
-[mini.nvim]: https://github.com/nvim-mini/mini.nvim
+[MiniMax]: https://github.com/nvim-mini/MiniMax
 [mini.files]: https://github.com/nvim-mini/mini.files
-[mini.operators]: https://github.com/nvim-mini/mini.operators
-[mini.surround]: https://github.com/nvim-mini/mini.surround
+[mini.jump2d]: https://github.com/nvim-mini/mini.jump2d
 [mini.pick]: https://github.com/nvim-mini/mini.pick
 [mini.visits]: https://github.com/nvim-mini/mini.visits
 [mini.clue]: https://github.com/nvim-mini/mini.clue
-[akmini.harpoonline]: lua/akmini/harpoonline.lua
-[akmini.jump2d_leaped]: lua/akmini/jump2d_leaped.lua
 [akmini.pick_hinted]: lua/akmini/pick_hinted.lua
 [akmini.visits_harpooned]: lua/akmini/visits_harpooned.lua
 [peek.nvim]: https://github.com/toppair/peek.nvim
 [deno]: https://deno.land
 [with_submodules]: https://github.com/abeldekat/nvim_pde/tree/with_submodules
 [with_lazynvim]: https://github.com/abeldekat/nvim_pde/tree/with_lazynvim
+[before_minimax]: https://github.com/abeldekat/nvim_pde/tree/before_minimax
 [tree-sitter]: https://github.com/tree-sitter/tree-sitter

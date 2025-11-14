@@ -1,0 +1,14 @@
+vim.lsp.enable({
+  "basedpyright",
+  "bashls",
+  "fennel_ls",
+  "gopls",
+  "jsonls",
+  "lua_ls",
+  "marksman",
+  "ruff",
+  "rust_analyzer",
+  "taplo",
+  "texlab",
+  "yamlls",
+})

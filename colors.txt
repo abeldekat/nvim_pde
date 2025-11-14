@@ -1,3 +1,4 @@
+ayu
 bamboo
 carbonfox
 catppuccin
