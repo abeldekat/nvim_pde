@@ -12,7 +12,7 @@ My _personal development environment_ for Neovim based on [MiniMax]
 >
 > Tag [with_lazynvim] references the version containing `lazy.nvim` and `mini.deps`
 >
-> Tag [before_minimax] references the version before switching to `minimax`
+> Tag [without_minimax] references the version before switching to `minimax`
 
 ## Install
 
@@ -142,5 +142,5 @@ This repo also uses code and ideas from the following repositories:
 [deno]: https://deno.land
 [with_submodules]: https://github.com/abeldekat/nvim_pde/tree/with_submodules
 [with_lazynvim]: https://github.com/abeldekat/nvim_pde/tree/with_lazynvim
-[before_minimax]: https://github.com/abeldekat/nvim_pde/tree/before_minimax
+[without_minimax]: https://github.com/abeldekat/nvim_pde/tree/without_minimax
 [tree-sitter]: https://github.com/tree-sitter/tree-sitter
