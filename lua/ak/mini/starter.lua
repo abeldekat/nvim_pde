@@ -17,7 +17,7 @@ local function setup()
 
   local commands_section = "Commands"
   local commands_items = {
-    { action = "e .", name = "e. explore('mk')", section = commands_section },
+    { action = "e .", name = "e. explore", section = commands_section },
     {
       action = function() MiniExtra.pickers.keymaps() end,
       name = "k. keymaps",
