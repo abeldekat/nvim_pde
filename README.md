@@ -118,13 +118,13 @@ Relevant discussions:
 
 ## Acknowledgements
 
-This repo also uses code and ideas from the following repositories:
+This config is based on [MiniMax].
+Also, code and ideas have been used from the following repositories:
 
 - [nvim](https://github.com/echasnovski/nvim) `@echasnovski`
 - [mini.deps](https://github.com/nvim-mini/mini.deps)
 - [LazyVim](https://github.com/LazyVim/LazyVim)
 - [lazy.nvim](https://github.com/folke/lazy.nvim)
-- [dotfiles](https://github.com/MariaSolOs/dotfiles/tree/main/.config/nvim) `@mariasolos`
 
 [tmuxp]: https://github.com/tmux-python/tmuxp
 [scripts]: https://github.com/abeldekat/scripts

@@ -68,8 +68,6 @@ later(function()
   require("ak.other.dial")
   add("stevearc/quicker.nvim")
   require("ak.other.quicker")
-  add("akinsho/toggleterm.nvim")
-  require("ak.other.toggleterm")
   add("nvim-treesitter/nvim-treesitter-context")
   require("ak.other.treesitter_context")
 
