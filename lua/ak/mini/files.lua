@@ -13,13 +13,6 @@ local setup = function()
   minifiles.setup(config)
   H.create_autocommmands()
 
-  -- No toggle because keymap `mk` marks the k. Pressing q is good enough though.
-  -- Open current working directory -or- file directory
-  vim.keymap.set("n", "mk", function() -- rolling fingers...
-    local buf_path = vim.api.nvim_buf_get_name(0)
-    local to_open = vim.uv.fs_stat(buf_path) ~= nil and buf_path or vim.fn.getcwd()
-    MiniFiles.open(to_open)
-  end, { desc = "MiniFiles open directory", silent = true })
 
   local edit_in_config = function(path) return "<Cmd>edit " .. vim.fn.stdpath("config") .. path .. "<CR>" end
   H.nmap_leader("ed", "<Cmd>lua MiniFiles.open()<CR>", "Directory")

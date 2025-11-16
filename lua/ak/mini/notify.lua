@@ -42,11 +42,3 @@ require("mini.notify").setup({
   content = { format = format }, -- sort = H.filterout_lua_diagnosing
   window = { winblend = 95, config = window_config },
 })
-
--- Make mappings
-local map = function(lhs, rhs, desc) vim.keymap.set("n", lhs, rhs, { desc = desc, silent = true }) end
-map("<leader>un", function() MiniNotify.clear() end, "Notify clear")
-map("<leader>oN", function()
-  vim.cmd("tabnew<cr>") -- close with q...
-  MiniNotify.show_history()
-end, "Notify history")

@@ -30,7 +30,9 @@ _G.Config.leader_group_clues = {
   { mode = 'n', keys = '<Leader>l', desc = '+Language' },
   { mode = 'n', keys = '<Leader>m', desc = '+Map' },
   { mode = 'n', keys = '<Leader>o', desc = '+Other' },
-  { mode = 'n', keys = '<Leader>s', desc = '+Session' },
+  -- The s is easy to type on both qwerty and colemakdh:
+  { mode = 'n', keys = '<Leader>s', desc = '+Vi[s]itsHarpooned' },
+  { mode = 'n', keys = '<Leader>S', desc = '+Session' },
   { mode = 'n', keys = '<Leader>t', desc = '+Terminal' },
   -- { mode = 'n', keys = '<Leader>v', desc = '+Visits' },
 
@@ -153,13 +155,35 @@ nmap_leader('or', '<Cmd>lua MiniMisc.resize_window()<CR>', 'Resize to default wi
 nmap_leader('ot', '<Cmd>lua MiniTrailspace.trim()<CR>',    'Trim trailspace')
 nmap_leader('oz', '<Cmd>lua MiniMisc.zoom()<CR>',          'Zoom toggle')
 
--- s is for 'Session'.
+-- s is for 'VisitsHarpooned', my 'Visits' extension.
+-- a is a shortcut to toggle the current label on a file
+-- n is a shortcut to cycle through the files having current label
+local make_harpooned_cmd = function(number)
+  return "<Cmd>lua VisitsHarpooned.select(" .. number .. ")<CR>"
+end
+local nmap_harpooned = function(char, n)
+  vim.keymap.set( "n", "s" .. char, make_harpooned_cmd(n), { desc = "Harpooned " .. n })
+end
+nmap_leader('sn', '<Cmd>lua VisitsHarpooned.pick_from_current()<CR>', 'Pick from current label')
+nmap_leader('sp', '<Cmd>lua VisitsHarpooned.pick_from_all()<CR>',     'Pick from all')
+nmap_leader('sl', '<Cmd>lua VisitsHarpooned.switch_label()<CR>',      'Switch label')
+nmap_leader('sL', '<Cmd>lua VisitsHarpooned.new_label()<CR>',         'New label')
+nmap_leader('sm', '<Cmd>lua VisitsHarpooned.maintain()<CR>',          'Maintain')
+nmap_leader('sc', '<Cmd>lua VisitsHarpooned.clear_all_visits()<CR>',  'Clear all harpooned')
+nmap_leader('a',  '<Cmd>lua VisitsHarpooned.toggle()<CR>',            'Harpooned toggle')
+nmap_leader('n',  '<Cmd>lua VisitsHarpooned.forward()<CR>',           'Harpooned cycle')
+nmap_harpooned("4", "1") -- numpad layer...
+nmap_harpooned("5", "2")
+nmap_harpooned("6", "3")
+nmap_harpooned("1", "4")
+
+-- S is for 'Session'. The S is capitalized because I don't use it much.
 local session_new = 'MiniSessions.write(vim.fn.input("Session name: "))'
 
-nmap_leader('sd', '<Cmd>lua MiniSessions.select("delete")<CR>', 'Delete')
-nmap_leader('sn', '<Cmd>lua ' .. session_new .. '<CR>',         'New')
-nmap_leader('sr', '<Cmd>lua MiniSessions.select("read")<CR>',   'Read')
-nmap_leader('sw', '<Cmd>lua MiniSessions.write()<CR>',          'Write current')
+nmap_leader('Sd', '<Cmd>lua MiniSessions.select("delete")<CR>', 'Delete')
+nmap_leader('Sn', '<Cmd>lua ' .. session_new .. '<CR>',         'New')
+nmap_leader('Sr', '<Cmd>lua MiniSessions.select("read")<CR>',   'Read')
+nmap_leader('Sw', '<Cmd>lua MiniSessions.write()<CR>',          'Write current')
 
 -- t is for 'Terminal'
 nmap_leader('tT', '<Cmd>horizontal term<CR>', 'Terminal (horizontal)')

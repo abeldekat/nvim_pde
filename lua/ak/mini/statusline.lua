@@ -12,7 +12,7 @@ AK.setup = function()
   H.create_autocommands()
   H.create_hl() -- colored diagnostics, normal mode override
   H.set_active() -- lazy loading and missing events: still show statusline
-  H.optional_dependencies() -- visitsline
+  H.dependencies() -- visitsline
 end
 
 AK.active = function() -- entrypoint
@@ -180,8 +180,8 @@ H.is_blocked_filetype = function()
   return blocked_filetypes[vim.bo.filetype]
 end
 
-H.optional_dependencies = function() -- See ak.deps.editor
-  if VisitsHarpooned == nil then return end
+H.dependencies = function()
+  -- if VisitsHarpooned == nil then return end
 
   require("akmini.harpoonline").setup({
     on_produce = H.set_active, -- callback on_produce, update the statusline

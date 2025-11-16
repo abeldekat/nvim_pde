@@ -2,6 +2,7 @@ local now, later = MiniDeps.now, MiniDeps.later
 local now_if_args = _G.Config.now_if_args
 
 now(function()
+  -- NOTE: MiniMax activates statusline  on `now` before tabline
   vim.o.statusline = " " -- wait till statusline plugin is loaded
   -- vim.cmd("colorscheme miniwinter") -- see 29_color.lua
 
@@ -17,7 +18,6 @@ now(function()
 end)
 
 later(function()
-  require("ak.mini.statusline") -- NOTE: MiniMax setup on `now` before tabline
   require("mini.extra").setup()
   require("ak.mini.ai")
   require("mini.align").setup()
@@ -32,15 +32,13 @@ later(function()
   require("ak.mini.completion")
   -- require("mini.cursorword").setup()
   require("mini.diff").setup()
-  -- TODO: Move me mapping
   require("ak.mini.files")
   require("mini.git").setup()
   -- TODO: Colored todos
   require("ak.mini.hipatterns")
   require("mini.indentscope").setup()
   require("mini.jump").setup()
-  -- TODO: Testing se mapping
-  require("ak.mini.jump2d")
+  require("ak.mini.jump2d") -- I like the se mapping
   require("ak.mini.keymap")
   -- TODO: Setup on demand
   require("ak.mini.map")
@@ -62,36 +60,10 @@ later(function()
   require("mini.surround").setup() -- `sa sd sr sf sF sh sn`
   require("mini.trailspace").setup()
   require("akmini.visits_harpooned").setup()
+  require("ak.mini.statusline")
 end)
 
 -- Not mentioned here, but can be useful:
 -- - 'mini.doc' - needed only for plugin developers.
 -- - 'mini.fuzzy' - not really needed on a daily basis.
 -- - 'mini.test' - needed only for plugin developers.
-
--- -- TODO: Move to mappings
--- local map = function(mode, lhs, rhs, opts)
---   if lhs == "" then return end
---   opts = vim.tbl_deep_extend("force", { silent = true }, opts or {})
---   vim.keymap.set(mode, lhs, rhs, opts)
--- end
-
--- local add_selects = function(selects)
---   for i = 1, #selects do
---     map("n", selects[i], function() VisitsHarpooned.select(i) end, { desc = "Visit " .. i })
---   end
--- end
-
--- map("n", "<leader>n", VisitsHarpooned.pick_from_current, { desc = "Visits pick" })
--- map("n", "<leader>a", VisitsHarpooned.toggle, { desc = "Visits toggle" })
--- add_selects({ "<leader>4", "<leader>5", "<leader>6", "<leader>1" })
-
--- -- ctrl jklh is not easy with the colemak-dh layout...
--- -- c-n is in use for half page down...
--- map("n", "<c-p>", VisitsHarpooned.forward, { desc = "Visits next wrap" })
-
--- map("n", "<leader>on", VisitsHarpooned.pick_from_all, { desc = "Visits pick all" })
--- map("n", "<leader>ol", VisitsHarpooned.switch_label, { desc = "Visits switch label" })
--- map("n", "<leader>oa", VisitsHarpooned.new_label, { desc = "Visits new label" })
--- map("n", "<leader>om", VisitsHarpooned.maintain, { desc = "Visits maintain" })
--- map("n", "<leader>or", VisitsHarpooned.clear_all_visits, { desc = "Visits clear all" })
