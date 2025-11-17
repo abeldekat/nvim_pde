@@ -29,7 +29,7 @@ end)
 
 -- Plugins not included in MiniMax ============================================
 
-local DeferredDeps = require("akmini.deps_deferred")
+local DeferredDeps = require("akextra.deps_deferred")
 
 local markdown = function()
   local function add_md(source, to_require, hook)

@@ -183,7 +183,7 @@ end
 H.dependencies = function()
   -- if VisitsHarpooned == nil then return end
 
-  require("akmini.harpoonline").setup({
+  require("akextra.harpoonline").setup({
     on_produce = H.set_active, -- callback on_produce, update the statusline
     highlight_active = function(text) -- optionally highlight active buffer
       return string.format("%%#%s# %s %%#%s#", "MiniHipatternsHack", text, H.group_default_hl)

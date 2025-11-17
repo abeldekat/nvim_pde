@@ -59,7 +59,7 @@ later(function()
   require("mini.splitjoin").setup()
   require("mini.surround").setup() -- `sa sd sr sf sF sh sn`
   require("mini.trailspace").setup()
-  require("akmini.visits_harpooned").setup() -- customized visits
+  require("akextra.visits_harpooned").setup() -- customized visits
   require("ak.mini.statusline")
 end)
 

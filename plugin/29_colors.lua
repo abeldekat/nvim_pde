@@ -1,4 +1,4 @@
-local DeferredDeps = require("akmini.deps_deferred")
+local DeferredDeps = require("akextra.deps_deferred")
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 
 local Color = require("ak.color")

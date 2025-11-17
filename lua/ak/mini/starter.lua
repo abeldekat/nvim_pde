@@ -16,7 +16,7 @@ local commands_items = {
 
 local deps_section = "Deps"
 local deps_cmd = function(cmd)
-  require("akmini.deps_deferred").load_registered()
+  require("akextra.deps_deferred").load_registered()
   vim.cmd(cmd)
 end
 local deps_items = {

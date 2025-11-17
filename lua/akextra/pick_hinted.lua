@@ -73,7 +73,7 @@ end
 H.apply_config = function(config) PickHinted.config = config end
 
 H.get_config = function()
-  -- No buffer override: vim.b.akminipickhinted or {}
+  -- No buffer override
   -- No config arg
   -- return vim.tbl_deep_extend("force", PickHinted.config or {}, config or {})
   return PickHinted.config

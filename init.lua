@@ -15,7 +15,7 @@ local function clone()
     vim.cmd('echo "Installed `mini.nvim`" | redraw')
     has_cloned = true
   end
-  return has_cloned, path_package
+  return has_cloned
 end
 
 -- TODO: Not in MiniMax?
@@ -25,9 +25,8 @@ for _, disable in ipairs({ "gzip", "tarPlugin", "tohtml", "tutor", "zipPlugin" }
   vim.g["loaded_" .. disable] = 0
 end
 
--- TODO: Is path_package necessary?
-local is_initial_install, path_package = clone()
-require("mini.deps").setup({ path = { package = path_package } })
+local is_initial_install = clone()
+require("mini.deps").setup()
 
 -- Define config table to be able to pass data between scripts
 _G.Config = {}
@@ -42,7 +41,7 @@ _G.Config.now_if_args = vim.fn.argc(-1) > 0 and MiniDeps.now or MiniDeps.later
 if is_initial_install then
   _G.Config.new_autocmd("UIEnter", nil, function()
     MiniDeps.later(function()
-      require("akmini.deps_deferred").load_registered()
+      require("akextra.deps_deferred").load_registered()
       vim.cmd("DepsSnapLoad")
     end)
   end, "Restore all plugins to the versions in mini-deps-snap on first install")
