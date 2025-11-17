@@ -12,7 +12,6 @@ AK.setup = function()
   H.create_autocommands()
   H.create_hl() -- colored diagnostics, normal mode override
   H.set_active() -- lazy loading and missing events: still show statusline
-  H.dependencies() -- visitsline
 end
 
 AK.active = function() -- entrypoint
@@ -178,17 +177,6 @@ H.set_active = function() vim.wo.statusline = "%{%v:lua.MiniStatusline.active()%
 H.is_blocked_filetype = function()
   local blocked_filetypes = {}
   return blocked_filetypes[vim.bo.filetype]
-end
-
-H.dependencies = function()
-  -- if VisitsHarpooned == nil then return end
-
-  require("akextra.harpoonline").setup({
-    on_produce = H.set_active, -- callback on_produce, update the statusline
-    highlight_active = function(text) -- optionally highlight active buffer
-      return string.format("%%#%s# %s %%#%s#", "MiniHipatternsHack", text, H.group_default_hl)
-    end,
-  }, VisitsHarpooned.as_provider())
 end
 
 H.full_path_of_current_buffer = function()

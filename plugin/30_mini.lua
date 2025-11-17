@@ -18,6 +18,7 @@ now(function()
 end)
 
 later(function()
+  require("ak.mini.statusline")
   require("mini.extra").setup()
   require("ak.mini.ai")
   require("mini.align").setup()
@@ -59,8 +60,7 @@ later(function()
   require("mini.splitjoin").setup()
   require("mini.surround").setup() -- `sa sd sr sf sF sh sn`
   require("mini.trailspace").setup()
-  require("akextra.visits_harpooned").setup() -- customized visits
-  require("ak.mini.statusline")
+  require("ak.mini.visits") -- customized visits harpooned
 end)
 
 -- Not mentioned here, but can be useful:
