@@ -1,3 +1,6 @@
+-- TODO: Restore ctrl k with mini.keymap, and why is omni cleaner
+-- TODO: Completefunc to use ctrl-o to temporarily escape to normal mode. See mini discussions #1736
+
 -- Customize post-processing of LSP responses for a better user experience.
 -- Don't show 'Text' suggestions (usually noisy) and show snippets last.
 local process_items_opts = { kind_priority = { Text = -1, Snippet = 99 } }

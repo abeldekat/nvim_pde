@@ -15,20 +15,14 @@ local setup = function()
 end
 
 H.create_autocommmands = function()
-  local minifiles_augroup = vim.api.nvim_create_augroup("ak-mini-files", {})
-  local au = function(pattern, callback)
-    vim.api.nvim_create_autocmd("User", { group = minifiles_augroup, pattern = pattern, callback = callback })
-  end
-
-  au("MiniFilesExplorerOpen", function() -- bookmarks, alternative is visits_harpooned
+  local add_marks = function()
     MiniFiles.set_bookmark("c", vim.fn.stdpath("config") .. "", { desc = "Config" })
-    MiniFiles.set_bookmark("m", vim.fn.stdpath("data") .. "/site/pack/deps/start/mini.nvim", { desc = "mini.nvim" })
     MiniFiles.set_bookmark("p", vim.fn.stdpath("data") .. "/site/pack/deps/opt", { desc = "Plugins" })
     MiniFiles.set_bookmark("w", vim.fn.getcwd, { desc = "Working directory" })
-  end)
+  end
+  _G.Config.new_autocmd("User", "MiniFilesExplorerOpen", add_marks, "Add bookmarks")
 
-  -- See also: lua/ak/mini/visits_harpooned
-  au("MiniFilesBufferCreate", function(args) -- toggle hidden files, map splits
+  local extra_keys = function(args)
     local b = args.data.buf_id
 
     vim.keymap.set("n", "g.", H.toggle_dotfiles, { buffer = b })
@@ -41,9 +35,10 @@ H.create_autocommmands = function()
     -- split keyboard with miryoku layout and vim layer:
     vim.keymap.set("n", "<Right>", "l", { buffer = b, remap = true })
     vim.keymap.set("n", "<Left>", "h", { buffer = b, remap = true })
-  end)
+  end
+  _G.Config.new_autocmd("User", "MiniFilesBufferCreate", extra_keys, "Add extra keys")
 
-  au("MiniFilesWindowUpdate", function(args) -- add linenumbers only to active window
+  local restrict_linenumbers = function(args) -- add linenumbers only to active window
     local win_id = vim.api.nvim_get_current_win()
     if win_id and win_id == args.data.win_id then
       vim.wo[win_id].relativenumber = true
@@ -52,11 +47,12 @@ H.create_autocommmands = function()
         callback = function() vim.wo[win_id].relativenumber = false end,
       })
     end
-  end)
+  end
+  _G.Config.new_autocmd("User", "MiniFilesWindowUpdate", restrict_linenumbers, "Restrict linenumbers")
 
   -- HACK: Notify LSPs that a file got renamed.
   -- Adapted from snacks.nvim(rename.lua) thanks to MariaSolos
-  au({ "MiniFilesActionRename", "MiniFilesActionMove" }, function(args)
+  local file_rename = function(args)
     local changes = {
       files = {
         {
@@ -77,7 +73,9 @@ H.create_autocommmands = function()
     for _, client in ipairs(clients) do
       if client:supports_method(did_rename_method) then client:notify(did_rename_method, changes) end
     end
-  end)
+  end
+  _G.Config.new_autocmd("User", "MiniFilesActionRename", file_rename, "File rename")
+  _G.Config.new_autocmd("User", "MiniFilesActionMove", file_rename, "File rename")
 end
 
 H.show_dotfiles = true

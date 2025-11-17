@@ -3,7 +3,7 @@
 
 -- using sed for color and prefer_light:
 local color = "ayu"
-local prefer_light = true
+local prefer_light = false
 -- end using sed
 
 return {

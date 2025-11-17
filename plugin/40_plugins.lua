@@ -1,4 +1,4 @@
-local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
+local add, later = MiniDeps.add, MiniDeps.later
 local now_if_args = _G.Config.now_if_args
 
 now_if_args(function()
@@ -11,12 +11,8 @@ now_if_args(function()
     source = "nvim-treesitter/nvim-treesitter-textobjects",
     checkout = "main",
   })
-  -- NOTE: Only install languages when missing on filetype event
   require("ak.other.treesitter")
 
-  -- TODO:  mini.ai like nvim-treesitter-textobjects.swap. Use < and >
-
-  -- TODO: Inlay hints and dynamic registration. No keymaps on attach?
   add("neovim/nvim-lspconfig")
   require("ak.other.lsp")
 end)
@@ -56,13 +52,11 @@ local markdown = function()
 end
 
 local vimtex = function()
-  require("ak.other.vimtex") -- only vimscript variables
+  require("ak.other.vimtex")
   add("lervag/vimtex")
 end
 
--- TODO: Add nvim-lint?
--- TODO: Move the definition of keymaps?
--- TODO: Always load markdown?
+-- TODO: Add nvim-lint? Move the definition of keymaps? Always load markdown?
 later(function()
   add("monaqa/dial.nvim")
   require("ak.other.dial")

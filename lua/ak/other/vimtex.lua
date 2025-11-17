@@ -1,3 +1,5 @@
+-- ...only vimscript variables
+
 -- ...The two exceptions are code folding and formatting, which are disabled by default and must be manually enabled...
 --
 -- Note: mini.clue, localleader triggers not that useful. Use mini.pick and search for "\"
