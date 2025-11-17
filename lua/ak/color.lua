@@ -2,8 +2,8 @@
 -- See: colors.txt
 
 -- using sed for color and prefer_light:
-local color = "randomhue"
-local prefer_light = false
+local color = "ayu"
+local prefer_light = true
 -- end using sed
 
 return {

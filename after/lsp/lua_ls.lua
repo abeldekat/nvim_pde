@@ -50,6 +50,7 @@ end
 return {
   on_attach = function(client, bufnr)
     -- reduce unnecessarily long list of completion triggers for better 'mini.completion' experience
+    -- TODO: reduce more see MiniMax
     client.server_capabilities.completionProvider.triggerCharacters = { ".", ":" }
     vim.keymap.set("n", "gd", luals_unique_definition, { buffer = bufnr, desc = "goto definition" })
   end,

@@ -60,6 +60,9 @@ nmap_leader('bw', '<Cmd>lua MiniBufremove.wipeout()<CR>',        'Wipeout')
 nmap_leader('bW', '<Cmd>lua MiniBufremove.wipeout(0, true)<CR>', 'Wipeout!')
 
 -- e is for 'Explore' and 'Edit'.
+local edit_config_file = function(filename) -- added
+  return string.format('<Cmd>edit %s/%s<CR>', vim.fn.stdpath('config'), filename)
+end
 local edit_plugin_file = function(filename)
   return string.format('<Cmd>edit %s/plugin/%s<CR>', vim.fn.stdpath('config'), filename)
 end
@@ -75,6 +78,7 @@ nmap_leader('ed', '<Cmd>lua MiniFiles.open()<CR>',          'Directory')
 nmap_leader('ef', explore_at_file,                          'File directory')
 nmap_leader('ei', '<Cmd>edit $MYVIMRC<CR>',                 'init.lua')
 nmap_leader('ek', edit_plugin_file('20_keymaps.lua'),       'Keymaps config')
+nmap_leader('el', edit_config_file('.luarc.jsonc'),         'Luarc json') -- added
 nmap_leader('em', edit_plugin_file('30_mini.lua'),          'MINI config')
 nmap_leader('en', '<Cmd>lua MiniNotify.show_history()<CR>', 'Notifications')
 nmap_leader('eo', edit_plugin_file('10_options.lua'),       'Options config')

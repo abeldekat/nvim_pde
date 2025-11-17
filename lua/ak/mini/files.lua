@@ -12,12 +12,6 @@ local setup = function()
   local minifiles = require("mini.files")
   minifiles.setup(config)
   H.create_autocommmands()
-
-
-  local edit_in_config = function(path) return "<Cmd>edit " .. vim.fn.stdpath("config") .. path .. "<CR>" end
-  H.nmap_leader("ed", "<Cmd>lua MiniFiles.open()<CR>", "Directory")
-  H.nmap_leader("ef", "<Cmd>lua MiniFiles.open(vim.api.nvim_buf_get_name(0))<CR>", "File directory")
-  H.nmap_leader("el", edit_in_config("/.luarc.jsonc"), ".luarc")
 end
 
 H.create_autocommmands = function()
@@ -133,11 +127,5 @@ H.can_preview = function() return H.max_windows > 1 end
 
 H.min_windows = 2
 H.max_windows = math.huge -- H.min_windows
-
-H.nmap_leader = function(suffix, rhs, desc, opts)
-  opts = opts or {}
-  opts.desc = desc
-  vim.keymap.set("n", "<leader>" .. suffix, rhs, opts)
-end
 
 setup()
