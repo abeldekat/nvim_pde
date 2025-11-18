@@ -1,13 +1,13 @@
 -- General mappings ===========================================================
 
-local nmap = function(lhs, rhs, desc)
-  vim.keymap.set('n', lhs, rhs, { desc = desc })
-end
+local nmap = function(lhs, rhs, desc) vim.keymap.set('n', lhs, rhs, { desc = desc }) end
 
--- Paste linewise before/after current line
--- Usage: `yiw` to yank a word and `]p` to put it on the next line.
-nmap('[p', '<Cmd>exe "put! " . v:register<CR>', 'Paste Above')
-nmap(']p', '<Cmd>exe "put "  . v:register<CR>', 'Paste Below')
+if vim.fn.has('nvim-0.12') == 0 then
+  -- Paste linewise before/after current line
+  -- Usage: `yiw` to yank a word and `]p` to put it on the next line.
+  nmap('[p', '<Cmd>exe "put! " . v:register<CR>', 'Paste Above')
+  nmap(']p', '<Cmd>exe "put "  . v:register<CR>', 'Paste Below')
+end
 
 -- Many general mappings are created by 'mini.basics'. See 'plugin/30_mini.lua'
 
