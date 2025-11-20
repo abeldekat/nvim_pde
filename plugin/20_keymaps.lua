@@ -87,32 +87,40 @@ nmap_leader('eq', explore_quickfix,                         'Quickfix')
 
 -- f is for 'Fuzzy Find'.
 local pick_added_hunks_buf = '<Cmd>Pick git_hunks path="%" scope="staged"<CR>'
+local pick_colorschemes = '<Cmd>lua _G.Config.setup_all_colors() MiniPick.registry.colorschemes()<CR>'
 
-nmap_leader('f/', '<Cmd>Pick history scope="/"<CR>',            '"/" history')
-nmap_leader('f:', '<Cmd>Pick history scope=":"<CR>',            '":" history')
-nmap_leader('fa', '<Cmd>Pick git_hunks scope="staged"<CR>',     'Added hunks (all)')
-nmap_leader('fA', pick_added_hunks_buf,                         'Added hunks (buf)')
-nmap_leader('fb', '<Cmd>Pick buffers<CR>',                      'Buffers')
-nmap_leader('fc', '<Cmd>Pick git_commits<CR>',                  'Commits (all)')
-nmap_leader('fC', '<Cmd>Pick git_commits path="%"<CR>',         'Commits (buf)')
-nmap_leader('fd', '<Cmd>Pick diagnostic scope="all"<CR>',       'Diagnostic workspace')
-nmap_leader('fD', '<Cmd>Pick diagnostic scope="current"<CR>',   'Diagnostic buffer')
-nmap_leader('ff', '<Cmd>Pick files<CR>',                        'Files')
-nmap_leader('fg', '<Cmd>Pick grep_live<CR>',                    'Grep live')
-nmap_leader('fG', '<Cmd>Pick grep pattern="<cword>"<CR>',       'Grep current word')
-nmap_leader('fh', '<Cmd>Pick help<CR>',                         'Help tags')
-nmap_leader('fH', '<Cmd>Pick hl_groups<CR>',                    'Highlight groups')
-nmap_leader('fk', '<Cmd>Pick keymaps<CR>',                      'Keymaps') -- added
-nmap_leader('fl', '<Cmd>Pick buf_lines scope="all"<CR>',        'Lines (all)')
-nmap_leader('fL', '<Cmd>Pick buf_lines scope="current"<CR>',    'Lines (buf)')
-nmap_leader('fm', '<Cmd>Pick git_hunks<CR>',                    'Modified hunks (all)')
-nmap_leader('fM', '<Cmd>Pick git_hunks path="%"<CR>',           'Modified hunks (buf)')
-nmap_leader('fr', '<Cmd>Pick resume<CR>',                       'Resume')
-nmap_leader('fR', '<Cmd>Pick lsp scope="references"<CR>',       'References (LSP)')
-nmap_leader('fs', '<Cmd>Pick lsp scope="workspace_symbol"<CR>', 'Symbols workspace')
-nmap_leader('fS', '<Cmd>Pick lsp scope="document_symbol"<CR>',  'Symbols document')
-nmap_leader('fv', '<Cmd>Pick visit_paths cwd=""<CR>',           'Visit paths (all)')
-nmap_leader('fV', '<Cmd>Pick visit_paths<CR>',                  'Visit paths (cwd)')
+nmap_leader('f/', '<Cmd>Pick history_hinted scope="/"<CR>',            '"/" history')
+nmap_leader('f:', '<Cmd>Pick history_hinted scope=":"<CR>',            '":" history')
+nmap_leader('fa', '<Cmd>Pick git_hunks scope="staged"<CR>',            'Added hunks (all)')
+nmap_leader('fA', pick_added_hunks_buf,                                'Added hunks (buf)')
+nmap_leader('fb', '<Cmd>Pick buffers_hinted<CR>',                      'Buffers') -- added custom hints
+nmap_leader('fc', '<Cmd>Pick git_commits<CR>',                         'Commits (all)')
+nmap_leader('fC', '<Cmd>Pick git_commits path="%"<CR>',                'Commits (buf)')
+nmap_leader('fd', '<Cmd>Pick diagnostic scope="all"<CR>',              'Diagnostic workspace')
+nmap_leader('fD', '<Cmd>Pick diagnostic scope="current"<CR>',          'Diagnostic buffer')
+nmap_leader('ff', '<Cmd>Pick files<CR>',                               'Files')
+nmap_leader('fF', '<Cmd>Pick git_files<CR>',                           'Git files') -- added
+nmap_leader('fg', '<Cmd>Pick grep_live<CR>',                           'Grep live')
+nmap_leader('fG', '<Cmd>Pick grep pattern="<cword>"<CR>',              'Grep current word')
+nmap_leader('fh', '<Cmd>Pick help<CR>',                                'Help tags')
+nmap_leader('fH', '<Cmd>Pick hl_groups<CR>',                           'Highlight groups')
+nmap_leader('fk', '<Cmd>Pick keymaps<CR>',                             'Keymaps') -- added
+nmap_leader('fl', '<Cmd>Pick buf_lines scope="all"<CR>',               'Lines (all)')
+nmap_leader('fL', '<Cmd>Pick buf_lines scope="current"<CR>',           'Lines (buf)')
+nmap_leader('fm', '<Cmd>Pick git_hunks<CR>',                           'Modified hunks (all)')
+nmap_leader('fM', '<Cmd>Pick git_hunks path="%"<CR>',                  'Modified hunks (buf)')
+nmap_leader('fo', '<Cmd>Pick oldfiles_hinted<CR>',                     'Recent files') -- added
+nmap_leader('fO', '<Cmd>Pick oldfiles_hinted current_dir=true<CR>',    'Recent files (rel)') -- added
+nmap_leader('fp', '<Cmd>Pick hipatterns scope="all"<CR>',              'Hipatterns (all)')
+nmap_leader('fP', '<Cmd>Pick hipatterns scope="current"<CR>',          'Hipatterns (buf)')
+nmap_leader('fr', '<Cmd>Pick lsp_hinted scope="references"<CR>',       'References (LSP)') -- changed from R
+nmap_leader('fs', '<Cmd>Pick lsp_hinted scope="workspace_symbol"<CR>', 'Symbols workspace')
+nmap_leader('fS', '<Cmd>Pick lsp_hinted scope="document_symbol"<CR>',  'Symbols document')
+nmap_leader('ft', '<Cmd>Pick grep_todo_keywords<CR>',                  'Grep todos') -- added
+nmap_leader('fT', pick_colorschemes,                                   'Colorschemes') -- added
+nmap_leader('fu', '<Cmd>Pick resume<CR>',                              'Resume') -- changed from r
+-- nmap_leader('fv', '<Cmd>Pick visit_paths cwd=""<CR>',           'Visit paths (all)') -- visits harpooned
+-- nmap_leader('fV', '<Cmd>Pick visit_paths<CR>',                  'Visit paths (cwd)') -- visits harpooned
 
 -- g is for 'Git'.
 local git_log_cmd = [[Git log --pretty=format:\%h\ \%as\ │\ \%s --topo-order]]

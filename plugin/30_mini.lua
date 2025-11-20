@@ -42,7 +42,7 @@ later(function()
   require('ak.mini.map')
   require('mini.move').setup()
   require('mini.operators').setup() -- Skipped mappings to swap arg
-  require('mini.pick').setup()
+  require('ak.mini.pick')
   require('ak.mini.snippets')
   require('mini.splitjoin').setup()
   require('mini.surround').setup() -- `sa sd sr sf sF sh sn`

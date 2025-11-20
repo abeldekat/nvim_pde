@@ -18,6 +18,5 @@ miniwinter
 nightfox
 nordfox
 randomhue
-rose-pine
 terafox
 tokyonight

@@ -1,3 +1,7 @@
+-- Not actively used...
+-- Last commit downloaded: cf2a288696b03d0934da713d66c6d71557b5c997
+-- Add to colors.txt: rose-pine
+
 local add_toggle = require("akshared.color_toggle").add
 local prefer_light = require("ak.color").prefer_light
 
