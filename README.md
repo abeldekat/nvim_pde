@@ -120,6 +120,7 @@ This config is based on [MiniMax].
 Additionally, code and ideas have been used from the following repositories:
 
 - [nvim](https://github.com/echasnovski/nvim) `@echasnovski`
+- [nvim](https://github.com/pkazmier/nvim) `@pkazmier`
 - [mini.deps](https://github.com/nvim-mini/mini.deps)
 - [LazyVim](https://github.com/LazyVim/LazyVim)
 - [lazy.nvim](https://github.com/folke/lazy.nvim)
