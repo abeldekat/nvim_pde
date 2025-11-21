@@ -1,14 +1,13 @@
-local add_toggle = require("akshared.color_toggle").add
-local prefer_light = require("ak.color").prefer_light
-vim.o.background = prefer_light and "light" or "dark"
+local prefer_light = require('ak.color').prefer_light
+vim.o.background = prefer_light and 'light' or 'dark'
 
--- unique colors, light is vague
-add_toggle("ayu*", {
-  name = "ayu",
-  flavours = { "ayu-mirage", "ayu-dark", "ayu-light" },
-})
+local info = {
+  name = 'ayu',
+  variants = { 'ayu-mirage', 'ayu-dark', 'ayu-light' },
+}
+_G.Config.add_theme_info('ayu*', info, 'Ayu variants')
 
-require("ayu").setup({
+require('ayu').setup({
   mirage = true,
   -- overrides = function()
   --   local c = require("ayu.colors")

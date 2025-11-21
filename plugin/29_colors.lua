@@ -14,14 +14,11 @@ local specs = {
   { source = 'EdenEast/nightfox.nvim', name = 'colors_nightfox' },
   { source = 'folke/tokyonight.nvim', name = 'colors_tokyonight' },
   -- { source = "rose-pine/neovim", name = "colors_rose-pine" },
-  -- { source = "sainnhe/sonokai", name = "colors_sonokai" },
   -- { source = "navarasu/onedark.nvim", name = "colors_onedark" },
   -- { source = "rebelot/kanagawa.nvim", name = "colors_kanagawa" },
-  -- { source = "craftzdog/solarized-osaka.nvim", name = "colors_solarized-osaka" },
   -- { source = "ellisonleao/gruvbox.nvim", name = "colors_gruvbox" },
   -- { source = "lifepillar/vim-solarized8", name = "colors_solarized8", checkout = "neovim" },
 }
-
 
 local register_all_colors = function()
   vim.iter(specs):each(function(s) DeferredDeps.register(s) end)
@@ -58,24 +55,50 @@ end
 -- Given the name of a spec, return the name of the config to require
 local to_config_name = function(spec_name) return 'ak.colors.' .. spec_name:gsub('colors_', '') end
 
-local setup_all_colors = function()
-  if all_colors_loaded then return end
-  for _, spec in ipairs(specs) do -- Load all specs and their configs
-    add(spec)
-    require(to_config_name(spec.name))
+-- Traverse the variants of a theme
+local theme_info = {} -- contains name, variants and possible callback
+local add_theme_info = function(pattern, new_info, desc)
+  local theme_info_default_cb = function(variant) vim.cmd.colorscheme(variant) end
+  local new_theme = function(info)
+    if theme_info.name and theme_info.name == info.name then return end
+    theme_info = info
+    theme_info.idx = 1
+    theme_info.cb = theme_info.cb and theme_info.cb or theme_info_default_cb
   end
-  require(from_color_name('mini').config_name) -- Mini collection
-  all_colors_loaded = true
+  _G.Config.new_autocmd('ColorScheme', pattern, function() new_theme(new_info) end, desc)
 end
-_G.Config.setup_all_colors = setup_all_colors
+local next_variant = function()
+  theme_info.idx = theme_info.idx == #theme_info.variants and 1 or (theme_info.idx + 1)
+  local variant = theme_info.variants[theme_info.idx]
+  theme_info.cb(variant)
+  vim.defer_fn(function()
+    local msg = string.format('Using %s[%s]', theme_info.name, vim.inspect(variant))
+    vim.api.nvim_echo({ { msg, 'InfoMsg' } }, true, {})
+  end, 250)
+end
+_G.Config.add_theme_info = add_theme_info -- see ak.colors
+_G.Config.next_theme_variant = next_variant -- see keymaps
 
 now(function()
-  local info = from_color_name(Color.color)
-  local spec = info.spec_name and find_spec(info.spec_name)
+  local colorinfo = from_color_name(Color.color)
+  local spec = colorinfo.spec_name and find_spec(colorinfo.spec_name)
 
   if spec then add(spec) end
-  require(info.config_name)
+  require(colorinfo.config_name)
   vim.cmd.colorscheme(Color.color)
 end)
 
-later(function() register_all_colors() end)
+later(function()
+  register_all_colors()
+
+  local setup_all_colors = function() -- See pick colorschemes
+    if all_colors_loaded then return end
+    for _, spec in ipairs(specs) do -- Load all specs and their configs
+      add(spec)
+      require(to_config_name(spec.name))
+    end
+    require(from_color_name('mini').config_name) -- Mini collection
+    all_colors_loaded = true
+  end
+  _G.Config.setup_all_colors = setup_all_colors
+end)

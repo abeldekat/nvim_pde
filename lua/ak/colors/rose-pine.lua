@@ -2,13 +2,13 @@
 -- Last commit downloaded: cf2a288696b03d0934da713d66c6d71557b5c997
 -- Add to colors.txt: rose-pine
 
-local add_toggle = require("akshared.color_toggle").add
 local prefer_light = require("ak.color").prefer_light
 
-add_toggle("rose-pine*", {
+local info = {
   name = "rose-pine",
-  flavours = { "rose-pine-moon", "rose-pine-main", "rose-pine-dawn" },
-})
+  variants = { "rose-pine-moon", "rose-pine-main", "rose-pine-dawn" },
+}
+_G.Config.add_theme_info('rose-pine*', info, 'Rose-pine variants')
 
 -- Before setup, the palette is set to main_nc:
 local current_nc = "#16141f"

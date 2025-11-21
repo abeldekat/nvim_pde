@@ -53,8 +53,6 @@ Notes: For [peek.nvim], [deno] needs to be installed. For [tree-sitter], the CLI
 Internal plugin [akextra.visits_harpooned] is a customized [mini.visits] configuration,
 operating in almost the same way as `harpoon`.
 
-TODO: The shortcuts changed...
-
 Pickers can display hints using internal plugin [akextra.pick_hinted]
 
 ### Tmux
@@ -81,8 +79,8 @@ Pickers can display hints using internal plugin [akextra.pick_hinted]
 Change color schemes:
 
 - on each startup, see [scripts], `vim_menu_owns`
-- mini.pick, `leader f o c`, loads all colors, does not show builtin color schemes
-- change the palette of the current color scheme using [leader h]
+- mini.pick, `leader f T`
+- change the variant of the current theme using [leader o c]
 
 Script `vim_menu_owns` writes to `lua.ak.colors`.
 Ignoring changes to that file:
@@ -119,7 +117,7 @@ Relevant discussions:
 ## Acknowledgements
 
 This config is based on [MiniMax].
-Also, code and ideas have been used from the following repositories:
+Additionally, code and ideas have been used from the following repositories:
 
 - [nvim](https://github.com/echasnovski/nvim) `@echasnovski`
 - [mini.deps](https://github.com/nvim-mini/mini.deps)
@@ -129,7 +127,7 @@ Also, code and ideas have been used from the following repositories:
 [tmuxp]: https://github.com/tmux-python/tmuxp
 [scripts]: https://github.com/abeldekat/scripts
 [tmux-sessionizer]: https://github.com/abeldekat/scripts/blob/main/tmux-sessionizer
-[leader h]: lua/akshared/color_toggle.lua
+[leader o c]: plugin/29_colors.lua
 [MiniMax]: https://github.com/nvim-mini/MiniMax
 [mini.files]: https://github.com/nvim-mini/mini.files
 [mini.jump2d]: https://github.com/nvim-mini/mini.jump2d

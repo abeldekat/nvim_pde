@@ -163,9 +163,10 @@ nmap_leader('ms', '<Cmd>lua MiniMap.toggle_side()<CR>',  'Side (toggle)')
 nmap_leader('mt', '<Cmd>lua MiniMap.toggle()<CR>',       'Toggle')
 
 -- o is for 'Other'.
-nmap_leader('or', '<Cmd>lua MiniMisc.resize_window()<CR>', 'Resize to default width')
-nmap_leader('ot', '<Cmd>lua MiniTrailspace.trim()<CR>',    'Trim trailspace')
-nmap_leader('oz', '<Cmd>lua MiniMisc.zoom()<CR>',          'Zoom toggle')
+nmap_leader('oc', '<Cmd>lua Config.next_theme_variant()<CR>', 'Next theme variant') -- added
+nmap_leader('or', '<Cmd>lua MiniMisc.resize_window()<CR>',    'Resize to default width')
+nmap_leader('ot', '<Cmd>lua MiniTrailspace.trim()<CR>',       'Trim trailspace')
+nmap_leader('oz', '<Cmd>lua MiniMisc.zoom()<CR>',             'Zoom toggle')
 
 -- s is for 'VisitsHarpooned', my 'Visits' extension.
 -- a is a shortcut to toggle the current label on a file
