@@ -39,7 +39,7 @@ rm -rf ~/.local/share/ak ~/.local/state/ak ~/.cache/ak
 rm -rf ~/.config/ak
 ```
 
-Notes: For [peek.nvim], [deno] needs to be installed. For [tree-sitter], the CLI must be installed.
+Notes: For [tree-sitter], the CLI must be installed.
 
 ## Workflow
 

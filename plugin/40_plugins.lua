@@ -28,33 +28,7 @@ end)
 
 -- Plugins not included in MiniMax ============================================
 
-local DeferredDeps = require('akextra.deps_deferred')
-
-local addmarkdown = function()
-  local function add_md(source, to_require, hook)
-    if hook then source = { source = source, hooks = { post_install = hook, post_checkout = hook } } end
-
-    DeferredDeps.register(source)
-    local function load()
-      add(source)
-      require('ak.other.' .. to_require)
-    end
-    DeferredDeps.on_event(function() later(load) end, 'FileType', 'markdown')
-  end
-
-  local function build_peek(params)
-    later(function()
-      vim.cmd('lcd ' .. params.path)
-      vim.cmd('!deno task --quiet build:fast')
-      vim.cmd('lcd -')
-    end)
-  end
-  add_md('toppair/peek.nvim', 'peek', build_peek)
-
-  add_md('MeanderingProgrammer/render-markdown.nvim', 'render_markdown')
-end
-
--- TODO: Add nvim-lint? Move the definition of keymaps? Always load markdown?
+-- TODO: Add nvim-lint? Move the definition of keymaps?
 later(function()
   addreq('monaqa/dial.nvim', 'ak.other.dial')
   addreq('stevearc/quicker.nvim', 'ak.other.quicker')
@@ -64,5 +38,14 @@ later(function()
   require('ak.other.vimtex') -- sets vimscript variables
   add('lervag/vimtex')
 
-  addmarkdown()
+  local build_mkdp = function() vim.fn['mkdp#util#install']() end
+  add({
+    source = 'iamcco/markdown-preview.nvim',
+    hooks = {
+      post_install = function() later(build_mkdp) end,
+      post_checkout = build_mkdp,
+    },
+    checkout = 'a923f5fc5ba36a3b17e289dc35dc17f66d0548ee', -- latest commit 2 years ago
+  })
+  vim.g.mkdp_auto_close = 0
 end)
