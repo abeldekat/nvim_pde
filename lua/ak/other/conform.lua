@@ -18,7 +18,7 @@ require('conform').setup({
   },
 })
 
-Config.conform_toggle = function()
+Config.toggle_conform = function()
   Config.disable_autoformat = not Config.disable_autoformat
   vim.notify('Auto-format ' .. (Config.disable_autoformat and 'off' or 'on'))
 end

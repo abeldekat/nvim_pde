@@ -13,6 +13,7 @@ return {
   ["friendly-snippets"] = "572f5660cf05f8cd8834e096d7b4c921ba18e175",
   ["markdown-preview.nvim"] = "a923f5fc5ba36a3b17e289dc35dc17f66d0548ee",
   ["mini.nvim"] = "6e885e4c27743ae6bf5957ea78ce86c032835f09",
+  ["nvim-lint"] = "d1118791070d090777398792a73032a0ca5c79ff",
   ["nvim-lspconfig"] = "a2a277114dbb93e98f04b5087a9b832918b7da15",
   ["nvim-treesitter"] = "bb83a676128d95c865e40ba71376d883bdadec14",
   ["nvim-treesitter-context"] = "660861b1849256398f70450afdf93908d28dc945",
