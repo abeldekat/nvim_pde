@@ -14,8 +14,9 @@ now(function()
   require('ak.mini.notify')
   require('mini.sessions').setup()
 
-  if vim.fn.argc(-1) == 0 then require('ak.mini.starter') end
-  vim.o.statusline = ' ' -- wait till statusline plugin is loaded
+  if vim.fn.argc(-1) == 0 then require('ak.mini.starter') end -- MiniMax always loads starter
+
+  vim.o.statusline = ' ' -- added: wait till statusline plugin is loaded
   -- require("mini.tabline").setup()
 end)
 
