@@ -9,6 +9,8 @@ if vim.fn.has('nvim-0.12') == 0 then
   nmap(']p', '<Cmd>exe "put "  . v:register<CR>', 'Paste Below')
 end
 
+nmap([[\f]], '<Cmd>lua Config.conform_toggle()<CR>', 'Toggle auto-format')
+
 -- Many general mappings are created by 'mini.basics'. See 'plugin/30_mini.lua'
 
 -- stylua: ignore start
