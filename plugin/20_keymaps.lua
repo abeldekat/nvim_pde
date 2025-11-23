@@ -87,6 +87,7 @@ nmap_leader('eq', explore_quickfix,                         'Quickfix')
 
 -- f is for 'Fuzzy Find'.
 local pick_added_hunks_buf = '<Cmd>Pick git_hunks path="%" scope="staged"<CR>'
+local pick_workspace_symbols_live = '<Cmd>Pick lsp scope="workspace_symbol_live"<CR>'
 local pick_colorschemes = '<Cmd>lua _G.Config.setup_all_colors() MiniPick.registry.colorschemes()<CR>'
 
 nmap_leader('f/', '<Cmd>Pick history_hinted scope="/"<CR>',            '"/" history')
@@ -114,7 +115,7 @@ nmap_leader('fO', '<Cmd>Pick oldfiles_hinted current_dir=true<CR>',    'Recent f
 nmap_leader('fp', '<Cmd>Pick hipatterns scope="all"<CR>',              'Hipatterns (all)')
 nmap_leader('fP', '<Cmd>Pick hipatterns scope="current"<CR>',          'Hipatterns (buf)')
 nmap_leader('fr', '<Cmd>Pick lsp_hinted scope="references"<CR>',       'References (LSP)') -- changed from R
-nmap_leader('fs', '<Cmd>Pick lsp_hinted scope="workspace_symbol"<CR>', 'Symbols workspace')
+nmap_leader('fs', pick_workspace_symbols_live,                         'Symbols workspace (live)')
 nmap_leader('fS', '<Cmd>Pick lsp_hinted scope="document_symbol"<CR>',  'Symbols document')
 nmap_leader('ft', '<Cmd>Pick grep_todo_keywords<CR>',                  'Grep todos') -- added
 nmap_leader('fT', pick_colorschemes,                                   'Colorschemes') -- added
