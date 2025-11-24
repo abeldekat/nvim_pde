@@ -41,6 +41,11 @@ rm -rf ~/.config/ak
 
 Notes: For [tree-sitter], the CLI must be installed.
 
+## Structure
+
+See [MiniMax]. However, in case the `setup` of a plugin is customized,
+the corresponding code will be contained in a dedicated lua module.
+
 ## Workflow
 
 - Leader: `space`
