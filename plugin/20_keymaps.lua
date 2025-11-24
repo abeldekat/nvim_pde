@@ -3,8 +3,9 @@
 local nmap = function(lhs, rhs, desc) vim.keymap.set('n', lhs, rhs, { desc = desc }) end
 
 -- ...added... From nvim echasnovski... Perhaps with mini.keymap including ctrl k?
+-- ...changed... The rhs from ctrl w h into ctrl w p, focus last accessed
 -- Shorter version of the most frequent way of going outside of terminal window
-vim.keymap.set('t', '<C-h>', [[<C-\><C-N><C-w>h]])
+vim.keymap.set('t', '<C-h>', [[<C-\><C-N><C-w>p]])
 
 if vim.fn.has('nvim-0.12') == 0 then
   -- Paste linewise before/after current line

@@ -26,7 +26,7 @@ Clone the repository:
 git clone https://github.com/abeldekat/nvim_pde ~/.config/ak
 ```
 
-Open Neovim with this config, installing the plugins:
+Open Neovim and install the plugins:
 
 ```sh
 NVIM_APPNAME=ak nvim
@@ -123,7 +123,6 @@ Additionally, code and ideas have been used from the following repositories:
 - [nvim](https://github.com/pkazmier/nvim) `@pkazmier`
 - [mini.deps](https://github.com/nvim-mini/mini.deps)
 - [LazyVim](https://github.com/LazyVim/LazyVim)
-- [lazy.nvim](https://github.com/folke/lazy.nvim)
 
 [tmuxp]: https://github.com/tmux-python/tmuxp
 [scripts]: https://github.com/abeldekat/scripts
@@ -137,8 +136,6 @@ Additionally, code and ideas have been used from the following repositories:
 [mini.clue]: https://github.com/nvim-mini/mini.clue
 [akextra.pick_hinted]: lua/akextra/pick_hinted.lua
 [akextra.visits_harpooned]: lua/akextra/visits_harpooned.lua
-[peek.nvim]: https://github.com/toppair/peek.nvim
-[deno]: https://deno.land
 [with_submodules]: https://github.com/abeldekat/nvim_pde/tree/with_submodules
 [with_lazynvim]: https://github.com/abeldekat/nvim_pde/tree/with_lazynvim
 [without_minimax]: https://github.com/abeldekat/nvim_pde/tree/without_minimax
