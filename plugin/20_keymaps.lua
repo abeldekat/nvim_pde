@@ -2,6 +2,10 @@
 
 local nmap = function(lhs, rhs, desc) vim.keymap.set('n', lhs, rhs, { desc = desc }) end
 
+-- ...added... From nvim echasnovski... Perhaps with mini.keymap including ctrl k?
+-- Shorter version of the most frequent way of going outside of terminal window
+vim.keymap.set('t', '<C-h>', [[<C-\><C-N><C-w>h]])
+
 if vim.fn.has('nvim-0.12') == 0 then
   -- Paste linewise before/after current line
   -- Usage: `yiw` to yank a word and `]p` to put it on the next line.
