@@ -5,8 +5,8 @@ lint.linters_by_ft = {
   sh = { 'shellcheck' },
 }
 
--- { "BufWritePost", "BufReadPost", "InsertLeave" }, or perhaps: Filetype
-_G.Config.new_autocmd({ 'BufWritePost' }, nil, function()
+-- { "BufWritePost", "BufReadPost", "InsertLeave" }
+_G.Config.new_autocmd({ 'Filetype', 'BufWritePost' }, nil, function()
   if _G.Config.disable_autolint then return end
 
   lint.try_lint() -- nil, { ignore_errors = true })

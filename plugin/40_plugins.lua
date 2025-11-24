@@ -29,11 +29,12 @@ end)
 
 -- Plugins not included in MiniMax ============================================
 
+now_if_args(function() addreq('mfussenegger/nvim-lint', 'ak.other.nvim_lint') end)
+
 later(function()
   addreq('monaqa/dial.nvim', 'ak.other.dial')
   addreq('stevearc/quicker.nvim', 'ak.other.quicker')
   addreq('nvim-treesitter/nvim-treesitter-context', 'ak.other.treesitter_context')
-  addreq('mfussenegger/nvim-lint', 'ak.other.nvim_lint')
 
   require('ak.other.vimtex') -- vimscript variables
   add('lervag/vimtex')
