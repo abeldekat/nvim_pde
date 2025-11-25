@@ -55,6 +55,10 @@ local xmap_leader = function(suffix, rhs, desc)
   vim.keymap.set('x', '<Leader>' .. suffix, rhs, { desc = desc })
 end
 
+-- shortcuts.
+nmap_leader(',', '<Cmd>Pick buffers_hinted<CR>',                      'Buffers') -- added custom hints
+nmap_leader('/', '<Cmd>Pick buf_lines scope="current"<CR>',           'Lines (buf)')
+
 -- b is for 'Buffer'.
 local new_scratch_buffer = function()
   vim.api.nvim_win_set_buf(0, vim.api.nvim_create_buf(true, true))
