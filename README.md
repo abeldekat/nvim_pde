@@ -49,16 +49,13 @@ the corresponding code will be contained in a dedicated lua module.
 ## Workflow
 
 - Leader: `space`
-- Main plugins: [akextra.visits_harpooned], [mini.files], [mini.pick], [mini.jump2d]
+- Main plugins: [mini.visits], [mini.files], [mini.pick], [mini.jump2d]
 - Menu: [mini.clue]
 - Keyboard: Halcyon Ferris, a split keyboard with 34 keys
 
-### VisitsHarpooned
+### PickHinted
 
-Internal plugin [akextra.visits_harpooned] is a customized [mini.visits] configuration,
-operating in almost the same way as `harpoon`.
-
-Pickers can display hints using internal plugin [akextra.pick_hinted]
+Pickers from [mini.pick] can display hints using internal module [akextra.pick_hinted]
 
 ### Tmux
 
@@ -99,9 +96,8 @@ git update-index --assume-unchanged lua/ak/colors.lua
 Relevant discussions:
 
 - [Visits tweaked to operate like `grapple` or `harpoon`](https://github.com/nvim-mini/mini.nvim/discussions/1158).
-  See internal plugin [akextra.visits_harpooned]
 - [Augment pickers with labels and hotkeys](https://github.com/nvim-mini/mini.nvim/discussions/1109).
-  See internal plugin [akextra.pick_hinted]
+  See internal module [akextra.pick_hinted]
 - [Pick bufferlines with treesitter highlighting](https://github.com/nvim-mini/mini.nvim/discussions/988).
 - [Apply tokyonight dev environment](https://github.com/nvim-mini/mini.nvim/discussions/1012).
 - [Optimized jumping with jump2d](https://github.com/nvim-mini/mini.nvim/discussions/1033).
@@ -140,7 +136,6 @@ Additionally, code and ideas have been used from the following repositories:
 [mini.visits]: https://github.com/nvim-mini/mini.visits
 [mini.clue]: https://github.com/nvim-mini/mini.clue
 [akextra.pick_hinted]: lua/akextra/pick_hinted.lua
-[akextra.visits_harpooned]: lua/akextra/visits_harpooned.lua
 [with_submodules]: https://github.com/abeldekat/nvim_pde/tree/with_submodules
 [with_lazynvim]: https://github.com/abeldekat/nvim_pde/tree/with_lazynvim
 [without_minimax]: https://github.com/abeldekat/nvim_pde/tree/without_minimax

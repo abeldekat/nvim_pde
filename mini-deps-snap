@@ -14,7 +14,7 @@ return {
   ["markdown-preview.nvim"] = "a923f5fc5ba36a3b17e289dc35dc17f66d0548ee",
   ["mini.nvim"] = "72b0194c56c984476c5975b62eb340fd1aa1686a",
   ["nvim-lint"] = "d1118791070d090777398792a73032a0ca5c79ff",
-  ["nvim-lspconfig"] = "30a2b191bccf541ce1797946324c9329e90ec448",
+  ["nvim-lspconfig"] = "de659c9c0d53df0e6b4747d8d1ef22ba1164291d",
   ["nvim-treesitter"] = "c5871d9d870c866fea9f271f1a3b3f29049a4793",
   ["nvim-treesitter-context"] = "660861b1849256398f70450afdf93908d28dc945",
   ["nvim-treesitter-textobjects"] = "227165aaeb07b567fb9c066f224816aa8f3ce63f",

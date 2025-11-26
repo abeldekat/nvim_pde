@@ -17,6 +17,21 @@ end
 nmap([[\f]], '<Cmd>lua Config.toggle_conform()<CR>', 'Toggle auto-format')
 nmap([[\L]], '<Cmd>lua Config.toggle_lint()<CR>', 'Toggle auto-lint')
 
+-- Visits iterate based on recency
+local make_iterate_label = function(direction) -- see map_iterate_core from the help
+  return function()
+    local current = _G.Config.visits_label
+    local sort_latest = MiniVisits.gen_sort.default({ recency_weight = 1 })
+    local opts = { filter = current, sort = sort_latest, wrap = true }
+    MiniVisits.iterate_paths(direction, vim.fn.getcwd(), opts)
+  end
+end
+
+nmap('[{', make_iterate_label('first'), 'Current label (earliest)')
+nmap('[[', make_iterate_label('backward'), 'Current label (earlier)')
+nmap(']]', make_iterate_label('forward'), 'Current label (later)')
+nmap(']}', make_iterate_label('last'), 'Current label (latest)')
+
 -- Many general mappings are created by 'mini.basics'. See 'plugin/30_mini.lua'
 
 -- stylua: ignore start
@@ -35,14 +50,12 @@ _G.Config.leader_group_clues = {
   { mode = 'n', keys = '<Leader>e', desc = '+Explore/Edit' },
   { mode = 'n', keys = '<Leader>f', desc = '+Find' },
   { mode = 'n', keys = '<Leader>g', desc = '+Git' },
+  { mode = 'n', keys = '<Leader>i', desc = '+V[i]sits' }, -- changed from v
   { mode = 'n', keys = '<Leader>l', desc = '+Language' },
   { mode = 'n', keys = '<Leader>m', desc = '+Map' },
   { mode = 'n', keys = '<Leader>o', desc = '+Other' },
-  -- The s is easy to type on both qwerty and colemakdh:
-  { mode = 'n', keys = '<Leader>s', desc = '+Vi[s]itsHarpooned' },
-  { mode = 'n', keys = '<Leader>S', desc = '+Session' },
+  { mode = 'n', keys = '<Leader>s', desc = '+Session' },
   { mode = 'n', keys = '<Leader>t', desc = '+Terminal' },
-  -- { mode = 'n', keys = '<Leader>v', desc = '+Visits' },
 
   { mode = 'x', keys = '<Leader>g', desc = '+Git' },
   { mode = 'x', keys = '<Leader>l', desc = '+Language' },
@@ -54,10 +67,6 @@ end
 local xmap_leader = function(suffix, rhs, desc)
   vim.keymap.set('x', '<Leader>' .. suffix, rhs, { desc = desc })
 end
-
--- shortcuts.
-nmap_leader(',', '<Cmd>Pick buffers_hinted<CR>',                      'Buffers') -- added custom hints
-nmap_leader('/', '<Cmd>Pick buf_lines scope="current"<CR>',           'Lines (buf)')
 
 -- b is for 'Buffer'.
 local new_scratch_buffer = function()
@@ -117,6 +126,8 @@ nmap_leader('fg', '<Cmd>Pick grep_live<CR>',                           'Grep liv
 nmap_leader('fG', '<Cmd>Pick grep pattern="<cword>"<CR>',              'Grep current word')
 nmap_leader('fh', '<Cmd>Pick help<CR>',                                'Help tags')
 nmap_leader('fH', '<Cmd>Pick hl_groups<CR>',                           'Highlight groups')
+nmap_leader('fi', '<Cmd>Pick visit_paths cwd=""<CR>',                  'V[i]sit paths (all)') -- changed from v
+nmap_leader('fI', '<Cmd>Pick visit_paths<CR>',                         'V[i]sit paths (cwd)') -- changed from V
 nmap_leader('fk', '<Cmd>Pick keymaps<CR>',                             'Keymaps') -- added
 nmap_leader('fl', '<Cmd>Pick buf_lines scope="all"<CR>',               'Lines (all)')
 nmap_leader('fL', '<Cmd>Pick buf_lines scope="current"<CR>',           'Lines (buf)')
@@ -132,8 +143,10 @@ nmap_leader('fS', '<Cmd>Pick lsp_hinted scope="document_symbol"<CR>',  'Symbols 
 nmap_leader('ft', '<Cmd>Pick grep_todo_keywords<CR>',                  'Grep todos') -- added
 nmap_leader('fT', pick_colorschemes,                                   'Colorschemes') -- added
 nmap_leader('fu', '<Cmd>Pick resume<CR>',                              'Resume') -- changed from r
--- nmap_leader('fv', '<Cmd>Pick visit_paths cwd=""<CR>',           'Visit paths (all)') -- visits harpooned
--- nmap_leader('fV', '<Cmd>Pick visit_paths<CR>',                  'Visit paths (cwd)') -- visits harpooned
+
+-- - 'Fuzzy Find' shortcuts.
+nmap_leader(',', '<Cmd>Pick buffers_hinted<CR>',                      'Buffers') -- alias fb
+nmap_leader('/', '<Cmd>Pick buf_lines scope="current"<CR>',           'Lines (buf)') -- alias fL
 
 -- g is for 'Git'.
 local git_log_cmd = [[Git log --pretty=format:\%h\ \%as\ │\ \%s --topo-order]]
@@ -151,6 +164,43 @@ nmap_leader('go', '<Cmd>lua MiniDiff.toggle_overlay()<CR>', 'Toggle overlay')
 nmap_leader('gs', '<Cmd>lua MiniGit.show_at_cursor()<CR>',  'Show at cursor')
 
 xmap_leader('gs', '<Cmd>lua MiniGit.show_at_cursor()<CR>', 'Show at selection')
+
+-- i is for 'Visits'. MiniMax uses 'v' which is harder to type
+-- - Most of the mappings have been changed
+-- - Introduced variable current_label, starting with 'core'
+local make_pick_from_label = function(cwd, desc) -- see make_pick_core in MiniMax
+  return function()
+    local label = _G.Config.visits_label
+    local name = string.format('%s %s', label, desc)
+    local sort_latest = MiniVisits.gen_sort.default({ recency_weight = 1 })
+    local local_opts = { cwd = cwd, filter = label, sort = sort_latest }
+    local hinted = { enable = true, use_autosubmit = true }
+    MiniExtra.pickers.visit_paths(local_opts, { source = { name = name }, hinted = hinted })
+  end
+end
+local make_addremove_current = function(call)
+  local current = '_G.Config.visits_label'
+  return string.format('<Cmd>lua MiniVisits.%s(%s)<CR>', call, current)
+end
+local make_purge_current = function()
+  local current = '_G.Config.visits_label'
+  return string.format('<Cmd>lua MiniVisits.remove_label(%s, "", "")<CR>', current)
+end
+
+nmap_leader('ic', '<Cmd>lua _G.Config.visits_choose_current()<CR>', 'Choose current label') -- added
+nmap_leader('ip', make_purge_current(),                             'Purge current label') -- added
+-- - the s is a mnemonic for 'show'
+nmap_leader('is', make_pick_from_label('',  'visits (all)'),        'Current label (all)') -- vc
+nmap_leader('iS', make_pick_from_label(nil, 'visits (cwd)'),        'Current label (cwd)') -- vC
+-- - the i uses the same repeat pattern as MiniMax
+nmap_leader('ii', make_addremove_current('add_label'),              'Add current label') -- vv
+nmap_leader('iI', make_addremove_current('remove_label'),           'Remove current label') -- vV
+-- - the l is the same as in MinMax
+nmap_leader('il', '<Cmd>lua MiniVisits.add_label()<CR>',            'Add label interactive') -- vl
+nmap_leader('iL', '<Cmd>lua MiniVisits.remove_label()<CR>',         'Remove label interactive') -- vL
+
+-- - 'Visits' shortcuts
+nmap_leader('.', make_pick_from_label('',  'visits (all)'),         'Current label (all)') -- alias is
 
 -- l is for 'Language'.
 local formatting_cmd = '<Cmd>lua require("conform").format({lsp_fallback=true})<CR>'
@@ -181,35 +231,13 @@ nmap_leader('or', '<Cmd>lua MiniMisc.resize_window()<CR>',    'Resize to default
 nmap_leader('ot', '<Cmd>lua MiniTrailspace.trim()<CR>',       'Trim trailspace')
 nmap_leader('oz', '<Cmd>lua MiniMisc.zoom()<CR>',             'Zoom toggle')
 
--- s is for 'VisitsHarpooned', my 'Visits' extension.
--- a is a shortcut to toggle the current label on a file
--- n is a shortcut to cycle through the files having current label
-local make_harpooned_cmd = function(number)
-  return "<Cmd>lua VisitsHarpooned.select(" .. number .. ")<CR>"
-end
-local nmap_harpooned = function(char, n)
-  vim.keymap.set( "n", "s" .. char, make_harpooned_cmd(n), { desc = "Harpooned " .. n })
-end
-nmap_leader('sn', '<Cmd>lua VisitsHarpooned.pick_from_current()<CR>', 'Pick from current label')
-nmap_leader('sp', '<Cmd>lua VisitsHarpooned.pick_from_all()<CR>',     'Pick from all')
-nmap_leader('sl', '<Cmd>lua VisitsHarpooned.switch_label()<CR>',      'Switch label')
-nmap_leader('sL', '<Cmd>lua VisitsHarpooned.new_label()<CR>',         'New label')
-nmap_leader('sm', '<Cmd>lua VisitsHarpooned.maintain()<CR>',          'Maintain')
-nmap_leader('sc', '<Cmd>lua VisitsHarpooned.clear_all_visits()<CR>',  'Clear all harpooned')
-nmap_leader('a',  '<Cmd>lua VisitsHarpooned.toggle()<CR>',            'Harpooned toggle')
-nmap_leader('n',  '<Cmd>lua VisitsHarpooned.forward()<CR>',           'Harpooned cycle')
-nmap_harpooned("4", "1") -- numpad layer...
-nmap_harpooned("5", "2")
-nmap_harpooned("6", "3")
-nmap_harpooned("1", "4")
-
--- S is for 'Session'. The S is capitalized because I don't use it much.
+-- s is for 'Session'.
 local session_new = 'MiniSessions.write(vim.fn.input("Session name: "))'
 
-nmap_leader('Sd', '<Cmd>lua MiniSessions.select("delete")<CR>', 'Delete')
-nmap_leader('Sn', '<Cmd>lua ' .. session_new .. '<CR>',         'New')
-nmap_leader('Sr', '<Cmd>lua MiniSessions.select("read")<CR>',   'Read')
-nmap_leader('Sw', '<Cmd>lua MiniSessions.write()<CR>',          'Write current')
+nmap_leader('sd', '<Cmd>lua MiniSessions.select("delete")<CR>', 'Delete')
+nmap_leader('sn', '<Cmd>lua ' .. session_new .. '<CR>',         'New')
+nmap_leader('sr', '<Cmd>lua MiniSessions.select("read")<CR>',   'Read')
+nmap_leader('sw', '<Cmd>lua MiniSessions.write()<CR>',          'Write current')
 
 -- t is for 'Terminal'
 nmap_leader('tT', '<Cmd>horizontal term<CR>', 'Terminal (horizontal)')
