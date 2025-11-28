@@ -38,12 +38,11 @@
       //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-lspconfig/lua",
       //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/conform.nvim/lua",
       //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/friendly-snippets/lua",
+      //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-lint/lua",
       //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/dial.nvim/lua",
       //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/quicker.nvim/lua",
       //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/nvim-treesitter-context/lua",
       //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/SchemaStore.nvim/lua",
-      //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/render-markdown.nvim/lua",
-      //"$XDG_DATA_HOME/nvim/site/pack/deps/opt/peek.nvim/lua",
 
       //// --> important, add this last:
       "$XDG_CONFIG_HOME/nvim/lua"
