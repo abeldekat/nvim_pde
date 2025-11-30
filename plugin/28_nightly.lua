@@ -4,10 +4,9 @@ if vim.fn.has('nvim-0.12') == 0 then return end
 
 -- UI options =================================================================
 
-vim.o.pummaxwidth          = 100                        -- Limit maximum width of popup menu
-vim.o.completefuzzycollect = 'keyword,files,whole_line' -- Use fuzzy matching when collecting candidates
-vim.o.pumborder            = 'bold'                     -- Use border in built-in completion menu
-vim.o.winborder            = 'bold'                     -- Use border in floating windows
+vim.o.pummaxwidth = 100 -- Limit maximum width of popup menu
+vim.o.pumborder = 'bold' -- Use border in built-in completion menu
+vim.o.winborder = 'bold' -- Use border in floating windows
 
 require('vim._extui').enable({ enable = true })
 

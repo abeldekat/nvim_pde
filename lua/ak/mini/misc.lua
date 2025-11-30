@@ -7,7 +7,7 @@
 --   function `f` 100 times and report statistical summary of execution times
 --
 -- Makes `:h MiniMisc.put()` and `:h MiniMisc.put_text()` public
-require("mini.misc").setup()
+require('mini.misc').setup()
 
 -- Change current working directory based on the current file path. It
 -- searches up the file tree until the first root marker ('.git' or 'Makefile')
@@ -20,4 +20,4 @@ MiniMisc.setup_restore_cursor()
 
 -- Synchronize terminal emulator background with Neovim's background to remove
 -- possibly different color padding around Neovim instance
--- MiniMisc.setup_termbg_sync() -- does not work with alacritty...
+MiniMisc.setup_termbg_sync()
