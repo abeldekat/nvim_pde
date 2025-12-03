@@ -14,14 +14,15 @@ require('ayu').setup({
     local c = require('ayu.colors')
       -- stylua: ignore
     return {
-      FloatTitle                     = { bold = true },
-      LineNr                         = { fg = c.guide_active },
       CursorLineNr                   = { fg = c.accent, bg = c.bg, bold = true },
+      FloatTitle                     = { fg = c.tag, bold = true },
+      LineNr                         = { fg = c.guide_active },
 
       -- Now that 'pumborder' exists, use same styling for other floats
-      Pmenu                          = { fg = c.fg, bg = c.bg },
+      Pmenu                          = { fg = c.fg,      bg = c.bg },
+      PmenuBorder                    = { fg = c.comment, bg = c.bg },
       PmenuMatch                     = { fg = c.regexp },
-      PmenuSel                       = { bg = c.line, reverse = false, bold = true },
+      PmenuSel                       = { bg = c.line,    reverse = false, bold = true },
 
       -- Use reverse text for diagnostics
       DiagnosticVirtualTextError     = { bg = c.error,   fg = c.line, italic = true },
@@ -30,8 +31,8 @@ require('ayu').setup({
       DiagnosticVirtualTextHint      = { bg = c.regexp,  fg = c.line, italic = true },
 
       -- Bold current line in MiniFiles
-      MiniFilesCursorLine            = { fg = nil,        bg = c.line,   bold = true },
-      MiniFilesTitleFocused          = { fg = c.panel_bg, bg = c.regexp, bold = true },
+      MiniFilesCursorLine            = { fg = nil,        bg = c.line, bold = true },
+      MiniFilesTitleFocused          = { fg = c.panel_bg, bg = c.tag,  bold = true },
 
       -- Bold matches and current line in MiniPick
       MiniPickMatchCurrent           = { fg = nil, bg = c.line,          bold = true },
