@@ -15,6 +15,7 @@ if vim.fn.has('nvim-0.12') == 0 then
 end
 
 nmap([[\f]], '<Cmd>lua Config.toggle_conform()<CR>', 'Toggle auto-format')
+nmap([[\H]], '<Cmd>lua Config.toggle_hints()<CR>', 'Toggle inlay hints')
 nmap([[\L]], '<Cmd>lua Config.toggle_lint()<CR>', 'Toggle auto-lint')
 
 -- Visits iterate based on recency
