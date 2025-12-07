@@ -17,7 +17,7 @@ local languages = { -- 45
   "awk", "bash", "bibtex", "c", "css", "diff",
   "fennel", "git_config", "gitcommit", "git_rebase", "gitignore", "gitattributes",
   "go", "gomod", "gowork", "gosum", "html", "javascript",
-  "jsdoc", "json", "jsonc", "json5", "luadoc",
+  "jsdoc", "json", "json5", "luadoc",
   "luap", "make", "markdown_inline", "ninja", "printf",
   "python", "query", "rasi", "regex", "ron", "rst",
   "rust", "sql", "toml", "tsx", "typescript", "vim",
@@ -44,9 +44,9 @@ local languages = { -- 45
 -- They are not used in this plugin and are provided for (limited) backward compatibility.
 -- end
 
-local isnt_installed = function(lang) return #vim.api.nvim_get_runtime_file("parser/" .. lang .. ".*", false) == 0 end
+local isnt_installed = function(lang) return #vim.api.nvim_get_runtime_file('parser/' .. lang .. '.*', false) == 0 end
 local to_install = vim.tbl_filter(isnt_installed, languages)
-if #to_install > 0 then require("nvim-treesitter").install(to_install) end
+if #to_install > 0 then require('nvim-treesitter').install(to_install) end
 
 local filetypes = {}
 for _, lang in ipairs(languages) do
@@ -55,4 +55,4 @@ for _, lang in ipairs(languages) do
   end
 end
 local ts_start = function(ev) vim.treesitter.start(ev.buf) end
-_G.Config.new_autocmd("FileType", filetypes, ts_start, "Start tree-sitter")
+_G.Config.new_autocmd('FileType', filetypes, ts_start, 'Start tree-sitter')
