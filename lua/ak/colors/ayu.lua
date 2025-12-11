@@ -43,7 +43,7 @@ require('ayu').setup({
       MiniStarterSection             = { fg = c.keyword, bold = true },
       MiniStarterHeader              = { fg = c.tag,     bold = true },
 
-      MiniStatuslineFilename         = { fg = c.fg,             bg = c.panel_border,  bold = true },
+      MiniStatuslineFilename         = { fg = c.fg,             bg = c.selection_inactive,  bold = true },
       MiniStatuslineDevinfo          = { fg = c.fg,             bg = c.selection_bg },
       MiniStatuslineFileinfo         = { fg = c.fg,             bg = c.selection_bg },
       StatusLine                     = { fg = c.fg,             bg = c.panel_border },
