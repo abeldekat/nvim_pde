@@ -1,5 +1,5 @@
 return {
-  ["SchemaStore.nvim"] = "c103ea363c4776ea9079eccaae54b42aa537a80e",
+  ["SchemaStore.nvim"] = "a025c78b147affef1aabb8aa360c92be2e0377a0",
   colors_ayu = "38caa8b5b969010b1dcae8ab1a569d7669a643d5",
   colors_bamboo = "1309bc88bffcf1bedc3e84e7fa9004de93da774a",
   colors_catppuccin = "193e123cdbc4dd3e86db883d55349e9587f0ded6",
@@ -12,9 +12,9 @@ return {
   ["dial.nvim"] = "f97c0c7fa7d5111bc04a91d0f693900fb2d95861",
   ["friendly-snippets"] = "572f5660cf05f8cd8834e096d7b4c921ba18e175",
   ["markdown-preview.nvim"] = "a923f5fc5ba36a3b17e289dc35dc17f66d0548ee",
-  ["mini.nvim"] = "6f11e41a137590e4a5f13624a2a9a845686e719f",
+  ["mini.nvim"] = "c889667a9d73b106bd303a043eb37a91da4a41a2",
   ["nvim-lint"] = "897f7771c1ca4b11659dfe372d9376acd9fe3097",
-  ["nvim-lspconfig"] = "a2bd1cf7b0446a7414aaf373cea5e4ca804c9c69",
+  ["nvim-lspconfig"] = "7af6f57d517d8cc68f249e0d27364c188a097812",
   ["nvim-treesitter"] = "2979e048b356cfd32dc419d5803dc356b9832adf",
   ["nvim-treesitter-context"] = "64dd4cf3f6fd0ab17622c5ce15c91fc539c3f24a",
   ["nvim-treesitter-textobjects"] = "76deedf0f1cec4496ef8d49b6d1f020f6d0c6ec9",
