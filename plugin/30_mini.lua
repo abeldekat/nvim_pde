@@ -7,17 +7,14 @@ now(function()
   require('ak.mini.icons')
   later(MiniIcons.tweak_lsp_kind)
 end)
-
 now_if_args(function() require('ak.mini.misc') end)
-
 now(function()
   require('ak.mini.notify')
   require('mini.sessions').setup()
 
   if vim.fn.argc(-1) == 0 then require('ak.mini.starter') end -- MiniMax always loads starter
-
   vim.o.statusline = ' ' -- added: wait till statusline plugin is loaded
-  -- require("mini.tabline").setup()
+  -- require("mini.tabline").setup() -- added to 10_options.lua: never show tabline
 end)
 
 later(function()
@@ -43,12 +40,12 @@ later(function()
   require('ak.mini.keymap')
   require('ak.mini.map')
   require('mini.move').setup()
-  require('mini.operators').setup() -- Skipped mappings to swap arg
+  require('mini.operators').setup() -- skipped: suggested mappings to swap arg
   require('ak.mini.pairs')
   require('ak.mini.pick')
   require('ak.mini.snippets')
   require('mini.splitjoin').setup()
-  require('mini.surround').setup() -- `sa sd sr sf sF sh sn`
+  require('mini.surround').setup() -- `sa sd sr sh sF sf` and last and next variants
   require('mini.trailspace').setup()
   require('ak.mini.visits')
 end)
