@@ -19,10 +19,10 @@ require('ayu').setup({
       LineNr                         = { fg = c.guide_active },
 
       -- Now that 'pumborder' exists, use same styling for other floats
-      Pmenu                          = { fg = c.fg,      bg = c.bg },
-      PmenuBorder                    = { fg = c.comment, bg = c.bg },
-      PmenuMatch                     = { fg = c.regexp },
-      PmenuSel                       = { bg = c.line,    reverse = false, bold = true },
+      Pmenu                          = { fg = c.fg,           bg = c.bg },
+      PmenuBorder                    = { fg = c.comment,      bg = c.bg },
+      PmenuMatch                     = { fg = c.regexp,       bold = true },
+      PmenuSel                       = { bg = c.selection_bg, reverse = false, bold = true },
 
       -- Use reverse text for diagnostics
       DiagnosticVirtualTextError     = { bg = c.error,   fg = c.line, italic = true },
@@ -31,12 +31,15 @@ require('ayu').setup({
       DiagnosticVirtualTextHint      = { bg = c.regexp,  fg = c.line, italic = true },
 
       -- Bold current line in MiniFiles
-      MiniFilesCursorLine            = { fg = nil,        bg = c.line, bold = true },
-      MiniFilesTitleFocused          = { fg = c.panel_bg, bg = c.tag,  bold = true },
+      MiniFilesCursorLine            = { fg = nil,        bg = c.selection_bg, bold = true },
+      MiniFilesTitleFocused          = { fg = c.panel_bg, bg = c.tag,          bold = true },
 
       -- Bold matches and current line in MiniPick
-      MiniPickMatchCurrent           = { fg = nil, bg = c.line,          bold = true },
-      MiniPickMatchMarked            = { fg = nil, bg = c.gutter_normal, bold = true },
+      MiniPickMatchCurrent           = { fg = nil,      bg = c.selection_bg,  bold = true },
+      MiniPickMatchMarked            = { fg = nil,      bg = c.gutter_normal, bold = true },
+      MiniPickMatchRanges            = { fg = c.regexp, bold = true },
+      MiniPickPrompt                 = { fg = c.regexp, bold = true },
+      MiniPickPromptPrefix           = { fg = c.tag,    bold = true },
 
       -- Dim inactive MiniStarter elements
       MiniStarterInactive            = { link = "MiniJump2dDim" },
