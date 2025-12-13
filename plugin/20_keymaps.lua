@@ -28,10 +28,14 @@ local make_iterate_label = function(direction) -- see map_iterate_core from the 
   end
 end
 
-nmap('[{', make_iterate_label('last'), 'Current label (earliest)')
+local earliest = make_iterate_label('last')
+local latest = make_iterate_label('first')
+nmap('[{', earliest, 'Current label (earliest)')
+nmap('[.', earliest, 'Current label (earliest)') -- also using leader dot...
 nmap('[[', make_iterate_label('forward'), 'Current label (earlier)')
 nmap(']]', make_iterate_label('backward'), 'Current label (later)')
-nmap(']}', make_iterate_label('first'), 'Current label (latest)')
+nmap(']}', latest, 'Current label (latest)')
+nmap('].', latest, 'Current label (latest)') -- also using leader dot...
 
 -- Many general mappings are created by 'mini.basics'. See 'plugin/30_mini.lua'
 
