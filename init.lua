@@ -1,48 +1,43 @@
--- TODO: Check older keymaps, options and autocommands
--- TODO: Treesitter indentexpression
-local function clone()
-  local has_cloned = false
-  local path_package = vim.fn.stdpath("data") .. "/site/"
-  local mini_path = path_package .. "pack/deps/start/mini.nvim"
+---@diagnostic disable: duplicate-set-field
 
-  if not vim.uv.fs_stat(mini_path) then
-    vim.cmd('echo "Installing `mini.nvim`" | redraw')
-    local origin = "https://github.com/nvim-mini/mini.nvim"
-    local clone_cmd = { "git", "clone", "--filter=blob:none", origin, mini_path }
+-- Monkey patch `vim.pack.add` for compatibility with Neovim<0.12 to only load plugins.
+-- Manage them (install, update, delete) on Neovim>=0.12. Copied from nvim echasnovski.
+if vim.fn.has('nvim-0.12') == 0 then
+  vim.pack = {}
+  vim.pack.add = function(specs, opts)
+    specs = vim.tbl_map(function(s) return type(s) == 'string' and { src = s } or s end, specs)
+    ---@diagnostic disable-next-line: undefined-field
+    opts = vim.tbl_extend('force', { load = vim.v.did_init == 1 }, opts or {})
 
-    vim.fn.system(clone_cmd)
-    vim.cmd("packadd mini.nvim | helptags ALL")
-    vim.cmd('echo "Installed `mini.nvim`" | redraw')
-    has_cloned = true
+    local cmd_prefix = 'packadd' .. (opts.load and '' or '!')
+    for _, s in ipairs(specs) do
+      local name = s.name or s.src:match('/([^/]+)$')
+      vim.cmd(cmd_prefix .. name)
+    end
   end
-  return has_cloned
 end
 
--- TODO: Not in MiniMax?
--- NOTE: No performance gain from disabling netrw: netrwPlugin.
--- NOTE: ToHtml is lazy loaded....
-for _, disable in ipairs({ "gzip", "tarPlugin", "tohtml", "tutor", "zipPlugin" }) do
-  vim.g["loaded_" .. disable] = 0
+-- Optimize
+for _, disable in ipairs({ 'gzip', 'tarPlugin', 'tohtml', 'tutor', 'zipPlugin' }) do
+  vim.g['loaded_' .. disable] = 0
 end
 
-local is_initial_install = clone()
-require("mini.deps").setup()
+-- Install 'mini.nvim'
+vim.pack.add({ 'https://github.com/nvim-mini/mini.nvim' })
 
 -- Define config table to be able to pass data between scripts
 _G.Config = {}
 
-local gr = vim.api.nvim_create_augroup("custom-config", {})
+local gr = vim.api.nvim_create_augroup('custom-config', {})
 _G.Config.new_autocmd = function(event, pattern, callback, desc)
   local opts = { group = gr, pattern = pattern, callback = callback, desc = desc }
   vim.api.nvim_create_autocmd(event, opts)
 end
-_G.Config.now_if_args = vim.fn.argc(-1) > 0 and MiniDeps.now or MiniDeps.later
 
-if is_initial_install then
-  _G.Config.new_autocmd("UIEnter", nil, function()
-    MiniDeps.later(function()
-      require("akextra.deps_deferred").load_registered()
-      vim.cmd("DepsSnapLoad")
-    end)
-  end, "Restore all plugins to the versions in mini-deps-snap on first install")
-end
+-- Set up 'mini.deps' to have its `now()` and `later()` helpers
+require('mini.deps').setup()
+_G.Config.now_if_args = vim.fn.argc(-1) > 0 and MiniDeps.now or MiniDeps.later
+_G.Config.now, _G.Config.later = MiniDeps.now, MiniDeps.later
+
+-- Define dummy `vim.pack.add()` hook helper. See 28_nightly.lua
+_G.Config.on_packchanged = function() end

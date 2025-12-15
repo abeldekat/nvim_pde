@@ -1,6 +1,17 @@
+---@diagnostic disable: duplicate-set-field
+
 if vim.fn.has('nvim-0.12') == 0 then return end
 
--- Test `nvim undotree`...
+-- Define custom `vim.pack.add()` hook helper. Copied from nvim echasnovski.
+_G.Config.on_packchanged = function(plugin_name, kinds, callback, desc)
+  local f = function(ev)
+    local name, kind = ev.data.spec.name, ev.data.kind
+    if not (name == plugin_name and vim.tbl_contains(kinds, kind)) then return end
+    if not ev.data.active then vim.cmd.packadd(plugin_name) end
+    callback()
+  end
+  _G.Config.new_autocmd('PackChanged', '*', f, desc)
+end
 
 -- UI options =================================================================
 

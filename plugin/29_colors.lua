@@ -1,28 +1,24 @@
-local DeferredDeps = require('akextra.deps_deferred')
-local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
+local add = vim.pack.add
+local now, later = _G.Config.now, _G.Config.later
 
 local Color = require('ak.color') -- contains color info set by shell script and rofi. See colors.txt
-local all_colors_loaded = false -- before picking other colors all need to be added
+local all_colors_loaded = false
 
 local specs = {
-  { source = 'catppuccin/nvim', name = 'colors_catppuccin' },
-  { source = 'Shatur/neovim-ayu', name = 'colors_ayu' },
-  { source = 'ribru17/bamboo.nvim', name = 'colors_bamboo' },
-  { source = 'savq/melange-nvim', name = 'colors_melange' },
-  { source = 'sainnhe/everforest', name = 'colors_everforest' },
-  { source = 'sainnhe/gruvbox-material', name = 'colors_gruvbox-material' },
-  { source = 'EdenEast/nightfox.nvim', name = 'colors_nightfox' },
-  { source = 'rose-pine/neovim', name = 'colors_rose-pine' },
-  -- { source = 'folke/tokyonight.nvim', name = 'colors_tokyonight' },
-  -- { source = "navarasu/onedark.nvim", name = "colors_onedark" },
-  -- { source = "rebelot/kanagawa.nvim", name = "colors_kanagawa" },
-  -- { source = "ellisonleao/gruvbox.nvim", name = "colors_gruvbox" },
-  -- { source = "lifepillar/vim-solarized8", name = "colors_solarized8", checkout = "neovim" },
+  { src = 'https://github.com/catppuccin/nvim', name = 'colors_catppuccin' },
+  { src = 'https://github.com/shatur/neovim-ayu', name = 'colors_ayu' },
+  { src = 'https://github.com/ribru17/bamboo.nvim', name = 'colors_bamboo' },
+  { src = 'https://github.com/savq/melange-nvim', name = 'colors_melange' },
+  { src = 'https://github.com/sainnhe/everforest', name = 'colors_everforest' },
+  { src = 'https://github.com/sainnhe/gruvbox-material', name = 'colors_gruvbox-material' },
+  { src = 'https://github.com/edeneast/nightfox.nvim', name = 'colors_nightfox' },
+  { src = 'https://github.com/rose-pine/neovim', name = 'colors_rose-pine' },
+  -- { src = 'https://github.com/folke/tokyonight.nvim', name = 'colors_tokyonight' },
+  -- { src = 'https://github.com/navarasu/onedark.nvim', name = "colors_onedark" },
+  -- { src = 'https://github.com/rebelot/kanagawa.nvim', name = "colors_kanagawa" },
+  -- { src = 'https://github.com/ellisonleao/gruvbox.nvim', name = "colors_gruvbox" },
+  -- { src = 'https://github.com/lifepillar/vim-solarized8', name = "colors_solarized8", checkout = "neovim" },
 }
-
-local register_all_colors = function()
-  vim.iter(specs):each(function(s) DeferredDeps.register(s) end)
-end
 
 local find_spec = function(spec_name)
   return vim.iter(specs):filter(function(s) return s.name == spec_name end):totable()[1]
@@ -83,13 +79,13 @@ now(function()
   local colorinfo = from_color_name(Color.color)
   local spec = colorinfo.spec_name and find_spec(colorinfo.spec_name)
 
-  if spec then add(spec) end
+  if spec then add({ spec }) end
   require(colorinfo.config_name)
   vim.cmd.colorscheme(Color.color)
 end)
 
 later(function()
-  register_all_colors()
+  add(specs)
 
   local setup_all_colors = function() -- See pick colorschemes
     if all_colors_loaded then return end

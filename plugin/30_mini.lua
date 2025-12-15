@@ -1,5 +1,4 @@
-local now, later = MiniDeps.now, MiniDeps.later
-local now_if_args = _G.Config.now_if_args
+local now, later, now_if_args = _G.Config.now, _G.Config.later, _G.Config.now_if_args
 
 now(function()
   -- vim.cmd("colorscheme miniwinter") -- see 29_color.lua
