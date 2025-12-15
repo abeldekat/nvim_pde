@@ -1,3 +1,7 @@
+-- Not actively used...
+-- Last commit downloaded: 5da1b76e64daf4c5d410f06bcb6b9cb640da7dfd
+-- Add to colors.txt: tokyonight
+
 local prefer_light = require('ak.color').prefer_light
 
 local info = {

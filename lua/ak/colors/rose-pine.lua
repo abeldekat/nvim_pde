@@ -1,25 +1,21 @@
--- Not actively used...
--- Last commit downloaded: cf2a288696b03d0934da713d66c6d71557b5c997
--- Add to colors.txt: rose-pine
-
-local prefer_light = require("ak.color").prefer_light
+local prefer_light = require('ak.color').prefer_light
 
 local info = {
-  name = "rose-pine",
-  variants = { "rose-pine-moon", "rose-pine-main", "rose-pine-dawn" },
+  name = 'rose-pine',
+  variants = { 'rose-pine-moon', 'rose-pine-main', 'rose-pine-dawn' },
 }
 _G.Config.add_theme_info('rose-pine*', info, 'Rose-pine variants')
 
 -- Before setup, the palette is set to main_nc:
-local current_nc = "#16141f"
+local current_nc = '#16141f'
 
 local hl_config = {
-  MiniJump2dSpot = { fg = "gold", bold = true, nocombine = true },
-  MiniJump2dSpotAhead = { fg = "gold", bold = true, nocombine = true },
-  MiniJump2dSpotUnique = { fg = "gold", bold = true, nocombine = true },
+  -- MiniJump2dSpot = { fg = 'gold', bold = true, nocombine = true },
+  -- MiniJump2dSpotAhead = { fg = 'gold', bold = true, nocombine = true },
+  -- MiniJump2dSpotUnique = { fg = 'gold', bold = true, nocombine = true },
 
   -- Area for messages and cmdline
-  MsgArea = { fg = "muted", current = current_nc },
+  MsgArea = { fg = 'muted', current = current_nc },
 }
 
 --          ╭─────────────────────────────────────────────────────────╮
@@ -36,7 +32,7 @@ end
 
 -- create initial modified hl
 local function groups()
-  local palette = require("rose-pine.palette")
+  local palette = require('rose-pine.palette')
   local result = {}
   for name, copy_from in pairs(hl_config) do -- use palette for actual colors
     result[name] = apply_hl({}, palette, copy_from)
@@ -53,16 +49,12 @@ local function before_highlight(group, highlight, palette)
   end
 end
 
---          ╭─────────────────────────────────────────────────────────╮
---          │                          setup                          │
---          ╰─────────────────────────────────────────────────────────╯
-
-vim.o.background = prefer_light and "light" or "dark"
+vim.o.background = prefer_light and 'light' or 'dark'
 local opts = {
-  variant = prefer_light and "dawn" or "moon",
-  dark_variant = "moon",
+  variant = prefer_light and 'dawn' or 'main',
+
   disable_italics = true,
   highlight_groups = groups(),
   before_highlight = before_highlight,
 }
-require("rose-pine").setup(opts)
+require('rose-pine').setup(opts)
