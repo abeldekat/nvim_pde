@@ -1,5 +1,4 @@
 -- Discussions/563. Issue 747. Rename file
--- Discussions/1197. Auto bookmarks
 
 local H = {}
 local setup = function()
@@ -17,6 +16,7 @@ end
 H.create_autocommmands = function()
   local add_marks = function()
     MiniFiles.set_bookmark('c', vim.fn.stdpath('config') .. '', { desc = 'Config' })
+    MiniFiles.set_bookmark('m', vim.fn.stdpath('data') .. '/site/pack/core/opt/mini.nvim', { desc = 'Mini' })
     MiniFiles.set_bookmark('p', vim.fn.stdpath('data') .. '/site/pack/core/opt', { desc = 'Plugins' })
     MiniFiles.set_bookmark('w', vim.fn.getcwd, { desc = 'Working directory' })
   end
