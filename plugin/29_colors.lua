@@ -90,7 +90,6 @@ later(function()
   local setup_all_colors = function() -- See pick colorschemes
     if all_colors_loaded then return end
     for _, spec in ipairs(specs) do -- Load all specs and their configs
-      add(spec)
       require(to_config_name(spec.name))
     end
     require(from_color_name('mini').config_name) -- Mini collection
