@@ -32,7 +32,8 @@ require('ayu').setup({
 
       -- Bold current line in MiniFiles
       MiniFilesCursorLine            = { fg = nil,        bg = c.selection_bg, bold = true },
-      MiniFilesTitleFocused          = { fg = c.panel_bg, bg = c.tag,          bold = true },
+      MiniFilesTitle                 = { fg = c.tag,      bg = c.panel_bg,     bold = false },
+      MiniFilesTitleFocused          = { fg = c.tag,      bg = c.panel_bg,     bold = true },
 
       -- Bold matches and current line in MiniPick
       MiniPickMatchCurrent           = { fg = nil,      bg = c.selection_bg,  bold = true },
