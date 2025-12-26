@@ -39,7 +39,7 @@ require('ayu').setup({
       MiniPickMatchCurrent           = { fg = nil,      bg = c.selection_bg,  bold = true },
       MiniPickMatchMarked            = { fg = nil,      bg = c.gutter_normal, bold = true },
       MiniPickMatchRanges            = { fg = c.regexp, bold = true },
-      MiniPickPrompt                 = { fg = c.regexp, bold = true },
+      MiniPickPrompt                 = { fg = c.fg, bold = true },
       MiniPickPromptPrefix           = { fg = c.tag,    bold = true },
 
       -- Dim inactive MiniStarter elements

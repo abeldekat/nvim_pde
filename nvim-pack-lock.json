@@ -1,7 +1,7 @@
 {
   "plugins": {
     "SchemaStore.nvim": {
-      "rev": "806187c790d93625564708c286e16142d87a5cc9",
+      "rev": "5ed01fc84e587e0883e7d04122684d768eb76bbc",
       "src": "https://github.com/b0o/SchemaStore.nvim"
     },
     "colors_ayu": {
@@ -17,7 +17,7 @@
       "src": "https://github.com/catppuccin/nvim"
     },
     "colors_everforest": {
-      "rev": "b10ed9a8b37d6b7448908be98ff8f58f550adc48",
+      "rev": "b90025cc84dbb9c46df5a2ae540d3f01cf85af74",
       "src": "https://github.com/sainnhe/everforest"
     },
     "colors_gruvbox-material": {
@@ -37,11 +37,11 @@
       "src": "https://github.com/rose-pine/neovim"
     },
     "conform.nvim": {
-      "rev": "41715945edf518ca73a9bd63ab6cdc23dd5c7b33",
+      "rev": "5420c4b5ea0aeb99c09cfbd4fd0b70d257b44f25",
       "src": "https://github.com/stevearc/conform.nvim"
     },
     "dial.nvim": {
-      "rev": "f97c0c7fa7d5111bc04a91d0f693900fb2d95861",
+      "rev": "f2634758455cfa52a8acea6f142dcd6271a1bf57",
       "src": "https://github.com/monaqa/dial.nvim"
     },
     "friendly-snippets": {
@@ -54,19 +54,19 @@
       "version": "'a923f5fc5ba36a3b17e289dc35dc17f66d0548ee'"
     },
     "mini.nvim": {
-      "rev": "a995fe9cd4193fb492b5df69175a351a74b3d36b",
+      "rev": "7e55c3d2c04da134085a31156196836f80a89982",
       "src": "https://github.com/nvim-mini/mini.nvim"
     },
     "nvim-lint": {
-      "rev": "7a64f4067065c16a355d40d0d599b8ca6b25de6d",
+      "rev": "1f19dacd945a7b1a57f29f32b2d7168384df3d36",
       "src": "https://github.com/mfussenegger/nvim-lint"
     },
     "nvim-lspconfig": {
-      "rev": "c4f67bf85b01a57e3c130352c0a0e453ab8cd5b9",
+      "rev": "d696e36d5792daf828f8c8e8d4b9aa90c1a10c2a",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {
-      "rev": "4fc09bee78e91bf4ba471cdab4bf9dfa37fde51c",
+      "rev": "6e42d823ce0a5a76180c473c119c7677738a09d1",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter"
     },
     "nvim-treesitter-context": {
@@ -74,16 +74,16 @@
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-context"
     },
     "nvim-treesitter-textobjects": {
-      "rev": "0d7c800fadcfe2d33089f5726cb8907fc846eece",
+      "rev": "f7122acf1bd2c9e4626651ad33bf5944be9d9392",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
       "version": "'main'"
     },
     "quicker.nvim": {
-      "rev": "9983d4b28881e1df626e3682167b45c284d4da8c",
+      "rev": "771437c3e3672dba9233156e1c2e2fc1888a5fff",
       "src": "https://github.com/stevearc/quicker.nvim"
     },
     "vimtex": {
-      "rev": "aed184681f177ae6071e56cd7a2b9441261fca52",
+      "rev": "f5c37462c690da9a0d05cd12a7b9595b10b56200",
       "src": "https://github.com/lervag/vimtex"
     }
   }
