@@ -51,19 +51,16 @@ nmap('].', latest, 'Current label (latest)') -- also using leader dot...
 -- denotes global and uppercase - local.
 -- Example: `<Leader>fs` / `<Leader>fS` - find workspace/document LSP symbols.
 _G.Config.leader_group_clues = {
-  { mode = 'n', keys = '<Leader>b', desc = '+Buffer' },
-  { mode = 'n', keys = '<Leader>e', desc = '+Explore/Edit' },
-  { mode = 'n', keys = '<Leader>f', desc = '+Find' },
-  { mode = 'n', keys = '<Leader>g', desc = '+Git' },
-  { mode = 'n', keys = '<Leader>i', desc = '+V[i]sits' }, -- changed from v
-  { mode = 'n', keys = '<Leader>l', desc = '+Language' },
-  { mode = 'n', keys = '<Leader>m', desc = '+Map' },
-  { mode = 'n', keys = '<Leader>o', desc = '+Other' },
-  { mode = 'n', keys = '<Leader>s', desc = '+Session' },
-  { mode = 'n', keys = '<Leader>t', desc = '+Terminal' },
-
-  { mode = 'x', keys = '<Leader>g', desc = '+Git' },
-  { mode = 'x', keys = '<Leader>l', desc = '+Language' },
+  { mode = 'n',          keys = '<Leader>b', desc = '+Buffer' },
+  { mode = 'n',          keys = '<Leader>e', desc = '+Explore/Edit' },
+  { mode = 'n',          keys = '<Leader>f', desc = '+Find' },
+  { mode = { 'n', 'x' }, keys = '<Leader>g', desc = '+Git' },
+  { mode = 'n',          keys = '<Leader>i', desc = '+V[i]sits' }, -- changed from v
+  { mode = { 'n', 'x' }, keys = '<Leader>l', desc = '+Language' },
+  { mode = 'n',          keys = '<Leader>m', desc = '+Map' },
+  { mode = 'n',          keys = '<Leader>o', desc = '+Other' },
+  { mode = 'n',          keys = '<Leader>s', desc = '+Session' },
+  { mode = 'n',          keys = '<Leader>t', desc = '+Terminal' },
 }
 
 local nmap_leader = function(suffix, rhs, desc)
