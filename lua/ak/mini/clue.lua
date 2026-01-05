@@ -20,20 +20,22 @@ miniclue.setup({
     -- - Stop submode either by `<Esc>` or by any key that is not in submode.
     miniclue.gen_clues.windows({ submode_resize = true }),
     miniclue.gen_clues.z(),
+    miniclue.gen_clues.square_brackets(),
   },
   -- Explicitly opt-in for set of common keys to trigger clue window
   triggers = {
     { mode = { 'n', 'x' }, keys = '<Leader>' }, -- Leader triggers
-    { mode = 'n',          keys = '\\' },       -- mini.basics
+    { mode =   'n',        keys = '\\' },       -- mini.basics
     { mode = { 'n', 'x' }, keys = '[' },        -- mini.bracketed
     { mode = { 'n', 'x' }, keys = ']' },
-    { mode = 'i',          keys = '<C-x>' },    -- Built-in completion
+    { mode =   'i',        keys = '<C-x>' },    -- Built-in completion
     { mode = { 'n', 'x' }, keys = 'g' },        -- `g` key
     { mode = { 'n', 'x' }, keys = "'" },        -- Marks
     { mode = { 'n', 'x' }, keys = '`' },
     { mode = { 'n', 'x' }, keys = '"' },        -- Registers
     { mode = { 'i', 'c' }, keys = '<C-r>' },
-    { mode = 'n',          keys = '<C-w>' },    -- Window commands
+    { mode =   'n',        keys = '<C-w>' },    -- Window commands
+    { mode = { 'n', 'x' }, keys = 's' },        -- `s` key (mini.surround, etc.)
     { mode = { 'n', 'x' }, keys = 'z' },        -- `z` key
   },
 })
