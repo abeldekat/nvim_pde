@@ -16,7 +16,7 @@ My _personal development environment_ for Neovim based on [MiniMax]
 
 ## Install
 
-> Requirements: Neovim latest version or nightly.
+> Requirements: Neovim latest version or nightly. See [MiniMax requirements]
 >
 > Always review the code before trying a configuration.
 
@@ -39,8 +39,6 @@ rm -rf ~/.local/share/ak ~/.local/state/ak ~/.cache/ak
 rm -rf ~/.config/ak
 ```
 
-Notes: For [tree-sitter], the CLI must be installed.
-
 ## Structure
 
 See [MiniMax]. However, in case the `setup` of a plugin is customized,
@@ -57,17 +55,17 @@ the corresponding code will be contained in a dedicated lua module.
 
 Pickers from [mini.pick] can display hints using internal module [akextra.pick_hinted]
 
-### Tmux
+### Kitty
 
-- [tmux-sessionizer] inspired by @ThePrimeagen
-- workspaces at the top of the screen, using [tmuxp]
-- leader: `ctrl space`
+- Custom [kitty-sessionizer]
+- Kitty sessions at the top of the screen
+- Most mappings use tmux bindings: `ctrl space`
 - navigation:
-  - `tmux-sessionizer`: leader h
-  - previous session: leader j
-  - previous window: leader l
+  - `kitty-sessionizer`: leader h
   - existing sessions: leader k
-  - switch pane: leader o
+  - alternate session: leader j
+  - alternate tab: leader l
+  - switch window: leader o
 
 ### UI
 
@@ -108,12 +106,11 @@ Relevant discussions:
 
 ## Environment
 
-[tmux](https://github.com/abeldekat/tmux)
-[alacritty](https://github.com/abeldekat/alacritty)
+[arch linux](https://archlinux.org/)
+[awesome](https://github.com/abeldekat/awesome)
+[kitty](https://github.com/abeldekat/kitty)
 [zsh](https://github.com/abeldekat/zsh)
 [scripts](https://github.com/abeldekat/scripts)
-[awesome](https://github.com/abeldekat/awesome)
-[arch linux](https://archlinux.org/)
 
 ## Acknowledgements
 
@@ -125,11 +122,11 @@ Additionally, code and ideas have been used from the following repositories:
 - [mini.deps](https://github.com/nvim-mini/mini.deps)
 - [LazyVim](https://github.com/LazyVim/LazyVim)
 
-[tmuxp]: https://github.com/tmux-python/tmuxp
 [scripts]: https://github.com/abeldekat/scripts
-[tmux-sessionizer]: https://github.com/abeldekat/scripts/blob/main/tmux-sessionizer
+[kitty-sessionizer]: https://github.com/abeldekat/scripts/blob/main/kitty_sessionizer_owns
 [leader o c]: plugin/29_colors.lua
 [MiniMax]: https://github.com/nvim-mini/MiniMax
+[MiniMax requirements]: https://github.com/nvim-mini/MiniMax?tab=readme-ov-file#software
 [mini.files]: https://github.com/nvim-mini/mini.files
 [mini.jump2d]: https://github.com/nvim-mini/mini.jump2d
 [mini.pick]: https://github.com/nvim-mini/mini.pick
@@ -139,4 +136,3 @@ Additionally, code and ideas have been used from the following repositories:
 [with_submodules]: https://github.com/abeldekat/nvim_pde/tree/with_submodules
 [with_lazynvim]: https://github.com/abeldekat/nvim_pde/tree/with_lazynvim
 [without_minimax]: https://github.com/abeldekat/nvim_pde/tree/without_minimax
-[tree-sitter]: https://github.com/tree-sitter/tree-sitter
