@@ -17,6 +17,6 @@ miniautumn
 miniwinter
 nightfox
 nordfox
+oasis
 randomhue
-rose-pine
 terafox
