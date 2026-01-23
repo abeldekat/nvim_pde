@@ -33,6 +33,8 @@ local from_color_name = function(color_name) -- color names: ak.colors.txt
   local is_mini = false
   if tmp:find('fox', 1, true) then
     tmp = 'nightfox' -- ie nordfox becomes nightfox
+  elseif tmp:find('oasis', 1, true) then
+    tmp = 'oasis' -- ie oasis-desert becomes oasis
   elseif tmp:find('solarized8', 1, true) then
     tmp = 'solarized8' -- ie solarized8_flat becomes solarized8
   elseif tmp:find('hue', 1, true) then

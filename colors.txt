@@ -17,6 +17,10 @@ miniautumn
 miniwinter
 nightfox
 nordfox
-oasis
+oasis-abyss
+oasis-cactus
+oasis-desert
+oasis-dune
+oasis-lagoon
 randomhue
 terafox

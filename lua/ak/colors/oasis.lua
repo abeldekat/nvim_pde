@@ -3,16 +3,16 @@ local prefer_light = require('ak.color').prefer_light
 local variants = {
   'oasis-abyss', -- black
   'oasis-cactus', -- green
-  'oasis-canyon', -- orange
+  -- 'oasis-canyon', -- orange
   'oasis-desert', -- grey
   'oasis-dune', -- yellow
   'oasis-lagoon', -- blue, the default
   'oasis-midnight', -- off black
   'oasis-mirage', -- teal
-  'oasis-night', -- night sky
+  -- 'oasis-night', -- night sky
   'oasis-rose', -- pink
-  'oasis-sol', -- red
-  'oasis-starlight', -- black vivid
+  -- 'oasis-sol', -- red
+  -- 'oasis-starlight', -- black vivid
   'oasis-twilight', -- purple
 }
 local info = { name = 'oasis', variants = variants }

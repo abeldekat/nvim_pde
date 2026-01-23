@@ -10,9 +10,11 @@ Arch linux: `sudo pacman -S bash-language-server shfmt shellcheck`
 
 ## fennel
 
+Disabled...
+
 [fennel-ls installation](https://xerool.net/fennel-ls/docs/installation.html)
 
-```
+```sh
 git clone https://git.sr.ht/~xerool/fennel-ls
 make LUA=luajit
 make install PREFIX=$HOME
