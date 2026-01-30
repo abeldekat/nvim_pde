@@ -28,23 +28,9 @@ local opts = {
   --   undercurl = true, -- Enable undercurl for diagnostics/spelling
   --   strikethrough = true, -- Enable strikethrough text (deprecations)
   -- },
-  integrations = {
-    default_enabled = false, -- Default behavior: true = enable all, false = disable all
-    plugins = { -- See theme_generator create_plugin_highlights, opt-in behaviour
-      mini_clue = true,
-      mini_cmdline = true,
-      mini_completion = true,
-      mini_diff = true,
-      mini_files = true,
-      mini_icons = true,
-      mini_jump = true,
-      mini_map = true,
-      mini_pick = true,
-      mini_starter = true,
-      mini_statusline = true,
-      mini_tabline = true,
-      mini_trailspace = true,
-    },
+  integrations = { -- See theme_generator create_plugin_highlights, opt-in behaviour
+    default_enabled = false,
+    plugins = { mini = true },
   },
 }
 require('oasis').setup(opts)
