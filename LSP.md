@@ -8,6 +8,13 @@ prettier, arch linux: `sudo pacman -S prettier`
 [github](https://github.com/bash-lsp/bash-language-server)
 Arch linux: `sudo pacman -S bash-language-server shfmt shellcheck`
 
+## c
+
+[clang](https://clangd.llvm.org/installation.html)
+Arch linux: `sudo pacman -S clang llvm`
+
+Also install optional `llvm` just to be sure
+
 ## fennel
 
 Disabled...

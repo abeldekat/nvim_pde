@@ -3,27 +3,59 @@
 -- := vim.treesitter.highlighter.active
 
 -- ron: rusty object notation, rasi: rofi, rst: python
--- stylua: ignore
-local languages = { -- 45
+local languages = { -- 46
   -- These are already pre-installed with Neovim. Used as an example.
-  "lua",
-  "vimdoc",
-  "markdown",
+  'lua',
+  'vimdoc',
+  'markdown',
   -- Add here more languages with which you want to use tree-sitter
   -- To see available languages:
   -- - Execute `:=require('nvim-treesitter').get_available()`
   -- - Visit 'SUPPORTED_LANGUAGES.md' file at
   --   https://github.com/nvim-treesitter/nvim-treesitter/blob/main
-  "awk", "bash", "bibtex", "c", "css", "diff",
-  "fennel", "git_config", "gitcommit", "git_rebase", "gitignore", "gitattributes",
-  "go", "gomod", "gowork", "gosum", "html", "javascript",
-  "jsdoc", "json", "json5", "luadoc",
-  "luap", "make", "markdown_inline", "ninja", "printf",
-  "python", "query", "rasi", "regex", "ron", "rst",
-  "rust", "sql", "toml", "tsx", "typescript", "vim",
-  "yaml", "xml",
+  'awk',
+  'bash',
+  'bibtex',
+  'c',
+  'cpp',
+  'css',
+  'diff',
+  'fennel',
+  'git_config',
+  'gitcommit',
+  'git_rebase',
+  'gitignore',
+  'gitattributes',
+  'go',
+  'gomod',
+  'gowork',
+  'gosum',
+  'html',
+  'javascript',
+  'jsdoc',
+  'json',
+  'json5',
+  'luadoc',
+  'luap',
+  'make',
+  'markdown_inline',
+  'ninja',
+  'printf',
+  'python',
+  'query',
+  'rasi',
+  'regex',
+  'ron',
+  'rst',
+  'rust',
+  'sql',
+  'toml',
+  'tsx',
+  'typescript',
+  'vim',
+  'yaml',
+  'xml',
 }
--- stylua: ignore end
 
 -- local on_filetype = function(ev)
 -- if not pcall(vim.treesitter.start, ev.buf) then -- instead of checking parsers on each startup...

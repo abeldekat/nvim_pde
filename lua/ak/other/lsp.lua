@@ -1,6 +1,7 @@
 vim.lsp.enable({
   'basedpyright',
   'bashls',
+  'clangd',
   -- 'fennel_ls',
   'gopls',
   'jsonls',
