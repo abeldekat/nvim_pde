@@ -1,7 +1,7 @@
 {
   "plugins": {
     "SchemaStore.nvim": {
-      "rev": "6217ff926e951401ac32f572da04e93e8cd6129d",
+      "rev": "ce1234aa4df6d5678bc7d4b9fd5340862519372d",
       "src": "https://github.com/b0o/SchemaStore.nvim"
     },
     "colors_ayu": {
@@ -33,7 +33,7 @@
       "src": "https://github.com/edeneast/nightfox.nvim"
     },
     "colors_oasis": {
-      "rev": "73f306cc7a1f30df9339d208737bc86ea009cea6",
+      "rev": "7e1907f1f3245b2cd85ae3d26c3ed3cd6294ef99",
       "src": "https://github.com/uhs-robert/oasis.nvim"
     },
     "conform.nvim": {
@@ -62,11 +62,11 @@
       "src": "https://github.com/mfussenegger/nvim-lint"
     },
     "nvim-lspconfig": {
-      "rev": "3f58aeca0c6ece8a9fb8782ea3fcb6024f285be3",
+      "rev": "0480b120318ec8bab27b530ffab6ee76a8c4d806",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {
-      "rev": "4967fa48b0fe7a7f92cee546c76bb4bb61bb14d5",
+      "rev": "70a9fecaf5aeae70c765d4c51a8038165a91aa06",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter"
     },
     "nvim-treesitter-context": {

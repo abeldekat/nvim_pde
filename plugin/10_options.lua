@@ -54,6 +54,7 @@ vim.o.foldtext    = ''       -- Show text under fold with its highlighting
 vim.o.autoindent    = true    -- Use auto indent
 vim.o.expandtab     = true    -- Convert tabs to spaces
 vim.o.formatoptions = 'rqnl1j'-- Improve comment editing
+vim.o.hlsearch      = false   -- ...added...: Cursorword is mostly sufficient
 vim.o.ignorecase    = true    -- Ignore case during search
 vim.o.incsearch     = true    -- Show search matches while typing
 vim.o.infercase     = true    -- Infer case in built-in completion

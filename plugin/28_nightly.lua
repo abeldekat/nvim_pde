@@ -19,7 +19,7 @@ vim.o.pummaxwidth = 100 -- Limit maximum width of popup menu
 vim.o.pumborder = 'bold' -- Use border in built-in completion menu
 vim.o.winborder = 'bold' -- Use border in floating windows
 
--- require('vim._extui').enable({}) -- enter window with g<. See also option cmdheight
+-- require('vim._core.ui2').enable({}) -- enter window with g<. See also option cmdheight
 
 -- Keymaps ====================================================================
 
