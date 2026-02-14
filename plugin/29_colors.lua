@@ -1,5 +1,5 @@
 local add = vim.pack.add
-local now, later = _G.Config.now, _G.Config.later
+local now, later = Config.now, Config.later
 
 local Color = require('ak.color') -- contains color info set by shell script and rofi. See colors.txt
 local all_colors_loaded = false
@@ -64,7 +64,7 @@ local add_theme_info = function(pattern, new_info, desc)
     theme_info.idx = 1
     theme_info.cb = theme_info.cb and theme_info.cb or theme_info_default_cb
   end
-  _G.Config.new_autocmd('ColorScheme', pattern, function() new_theme(new_info) end, desc)
+  Config.new_autocmd('ColorScheme', pattern, function() new_theme(new_info) end, desc)
 end
 local next_variant = function()
   theme_info.idx = theme_info.idx == #theme_info.variants and 1 or (theme_info.idx + 1)
@@ -75,8 +75,8 @@ local next_variant = function()
     vim.api.nvim_echo({ { msg, 'InfoMsg' } }, true, {})
   end, 250)
 end
-_G.Config.add_theme_info = add_theme_info -- see ak.colors
-_G.Config.next_theme_variant = next_variant -- see keymaps
+Config.add_theme_info = add_theme_info -- see ak.colors
+Config.next_theme_variant = next_variant -- see keymaps
 
 now(function()
   local colorinfo = from_color_name(Color.color)
@@ -98,5 +98,5 @@ later(function()
     require(from_color_name('mini').config_name) -- Mini collection
     all_colors_loaded = true
   end
-  _G.Config.setup_all_colors = setup_all_colors
+  Config.setup_all_colors = setup_all_colors
 end)

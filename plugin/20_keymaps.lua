@@ -21,7 +21,7 @@ nmap([[\L]], '<Cmd>lua Config.toggle_lint()<CR>', 'Toggle auto-lint')
 -- Visits iterate based on recency
 local make_iterate_label = function(direction) -- see map_iterate_core from the help
   return function()
-    local current = _G.Config.visits_label
+    local current = Config.visits_label
     local sort_latest = MiniVisits.gen_sort.default({ recency_weight = 1 })
     local opts = { filter = current, sort = sort_latest, wrap = true }
     MiniVisits.iterate_paths(direction, vim.fn.getcwd(), opts)
@@ -50,7 +50,7 @@ nmap('].', latest, 'Current label (latest)') -- also using leader dot...
 -- Usually if there are global and local kinds of actions, lowercase second key
 -- denotes global and uppercase - local.
 -- Example: `<Leader>fs` / `<Leader>fS` - find workspace/document LSP symbols.
-_G.Config.leader_group_clues = {
+Config.leader_group_clues = {
   { mode =   'n',        keys = '<Leader>b', desc = '+Buffer' },
   { mode =   'n',        keys = '<Leader>e', desc = '+Explore/Edit' },
   { mode =   'n',        keys = '<Leader>f', desc = '+Find' },
@@ -112,7 +112,7 @@ nmap_leader('eQ', explore_locations,                        'Location list')
 -- f is for 'Fuzzy Find'.
 local pick_added_hunks_buf = '<Cmd>Pick git_hunks path="%" scope="staged"<CR>'
 local pick_workspace_symbols_live = '<Cmd>Pick lsp scope="workspace_symbol_live"<CR>'
-local pick_colorschemes = '<Cmd>lua _G.Config.setup_all_colors() MiniPick.registry.colorschemes()<CR>'
+local pick_colorschemes = '<Cmd>lua Config.setup_all_colors() MiniPick.registry.colorschemes()<CR>'
 
 nmap_leader('f/', '<Cmd>Pick history_hinted scope="/"<CR>',            '"/" history')
 nmap_leader('f:', '<Cmd>Pick history_hinted scope=":"<CR>',            '":" history')
@@ -173,7 +173,7 @@ xmap_leader('gs', '<Cmd>lua MiniGit.show_at_cursor()<CR>', 'Show at selection')
 -- - Introduced variable current_label, starting with 'core'
 local make_pick_from_label = function(cwd, desc) -- see make_pick_core in MiniMax
   return function()
-    local label = _G.Config.visits_label
+    local label = Config.visits_label
     local name = string.format('%s %s', label, desc)
     local sort_latest = MiniVisits.gen_sort.default({ recency_weight = 1 })
     local local_opts = { cwd = cwd, filter = label, sort = sort_latest }
@@ -182,15 +182,15 @@ local make_pick_from_label = function(cwd, desc) -- see make_pick_core in MiniMa
   end
 end
 local make_addremove_current = function(call)
-  local current = '_G.Config.visits_label'
+  local current = 'Config.visits_label'
   return string.format('<Cmd>lua MiniVisits.%s(%s)<CR>', call, current)
 end
 local make_purge_current = function()
-  local current = '_G.Config.visits_label'
+  local current = 'Config.visits_label'
   return string.format('<Cmd>lua MiniVisits.remove_label(%s, "", "")<CR>', current)
 end
 
-nmap_leader('ic', '<Cmd>lua _G.Config.visits_choose_current()<CR>', 'Choose current label') -- added
+nmap_leader('ic', '<Cmd>lua Config.visits_choose_current()<CR>', 'Choose current label') -- added
 nmap_leader('ip', make_purge_current(),                             'Purge current label') -- added
 -- - the s is a mnemonic for 'show'
 nmap_leader('is', make_pick_from_label('',  'visits (all)'),        'Current label (all)') -- vc

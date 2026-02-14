@@ -7,7 +7,7 @@ local info = {
   variants = { 'dummy' }, -- irrelevant, has builtin toggle
   cb = function() bamboo.toggle() end,
 }
-_G.Config.add_theme_info('bamboo*', info, 'Bamboo dummy variants')
+Config.add_theme_info('bamboo*', info, 'Bamboo dummy variants')
 
 -- M.styles_list = { 'vulgaris', 'multiplex', 'light' }
 -- multiplex is greener.

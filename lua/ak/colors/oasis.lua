@@ -16,7 +16,7 @@ local variants = {
   'oasis-twilight', -- purple
 }
 local info = { name = 'oasis', variants = variants }
-_G.Config.add_theme_info('oasis*', info, 'Oasis variants')
+Config.add_theme_info('oasis*', info, 'Oasis variants')
 
 vim.o.background = prefer_light and 'light' or 'dark'
 local opts = {

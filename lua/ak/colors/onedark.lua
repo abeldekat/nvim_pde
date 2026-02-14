@@ -10,9 +10,9 @@ local info = {
   variants = { 'dummy' }, -- irrelevant, has builtin toggle
   cb = function() onedark.toggle() end,
 }
-_G.Config.add_theme_info(name, info, 'Onedark dummy variants')
+Config.add_theme_info(name, info, 'Onedark dummy variants')
 
-_G.Config.new_autocmd('ColorScheme', name, function()
+Config.new_autocmd('ColorScheme', name, function()
   local hl_for_msg_area = vim.api.nvim_get_hl(0, { name = 'Comment', link = false })
   vim.api.nvim_set_hl(0, 'MsgArea', { fg = hl_for_msg_area.fg }) -- Area for messages and cmdline
 end, 'Onedark on colorscheme')

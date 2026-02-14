@@ -3,14 +3,14 @@
 if vim.fn.has('nvim-0.12') == 0 then return end
 
 -- Define custom `vim.pack.add()` hook helper. Copied from nvim echasnovski.
-_G.Config.on_packchanged = function(plugin_name, kinds, callback, desc)
+Config.on_packchanged = function(plugin_name, kinds, callback, desc)
   local f = function(ev)
     local name, kind = ev.data.spec.name, ev.data.kind
     if not (name == plugin_name and vim.tbl_contains(kinds, kind)) then return end
     if not ev.data.active then vim.cmd.packadd(plugin_name) end
     callback()
   end
-  _G.Config.new_autocmd('PackChanged', '*', f, desc)
+  Config.new_autocmd('PackChanged', '*', f, desc)
 end
 
 -- UI options =================================================================
@@ -19,7 +19,7 @@ vim.o.pummaxwidth = 100 -- Limit maximum width of popup menu
 vim.o.pumborder = 'bold' -- Use border in built-in completion menu
 vim.o.winborder = 'bold' -- Use border in floating windows
 
-require('vim._core.ui2').enable({}) -- enter window with g<. See also option cmdheight
+-- require('vim._core.ui2').enable({}) -- enter window with g<. See also option cmdheight
 
 -- Keymaps ====================================================================
 

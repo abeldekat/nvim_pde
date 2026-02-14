@@ -19,9 +19,9 @@ local info = {
     vim.cmd.colorscheme('gruvbox')
   end,
 }
-_G.Config.add_theme_info('gruvbox', info, 'Gruvbox variants')
+Config.add_theme_info('gruvbox', info, 'Gruvbox variants')
 
-_G.Config.new_autocmd('ColorScheme', 'gruvbox', function()
+Config.new_autocmd('ColorScheme', 'gruvbox', function()
   local set_hl = function(name, data) vim.api.nvim_set_hl(0, name, data) end
 
   local fg_msg_area = vim.api.nvim_get_hl(0, { name = 'Comment' }).fg

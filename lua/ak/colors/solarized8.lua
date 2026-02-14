@@ -23,9 +23,9 @@ local info = {
     vim.cmd.colorscheme(variant[2])
   end,
 }
-_G.Config.add_theme_info('solarized8*', info, 'Solarized variants')
+Config.add_theme_info('solarized8*', info, 'Solarized variants')
 
-_G.Config.new_autocmd('ColorScheme', 'solarized8*', function()
+Config.new_autocmd('ColorScheme', 'solarized8*', function()
   local set_hl = function(hl, data) vim.api.nvim_set_hl(0, hl, data) end
   local fg_msg_area = vim.api.nvim_get_hl(0, { name = 'Comment' }).fg
   set_hl('MsgArea', { fg = fg_msg_area }) -- Area for messages and cmdline

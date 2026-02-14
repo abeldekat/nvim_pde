@@ -6,13 +6,13 @@ lint.linters_by_ft = {
 }
 
 -- { "BufWritePost", "BufReadPost", "InsertLeave" }
-_G.Config.new_autocmd({ 'Filetype', 'BufWritePost' }, nil, function()
-  if _G.Config.disable_autolint then return end
+Config.new_autocmd({ 'Filetype', 'BufWritePost' }, nil, function()
+  if Config.disable_autolint then return end
 
   lint.try_lint() -- nil, { ignore_errors = true })
 end, 'Auto-lint')
 
-_G.Config.toggle_lint = function()
-  _G.Config.disable_autolint = not _G.Config.disable_autolint
-  vim.notify('Auto-lint ' .. (_G.Config.disable_autolint and 'off' or 'on'))
+Config.toggle_lint = function()
+  Config.disable_autolint = not Config.disable_autolint
+  vim.notify('Auto-lint ' .. (Config.disable_autolint and 'off' or 'on'))
 end

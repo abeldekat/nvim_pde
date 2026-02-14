@@ -8,7 +8,7 @@ local info = {
   name = 'tokyonight',
   variants = { 'tokyonight-storm', 'tokyonight-moon', 'tokyonight-night', 'tokyonight-day' },
 }
-_G.Config.add_theme_info('tokyonight*', info, 'Tokyonight variants')
+Config.add_theme_info('tokyonight*', info, 'Tokyonight variants')
 
 -- These groups from tokyonight.groups.init are always included!
 -- local groups = { base = true, kinds = true, semantic_tokens = true, treesitter = true }

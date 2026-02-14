@@ -5,7 +5,7 @@ local info = {
   name = 'ayu',
   variants = { 'ayu-mirage', 'ayu-dark', 'ayu-light' },
 }
-_G.Config.add_theme_info('ayu*', info, 'Ayu variants')
+Config.add_theme_info('ayu*', info, 'Ayu variants')
 
 require('ayu').setup({
   mirage = true,

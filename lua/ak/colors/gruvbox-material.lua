@@ -14,9 +14,9 @@ local info = {
     vim.cmd.colorscheme(name)
   end,
 }
-_G.Config.add_theme_info(name, info, 'Gruvbox material variants')
+Config.add_theme_info(name, info, 'Gruvbox material variants')
 
-_G.Config.new_autocmd('ColorScheme', name, function()
+Config.new_autocmd('ColorScheme', name, function()
   local config = vim.fn['gruvbox_material#get_configuration']()
   local palette = vim.fn['gruvbox_material#get_palette'](config.background, config.foreground, config.colors_override)
   local set_hl = vim.fn['gruvbox_material#highlight']

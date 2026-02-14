@@ -64,7 +64,7 @@ end
 -- overridden: removed filesize. Optional encoding and format
 AK.section_fileinfo = function(args)
   local filetype = vim.bo.filetype
-  local icon = _G.MiniIcons and filetype ~= '' and _G.MiniIcons.get('filetype', filetype)
+  local icon = MiniIcons and filetype ~= '' and MiniIcons.get('filetype', filetype)
 
   filetype = icon and icon or filetype -- either show icon or text
 

@@ -2,7 +2,7 @@ local info = {
   name = 'nightfox',
   variants = { 'nordfox', 'nightfox', 'carbonfox', 'duskfox', 'terafox', 'dawnfox', 'dayfox' },
 }
-_G.Config.add_theme_info('*fox', info, 'Nightfox variants')
+Config.add_theme_info('*fox', info, 'Nightfox variants')
 
 local opts = {
   dim_inactive = true,

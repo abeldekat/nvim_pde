@@ -11,9 +11,9 @@ local base16_info = {
   name = 'mini_base16',
   variants = base16_variants,
 }
-_G.Config.add_theme_info(base16_variants, base16_info, 'Mini base16 variants')
+Config.add_theme_info(base16_variants, base16_info, 'Mini base16 variants')
 
-_G.Config.new_autocmd('ColorScheme', base16_variants, function()
+Config.new_autocmd('ColorScheme', base16_variants, function()
   local p = MiniBase16.config.palette
   if p == nil then return end
 
@@ -31,18 +31,18 @@ local hues_info = {
   name = 'mini_seasons',
   variants = hues_variants,
 }
-_G.Config.add_theme_info(hues_variants, hues_info, 'Mini hues season variants')
+Config.add_theme_info(hues_variants, hues_info, 'Mini hues season variants')
 
 local randomhue = 'randomhue'
 local randomhue_info = { -- toggle randoms
   name = 'mini_randomhue',
   variants = { randomhue },
 }
-_G.Config.add_theme_info(randomhue, randomhue_info, 'Mini randomhue variants')
+Config.add_theme_info(randomhue, randomhue_info, 'Mini randomhue variants')
 
 local all_hues_variants = { randomhue }
 vim.list_extend(all_hues_variants, hues_variants)
-_G.Config.new_autocmd('ColorScheme', all_hues_variants, function()
+Config.new_autocmd('ColorScheme', all_hues_variants, function()
   local p = require('mini.hues').get_palette()
 
   hi('MiniJump2dSpot', { fg = p.orange, bg = nil, bold = true, nocombine = true }) -- yellow

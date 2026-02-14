@@ -35,10 +35,10 @@ end
 local visits_choose_current_label = function()
   vim.ui.select(list_labels(), {}, function(selected)
     if not selected then return end
-    _G.Config.visits_label = selected
+    Config.visits_label = selected
   end)
 end
 
 require('mini.visits').setup({ silent = true, store = { path = make_project_store_path() } })
-_G.Config.visits_label = start_label
-_G.Config.visits_choose_current = visits_choose_current_label
+Config.visits_label = start_label
+Config.visits_choose_current = visits_choose_current_label

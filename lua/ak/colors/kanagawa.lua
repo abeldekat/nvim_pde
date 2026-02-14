@@ -10,7 +10,7 @@ local info = {
   name = 'kanagawa',
   variants = { 'kanagawa-wave', 'kanagawa-dragon', 'kanagawa-lotus' },
 }
-_G.Config.add_theme_info('kanagawa*', info, 'Kanagawa variants')
+Config.add_theme_info('kanagawa*', info, 'Kanagawa variants')
 
 vim.o.background = prefer_light and 'light' or 'dark'
 

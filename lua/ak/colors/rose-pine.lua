@@ -8,7 +8,7 @@ local info = {
   name = 'rose-pine',
   variants = { 'rose-pine-moon', 'rose-pine-main', 'rose-pine-dawn' },
 }
-_G.Config.add_theme_info('rose-pine*', info, 'Rose-pine variants')
+Config.add_theme_info('rose-pine*', info, 'Rose-pine variants')
 
 -- Before setup, the palette is set to main_nc:
 local current_nc = '#16141f'

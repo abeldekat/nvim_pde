@@ -4,7 +4,7 @@ local info = {
   name = 'catppuccin',
   variants = { 'catppuccin-frappe', 'catppuccin-mocha', 'catppuccin-macchiato', 'catppuccin-latte' },
 }
-_G.Config.add_theme_info('catppuccin*', info, 'Catppuccin variants')
+Config.add_theme_info('catppuccin*', info, 'Catppuccin variants')
 
 local opts = {
   flavour = prefer_light and 'latte' or 'frappe',

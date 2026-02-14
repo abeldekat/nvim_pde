@@ -20,7 +20,7 @@ H.create_autocommmands = function()
     MiniFiles.set_bookmark('p', vim.fn.stdpath('data') .. '/site/pack/core/opt', { desc = 'Plugins' })
     MiniFiles.set_bookmark('w', vim.fn.getcwd, { desc = 'Working directory' })
   end
-  _G.Config.new_autocmd('User', 'MiniFilesExplorerOpen', add_marks, 'Add bookmarks')
+  Config.new_autocmd('User', 'MiniFilesExplorerOpen', add_marks, 'Add bookmarks')
 
   local extra_keys = function(args)
     local b = args.data.buf_id
@@ -36,7 +36,7 @@ H.create_autocommmands = function()
     vim.keymap.set('n', '<Right>', 'l', { buffer = b, remap = true })
     vim.keymap.set('n', '<Left>', 'h', { buffer = b, remap = true })
   end
-  _G.Config.new_autocmd('User', 'MiniFilesBufferCreate', extra_keys, 'Add extra keys')
+  Config.new_autocmd('User', 'MiniFilesBufferCreate', extra_keys, 'Add extra keys')
 
   local restrict_linenumbers = function(args) -- add linenumbers only to active window
     local win_id = vim.api.nvim_get_current_win()
@@ -48,7 +48,7 @@ H.create_autocommmands = function()
       })
     end
   end
-  _G.Config.new_autocmd('User', 'MiniFilesWindowUpdate', restrict_linenumbers, 'Restrict linenumbers')
+  Config.new_autocmd('User', 'MiniFilesWindowUpdate', restrict_linenumbers, 'Restrict linenumbers')
 
   -- HACK: Notify LSPs that a file got renamed.
   -- Adapted from snacks.nvim(rename.lua) thanks to MariaSolos
@@ -74,8 +74,8 @@ H.create_autocommmands = function()
       if client:supports_method(did_rename_method) then client:notify(did_rename_method, changes) end
     end
   end
-  _G.Config.new_autocmd('User', 'MiniFilesActionRename', file_rename, 'File rename')
-  _G.Config.new_autocmd('User', 'MiniFilesActionMove', file_rename, 'File rename')
+  Config.new_autocmd('User', 'MiniFilesActionRename', file_rename, 'File rename')
+  Config.new_autocmd('User', 'MiniFilesActionMove', file_rename, 'File rename')
 end
 
 H.show_dotfiles = true

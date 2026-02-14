@@ -1,8 +1,8 @@
 ---@diagnostic disable-next-line: undefined-field
-if _G.MiniSplitjoin ~= nil then
+if MiniSplitjoin ~= nil then
   ---@diagnostic disable-next-line: undefined-global
   local gen_hook = MiniSplitjoin.gen_hook
-  local curly = { brackets = { "%b{}" } }
+  local curly = { brackets = { '%b{}' } }
 
   -- Add trailing comma when splitting inside curly brackets
   local add_comma_curly = gen_hook.add_trailing_separator(curly)

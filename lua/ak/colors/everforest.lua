@@ -14,9 +14,9 @@ local info = {
     vim.cmd.colorscheme(name)
   end,
 }
-_G.Config.add_theme_info(name, info, 'Everforest variants')
+Config.add_theme_info(name, info, 'Everforest variants')
 
-_G.Config.new_autocmd('ColorScheme', 'everforest', function()
+Config.new_autocmd('ColorScheme', 'everforest', function()
   local config = vim.fn['everforest#get_configuration']()
   local palette = vim.fn['everforest#get_palette'](config.background, config.colors_override)
   local set_hl = vim.fn['everforest#highlight'] -- group fg bg

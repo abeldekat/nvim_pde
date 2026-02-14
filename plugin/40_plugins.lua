@@ -1,5 +1,5 @@
-local add, on_packchanged = vim.pack.add, _G.Config.on_packchanged
-local later, now_if_args = _G.Config.later, _G.Config.now_if_args
+local add, on_packchanged = vim.pack.add, Config.on_packchanged
+local later, now_if_args = Config.later, Config.now_if_args
 
 local gh = function(x) return 'https://github.com/' .. x end
 local add_and_req = function(spec, loc)
