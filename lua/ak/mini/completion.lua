@@ -1,5 +1,4 @@
--- TODO: why is omni cleaner
--- TODO: Completefunc to use ctrl-o to temporarily escape to normal mode. See mini discussions #1736
+-- TODO: Completefunc to use ctrl-o to temporarily escape to normal mode? See mini discussions #1736
 
 -- Customize post-processing of LSP responses for a better user experience.
 -- Don't show 'Text' suggestions (usually noisy) and show snippets last.

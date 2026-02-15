@@ -10,10 +10,7 @@ end
 now_if_args(function()
   local ts_update = function() vim.cmd('TSUpdate') end
   on_packchanged('nvim-treesitter', { 'update' }, ts_update, 'Update tree-sitter parsers')
-  local spec_ts = {
-    { src = gh('nvim-treesitter/nvim-treesitter') },
-    { src = gh('nvim-treesitter/nvim-treesitter-textobjects'), version = 'main' },
-  }
+  local spec_ts = { gh('nvim-treesitter/nvim-treesitter'), gh('nvim-treesitter/nvim-treesitter-textobjects') }
   add_and_req(spec_ts, 'ak.other.treesitter')
 
   add_and_req({ gh('neovim/nvim-lspconfig') }, 'ak.other.lsp')
