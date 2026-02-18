@@ -191,16 +191,16 @@ local make_purge_current = function()
 end
 
 nmap_leader('ic', '<Cmd>lua Config.visits_choose_current()<CR>', 'Choose current label') -- added
-nmap_leader('ip', make_purge_current(),                             'Purge current label') -- added
+nmap_leader('ip', make_purge_current(),                          'Purge current label') -- added
 -- - the s is a mnemonic for 'show'
-nmap_leader('is', make_pick_from_label('',  'visits (all)'),        'Current label (all)') -- vc
-nmap_leader('iS', make_pick_from_label(nil, 'visits (cwd)'),        'Current label (cwd)') -- vC
+nmap_leader('is', make_pick_from_label('',  'visits (all)'),     'Current label (all)') -- vc
+nmap_leader('iS', make_pick_from_label(nil, 'visits (cwd)'),     'Current label (cwd)') -- vC
 -- - the i uses the same repeat pattern as MiniMax
-nmap_leader('ii', make_addremove_current('add_label'),              'Add current label') -- vv
-nmap_leader('iI', make_addremove_current('remove_label'),           'Remove current label') -- vV
+nmap_leader('ii', make_addremove_current('add_label'),           'Add current label') -- vv
+nmap_leader('iI', make_addremove_current('remove_label'),        'Remove current label') -- vV
 -- - the l is the same as in MinMax
-nmap_leader('il', '<Cmd>lua MiniVisits.add_label()<CR>',            'Add label interactive') -- vl
-nmap_leader('iL', '<Cmd>lua MiniVisits.remove_label()<CR>',         'Remove label interactive') -- vL
+nmap_leader('il', '<Cmd>lua MiniVisits.add_label()<CR>',         'Add label interactive') -- vl
+nmap_leader('iL', '<Cmd>lua MiniVisits.remove_label()<CR>',      'Remove label interactive') -- vL
 
 -- - 'Visits' shortcuts
 nmap_leader('.', make_pick_from_label('',  'visits (all)'),         'Current label (all)') -- alias is
