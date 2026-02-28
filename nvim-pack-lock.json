@@ -1,7 +1,7 @@
 {
   "plugins": {
     "SchemaStore.nvim": {
-      "rev": "84d86aa49021aa8b48c0a6ff89cd92c39ddf7d5c",
+      "rev": "7e88652d0291bfd4c988737c176fa59e187904f2",
       "src": "https://github.com/b0o/SchemaStore.nvim"
     },
     "colors_ayu": {
@@ -33,11 +33,11 @@
       "src": "https://github.com/edeneast/nightfox.nvim"
     },
     "colors_oasis": {
-      "rev": "7e1907f1f3245b2cd85ae3d26c3ed3cd6294ef99",
+      "rev": "ef2bc2f18340626741cb70891da7b20887586ec7",
       "src": "https://github.com/uhs-robert/oasis.nvim"
     },
     "conform.nvim": {
-      "rev": "c2526f1cde528a66e086ab1668e996d162c75f4f",
+      "rev": "e969e302bced7ffb9a0a0323629f31feb0ca35a6",
       "src": "https://github.com/stevearc/conform.nvim"
     },
     "dial.nvim": {
@@ -54,19 +54,19 @@
       "version": "'a923f5fc5ba36a3b17e289dc35dc17f66d0548ee'"
     },
     "mini.nvim": {
-      "rev": "0a6fe4ec57377526e9056fffb4204dbdfe860ebc",
+      "rev": "0098de999048af0539183d625c52d733318a441b",
       "src": "https://github.com/nvim-mini/mini.nvim"
     },
     "nvim-lint": {
-      "rev": "486474c2ace8d78d28995074dbdbe29011bc63d0",
+      "rev": "606b823a57b027502a9ae00978ebf4f5d5158098",
       "src": "https://github.com/mfussenegger/nvim-lint"
     },
     "nvim-lspconfig": {
-      "rev": "5a855bcfec7973767a1a472335684bbd71d2fa2b",
+      "rev": "ead0f5f342d8d323441e7d4b88f0fc436a81ad5f",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {
-      "rev": "dc42c209f3820bdfaae0956f15de29689aa6b451",
+      "rev": "6bc51d020a5e06b7e20ea82dbc47196d3d3027c7",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter"
     },
     "nvim-treesitter-context": {
@@ -78,11 +78,11 @@
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects"
     },
     "quicker.nvim": {
-      "rev": "fc041830fa7cf093786b0d5990d99cf3c7b0c129",
+      "rev": "2d3f3276eab9352c7b212821c218aca986929f62",
       "src": "https://github.com/stevearc/quicker.nvim"
     },
     "vimtex": {
-      "rev": "95b93a24740f7b89dd8331326b41bdd1337d79f6",
+      "rev": "fcd1533862cc3153c203399964065bc835f6919a",
       "src": "https://github.com/lervag/vimtex"
     }
   }
