@@ -1,7 +1,7 @@
 {
   "plugins": {
     "SchemaStore.nvim": {
-      "rev": "7e88652d0291bfd4c988737c176fa59e187904f2",
+      "rev": "c4b3c25e5661600e04be787fbce8c6704583717f",
       "src": "https://github.com/b0o/SchemaStore.nvim"
     },
     "colors_ayu": {
@@ -33,11 +33,11 @@
       "src": "https://github.com/edeneast/nightfox.nvim"
     },
     "colors_oasis": {
-      "rev": "ef2bc2f18340626741cb70891da7b20887586ec7",
+      "rev": "53ed045307ee551902f74c457e946af98826b990",
       "src": "https://github.com/uhs-robert/oasis.nvim"
     },
     "conform.nvim": {
-      "rev": "e969e302bced7ffb9a0a0323629f31feb0ca35a6",
+      "rev": "40dcec5555f960b0a04340d76eabdf4efe78599d",
       "src": "https://github.com/stevearc/conform.nvim"
     },
     "dial.nvim": {
@@ -54,7 +54,7 @@
       "version": "'a923f5fc5ba36a3b17e289dc35dc17f66d0548ee'"
     },
     "mini.nvim": {
-      "rev": "0098de999048af0539183d625c52d733318a441b",
+      "rev": "cad365c212fb1e332cb93fa8f72697125799d00a",
       "src": "https://github.com/nvim-mini/mini.nvim"
     },
     "nvim-lint": {
@@ -66,7 +66,7 @@
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {
-      "rev": "6bc51d020a5e06b7e20ea82dbc47196d3d3027c7",
+      "rev": "972f378653c794b0ff82282a844732695064b70f",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter"
     },
     "nvim-treesitter-context": {
