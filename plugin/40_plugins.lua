@@ -1,5 +1,5 @@
 local add, on_packchanged = vim.pack.add, Config.on_packchanged
-local later, now_if_args = Config.later, Config.now_if_args
+local later, now_if_args, on_filetype = Config.later, Config.now_if_args, Config.on_filetype
 
 local gh = function(x) return 'https://github.com/' .. x end
 local add_and_req = function(spec, loc)
@@ -33,14 +33,19 @@ later(function()
   add_and_req({ gh('stevearc/quicker.nvim') }, 'ak.other.quicker')
   add_and_req({ gh('nvim-treesitter/nvim-treesitter-context') }, 'ak.other.treesitter_context')
 
-  require('ak.other.vimtex') -- vimscript variables
+  require('ak.other.vimtex') -- set vimscript variables
   add({ gh('lervag/vimtex') })
+end)
 
-  local build_mkdp = function() vim.fn['mkdp#util#install']() end
-  on_packchanged('markdown-preview.nvim', { 'install', 'update' }, build_mkdp, 'Build markdown-preview')
-  local spec_mkdp = {
-    src = gh('iamcco/markdown-preview.nvim'),
-    version = 'a923f5fc5ba36a3b17e289dc35dc17f66d0548ee', -- latest commit 2 years ago
-  }
-  add({ spec_mkdp })
+-- Filetype: markdown =========================================================
+on_filetype('markdown', function()
+  local build = function()
+    vim.cmd.packadd('markdown-preview.nvim')
+    vim.fn['mkdp#util#install']()
+  end
+  Config.on_packchanged('markdown-preview.nvim', { 'install', 'update' }, build, 'Build markdown-preview')
+  -- latest commit 2 years ago
+  add({ { src = gh('iamcco/markdown-preview.nvim'), version = 'a923f5fc5ba36a3b17e289dc35dc17f66d0548ee' } })
+  -- Do not close the preview tab when switching to other buffers
+  vim.g.mkdp_auto_close = 0
 end)
