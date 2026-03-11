@@ -1,5 +1,5 @@
 vim.cmd('setlocal spell wrap')
-vim.cmd('setlocal foldmethod=expr foldexpr=v:lua.vim.treesitter.foldexpr()')
+vim.cmd('setlocal foldmethod=expr foldexpr=v:lua.vim.treesitter.foldexpr()') -- foldlevel=1
 
 -- Disable built-in `gO` mapping in favor of 'mini.basics'
 vim.keymap.del('n', 'gO', { buffer = 0 })
