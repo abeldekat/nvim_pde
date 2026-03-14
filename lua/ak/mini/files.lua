@@ -38,15 +38,13 @@ H.create_autocommmands = function()
   end
   Config.new_autocmd('User', 'MiniFilesBufferCreate', extra_keys, 'Add extra keys')
 
-  local restrict_linenumbers = function(args) -- add linenumbers only to active window
-    local win_id = vim.api.nvim_get_current_win()
-    if win_id and win_id == args.data.win_id then
-      vim.wo[win_id].relativenumber = true
-      vim.api.nvim_create_autocmd('WinLeave', {
-        once = true,
-        callback = function() vim.wo[win_id].relativenumber = false end,
-      })
-    end
+  local restrict_linenumbers = function(args) -- add relative linenumbers to active window
+    local win_id = args.data.win_id
+    if not (win_id and win_id == vim.api.nvim_get_current_win()) then return end
+
+    vim.wo[win_id].relativenumber = true
+    local opts = { once = true, callback = function() vim.wo[win_id].relativenumber = false end }
+    vim.api.nvim_create_autocmd('WinLeave', opts)
   end
   Config.new_autocmd('User', 'MiniFilesWindowUpdate', restrict_linenumbers, 'Restrict linenumbers')
 
