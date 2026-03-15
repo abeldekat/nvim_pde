@@ -54,7 +54,6 @@ return {
         ignoreSubmodules = true,
         library = { vim.env.VIMRUNTIME },
       },
-      telemetry = { enable = false },
     },
   },
 }
