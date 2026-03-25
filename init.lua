@@ -18,7 +18,7 @@ if vim.fn.has('nvim-0.12') == 0 then
 end
 
 -- Added: Optimize( a bit )
-for _, disable in ipairs({ 'gzip', 'tarPlugin', 'tohtml', 'tutor', 'zipPlugin' }) do
+for _, disable in ipairs({ 'gzip', 'tarPlugin', 'tutor', 'zipPlugin' }) do
   vim.g['loaded_' .. disable] = 0
 end
 
