@@ -212,7 +212,8 @@ nmap_leader('ld', '<Cmd>lua vim.diagnostic.open_float()<CR>',   'Diagnostic popu
 nmap_leader('lf', '<Cmd>lua require("conform").format()<CR>',   'Format')
 nmap_leader('li', '<Cmd>lua vim.lsp.buf.implementation()<CR>',  'Implementation')
 nmap_leader('lh', '<Cmd>lua vim.lsp.buf.hover()<CR>',           'Hover')
-nmap_leader('ln', '<Cmd>lua vim.lsp.buf.rename()<CR>',          'Rename')
+nmap_leader('ll', '<Cmd>lua vim.lsp.codelens.run()<CR>',        'Lens')
+nmap_leader('ln', '<Cmd>lua vim.lsp.buf.rename()<CR>',          'Re[n]ame')
 -- nmap_leader('lr', '<Cmd>lua vim.lsp.buf.rename()<CR>',          'Rename') -- n like grn
 -- nmap_leader('lR', '<Cmd>lua vim.lsp.buf.references()<CR>',      'References')
 nmap_leader('lr', '<Cmd>lua vim.lsp.buf.references()<CR>',      'References') -- r like grr
