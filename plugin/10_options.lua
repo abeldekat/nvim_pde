@@ -25,7 +25,9 @@ vim.o.laststatus     = 3          -- ...added...: Global statusline
 vim.o.linebreak      = true       -- Wrap lines at 'breakat' (if 'wrap' is set)
 vim.o.list           = true       -- Show helpful text indicators
 vim.o.number         = true       -- Show line numbers
+vim.o.pumborder      = 'rounded'  -- Use border in built-in completion menu
 vim.o.pumheight      = 10         -- Make popup menu smaller
+vim.o.pummaxwidth    = 100        -- Limit maximum width of popup menu
 vim.o.relativenumber = true       -- ...added...
 vim.o.ruler          = false      -- Don't show cursor coordinates
 vim.o.shortmess      = 'CFOSWaco' -- Disable some built-in completion messages
@@ -36,7 +38,7 @@ vim.o.splitbelow     = true       -- Horizontal splits will be below
 vim.o.splitkeep      = 'screen'   -- Reduce scroll during window split
 vim.o.splitright     = true       -- Vertical splits will be to the right
 -- vim.o.winborder      = 'single'   -- Use border in floating windows
-vim.o.winborder      = 'rounded'  -- ...changed...
+vim.o.winborder      = 'bold'     -- ...changed...
 vim.o.wrap           = false      -- Don't visually wrap lines (toggle with \w)
 
 vim.o.cursorlineopt  = 'screenline,number' -- Show cursor line per screen line
@@ -50,6 +52,9 @@ vim.o.foldlevel   = 10       -- Fold nothing by default; set to 0 or 1 to fold
 vim.o.foldmethod  = 'indent' -- Fold based on indent level
 vim.o.foldnestmax = 10       -- Limit number of fold levels
 vim.o.foldtext    = ''       -- Show text under fold with its highlighting
+
+-- Added:
+require('vim._core.ui2').enable() -- enter window with g<. See also option cmdheight
 
 -- Editing ====================================================================
 vim.o.autoindent    = true    -- Use auto indent
@@ -74,9 +79,10 @@ vim.o.iskeyword = '@,48-57,_,192-255,-' -- Treat dash as `word` textobject part
 vim.o.formatlistpat = [[^\s*[0-9\-\+\*]\+[\.\)]*\s\+]]
 
 -- Built-in completion
-vim.o.complete    = '.,w,b,kspell'                  -- Use less sources
--- vim.o.completeopt = 'menuone,noselect,fuzzy,nosort' -- Use custom behavior
-vim.o.completeopt = 'menuone,noselect,fuzzy' -- ...changed...
+vim.o.complete        = '.,w,b,kspell'                  -- Use less sources
+-- vim.o.completeopt     = 'menuone,noselect,fuzzy,nosort' -- Use custom behavior
+vim.o.completeopt     = 'menuone,noselect,fuzzy'        -- ...changed...
+vim.o.completetimeout = 100                             -- Limit sources delay
 
 -- Autocommands ===============================================================
 
