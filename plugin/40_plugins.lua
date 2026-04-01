@@ -1,38 +1,33 @@
 local add, on_packchanged = vim.pack.add, Config.on_packchanged
-local later, now_if_args, on_filetype = Config.later, Config.now_if_args, Config.on_filetype
+local now_if_args, later, on_filetype = Config.now_if_args, Config.later, Config.on_filetype
 
+-- Helpers ====================================================================
 local gh = function(x) return 'https://github.com/' .. x end
 local add_and_req = function(spec, loc)
   add(spec)
   require(loc)
 end
 
+-- Plugins included in MiniMax ================================================
 now_if_args(function()
   local ts_update = function() vim.cmd('TSUpdate') end
   on_packchanged('nvim-treesitter', { 'update' }, ts_update, 'Update tree-sitter parsers')
   local spec_ts = { gh('nvim-treesitter/nvim-treesitter'), gh('nvim-treesitter/nvim-treesitter-textobjects') }
   add_and_req(spec_ts, 'ak.other.treesitter')
-
-  add_and_req({ gh('neovim/nvim-lspconfig') }, 'ak.other.lsp')
 end)
+now_if_args(function() add_and_req({ gh('neovim/nvim-lspconfig') }, 'ak.other.lsp') end)
 
-later(function()
-  add_and_req({ gh('stevearc/conform.nvim') }, 'ak.other.conform')
-  add({ gh('rafamadriz/friendly-snippets') })
-end)
+later(function() add_and_req({ gh('stevearc/conform.nvim') }, 'ak.other.conform') end)
+later(function() add({ gh('rafamadriz/friendly-snippets') }) end)
 
 -- Plugins not included in MiniMax ============================================
+now_if_args(function() add_and_req({ gh('mfussenegger/nvim-lint') }, 'ak.other.nvim_lint') end)
+now_if_args(function() add({ gh('b0o/SchemaStore.nvim') }) end)
 
-now_if_args(function()
-  add_and_req({ gh('mfussenegger/nvim-lint') }, 'ak.other.nvim_lint')
-  add({ gh('b0o/SchemaStore.nvim') })
-end)
-
+later(function() add_and_req({ gh('monaqa/dial.nvim') }, 'ak.other.dial') end)
+later(function() add_and_req({ gh('stevearc/quicker.nvim') }, 'ak.other.quicker') end)
+later(function() add_and_req({ gh('nvim-treesitter/nvim-treesitter-context') }, 'ak.other.treesitter_context') end)
 later(function()
-  add_and_req({ gh('monaqa/dial.nvim') }, 'ak.other.dial')
-  add_and_req({ gh('stevearc/quicker.nvim') }, 'ak.other.quicker')
-  add_and_req({ gh('nvim-treesitter/nvim-treesitter-context') }, 'ak.other.treesitter_context')
-
   require('ak.other.vimtex') -- set vimscript variables
   add({ gh('lervag/vimtex') })
 end)
