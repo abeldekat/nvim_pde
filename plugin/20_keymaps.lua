@@ -220,6 +220,26 @@ nmap_leader('lt', '<Cmd>lua vim.lsp.buf.type_definition()<CR>', 'Type definition
 
 xmap_leader('lf', '<Cmd>lua require("conform").format()<CR>', 'Format selection')
 
+-- Added: alternative "Incremental selection" mappings (treesitter + LSP fallback).
+-- See `:h MiniAi.config`, `:h treesitter-incremental-selection` and Neovim's defaults.lua
+local map_incremental_selection = function(lhs, desc)
+  local s = vim.startswith(desc, 'Increase') and 1 or -1
+  local rhs = function()
+    if not vim.treesitter.get_parser(nil, nil, { error = false }) then
+      vim.lsp.buf.selection_range(s * vim.v.count1)
+      return
+    end
+
+    -- 'Select parent (outer) node',  'Select child (inner) node'
+    -- Using private _select. See issue #38211 in neovim/neovim
+    local action = s==1 and 'select_parent' or 'select_child'
+    require 'vim.treesitter._select'[action](vim.v.count1)
+  end
+  vim.keymap.set({ 'x', 'o' }, lhs, rhs, { desc = desc }) -- also add o mode
+end
+map_incremental_selection('<Leader>ls', 'Increase selection') -- an
+map_incremental_selection('<Leader>lS', 'Decrease selection') -- in
+
 -- m is for 'Map'. Common usage:
 nmap_leader('mf', '<Cmd>lua MiniMap.toggle_focus()<CR>', 'Focus (toggle)')
 nmap_leader('mr', '<Cmd>lua MiniMap.refresh()<CR>',      'Refresh')
