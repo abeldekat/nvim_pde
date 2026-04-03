@@ -2,12 +2,12 @@ local prefer_light = require('ak.color').prefer_light
 
 local info = {
   name = 'catppuccin',
-  variants = { 'catppuccin-frappe', 'catppuccin-mocha', 'catppuccin-macchiato', 'catppuccin-latte' },
+  variants = { 'catppuccin-nvim', 'catppuccin-frappe', 'catppuccin-mocha', 'catppuccin-macchiato', 'catppuccin-latte' },
 }
 Config.add_theme_info('catppuccin*', info, 'Catppuccin variants')
 
 local opts = {
-  flavour = prefer_light and 'latte' or 'frappe',
+  -- flavour = prefer_light and 'latte' or 'frappe',
   custom_highlights = function(c)
     return { -- left and right, dynamic
       MiniStatuslineFilename = { fg = c.subtext1, bg = c.mantle },

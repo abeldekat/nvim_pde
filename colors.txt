@@ -1,7 +1,11 @@
 ayu
 bamboo
 carbonfox
-catppuccin
+catppuccin-nvim
+catppuccin-frappe
+catppuccin-latte
+catppuccin-macchiato
+catppuccin-mocha
 dawnfox
 dayfox
 duskfox
