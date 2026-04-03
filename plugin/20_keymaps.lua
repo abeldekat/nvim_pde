@@ -237,8 +237,8 @@ local map_incremental_selection = function(lhs, desc)
   end
   vim.keymap.set({ 'x', 'o' }, lhs, rhs, { desc = desc }) -- also add o mode
 end
-map_incremental_selection('<Leader>ls', 'Increase selection') -- an
-map_incremental_selection('<Leader>lS', 'Decrease selection') -- in
+map_incremental_selection('<M-i>', 'Increase selection') -- an <Leader>ls
+map_incremental_selection('<M-o>', 'Decrease selection') -- in <Leader>lS
 
 -- m is for 'Map'. Common usage:
 nmap_leader('mf', '<Cmd>lua MiniMap.toggle_focus()<CR>', 'Focus (toggle)')
