@@ -24,7 +24,6 @@ later(function() add({ gh('rafamadriz/friendly-snippets') }) end)
 now_if_args(function() add_and_req({ gh('mfussenegger/nvim-lint') }, 'ak.other.nvim_lint') end)
 now_if_args(function() add({ gh('b0o/SchemaStore.nvim') }) end)
 
-later(function() add_and_req({ gh('monaqa/dial.nvim') }, 'ak.other.dial') end)
 later(function() add_and_req({ gh('stevearc/quicker.nvim') }, 'ak.other.quicker') end)
 later(function() add_and_req({ gh('nvim-treesitter/nvim-treesitter-context') }, 'ak.other.treesitter_context') end)
 later(function()
