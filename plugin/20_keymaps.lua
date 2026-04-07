@@ -237,6 +237,7 @@ local map_incremental_selection = function(lhs, desc)
   end
   vim.keymap.set({ 'x', 'o' }, lhs, rhs, { desc = desc }) -- also add o mode
 end
+-- Other mnemonics: outer/inner outward/inward
 map_incremental_selection('<M-i>', 'Increase selection') -- an <Leader>ls
 map_incremental_selection('<M-o>', 'Decrease selection') -- in <Leader>lS
 
@@ -253,11 +254,12 @@ nmap_leader('ot', '<Cmd>lua MiniTrailspace.trim()<CR>',       'Trim trailspace')
 nmap_leader('oz', '<Cmd>lua MiniMisc.zoom()<CR>',             'Zoom toggle')
 
 -- s is for 'Session'.
-local session_new = 'MiniSessions.write(vim.fn.input("Session name: "))'
+local session_new = 'vim.ui.input({ prompt = "Session name: " }, MiniSessions.write)'
 
 nmap_leader('sd', '<Cmd>lua MiniSessions.select("delete")<CR>', 'Delete')
 nmap_leader('sn', '<Cmd>lua ' .. session_new .. '<CR>',         'New')
 nmap_leader('sr', '<Cmd>lua MiniSessions.select("read")<CR>',   'Read')
+nmap_leader('sR', '<Cmd>lua MiniSessions.restart()<CR>',        'Restart')
 nmap_leader('sw', '<Cmd>lua MiniSessions.write()<CR>',          'Write current')
 
 -- t is for 'Terminal'
