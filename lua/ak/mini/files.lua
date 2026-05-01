@@ -1,4 +1,6 @@
+---@diagnostic disable: undefined-global
 local H = {}
+
 local setup = function()
   local config = {
     content = { filter = H.filter_show },
@@ -26,12 +28,14 @@ H.create_autocommmands = function()
     vim.keymap.set('n', 'g.', H.toggle_dotfiles, { buffer = b })
     vim.keymap.set('n', 'g~', H.set_cwd, { buffer = b, desc = 'Set cwd' })
     vim.keymap.set('n', 'gm', H.toggle_max_windows, { buffer = b, desc = 'Toggle max windows' })
+    vim.keymap.set('n', 'gX', H.ui_open, { buffer = b, desc = 'OS open' })
     vim.keymap.set('n', 'gy', H.yank_path, { buffer = b, desc = 'Yank path' })
+
     H.map_split(b, '<C-s>', 'belowright horizontal')
     H.map_split(b, '<C-v>', 'belowright vertical')
     H.map_split(b, '<C-t>', 'tab')
 
-    -- split keyboard with miryoku layout and vim layer:
+    -- split keyboard with miryoku layout and vim layer, go_in and go_out:
     vim.keymap.set('n', '<Right>', 'l', { buffer = b, remap = true })
     vim.keymap.set('n', '<Left>', 'h', { buffer = b, remap = true })
   end
@@ -85,6 +89,8 @@ H.yank_path = function() -- yank in register full path of entry under cursor
 
   vim.fn.setreg(vim.v.register, path)
 end
+
+H.ui_open = function() vim.ui.open(MiniFiles.get_fs_entry().path) end
 
 H.toggle_max_windows = function()
   H.max_windows = H.max_windows == H.min_windows and math.huge or H.min_windows
