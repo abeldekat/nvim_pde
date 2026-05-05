@@ -1,9 +1,9 @@
 local jump2d = require('mini.jump2d')
-jump2d.setup({ -- colemakdh labels
+jump2d.setup({
   spotter = jump2d.gen_spotter.pattern('[^%s%p]+'),
-  labels = 'tnseriaogm',
+  labels = 'asdfghjkl;',
+  -- labels = 'tnseriaogm',
   -- labels = "asdfghlnmio",
-  -- labels = 'tnseriaogmplfuwyqbjdhvkzxc',
   mappings = { start_jumping = '' },
   view = { dim = true, n_steps_ahead = 2 },
 })

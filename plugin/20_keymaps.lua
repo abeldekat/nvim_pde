@@ -2,11 +2,6 @@
 
 local nmap = function(lhs, rhs, desc) vim.keymap.set('n', lhs, rhs, { desc = desc }) end
 
--- ...added... From nvim echasnovski... Perhaps with mini.keymap including ctrl k?
--- ...changed... The rhs from ctrl w h into ctrl w p, focus last accessed
--- Shorter version of the most frequent way of going outside of terminal window
-vim.keymap.set('t', '<C-h>', [[<C-\><C-N><C-w>p]])
-
 -- Paste linewise before/after current line
 -- Usage: `yiw` to yank a word and `]p` to put it on the next line.
 nmap('[p', '<Cmd>exe "iput! " . v:register<CR>', 'Paste Above')
@@ -222,25 +217,15 @@ xmap_leader('lf', '<Cmd>lua require("conform").format()<CR>', 'Format selection'
 
 -- Added: alternative "Incremental selection" mappings (treesitter + LSP fallback).
 -- See `:h MiniAi.config`, `:h treesitter-incremental-selection` and Neovim's defaults.lua
-local map_incremental_selection = function(lhs, desc)
-  local s = vim.startswith(desc, 'Increase') and 1 or -1
-  local rhs = function()
-    if not vim.treesitter.get_parser(nil, nil, { error = false }) then
-      vim.lsp.buf.selection_range(s * vim.v.count1)
-      return
-    end
-
-    -- 'Select parent (outer) node',  'Select child (inner) node'
-    -- Using private _select. See issue #38211 in neovim/neovim
-    local action = s==1 and 'select_parent' or 'select_child'
-    require 'vim.treesitter._select'[action](vim.v.count1)
-  end
-  vim.keymap.set({ 'x', 'o' }, lhs, rhs, { desc = desc }) -- also add o mode
+local copy_keymap = function(mode, from_lhs, to_lhs)
+  local keymap = vim.fn.maparg(from_lhs, mode, false, true)
+  local rhs = keymap.callback or keymap.rhs
+  vim.keymap.set(mode, to_lhs, rhs, { desc = keymap.desc })
 end
 -- Other mnemonics: outer/inner outward/inward
 -- NOTE: Kickstart redefines mini.ai an -> aa and in -> ii
-map_incremental_selection('<M-i>', 'Increase selection') -- an <Leader>ls
-map_incremental_selection('<M-o>', 'Decrease selection') -- in <Leader>lS
+copy_keymap('x', 'an', '<M-i>') -- <leader>ls, ommitted o mode
+copy_keymap('x', 'in', '<M-o>') -- <leader>lS, ommitted o mode
 
 -- m is for 'Map'. Common usage:
 nmap_leader('mf', '<Cmd>lua MiniMap.toggle_focus()<CR>', 'Focus (toggle)')
@@ -266,5 +251,13 @@ nmap_leader('sw', '<Cmd>lua MiniSessions.write()<CR>',          'Write current')
 -- t is for 'Terminal'
 nmap_leader('tT', '<Cmd>horizontal term<CR>', 'Terminal (horizontal)')
 nmap_leader('tt', '<Cmd>vertical term<CR>',   'Terminal (vertical)')
+
+local function on_termopen() -- ...added...
+  local opts = { buf = 0 }
+  vim.keymap.set('t', 'jk', [[<C-\><C-n>]], opts)
+  vim.keymap.set('t', '<C-w>', [[<C-\><C-n><C-w>]], opts)
+  vim.keymap.set('t', '<C-h>', [[<C-\><C-N><C-w>p]], opts)
+end
+Config.new_autocmd('TermOpen', nil, on_termopen, 'Terminal mappings')
 
 -- stylua: ignore end
