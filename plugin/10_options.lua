@@ -54,8 +54,7 @@ vim.o.foldnestmax = 10       -- Limit number of fold levels
 vim.o.foldtext    = ''       -- Show text under fold with its highlighting
 
 -- Added:
--- TODO: empty table not needed in version > v12.0?
-require('vim._core.ui2').enable({}) -- enter window with g<. See also option cmdheight
+require('vim._core.ui2').enable() -- enter window with g<. See also option cmdheight
 
 -- Editing ====================================================================
 vim.o.autoindent    = true    -- Use auto indent
