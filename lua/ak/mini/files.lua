@@ -114,59 +114,45 @@ end
 
 -- See https://github.com/nvim-mini/mini.nvim/discussions/2173
 H.center = function(windows, idx_focused)
-  -- Use the same widths as in MiniFiles, compute_visible_depth_range
-  local config = MiniFiles.config
-  local width_focus, width_nofocus = config.windows.width_focus + H.x_margin, config.windows.width_nofocus + H.x_margin
+  local _, _, width_focused = H.get_win_data(windows, idx_focused)
+  if vim.o.columns <= width_focused then return end
 
-  -- No centering needed
-  if vim.o.columns <= width_focus then return end
+  -- From focused to left edge
+  local col_focused = math.floor((vim.o.columns - width_focused) * 0.5)
+  local col = col_focused + width_focused
+  local hidden = {}
+  for i = idx_focused, 1, -1 do
+    local win_id, config, width = H.get_win_data(windows, i)
+    local show = i == idx_focused or col >= width
 
-  -- Center focused window
-  local col_focus = math.floor((vim.o.columns - width_focus) * 0.5)
-  H.center_set_config(windows, idx_focused, col_focus, true, true)
-
-  -- Prepend left part. If a window does not fit, the col stays the last left-most col
-  local col_left = col_focus
-  local idx_hidden
-  for i = idx_focused - 1, 1, -1 do
-    local show = col_left >= width_nofocus
-    col_left = show and col_left - width_nofocus or col_left
-    idx_hidden = not show and idx_hidden == nil and i or idx_hidden
-
-    H.center_set_config(windows, i, col_left, show, false)
+    col = show and col - width or 0
+    H.center_set_config(config, win_id, show and col or col_focused, i == idx_focused, show)
+    if not show then table.insert(hidden, i) end
   end
-  if idx_hidden then H.center_update_first_visible_title(windows, idx_hidden + 1) end
+  if #hidden > 0 then H.center_update_first_visible_title(windows, hidden[1] + 1) end
 
-  -- Append right part. If a window does not fit, the col stays the last right-most col
-  local width_preview = config.windows.width_preview + H.x_margin
-  local col_right = col_focus + width_focus
+  -- From focused + 1 to right edge
+  col = col_focused + width_focused
   for i = idx_focused + 1, #windows do
-    local width = (i == idx_focused + 1) and config.windows.preview and width_preview or width_nofocus
-    local show = (vim.o.columns - col_right) >= width
-    local col = show and col_right or vim.api.nvim_win_get_config(windows[i - 1].win_id).col
+    local win_id, config, width = H.get_win_data(windows, i)
+    local show = (vim.o.columns - col) >= width
 
-    H.center_set_config(windows, i, col, show, false)
-    if show then col_right = col_right + width end
+    H.center_set_config(config, win_id, show and col or col_focused, false, show)
+    col = show and col + width or vim.o.columns
   end
 end
 
-H.center_set_config = function(windows, idx, col, show, is_focused)
-  local win_id = windows[idx].win_id
-  local config = vim.api.nvim_win_get_config(win_id)
-
-  config.zindex = H.zindex
-  config.col = col
-
+H.center_set_config = function(config, win_id, col, is_focused, show)
   -- Overlap concerns: If free vertical space < threshold, don't center
-  if H.vert.enable and (vim.o.lines - H.vert.height_focus >= H.vert.threshold) then
+  local vert_enable = H.vert.enable and vim.o.lines - H.vert.height_focus >= H.vert.threshold
+
+  if vert_enable then
     config.height = is_focused and H.vert.height_focus or H.vert.height
     config.row = math.floor(0.5 * (vim.o.lines - config.height))
   end
-
-  if not show then
-    config.zindex = H.zindex - idx
-    config.height = 1
-  end
+  config.height = not show and 1 or config.height
+  config.zindex = show and zindex or config.zindex
+  config.col = col
 
   vim.api.nvim_win_set_config(win_id, config)
 end
@@ -174,15 +160,19 @@ end
 H.center_update_first_visible_title = function(windows, idx)
   -- Change the title for the first visible window
   local win = windows[idx]
-  if not win then return end
-
   local config = vim.api.nvim_win_get_config(win.win_id)
   if not type(config.title) == string then return end
 
-  config.title = H.fs_shorten_path(win.path)
-  config.title = ' ' .. H.sanitize_string(config.title) .. ' '
+  config.title = ' ' .. H.sanitize_string(H.fs_shorten_path(win.path)) .. ' '
   config.title = H.fit_to_width(config.title, config.width)
   vim.api.nvim_win_set_config(win.win_id, config)
+end
+
+H.get_win_data = function(windows, idx)
+  local win_id = windows[idx].win_id
+  local config = vim.api.nvim_win_get_config(win_id)
+  local width = config.width + H.x_margin
+  return win_id, config, width
 end
 
 H.filter_show = function(_) return true end
