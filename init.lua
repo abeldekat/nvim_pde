@@ -1,5 +1,3 @@
----@diagnostic disable: duplicate-set-field
-
 -- Define config table to be able to pass data between scripts.
 _G.Config = {}
 

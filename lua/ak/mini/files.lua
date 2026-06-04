@@ -5,7 +5,6 @@ local setup = function()
   local config = {
     content = { filter = H.filter_show },
     mappings = { go_in = 'L', go_in_plus = 'l' }, -- close explorer after opening file with `l`
-    -- Default widths: 50 - 25 - 15
     windows = { max_number = H.max_windows, preview = H.can_preview() },
   }
   require('mini.files').setup(config)
@@ -30,7 +29,7 @@ H.max_windows = math.huge
 H.current_layout = 'C'
 H.next_layout = { L = 'C', C = 'R', R = 'L' }
 
--- Centering:
+-- Left and right border to take into account
 H.x_margin = 2
 -- Default zindex when centered
 H.zindex = 99
@@ -78,10 +77,8 @@ H.traverse_layout = function()
 end
 
 H.ensure_layout = function(args)
-  -- No extra steps when layout is builtin
   if H.current_layout == 'L' then return end
 
-  -- There is always a state on a MiniFilesWindow event
   local state = MiniFiles.get_explorer_state()
   if state == nil then return end
 
@@ -93,7 +90,6 @@ H.ensure_layout = function(args)
   end
   if idx_focused == nil then return end
 
-  -- Apply layout in one pass
   local layout = H.current_layout == 'C' and H.center or H.right
   layout(state.windows, idx_focused)
 end
@@ -101,7 +97,6 @@ end
 H.right = function(windows, _)
   -- In the default layout, the first window is aligned to the left edge of the editor
   -- Here, the last window is aligned to the right edge of the editor
-
   local config_last_window = vim.api.nvim_win_get_config(windows[#windows].win_id)
   local offset = (vim.o.columns - config_last_window.col) - config_last_window.width - H.x_margin
   for _, win in ipairs(windows) do
@@ -114,19 +109,21 @@ end
 
 -- See https://github.com/nvim-mini/mini.nvim/discussions/2173
 H.center = function(windows, idx_focused)
+  local is_vert = H.vert.enable and vim.o.lines - H.vert.height_focus >= H.vert.threshold
   local _, _, width_focused = H.get_win_data(windows, idx_focused)
   if vim.o.columns <= width_focused then return end
 
-  -- From focused to left edge
   local col_focused = math.floor((vim.o.columns - width_focused) * 0.5)
-  local col = col_focused + width_focused
+  -- From focused to left edge
   local hidden = {}
+  local col = col_focused + width_focused
   for i = idx_focused, 1, -1 do
     local win_id, config, width = H.get_win_data(windows, i)
     local show = i == idx_focused or col >= width
 
-    col = show and col - width or 0
-    H.center_set_config(config, win_id, show and col or col_focused, i == idx_focused, show)
+    config.col = show and col - width or col_focused
+    H.center_set_config(config, win_id, show, i == idx_focused, is_vert)
+    col = show and config.col or 0
     if not show then table.insert(hidden, i) end
   end
   if #hidden > 0 then H.center_update_first_visible_title(windows, hidden[1] + 1) end
@@ -137,28 +134,24 @@ H.center = function(windows, idx_focused)
     local win_id, config, width = H.get_win_data(windows, i)
     local show = (vim.o.columns - col) >= width
 
-    H.center_set_config(config, win_id, show and col or col_focused, false, show)
-    col = show and col + width or vim.o.columns
+    config.col = show and col or col_focused
+    H.center_set_config(config, win_id, show, false, is_vert)
+    col = show and config.col + width or vim.o.columns
   end
 end
 
-H.center_set_config = function(config, win_id, col, is_focused, show)
-  -- Overlap concerns: If free vertical space < threshold, don't center
-  local vert_enable = H.vert.enable and vim.o.lines - H.vert.height_focus >= H.vert.threshold
-
+H.center_set_config = function(config, win_id, show, is_focused, vert_enable)
   if vert_enable then
     config.height = is_focused and H.vert.height_focus or H.vert.height
     config.row = math.floor(0.5 * (vim.o.lines - config.height))
   end
   config.height = not show and 1 or config.height
-  config.zindex = show and zindex or config.zindex
-  config.col = col
+  config.zindex = show and H.zindex or config.zindex
 
   vim.api.nvim_win_set_config(win_id, config)
 end
 
 H.center_update_first_visible_title = function(windows, idx)
-  -- Change the title for the first visible window
   local win = windows[idx]
   local config = vim.api.nvim_win_get_config(win.win_id)
   if not type(config.title) == string then return end
@@ -221,7 +214,7 @@ end
 
 H.can_preview = function() return H.max_windows > 1 end
 
--- Copied from mini.files to change first visible title when expected first window is hidden
+-- Centering: Copied from mini.files to change first visible title when expected first window is hidden
 H.fit_to_width = function(text, width)
   local t_width = vim.fn.strchars(text)
   return t_width <= width and text or ('…' .. vim.fn.strcharpart(text, t_width - width + 1, width - 1))
@@ -235,5 +228,6 @@ H.fs_shorten_path = function(path)
 end
 -- Skipped the override for windows OS as I don't use windows
 H.fs_normalize_path = function(path) return (path:gsub('/+', '/'):gsub('(.)/$', '%1')) end
+-- End copied from mini.files
 
 setup()
