@@ -34,7 +34,7 @@ H.x_margin = 2
 -- Default zindex when centered
 H.zindex = 99
 -- Config to center vertically
-H.vert = { enable = true, height_focus = 22, height = 20, threshold = 6 }
+H.vert = { enable = true, height_focus = 32, height = 30, align_first_row = true, threshold = 6 }
 
 H.add_marks = function()
   MiniFiles.set_bookmark('c', vim.fn.stdpath('config') .. '', { desc = 'Config' })
@@ -142,8 +142,9 @@ end
 
 H.center_set_config = function(config, win_id, show, is_focused, vert_enable)
   if vert_enable then
-    config.height = is_focused and H.vert.height_focus or H.vert.height
-    config.row = math.floor(0.5 * (vim.o.lines - config.height))
+    local v = H.vert
+    config.height = is_focused and v.height_focus or v.height
+    config.row = math.floor(0.5 * (vim.o.lines - (v.align_first_row and v.height or config.height)))
   end
   config.height = not show and 1 or config.height
   config.zindex = show and H.zindex or config.zindex

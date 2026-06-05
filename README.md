@@ -103,6 +103,7 @@ Relevant discussions:
 - [MiniNotify replacing fidget](https://github.com/nvim-mini/mini.nvim/discussions/1602).
 - [MiniCompletion using blink fuzzy algorithm](https://github.com/nvim-mini/mini.nvim/discussions/1771).
 - [Jump with second character from each spot](https://github.com/nvim-mini/mini.nvim/discussions/1860)
+- [Traverse styles in mini.files](https://github.com/nvim-mini/mini.nvim/discussions/2448)
 
 ## Environment
 
@@ -119,8 +120,6 @@ Additionally, code and ideas have been used from the following repositories:
 
 - [nvim](https://github.com/echasnovski/nvim) `@echasnovski`
 - [nvim](https://github.com/pkazmier/nvim) `@pkazmier`
-- [mini.deps](https://github.com/nvim-mini/mini.deps)
-- [LazyVim](https://github.com/LazyVim/LazyVim)
 
 [scripts]: https://github.com/abeldekat/scripts
 [kitty-sessionizer]: https://github.com/abeldekat/scripts/blob/main/kitty_sessionizer_owns
