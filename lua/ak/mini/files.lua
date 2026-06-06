@@ -149,6 +149,14 @@ H.center_set_config = function(config, win_id, show, is_focused, vert_enable)
   config.height = not show and 1 or config.height
   config.zindex = show and H.zindex or config.zindex
 
+  local line_count = vim.api.nvim_buf_line_count(vim.api.nvim_win_get_buf(win_id))
+  local footer = ''
+  if line_count > config.height then
+    footer = string.format(' %d/%d ', vim.api.nvim_win_get_cursor(win_id)[1], line_count)
+  end
+  config.footer = { { footer, 'MiniFilesTitle' } }
+  config.footer_pos = 'right'
+
   vim.api.nvim_win_set_config(win_id, config)
 end
 

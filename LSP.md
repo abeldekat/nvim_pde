@@ -121,12 +121,6 @@ version 1.11.0 on 20250411, version 1.11.4 with mason on 20250411
 
 Also see `mason-registry`: `packages/codelldb/package.yaml`
 
-## toml
-
-[info](https://taplo.tamasfe.dev/)
-Arch linux: `sudo pacman -S taplo`
-Can also be installed via cargo
-
 ## yaml
 
 [redhat](https://github.com/redhat-developer/yaml-language-server)

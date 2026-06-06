@@ -9,7 +9,6 @@ vim.lsp.enable({
   'marksman',
   'ruff',
   'rust_analyzer',
-  'taplo',
   'texlab',
   'yamlls',
 })
