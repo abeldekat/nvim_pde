@@ -26,7 +26,7 @@ H.show_dotfiles = true
 H.min_windows = 2
 H.max_windows = math.huge
 
-H.current_layout = 'C'
+H.current_layout = 'L'
 H.next_layout = { L = 'C', C = 'R', R = 'L' }
 
 -- Left and right border to take into account
