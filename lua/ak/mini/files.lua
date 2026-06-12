@@ -31,8 +31,6 @@ H.next_layout = { L = 'C', C = 'R', R = 'L' }
 
 -- Left and right border to take into account
 H.x_margin = 2
--- Default zindex when centered
-H.zindex = 99
 -- Config to center vertically
 H.vert = { enable = true, height_focus = 32, height = 30, align_first_row = true, threshold = 6 }
 
@@ -147,7 +145,6 @@ H.center_set_config = function(config, win_id, show, is_focused, vert_enable)
     config.row = math.floor(0.5 * (vim.o.lines - (v.align_first_row and v.height or config.height)))
   end
   config.height = not show and 1 or config.height
-  config.zindex = show and H.zindex or config.zindex
 
   local line_count = vim.api.nvim_buf_line_count(vim.api.nvim_win_get_buf(win_id))
   local footer = ''
