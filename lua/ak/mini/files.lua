@@ -22,7 +22,7 @@ H.create_autocommmands = function()
   Config.new_autocmd('User', 'MiniFilesWindowUpdate', on_window_update, 'MiniFilesWindowUpdate')
 end
 
-H.show_dotfiles = true
+H.show_hidden = true
 H.min_windows = 2
 H.max_windows = math.huge
 
@@ -43,19 +43,23 @@ end
 
 H.add_keymaps = function(args)
   local b = args.data.buf_id
+  local nmap = function(lhs, rhs, desc) vim.keymap.set('n', lhs, rhs, { buffer = b, desc = desc }) end
 
-  vim.keymap.set('n', 'g.', H.toggle_dotfiles, { buffer = b })
-  vim.keymap.set('n', 'g~', H.set_cwd, { buffer = b, desc = 'Set cwd' })
-  vim.keymap.set('n', 'gm', H.toggle_max_windows, { buffer = b, desc = 'Toggle max windows' })
-  vim.keymap.set('n', 'gX', H.ui_open, { buffer = b, desc = 'OS open' })
-  vim.keymap.set('n', 'gy', H.yank_path, { buffer = b, desc = 'Yank path' })
+  nmap('g.', H.toggle_hidden, 'Toggle hidden')
+  -- Set cwd is not that useful when MiniMisc.setup_auto_root() is active
+  nmap('g~', H.set_cwd, 'Set cwd')
+  -- MiniVisits cannot be used on MiniFiles. Use netrw to label directories
+  nmap('gb', H.netrw_open, 'Open branch path with netrw')
+  nmap('gm', H.toggle_max_windows, 'Toggle max windows')
+  nmap('gX', H.ui_open, 'OS open')
+  nmap('gy', H.yank_path, 'Yank path')
+  -- Instead of horizontal split, use <C-s> to traverse layout
+  nmap('<C-s>', H.traverse_layout, 'Traverse layout')
 
-  vim.keymap.set('n', '<C-s>', H.traverse_layout, { buffer = b, desc = 'Traverse layout' })
-  -- H.map_split(b, '<C-s>', 'belowright horizontal')
-  H.map_split(b, '<C-v>', 'belowright vertical')
-  H.map_split(b, '<C-t>', 'tab')
+  H.nmap_split(b, '<C-v>', 'belowright vertical')
+  H.nmap_split(b, '<C-t>', 'tab')
 
-  -- split keyboard with miryoku layout and vim layer, go_in and go_out:
+  -- Split keyboard with miryoku layout and vim layer, go_in and go_out:
   vim.keymap.set('n', '<Right>', 'l', { buffer = b, remap = true })
   vim.keymap.set('n', '<Left>', 'h', { buffer = b, remap = true })
 end
@@ -176,25 +180,10 @@ end
 
 H.filter_show = function(_) return true end
 H.filter_hide = function(fs_entry) return not vim.startswith(fs_entry.name, '.') end
-H.toggle_dotfiles = function()
-  H.show_dotfiles = not H.show_dotfiles
-  local new_filter = H.show_dotfiles and H.filter_show or H.filter_hide
+H.toggle_hidden = function()
+  H.show_hidden = not H.show_hidden
+  local new_filter = H.show_hidden and H.filter_show or H.filter_hide
   MiniFiles.refresh({ content = { filter = new_filter } })
-end
-
-H.map_split = function(buf_id, lhs, direction)
-  local rhs = function()
-    -- Make new window and set it as target
-    local cur_target = MiniFiles.get_explorer_state().target_window
-    local new_target = vim.api.nvim_win_call(cur_target, function()
-      vim.cmd(direction .. ' split')
-      return vim.api.nvim_get_current_win()
-    end)
-    MiniFiles.set_target_window(new_target)
-    MiniFiles.go_in({ close_on_file = true })
-  end
-  local desc = 'Split ' .. direction
-  vim.keymap.set('n', lhs, rhs, { buffer = buf_id, desc = desc })
 end
 
 H.set_cwd = function() -- set focused directory as current working directory
@@ -213,12 +202,35 @@ end
 
 H.ui_open = function() vim.ui.open(MiniFiles.get_fs_entry().path) end
 
+H.netrw_open = function()
+  local state = MiniFiles.get_explorer_state()
+  if not state then return end
+
+  MiniFiles.close()
+  vim.cmd('Ex ' .. state.branch[state.depth_focus])
+end
+
 H.toggle_max_windows = function()
   H.max_windows = H.max_windows == H.min_windows and math.huge or H.min_windows
   MiniFiles.refresh({ windows = { max_number = H.max_windows, preview = H.can_preview() } })
 end
 
 H.can_preview = function() return H.max_windows > 1 end
+
+H.nmap_split = function(buf_id, lhs, direction)
+  local rhs = function()
+    -- Make new window and set it as target
+    local cur_target = MiniFiles.get_explorer_state().target_window
+    local new_target = vim.api.nvim_win_call(cur_target, function()
+      vim.cmd(direction .. ' split')
+      return vim.api.nvim_get_current_win()
+    end)
+    MiniFiles.set_target_window(new_target)
+    MiniFiles.go_in({ close_on_file = true })
+  end
+  local desc = 'Split ' .. direction
+  vim.keymap.set('n', lhs, rhs, { buffer = buf_id, desc = desc })
+end
 
 -- Centering: Copied from mini.files to change first visible title when expected first window is hidden
 H.fit_to_width = function(text, width)
