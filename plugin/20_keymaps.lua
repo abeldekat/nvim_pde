@@ -1,3 +1,4 @@
+---@diagnostic disable: undefined-global
 -- General mappings ===========================================================
 
 local nmap = function(lhs, rhs, desc) vim.keymap.set('n', lhs, rhs, { desc = desc }) end
@@ -163,41 +164,33 @@ nmap_leader('gs', '<Cmd>lua MiniGit.show_at_cursor()<CR>',  'Show at cursor')
 xmap_leader('gs', '<Cmd>lua MiniGit.show_at_cursor()<CR>', 'Show at selection')
 
 -- i is for 'Visits'. MiniMax uses 'v' which is harder to type
--- - Most of the mappings have been changed
--- - Introduced variable current_label, starting with 'core'
+-- - Added variable current_label, starting with 'core'
+-- - Using a separate "visit index" for each cwd Neovim is started in
+-- - Most mappings have been changed
 local make_pick_from_label = function(cwd, desc) -- see make_pick_core in MiniMax
   return function()
-    local label = Config.visits_label
-    local name = string.format('%s %s', label, desc)
+    local name = string.format('%s %s', Config.visits_label, desc)
     local sort_latest = MiniVisits.gen_sort.default({ recency_weight = 1 })
-    local local_opts = { cwd = cwd, filter = label, sort = sort_latest }
-    local hinted = { enable = true, use_autosubmit = true }
+    local local_opts = { cwd = cwd, filter = Config.visits_label, sort = sort_latest }
+    local hinted = { enable = true, use_autosubmit = true } -- see akextra.pick_hinted
     MiniExtra.pickers.visit_paths(local_opts, { source = { name = name }, hinted = hinted })
   end
 end
 local make_addremove_current = function(call)
-  local current = 'Config.visits_label'
-  return string.format('<Cmd>lua MiniVisits.%s(%s)<CR>', call, current)
+  return string.format('<Cmd>lua MiniVisits.%s(%s)<CR>', call, 'Config.visits_label')
 end
 local make_purge_current = function()
-  local current = 'Config.visits_label'
-  return string.format('<Cmd>lua MiniVisits.remove_label(%s, "", "")<CR>', current)
+  return string.format('<Cmd>lua MiniVisits.remove_label(%s, "", "")<CR>', 'Config.visits_label')
 end
 
-nmap_leader('ic', '<Cmd>lua Config.visits_choose_current()<CR>', 'Choose current label') -- added
-nmap_leader('ip', make_purge_current(),                          'Purge current label') -- added
--- - the s is a mnemonic for 'show'
-nmap_leader('is', make_pick_from_label('',  'visits (all)'),     'Current label (all)') -- vc
-nmap_leader('iS', make_pick_from_label(nil, 'visits (cwd)'),     'Current label (cwd)') -- vC
--- - the i uses the same repeat pattern as MiniMax
-nmap_leader('ii', make_addremove_current('add_label'),           'Add current label') -- vv
-nmap_leader('iI', make_addremove_current('remove_label'),        'Remove current label') -- vV
--- - the l is the same as in MinMax
-nmap_leader('il', '<Cmd>lua MiniVisits.add_label()<CR>',         'Add label interactive') -- vl
-nmap_leader('iL', '<Cmd>lua MiniVisits.remove_label()<CR>',      'Remove label interactive') -- vL
+nmap_leader('ic', '<Cmd>lua Config.visits_choose_current()<CR>', 'Choose current label')
+nmap_leader('ii', make_addremove_current('add_label'),           'Add current label')
+nmap_leader('iI', make_addremove_current('remove_label'),        'Remove current label')
+nmap_leader('il', '<Cmd>lua MiniVisits.add_label()<CR>',         'Add label interactive')
+nmap_leader('ip', make_purge_current(),                          'Purge current label')
+nmap_leader('is', make_pick_from_label('',  'visits (all)'),     'Current label') -- "show"
+nmap_leader('.',  make_pick_from_label('',  'visits (all)'),     'Current label') -- "show" shortcut
 
--- - 'Visits' shortcuts
-nmap_leader('.', make_pick_from_label('',  'visits (all)'),         'Current label (all)') -- alias is
 
 -- l is for 'Language'.
 nmap_leader('la', '<Cmd>lua vim.lsp.buf.code_action()<CR>',     'Actions')

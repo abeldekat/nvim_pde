@@ -48,8 +48,9 @@ H.add_keymaps = function(args)
   nmap('g.', H.toggle_hidden, 'Toggle hidden')
   -- Set cwd is not that useful when MiniMisc.setup_auto_root() is active
   nmap('g~', H.set_cwd, 'Set cwd')
-  -- MiniVisits cannot be used on MiniFiles. Use netrw to label directories
-  nmap('gb', H.netrw_open, 'Open branch path with netrw')
+  -- Unlike netrw, MiniVisits cannot be used directly in MiniFiles
+  nmap('gd', H.make_label_directory('add_label'), 'Visits add label')
+  nmap('gD', H.make_label_directory('remove_label'), 'Visits remove label')
   nmap('gm', H.toggle_max_windows, 'Toggle max windows')
   nmap('gX', H.ui_open, 'OS open')
   nmap('gy', H.yank_path, 'Yank path')
@@ -202,12 +203,11 @@ end
 
 H.ui_open = function() vim.ui.open(MiniFiles.get_fs_entry().path) end
 
-H.netrw_open = function()
-  local state = MiniFiles.get_explorer_state()
-  if not state then return end
-
-  MiniFiles.close()
-  vim.cmd('Ex ' .. state.branch[state.depth_focus])
+H.make_label_directory = function(call)
+  return function()
+    local state = MiniFiles.get_explorer_state()
+    MiniVisits[call](Config.visits_label, state.branch[state.depth_focus])
+  end
 end
 
 H.toggle_max_windows = function()
