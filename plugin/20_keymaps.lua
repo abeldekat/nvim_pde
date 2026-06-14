@@ -168,12 +168,16 @@ xmap_leader('gs', '<Cmd>lua MiniGit.show_at_cursor()<CR>', 'Show at selection')
 -- - Using a separate "visit index" for each cwd Neovim is started in
 -- - Most mappings have been changed
 local make_pick_from_label = function(cwd, desc) -- see make_pick_core in MiniMax
+  local choose_marked = function(items)
+    vim.iter(items):each(function(item) MiniVisits.remove_label(Config.visits_label, item) end)
+  end
   return function()
     local name = string.format('%s %s', Config.visits_label, desc)
     local sort_latest = MiniVisits.gen_sort.default({ recency_weight = 1 })
     local local_opts = { cwd = cwd, filter = Config.visits_label, sort = sort_latest }
+    local source = {  choose_marked = choose_marked, name = name }
     local hinted = { enable = true, use_autosubmit = true } -- see akextra.pick_hinted
-    MiniExtra.pickers.visit_paths(local_opts, { source = { name = name }, hinted = hinted })
+    MiniExtra.pickers.visit_paths(local_opts, { source = source, hinted = hinted })
   end
 end
 local make_addremove_current = function(call)
