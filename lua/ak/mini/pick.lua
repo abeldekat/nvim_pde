@@ -1,4 +1,5 @@
----@diagnostic disable: duplicate-set-field
+---@diagnostic disable: duplicate-set-field, undefined-global
+
 -- - If query starts with `'`, the match is exact.
 -- - If query starts with `^`, the match is exact at start.
 -- - If query ends with `$`, the match is exact at end.
@@ -27,10 +28,10 @@ MiniPick.registry.grep_todo_keywords = function(local_opts)
   MiniPick.builtin.grep(local_opts, {})
 end
 
-local buffer_hints = vim.split('abcdefg', '')
-MiniPick.registry.buffers_hinted = function() -- Perhaps: Add modified buffers visualization, issue 1810
-  local hinted = { enable = true, use_autosubmit = true, chars = buffer_hints }
-  MiniPick.builtin.buffers({ include_current = false }, { hinted = hinted })
+local buffers_hints = vim.split('ajskdlf', '')
+MiniPick.registry.buffers_hinted = function()
+  local hinted = { enable = true, use_autosubmit = true, chars = buffers_hints }
+  MiniPick.builtin.buffers({}, { hinted = hinted })
 end
 
 MiniPick.registry.lsp_hinted = function(local_opts)

@@ -1,3 +1,5 @@
+---@diagnostic disable: undefined-global
+
 -- By default, MiniVisits uses one single file to store all visits.
 -- Its internal representation is flushed to that file when Neovim is exited.
 -- As a consequence, when the user has multiple editors open, the last process

@@ -5,8 +5,9 @@ local e = MiniExtra
 
 ai.setup({
   custom_textobjects = {
-    -- B = e.gen_ai_spec.buffer(),-- TODO: Test builtin nightly 'al' all lines
-    -- L = e.gen_ai_spec.line(), -- TODO: Test builtin nightly 'il' inside line
+    -- v0.13 introduces 'al' all lines and 'il' inside line
+    B = e.gen_ai_spec.buffer(),
+    L = e.gen_ai_spec.line(),
 
     D = e.gen_ai_spec.diagnostic(),
     I = e.gen_ai_spec.indent(),
@@ -19,10 +20,10 @@ ai.setup({
     }),
   },
 
-  mappings = {
-    around_last = 'aL', -- Not using 'last' often. Mostly using 'next'...
-    inside_last = 'iL',
-  },
+  -- mappings = {
+  --   around_last = 'aL', -- Not using 'last' often. Mostly using 'next'...
+  --   inside_last = 'iL',
+  -- },
 
   search_method = 'cover',
 })

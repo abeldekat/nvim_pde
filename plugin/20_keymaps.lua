@@ -124,7 +124,6 @@ nmap_leader('fG', '<Cmd>Pick grep pattern="<cword>"<CR>',              'Grep cur
 nmap_leader('fh', '<Cmd>Pick help<CR>',                                'Help tags')
 nmap_leader('fH', '<Cmd>Pick hl_groups<CR>',                           'Highlight groups')
 nmap_leader('fi', '<Cmd>Pick visit_paths cwd=""<CR>',                  'V[i]sit paths (all)') -- changed from v
-nmap_leader('fI', '<Cmd>Pick visit_paths<CR>',                         'V[i]sit paths (cwd)') -- changed from V
 nmap_leader('fk', '<Cmd>Pick keymaps<CR>',                             'Keymaps') -- added
 nmap_leader('fl', '<Cmd>Pick buf_lines scope="all"<CR>',               'Lines (all)')
 nmap_leader('fL', '<Cmd>Pick buf_lines scope="current"<CR>',           'Lines (buf)')

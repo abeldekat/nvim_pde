@@ -1,4 +1,5 @@
--- Color schemes without support: ayu, melange, solarized8
+---@diagnostic disable: undefined-global
+-- Color schemes without support: melange, solarized8
 
 local AK = {} -- module using the structure of MiniStatusline
 local H = {} -- helpers, copied, modified or added
@@ -20,7 +21,6 @@ AK.active = function() -- entrypoint
   local diag = MiniStatusline.section_diagnostics({ trunc_width = 75, signs = H.diag_signs, icon = '' })
   local diff = MiniStatusline.section_diff({ trunc_width = 75, icon = '' })
   local fileinfo = AK.section_fileinfo({ trunc_width = 120 })
-  -- local filename = MiniStatusline.section_filename({ trunc_width = 140 })
   local filename = AK.section_filename() -- use automatic statusline truncation
   local git = MiniStatusline.section_git({ trunc_width = 40 })
   local location = MiniStatusline.section_location({ trunc_width = 75 })
