@@ -51,7 +51,7 @@
     },
     "nvim-lint": {
       "rev": "4b7957daf4b81eb578114bd6fcf20b6f5a2b59e8",
-      "src": "https://github.com/mfussenegger/nvim-lint"
+      "src": "https://codeberg.org/mfussenegger/nvim-lint.git"
     },
     "nvim-lspconfig": {
       "rev": "a683e0ddf0cf64c6cd689e18ffb480ade3c162b7",
