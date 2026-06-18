@@ -9,7 +9,6 @@ catppuccin-mocha
 dawnfox
 dayfox
 duskfox
-everforest
 melange
 minicyan
 minischeme
