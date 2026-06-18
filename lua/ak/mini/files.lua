@@ -8,10 +8,7 @@ local setup = function()
     windows = { max_number = H.max_windows, preview = H.can_preview() },
   }
   require('mini.files').setup(config)
-  H.create_autocommmands()
-end
 
-H.create_autocommmands = function()
   Config.new_autocmd('User', 'MiniFilesExplorerOpen', H.add_marks, 'Add bookmarks')
   Config.new_autocmd('User', 'MiniFilesBufferCreate', H.add_keymaps, 'Add extra keys')
 
@@ -23,16 +20,10 @@ H.create_autocommmands = function()
 end
 
 H.show_hidden = true
-H.min_windows = 2
-H.max_windows = math.huge
-
-H.current_layout = 'L'
-H.next_layout = { L = 'C', C = 'R', R = 'L' }
-
--- Left and right border to take into account
-H.x_margin = 2
--- Config to center vertically
-H.vert = { enable = true, height_focus = 32, height = 30, align_first_row = true, threshold = 6 }
+H.min_windows, H.max_windows = 2, math.huge
+H.current_layout, H.next_layout = 'C', { L = 'C', C = 'R', R = 'L' }
+H.x_margin = 2 -- Left and right border to take into account
+H.center_vert = { enable = true, height_focus = 32, height = 30, align_row = true, threshold = 6 }
 
 H.add_marks = function()
   MiniFiles.set_bookmark('c', vim.fn.stdpath('config') .. '', { desc = 'Config' })
@@ -110,9 +101,9 @@ H.right = function(windows, _)
   end
 end
 
--- See https://github.com/nvim-mini/mini.nvim/discussions/2173
+-- See https://github.com/nvim-mini/mini.nvim/discussions/2448
 H.center = function(windows, idx_focused)
-  local is_vert = H.vert.enable and vim.o.lines - H.vert.height_focus >= H.vert.threshold
+  local is_vert = H.center_vert.enable and (vim.o.lines - H.center_vert.height_focus >= H.center_vert.threshold)
   local _, _, width_focused = H.get_win_data(windows, idx_focused)
   if vim.o.columns <= width_focused then return end
 
@@ -126,8 +117,8 @@ H.center = function(windows, idx_focused)
 
     config.col = show and col - width or col_focused
     H.center_set_config(config, win_id, show, i == idx_focused, is_vert)
-    col = show and config.col or 0
     if not show then table.insert(hidden, i) end
+    col = show and config.col or 0
   end
   if #hidden > 0 then H.center_update_first_visible_title(windows, hidden[1] + 1) end
 
@@ -145,9 +136,9 @@ end
 
 H.center_set_config = function(config, win_id, show, is_focused, vert_enable)
   if vert_enable then
-    local v = H.vert
+    local v = H.center_vert
     config.height = is_focused and v.height_focus or v.height
-    config.row = math.floor(0.5 * (vim.o.lines - (v.align_first_row and v.height or config.height)))
+    config.row = math.floor(0.5 * (vim.o.lines - (v.align_row and v.height or config.height)))
   end
   config.height = not show and 1 or config.height
 
@@ -175,8 +166,7 @@ end
 H.get_win_data = function(windows, idx)
   local win_id = windows[idx].win_id
   local config = vim.api.nvim_win_get_config(win_id)
-  local width = config.width + H.x_margin
-  return win_id, config, width
+  return win_id, config, config.width + H.x_margin
 end
 
 H.filter_show = function(_) return true end
@@ -233,6 +223,7 @@ H.nmap_split = function(buf_id, lhs, direction)
 end
 
 -- Centering: Copied from mini.files to change first visible title when expected first window is hidden
+
 H.fit_to_width = function(text, width)
   local t_width = vim.fn.strchars(text)
   return t_width <= width and text or ('…' .. vim.fn.strcharpart(text, t_width - width + 1, width - 1))
@@ -246,6 +237,7 @@ H.fs_shorten_path = function(path)
 end
 -- Skipped the override for windows OS as I don't use windows
 H.fs_normalize_path = function(path) return (path:gsub('/+', '/'):gsub('(.)/$', '%1')) end
+
 -- End copied from mini.files
 
 setup()
