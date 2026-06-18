@@ -1,7 +1,7 @@
 {
   "plugins": {
     "SchemaStore.nvim": {
-      "rev": "304d2286752923e3b0eb1ddcb3d4002a69b855ad",
+      "rev": "735540a7602bffd1b07deab7d508affb57b78c64",
       "src": "https://github.com/b0o/SchemaStore.nvim"
     },
     "colors_ayu": {
@@ -19,10 +19,6 @@
     "colors_everforest": {
       "rev": "85a86eb62409e3ec88713bff3d1b9d7374e112e4",
       "src": "https://github.com/sainnhe/everforest"
-    },
-    "colors_gruvbox-material": {
-      "rev": "11d779b26a9ab2b3db8c22c6ac9fb6e8ed4fea79",
-      "src": "https://github.com/sainnhe/gruvbox-material"
     },
     "colors_melange": {
       "rev": "ce42f6b629beeaa00591ba73a77d3eeac4cf28ce",
@@ -50,11 +46,11 @@
       "version": "'a923f5fc5ba36a3b17e289dc35dc17f66d0548ee'"
     },
     "mini.nvim": {
-      "rev": "7ed410c73ebb910754c2938a6dae50c51c3a096a",
+      "rev": "bf8169f3e518be8de3f88073ace37d91f576cb04",
       "src": "https://github.com/nvim-mini/mini.nvim"
     },
     "nvim-lint": {
-      "rev": "99cbc3ca8a76845fca50e496be7212bebf907dd3",
+      "rev": "4b7957daf4b81eb578114bd6fcf20b6f5a2b59e8",
       "src": "https://github.com/mfussenegger/nvim-lint"
     },
     "nvim-lspconfig": {

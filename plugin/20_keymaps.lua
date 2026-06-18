@@ -37,10 +37,6 @@ nmap('].', latest, 'Current label (latest)') -- also using leader dot...
 
 -- Leader mappings ============================================================
 
--- Neovim has the concept of a Leader key (see `:h <Leader>`). It is a configurable
--- key that is primarily used for "workflow" mappings (opposed to text editing).
--- Like "open file explorer", "create scratch buffer", "pick from buffers".
---
 -- Usually if there are global and local kinds of actions, lowercase second key
 -- denotes global and uppercase - local.
 -- Example: `<Leader>fs` / `<Leader>fS` - find workspace/document LSP symbols.
@@ -102,6 +98,9 @@ nmap_leader('eo', edit_plugin_file('10_options.lua'),       'Options config')
 nmap_leader('ep', edit_plugin_file('40_plugins.lua'),       'Plugins config')
 nmap_leader('eq', explore_quickfix,                         'Quickfix list')
 nmap_leader('eQ', explore_locations,                        'Location list')
+
+-- - 'Explore' and 'Edit' shortcuts.
+nmap(       '-',  explore_at_file,                          'File directory')
 
 -- f is for 'Fuzzy Find'.
 local pick_added_hunks_buf = '<Cmd>Pick git_hunks path="%" scope="staged"<CR>'

@@ -10,8 +10,6 @@ dawnfox
 dayfox
 duskfox
 everforest
-gruvbox-material
-gruvbuddy_minicolors
 melange
 minicyan
 minischeme

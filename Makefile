@@ -23,8 +23,6 @@ to_gh:
 	@cp README.md LSP.md init.lua filetype.lua nvim-pack-lock.json .stylua.toml colors.txt .markdownlint.yml .prettierrc .gitignore Makefile ../nvimak
 	@rm -rf ../nvimak/after
 	@rsync -av after ../nvimak
-	@rm -rf ../nvimak/colors
-	@rsync -av colors ../nvimak
 	@rm -rf ../nvimak/lua
 	@rsync -av lua ../nvimak
 	@rm -rf ../nvimak/queries

@@ -1,3 +1,6 @@
+-- Not actively used.
+-- Latest commit: 11d779b26a9ab2b3db8c22c6ac9fb6e8ed4fea79
+
 local prefer_light = require('ak.color').prefer_light
 local name = 'gruvbox-material'
 

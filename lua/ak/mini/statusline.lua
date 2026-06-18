@@ -1,5 +1,4 @@
 ---@diagnostic disable: undefined-global
--- Color schemes without support: melange, solarized8
 
 local AK = {} -- module using the structure of MiniStatusline
 local H = {} -- helpers, copied, modified or added
