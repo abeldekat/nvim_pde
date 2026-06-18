@@ -32,6 +32,10 @@
       "rev": "d79e82b72407a78fa43d7c4053390a49cdc93761",
       "src": "https://github.com/uhs-robert/oasis.nvim"
     },
+    "colors_thorn": {
+      "rev": "3653d1508e605fe87ec174e8c2ad0f36ce9844f3",
+      "src": "https://github.com/jpwol/thorn.nvim"
+    },
     "conform.nvim": {
       "rev": "619363c30309d29ffa631e67c8183f2a72caa373",
       "src": "https://github.com/stevearc/conform.nvim"
