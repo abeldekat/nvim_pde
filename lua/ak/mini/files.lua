@@ -4,12 +4,14 @@ local H = {}
 local setup = function()
   local config = {
     content = { filter = H.filter_show },
-    mappings = { go_in = 'L', go_in_plus = 'l' }, -- close explorer after opening file with `l`
+    mappings = { go_in = 'L', go_in_plus = 'l' },
     windows = { max_number = H.max_windows, preview = H.can_preview() },
   }
   require('mini.files').setup(config)
 
   Config.new_autocmd('User', 'MiniFilesExplorerOpen', H.add_marks, 'Add bookmarks')
+  Config.new_autocmd('User', 'MiniFilesExplorerClose', H.full_screen_reset, 'Reset full screen')
+  Config.new_autocmd('VimEnter', '*', H.full_screen_vim_enter, 'Full screen on vim <dir>')
   Config.new_autocmd('User', 'MiniFilesBufferCreate', H.add_keymaps, 'Add extra keys')
 
   local on_window_update = function(args)
@@ -21,9 +23,11 @@ end
 
 H.show_hidden = true
 H.min_windows, H.max_windows = 2, math.huge
-H.current_layout, H.next_layout = 'C', { L = 'C', C = 'R', R = 'L' }
-H.x_margin = 2 -- Left and right border to take into account
+H.layout_current, H.layout_next = 'C', { L = 'C', C = 'R', R = 'L' }
+H.is_full_screen, H.full_screen_max_number = false, 3
 H.center_vert = { enable = true, height_focus = 32, height = 30, align_row = true, threshold = 6 }
+-- Left and right border to take into account. Col position vs inner width
+H.x_margin = 2
 
 H.add_marks = function()
   MiniFiles.set_bookmark('c', vim.fn.stdpath('config') .. '', { desc = 'Config' })
@@ -45,6 +49,7 @@ H.add_keymaps = function(args)
   nmap('gm', H.toggle_max_windows, 'Toggle max windows')
   nmap('gX', H.ui_open, 'OS open')
   nmap('gy', H.yank_path, 'Yank path')
+  nmap('gf', H.full_screen_toggle, 'Toggle full screen')
   -- Instead of horizontal split, use <C-s> to traverse layout
   nmap('<C-s>', H.traverse_layout, 'Traverse layout')
 
@@ -65,18 +70,36 @@ H.add_relative_linenumbers_to_active_window = function(args)
   vim.api.nvim_create_autocmd('WinLeave', opts)
 end
 
+H.full_screen_toggle = function()
+  H.is_full_screen = not H.is_full_screen
+  local max_number = MiniFiles.config.windows.max_number
+  max_number = H.is_full_screen and H.full_screen_max_number or max_number
+  MiniFiles.refresh({ windows = { max_number = max_number } })
+end
+
+H.full_screen_reset = function()
+  if H.is_full_screen then H.full_screen_toggle() end
+end
+
+H.full_screen_vim_enter = function(args)
+  if vim.fn.isdirectory(args.file) ~= 1 then return end
+  vim.schedule(H.full_screen_toggle)
+end
+
 H.traverse_layout = function()
-  H.current_layout = H.next_layout[H.current_layout]
+  H.layout_current = H.layout_next[H.layout_current]
   MiniFiles.refresh()
 end
 
 H.ensure_layout = function(args)
-  if H.current_layout == 'L' then return end
+  -- Built-in layout, return early
+  if H.layout_current == 'L' and not H.is_full_screen then return end
 
+  -- If there is no state, return early
   local state = MiniFiles.get_explorer_state()
   if state == nil then return end
 
-  -- Return when event is not for focused window
+  -- If event is not for focused window, return early
   local focused_path = state.branch[state.depth_focus]
   local idx_focused
   for i, win in ipairs(state.windows) do
@@ -84,8 +107,12 @@ H.ensure_layout = function(args)
   end
   if idx_focused == nil then return end
 
-  local layout = H.current_layout == 'C' and H.center or H.right
-  layout(state.windows, idx_focused)
+  -- Make explorer appear full screen
+  if H.is_full_screen then return H.full_screen(state.windows, idx_focused) end
+
+  -- Apply center or right in all other cases
+  local layout_fn = H.layout_current == 'C' and H.center or H.right
+  layout_fn(state.windows, idx_focused)
 end
 
 H.right = function(windows, _)
@@ -97,6 +124,7 @@ H.right = function(windows, _)
     local win_id = win.win_id
     local config = vim.api.nvim_win_get_config(win_id)
     config.col = offset + config.col
+    config.footer = config.footer and '' or config.footer
     vim.api.nvim_win_set_config(win_id, config)
   end
 end
@@ -163,6 +191,27 @@ H.center_update_first_visible_title = function(windows, idx)
   vim.api.nvim_win_set_config(win.win_id, config)
 end
 
+H.full_screen = function(windows, _)
+  local nr_of_windows = #windows
+  -- All windows have max_height
+  local height = H.window_get_max_height()
+  -- All windows have (almost) the same width
+  local col_distance = math.floor(vim.o.columns / nr_of_windows)
+
+  local col = 0
+  for i = 1, nr_of_windows do
+    local win_id, config, _ = H.get_win_data(windows, i)
+    -- Set the col to the new position
+    col = (i == 1 and config.col) or (col + col_distance)
+
+    config.col, config.height = col, height
+    -- Set the width, and ensure there is no gap after last window
+    config.width = (i == nr_of_windows and (vim.o.columns - col) or col_distance) - H.x_margin
+    config.footer = config.footer and '' or config.footer
+    vim.api.nvim_win_set_config(win_id, config)
+  end
+end
+
 H.get_win_data = function(windows, idx)
   local win_id = windows[idx].win_id
   local config = vim.api.nvim_win_get_config(win_id)
@@ -223,7 +272,6 @@ H.nmap_split = function(buf_id, lhs, direction)
 end
 
 -- Centering: Copied from mini.files to change first visible title when expected first window is hidden
-
 H.fit_to_width = function(text, width)
   local t_width = vim.fn.strchars(text)
   return t_width <= width and text or ('…' .. vim.fn.strcharpart(text, t_width - width + 1, width - 1))
@@ -238,6 +286,13 @@ end
 -- Skipped the override for windows OS as I don't use windows
 H.fs_normalize_path = function(path) return (path:gsub('/+', '/'):gsub('(.)/$', '%1')) end
 
+-- Full screen: Copied from mini.files to calculate max height
+H.window_get_max_height = function()
+  local has_tabline = vim.o.showtabline == 2 or (vim.o.showtabline == 1 and #vim.api.nvim_list_tabpages() > 1)
+  local has_statusline = vim.o.laststatus > 0
+  -- Remove 2 from maximum height to account for top and bottom borders
+  return vim.o.lines - vim.o.cmdheight - (has_tabline and 1 or 0) - (has_statusline and 1 or 0) - 2
+end
 -- End copied from mini.files
 
 setup()

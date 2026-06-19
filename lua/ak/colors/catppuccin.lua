@@ -1,5 +1,3 @@
-local prefer_light = require('ak.color').prefer_light
-
 local info = {
   name = 'catppuccin',
   variants = { 'catppuccin-nvim', 'catppuccin-frappe', 'catppuccin-mocha', 'catppuccin-macchiato', 'catppuccin-latte' },
