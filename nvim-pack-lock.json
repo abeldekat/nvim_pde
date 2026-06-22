@@ -13,7 +13,7 @@
       "src": "https://github.com/ribru17/bamboo.nvim"
     },
     "colors_catppuccin": {
-      "rev": "49a926655a2f5579e9c276470fc300baaa49e524",
+      "rev": "e068ab5f8261f23f6f71ffd8791ae40315b77b9c",
       "src": "https://github.com/catppuccin/nvim"
     },
     "colors_melange": {
@@ -46,7 +46,7 @@
       "version": "'a923f5fc5ba36a3b17e289dc35dc17f66d0548ee'"
     },
     "mini.nvim": {
-      "rev": "bf8169f3e518be8de3f88073ace37d91f576cb04",
+      "rev": "1345d191bb3da9c7b0e977f4387c5761f9bff68d",
       "src": "https://github.com/nvim-mini/mini.nvim"
     },
     "nvim-lint": {
@@ -74,7 +74,7 @@
       "src": "https://github.com/stevearc/quicker.nvim"
     },
     "vimtex": {
-      "rev": "fedb7ffc1bebf254cc74e7419c3a5930b6719065",
+      "rev": "df8892993c1df79b96c2d237c8a0cbcbf72131da",
       "src": "https://github.com/lervag/vimtex"
     }
   }

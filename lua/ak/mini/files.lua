@@ -77,9 +77,7 @@ H.full_screen_toggle = function()
   MiniFiles.refresh({ windows = { max_number = max_number } })
 end
 
-H.full_screen_reset = function()
-  if H.is_full_screen then H.full_screen_toggle() end
-end
+H.full_screen_reset = function() H.is_full_screen = false end
 
 H.full_screen_vim_enter = function(args)
   if vim.fn.isdirectory(args.file) ~= 1 then return end
