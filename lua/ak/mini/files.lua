@@ -41,18 +41,18 @@ H.add_keymaps = function(args)
   local nmap = function(lhs, rhs, desc) vim.keymap.set('n', lhs, rhs, { buffer = b, desc = desc }) end
 
   nmap('g.', H.toggle_hidden, 'Toggle hidden')
-  -- Set cwd is not that useful when MiniMisc.setup_auto_root() is active
+  -- When MiniMisc.setup_auto_root() is active, set_cwd is not that useful
   nmap('g~', H.set_cwd, 'Set cwd')
   -- Unlike netrw, MiniVisits cannot be used directly in MiniFiles
   nmap('gd', H.make_label_directory('add_label'), 'Visits add label')
   nmap('gD', H.make_label_directory('remove_label'), 'Visits remove label')
+  nmap('gf', H.full_screen_toggle, 'Toggle full screen')
   nmap('gm', H.toggle_max_windows, 'Toggle max windows')
   nmap('gX', H.ui_open, 'OS open')
   nmap('gy', H.yank_path, 'Yank path')
-  nmap('gf', H.full_screen_toggle, 'Toggle full screen')
+
   -- Instead of horizontal split, use <C-s> to traverse layout
   nmap('<C-s>', H.traverse_layout, 'Traverse layout')
-
   H.nmap_split(b, '<C-v>', 'belowright vertical')
   H.nmap_split(b, '<C-t>', 'tab')
 
@@ -89,6 +89,7 @@ H.traverse_layout = function()
   MiniFiles.refresh()
 end
 
+-- See https://github.com/nvim-mini/mini.nvim/discussions/2448
 H.ensure_layout = function(args)
   -- Built-in layout, return early
   if H.layout_current == 'L' and not H.is_full_screen then return end
@@ -127,7 +128,6 @@ H.right = function(windows, _)
   end
 end
 
--- See https://github.com/nvim-mini/mini.nvim/discussions/2448
 H.center = function(windows, idx_focused)
   local is_vert = H.center_vert.enable and (vim.o.lines - H.center_vert.height_focus >= H.center_vert.threshold)
   local _, _, width_focused = H.get_win_data(windows, idx_focused)
@@ -184,6 +184,7 @@ H.center_update_first_visible_title = function(windows, idx)
   local config = vim.api.nvim_win_get_config(win.win_id)
   if not type(config.title) == string then return end
 
+  -- mini.files, see H.explorer_refresh_depth_window
   config.title = ' ' .. H.sanitize_string(H.fs_shorten_path(win.path)) .. ' '
   config.title = H.fit_to_width(config.title, config.width)
   vim.api.nvim_win_set_config(win.win_id, config)
@@ -240,7 +241,7 @@ end
 
 H.ui_open = function() vim.ui.open(MiniFiles.get_fs_entry().path) end
 
-H.make_label_directory = function(call)
+H.make_label_directory = function(call) -- MiniVisits with MiniFiles
   return function()
     local state = MiniFiles.get_explorer_state()
     MiniVisits[call](Config.visits_label, state.branch[state.depth_focus])
@@ -253,7 +254,6 @@ H.toggle_max_windows = function()
 end
 
 H.can_preview = function() return H.max_windows > 1 end
-
 H.nmap_split = function(buf_id, lhs, direction)
   local rhs = function()
     -- Make new window and set it as target
@@ -269,7 +269,8 @@ H.nmap_split = function(buf_id, lhs, direction)
   vim.keymap.set('n', lhs, rhs, { buffer = buf_id, desc = desc })
 end
 
--- Centering: Copied from mini.files to change first visible title when expected first window is hidden
+-- Start copied from mini.files
+-- Centering: change first visible title when expected first window is hidden
 H.fit_to_width = function(text, width)
   local t_width = vim.fn.strchars(text)
   return t_width <= width and text or ('…' .. vim.fn.strcharpart(text, t_width - width + 1, width - 1))
@@ -284,7 +285,7 @@ end
 -- Skipped the override for windows OS as I don't use windows
 H.fs_normalize_path = function(path) return (path:gsub('/+', '/'):gsub('(.)/$', '%1')) end
 
--- Full screen: Copied from mini.files to calculate max height
+-- Full screen: calculate max height
 H.window_get_max_height = function()
   local has_tabline = vim.o.showtabline == 2 or (vim.o.showtabline == 1 and #vim.api.nvim_list_tabpages() > 1)
   local has_statusline = vim.o.laststatus > 0

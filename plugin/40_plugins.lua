@@ -3,7 +3,7 @@ local now_if_args, later, on_filetype = Config.now_if_args, Config.later, Config
 
 -- Helpers ====================================================================
 local gh = function(x) return 'https://github.com/' .. x end
-local cb = function(x) return 'https://codeberg.org/' .. x end
+-- local cb = function(x) return 'https://codeberg.org/' .. x end
 local add_and_req = function(spec, loc)
   add(spec)
   require(loc)
@@ -22,7 +22,7 @@ later(function() add_and_req({ gh('stevearc/conform.nvim') }, 'ak.other.conform'
 later(function() add({ gh('rafamadriz/friendly-snippets') }) end)
 
 -- Plugins not included in MiniMax ============================================
-now_if_args(function() add_and_req({ cb('mfussenegger/nvim-lint.git') }, 'ak.other.nvim_lint') end)
+now_if_args(function() add_and_req({ gh('mfussenegger/nvim-lint.git') }, 'ak.other.nvim_lint') end)
 now_if_args(function() add({ gh('b0o/SchemaStore.nvim') }) end)
 
 later(function() add_and_req({ gh('stevearc/quicker.nvim') }, 'ak.other.quicker') end)
