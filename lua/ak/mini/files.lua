@@ -5,7 +5,8 @@ local setup = function()
   local config = {
     content = { filter = H.filter_show },
     mappings = { go_in = 'L', go_in_plus = 'l' },
-    windows = { max_number = H.max_windows, preview = H.can_preview() },
+    options = { use_as_default_explorer = H.use_as_default_explorer },
+    windows = { preview = H.show_preview },
   }
   require('mini.files').setup(config)
 
@@ -21,11 +22,11 @@ local setup = function()
   Config.new_autocmd('User', 'MiniFilesWindowUpdate', on_window_update, 'MiniFilesWindowUpdate')
 end
 
-H.show_hidden = true
-H.min_windows, H.max_windows = 2, math.huge
+H.use_as_default_explorer, H.show_hidden, H.show_preview = true, true, true
 H.layout_current, H.layout_next = 'C', { L = 'C', C = 'R', R = 'L' }
 H.is_full_screen, H.full_screen_max_number = false, 3
-H.center_vert = { enable = true, height_focus = 32, height = 30, align_row = true, threshold = 6 }
+H.center_vert = { enable = true, height_focus = 32, height = 30, same_row = true, threshold = 6 }
+
 -- Left and right border to take into account. Col position vs inner width
 H.x_margin = 2
 
@@ -47,7 +48,7 @@ H.add_keymaps = function(args)
   nmap('gd', H.make_label_directory('add_label'), 'Visits add label')
   nmap('gD', H.make_label_directory('remove_label'), 'Visits remove label')
   nmap('gf', H.full_screen_toggle, 'Toggle full screen')
-  nmap('gm', H.toggle_max_windows, 'Toggle max windows')
+  nmap('gp', H.preview_toggle, 'Toggle preview')
   nmap('gX', H.ui_open, 'OS open')
   nmap('gy', H.yank_path, 'Yank path')
 
@@ -80,6 +81,7 @@ end
 H.full_screen_reset = function() H.is_full_screen = false end
 
 H.full_screen_vim_enter = function(args)
+  if not H.use_as_default_explorer then return end
   if vim.fn.isdirectory(args.file) ~= 1 then return end
   vim.schedule(H.full_screen_toggle)
 end
@@ -164,7 +166,7 @@ H.center_set_config = function(config, win_id, show, is_focused, vert_enable)
   if vert_enable then
     local v = H.center_vert
     config.height = is_focused and v.height_focus or v.height
-    config.row = math.floor(0.5 * (vim.o.lines - (v.align_row and v.height or config.height)))
+    config.row = math.floor(0.5 * (vim.o.lines - (v.same_row and v.height or config.height)))
   end
   config.height = not show and 1 or config.height
 
@@ -248,12 +250,11 @@ H.make_label_directory = function(call) -- MiniVisits with MiniFiles
   end
 end
 
-H.toggle_max_windows = function()
-  H.max_windows = H.max_windows == H.min_windows and math.huge or H.min_windows
-  MiniFiles.refresh({ windows = { max_number = H.max_windows, preview = H.can_preview() } })
+H.preview_toggle = function()
+  H.show_preview = not H.show_preview
+  MiniFiles.refresh({ windows = { preview = H.show_preview } })
 end
 
-H.can_preview = function() return H.max_windows > 1 end
 H.nmap_split = function(buf_id, lhs, direction)
   local rhs = function()
     -- Make new window and set it as target
