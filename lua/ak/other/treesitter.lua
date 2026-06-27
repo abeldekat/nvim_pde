@@ -9,11 +9,6 @@ local languages = { -- 46
   -- 'vimdoc',
   -- 'markdown',
   --
-  -- Add here more languages with which you want to use tree-sitter
-  -- To see available languages:
-  -- - Execute `:=require('nvim-treesitter').get_available()`
-  -- - Visit 'SUPPORTED_LANGUAGES.md' file at
-  --   https://github.com/nvim-treesitter/nvim-treesitter/blob/main
   'awk',
   'bash',
   'bibtex',

@@ -4,7 +4,7 @@ require('conform').setup({
   default_format_opts = { lsp_format = 'fallback' },
   format_on_save = function() -- bufnr
     if Config.disable_autoformat then return end
-    return { timeout_ms = 3000, lsp_format = 'fallback' } -- recommended: 5000
+    return { timeout_ms = 3000, lsp_format = 'fallback' }
   end,
   formatters_by_ft = {
     css = { 'prettier' },
