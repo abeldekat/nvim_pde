@@ -1,3 +1,4 @@
+---@diagnostic disable: undefined-global
 local jump2d = require('mini.jump2d')
 jump2d.setup({
   spotter = jump2d.gen_spotter.pattern('[^%s%p]+'),

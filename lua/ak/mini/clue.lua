@@ -1,6 +1,6 @@
 local miniclue = require('mini.clue')
 
--- stylua: ignore
+--stylua: ignore
 miniclue.setup({
   -- Define which clues to show. By default shows only clues for custom mappings
   -- (uses `desc` field from the mapping; takes precedence over custom clue).

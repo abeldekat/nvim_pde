@@ -1,3 +1,4 @@
+---@diagnostic disable: undefined-global
 --[[
 Use a notification window like fidget.nvim for messages from the lsp,
 and a regular window otherwise.
@@ -36,7 +37,6 @@ local window_config = function()
   return { anchor = "SE", col = vim.o.columns, row = vim.o.lines - pad, border = "none" }
 end
 
--- Setup 'mini.notify'
 require("mini.notify").setup({
   lsp_progress = { duration_last = 500 }, -- default duration: 1000
   content = { format = format }, -- sort = H.filterout_lua_diagnosing

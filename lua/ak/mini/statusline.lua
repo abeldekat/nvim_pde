@@ -5,10 +5,7 @@ local H = {} -- helpers, copied, modified or added
 local MiniStatusline = require('mini.statusline')
 
 AK.setup = function()
-  MiniStatusline.setup({
-    use_icons = true,
-    content = { active = AK.active },
-  })
+  MiniStatusline.setup({ content = { active = AK.active } })
   H.create_autocommands()
   H.create_hl() -- colored diagnostics, normal mode override
   H.set_active() -- lazy loading and missing events: still show statusline
@@ -46,7 +43,7 @@ AK.active = function() -- entrypoint
   })
 end
 
--- overridden: Use relative path if file is in cwd.
+-- overridden: Use relative path if file is in cwd
 AK.section_filename = function()
   local ft = vim.bo.filetype
   local full_path = H.full_path_of_current_buffer()
@@ -96,11 +93,7 @@ AK.section_macro = function(args)
   return reg == '' and '' or 'REC @' .. reg
 end
 
---          ╭─────────────────────────────────────────────────────────╮
---          │                       Helper data                       │
---          ╰─────────────────────────────────────────────────────────╯
 -- added:
--- H.group_default_hl = "MiniStatuslineFilename"
 H.group_default_hl = 'MiniStatuslineDevinfo'
 
 H.diag_hls = {
@@ -123,9 +116,6 @@ H.ignored_ft = {
   minipick = true,
 }
 
---          ╭─────────────────────────────────────────────────────────╮
---          │                  Helper functionality                   │
---          ╰─────────────────────────────────────────────────────────╯
 -- added:
 H.create_autocommands = function()
   local augroup = vim.api.nvim_create_augroup('MiniStatuslineAk', {})
@@ -158,9 +148,6 @@ H.create_hl = function()
   vim.api.nvim_set_hl(0, H.diag_hls.hint, { bg = bg, fg = fg('DiagnosticHint') })
 end
 
---          ╭─────────────────────────────────────────────────────────╮
---          │                    Helper utilities                     │
---          ╰─────────────────────────────────────────────────────────╯
 -- added, manually activate, lsp can be slow:
 H.set_active = function() vim.wo.statusline = '%{%v:lua.MiniStatusline.active()%}' end
 
@@ -174,7 +161,4 @@ H.full_path_of_current_buffer = function()
   return vim.fn.expand('%:p') -- /home/user....
 end
 
---          ╭─────────────────────────────────────────────────────────╮
---          │                        Activate                         │
---          ╰─────────────────────────────────────────────────────────╯
 AK.setup()

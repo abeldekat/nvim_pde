@@ -1,3 +1,4 @@
+---@diagnostic disable: undefined-global
 -- Miscellaneous small but useful functions. Example usage:
 -- - `<Leader>oz` - toggle between "zoomed" and regular view of current buffer
 -- - `<Leader>or` - resize window to its "editable width"

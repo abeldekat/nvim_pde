@@ -1,7 +1,7 @@
 {
   "plugins": {
     "SchemaStore.nvim": {
-      "rev": "e3a2fc3862fa750603b7067789cb4b90578bcd07",
+      "rev": "322751401046ae2dbbe32eeb31992a5d4fcc8d92",
       "src": "https://github.com/b0o/SchemaStore.nvim"
     },
     "colors_ayu": {
@@ -74,7 +74,7 @@
       "src": "https://github.com/stevearc/quicker.nvim"
     },
     "vimtex": {
-      "rev": "63745fa542346e0f09a496d440645ef6ff75b62c",
+      "rev": "9388638aec092cceab6ac20dc08541f4e429e8ce",
       "src": "https://github.com/lervag/vimtex"
     }
   }

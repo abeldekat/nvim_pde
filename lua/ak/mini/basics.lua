@@ -1,5 +1,3 @@
--- TODO: gO and outline?
-
 -- Common configuration presets. Example usage:
 -- - `<C-s>` in Insert mode - save and go to Normal mode
 -- - `go` / `gO` - insert empty line before/after in Normal mode
@@ -8,8 +6,7 @@
 -- - `<C-hjkl>` (four combos) - navigate between windows.
 -- - `<M-hjkl>` in Insert/Command mode - navigate in that mode.
 --
-require("mini.basics").setup({
-  -- Manage options in 'plugin/10_options.lua' for didactic purposes
+require('mini.basics').setup({
   options = { basic = false },
   mappings = {
     -- Create `<C-hjkl>` mappings for window navigation

@@ -10,12 +10,12 @@ local starter = require('mini.starter')
 starter.setup({
   header = header_cb,
   items = {
-    starter.sections.sessions(5, true),
+    starter.sections.sessions(4, true),
     starter.sections.recent_files(4, true, false),
     starter.sections.builtin_actions(),
     {
       { action = 'lua vim.pack.update()', name = 'Update plugins', section = 'Updaters' },
     },
   },
-  footer = function() return '  Press space for the menu' end,
+  footer = function() return '' end,
 })
