@@ -1,164 +1,72 @@
 ---@diagnostic disable: undefined-global
+local group_default_hl = 'MiniStatuslineDevinfo' -- not using MiniStatuslineFileInfo
+local ignored_ft = { ministarter = true, minifiles = true, minipick = true }
 
-local AK = {} -- module using the structure of MiniStatusline
-local H = {} -- helpers, copied, modified or added
-local MiniStatusline = require('mini.statusline')
-
-AK.setup = function()
-  MiniStatusline.setup({ content = { active = AK.active } })
-  H.create_autocommands()
-  H.create_hl() -- colored diagnostics, normal mode override
-  H.set_active() -- lazy loading and missing events: still show statusline
+-- Overridden: Return early when ft should not be displayed because of laststatus=3
+local section_filename = function(...)
+  if ignored_ft[vim.bo.filetype] then return '' end
+  return MiniStatusline.section_filename(...)
 end
 
-AK.active = function() -- entrypoint
-  if H.is_blocked_filetype() then return '' end
-
-  local diag = MiniStatusline.section_diagnostics({ trunc_width = 75, signs = H.diag_signs, icon = '' })
-  local diff = MiniStatusline.section_diff({ trunc_width = 75, icon = '' })
-  local fileinfo = AK.section_fileinfo({ trunc_width = 120 })
-  local filename = AK.section_filename() -- use automatic statusline truncation
-  local git = MiniStatusline.section_git({ trunc_width = 40 })
-  local location = MiniStatusline.section_location({ trunc_width = 75 })
-  local lsp = MiniStatusline.section_lsp({ trunc_width = 75 })
-  local macro = AK.section_macro({ trunc_width = 120 })
-  local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 120 })
-  local search = MiniStatusline.section_searchcount({ trunc_width = 75 })
-  local tabinfo = AK.section_tabinfo({ trunc_width = 75 })
-
-  mode = string.find(mode, 'N', 1, false) and 'N' or mode
-  diag = diag and #diag > 0 and string.gsub(diag, ' ', '') or diag
-  local git_and_diff = string.format('%s %s', git, diff and diff:sub(2) or '')
-  lsp = lsp and #lsp > 0 and '󰓃' or '' -- speaker --   server -- 󰿘 protocl -- 󰝚 music
-  return MiniStatusline.combine_groups({
-    { hl = mode_hl, strings = { mode } },
-    { hl = H.group_default_hl, strings = { git_and_diff } },
-    '%<', -- Mark general truncate point
-    { hl = 'MiniStatuslineFilename', strings = { filename } },
-    '%=', -- End left alignment
-    { hl = 'MiniHipatternsHack', strings = { macro, tabinfo } },
-    { hl = H.group_default_hl, strings = { diag } },
-    { hl = H.group_default_hl, strings = { fileinfo, lsp } },
-    { hl = mode_hl, strings = { search, location } },
-  })
-end
-
--- overridden: Use relative path if file is in cwd
-AK.section_filename = function()
-  local ft = vim.bo.filetype
-  local full_path = H.full_path_of_current_buffer()
-  if not full_path or H.ignored_ft[ft] then return '' end
-
-  local flags = '%m%r'
-  -- if full_path == "" then return "[No Name]" .. flags end
-  if full_path == '' then return '' .. flags end
-
-  local fmt = ':~:.'
-  return vim.fn.fnamemodify(full_path, fmt) .. flags
-end
-
--- overridden: removed filesize. Optional encoding and format
-AK.section_fileinfo = function(args)
+-- Overridden: Removed filesize. Encoding and format are optional
+local section_fileinfo = function(args)
   local filetype = vim.bo.filetype
   local icon = MiniIcons and filetype ~= '' and MiniIcons.get('filetype', filetype)
-
   filetype = icon and icon or filetype -- either show icon or text
 
-  -- Construct output string if truncated or buffer is not normal
   if MiniStatusline.is_truncated(args.trunc_width) or vim.bo.buftype ~= '' then return filetype end
 
-  -- Construct output string with extra file info
-  local encoding_and_format = ''
-  local encoding = vim.bo.fileencoding or vim.bo.encoding
-  local format = vim.bo.fileformat
-  if not (encoding == 'utf-8' and format == 'unix') then
-    encoding_and_format = string.format(' %s[%s]', encoding, format)
-  end
+  local encoding, format = vim.bo.fileencoding or vim.bo.encoding, vim.bo.fileformat
+  local info = ''
+  if not (encoding == 'utf-8' and format == 'unix') then info = string.format(' %s[%s]', encoding, format) end
 
-  return string.format('%s%s', filetype, encoding_and_format)
+  return string.format('%s%s', filetype, info)
 end
 
--- added:
-AK.section_tabinfo = function(args)
+local section_tabinfo = function(args)
   if MiniStatusline.is_truncated(args.trunc_width) then return '' end
   local tabnr = vim.api.nvim_tabpage_get_number(0)
   if tabnr == 1 then return '' end
   return string.format('t%d', tabnr)
 end
 
--- added: show when recording a macro
-AK.section_macro = function(args)
+local section_macro = function(args)
   if MiniStatusline.is_truncated(args.trunc_width) then return '' end
   local reg = vim.fn.reg_recording()
   return reg == '' and '' or 'REC @' .. reg
 end
 
--- added:
-H.group_default_hl = 'MiniStatuslineDevinfo'
+local active = function()
+  local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 120 })
+  mode = string.find(mode, 'N', 1, false) and 'N' or mode
 
-H.diag_hls = {
-  error = 'DiagnosticErrorStatusline',
-  warn = 'DiagnosticWarnStatusline',
-  info = 'DiagnosticInfoStatusline',
-  hint = 'DiagnosticHintStatusline',
-}
+  local git = MiniStatusline.section_git({ trunc_width = 40 })
+  local diff = MiniStatusline.section_diff({ trunc_width = 75, icon = '' })
+  local diag = MiniStatusline.section_diagnostics({ trunc_width = 75, icon = '' })
+  local lsp = MiniStatusline.section_lsp({ trunc_width = 75 })
 
-H.diag_signs = { -- must be at the end of a section, hl does not close
-  ERROR = string.format('%%#%s#%s', H.diag_hls.error, 'E'),
-  WARN = string.format('%%#%s#%s', H.diag_hls.warn, 'W'),
-  INFO = string.format('%%#%s#%s', H.diag_hls.info, 'I'),
-  HINT = string.format('%%#%s#%s', H.diag_hls.hint, 'H'),
-}
+  local filename = section_filename({ trunc_width = 140 })
 
-H.ignored_ft = {
-  ministarter = true,
-  minifiles = true,
-  minipick = true,
-}
+  local macro = section_macro({ trunc_width = 40 })
+  local tabinfo = section_tabinfo({ trunc_width = 40 })
 
--- added:
-H.create_autocommands = function()
-  local augroup = vim.api.nvim_create_augroup('MiniStatuslineAk', {})
-  local au = function(event, pattern, callback, desc)
-    vim.api.nvim_create_autocmd(event, { group = augroup, pattern = pattern, callback = callback, desc = desc })
-  end
-  -- Colored diagnostics
-  au('ColorScheme', '*', H.create_hl, 'Create diagnostic highlight')
-  -- slow lsp(ie marksman): the symbol only shows when moving inside the buffer:
-  au('LspDetach', '*', H.set_active, 'Track LSP clients')
-  au('LspDetach', '*', H.set_active, 'Track LSP clients')
+  local fileinfo = section_fileinfo({ trunc_width = 120 })
+  local search = MiniStatusline.section_searchcount({ trunc_width = 75 })
+  local location = MiniStatusline.section_location({ trunc_width = 75 })
+
+  return MiniStatusline.combine_groups({
+    { hl = mode_hl, strings = { mode } },
+    { hl = group_default_hl, strings = { git, diff, diag, lsp } },
+    '%<',
+    { hl = 'MiniStatuslineFilename', strings = { filename } },
+    '%=',
+    { hl = 'MiniHipatternsHack', strings = { macro, tabinfo } },
+    { hl = group_default_hl, strings = { fileinfo } },
+    { hl = mode_hl, strings = { search, location } },
+  })
 end
 
--- added
-H.create_hl = function()
-  vim.api.nvim_set_hl(0, 'MiniStatuslineModeNormal', { link = H.group_default_hl })
-
-  -- Diagnostics:
-  local fallback = vim.api.nvim_get_hl(0, { name = 'StatusLine', link = false })
-  local fixed_hl = vim.api.nvim_get_hl(0, { name = H.group_default_hl, link = false })
-  local bg = fixed_hl and fixed_hl.bg or fallback.bg
-  local function fg(name)
-    local hl = vim.api.nvim_get_hl(0, { name = name, link = false })
-    return hl and hl.fg or (hl.sp and hl.sp) or fallback.fg
-  end
-
-  vim.api.nvim_set_hl(0, H.diag_hls.error, { bg = bg, fg = fg('DiagnosticError') })
-  vim.api.nvim_set_hl(0, H.diag_hls.warn, { bg = bg, fg = fg('DiagnosticWarn') })
-  vim.api.nvim_set_hl(0, H.diag_hls.info, { bg = bg, fg = fg('DiagnosticInfo') })
-  vim.api.nvim_set_hl(0, H.diag_hls.hint, { bg = bg, fg = fg('DiagnosticHint') })
-end
-
--- added, manually activate, lsp can be slow:
-H.set_active = function() vim.wo.statusline = '%{%v:lua.MiniStatusline.active()%}' end
-
--- added
-H.is_blocked_filetype = function()
-  local blocked_filetypes = {}
-  return blocked_filetypes[vim.bo.filetype]
-end
-
-H.full_path_of_current_buffer = function()
-  return vim.fn.expand('%:p') -- /home/user....
-end
-
-AK.setup()
+require('mini.statusline').setup({ content = { active = active } })
+local override_normal_hl = function() vim.api.nvim_set_hl(0, 'MiniStatuslineModeNormal', { link = group_default_hl }) end
+override_normal_hl()
+Config.new_autocmd('ColorScheme', '*', override_normal_hl, 'Override MiniStatuslineModeNormal')
