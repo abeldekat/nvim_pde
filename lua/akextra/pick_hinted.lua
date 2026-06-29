@@ -1,3 +1,4 @@
+---@diagnostic disable: undefined-global
 -- "Picker with hints" feature. See https://github.com/echasnovski/mini.nvim/discussions/1109
 -- Useful when:
 -- 1. Picker has limited items (ie buffers, ui_select: hotkeys activated)
@@ -28,8 +29,8 @@ end
 PickHinted.config = {
   hinted = {
     enable = false, -- opt-in
-    chars = vim.split("abcdefghijklmnopqrstuvwxyz", ""),
-    virt_clues_pos = { "eol" }, -- or { "inline", "eol" }, { "eol "}
+    chars = vim.split('abcdefghijklmnopqrstuvwxyz', ''),
+    virt_clues_pos = { 'eol' }, -- or { "inline", "eol" }, { "eol "}
     use_autosubmit = false, -- if possible, use autosubmit
   },
 }
@@ -37,35 +38,35 @@ PickHinted.config = {
 -- Helper ================================================================
 
 H.default_config = vim.deepcopy(PickHinted.config)
-H.ns_id = { hinted = vim.api.nvim_create_namespace("PickHinted") }
+H.ns_id = { hinted = vim.api.nvim_create_namespace('PickHinted') }
 H.keys = {
-  cr = vim.api.nvim_replace_termcodes("<CR>", true, true, true),
+  cr = vim.api.nvim_replace_termcodes('<CR>', true, true, true),
 }
 
 H.is_list_of = function(x, x_name, type_to_test)
-  if not vim.islist(x) then return false, string.format("`%s` should be a list.", x_name) end
+  if not vim.islist(x) then return false, string.format('`%s` should be a list.', x_name) end
   for key, value in ipairs(x) do
     if type(value) ~= type_to_test then
-      return false, string.format("`%s[%s]` should be a %s.", x_name, vim.inspect(key), type_to_test)
+      return false, string.format('`%s[%s]` should be a %s.', x_name, vim.inspect(key), type_to_test)
     end
   end
-  return true, ""
+  return true, ''
 end
 
 H.setup_config = function(config)
-  vim.validate("MiniPick", MiniPick, "table")
-  vim.validate("config", config, "table")
-  config = vim.tbl_deep_extend("force", vim.deepcopy(H.default_config), config or {})
+  vim.validate('MiniPick', MiniPick, 'table')
+  vim.validate('config', config, 'table')
+  config = vim.tbl_deep_extend('force', vim.deepcopy(H.default_config), config or {})
 
-  vim.validate("config.hinted", config.hinted, "table")
-  vim.validate("hinted.enable", config.hinted.enable, "boolean")
-  vim.validate("hinted.chars", config.hinted.chars, function(x) return H.is_list_of(x, "hinted.chars", "string") end)
+  vim.validate('config.hinted', config.hinted, 'table')
+  vim.validate('hinted.enable', config.hinted.enable, 'boolean')
+  vim.validate('hinted.chars', config.hinted.chars, function(x) return H.is_list_of(x, 'hinted.chars', 'string') end)
   vim.validate(
-    "hinted.virt_clues_pos",
+    'hinted.virt_clues_pos',
     config.hinted.virt_clues_pos,
-    function(x) return H.is_list_of(x, "hinted.virt_text_pos", "string") end
+    function(x) return H.is_list_of(x, 'hinted.virt_text_pos', 'string') end
   )
-  vim.validate("hinted.use_autosubmit", config.hinted.use_autosubmit, "boolean")
+  vim.validate('hinted.use_autosubmit', config.hinted.use_autosubmit, 'boolean')
 
   return config
 end
@@ -80,11 +81,11 @@ H.get_config = function()
 end
 
 H.create_autocommands = function()
-  local augroup = vim.api.nvim_create_augroup("mini-ak-pick-hinted", { clear = true })
+  local augroup = vim.api.nvim_create_augroup('PickHinted', { clear = true })
   local au = function(event, pattern, callback, desc)
     vim.api.nvim_create_autocmd(event, { group = augroup, pattern = pattern, callback = callback, desc = desc })
   end
-  au("User", "MiniPickStart", H.on_pick_start_event, "Augment pickers with hints")
+  au('User', 'MiniPickStart', H.on_pick_start_event, 'Augment pickers with hints')
 end
 
 -- Copied from mini.pick:
@@ -118,21 +119,21 @@ H.make_override_match = function(match, ctx, picker_opts)
     if not hinted_index or hinted_index > ctx.max_hints then return match(stritems, inds, query, opts) end
 
     -- Valid hint
-    stritems[hinted_index] = string.format("%s%s", char, stritems[hinted_index]) -- ensure item is matched
+    stritems[hinted_index] = string.format('%s%s', char, stritems[hinted_index]) -- ensure item is matched
     local result = match(stritems, inds, query, opts)
     local matches = MiniPick.get_picker_matches() or {} -- ensure item is current
-    if hinted_index ~= matches.current_ind then MiniPick.set_picker_match_inds({ hinted_index }, "current") end
+    if hinted_index ~= matches.current_ind then MiniPick.set_picker_match_inds({ hinted_index }, 'current') end
     ctx.hinted_index = hinted_index
     return result
   end
 end
 
 H.add_hints = function(buf_id, max_hints, do_autosubmit, picker_opts)
-  local hl = do_autosubmit and "MiniPickMatchRanges" or "Comment"
+  local hl = do_autosubmit and 'MiniPickMatchRanges' or 'Comment'
   for i, hint in ipairs(picker_opts.hinted.chars) do
     if i > max_hints then break end
-    local virt_text = { { string.format("[%s]", hint), hl } }
-    local extmark_opts = { hl_mode = "combine", priority = 200, virt_text = virt_text }
+    local virt_text = { { string.format('[%s]', hint), hl } }
+    local extmark_opts = { hl_mode = 'combine', priority = 200, virt_text = virt_text }
 
     -- Add hint to start or end of line, or both:
     for _, virt_text_pos in ipairs(picker_opts.hinted.virt_clues_pos) do
@@ -174,7 +175,7 @@ H.make_override_show = function(show, ctx, picker_opts)
     if show_ctx.do_autosubmit then -- autosubmit
       if not show_ctx.did_autosubmit then
         show_ctx.did_autosubmit = true
-        vim.api.nvim_feedkeys(H.keys.cr, "n", true)
+        vim.api.nvim_feedkeys(H.keys.cr, 'n', true)
       end
       return
     end
@@ -183,7 +184,7 @@ H.make_override_show = function(show, ctx, picker_opts)
 end
 
 H.on_pick_start_event = function()
-  local picker_opts = vim.tbl_deep_extend("force", H.get_config(), MiniPick.get_picker_opts() or {})
+  local picker_opts = vim.tbl_deep_extend('force', H.get_config(), MiniPick.get_picker_opts() or {})
   if not picker_opts.hinted.enable then return end -- opt-in per picker...
 
   local use_autosubmit = picker_opts.hinted.use_autosubmit
