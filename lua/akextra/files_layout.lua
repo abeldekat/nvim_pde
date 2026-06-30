@@ -1,5 +1,5 @@
 ---@diagnostic disable: undefined-global
--- mini.files, layouts: left(l), center(c), right(r). Also provides full-screen.
+-- mini.files with layouts: left(l), center(c), right(r). Toggle full-screen.
 -- See https://github.com/nvim-mini/mini.nvim/discussions/2448
 --[[
 
@@ -19,11 +19,11 @@
 
 --]]
 
--- The layout to start with, and the order to traverse layouts
+-- The layout to start with, and the order of traversal
 local layout_current, layout_next = 'C', { L = 'C', C = 'R', R = 'L' }
--- Full screen indicator, and max_windows when in full screen
+-- Full screen flag, and max_windows when in full screen
 local is_full_screen, full_screen_max_number = false, 3
--- If the layout is center, also center vertically
+-- If enabled and the layout is center, also center vertically
 local center_vert = {
   enable = true,
   height_focus = 32,
@@ -195,17 +195,20 @@ local ensure_layout = function(args)
   layout_fn(state.windows, idx_focused)
 end
 
-local gr = vim.api.nvim_create_augroup('FilesLayout', {})
-local au = function(event, pattern, callback, desc)
-  local opts = { group = gr, pattern = pattern, callback = callback, desc = desc }
-  vim.api.nvim_create_autocmd(event, opts)
-end
-au('User', 'MiniFilesExplorerClose', full_screen_reset, 'Reset full screen')
-au('VimEnter', '*', full_screen_vim_enter, 'Full screen on vim <dir>')
-au('User', 'MiniFilesWindowUpdate', ensure_layout, 'Ensure layout')
-
 local FilesLayout = {}
-FilesLayout.setup = function() _G.FilesLayout = FilesLayout end
+FilesLayout.setup = function()
+  _G.FilesLayout = FilesLayout
+
+  local gr = vim.api.nvim_create_augroup('FilesLayout', {})
+  local au = function(event, pattern, callback, desc)
+    local opts = { group = gr, pattern = pattern, callback = callback, desc = desc }
+    vim.api.nvim_create_autocmd(event, opts)
+  end
+
+  au('VimEnter', '*', full_screen_vim_enter, 'Full screen on vim <dir>')
+  au('User', 'MiniFilesExplorerClose', full_screen_reset, 'Reset full screen')
+  au('User', 'MiniFilesWindowUpdate', ensure_layout, 'Ensure layout')
+end
 FilesLayout.toggle_full_screen = toggle_full_screen
 FilesLayout.traverse = function()
   layout_current = layout_next[layout_current]
