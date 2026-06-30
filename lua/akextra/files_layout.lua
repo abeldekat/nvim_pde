@@ -158,13 +158,13 @@ local full_screen = function(windows, _)
   end
 end
 
-local full_screen_reset = function() is_full_screen = false end
 local toggle_full_screen = function()
   is_full_screen = not is_full_screen
   local max_number = MiniFiles.config.windows.max_number
   max_number = is_full_screen and full_screen_max_number or max_number
   MiniFiles.refresh({ windows = { max_number = max_number } })
 end
+local full_screen_reset = function() is_full_screen = false end
 local full_screen_vim_enter = function(args)
   if not MiniFiles.config.options.use_as_default_explorer then return end
   if vim.fn.isdirectory(args.file) ~= 1 then return end
