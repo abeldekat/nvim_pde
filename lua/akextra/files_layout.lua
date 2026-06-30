@@ -20,7 +20,7 @@
 --]]
 
 -- The layout to start with, and the order of traversal
-local layout_current, layout_next = 'C', { L = 'C', C = 'R', R = 'L' }
+local layout_current, layout_next = 'L', { L = 'C', C = 'R', R = 'L' }
 -- Full screen flag, and max_windows when in full screen
 local is_full_screen, full_screen_max_number = false, 3
 -- If enabled and the layout is center, also center vertically
