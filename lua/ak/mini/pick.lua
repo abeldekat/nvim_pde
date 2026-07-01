@@ -1,5 +1,4 @@
 ---@diagnostic disable: duplicate-set-field, undefined-global
-
 -- - If query starts with `'`, the match is exact.
 -- - If query starts with `^`, the match is exact at start.
 -- - If query ends with `$`, the match is exact at end.
@@ -10,18 +9,12 @@
 
 local preview = function(buf_id, item) return MiniPick.default_preview(buf_id, item, { line_position = 'center' }) end
 require('mini.pick').setup({ source = { preview = preview } })
+require('akextra.pick_hinted').setup()
 
 vim.ui.select = function(items, opts, on_choice) -- use akextra.pick_hinted with vim.ui.select
   local start_opts = { hinted = { enable = true, use_autosubmit = true } }
   return MiniPick.ui_select(items, opts, on_choice, start_opts)
 end
-
-require('akextra.pick_hinted').setup({ -- 19 letters, no "bcgpqyz"
-  hinted = {
-    -- virt_clues_pos = { "inline", "eol" },
-    chars = vim.split('adefhilmnorstu', ''),
-  },
-})
 
 MiniPick.registry.grep_todo_keywords = function(local_opts)
   local_opts.pattern = '(TODO|FIXME|HACK|NOTE):'
