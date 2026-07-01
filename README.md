@@ -4,7 +4,7 @@
 
 ![1724703946](https://github.com/user-attachments/assets/4fac0567-81fe-48c2-8d79-88b9744803a0)
 
-My _personal development environment_ for Neovim based on [MiniMax]
+My Neovim config, based on [MiniMax]
 
 > [!NOTE]
 > Tag [with_submodules] references the version containing `git submodules`,
@@ -55,6 +55,10 @@ the corresponding code will be contained in a dedicated lua module.
 
 Pickers from [mini.pick] can display hints using internal module [akextra.pick_hinted]
 
+### FilesLayout
+
+Layouts and a full-screen toggle for [mini.files] using internal module [akextra.files_layout]
+
 ### Kitty
 
 - Custom [kitty-sessionizer]
@@ -67,13 +71,12 @@ Pickers from [mini.pick] can display hints using internal module [akextra.pick_h
   - alternate tab: leader l
   - switch window: leader o
 
-### UI
+## UI
 
 - `mini.statusline`, no colors, except on:
-  - mode change
-  - diagnostics
-  - current buffer has current label (mini.visits)
+  - mode other than normal
   - macro recording
+  - tab-page is not the first
 - many color schemes
 
 Change color schemes:
@@ -116,10 +119,11 @@ Relevant discussions:
 ## Acknowledgements
 
 This config is based on [MiniMax].
-Additionally, code and ideas have been used from the following repositories:
+Additionally, code and ideas have been used from the following sources:
 
 - [nvim](https://github.com/echasnovski/nvim) `@echasnovski`
 - [nvim](https://github.com/pkazmier/nvim) `@pkazmier`
+- [mini.nvim discussions](https://github.com/nvim-mini/mini.nvim/discussions)
 
 [scripts]: https://github.com/abeldekat/scripts
 [kitty-sessionizer]: https://github.com/abeldekat/scripts/blob/main/kitty_sessionizer_owns
@@ -132,6 +136,7 @@ Additionally, code and ideas have been used from the following repositories:
 [mini.visits]: https://github.com/nvim-mini/mini.visits
 [mini.clue]: https://github.com/nvim-mini/mini.clue
 [akextra.pick_hinted]: lua/akextra/pick_hinted.lua
+[akextra.files_layout]: lua/akextra/files_layout.lua
 [with_submodules]: https://github.com/abeldekat/nvim_pde/tree/with_submodules
 [with_lazynvim]: https://github.com/abeldekat/nvim_pde/tree/with_lazynvim
 [without_minimax]: https://github.com/abeldekat/nvim_pde/tree/without_minimax
