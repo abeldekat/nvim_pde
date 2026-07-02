@@ -1,6 +1,7 @@
 ---@diagnostic disable: undefined-global
 -- mini.files with layouts: left(l), center(c), right(r). Toggle full-screen.
 -- See https://github.com/nvim-mini/mini.nvim/discussions/2448
+-- Requirement: MiniFiles active
 --[[
 
   -- Example usage:

@@ -25,7 +25,7 @@
       "src": "https://github.com/edeneast/nightfox.nvim"
     },
     "colors_oasis": {
-      "rev": "d79e82b72407a78fa43d7c4053390a49cdc93761",
+      "rev": "eec440927108a2eea256b70886e821986c2df008",
       "src": "https://github.com/uhs-robert/oasis.nvim"
     },
     "colors_thorn": {
@@ -54,7 +54,7 @@
       "src": "https://github.com/mfussenegger/nvim-lint.git"
     },
     "nvim-lspconfig": {
-      "rev": "dd1c9b802c943278179a5d819369cda085b79d45",
+      "rev": "292f44408498103c47996ff5c18fd366293840d8",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {

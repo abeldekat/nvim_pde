@@ -5,8 +5,23 @@
 -- 2. Picker displays most valuable results on top(ie oldfiles, visits)
 -- Less useful: Pick.files, top results have no extra meaning
 --
--- Requirements:
--- 1. MiniPick active
+-- Requirements: MiniPick active
+--[[
+
+  -- Example usage
+  require('mini.extra').setup()
+  require('mini.pick').setup()
+  require('<this_file').setup()
+  vim.ui.select = function(items, opts, on_choice)
+    local start_opts = { hinted = { enable = true, use_autosubmit = true } }
+    return MiniPick.ui_select(items, opts, on_choice, start_opts)
+  end
+  MiniPick.registry.oldfiles_hinted = function(local_opts)
+    MiniExtra.pickers.oldfiles(local_opts, { hinted = { enable = true } })
+  end
+  -- ... etc
+
+--]]
 
 -- Config to merge into MiniPick.start(opts)
 -- Override by providing (parts of) the config to opts:
