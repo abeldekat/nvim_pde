@@ -35,7 +35,7 @@ local list_labels = function()
 end
 
 local visits_choose_current_label = function()
-  vim.ui.select(list_labels(), {}, function(selected)
+  vim.ui.select(list_labels(), { prompt = 'Choose label' }, function(selected)
     if not selected then return end
     Config.visits_label = selected
   end)

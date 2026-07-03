@@ -21,7 +21,7 @@
 --]]
 
 -- The layout to start with, and the order of traversal
-local layout_current, layout_next = 'L', { L = 'C', C = 'R', R = 'L' }
+local layout_current, layout_next = 'C', { L = 'C', C = 'R', R = 'L' }
 -- Full screen flag, and max_windows when in full screen
 local is_full_screen, full_screen_max_number = false, 3
 -- If enabled and the layout is center, also center vertically
@@ -180,20 +180,24 @@ local ensure_layout = function(args)
   local state = MiniFiles.get_explorer_state()
   if state == nil then return end
 
-  -- If event is not for focused window, return early
-  local focused_path = state.branch[state.depth_focus]
+  -- Optimize: If event is not for last window, return early
+  local windows = state.windows
+  if not (args.data.win_id == windows[#windows].win_id) then return end
+
+  -- If the index of the focused window is not found, return early
   local idx_focused
-  for i, win in ipairs(state.windows) do
-    if win.path == focused_path and win.win_id == args.data.win_id then idx_focused = i end
+  local path_focused = state.branch[state.depth_focus]
+  for i, w in ipairs(windows) do
+    if w.path == path_focused then idx_focused = i end
   end
   if idx_focused == nil then return end
 
   -- Make explorer appear full screen
-  if is_full_screen then return full_screen(state.windows, idx_focused) end
+  if is_full_screen then return full_screen(windows, idx_focused) end
 
   -- Apply center or right in all other cases
   local layout_fn = layout_current == 'C' and center or right
-  layout_fn(state.windows, idx_focused)
+  layout_fn(windows, idx_focused)
 end
 
 local FilesLayout = {}
@@ -205,7 +209,6 @@ FilesLayout.setup = function()
     local opts = { group = gr, pattern = pattern, callback = callback, desc = desc }
     vim.api.nvim_create_autocmd(event, opts)
   end
-
   au('VimEnter', '*', full_screen_vim_enter, 'Full screen on vim <dir>')
   au('User', 'MiniFilesExplorerClose', full_screen_reset, 'Reset full screen')
   au('User', 'MiniFilesWindowUpdate', ensure_layout, 'Ensure layout')
