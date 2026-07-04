@@ -52,6 +52,10 @@ local make_label_directory = function(call) -- MiniVisits with MiniFiles
   end
 end
 
+local pick_files = function()
+  MiniPick.builtin.files(nil, { source = { cwd = vim.fs.dirname(MiniFiles.get_fs_entry().path) } })
+end
+
 local add_linenumbers = function(args)
   local win_id = args.data.win_id
   if not (win_id and win_id == vim.api.nvim_get_current_win()) then return end
@@ -79,7 +83,8 @@ local add_keymaps = function(args)
   nmap('gd', make_label_directory('add_label'), 'Visits add label')
   nmap('gD', make_label_directory('remove_label'), 'Visits remove label')
   if FilesLayout then nmap('gf', FilesLayout.toggle_full_screen, 'Toggle full screen') end
-  nmap('gp', toggle_preview, 'Toggle preview')
+  if MiniPick then nmap('gp', pick_files, 'Pick files') end
+  nmap('gP', toggle_preview, 'Toggle preview')
   nmap('gX', ui_open, 'OS open')
   nmap('gy', yank_path, 'Yank path')
 

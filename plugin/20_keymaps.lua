@@ -222,6 +222,10 @@ end
 copy_keymap('x', 'an', '<M-i>') -- <leader>ls, ommitted o mode
 copy_keymap('x', 'in', '<M-o>') -- <leader>lS, ommitted o mode
 
+-- L is for 'Lua'
+nmap_leader('Lc', '<Cmd>lua MiniMisc.log_clear()<CR>',             'Clear log')
+nmap_leader('Ls', '<Cmd>lua MiniMisc.log_show()<CR>',              'Show log')
+
 -- m is for 'Map'. Common usage:
 nmap_leader('mf', '<Cmd>lua MiniMap.toggle_focus()<CR>', 'Focus (toggle)')
 nmap_leader('mr', '<Cmd>lua MiniMap.refresh()<CR>',      'Refresh')
