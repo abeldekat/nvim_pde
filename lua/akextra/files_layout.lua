@@ -7,7 +7,7 @@
   -- Example usage:
   require('mini.files').setup()
   require('<this_file>').setup()
-  local gr = vim.api.nvim_create_augroup('custom-config', {})
+  local gr = vim.api.nvim_create_augroup('my-files-layout', {})
   vim.api.nvim_create_autocmd('User', {
     group = gr,
     pattern = 'MiniFilesBufferCreate',
