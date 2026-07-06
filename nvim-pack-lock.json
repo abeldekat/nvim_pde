@@ -21,12 +21,8 @@
       "src": "https://github.com/savq/melange-nvim"
     },
     "colors_nightfox": {
-      "rev": "26b61b1f856ec37cae3cb64f5690adb955f246a1",
+      "rev": "4dacd3f0185a2227bdf3b6c0975a8f0bf87cac9a",
       "src": "https://github.com/edeneast/nightfox.nvim"
-    },
-    "colors_oasis": {
-      "rev": "eec440927108a2eea256b70886e821986c2df008",
-      "src": "https://github.com/uhs-robert/oasis.nvim"
     },
     "colors_thorn": {
       "rev": "3653d1508e605fe87ec174e8c2ad0f36ce9844f3",
@@ -46,7 +42,7 @@
       "version": "'a923f5fc5ba36a3b17e289dc35dc17f66d0548ee'"
     },
     "mini.nvim": {
-      "rev": "c5cdbadeb423ff724e27a42ab2d1c504d1d6fc5a",
+      "rev": "d74190c1528aaf12ba5f3a29d03524c6b81e18b3",
       "src": "https://github.com/nvim-mini/mini.nvim"
     },
     "nvim-lint": {
@@ -54,7 +50,7 @@
       "src": "https://github.com/mfussenegger/nvim-lint.git"
     },
     "nvim-lspconfig": {
-      "rev": "292f44408498103c47996ff5c18fd366293840d8",
+      "rev": "d224a1920728ba129880efc700d4a0180ac4ecbb",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {
@@ -74,7 +70,7 @@
       "src": "https://github.com/stevearc/quicker.nvim"
     },
     "vimtex": {
-      "rev": "5e6a06f5cec5ede3dc6ba045ef6eda13b6dccb1f",
+      "rev": "a5949d2800c1866c878956d49c51fc8d003c6b99",
       "src": "https://github.com/lervag/vimtex"
     }
   }

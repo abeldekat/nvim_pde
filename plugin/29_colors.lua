@@ -10,7 +10,6 @@ local specs = {
   { src = 'https://github.com/ribru17/bamboo.nvim', name = 'colors_bamboo' },
   { src = 'https://github.com/savq/melange-nvim', name = 'colors_melange' },
   { src = 'https://github.com/edeneast/nightfox.nvim', name = 'colors_nightfox' },
-  { src = 'https://github.com/uhs-robert/oasis.nvim', name = 'colors_oasis' },
   { src = 'https://github.com/jpwol/thorn.nvim', name = 'colors_thorn' },
   -- { src = 'https://github.com/sainnhe/everforest', name = 'colors_everforest' },
   -- { src = 'https://github.com/sainnhe/gruvbox-material', name = 'colors_gruvbox-material' },
@@ -37,10 +36,6 @@ local from_color_name = function(color_name) -- color names: ak.colors.txt
   elseif tmp:find('mini', 1, true) then
     tmp = 'mini'
     is_mini = true
-  elseif tmp:find('oasis', 1, true) then
-    tmp = 'oasis' -- ie oasis-desert becomes oasis
-  elseif tmp:find('solarized8', 1, true) then
-    tmp = 'solarized8' -- ie solarized8_flat becomes solarized8
   end
 
   return {
