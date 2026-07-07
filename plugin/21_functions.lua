@@ -1,6 +1,14 @@
--- Needs in ~/.config/lazygit/config.yml:
+-- Recommended in ~/.config/lazygit/config.yml:
+-- Ensure that pressing 'e' in LazyGit does not spawn a new nvim instance.
 -- os:
 --   editPreset: "nvim-remote"
+--
+-- There are themes where the selected line hides the underlying text.
+-- Add to the config:
+-- gui:
+--   theme:
+--     selectedLineBgColor:
+--       - reverse
 --
 -- Copied from nvim echasnovski and modified
 Config.open_lazygit = function()
