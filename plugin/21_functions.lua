@@ -15,20 +15,21 @@ Config.open_lazygit = function()
   vim.cmd('tabedit')
   vim.cmd('setlocal nonumber signcolumn=no')
 
-  -- This buffer needs to be deleted when job is finished
-  local buf = vim.api.nvim_get_current_buf()
-
   -- The `jk` keymap breaks navigation in LazyGit
   vim.api.nvim_create_autocmd('TermOpen', {
     once = true,
     callback = function(ev) vim.keymap.del('t', 'jk', { buf = ev.buf }) end,
   })
 
+  local tab = vim.api.nvim_tabpage_get_number(0)
+  local buf = vim.api.nvim_get_current_buf()
   vim.fn.jobstart('lazygit', {
     term = true,
     on_exit = function()
-      vim.cmd('silent! :checktime')
+      -- Explicit tabclose, needed in case ministarter is only buffer
+      vim.cmd('silent! :tabclose ' .. tab)
       vim.cmd('silent! :bw ' .. buf)
+      vim.cmd('silent! :checktime')
     end,
   })
   vim.cmd('startinsert')
