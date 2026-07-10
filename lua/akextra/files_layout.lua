@@ -30,7 +30,7 @@ local center_vert = {
   height_focus = 32,
   height = 30,
   -- Ensure that all windows have the same top row
-  align_titles = true,
+  align_titles = false,
   -- Do not center vertically if remaining vertical space is lower than threshold
   threshold = 6,
 }

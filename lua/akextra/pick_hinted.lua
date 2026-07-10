@@ -35,7 +35,7 @@ local config = {
     use_autosubmit = false, -- opt-in to autosubmit per picker
   },
 }
-local ns_id = { hinted = vim.api.nvim_create_namespace('PickHinted') }
+local ns_ids = { hinted = vim.api.nvim_create_namespace('PickHinted') }
 local keys = {
   cr = vim.api.nvim_replace_termcodes('<CR>', true, true, true),
 }
@@ -89,7 +89,7 @@ local add_hints = function(buf_id, max_hints, do_autosubmit, picker_opts)
     -- Add hint to start or end of line, or both:
     for _, virt_text_pos in ipairs(picker_opts.hinted.virt_clues_pos) do
       extmark_opts.virt_text_pos = virt_text_pos
-      set_extmark(buf_id, ns_id.hinted, i - 1, 0, extmark_opts)
+      set_extmark(buf_id, ns_ids.hinted, i - 1, 0, extmark_opts)
     end
   end
 end
@@ -110,7 +110,7 @@ local make_override_show = function(show, ctx, picker_opts)
   local show_ctx
   return function(buf_id, items, query, opts) -- items contain as many as displayed
     if not show_ctx then show_ctx = init_show_ctx(items, ctx, picker_opts) end
-    clear_namespace(buf_id, ns_id.hinted) -- remove hints
+    clear_namespace(buf_id, ns_ids.hinted) -- remove hints
 
     -- No hint, create hints if applicable
     if ctx.hinted_index == nil then
