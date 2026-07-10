@@ -25,7 +25,8 @@ vim.b.minisurround_config = {
 vim.cmd('setlocal colorcolumn=+1') -- 81
 -- vim.cmd("setlocal conceallevel=2") -- Hide * markup for bold and italic, but not markers with substitutions
 
-local mini_ai = require('mini.ai')
+local has_mini_ai, mini_ai = pcall(require, 'mini.ai')
+if not has_mini_ai then return end
 vim.b.miniai_config = {
   custom_textobjects = {
     S = { '```().-()```' },

@@ -1,6 +1,5 @@
----@diagnostic disable-next-line: undefined-field
+---@diagnostic disable: undefined-global
 if MiniSplitjoin ~= nil then
-  ---@diagnostic disable-next-line: undefined-global
   local gen_hook = MiniSplitjoin.gen_hook
   local curly = { brackets = { '%b{}' } }
 

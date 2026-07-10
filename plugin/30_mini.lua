@@ -1,3 +1,4 @@
+---@diagnostic disable: undefined-global
 local now, later, now_if_args = Config.now, Config.later, Config.now_if_args
 
 -- now(function() vim.cmd('colorscheme miniwinter') end) -- see 29_color.lua
@@ -19,6 +20,7 @@ end)
 
 now_if_args(function() require('ak.mini.completion') end)
 now_if_args(function() require('ak.mini.files') end)
+---@diagnostic disable-next-line: different-requires
 now_if_args(function() require('ak.mini.misc') end)
 
 later(function() require('mini.extra').setup() end)
