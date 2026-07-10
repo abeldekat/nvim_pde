@@ -140,10 +140,9 @@ end
 
 local full_screen = function(windows, _)
   local nr_of_windows = #windows
-  -- All windows have max_height
-  local height = window_get_max_height()
   -- All windows have (almost) the same width
   local col_distance = math.floor(vim.o.columns / nr_of_windows)
+  local height = window_get_max_height()
 
   local col = 0
   for i = 1, nr_of_windows do
