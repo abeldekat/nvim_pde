@@ -227,11 +227,17 @@ copy_keymap('x', 'in', '<M-o>') -- <leader>lS, ommitted o mode
 nmap_leader('Lc', '<Cmd>lua MiniMisc.log_clear()<CR>',             'Clear log')
 nmap_leader('Ls', '<Cmd>lua MiniMisc.log_show()<CR>',              'Show log')
 
--- m is for 'Map'. Common usage:
-nmap_leader('mf', '<Cmd>lua MiniMap.toggle_focus()<CR>', 'Focus (toggle)')
-nmap_leader('mr', '<Cmd>lua MiniMap.refresh()<CR>',      'Refresh')
-nmap_leader('ms', '<Cmd>lua MiniMap.toggle_side()<CR>',  'Side (toggle)')
-nmap_leader('mt', '<Cmd>lua MiniMap.toggle()<CR>',       'Toggle')
+-- m is for 'Map'. Not used often, setup on first toggle.
+local minimap_toggle = function()
+  if MiniMap == nil then
+    require('ak.mini.map')
+    nmap_leader('mf', '<Cmd>lua MiniMap.toggle_focus()<CR>', 'Focus (toggle)')
+    nmap_leader('mr', '<Cmd>lua MiniMap.refresh()<CR>',      'Refresh')
+    nmap_leader('ms', '<Cmd>lua MiniMap.toggle_side()<CR>',  'Side (toggle)')
+  end
+  MiniMap.toggle()
+end
+nmap_leader('mt', minimap_toggle,                            'Toggle')
 
 -- o is for 'Other'.
 nmap_leader('oc', '<Cmd>lua Config.next_theme_variant()<CR>', 'Next theme variant') -- added

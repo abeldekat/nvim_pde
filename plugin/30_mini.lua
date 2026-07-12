@@ -41,7 +41,7 @@ later(function() require('mini.input').setup() end)
 later(function() require('mini.jump').setup() end)
 later(function() require('ak.mini.jump2d') end)
 later(function() require('ak.mini.keymap') end)
-later(function() require('ak.mini.map') end)
+-- later(function() require('ak.mini.map') end) -- setup on toggle, see 20_keymaps
 later(function() require('mini.move').setup() end)
 later(function() require('mini.operators').setup() end) -- skipped swap arg mappings
 later(function() require('ak.mini.pairs') end)
