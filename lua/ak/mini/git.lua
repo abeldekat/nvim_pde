@@ -1,4 +1,12 @@
 ---@diagnostic disable: undefined-global
+
+--[[
+General idea of folding levels (use |zr| and |zm| to adjust interactively):
+- At level 0 there is one line per whole patch or log entry.
+- At level 1 there is one line per patched file.
+- At level 2 there is one line per hunk.
+- At level 3 there is no folds.
+--]]
 require('mini.git').setup()
 
 -- `:h MiniGit-examples`

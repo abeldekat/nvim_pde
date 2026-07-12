@@ -105,8 +105,7 @@ local config = {
   windows = { preview = show_preview },
 }
 require('mini.files').setup(config)
-au('User', 'MiniFilesExplorerOpen', add_marks, 'Add bookmarks')
-au('User', 'MiniFilesWindowUpdate', add_linenumbers, 'Add linenumbers')
-
 require('akextra.files_layout').setup()
 au('User', 'MiniFilesBufferCreate', add_keymaps, 'Add extra keys')
+au('User', 'MiniFilesWindowUpdate', add_linenumbers, 'Add linenumbers')
+au('User', 'MiniFilesExplorerOpen', add_marks, 'Add bookmarks')
