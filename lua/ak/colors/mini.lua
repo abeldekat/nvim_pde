@@ -30,6 +30,11 @@ Config.new_autocmd('ColorScheme', base16_variants, function()
   hi('MiniDiffSignAdd', { fg = p.base0B, bg = p.base00 })
   hi('MiniDiffSignChange', { fg = p.base0E, bg = p.base00 })
   hi('MiniDiffSignDelete', { fg = p.base08, bg = p.base00 })
+  hi('DiagnosticSignError', { fg = p.base08, bg = p.base00 })
+  hi('DiagnosticSignHint', { fg = p.base0D, bg = p.base00 })
+  hi('DiagnosticSignInfo', { fg = p.base0C, bg = p.base00 })
+  hi('DiagnosticSignOk', { fg = p.base0B, bg = p.base00 })
+  hi('DiagnosticSignWarn', { fg = p.base0E, bg = p.base00 })
 
   -- Is a link to DiagnosticFloatingHint, change to bold orange:
   hi('MiniPickMatchRanges', { fg = p.orange, bold = true })
