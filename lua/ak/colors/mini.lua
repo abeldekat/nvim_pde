@@ -18,8 +18,22 @@ Config.new_autocmd('ColorScheme', base16_variants, function()
   local p = MiniBase16.config.palette
   if p == nil then return end
 
-  -- Is a link to DiagnosticFloatingHint, change to bold orange
-  hi('MiniPickMatchRanges', { fg = 'orange', bold = true })
+  -- Statuscolumn: Change bg from base01 to base00
+  hi('CursorLineFold', { fg = p.base0C, bg = p.base00 })
+  hi('CursorLineNr', { fg = p.base04, bg = p.base00 })
+  hi('CursorLineSign', { fg = p.base03, bg = p.base00 })
+  hi('FoldColumn', { fg = p.base0C, bg = p.base00 })
+  hi('LineNr', { fg = p.base03, bg = p.base00 })
+  hi('LineNrAbove', { fg = p.base03, bg = p.base00 })
+  hi('LineNrBelow', { fg = p.base03, bg = p.base00 })
+  hi('SignColumn', { fg = p.base03, bg = p.base00 })
+  hi('MiniDiffSignAdd', { fg = p.base0B, bg = p.base00 })
+  hi('MiniDiffSignChange', { fg = p.base0E, bg = p.base00 })
+  hi('MiniDiffSignDelete', { fg = p.base08, bg = p.base00 })
+
+  -- Is a link to DiagnosticFloatingHint, change to bold orange:
+  hi('MiniPickMatchRanges', { fg = p.orange, bold = true })
+
   -- Area for messages and cmdline, change p.base05
   hi('MsgArea', { fg = p.base03 })
 end, 'Mini base16 on colorscheme')
@@ -52,6 +66,7 @@ Config.new_autocmd('ColorScheme', all_hues_variants, function()
 
   -- Is a link to DiagnosticFloatingHint, change to bold orange:
   hi('MiniPickMatchRanges', { fg = p.orange, bold = true })
+
   -- Area for messages and cmdline, changed from Normal to Comment.fg
   hi('MsgArea', { fg = p.fg_mid2 })
 end, 'Mini hues on colorscheme')

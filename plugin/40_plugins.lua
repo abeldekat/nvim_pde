@@ -38,7 +38,7 @@ on_filetype('markdown', function()
     vim.cmd.packadd('markdown-preview.nvim')
     vim.fn['mkdp#util#install']()
   end
-  Config.on_packchanged('markdown-preview.nvim', { 'install', 'update' }, build, 'Build markdown-preview')
+  on_packchanged('markdown-preview.nvim', { 'install', 'update' }, build, 'Build markdown-preview')
   -- latest commit 2 years ago
   add({ { src = gh('iamcco/markdown-preview.nvim'), version = 'a923f5fc5ba36a3b17e289dc35dc17f66d0548ee' } })
   -- Do not close the preview tab when switching to other buffers
