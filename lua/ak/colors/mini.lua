@@ -36,6 +36,9 @@ Config.new_autocmd('ColorScheme', base16_variants, function()
   hi('DiagnosticSignOk', { fg = p.base0B, bg = p.base00 })
   hi('DiagnosticSignWarn', { fg = p.base0E, bg = p.base00 })
 
+  -- Also need to change NormalFloat because of statuscolumn change:
+  hi('NormalFloat', { fg = p.base05, bg = p.base00 })
+
   -- Is a link to DiagnosticFloatingHint, change to bold orange:
   hi('MiniPickMatchRanges', { fg = p.orange, bold = true })
 

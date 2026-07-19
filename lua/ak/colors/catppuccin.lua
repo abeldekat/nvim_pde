@@ -36,17 +36,6 @@ local opts = {
     },
     inlay_hints = { background = true },
   },
-  default_integrations = false,
-  integrations = {
-    markdown = true,
-    mini = {
-      enabled = true,
-      indentscope_color = 'text',
-    },
-    render_markdown = true,
-    semantic_tokens = true,
-    treesitter_context = true,
-  },
 }
 
 require('catppuccin').setup(opts)
