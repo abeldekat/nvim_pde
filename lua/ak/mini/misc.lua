@@ -9,6 +9,7 @@
 --
 -- Makes `:h MiniMisc.put()` and `:h MiniMisc.put_text()` public
 require('mini.misc').setup()
+require('akextra.zoom_extended').setup()
 
 -- Change current working directory based on the current file path. It
 -- searches up the file tree until the first root marker ('.git' or 'Makefile')

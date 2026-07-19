@@ -237,10 +237,11 @@ end
 nmap_leader('mt', minimap_toggle,                            'Toggle')
 
 -- o is for 'Other'.
+local zoom_toggle_extended = function() (ZoomExtended or MiniMisc).zoom() end
 nmap_leader('oc', '<Cmd>lua Config.next_theme_variant()<CR>', 'Next theme variant') -- added
 nmap_leader('or', '<Cmd>lua MiniMisc.resize_window()<CR>',    'Resize to default width')
 nmap_leader('ot', '<Cmd>lua MiniTrailspace.trim()<CR>',       'Trim trailspace')
-nmap_leader('oz', '<Cmd>lua MiniMisc.zoom()<CR>',             'Zoom toggle')
+nmap_leader('oz', zoom_toggle_extended,                       'Zoom toggle')
 
 -- s is for 'Session'.
 local session_new = 'vim.ui.input({ prompt = "Session name: " }, MiniSessions.write)'
