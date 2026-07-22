@@ -39,7 +39,7 @@ on_filetype('markdown', function()
     vim.fn['mkdp#util#install']()
   end
   on_packchanged('markdown-preview.nvim', { 'install', 'update' }, build, 'Build markdown-preview')
-  -- latest commit 2 years ago
+  -- latest commit 2 years ago. On initial install, use `npm install` inside its app directory.
   add({ { src = gh('iamcco/markdown-preview.nvim'), version = 'a923f5fc5ba36a3b17e289dc35dc17f66d0548ee' } })
   -- Do not close the preview tab when switching to other buffers
   vim.g.mkdp_auto_close = 0

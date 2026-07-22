@@ -6,8 +6,8 @@
 --- needing to zoom into one to see more of the code from that buffer. Call it
 --- again (without arguments) to zoom out.
 --
--- Given the above, zoom's main use case is not navigating and editing,
--- which is precisely what I often end up doing. Especially on my laptop,
+-- Given the above, zoom's main use case is viewing.
+-- However, I often end up navigating and editing, especially on my laptop,
 -- with a terminal in a vertical split.
 -- I then want to use it as a fast alternative to manually manipulating
 -- the window size, keeping the original layout.
@@ -36,9 +36,9 @@ local zoom = function()
   local is_zoomed = MiniMisc.zoom()
   if not is_zoomed then return end
 
-  -- No need to change hl to a floating version
+  -- Ensure color stays the same
   hi('NormalFloat', hl_normal)
-  -- Add jump2d local override, only if not already present
+  -- Add jump2d local override if not already present
   if vim.b.minijump2d_config == nil then
     -- Jump2d should not include the underlying window, which holds the same buffer
     vim.b.minijump2d_config = { allowed_windows = { current = true, not_current = false } }
