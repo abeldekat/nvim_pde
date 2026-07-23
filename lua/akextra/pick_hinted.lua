@@ -4,11 +4,10 @@
 -- 1. Picker has limited items (ie buffers, ui_select: hotkeys activated)
 -- 2. Picker displays most valuable results on top(ie oldfiles, visits)
 -- Less useful: Pick.files, top results have no extra meaning
---
--- Requirements: MiniPick active
---[[
 
-  -- Example usage
+-- Requirements: MiniPick active
+-- Example usage:
+--[[
   require('mini.extra').setup()
   require('mini.pick').setup()
   require('<this_file').setup()
@@ -20,7 +19,6 @@
     MiniExtra.pickers.oldfiles(local_opts, { hinted = { enable = true } })
   end
   -- ... etc
-
 --]]
 
 -- Config to merge into MiniPick.start(opts)

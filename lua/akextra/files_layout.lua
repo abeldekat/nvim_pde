@@ -2,9 +2,8 @@
 -- mini.files with layouts: left(l), center(c), right(r). Toggle full-screen.
 -- See https://github.com/nvim-mini/mini.nvim/discussions/2448
 -- Requirement: MiniFiles active
+-- Example usage:
 --[[
-
-  -- Example usage:
   require('mini.files').setup()
   require('<this_file>').setup()
   local gr = vim.api.nvim_create_augroup('my-files-layout', {})
@@ -17,7 +16,6 @@
       vim.keymap.set('n', 'gf', FilesLayout.toggle_full_screen, { buffer = b })
     end
   })
-
 --]]
 
 -- The layout to start with, and the order of traversal

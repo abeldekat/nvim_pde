@@ -1,4 +1,5 @@
-vim.cmd('setlocal spell wrap')
+vim.cmd('setlocal spell')
+vim.cmd('setlocal wrap')
 vim.cmd('setlocal foldmethod=expr foldexpr=v:lua.vim.treesitter.foldexpr()') -- foldlevel=1
 
 -- Disable built-in `gO` mapping in favor of 'mini.basics'
@@ -21,8 +22,6 @@ vim.b.minisurround_config = {
   },
 }
 
--- Show line after desired maximum text width
-vim.cmd('setlocal colorcolumn=+1') -- 81
 -- vim.cmd("setlocal conceallevel=2") -- Hide * markup for bold and italic, but not markers with substitutions
 
 local has_mini_ai, mini_ai = pcall(require, 'mini.ai')
