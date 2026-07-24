@@ -1,5 +1,5 @@
 ---@diagnostic disable: undefined-global
--- This 'extra' enables the bookmarks from mini.files to be shown mini.clue.
+-- This 'extra' makes it possible to show the bookmarks from mini.files in mini.clue.
 -- General idea: Recreate bookmark "'" mapping, but global. Manipulate MiniClue.config.
 -- See discussions:
 -- https://github.com/nvim-mini/mini.nvim/discussions/2454
@@ -13,53 +13,22 @@
   require('<this_file>').setup()
 --]]
 
--- Copied from mini.files
-local notify = function(msg, level_name) vim.notify('(FilesClued) ' .. msg, vim.log.levels[level_name]) end
-local getcharstr = function()
-  local ok, char = pcall(vim.fn.getcharstr)
-  -- Terminate if couldn't get input (like with <C-c>) or on `<Esc>`
-  if not ok or char == '' or char == '\3' or char == '\27' then return nil end
-  return char
-end
-local fs_is_imaginary_path = function(path) return path:sub(-1) == '\000' end
-local fs_is_present_path = function(path) return vim.loop.fs_stat(path) ~= nil and not fs_is_imaginary_path(path) end
-local fs_get_type = function(path)
-  if path == nil or not (not fs_is_imaginary_path(path) and fs_is_present_path(path)) then return nil end
-  return vim.fn.isdirectory(path) == 1 and 'directory' or 'file'
-end
--- See mini.files H.buffer.make_mappings, mark_goto. Changed: get state explorer state only once...
-local open_bookmark = function()
-  local id = getcharstr()
-  if id == nil then return end
-
-  local state = MiniFiles.get_explorer_state()
-  local data = state.bookmarks[id]
-  if data == nil then return notify('No bookmark with id ' .. vim.inspect(id), 'WARN') end
-
-  local path = data.path
-  if vim.is_callable(path) then path = path() end
-  local is_valid_path = type(path) == 'string' and fs_get_type(vim.fn.expand(path)) == 'directory'
-  if not is_valid_path then return notify('Bookmark path should be a valid path to directory', 'WARN') end
-
-  MiniFiles.set_bookmark("'", state.branch[state.depth_focus], { desc = 'Before latest jump' })
-  MiniFiles.set_branch({ path })
-end
--- End copied from mini.files
-
 -- Cache a copy of MiniClue global config
 local miniclue_config_deepcopy = nil
--- MiniClue mark triggers
-local clue_triggers = { { mode = { 'n', 'x' }, keys = "'" } }
+-- MiniClue triggers for MiniFiles: bookmarks
+local clue_triggers = { { mode = { 'n' }, keys = "'" } }
 -- Id of previous tabpage
 local tab_prev = nil
 -- Table with key: tabpage id, value: boolean(tab has active explorer)
 local tabs = {}
+-- A reference to the mark_goto function in MiniFiles. See its H.buffer_make_mappings.
+local mark_goto_cb = nil
 
-local map_to_clue = function(id, b) return { mode = 'n', keys = "'" .. id, desc = b.desc } end
-local get_clues = function()
+local bookmark_to_clue = function(id, b) return { mode = 'n', keys = "'" .. id, desc = b.desc } end
+local get_files_clues = function()
   local state = MiniFiles.get_explorer_state()
   if state == nil then return {} end
-  return vim.iter(pairs(state.bookmarks)):map(map_to_clue):totable()
+  return vim.iter(pairs(state.bookmarks)):map(bookmark_to_clue):totable()
 end
 
 local get_global_config = function()
@@ -76,25 +45,38 @@ local restore = function()
 end
 
 local override = function()
-  -- Clues, only for minifiles bookmarks
-  get_global_config().clues = get_clues()
+  -- Clues, only for minifiles
+  get_global_config().clues = get_files_clues()
+  if not mark_goto_cb then return end
+
   -- Ensure global "'" mapping for minifiles bookmarks
-  vim.keymap.set('n', "'", open_bookmark, { desc = 'MiniFiles open bookmark' })
+  vim.keymap.set('n', "'", mark_goto_cb, { desc = 'MiniFiles open bookmark' })
 end
 
-local on_explorer_buffer_create = function(args)
-  -- Remove the buffer local mapping minifiles created
-  vim.keymap.del('n', 'm', { buf = args.data.buf_id })
+local enable = function(buf_id)
   -- Activate clue with a restricted set of triggers
   local miniclue_config = get_global_config()
   miniclue_config.triggers = clue_triggers
-  MiniClue.enable_buf_triggers(args.data.buf_id)
+  MiniClue.enable_buf_triggers(buf_id)
+end
 
-  -- NOTE: Collect new bookmarks if explorer is active. There is no MiniFilesBookmarkAdded event...
-  if tabs[vim.api.nvim_get_current_tabpage()] then miniclue_config.clues = get_clues() end
+local on_explorer_buffer_create = function(args)
+  -- If explorer is not yet open, enable buffer later
+  if not tabs[vim.api.nvim_get_current_tabpage()] then return end
+
+  -- Explorer is open, enable buffer here
+  enable(args.data.buf_id)
+  -- NOTE: Update bookmarks if explorer is active. There is no MiniFilesBookmarkAdded event...
+  override()
 end
 
 local on_explorer_open = function()
+  -- MiniClue is not yet enabled on explorer's buffers. Thus, the "'" mapping is from MiniFiles
+  if mark_goto_cb == nil then mark_goto_cb = vim.fn.maparg("'", 'n', false, true).callback end
+
+  -- Enable mini.clue in all buffers
+  local state = MiniFiles.get_explorer_state()
+  vim.iter(ipairs(state.windows)):each(function(_, w) enable(vim.api.nvim_win_get_buf(w.win_id)) end)
   override()
   tabs[vim.api.nvim_get_current_tabpage()] = true
 end
