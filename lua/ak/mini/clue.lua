@@ -1,3 +1,4 @@
+---@diagnostic disable: undefined-global
 local miniclue = require('mini.clue')
 
 --stylua: ignore
@@ -38,3 +39,5 @@ miniclue.setup({
     { mode = { 'n', 'x' }, keys = 'z' },        -- `z` key
   },
 })
+
+require('akextra.files_clued').setup()
