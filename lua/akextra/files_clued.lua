@@ -1,13 +1,11 @@
 ---@diagnostic disable: undefined-global
 -- This 'extra' makes it possible to show bookmarks and g mappings from MiniFiles in MiniClue
--- See discussions:
--- https://github.com/nvim-mini/mini.nvim/discussions/2454
--- https://github.com/nvim-mini/mini.nvim/discussions/1195
+-- See https://github.com/nvim-mini/mini.nvim/discussions/2519
 -- Prerequisites: MiniFiles and MiniClue active. MiniFiles uses default mark_goto mapping
 -- Example usage:
 --[[
    require('mini.files').setup()
-  -- add bookmarks, see `:h MiniFiles-examples`
+  -- add bookmarks and 'g' mappings, see `:h MiniFiles-examples`.
   require('mini.clue').setup()
   require('<this_file>').setup()
 --]]
