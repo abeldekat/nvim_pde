@@ -80,8 +80,8 @@ local add_keymaps = function(args)
   -- When MiniMisc.setup_auto_root() is active, set_cwd is not that useful
   nmap('g~', set_cwd, 'Set cwd')
   -- Unlike netrw, MiniVisits cannot be used directly in MiniFiles
-  nmap('gd', make_label_directory('add_label'), 'Visits add label')
-  nmap('gD', make_label_directory('remove_label'), 'Visits remove label')
+  nmap('gd', make_label_directory('add_label'), 'Add label')
+  nmap('gD', make_label_directory('remove_label'), 'Remove label')
   if FilesLayout then nmap('gf', FilesLayout.toggle_full_screen, 'Toggle full screen') end
   if MiniPick then nmap('gp', pick_files, 'Pick files') end
   nmap('gP', toggle_preview, 'Toggle preview')
