@@ -38,7 +38,7 @@ local get_global_config = function()
   return MiniClue.config
 end
 
-local restore = function()
+local restore_globally = function()
   -- Restore the global miniclue config
   MiniClue.config = miniclue_config_deepcopy
   miniclue_config_deepcopy = nil
@@ -46,7 +46,7 @@ local restore = function()
   vim.keymap.del('n', "'")
 end
 
-local override = function()
+local override_globally = function()
   -- Override 'config clues' to only contain minifiles bookmarks
   get_global_config().clues = get_bookmark_clues()
 
@@ -75,7 +75,7 @@ local explorer_buffer_create = function(args)
   -- Explorer is open, enable buffer here
   enable(args.data.buf_id)
   -- NOTE: Update bookmarks. There is no MiniFilesBookmarkAdded event...
-  override()
+  override_globally()
 end
 
 local explorer_open = function()
@@ -85,12 +85,12 @@ local explorer_open = function()
   -- Enable mini.clue in all buffers
   local state = MiniFiles.get_explorer_state()
   vim.iter(ipairs(state.windows)):each(function(_, w) enable(vim.api.nvim_win_get_buf(w.win_id)) end)
-  override()
+  override_globally()
   explorer_set_open(true)
 end
 
 local explorer_close = function()
-  restore()
+  restore_globally()
   explorer_set_open(false)
 end
 
@@ -99,8 +99,8 @@ local buf_enter = function()
   local tab_current = vim.api.nvim_get_current_tabpage()
   if tab_prev == tab_current then return end
 
-  if explorer_is_open(tab_prev) then restore() end
-  if explorer_is_open(tab_current) then override() end
+  if explorer_is_open(tab_prev) then restore_globally() end
+  if explorer_is_open(tab_current) then override_globally() end
   tab_prev = tab_current
 end
 
