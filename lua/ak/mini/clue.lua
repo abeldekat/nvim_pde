@@ -39,5 +39,3 @@ miniclue.setup({
     { mode = { 'n', 'x' }, keys = 'z' },        -- `z` key
   },
 })
-
-require('akextra.files_clued').setup()

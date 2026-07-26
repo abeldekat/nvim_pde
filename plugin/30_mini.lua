@@ -13,10 +13,8 @@ now(function() -- MiniMax always loads starter
   if vim.fn.argc(-1) == 0 then require('ak.mini.starter') end
   vim.o.statusline = ' ' -- added: wait till statusline plugin is loaded
 end)
-later(function() -- MiniMax activates statusline  on `now`
-  require('ak.mini.statusline')
-end)
--- now(function() require('mini.tabline').setup() end)
+later(function() require('ak.mini.statusline') end) -- MiniMax uses now
+-- now(function() require('mini.tabline').setup() end) -- not used
 
 now_if_args(function() require('ak.mini.completion') end)
 now_if_args(function() require('ak.mini.files') end)
@@ -25,13 +23,13 @@ now_if_args(function() require('ak.mini.misc') end)
 
 later(function() require('mini.extra').setup() end)
 later(function() require('ak.mini.ai') end)
-later(function() require('mini.align').setup() end)
--- later(function() require('mini.animate').setup() end)
+-- later(function() require('mini.align').setup() end) -- see 20_keymaps
+-- later(function() require('mini.animate').setup() end) -- not used
 later(function() require('mini.bracketed').setup() end)
 later(function() require('mini.bufremove').setup() end)
 later(function() require('ak.mini.clue') end)
 later(function() require('mini.cmdline').setup() end)
--- later(function() require('mini.comment').setup() end)
+-- later(function() require('mini.comment').setup() end) -- not used
 later(function() require('mini.cursorword').setup() end)
 later(function() require('mini.diff').setup() end)
 later(function() require('ak.mini.git') end)
@@ -41,16 +39,19 @@ later(function() require('mini.input').setup() end)
 later(function() require('mini.jump').setup() end)
 later(function() require('ak.mini.jump2d') end)
 later(function() require('ak.mini.keymap') end)
--- later(function() require('ak.mini.map') end) -- setup on toggle, see 20_keymaps
+-- later(function() require('ak.mini.map') end) -- see 20_keymaps
 later(function() require('mini.move').setup() end)
 later(function() require('mini.operators').setup() end) -- skipped swap arg mappings
 later(function() require('ak.mini.pairs') end)
 later(function() require('ak.mini.pick') end)
 later(function() require('ak.mini.snippets') end)
-later(function() require('mini.splitjoin').setup() end)
+-- later(function() require('mini.splitjoin').setup() end) -- see 20_keymaps
 later(function() require('mini.surround').setup() end) -- `sa sd sr sh sF sf`, last, next
 later(function() require('mini.trailspace').setup() end)
 later(function() require('ak.mini.visits') end)
+
+-- Extra:
+later(function() require('akextra.files_clued').setup() end)
 
 -- Not mentioned here, but can be useful:
 -- - 'mini.colors' - not really needed on a daily basis.

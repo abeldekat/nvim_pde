@@ -221,33 +221,36 @@ copy_keymap('x', 'an', '<M-i>') -- <leader>ls, ommitted o mode
 copy_keymap('x', 'in', '<M-o>') -- <leader>lS, ommitted o mode
 
 -- L is for 'Lua'
-nmap_leader('Lc', '<Cmd>lua MiniMisc.log_clear()<CR>',             'Clear log')
-nmap_leader('Ls', '<Cmd>lua MiniMisc.log_show()<CR>',              'Show log')
+nmap_leader('Lc', '<Cmd>lua MiniMisc.log_clear()<CR>',       'Clear log')
+nmap_leader('Ls', '<Cmd>lua MiniMisc.log_show()<CR>',        'Show log')
 
 -- m is for 'Map'. Not used often, setup on first toggle.
 local minimap_toggle = function()
   if MiniMap == nil then
     require('ak.mini.map')
-    nmap_leader('mf', '<Cmd>lua MiniMap.toggle_focus()<CR>', 'Focus (toggle)')
-    nmap_leader('mr', '<Cmd>lua MiniMap.refresh()<CR>',      'Refresh')
-    nmap_leader('ms', '<Cmd>lua MiniMap.toggle_side()<CR>',  'Side (toggle)')
+    nmap_leader('mf', '<Cmd>lua MiniMap.toggle_focus()<CR>',  'Focus (toggle)')
+    nmap_leader('mr', '<Cmd>lua MiniMap.refresh()<CR>',       'Refresh')
+    nmap_leader('ms', '<Cmd>lua MiniMap.toggle_side()<CR>',   'Side (toggle)')
   end
   MiniMap.toggle()
 end
-nmap_leader('mt', minimap_toggle,                            'Toggle')
+nmap_leader('mt', minimap_toggle,                             'Toggle')
 
 -- o is for 'Other'.
-local zoom_toggle_extended = function() (ZoomExtended or MiniMisc).zoom() end
-local hlsearch_toggle = function() vim.o.hlsearch = not vim.o.hlsearch end
-nmap_leader('oc', '<Cmd>lua Config.next_theme_variant()<CR>', 'Next theme variant') -- added
-nmap_leader('oh', hlsearch_toggle,                            'Vim.o.hlsearch toggle')
+local align = function() if MiniAlign == nil then require('mini.align').setup() end end
+local splitjoin = function() if MiniSplitjoin == nil then require('mini.splitjoin').setup() end end
+local zoom = function() (ZoomExtended or MiniMisc).zoom() end
+local hlsearch = function() vim.o.hlsearch = not vim.o.hlsearch end
+nmap_leader('oc', '<Cmd>lua Config.next_theme_variant()<CR>', 'Next theme variant')
+nmap_leader('oA', align,                                      'Activate align')
+nmap_leader('oh', hlsearch,                                   'Vim.o.hlsearch toggle')
+nmap_leader('oJ', splitjoin,                                  'Activate splitjoin')
 nmap_leader('or', '<Cmd>lua MiniMisc.resize_window()<CR>',    'Resize to default width')
 nmap_leader('ot', '<Cmd>lua MiniTrailspace.trim()<CR>',       'Trim trailspace')
-nmap_leader('oz', zoom_toggle_extended,                       'Zoom toggle')
+nmap_leader('oz', zoom,                                       'Zoom toggle')
 
 -- s is for 'Session'.
 local session_new = 'vim.ui.input({ prompt = "Session name: " }, MiniSessions.write)'
-
 nmap_leader('sd', '<Cmd>lua MiniSessions.select("delete")<CR>', 'Delete')
 nmap_leader('sn', '<Cmd>lua ' .. session_new .. '<CR>',         'New')
 nmap_leader('sR', '<Cmd>lua MiniSessions.select("read")<CR>',   'Read') -- sr
