@@ -51,13 +51,17 @@ the corresponding code will be contained in a dedicated lua module.
 - Menu: [mini.clue]
 - Keyboard: Halcyon Ferris, a split keyboard with 34 keys
 
-### PickHinted
+### FilesClued
 
-Pickers from [mini.pick] can display hints using internal module [akextra.pick_hinted]
+MiniClue shows bookmarks and relevant `g` mappings from MiniFiles using internal module [akextra.files_clued]
 
 ### FilesLayout
 
 Layouts and a full-screen toggle for [mini.files] using internal module [akextra.files_layout]
+
+### PickHinted
+
+Pickers from [mini.pick] can display hints using internal module [akextra.pick_hinted]
 
 ### Kitty
 
@@ -96,17 +100,11 @@ git update-index --assume-unchanged lua/ak/colors.lua
 
 Relevant discussions:
 
-- [Visits tweaked to operate like `grapple` or `harpoon`](https://github.com/nvim-mini/mini.nvim/discussions/1158).
-- [Augment pickers with labels and hotkeys](https://github.com/nvim-mini/mini.nvim/discussions/1109).
-  See internal module [akextra.pick_hinted]
-- [Pick bufferlines with treesitter highlighting](https://github.com/nvim-mini/mini.nvim/discussions/988).
-- [Apply tokyonight dev environment](https://github.com/nvim-mini/mini.nvim/discussions/1012).
-- [Optimized jumping with jump2d](https://github.com/nvim-mini/mini.nvim/discussions/1033).
-- [Beta testing mini.deps](https://github.com/nvim-mini/mini.nvim/issues/689#issuecomment-1962327624).
-- [MiniNotify replacing fidget](https://github.com/nvim-mini/mini.nvim/discussions/1602).
-- [MiniCompletion using blink fuzzy algorithm](https://github.com/nvim-mini/mini.nvim/discussions/1771).
-- [Jump with second character from each spot](https://github.com/nvim-mini/mini.nvim/discussions/1860)
+- [MiniClue: Show bookmarks and `g` mappings from MiniFiles](https://github.com/nvim-mini/mini.nvim/discussions/2519)
 - [Traverse styles in mini.files](https://github.com/nvim-mini/mini.nvim/discussions/2448)
+- [MiniNotify replacing fidget](https://github.com/nvim-mini/mini.nvim/discussions/1602).
+- [Augment pickers with labels and hotkeys](https://github.com/nvim-mini/mini.nvim/discussions/1109).
+- [Optimized jumping with jump2d](https://github.com/nvim-mini/mini.nvim/discussions/1033).
 
 ## Environment
 
@@ -135,8 +133,9 @@ Additionally, code and ideas have been used from the following sources:
 [mini.pick]: https://github.com/nvim-mini/mini.pick
 [mini.visits]: https://github.com/nvim-mini/mini.visits
 [mini.clue]: https://github.com/nvim-mini/mini.clue
-[akextra.pick_hinted]: lua/akextra/pick_hinted.lua
+[akextra.files_clued]: lua/akextra/files_clued.lua
 [akextra.files_layout]: lua/akextra/files_layout.lua
+[akextra.pick_hinted]: lua/akextra/pick_hinted.lua
 [with_submodules]: https://github.com/abeldekat/nvim_pde/tree/with_submodules
 [with_lazynvim]: https://github.com/abeldekat/nvim_pde/tree/with_lazynvim
 [without_minimax]: https://github.com/abeldekat/nvim_pde/tree/without_minimax
