@@ -1,4 +1,8 @@
 {
   "local": { "prefix": "l", "body": "local $1 = $0" },
+
+  "log": { "prefix": "la", "body": "MiniMisc.log_add('$1', { $0 })" },
+  "vim.api": { "prefix": "api", "body": "vim.api.nvim_" },
+
   "Remove prefixes": { "prefix": ["lfu", "ll", "lpca"] }
 }
