@@ -22,7 +22,7 @@ local g_originals = {}
 -- Cache. List with the dictionaries of the modified global 'g' mappings
 local g_modified = {}
 
--- Copied from MiniFiles in order to write a local "map_goto"
+-- Copied from MiniFiles in order to write a local "mark_goto"
 local notify = function(msg, level_name) vim.notify('(FilesClued) ' .. msg, vim.log.levels[level_name]) end
 local fs_is_imaginary_path = function(path) return path:sub(-1) == '\000' end
 local fs_is_present_path = function(path) return vim.loop.fs_stat(path) ~= nil and not fs_is_imaginary_path(path) end
@@ -70,8 +70,8 @@ local decorate_miniclue_trigger = function(trigger_char, buf_id, cb_before_trigg
   local miniclue_mapping_info = vim.fn.maparg(trigger_char, 'n', false, true)
   if miniclue_mapping_info.buffer ~= 1 then return end
 
-  local decorated_info = vim.deepcopy(miniclue_mapping_info)
-  decorated_info.callback = function()
+  local decorated_callback
+  decorated_callback = function()
     local clues_orig = MiniClue.config.clues
 
     -- Don't show global 'config clues' during this 'trigger-char' callback
@@ -84,9 +84,9 @@ local decorate_miniclue_trigger = function(trigger_char, buf_id, cb_before_trigg
     MiniClue.config.clues = clues_orig
 
     -- MiniClue unmaps on exec and schedules a new map. See MiniClue, H.state_exec
-    vim.schedule(function() map_trigger(trigger_char, buf_id, decorated_info.callback) end)
+    vim.schedule(function() map_trigger(trigger_char, buf_id, decorated_callback) end)
   end
-  map_trigger(trigger_char, buf_id, decorated_info.callback)
+  map_trigger(trigger_char, buf_id, decorated_callback)
 end
 
 local attach = function(buf_id)
