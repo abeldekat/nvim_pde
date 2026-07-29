@@ -15,17 +15,15 @@
   require('<this_file>').setup()
 --]]
 
--- The triggers used when explorer is open
-local clue_triggers = { { mode = { 'n' }, keys = "'" }, { mode = { 'n' }, keys = 'g' } }
 -- The description of a global 'g' mapping in open explorer, for better 'clues' readability
 local g_dummy_description = '***'
 -- Flag indicating that the descriptions of the global 'g' mappings have been modified
-local g_descriptions_are_modified = false
+local g_mappings_are_modified = false
 -- Cache. List with the dictionaries of the original global 'g' mappings
 local g_originals = {}
 -- Cache. List with the dictionaries of the global 'g' mappings with modified descriptions
 local g_modified = {}
--- Cache: Deepcopy of global MiniClue config
+-- Cache. Deepcopy of global MiniClue config
 local miniclue_config_deepcopy
 
 -- Copied from MiniFiles in order to write a local "mark_goto"
@@ -61,63 +59,64 @@ local add_mark_mappings = function(buf_id)
   end)
 end
 
-local override_g_globally = function(g_dictionaries, is_override)
+local override_global_g_mappings = function(g_dictionaries, is_override)
   local still_present = function(_, m) return vim.fn.maparg(m.lhs, 'n', false, false) ~= '' end
   vim.iter(ipairs(g_dictionaries)):filter(still_present):each(function(_, m) vim.fn.mapset(m) end)
-  g_descriptions_are_modified = is_override
+  g_mappings_are_modified = is_override
 end
 
-local map_trigger = function(trigger, buf_id, rhs)
+local map_trigger = function(trigger_char, buf_id, trigger_fn)
   -- See MiniClue->H.map_trigger
-  local opts = { nowait = true, buf = buf_id, desc = 'FilesClued for ' .. trigger }
-  vim.keymap.set('n', trigger, rhs, opts)
+  local opts = { nowait = true, buf = buf_id, desc = 'FilesClued for "' .. trigger_char .. '"' }
+  vim.keymap.set('n', trigger_char, trigger_fn, opts)
 end
-local decorate_miniclue_trigger = function(trigger_char, buf_id, cb_before_trigger, cb_after_trigger)
+local decorate = function(trigger_char, buf_id, cb_before, cb_after)
   local miniclue_mapping_info = vim.fn.maparg(trigger_char, 'n', false, true)
+  -- Early return when mapping is not buffer local
   if miniclue_mapping_info.buffer ~= 1 then return end
 
-  local decorated_callback
-  decorated_callback = function()
+  local trigger_fn
+  trigger_fn = function()
     local clues_orig = MiniClue.config.clues
 
     -- During this invocation of 'trigger-char', don't show global 'config clues'
     MiniClue.config.clues = {}
     -- Perform any necessary action to enable MiniClue to show the expected clues
-    cb_before_trigger()
+    cb_before()
     -- Execute the MiniClue trigger
     miniclue_mapping_info.callback()
     -- If needed, undo the actions from 'cb_before_trigger'
-    if cb_after_trigger then cb_after_trigger() end
+    if cb_after then cb_after() end
     -- Restore the global "config clues"
     MiniClue.config.clues = clues_orig
 
     -- MiniClue unmaps on exec and schedules the mapping to be recreated. See MiniClue, H.state_exec
-    vim.schedule(function() map_trigger(trigger_char, buf_id, decorated_callback) end)
+    vim.schedule(function() map_trigger(trigger_char, buf_id, trigger_fn) end)
   end
-  map_trigger(trigger_char, buf_id, decorated_callback)
+  map_trigger(trigger_char, buf_id, trigger_fn)
 end
+
+local decorate_triggers = vim.schedule_wrap(function(buf_id)
+  -- Ensure that bookmarks created dynamically are also included
+  local cb_before = function() add_mark_mappings(buf_id) end
+  decorate("'", buf_id, cb_before)
+
+  -- Ensure that the descriptions of MiniFiles 'g' mappings stand out when explorer is open
+  cb_before = function() override_global_g_mappings(g_modified, true) end
+  local cb_after = function() override_global_g_mappings(g_originals, false) end
+  decorate('g', buf_id, cb_before, cb_after)
+end)
 
 local attach = function(buf_id)
   -- Triggers: Restricted to "'" and 'g'
   -- Solution from discussion: https://github.com/nvim-mini/mini.nvim/discussions/1195#discussioncomment-10542838
   local triggers_orig = MiniClue.config.triggers
-  MiniClue.config.triggers = clue_triggers
+  MiniClue.config.triggers = { { mode = { 'n' }, keys = "'" }, { mode = { 'n' }, keys = 'g' } }
   MiniClue.enable_buf_triggers(buf_id)
   MiniClue.config.triggers = triggers_orig
 
-  -- Clues: Decorate triggers to manipulate the clues shown when explorer is open
-  -- Important: Calls must be scheduled!
-  vim.schedule(function()
-    -- Ensure that bookmarks created when inside explorer are also included
-    local cb_before = function() add_mark_mappings(buf_id) end
-    decorate_miniclue_trigger("'", buf_id, cb_before)
-  end)
-  vim.schedule(function()
-    -- Ensure that when explorer is open, the descriptions of MiniFiles 'g' mappings stand out.
-    local cb_before = function() override_g_globally(g_modified, true) end
-    local cb_after = function() override_g_globally(g_originals, false) end
-    decorate_miniclue_trigger('g', buf_id, cb_before, cb_after)
-  end)
+  -- Clues: Decorate triggers to manipulate the clues displayed when explorer is open
+  decorate_triggers(buf_id)
 end
 
 local ensure_correct_state = function()
@@ -126,7 +125,7 @@ local ensure_correct_state = function()
   -- 2. if 'g', the global 'g' mappings still have modified descriptions
   -- Solution: Always restore when explorer closes
   MiniClue.config = miniclue_config_deepcopy
-  if g_descriptions_are_modified then override_g_globally(g_originals, false) end
+  if g_mappings_are_modified then override_global_g_mappings(g_originals, false) end
 end
 
 local attach_to_already_open = function()
