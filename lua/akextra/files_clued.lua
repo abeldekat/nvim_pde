@@ -77,8 +77,8 @@ local decorate = function(trigger_char, buf_id, cb_before, cb_after)
 
   local trigger_fn
   trigger_fn = function()
+    -- Keep a reference to the original global 'config clues'
     local clues_orig = MiniClue.config.clues
-
     -- During this invocation of 'trigger-char', don't show global 'config clues'
     MiniClue.config.clues = {}
     -- Perform any necessary action to enable MiniClue to show the expected clues
@@ -87,7 +87,7 @@ local decorate = function(trigger_char, buf_id, cb_before, cb_after)
     miniclue_mapping_info.callback()
     -- If needed, undo the actions from 'cb_before_trigger'
     if cb_after then cb_after() end
-    -- Restore the global "config clues"
+    -- Restore the global 'config clues'
     MiniClue.config.clues = clues_orig
 
     -- MiniClue unmaps on exec and schedules the mapping to be recreated. See MiniClue, H.state_exec
