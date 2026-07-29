@@ -120,7 +120,7 @@ local attach = function(buf_id)
   end)
 end
 
-local ensure_consistent_state = function()
+local ensure_correct_state = function()
   -- Only when a 'g' or "'" action fails in open explorer, inconsistent state is expected:
   -- 1. global MiniClue.config.clues would remain incorrect
   -- 2. if 'g', the global 'g' mappings still have modified descriptions
@@ -160,6 +160,6 @@ FilesClued.setup = function()
     vim.api.nvim_create_autocmd(event, { group = augroup, pattern = pattern, callback = callback, desc = desc })
   end
   au('User', 'MiniFilesBufferCreate', function(args) attach(args.data.buf_id) end, 'Show MiniFiles in MiniClue')
-  au('User', 'MiniFilesExplorerClose', function() ensure_consistent_state() end, 'Ensure state')
+  au('User', 'MiniFilesExplorerClose', function() ensure_correct_state() end, 'Ensure state')
 end
 return FilesClued
