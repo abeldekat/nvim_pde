@@ -60,9 +60,8 @@ local add_linenumbers = function(args)
   local win_id = args.data.win_id
   if not (win_id and win_id == vim.api.nvim_get_current_win()) then return end
 
+  vim.wo[win_id].number = true
   vim.wo[win_id].relativenumber = true
-  local opts = { once = true, callback = function() vim.wo[win_id].relativenumber = false end }
-  vim.api.nvim_create_autocmd('WinLeave', opts)
 end
 
 local add_marks = function()

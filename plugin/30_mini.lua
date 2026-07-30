@@ -51,7 +51,7 @@ later(function() require('mini.trailspace').setup() end)
 later(function() require('ak.mini.visits') end)
 
 -- Extra:
-later(function() require('akextra.files_clued').setup() end)
+later(function() require('akextra.files_clued').setup({ with_g = true }) end)
 
 -- Not mentioned here, but can be useful:
 -- - 'mini.colors' - not really needed on a daily basis.

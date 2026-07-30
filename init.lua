@@ -20,8 +20,8 @@ Config.on_packchanged = function(plugin_name, kinds, callback, desc)
 end
 
 -- Added: Optimize( a bit )..
-for _, disable in ipairs({ 'gzip', 'tarPlugin', 'tutor', 'zipPlugin' }) do
-  vim.g['loaded_' .. disable] = 0
+for _, to_disable in ipairs({ 'gzip', 'tarPlugin', 'tutor', 'zipPlugin', 'nvim_zip_plugin' }) do
+  vim.g['loaded_' .. to_disable] = 1
 end
 
 -- Load 'mini.nvim'.
@@ -34,3 +34,6 @@ Config.later = function(f) misc.safely('later', f) end
 Config.now_if_args = vim.fn.argc(-1) > 0 and Config.now or Config.later
 Config.on_event = function(ev, f) misc.safely('event:' .. ev, f) end
 Config.on_filetype = function(ft, f) misc.safely('filetype:' .. ft, f) end
+
+-- Added: support project specific .nvim.lua. Example: set extra MiniFiles bookmarks
+vim.o.exrc = true
