@@ -19,8 +19,8 @@ local decorate = function(buf_id, trigger_char, cb_before, cb_after)
     local opts = { nowait = true, buf = buf_id, desc = 'FilesClued for "' .. trigger_char .. '"' }
     vim.keymap.set('n', trigger_char, trigger_fn, opts)
   end
+  if vim.fn.maparg(trigger_char, 'n', false, false) == '' then return end
   local miniclue_mapping_info = vim.fn.maparg(trigger_char, 'n', false, true)
-  -- Early return when mapping is not buffer local. MiniClue must be enabled...
   if miniclue_mapping_info.buffer ~= 1 then return end
 
   local trigger_fn
@@ -97,8 +97,10 @@ local gen_bookmarks_config = function(opts)
     trigger_char = "'",
     trigger_definition = { mode = { 'n' }, keys = "'" },
     cb_before = function(buf_id)
-      vim.iter(pairs(MiniFiles.get_explorer_state().bookmarks)):each(function(id, bookmark)
-        vim.keymap.set('n', "'" .. id, function() mark_goto(id) end, { buf = buf_id, desc = bookmark.desc })
+      local fn, callable = vim.fn, vim.is_callable
+      vim.iter(pairs(MiniFiles.get_explorer_state().bookmarks)):each(function(id, b)
+        local desc = b.desc or fn.pathshorten(fn.fnamemodify(callable(b.path) and b.path() or b.path, ':p:~'), 2)
+        vim.keymap.set('n', "'" .. id, function() mark_goto(id) end, { buf = buf_id, desc = desc })
       end)
       vim.b[buf_id].miniclue_config = { clues = get_cache().from_config }
     end,
@@ -149,7 +151,7 @@ FilesClued.setup = function(config)
   if MiniFiles.config.mappings.mark_goto ~= "'" then return end
 
   _G.FilesClued = FilesClued
-  local config = vim.tbl_deep_extend('force', { with_g = false }, config or {})
+  config = vim.tbl_deep_extend('force', { with_g = false }, config or {})
   local change_desc = function(obj)
     obj.desc = '     ' .. (obj.desc or '')
     return obj
