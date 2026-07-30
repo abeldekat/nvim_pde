@@ -4,7 +4,7 @@
 
 ![1724703946](https://github.com/user-attachments/assets/4fac0567-81fe-48c2-8d79-88b9744803a0)
 
-My Neovim config, based on [MiniMax]
+Neovim config based on [MiniMax]
 
 > [!NOTE]
 > Tag [with_submodules] references the version containing `git submodules`,
@@ -42,7 +42,7 @@ rm -rf ~/.config/ak
 ## Structure
 
 See [MiniMax]. However, in case the `setup` of a plugin is customized,
-the corresponding code will be contained in a dedicated lua module.
+the corresponding code will be written in a dedicated lua module.
 
 ## Workflow
 
@@ -53,7 +53,7 @@ the corresponding code will be contained in a dedicated lua module.
 
 ### FilesClued
 
-MiniClue shows bookmarks and relevant `g` mappings from MiniFiles using internal module [akextra.files_clued]
+MiniClue shows bookmarks and `g` mappings from MiniFiles using internal module [akextra.files_clued]
 
 ### FilesLayout
 

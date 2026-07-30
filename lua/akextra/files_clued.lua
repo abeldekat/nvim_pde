@@ -2,7 +2,8 @@
 -- This 'extra' enables showing bookmarks from MiniFiles with MiniClue. The 'g' mappings are opt-in
 -- See `:h MiniFiles-examples`
 -- See https://github.com/nvim-mini/mini.nvim/discussions/2519
--- Prerequisites: MiniFiles and MiniClue active. MiniFiles uses default mark_goto mapping
+--
+-- Requirements: MiniFiles and MiniClue active. MiniFiles uses default mark_goto mapping
 -- Example usage:
 --[[
    require('mini.files').setup()
@@ -97,9 +98,9 @@ local gen_bookmarks_config = function(opts)
     trigger_char = "'",
     trigger_definition = { mode = { 'n' }, keys = "'" },
     cb_before = function(buf_id)
-      local fn, callable = vim.fn, vim.is_callable
+      local fn, is_callable = vim.fn, vim.is_callable
       vim.iter(pairs(MiniFiles.get_explorer_state().bookmarks)):each(function(id, b)
-        local desc = b.desc or fn.pathshorten(fn.fnamemodify(callable(b.path) and b.path() or b.path, ':p:~'), 2)
+        local desc = b.desc or fn.pathshorten(fn.fnamemodify(is_callable(b.path) and b.path() or b.path, ':p:~'), 2)
         vim.keymap.set('n', "'" .. id, function() mark_goto(id) end, { buf = buf_id, desc = desc })
       end)
       vim.b[buf_id].miniclue_config = { clues = get_cache().from_config }
