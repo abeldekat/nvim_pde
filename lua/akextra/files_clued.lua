@@ -161,7 +161,7 @@ FilesClued.setup = function(config)
   local list_bufs, is_loaded = vim.api.nvim_list_bufs, vim.api.nvim_buf_is_loaded
   local is_files = function(buf_id) return vim.bo[buf_id].filetype == 'minifiles' end
   vim.iter(list_bufs()):filter(is_loaded):filter(is_files):each(function(buf_id) attach(buf_id, with) end)
-
+  -- attach to new MiniFiles buffers
   au('User', 'MiniFilesBufferCreate', function(args) attach(args.data.buf_id, with) end, 'Show MiniFiles in MiniClue')
 end
 return FilesClued
