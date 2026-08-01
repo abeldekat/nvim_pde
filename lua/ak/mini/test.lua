@@ -1,80 +1,8 @@
--- Copied from nvim echasnovski, 21_functions.lua. Modified...
+---@diagnostic disable: undefined-global
+-- Copied and modified from nvim echasnovski, 21_functions.lua.
 require('mini.test').setup()
 
-local S = {}
-Config.minitest_screenshots = S
-
-S.browse = function(dir_path)
-  dir_path = dir_path or 'tests/screenshots'
-  S.files = vim.fn.readdir(dir_path)
-  S.dir_path = dir_path
-  local preview_item = function(x) return vim.fn.readfile(dir_path .. '/' .. x) end
-  local ui_opts = { prompt = 'Choose screenshot', preview_item = preview_item }
-
-  vim.ui.select(S.files, ui_opts, function(_, idx)
-    if idx == nil then return end
-    S.file_id = idx
-
-    S.setup_windows()
-    S.show()
-  end)
-end
-
-S.setup_windows = function()
-  -- Set up tab page
-  vim.cmd('tabnew')
-  S.buf_id_text = vim.api.nvim_get_current_buf()
-  S.win_id_text = vim.api.nvim_get_current_win()
-  vim.cmd('setlocal bufhidden=wipe nobuflisted')
-  vim.cmd('au CursorMoved <buffer> lua Config.minitest_screenshots.sync_cursor()')
-
-  vim.cmd('belowright wincmd v | wincmd = | enew')
-  S.buf_id_attr = vim.api.nvim_get_current_buf()
-  S.win_id_attr = vim.api.nvim_get_current_win()
-  vim.cmd('setlocal bufhidden=wipe nobuflisted')
-  vim.cmd('au CursorMoved <buffer> lua Config.minitest_screenshots.sync_cursor()')
-
-  vim.api.nvim_set_current_win(S.win_id_text)
-
-  --stylua: ignore start
-  local win_options = {
-    colorcolumn = '', cursorline = true, cursorcolumn = true, fillchars = 'eob: ',
-    foldcolumn = '0', foldlevel = 999,   number = false,      relativenumber = false,
-    spell = false,    signcolumn = 'no', wrap = false,
-  }
-  for name, value in pairs(win_options) do
-    vim.api.nvim_set_option_value(name, value, { win = S.win_id_text})
-    vim.api.nvim_set_option_value(name, value, { win = S.win_id_attr})
-  end
-
-  -- Set up behavior
-  for _, buf_id in ipairs({ S.buf_id_text, S.buf_id_attr }) do
-    vim.api.nvim_buf_set_keymap(buf_id, 'n', 'q', ':tabclose!<CR>', { noremap = true })
-    vim.api.nvim_buf_set_keymap(buf_id, 'n', '<C-d>', '<Cmd>lua Config.minitest_screenshots.delete_current()<CR>', { noremap = true })
-    vim.api.nvim_buf_set_keymap(buf_id, 'n', '<C-n>', '<Cmd>lua Config.minitest_screenshots.show_next()<CR>', { noremap = true })
-    vim.api.nvim_buf_set_keymap(buf_id, 'n', '<C-p>', '<Cmd>lua Config.minitest_screenshots.show_prev()<CR>', { noremap = true })
-  end
-  --stylua: ignore end
-end
-
-S.show = function(path)
-  path = path or (S.dir_path .. '/' .. S.files[S.file_id])
-
-  local lines = vim.fn.readfile(path)
-  local n = 0.5 * (#lines - 3)
-
-  local text_lines = { path, 'Text' }
-  vim.list_extend(text_lines, vim.list_slice(lines, 1, n + 1))
-  vim.api.nvim_buf_set_lines(S.buf_id_text, 0, -1, true, text_lines)
-
-  local attr_lines = { path, 'Attr' }
-  vim.list_extend(attr_lines, vim.list_slice(lines, n + 3, 2 * n + 3))
-  vim.api.nvim_buf_set_lines(S.buf_id_attr, 0, -1, true, attr_lines)
-
-  pcall(function() MiniTrailspace.unhighlight() end)
-end
-
-S.sync_cursor = function()
+local sync_cursor = function()
   -- Don't use `vim.api.nvim_win_get_cursor()` because of multibyte characters
   local line, col = vim.fn.winline(), vim.fn.wincol()
   local cur_win_id = vim.api.nvim_get_current_win()
@@ -84,18 +12,87 @@ S.sync_cursor = function()
   vim.api.nvim_set_current_win(cur_win_id)
 end
 
-S.show_next = function()
-  S.file_id = math.fmod(S.file_id, #S.files) + 1
-  S.show()
-end
+local files, dir_path, file_id
 
-S.show_prev = function()
-  S.file_id = math.fmod(S.file_id + #S.files - 2, #S.files) + 1
-  S.show()
-end
-
-S.delete_current = function()
-  local path = S.dir_path .. '/' .. S.files[S.file_id]
+local delete_current = function()
+  local path = dir_path .. '/' .. files[file_id]
   vim.fn.delete(path)
   vim.notify('Deleted file ' .. vim.inspect(path))
 end
+
+local show = function(buf_text, buf_attr)
+  local path = dir_path .. '/' .. files[file_id]
+
+  local lines = vim.fn.readfile(path)
+  local n = 0.5 * (#lines - 3)
+
+  local text_lines = { path, 'Text' }
+  vim.list_extend(text_lines, vim.list_slice(lines, 1, n + 1))
+  vim.api.nvim_buf_set_lines(buf_text, 0, -1, true, text_lines)
+
+  local attr_lines = { path, 'Attr' }
+  vim.list_extend(attr_lines, vim.list_slice(lines, n + 3, 2 * n + 3))
+  vim.api.nvim_buf_set_lines(buf_attr, 0, -1, true, attr_lines)
+
+  pcall(function() MiniTrailspace.unhighlight() end)
+end
+local show_next = function(buf_text, buf_attr)
+  file_id = math.fmod(file_id, #files) + 1
+  show(buf_text, buf_attr)
+end
+local show_prev = function(buf_text, buf_attr)
+  file_id = math.fmod(file_id + #files - 2, #files) + 1
+  show(buf_text, buf_attr)
+end
+
+local setup_windows = function()
+  local function apply_buf()
+    local buf = vim.api.nvim_get_current_buf()
+    vim.cmd('setlocal bufhidden=wipe nobuflisted')
+    vim.api.nvim_create_autocmd('CursorMoved', { buf = buf_id, callback = sync_cursor })
+    return buf
+  end
+
+  -- Set up tab page
+  vim.cmd('tabnew')
+  local buf_text, win_text = apply_buf(), vim.api.nvim_get_current_win()
+  vim.cmd('belowright wincmd v | wincmd = | enew')
+  local buf_attr, win_attr = apply_buf(), vim.api.nvim_get_current_win()
+  vim.api.nvim_set_current_win(win_text)
+
+  -- stylua: ignore start
+  local win_options = {
+    colorcolumn = '', cursorline = true, cursorcolumn = true, fillchars = 'eob: ',
+    foldcolumn = '0', foldlevel = 999,   number = false,      relativenumber = false,
+    spell = false,    signcolumn = 'no', wrap = false,
+  }
+  -- stylua: ignore end
+  for name, value in pairs(win_options) do
+    vim.api.nvim_set_option_value(name, value, { win = win_text })
+    vim.api.nvim_set_option_value(name, value, { win = win_attr })
+  end
+
+  -- Set up behavior
+  for _, buf_id in ipairs({ buf_text, buf_attr }) do
+    vim.keymap.set('n', 'q', ':tabclose!<CR>', { buf = buf_id })
+    vim.keymap.set('n', '<C-d>', delete_current, { buf = buf_id })
+    vim.keymap.set('n', '<C-n>', function() show_next(buf_text, buf_attr) end, { buf = buf_id })
+    vim.keymap.set('n', '<C-p>', function() show_prev(buf_text, buf_attr) end, { buf = buf_id })
+  end
+  return buf_text, buf_attr
+end
+
+local browse = function(path_to_screenshots)
+  path_to_screenshots = path_to_screenshots or 'tests/screenshots'
+  dir_path = path_to_screenshots
+  files = vim.fn.readdir(dir_path)
+
+  local read_file = function(x) return vim.fn.readfile(dir_path .. '/' .. x) end
+  vim.ui.select(files, { prompt = 'Choose screenshot', preview_item = read_file }, function(_, idx)
+    if idx == nil then return end
+    file_id = idx
+    show(setup_windows())
+  end)
+end
+
+Config.minitest_screenshots = { browse = browse }
