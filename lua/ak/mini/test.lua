@@ -46,18 +46,19 @@ local show_prev = function(buf_text, buf_attr)
 end
 
 local setup_windows = function()
-  local function apply_buf()
+  local function buf_win()
     local buf = vim.api.nvim_get_current_buf()
+    local win = vim.api.nvim_get_current_win()
     vim.cmd('setlocal bufhidden=wipe nobuflisted')
-    vim.api.nvim_create_autocmd('CursorMoved', { buf = buf_id, callback = sync_cursor })
-    return buf
+    vim.api.nvim_create_autocmd('CursorMoved', { buf = buf, callback = sync_cursor })
+    return buf, win
   end
 
-  -- Set up tab page
+  -- -- Set up tab page
   vim.cmd('tabnew')
-  local buf_text, win_text = apply_buf(), vim.api.nvim_get_current_win()
+  local buf_text, win_text = buf_win()
   vim.cmd('belowright wincmd v | wincmd = | enew')
-  local buf_attr, win_attr = apply_buf(), vim.api.nvim_get_current_win()
+  local buf_attr, win_attr = buf_win()
   vim.api.nvim_set_current_win(win_text)
 
   -- stylua: ignore start
@@ -95,4 +96,4 @@ local browse = function(path_to_screenshots)
   end)
 end
 
-Config.minitest_screenshots = { browse = browse }
+Config.minitest_screenshots = { browse = browse, sync_cursor = sync_cursor }
