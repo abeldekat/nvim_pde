@@ -46,6 +46,7 @@ Config.leader_group_clues = {
   { mode =   'n',        keys = '<Leader>f', desc = '+Find' },
   { mode = { 'n', 'x' }, keys = '<Leader>g', desc = '+Git' },
   { mode =   'n',        keys = '<Leader>i', desc = '+V[i]sits' }, -- changed from v
+  { mode =   'n',        keys = '<Leader>L', desc = '+Lua/Log' }, -- added
   { mode = { 'n', 'x' }, keys = '<Leader>l', desc = '+Language' },
   { mode =   'n',        keys = '<Leader>m', desc = '+Map' },
   { mode =   'n',        keys = '<Leader>o', desc = '+Other' },
@@ -257,9 +258,13 @@ nmap_leader('sR', '<Cmd>lua MiniSessions.select("read")<CR>',   'Read') -- sr
 nmap_leader('sr', '<Cmd>lua MiniSessions.restart()<CR>',        'Restart') -- sR
 nmap_leader('sw', '<Cmd>lua MiniSessions.write()<CR>',          'Write current')
 
--- t is for 'Terminal'
-nmap_leader('tT', '<Cmd>horizontal term<CR>', 'Terminal (horizontal)')
-nmap_leader('tt', '<Cmd>vertical term<CR>',   'Terminal (vertical)')
+-- t is for 'Terminal' and 'minitest'(added)
+nmap_leader('ta', '<Cmd>lua MiniTest.run()<CR>',                       'Test run all')
+nmap_leader('tf', '<Cmd>lua MiniTest.run_file()<CR>',                  'Test run file')
+nmap_leader('tl', '<Cmd>lua MiniTest.run_at_location()<CR>',           'Test run location')
+nmap_leader('ts', '<Cmd>lua Config.minitest_screenshots.browse()<CR>', 'Test show screenshot')
+nmap_leader('tT', '<Cmd>horizontal term<CR>',                          'Terminal (horizontal)')
+nmap_leader('tt', '<Cmd>vertical term<CR>',                            'Terminal (vertical)')
 
 local function on_termopen() -- ...added...
   local opts = { buf = 0 }

@@ -11,11 +11,20 @@ local lang_patterns = {
   markdown_inline = { 'markdown.json' },
 }
 
+-- From nvim echasnovski
+local load_if_minitest_buf = function(context)
+  local buf_name = vim.api.nvim_buf_get_name(context.buf_id)
+  local is_test_buf = vim.fn.fnamemodify(buf_name, ':t'):find('^test_.+%.lua$') ~= nil
+  if not is_test_buf then return {} end
+  return MiniSnippets.read_file(config_path .. '/snippets/mini-test.json')
+end
+
 mini_snippets.setup({
   mappings = { jump_next = '', jump_prev = '' }, -- see ak.mini.keymap
   snippets = {
     mini_snippets.gen_loader.from_file(config_path .. '/snippets/global.json'),
     mini_snippets.gen_loader.from_lang({ lang_patterns = lang_patterns }),
+    load_if_minitest_buf,
   },
 })
 

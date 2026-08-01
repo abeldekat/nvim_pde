@@ -1,26 +1,27 @@
-.DEFAULT_GOAL = to_gh
+.DEFAULT_GOAL = test_files_clued
+GROUP_DEPTH ?= 1
+NVIM_EXEC ?= nvim
 
-#------------------ internal
+# Download 'mini.nvim' to use its 'mini.test' testing module
+deps/mini.nvim:
+	@mkdir -p deps
+	git clone --filter=blob:none https://github.com/nvim-mini/mini.nvim $@
 
-#-- if not set, default to nvim
-NVIM_APPNAME?=nvim
-
-CACHE=~/.cache/${NVIM_APPNAME}
-DATA=~/.local/share/${NVIM_APPNAME}
-STATE=~/.local/state/${NVIM_APPNAME}
-
-clean_cache:
-	@if [ -d ${CACHE} ]; then \
-		rm -rf ${CACHE}; \
-		echo "clean cache done"; \
-	fi
-
-clean: clean_cache
-	@rm -rf ${DATA} ${STATE}
-	echo "clean done";
+test_files_clued: deps/mini.nvim
+	for nvim_exec in $(NVIM_EXEC); do \
+		printf "\n======\n\n" ; \
+		$$nvim_exec --version | head -n 1 && echo '' ; \
+		$$nvim_exec --headless --noplugin -u ./scripts/minimal_init.lua \
+			-c "lua require('mini.test').setup()" \
+			-c "lua MiniTest.run_file('tests/test_files_clued.lua', { execute = { reporter = MiniTest.gen_reporter.stdout({ group_depth = $(GROUP_DEPTH) }) } })" ; \
+	done
 
 to_gh:
 	@cp README.md LSP.md init.lua filetype.lua nvim-pack-lock.json .stylua.toml colors.txt .markdownlint.yml .prettierrc .gitignore Makefile ../nvimak
+	@rm -rf ../nvimak/scripts
+	@rsync -av scripts ../nvimak
+	@rm -rf ../nvimak/tests
+	@rsync -av tests ../nvimak
 	@rm -rf ../nvimak/after
 	@rsync -av after ../nvimak
 	@rm -rf ../nvimak/lua
