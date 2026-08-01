@@ -96,4 +96,4 @@ local browse = function(path_to_screenshots)
   end)
 end
 
-Config.minitest_screenshots = { browse = browse, sync_cursor = sync_cursor }
+Config.minitest_screenshots = { browse = browse }
