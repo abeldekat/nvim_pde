@@ -58,4 +58,4 @@ later(function() require('akextra.files_clued').setup({ with_g = true }) end)
 -- - 'mini.doc' - needed only for plugin developers.
 -- - 'mini.fuzzy' - not really needed on a daily basis.
 -- - 'mini.test' - needed only for plugin developers.
-later(function() require('mini.test').setup() end)
+later(function() require('ak.mini.test') end)
