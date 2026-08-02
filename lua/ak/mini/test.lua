@@ -7,8 +7,7 @@ local sync_cursor = function()
   local line, col = vim.fn.winline(), vim.fn.wincol()
   local cur_win_id = vim.api.nvim_get_current_win()
   -- Don't use `vim.api.nvim_win_set_cursor()`: it doesn't redraw cursorcolumn
-  local command = string.format('windo call setcursorcharpos(%d, %d)', line, col)
-  vim.cmd(command)
+  vim.cmd(string.format('windo call setcursorcharpos(%d, %d)', line, col))
   vim.api.nvim_set_current_win(cur_win_id)
 end
 
