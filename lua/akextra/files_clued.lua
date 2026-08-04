@@ -152,6 +152,11 @@ local gen_g_config = function(opts)
   }
 end
 
+local error = function(msg) error('(FilesClued) ' .. msg, 0) end
+local check_type = function(name, val, ref, allow_nil)
+  if type(val) == ref or (ref == 'callable' and vim.is_callable(val)) or (allow_nil and val == nil) then return end
+  error(string.format('`%s` should be %s, not %s', name, ref, type(val)))
+end
 local FilesClued = {}
 FilesClued.config = {
   use_g = false,
@@ -167,7 +172,11 @@ FilesClued.setup = function(config)
   if MiniFiles == nil or MiniClue == nil then return end
   _G.FilesClued = FilesClued
 
+  check_type('config', config, 'table', true)
   config = vim.tbl_deep_extend('force', default_config, config or {})
+  check_type('use_g', config.use_g, 'boolean')
+  if not vim.is_callable(config.change_desc) then error('`change_desc` should be callable.') end
+
   FilesClued.config = config
 
   local bookmark_config, g_config = gen_bookmark_config(config), config.use_g and gen_g_config(config) or nil

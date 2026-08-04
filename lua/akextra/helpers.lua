@@ -141,12 +141,12 @@ Helpers.new_child_neovim = function()
   --   function (as currently there is no way to communicate a function object
   --   through RPC).
   -- - `mini_unload` - unload module and revert common side effects.
-  child.mini_load = function(name, config)
-    local lua_cmd = ([[require('mini.%s').setup(...)]]):format(name)
-    child.lua(lua_cmd, { config })
-  end
   child.akextra_load = function(name, config)
     local lua_cmd = ([[require('akextra.%s').setup(...)]]):format(name)
+    child.lua(lua_cmd, { config })
+  end
+  child.mini_load = function(name, config)
+    local lua_cmd = ([[require('mini.%s').setup(...)]]):format(name)
     child.lua(lua_cmd, { config })
   end
 
@@ -161,8 +161,21 @@ Helpers.new_child_neovim = function()
     child.lua(command)
   end
 
-  child.mini_unload = function(name)
+  child.akextra_unload = function(name, tbl_name)
     local module_name = 'akextra.' .. name
+    local tbl_name = tbl_name
+
+    -- Unload Lua module
+    child.lua(([[package.loaded['%s'] = nil]]):format(module_name))
+
+    -- Remove global table
+    child.lua(('_G["%s"] = nil'):format(tbl_name))
+
+    -- Remove autocmd group
+    if child.fn.exists('#' .. tbl_name) == 1 then child.api.nvim_del_augroup_by_name(tbl_name) end
+  end
+  child.mini_unload = function(name)
+    local module_name = 'mini.' .. name
     local tbl_name = 'Mini' .. name:sub(1, 1):upper() .. name:sub(2)
 
     -- Unload Lua module

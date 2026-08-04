@@ -6,6 +6,7 @@ local new_set = MiniTest.new_set
 
 -- Helpers with child processes
 local load_module = function(config) child.akextra_load('files_clued', config) end
+local unload_module = function() child.akextra_unload('files_clued', 'FilesClued') end
 local load_module_files = function(config) child.mini_load('files', config) end
 local load_module_clue = function(config) child.mini_load('clue', config) end
 local type_keys = function(...) return child.type_keys(...) end
@@ -134,18 +135,32 @@ T['setup()']['creates `config` field'] = function()
   eq(child.lua_get('type(_G.FilesClued.config)'), 'table')
 
   -- Check default values
+  local expect_config_type = function(field, type_val)
+    eq(child.lua_get('type(FilesClued.config.' .. field .. ')'), type_val)
+  end
   local expect_config = function(field, value) eq(child.lua_get('FilesClued.config.' .. field), value) end
+
   expect_config('use_g', false)
-  -- TODO: Cannot convert... Investigate approaches in mini.nvim regarding config functions
-  -- expect_config('change_desc ', vim.NIL)
+  expect_config_type('change_desc', 'function')
 end
 
--- NOTE: FilesClued does not perform config validation
 T['setup()']['respects `config` argument'] = function()
   child.lua('_G.MiniFiles = {} _G.MiniClue = {}')
   -- Check setting `FilesClued.config` fields
   load_module({ use_g = true })
   eq(child.lua_get('FilesClued.config.use_g'), true)
+end
+
+T['setup()']['validates `config` argument'] = function()
+  unload_module()
+  child.lua([[ MiniFiles = {} MiniClue = {} ]])
+
+  local expect_config_error = function(config, name, target_type)
+    expect.error(function() load_module(config) end, vim.pesc(name) .. '.*' .. vim.pesc(target_type))
+  end
+  expect_config_error('a', 'config', 'table')
+  expect_config_error({ use_g = 'a' }, 'use_g', 'boolean')
+  expect_config_error({ change_desc = 'a' }, 'change_desc', 'function')
 end
 
 T['setup()']['creates triggers for already created explorers'] = function()
