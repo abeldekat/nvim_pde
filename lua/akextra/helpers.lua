@@ -1,4 +1,3 @@
----@diagnostic disable: undefined-global
 local Helpers = {}
 
 -- Add extra expectations
@@ -16,47 +15,47 @@ Helpers.expect.no_match = MiniTest.new_expectation(
   function(str, pattern) return string.format('Pattern: %s\nObserved string: %s', vim.inspect(pattern), str) end
 )
 
--- Helpers.expect.equality_approx = MiniTest.new_expectation(
---   'approximate equality',
---   function(x, y, tol)
---     if type(x) ~= type(y) then return false end
---     if type(x) == 'number' then return math.abs(x - y) <= tol end
---     if type(x) ~= 'table' then return vim.deep_equal(x, y) end
---
---     local x_keys, y_keys = vim.tbl_keys(x), vim.tbl_keys(y)
---     table.sort(x_keys)
---     table.sort(y_keys)
---     if not vim.deep_equal(x_keys, y_keys) then return false end
---     for _, key in ipairs(x_keys) do
---       if math.abs(x[key] - y[key]) > tol then return false end
---     end
---
---     return true
---   end,
---   function(x, y, tol) return string.format('Left: %s\nRight: %s\nTolerance: %s', vim.inspect(x), vim.inspect(y), tol) end
--- )
+Helpers.expect.equality_approx = MiniTest.new_expectation(
+  'approximate equality',
+  function(x, y, tol)
+    if type(x) ~= type(y) then return false end
+    if type(x) == 'number' then return math.abs(x - y) <= tol end
+    if type(x) ~= 'table' then return vim.deep_equal(x, y) end
 
--- Helpers.make_partial_tbl = function(tbl, ref)
---   local res = {}
---   for k, v in pairs(ref) do
---     res[k] = (type(tbl[k]) == 'table' and type(v) == 'table') and Helpers.make_partial_tbl(tbl[k], v) or tbl[k]
---   end
---   for i = 1, #tbl do
---     if ref[i] == nil then res[i] = tbl[i] end
---   end
---   return res
--- end
+    local x_keys, y_keys = vim.tbl_keys(x), vim.tbl_keys(y)
+    table.sort(x_keys)
+    table.sort(y_keys)
+    if not vim.deep_equal(x_keys, y_keys) then return false end
+    for _, key in ipairs(x_keys) do
+      if math.abs(x[key] - y[key]) > tol then return false end
+    end
 
--- Helpers.expect.equality_partial_tbl = MiniTest.new_expectation(
---   'equality of tables only in reference fields',
---   function(x, y)
---     if type(x) == 'table' and type(y) == 'table' then x = Helpers.make_partial_tbl(x, y, {}) end
---     return vim.deep_equal(x, y)
---   end,
---   function(x, y)
---     return string.format('Left: %s\nRight: %s', vim.inspect(Helpers.make_partial_tbl(x, y, {})), vim.inspect(y))
---   end
--- )
+    return true
+  end,
+  function(x, y, tol) return string.format('Left: %s\nRight: %s\nTolerance: %s', vim.inspect(x), vim.inspect(y), tol) end
+)
+
+Helpers.make_partial_tbl = function(tbl, ref)
+  local res = {}
+  for k, v in pairs(ref) do
+    res[k] = (type(tbl[k]) == 'table' and type(v) == 'table') and Helpers.make_partial_tbl(tbl[k], v) or tbl[k]
+  end
+  for i = 1, #tbl do
+    if ref[i] == nil then res[i] = tbl[i] end
+  end
+  return res
+end
+
+Helpers.expect.equality_partial_tbl = MiniTest.new_expectation(
+  'equality of tables only in reference fields',
+  function(x, y)
+    if type(x) == 'table' and type(y) == 'table' then x = Helpers.make_partial_tbl(x, y, {}) end
+    return vim.deep_equal(x, y)
+  end,
+  function(x, y)
+    return string.format('Left: %s\nRight: %s', vim.inspect(Helpers.make_partial_tbl(x, y, {})), vim.inspect(y))
+  end
+)
 
 -- Monkey-patch `MiniTest.new_child_neovim` with helpful wrappers
 Helpers.new_child_neovim = function()
@@ -70,7 +69,7 @@ Helpers.new_child_neovim = function()
   end
 
   child.setup = function()
-    child.restart({ '-u', 'scripts/minimal_init.lua' })
+    child.restart({ '--noplugin', '-u', 'lua/akextra/minimal_init.lua' })
 
     -- Change initial buffer to be readonly. This not only increases execution
     -- speed, but more closely resembles manually opened Neovim.
@@ -134,23 +133,6 @@ Helpers.new_child_neovim = function()
     MiniTest.expect.equality(child.api.nvim_buf_get_mark(0, '>'), last)
   end
 
-  child.validate_edit = function(lines_before, cursor_before, keys, lines_after, cursor_after)
-    child.ensure_normal_mode()
-
-    child.set_lines(lines_before)
-    child.set_cursor(cursor_before[1], cursor_before[2])
-
-    if vim.is_callable(keys) then keys() end
-    if not vim.is_callable(keys) then child.type_keys(keys) end
-
-    Helpers.expect.equality(child.get_lines(), lines_after)
-    Helpers.expect.equality(child.get_cursor(), cursor_after)
-  end
-
-  child.validate_edit1d = function(line_before, col_before, keys, line_after, col_after)
-    child.validate_edit({ line_before }, { 1, col_before }, keys, { line_after }, { 1, col_after })
-  end
-
   -- Work with 'mini.nvim':
   -- - `mini_load` - load with "normal" table config
   -- - `mini_load_strconfig` - load with "string" config, which is still a
@@ -159,12 +141,12 @@ Helpers.new_child_neovim = function()
   --   function (as currently there is no way to communicate a function object
   --   through RPC).
   -- - `mini_unload` - unload module and revert common side effects.
-  child.akextra_load = function(name, config)
-    local lua_cmd = ([[require('akextra.%s').setup(...)]]):format(name)
-    child.lua(lua_cmd, { config })
-  end
   child.mini_load = function(name, config)
     local lua_cmd = ([[require('mini.%s').setup(...)]]):format(name)
+    child.lua(lua_cmd, { config })
+  end
+  child.akextra_load = function(name, config)
+    local lua_cmd = ([[require('akextra.%s').setup(...)]]):format(name)
     child.lua(lua_cmd, { config })
   end
 
@@ -175,24 +157,12 @@ Helpers.new_child_neovim = function()
     end
     local str = string.format('{ %s }', table.concat(t, ', '))
 
-    local command = ([[require('mini.%s').setup(%s)]]):format(name, str)
+    local command = ([[require('akextra.%s').setup(%s)]]):format(name, str)
     child.lua(command)
   end
 
-  child.akextra_unload = function(name, tbl_name)
-    local module_name = 'akextra' .. name
-
-    -- Unload Lua module
-    child.lua(([[package.loaded['%s'] = nil]]):format(module_name))
-
-    -- Remove global table
-    child.lua(('_G["%s"] = nil'):format(tbl_name))
-
-    -- Remove autocmd group
-    if child.fn.exists('#' .. tbl_name) == 1 then child.api.nvim_del_augroup_by_name(tbl_name) end
-  end
   child.mini_unload = function(name)
-    local module_name = 'mini.' .. name
+    local module_name = 'akextra.' .. name
     local tbl_name = 'Mini' .. name:sub(1, 1):upper() .. name:sub(2)
 
     -- Unload Lua module
@@ -203,20 +173,6 @@ Helpers.new_child_neovim = function()
 
     -- Remove autocmd group
     if child.fn.exists('#' .. tbl_name) == 1 then child.api.nvim_del_augroup_by_name(tbl_name) end
-  end
-
-  child.akextra_reload = function(name, config, tbl_name)
-    child.akextra_unload(name, tbl_name)
-    child.extra_load(name, config)
-  end
-  child.mini_reload = function(name, config)
-    child.mini_unload(name)
-    child.mini_load(name, config)
-  end
-
-  child.mini_reload_strconfig = function(name, strconfig)
-    child.mini_unload(name)
-    child.mini_load_strconfig(name, strconfig)
   end
 
   child.expect_screenshot = function(opts, path)

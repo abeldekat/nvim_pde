@@ -11,15 +11,13 @@ test_files_clued: deps/mini.nvim
 	for nvim_exec in $(NVIM_EXEC); do \
 		printf "\n======\n\n" ; \
 		$$nvim_exec --version | head -n 1 && echo '' ; \
-		$$nvim_exec --headless --noplugin -u ./scripts/minimal_init.lua \
+		$$nvim_exec --headless --noplugin -u ./lua/akextra/minimal_init.lua \
 			-c "lua require('mini.test').setup()" \
-			-c "lua MiniTest.run_file('tests/test_files_clued.lua', { execute = { reporter = MiniTest.gen_reporter.stdout({ group_depth = $(GROUP_DEPTH) }) } })" ; \
+			-c "lua MiniTest.run_file('lua/akextra/test_files_clued.lua', { execute = { reporter = MiniTest.gen_reporter.stdout({ group_depth = $(GROUP_DEPTH) }) } })" ; \
 	done
 
 to_gh:
 	@cp README.md LSP.md init.lua filetype.lua nvim-pack-lock.json .stylua.toml colors.txt .markdownlint.yml .prettierrc .gitignore Makefile ../nvimak
-	@rm -rf ../nvimak/scripts
-	@rsync -av scripts ../nvimak
 	@rm -rf ../nvimak/tests
 	@rsync -av tests ../nvimak
 	@rm -rf ../nvimak/after
