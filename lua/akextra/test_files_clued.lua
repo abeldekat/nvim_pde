@@ -10,7 +10,6 @@ local unload_module = function() child.akextra_unload('files_clued', 'FilesClued
 local load_module_files = function(config) child.mini_load('files', config) end
 local load_module_clue = function(config) child.mini_load('clue', config) end
 local type_keys = function(...) return child.type_keys(...) end
--- local sleep = function(ms) helpers.sleep(ms, child) end
 local forward_lua = function(fun_str) return helpers.forward_lua(child, fun_str) end
 
 -- Test paths helpers
@@ -462,22 +461,23 @@ T['Mappings']['g']['does not overwrite already existing buffer mappings'] = func
   -- Create MiniFiles 'gd' mapping
   open(test_file_path)
   type_keys('g')
-  -- Expect description of MiniFiles 'gd' mapping
+  -- Expect description of MiniFiles 'gd' buffer mapping
   child.expect_screenshot()
 end
 
 T['Mappings']['g']['does not restore a deleted global mapping'] = function()
-  open(test_file_path)
   -- Initialize cache with global mappings to override
+  open(test_file_path)
   type_keys('g', '<Esc>')
   close()
 
   -- Delete global mappings
   child.api.nvim_del_keymap('n', 'gcc')
   child.api.nvim_del_keymap('n', 'gc')
+
+  -- Ensure that the copy in cache is not used anymore
   open(test_file_path)
   type_keys('g')
-  -- Ensure that the copy in cache is not used anymore
   child.expect_screenshot()
 end
 
