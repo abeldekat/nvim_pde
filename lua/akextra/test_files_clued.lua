@@ -18,7 +18,6 @@ local normalize_path = function(p) return (p:gsub('\\', '/'):gsub('(.)/$', '%1')
 if helpers.is_windows() then
   normalize_path = function(p) return (p:gsub('\\', '/'):gsub('(.)/$', '%1'):gsub('^(%a):/+([^/])', '%1://%2')) end
 end
-
 local join_path = function(...) return table.concat({ ... }, '/') end
 local full_path = function(...) return normalize_path(vim.fn.fnamemodify(join_path(...), ':p')) end
 
@@ -75,12 +74,6 @@ end
 -- Hooks ======================================================================
 local hooks_pre_case_integration = function()
   mock_win_functions()
-  load_module_files()
-  load_module_clue({
-    triggers = { { mode = 'n', keys = "'" }, { mode = 'n', keys = 'g' } },
-    window = { delay = 0 },
-  })
-  load_module()
 
   -- Mock `vim.notify()`
   child.lua([[
@@ -92,7 +85,7 @@ local hooks_pre_case_integration = function()
   child.o.laststatus = 0
   child.o.showtabline = 0
 
-  -- - Hide intro
+  -- Hide intro
   child.cmd('vsplit')
   child.cmd('quit')
 end
@@ -101,9 +94,6 @@ end
 local quote = "'"
 local test_dir_path = 'tests/dir-files_clued/common'
 local test_file_path = 'tests/dir-files_clued/common/a-file'
-
--- Time constants
--- local small_time = helpers.get_time_const(10)
 
 -- Output test set ============================================================
 local T = new_set({
@@ -141,7 +131,7 @@ T['setup()']['creates `config` field'] = function()
   local expect_config = function(field, value) eq(child.lua_get('FilesClued.config.' .. field), value) end
 
   expect_config('use_g', false)
-  expect_config_type('change_desc', 'function')
+  expect_config_type('make_desc', 'function')
 end
 
 T['setup()']['respects `config` argument'] = function()
@@ -160,10 +150,10 @@ T['setup()']['validates `config` argument'] = function()
   end
   expect_config_error('a', 'config', 'table')
   expect_config_error({ use_g = 'a' }, 'use_g', 'boolean')
-  expect_config_error({ change_desc = 'a' }, 'change_desc', 'function')
+  expect_config_error({ make_desc = 'a' }, 'make_desc', 'function')
 end
 
-T['setup()']['creates triggers for already created explorers'] = function()
+T['setup()']['creates triggers for already created MiniFiles buffers'] = function()
   local init_buf_id = child.api.nvim_create_buf(true, false)
   child.lua(string.format('vim.bo[%d].filetype = "minifiles"', init_buf_id))
   local other_buf_id = child.api.nvim_create_buf(true, false)
@@ -200,14 +190,20 @@ T['Mappings'] = new_set({
 T['Mappings'][quote] = new_set({
   hooks = {
     pre_case = function()
+      load_module_files()
+      load_module_clue({
+        triggers = { { mode = 'n', keys = "'" } },
+        window = { delay = 0 },
+      })
       child.lua([[
         MiniClue.config.clues = { MiniClue.gen_clues.marks() }
       ]])
+      load_module()
     end,
   },
 })
 
-T['Mappings'][quote]['shows bookmarks from MiniFiles in MiniClue'] = function()
+T['Mappings'][quote]['works'] = function()
   open(test_file_path)
   set_bookmark('c', test_dir_path, { desc = 'nvim config' })
   set_bookmark('m', test_dir_path, { desc = 'same as c' })
@@ -217,7 +213,7 @@ T['Mappings'][quote]['shows bookmarks from MiniFiles in MiniClue'] = function()
 
   -- Ensure that new bookmark "before last jump" is also visible
   child.expect_screenshot()
-  type_keys("'", '<Esc>')
+  type_keys("'")
 
   -- Explorer still open in previous tab. Expect clues without MiniFiles bookmarks
   local tab_explorer = child.api.nvim_get_current_tabpage()
@@ -257,7 +253,7 @@ end
 T['Mappings'][quote]['allows to override the customization of descriptions'] = function()
   -- No indentation:
   child.lua([[
-    FilesClued.config.change_desc = function(obj) return obj end
+    FilesClued.config.make_desc = function(desc) return desc end
   ]])
   open(test_file_path)
   set_bookmark('c', test_dir_path, { desc = 'NO INDENTATION' })
@@ -388,10 +384,101 @@ T['Mappings'][quote]['MiniFiles_tests']['`mark_goto` works with special paths'] 
   validate_log({ { '(FilesClued) Bookmark path should be a valid path to directory', warn_level } })
 end
 
--- T['Mappings']['g'] = new_set()
---
--- T['Mappings']['g']['is not included by default'] = function() MiniTest.skip() end
---
--- T['Mappings']['g']['allows to override the customization of descriptions'] = function() MiniTest.skip() end
+T['Mappings']['g'] = new_set({
+  hooks = {
+    pre_case = function()
+      child.set_size(24, 85)
+      load_module_files()
+      load_module_clue({
+        triggers = { { mode = 'n', keys = 'g' } },
+        window = { delay = 0 },
+      })
+      child.lua([[
+        MiniClue.config.clues = { MiniClue.gen_clues.g() }
+      ]])
+      child.lua([[
+        vim.api.nvim_create_autocmd('User', {
+          pattern = 'MiniFilesBufferCreate',
+          callback = function(args)
+            local opts = { desc = "Toggle dotfiles", buffer = args.data.buf_id }
+            vim.keymap.set('n', 'gd', "<Cmd><CR>", opts) end
+        })
+      ]])
+      load_module({ use_g = true })
+    end,
+  },
+})
+
+T['Mappings']['g']['is disabled by default'] = function()
+  unload_module()
+  load_module()
+  open(test_file_path)
+  validate_no_trigger_keymap('n', 'g')
+end
+
+T['Mappings']['g']['works'] = function()
+  open(test_file_path)
+  type_keys('g')
+  child.expect_screenshot()
+  type_keys('g')
+
+  -- Ensure works again in open explorer
+  type_keys('g')
+  child.expect_screenshot()
+  type_keys('g')
+
+  -- Explorer still open in previous tab. Expect clues without MiniFiles 'g' mappings
+  local tab_explorer = child.api.nvim_get_current_tabpage()
+  child.cmd('tabnew')
+  local tab_new = child.api.nvim_get_current_tabpage()
+  expect.no_equality(tab_new, tab_explorer)
+  type_keys('g')
+  child.expect_screenshot()
+  type_keys('<Esc>')
+
+  -- Close explorer. Expect clues without MiniFiles 'g' mappings
+  type_keys('gt')
+  eq(child.api.nvim_get_current_tabpage(), tab_explorer)
+  close()
+  type_keys('g')
+  child.expect_screenshot()
+end
+
+T['Mappings']['g']['allows to override the customization of descriptions'] = function()
+  -- No change(indentation)
+  child.lua([[
+    FilesClued.config.make_desc = function(desc) return desc end
+  ]])
+  open(test_file_path)
+  type_keys('g')
+  child.expect_screenshot()
+  close()
+end
+
+T['Mappings']['g']['does not overwrite already existing buffer mappings'] = function()
+  child.lua([[
+    vim.keymap.set('n', 'gd', '<Cmd><CR>', { desc = 'Dummy global mapping' })
+  ]])
+  -- Create MiniFiles 'gd' mapping
+  open(test_file_path)
+  type_keys('g')
+  -- Expect description of MiniFiles 'gd' mapping
+  child.expect_screenshot()
+end
+
+T['Mappings']['g']['does not restore a deleted global mapping'] = function()
+  open(test_file_path)
+  -- Initialize cache with global mappings to override
+  type_keys('g', '<Esc>')
+  close()
+
+  -- Delete global mappings
+  child.api.nvim_del_keymap('n', 'gcc')
+  child.api.nvim_del_keymap('n', 'gc')
+  open(test_file_path)
+  type_keys('g')
+  -- Ensure that the copy in cache is not used anymore
+  child.expect_screenshot()
+end
 
 return T
