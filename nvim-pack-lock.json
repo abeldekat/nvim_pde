@@ -16,6 +16,10 @@
       "rev": "79e2049a0fdf7ec840f8463fe1d962c94493196b",
       "src": "https://github.com/catppuccin/nvim"
     },
+    "colors_cendre": {
+      "rev": "9439ff8e1b7b9af952e922bf62b3f367ea02fe26",
+      "src": "https://github.com/Aejkatappaja/cendre"
+    },
     "colors_melange": {
       "rev": "ce42f6b629beeaa00591ba73a77d3eeac4cf28ce",
       "src": "https://github.com/savq/melange-nvim"

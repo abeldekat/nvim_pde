@@ -6,6 +6,7 @@ catppuccin-frappe
 catppuccin-latte
 catppuccin-macchiato
 catppuccin-mocha
+cendre
 dawnfox
 dayfox
 duskfox
