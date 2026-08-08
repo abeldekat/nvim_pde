@@ -1,7 +1,6 @@
 ---@diagnostic disable: undefined-global, inject-field
 -- This 'extra' shows bookmarks from MiniFiles with MiniClue. The 'g' mappings are opt-in
--- Approach: Override specific trigger-mappings after MiniClue.enable_buf_triggers
--- In normal mode this should also works for other regular characters used as triggers
+-- Approach: Override the relevant trigger-mappings after MiniClue.enable_buf_triggers
 -- See https://github.com/nvim-mini/mini.nvim/discussions/2519 and `:h MiniFiles-examples`
 --
 -- Requirements: MiniFiles and MiniClue active. MiniFiles uses default mark_goto mapping
@@ -12,25 +11,26 @@
    require('<this_file>').setup() -- See FilesClued.config
 --]]
 
-local override = function(buf_id, trigger_char, cb_before)
+local override = function(buf_id, keys, trigger_pre)
   local map = function(trigger_fn)
-    -- See MiniClue->H.map_trigger
-    local opts = { nowait = true, buffer = buf_id, desc = string.format('FilesClued after "%s"', trigger_char) }
-    vim.keymap.set('n', trigger_char, trigger_fn, opts)
+    -- See MiniClue -> H.map_trigger
+    local opts = { nowait = true, buffer = buf_id, desc = string.format('FilesClued after "%s"', keys) }
+    vim.keymap.set('n', keys, trigger_fn, opts)
   end
-  local t = vim.fn.maparg(trigger_char, 'n', false, true)
-  if not (t.buffer == 1 and t.desc == string.format('Query keys after "%s"', trigger_char)) then return end
 
-  local trigger_fn
-  trigger_fn = function()
+  local trigger = vim.tbl_filter(function(m) return m.lhs == keys end, vim.api.nvim_buf_get_keymap(buf_id, 'n'))[1]
+  if not (trigger and trigger.desc == string.format('Query keys after "%s"', keys)) then return end
+
+  local trigger_override
+  trigger_override = function()
     -- Perform any action needed to show the expected clues
-    cb_before()
+    trigger_pre()
     -- Execute the MiniClue trigger
-    t.callback()
-    -- Ensure continuing trigger_char override. See MiniClue, H.state_exec
-    vim.schedule(function() map(trigger_fn) end)
+    trigger.callback()
+    -- Ensure continuing "keys" override. See MiniClue, H.state_exec
+    vim.schedule(function() map(trigger_override) end)
   end
-  map(trigger_fn)
+  map(trigger_override)
 end
 
 local attach = function(buf_id, filter_configs)
@@ -43,14 +43,10 @@ local attach = function(buf_id, filter_configs)
 
   -- Clues: Override trigger mappings to manipulate the clues displayed
   vim.schedule(function()
-    vim.iter(configs):each(function(c) override(buf_id, c.trigger_definition.keys, c.cb_before) end)
+    vim.iter(configs):each(function(c) override(buf_id, c.trigger_definition.keys, c.trigger_pre) end)
   end)
 end
 
-local augroup = vim.api.nvim_create_augroup('FilesClued', {})
-local au = function(event, pattern, callback, desc)
-  vim.api.nvim_create_autocmd(event, { group = augroup, pattern = pattern, callback = callback, desc = desc })
-end
 local with_desc = function(obj, make_desc_cb)
   obj.desc = make_desc_cb(obj.desc)
   return obj
@@ -67,7 +63,7 @@ local gen_bookmark_code_from_mini_files = function()
   end
   -- End copied from MiniFiles
 
-  -- MiniFiles->H.buffer_make_mappings->mark_goto uses its 'H.getcharstr' to obtain the id
+  -- MiniFiles -> H.buffer_make_mappings -> mark_goto uses its 'H.getcharstr' to obtain the id
   -- When using a buffer mapping from each bookmark, mark_goto has to be changed slightly
   local mark_goto = function(id)
     local state = MiniFiles.get_explorer_state()
@@ -95,7 +91,7 @@ local gen_bookmark_config = function(opts)
     return cache
   end
 
-  local cb_before = function()
+  local trigger_pre = function()
     local bookmarks = MiniFiles.get_explorer_state().bookmarks
     if vim.tbl_count(bookmarks) == 0 then return end
 
@@ -111,7 +107,7 @@ local gen_bookmark_config = function(opts)
     vim.b.miniclue_config = { clues = get_cache().from_config, window = window }
   end
 
-  return { trigger_definition = { mode = { 'n' }, keys = "'" }, cb_before = cb_before }
+  return { trigger_definition = { mode = { 'n' }, keys = "'" }, trigger_pre = trigger_pre }
 end
 
 -- Ensure that the descriptions of MiniFiles 'g' mappings stand out in explorer
@@ -126,8 +122,8 @@ local gen_g_config = function(opts)
       return global_info.lhs:sub(1, 1) == 'g' and vim.fn.maparg(global_info.lhs, 'n', false, true).buffer ~= 1
     end
     local g_globals = vim.tbl_filter(filter_g, vim.api.nvim_get_keymap('n'))
-    local to_buffer_local = function(global_info)
-      local res = with_desc(vim.deepcopy(global_info), opts.make_desc)
+    local to_buffer_local = function(g_global)
+      local res = with_desc(vim.deepcopy(g_global), opts.make_desc)
       res.buffer = 1
       return res
     end
@@ -140,20 +136,20 @@ local gen_g_config = function(opts)
     return cache
   end
 
-  local cb_before = function()
+  local trigger_pre = function()
     -- Promote existing global 'g' mappings to buffer-local with modified description
     local is_present = function(_, m) return vim.fn.maparg(m.lhs, 'n', false, false) ~= '' end
     vim.iter(ipairs(get_cache().g_buffer)):filter(is_present):each(function(_, m) vim.fn.mapset(m) end)
     -- Also add buffer overwrites for MiniClue.gen_clues.g with modified description
     vim.b.miniclue_config = { clues = get_cache().g_config }
   end
-  return { trigger_definition = { mode = { 'n' }, keys = 'g' }, cb_before = cb_before }
+  return { trigger_definition = { mode = { 'n' }, keys = 'g' }, trigger_pre = trigger_pre }
 end
 
 local filter_configs = function(buf_id, bookmark_config, g_config)
   local configs = {}
 
-  -- Ensure presence of buffer-local quote_mapping(MiniFiles default)
+  -- Ensure presence of buffer-local quote mapping(MiniFiles default)
   local quote_mapping = vim.tbl_filter(function(m) return m.lhs == "'" end, vim.api.nvim_buf_get_keymap(buf_id, 'n'))
   if #quote_mapping == 1 then table.insert(configs, bookmark_config) end
   if g_config ~= nil then table.insert(configs, g_config) end
@@ -189,10 +185,16 @@ FilesClued.setup = function(config)
   local bookmark_config, g_config = gen_bookmark_config(config), config.use_g and gen_g_config(config) or nil
   local filter = function(buf_id) return filter_configs(buf_id, bookmark_config, g_config) end
 
-  -- Attach to already open MiniFiles buffers and subscribe to future MiniFilesBufferCreate events
+  -- Attach to already open MiniFiles buffers
   local list_bufs, is_loaded = vim.api.nvim_list_bufs, vim.api.nvim_buf_is_loaded
   local is_files = function(buf_id) return vim.bo[buf_id].filetype == 'minifiles' end
   vim.iter(list_bufs()):filter(is_loaded):filter(is_files):each(function(buf_id) attach(buf_id, filter) end)
+
+  -- Subscribe to future MiniFilesBufferCreate events
+  local augroup = vim.api.nvim_create_augroup('FilesClued', {})
+  local au = function(event, pattern, callback, desc)
+    vim.api.nvim_create_autocmd(event, { group = augroup, pattern = pattern, callback = callback, desc = desc })
+  end
   au('User', 'MiniFilesBufferCreate', function(args) attach(args.data.buf_id, filter) end, 'MiniFiles with MiniClue')
 end
 return FilesClued

@@ -42,6 +42,7 @@ end
 
 -- Common test wrappers
 local open = forward_lua('MiniFiles.open')
+local go_in = forward_lua('MiniFiles.go_in')
 local go_out = forward_lua('MiniFiles.go_out')
 local close = forward_lua('MiniFiles.close')
 local get_explorer_state = forward_lua('MiniFiles.get_explorer_state')
@@ -212,7 +213,15 @@ T['Mappings'][quote]['works'] = function()
 
   -- Ensure that new bookmark "before last jump" is also visible
   child.expect_screenshot()
+  type_keys('<Esc>')
+
+  -- Ensure that "go_in" also works
+  type_keys('k')
+  go_in()
   type_keys("'")
+  child.expect_screenshot()
+  type_keys('<Esc>')
+  go_out()
 
   -- Explorer still open in previous tab. Expect clues without MiniFiles bookmarks
   local tab_explorer = child.api.nvim_get_current_tabpage()
@@ -229,6 +238,23 @@ T['Mappings'][quote]['works'] = function()
   close()
   type_keys("'")
   child.expect_screenshot()
+end
+
+T['Mappings'][quote]['works with preview'] = function()
+  child.lua('MiniFiles.config.windows.preview = true')
+  open(test_file_path)
+  set_bookmark('c', test_dir_path, { desc = 'nvim config' })
+  type_keys("'")
+  child.expect_screenshot()
+  type_keys('c', '<Esc>')
+
+  -- Ensure that "go_in" also works
+  type_keys('k')
+  go_in()
+  type_keys("'")
+  child.expect_screenshot()
+  type_keys('<Esc>')
+  go_out()
 end
 
 T['Mappings'][quote]['only modifies descriptions if there are MiniFiles bookmarks'] = function()
