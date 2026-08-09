@@ -1,7 +1,7 @@
 ---@diagnostic disable: undefined-global, inject-field
 -- This 'extra' shows bookmarks from MiniFiles with MiniClue. The 'g' mappings are opt-in
 -- Approach: Override the relevant trigger-mappings after MiniClue.enable_buf_triggers
--- See https://github.com/nvim-mini/mini.nvim/discussions/2519 and `:h MiniFiles-examples`
+-- See https://github.com/nvim-mini/mini.nvim/discussions/2531 and `:h MiniFiles-examples`
 --
 -- Requirements: MiniFiles and MiniClue active. MiniFiles uses default mark_goto mapping
 -- Example usage:
