@@ -85,9 +85,11 @@ local center_set_config = function(config, win_id, show, is_focused, vert_enable
   end
   config.height = not show and 1 or config.height
 
-  local line_count = vim.api.nvim_buf_line_count(vim.api.nvim_win_get_buf(win_id))
-  config.footer = { { line_count > config.height and ' · ' or '', 'MiniFilesTitle' } }
-  config.footer_pos = 'right'
+  if show then
+    local line_count = vim.api.nvim_buf_line_count(vim.api.nvim_win_get_buf(win_id))
+    config.footer = { { line_count > config.height and ' · ' or '', 'MiniFilesTitle' } }
+    config.footer_pos = 'right'
+  end
   vim.api.nvim_win_set_config(win_id, config)
 end
 
@@ -97,30 +99,28 @@ local center = function(windows, idx_focused)
   if vim.o.columns <= width_focused then return end
 
   local col_focused = math.floor((vim.o.columns - width_focused) * 0.5)
-  -- From focused to left edge
-  local hidden = {}
-  local col = col_focused + width_focused
-  for i = idx_focused, 1, -1 do
-    local win_id, config, width = get_win_data(windows, i)
-    local show = i == idx_focused or col >= width
+  local left_offset, left_hidden = col_focused, {}
+  for i = idx_focused - 1, 1, -1 do
+    local _, _, width = get_win_data(windows, i)
+    local show = left_offset >= width
+    left_offset = show and left_offset - width or left_offset
+    if not show then table.insert(left_hidden, i) end
+  end
 
-    config.col = show and col - width or col_focused
+  local offset = left_offset
+  for i = 1, #windows do
+    local win_id, config, width = get_win_data(windows, i)
+    local show = false
+    if i > idx_focused then
+      show = (vim.o.columns - offset) >= width
+    else
+      show = not vim.tbl_contains(left_hidden, i)
+    end
+    config.col = show and offset or col_focused
     center_set_config(config, win_id, show, i == idx_focused, is_vert)
-    if not show then table.insert(hidden, i) end
-    col = show and config.col or 0
+    offset = show and offset + width or offset
   end
-  if #hidden > 0 then center_update_first_visible_title(windows, hidden[1] + 1) end
-
-  -- From focused + 1 to right edge
-  col = col_focused + width_focused
-  for i = idx_focused + 1, #windows do
-    local win_id, config, width = get_win_data(windows, i)
-    local show = (vim.o.columns - col) >= width
-
-    config.col = show and col or col_focused
-    center_set_config(config, win_id, show, false, is_vert)
-    col = show and config.col + width or vim.o.columns
-  end
+  if #left_hidden > 0 then center_update_first_visible_title(windows, left_hidden[1] + 1) end
 end
 
 local right = function(windows, _)
@@ -178,9 +178,9 @@ local ensure_layout = function(args)
   local state = MiniFiles.get_explorer_state()
   if state == nil then return end
 
-  -- Optimize: If event is not for last window, return early
+  -- Optimize: If event is not for first window, return early
   local windows = state.windows
-  if not (args.data.win_id == windows[#windows].win_id) then return end
+  if not (args.data.win_id == windows[1].win_id) then return end
 
   -- If the index of the focused window is not found, return early
   local idx_focused

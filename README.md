@@ -100,8 +100,8 @@ git update-index --assume-unchanged lua/ak/colors.lua
 
 Relevant discussions:
 
-- [MiniClue: Show bookmarks and `g` mappings from MiniFiles](https://github.com/nvim-mini/mini.nvim/discussions/2519)
-- [Traverse styles in mini.files](https://github.com/nvim-mini/mini.nvim/discussions/2448)
+- [MiniClue: Show bookmarks and `g` clues from MiniFiles](https://github.com/nvim-mini/mini.nvim/discussions/2531)
+- [Traverse styles in MiniFiles](https://github.com/nvim-mini/mini.nvim/discussions/2448)
 - [MiniNotify replacing fidget](https://github.com/nvim-mini/mini.nvim/discussions/1602).
 - [Augment pickers with labels and hotkeys](https://github.com/nvim-mini/mini.nvim/discussions/1109).
 - [Optimized jumping with jump2d](https://github.com/nvim-mini/mini.nvim/discussions/1033).

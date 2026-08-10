@@ -13,7 +13,7 @@
       "src": "https://github.com/ribru17/bamboo.nvim"
     },
     "colors_catppuccin": {
-      "rev": "79e2049a0fdf7ec840f8463fe1d962c94493196b",
+      "rev": "edefef779ab08ce1a4a404713e3012b0d202bd35",
       "src": "https://github.com/catppuccin/nvim"
     },
     "colors_cendre": {
@@ -58,7 +58,7 @@
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {
-      "rev": "3d3321b560a63ff92a8692401f303a5123336b86",
+      "rev": "c9f9ed6c1892f629ea399f4ee7905f2686fa13f2",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter"
     },
     "nvim-treesitter-context": {
@@ -74,7 +74,7 @@
       "src": "https://github.com/stevearc/quicker.nvim"
     },
     "vimtex": {
-      "rev": "2596fb0178ab72cd5fadd53c1d8e58ce1c1a92df",
+      "rev": "a5568d902cc20a76bb8ef70743f0157ec2e79ded",
       "src": "https://github.com/lervag/vimtex"
     }
   }
