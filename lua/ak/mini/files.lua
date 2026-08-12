@@ -42,6 +42,7 @@ end
 
 local toggle_preview = function()
   show_preview = not show_preview
+  MiniFiles.config.windows.preview = show_preview
   MiniFiles.refresh({ windows = { preview = show_preview } })
 end
 

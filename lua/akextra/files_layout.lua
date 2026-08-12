@@ -107,18 +107,17 @@ local center = function(windows, idx_focused)
     if not show then table.insert(left_hidden, i) end
   end
 
-  local offset = left_offset
   for i = 1, #windows do
     local win_id, config, width = get_win_data(windows, i)
     local show = false
     if i > idx_focused then
-      show = (vim.o.columns - offset) >= width
+      show = (vim.o.columns - left_offset) >= width
     else
       show = not vim.tbl_contains(left_hidden, i)
     end
-    config.col = show and offset or col_focused
+    config.col = show and left_offset or col_focused
+    left_offset = show and left_offset + width or left_offset
     center_set_config(config, win_id, show, i == idx_focused, is_vert)
-    offset = show and offset + width or offset
   end
   if #left_hidden > 0 then center_update_first_visible_title(windows, left_hidden[1] + 1) end
 end
