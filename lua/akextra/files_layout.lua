@@ -24,12 +24,12 @@ local layout_current, layout_next = 'C', { L = 'C', C = 'R', R = 'L' }
 -- Full screen flag, and max_windows when in full screen
 local is_full_screen, full_screen_max_number = false, 3
 -- If enabled and the layout is center, also center vertically
-local center_vert = {
+local vertical = {
   enable = true,
   height_focus = 32,
   height = 30,
   -- Ensure that all windows have the same top row
-  align_titles = false,
+  align_horizontal = false,
   -- Do not center vertically if remaining vertical space is lower than threshold
   threshold = 6,
 }
@@ -63,7 +63,7 @@ end
 local get_win_data = function(windows, idx)
   local win_id = windows[idx].win_id
   local config = vim.api.nvim_win_get_config(win_id)
-  return win_id, config, config.width + x_margin
+  return config.width + x_margin, config, win_id
 end
 
 local center_update_first_visible_title = function(windows, idx)
@@ -77,11 +77,11 @@ local center_update_first_visible_title = function(windows, idx)
   vim.api.nvim_win_set_config(win.win_id, config)
 end
 
-local center_set_config = function(config, win_id, show, is_focused, vert_enable)
-  if vert_enable then
-    local v = center_vert
+local center_set_config = function(config, win_id, show, is_focused, vert)
+  if vert then
+    local v = vertical
     config.height = is_focused and v.height_focus or v.height
-    config.row = math.floor(0.5 * (vim.o.lines - (v.align_titles and v.height or config.height)))
+    config.row = math.floor(0.5 * (vim.o.lines - (v.align_horizontal and v.height or config.height)))
   end
   config.height = not show and 1 or config.height
 
@@ -94,30 +94,34 @@ local center_set_config = function(config, win_id, show, is_focused, vert_enable
 end
 
 local center = function(windows, idx_focused)
-  local is_vert = center_vert.enable and (vim.o.lines - center_vert.height_focus >= center_vert.threshold)
-  local _, _, width_focused = get_win_data(windows, idx_focused)
+  local vert = vertical.enable and (vim.o.lines - vertical.height_focus >= vertical.threshold)
+  local width_focused = get_win_data(windows, idx_focused)
   if vim.o.columns <= width_focused then return end
 
+  -- Calculate left_offset starting from col_focused
   local col_focused = math.floor((vim.o.columns - width_focused) * 0.5)
   local left_offset, left_hidden = col_focused, {}
   for i = idx_focused - 1, 1, -1 do
-    local _, _, width = get_win_data(windows, i)
-    local show = left_offset >= width
-    left_offset = show and left_offset - width or left_offset
-    if not show then table.insert(left_hidden, i) end
+    local width = get_win_data(windows, i)
+    if left_hidden[1] == nil and left_offset >= width then
+      left_offset = left_offset - width
+    else
+      table.insert(left_hidden, i)
+    end
   end
 
+  -- Apply, starting from left_offset.
+  local show = false
   for i = 1, #windows do
-    local win_id, config, width = get_win_data(windows, i)
-    local show = false
-    if i > idx_focused then
-      show = (vim.o.columns - left_offset) >= width
+    local width, config, win_id = get_win_data(windows, i)
+    if i <= idx_focused then
+      show = i == idx_focused or not vim.tbl_contains(left_hidden, i)
     else
-      show = not vim.tbl_contains(left_hidden, i)
+      show = show and (vim.o.columns - left_offset) >= width
     end
     config.col = show and left_offset or col_focused
-    left_offset = show and left_offset + width or left_offset
-    center_set_config(config, win_id, show, i == idx_focused, is_vert)
+    if show then left_offset = left_offset + width end
+    center_set_config(config, win_id, show, i == idx_focused, vert)
   end
   if #left_hidden > 0 then center_update_first_visible_title(windows, left_hidden[1] + 1) end
 end
