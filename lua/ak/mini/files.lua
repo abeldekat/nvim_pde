@@ -59,10 +59,10 @@ end
 
 local add_linenumbers = function(args)
   local win_id = args.data.win_id
-  if not (win_id and win_id == vim.api.nvim_get_current_win()) then return end
+  local activate = win_id == vim.api.nvim_get_current_win()
 
-  vim.wo[win_id].number = true
-  vim.wo[win_id].relativenumber = true
+  vim.wo[win_id].number = activate
+  vim.wo[win_id].relativenumber = activate
 end
 
 local add_marks = function()
