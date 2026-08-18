@@ -20,5 +20,6 @@ miniwinter
 nightfox
 nordfox
 randomhue
+sora
 terafox
 thorn

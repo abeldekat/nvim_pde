@@ -98,7 +98,7 @@ local center = function(windows, idx_focused)
   local width_focused = get_win_data(windows, idx_focused)
   if vim.o.columns <= width_focused then return end
 
-  -- Calculate left_offset starting from col_focused
+  -- Calculate left_offset. Initialize to col_focused, decrease when earlier window fits
   local col_focused = math.floor((vim.o.columns - width_focused) * 0.5)
   local left_offset, left_hidden = col_focused, {}
   for i = idx_focused - 1, 1, -1 do
