@@ -12,7 +12,6 @@ local specs = {
   { src = 'https://github.com/edeneast/nightfox.nvim', name = 'colors_nightfox' },
   { src = 'https://github.com/jpwol/thorn.nvim', name = 'colors_thorn' },
   { src = 'https://github.com/Aejkatappaja/cendre', name = 'colors_cendre' },
-  { src = 'https://github.com/Aejkatappaja/sora', name = 'colors_sora' },
   -- { src = 'https://github.com/sainnhe/everforest', name = 'colors_everforest' },
   -- { src = 'https://github.com/sainnhe/gruvbox-material', name = 'colors_gruvbox-material' },
   -- { src = 'https://github.com/navarasu/onedark.nvim', name = "colors_onedark" },

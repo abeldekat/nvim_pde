@@ -17,7 +17,7 @@
       "src": "https://github.com/catppuccin/nvim"
     },
     "colors_cendre": {
-      "rev": "4d0758a3e6bf0d415c5e7b8cbaaf396754213a07",
+      "rev": "c0e0a414b42dba889f16b3746839d7300dfb1c3f",
       "src": "https://github.com/Aejkatappaja/cendre"
     },
     "colors_melange": {
@@ -27,10 +27,6 @@
     "colors_nightfox": {
       "rev": "4dacd3f0185a2227bdf3b6c0975a8f0bf87cac9a",
       "src": "https://github.com/edeneast/nightfox.nvim"
-    },
-    "colors_sora": {
-      "rev": "bef40e298fb677d22f625eeaa30d3e4b39872d6d",
-      "src": "https://github.com/Aejkatappaja/sora"
     },
     "colors_thorn": {
       "rev": "3653d1508e605fe87ec174e8c2ad0f36ce9844f3",
@@ -58,7 +54,7 @@
       "src": "https://github.com/mfussenegger/nvim-lint.git"
     },
     "nvim-lspconfig": {
-      "rev": "6fc041976833841cc9d991f45193533fe2a2e09b",
+      "rev": "c8a582abc20a3121a768073df569d088cb5604b5",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {
