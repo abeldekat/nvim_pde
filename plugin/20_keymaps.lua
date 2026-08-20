@@ -244,10 +244,13 @@ local zoom = function() (ZoomExtended or MiniMisc).zoom() end
 local hlsearch = function() vim.o.hlsearch = not vim.o.hlsearch end
 nmap_leader('oc', '<Cmd>lua Config.next_theme_variant()<CR>', 'Next theme variant')
 nmap_leader('oA', align,                                      'Activate align')
-nmap_leader('oh', hlsearch,                                   'Vim.o.hlsearch toggle')
+nmap_leader('oe', '<Cmd>wincmd =<CR>',                        'Equalize')
+nmap_leader('oh', '<Cmd>wincmd _<CR>',                        'Highest')
 nmap_leader('oJ', splitjoin,                                  'Activate splitjoin')
 nmap_leader('or', '<Cmd>lua MiniMisc.resize_window()<CR>',    'Resize to default width')
+nmap_leader('os', hlsearch,                                   'Vim.o.hlsearch toggle')
 nmap_leader('ot', '<Cmd>lua MiniTrailspace.trim()<CR>',       'Trim trailspace')
+nmap_leader('ow', '<Cmd>wincmd |<CR>',                        'Widest')
 nmap_leader('oz', zoom,                                       'Zoom toggle')
 
 -- s is for 'Session'.

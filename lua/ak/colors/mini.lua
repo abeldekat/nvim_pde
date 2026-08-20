@@ -49,13 +49,6 @@ end, 'Mini base16 on colorscheme')
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                          hues                           │
 --          ╰─────────────────────────────────────────────────────────╯
-local hues_variants = { 'miniwinter', 'minispring', 'minisummer', 'miniautumn' }
-local hues_info = {
-  name = 'mini_seasons',
-  variants = hues_variants,
-}
-Config.add_theme_info(hues_variants, hues_info, 'Mini hues season variants')
-
 local randomhue = 'randomhue'
 local randomhue_info = { -- toggle randoms
   name = 'mini_randomhue',
@@ -63,8 +56,23 @@ local randomhue_info = { -- toggle randoms
 }
 Config.add_theme_info(randomhue, randomhue_info, 'Mini randomhue variants')
 
+local hues_variants = { 'miniwinter', 'minispring', 'minisummer', 'miniautumn' }
+local hues_info = {
+  name = 'mini_seasons',
+  variants = hues_variants,
+}
+Config.add_theme_info(hues_variants, hues_info, 'Mini hues season variants')
+
+local my_variants = { 'minihues-brownish' }
+local my_info = {
+  name = 'my_variants',
+  variants = my_variants,
+}
+Config.add_theme_info(my_variants, my_info, 'My hues variants')
+
 local all_hues_variants = { randomhue }
 vim.list_extend(all_hues_variants, hues_variants)
+vim.list_extend(all_hues_variants, my_variants)
 Config.new_autocmd('ColorScheme', all_hues_variants, function()
   local p = require('mini.hues').get_palette()
 

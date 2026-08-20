@@ -18,6 +18,8 @@ test_files_clued: deps/mini.nvim
 
 to_gh:
 	@cp README.md LSP.md init.lua filetype.lua nvim-pack-lock.json .stylua.toml colors.txt .markdownlint.yml .prettierrc .gitignore Makefile ../nvimak
+	@rm -rf ../nvimak/colors
+	@rsync -av colors ../nvimak
 	@rm -rf ../nvimak/tests
 	@rsync -av tests ../nvimak
 	@rm -rf ../nvimak/after

@@ -12,6 +12,7 @@ dayfox
 duskfox
 melange
 minicyan
+minihues-brownish
 minischeme
 minispring
 minisummer

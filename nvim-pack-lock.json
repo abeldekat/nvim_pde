@@ -54,7 +54,7 @@
       "src": "https://github.com/mfussenegger/nvim-lint.git"
     },
     "nvim-lspconfig": {
-      "rev": "c8a582abc20a3121a768073df569d088cb5604b5",
+      "rev": "a00eb57db2ef4d1ff2d4ef50ead2029cebd09f01",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {
