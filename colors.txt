@@ -12,7 +12,7 @@ dayfox
 duskfox
 melange
 minicyan
-minihues-brownish
+minihues-bamboo
 minischeme
 minispring
 minisummer
