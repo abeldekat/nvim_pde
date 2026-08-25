@@ -148,7 +148,7 @@ local full_screen = function(windows, _)
 
   local col = 0
   for i = 1, nr_of_windows do
-    local win_id, config, _ = get_win_data(windows, i)
+    local _, config, win_id = get_win_data(windows, i)
     -- Set the col to the new position
     col = (i == 1 and config.col) or (col + col_distance)
 
@@ -156,7 +156,9 @@ local full_screen = function(windows, _)
     -- Set the width, and ensure there is no gap after last window
     config.width = (i == nr_of_windows and (vim.o.columns - col) or col_distance) - x_margin
     config.footer = config.footer and '' or config.footer
-    vim.api.nvim_win_set_config(win_id, config)
+
+    -- Schedule is needed to ensure that max height is always set
+    vim.schedule(function() pcall(vim.api.nvim_win_set_config, win_id, config) end)
   end
 end
 
