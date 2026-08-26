@@ -1,5 +1,4 @@
 ayu
-bamboo
 carbonfox
 catppuccin-nvim
 catppuccin-frappe
@@ -10,6 +9,7 @@ dawnfox
 dayfox
 duskfox
 everforest
+gruvbox-material
 melange
 minicyan
 minihues-bamboo
