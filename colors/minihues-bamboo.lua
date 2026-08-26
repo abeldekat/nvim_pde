@@ -29,6 +29,7 @@ local palette_vulgaris = {
   yellow = '#dbb651', yellow_bg = '#e2c792',
 
   -- azure is not present. Bamboo does define grey and coral
+   azure = '#57a5e5', -- azure_bg = '#68aee8',
   -- coral = '#f08080', grey = '#5b5e5a',
 }
 

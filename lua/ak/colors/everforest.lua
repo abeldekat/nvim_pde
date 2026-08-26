@@ -1,7 +1,3 @@
--- Not used currently
--- Latest commit: 85a86eb62409e3ec88713bff3d1b9d7374e112e4
--- colors.txt: everforest
-
 local prefer_light = require('ak.color').prefer_light
 local name = 'everforest'
 
