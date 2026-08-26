@@ -18,30 +18,20 @@ local generated = {
   red = '#ffcbe2', red_bg = '#421128',
   yellow = '#fce0a6', yellow_bg = '#493400',
 }
-
+-- stylua: ignore
 local palette_b_bright_fg = {
-  blue = '#A3A9CE',
-  cyan = '#89B3B6',
-  green = '#85B695',
-  magenta = '#CF9BC2',
-  red = '#D47766',
-  yellow = '#EBC06D',
+  blue = '#A3A9CE', cyan = '#89B3B6', green = '#85B695',
+  magenta = '#CF9BC2', red = '#D47766', yellow = '#EBC06D',
 }
+-- stylua: ignore
 local palette_c_fg = {
-  blue = '#7F91B2',
-  cyan = '#7B9695',
-  green = '#78997A',
-  magenta = '#B380B0',
-  red = '#BD8183',
-  yellow = '#E49B5D',
+  blue = '#7F91B2', cyan = '#7B9695', green = '#78997A',
+  magenta = '#B380B0', red = '#BD8183', yellow = '#E49B5D',
 }
+-- stylua: ignore
 local palette_d_bg = {
-  blue_bg = '#273142',
-  cyan_bg = '#253333',
-  green_bg = '#233524',
-  magenta_bg = '#422741',
-  red_bg = '#7D2A2F',
-  yellow_bg = '#8B7449',
+  blue_bg = '#273142', cyan_bg = '#253333', green_bg = '#233524',
+  magenta_bg = '#422741', red_bg = '#7D2A2F', yellow_bg = '#8B7449',
 }
 
 local use_bright = true

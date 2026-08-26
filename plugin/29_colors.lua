@@ -5,7 +5,6 @@ local Color = require('ak.color') -- contains color info set by shell script and
 local all_colors_loaded = false
 
 local specs = {
-  { src = 'https://github.com/shatur/neovim-ayu', name = 'colors_ayu' },
   { src = 'https://github.com/catppuccin/nvim', name = 'colors_catppuccin' },
   { src = 'https://github.com/sainnhe/everforest', name = 'colors_everforest' },
   { src = 'https://github.com/sainnhe/gruvbox-material', name = 'colors_gruvbox-material' },

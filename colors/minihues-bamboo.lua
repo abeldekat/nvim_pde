@@ -17,7 +17,6 @@ local generated = {
   red = '#ffcbcd', red_bg = '#451017',
   yellow = '#efedaf', yellow_bg = '#3c3900',
 }
-
 -- stylua: ignore
 local palette_vulgaris = {
   blue = '#57a5e5', blue_bg = '#68aee8',
@@ -27,11 +26,9 @@ local palette_vulgaris = {
   purple = '#df73ff', -- bamboo bright_purple, purple is too much like blue
   red = '#e75a7c',
   yellow = '#dbb651', yellow_bg = '#e2c792',
-
-  -- azure is not present. Bamboo does define grey and coral
-   azure = '#57a5e5', -- azure_bg = '#68aee8',
-  -- coral = '#f08080', grey = '#5b5e5a',
 }
+-- Azure is not present. Use blue. Bamboo also defines grey and coral
+palette_vulgaris.azure = '#57a5e5'
 
 require('mini.hues').apply_palette(vim.tbl_deep_extend('force', generated, palette_vulgaris))
 vim.g.colors_name = 'minihues-bamboo'
