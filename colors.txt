@@ -13,6 +13,7 @@ duskfox
 melange
 minicyan
 minihues-bamboo
+minihues-melange
 minischeme
 minispring
 minisummer

@@ -1,5 +1,4 @@
--- Generate hues for bamboo vulgaris using its bg0 and fg, with default MiniHue setup
---
+-- Generate hues for ribru17/bamboo(vulgaris) using its bg0 and fg, with default MiniHues setup
 -- local opts = { background = '#252623', foreground = '#f1e9d2' }
 -- require('mini.hues').setup(opts)
 
@@ -21,14 +20,16 @@ local generated = {
 
 -- stylua: ignore
 local palette_vulgaris = {
-  -- azure is not present. Bamboo does define grey and coral
-  blue = '#57a5e5',blue_bg = '#68aee8',
+  blue = '#57a5e5', blue_bg = '#68aee8',
   cyan = '#70c2be',
   green = '#8fb573',
   orange = '#ff9966',
   purple = '#df73ff', -- bamboo bright_purple, purple is too much like blue
   red = '#e75a7c',
   yellow = '#dbb651', yellow_bg = '#e2c792',
+
+  -- azure is not present. Bamboo does define grey and coral
+  -- coral = '#f08080', grey = '#5b5e5a',
 }
 
 require('mini.hues').apply_palette(vim.tbl_deep_extend('force', generated, palette_vulgaris))

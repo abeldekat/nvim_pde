@@ -63,7 +63,7 @@ local hues_info = {
 }
 Config.add_theme_info(hues_variants, hues_info, 'Mini hues season variants')
 
-local my_variants = { 'minihues-bamboo' }
+local my_variants = { 'minihues-bamboo', 'minihues-melange' }
 local my_info = {
   name = 'my_variants',
   variants = my_variants,
