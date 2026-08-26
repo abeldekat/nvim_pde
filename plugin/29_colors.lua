@@ -5,15 +5,14 @@ local Color = require('ak.color') -- contains color info set by shell script and
 local all_colors_loaded = false
 
 local specs = {
-  { src = 'https://github.com/catppuccin/nvim', name = 'colors_catppuccin' },
   { src = 'https://github.com/shatur/neovim-ayu', name = 'colors_ayu' },
   { src = 'https://github.com/ribru17/bamboo.nvim', name = 'colors_bamboo' },
+  { src = 'https://github.com/catppuccin/nvim', name = 'colors_catppuccin' },
+  { src = 'https://github.com/sainnhe/everforest', name = 'colors_everforest' },
   { src = 'https://github.com/savq/melange-nvim', name = 'colors_melange' },
   { src = 'https://github.com/edeneast/nightfox.nvim', name = 'colors_nightfox' },
   { src = 'https://github.com/jpwol/thorn.nvim', name = 'colors_thorn' },
-  { src = 'https://github.com/sainnhe/everforest', name = 'colors_everforest' },
   -- { src = 'https://github.com/sainnhe/gruvbox-material', name = 'colors_gruvbox-material' },
-  -- { src = 'https://github.com/navarasu/onedark.nvim', name = "colors_onedark" },
 }
 
 local find_spec = function(spec_name)

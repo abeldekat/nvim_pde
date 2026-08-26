@@ -28,6 +28,10 @@
       "rev": "4dacd3f0185a2227bdf3b6c0975a8f0bf87cac9a",
       "src": "https://github.com/edeneast/nightfox.nvim"
     },
+    "colors_onedark": {
+      "rev": "df4792accde9db0043121f32628bcf8e645d9aea",
+      "src": "https://github.com/navarasu/onedark.nvim"
+    },
     "colors_thorn": {
       "rev": "3653d1508e605fe87ec174e8c2ad0f36ce9844f3",
       "src": "https://github.com/jpwol/thorn.nvim"
