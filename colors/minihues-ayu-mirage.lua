@@ -1,3 +1,4 @@
+---@diagnostic disable: undefined-global
 -- Generate hues for shatur/neovim-ayu(mirage) using its bg and fg, with default MiniHues setup
 -- local opts = { background = '#1F2430', foreground = '#CCCAC2' }
 -- require('mini.hues').setup(opts)
@@ -17,25 +18,23 @@ local generated = {
   red = '#eeb6dc', red_bg = '#3c1131',
   yellow = '#edc191', yellow_bg = '#4a2b00',
 }
-local palette_orange = '#FFAD66'
+-- stylua: ignore
 local palette_fg = {
   accent = '#FFCC66', -- colors.accent
 
-  -- Colors set for MiniIcons*...
-  azure = '#5CCFE6', -- colors.tag
-  blue = '#73D0FF', -- colors.entity
-  cyan = '#95E6CB', -- colors.regexp
-  green = '#D5FF80', -- colors.string
-  orange = palette_orange, -- colors.keyword
-  purple = '#D3B8F9', -- colors.lsp_parameter
-  red = '#FF6666', -- colors.error
-  yellow = '#FFDFB3', -- colors.special
+  -- Using colors set for MiniIcons*...
+  -- colors.tag colors.entity colors.regexp colors.string
+  azure = '#5CCFE6', blue = '#73D0FF', cyan = '#95E6CB', green = '#D5FF80',
+  -- colors.keyword colors.lsp_parameter colors.error colors.special
+  orange = '#FFAD66', purple = '#D3B8F9', red = '#FF6666', yellow = '#FFDFB3',
 }
 
 local hi = function(name, data) vim.api.nvim_set_hl(0, name, data) end
 local set = function()
+  local p = require('mini.hues').get_palette()
   hi('Function', { fg = '#FFD173', bg = nil }) -- colors.func
-  hi('Keyword', { fg = palette_orange, bg = nil, bold = true })
+  hi('Keyword', { fg = p.orange, bg = nil, bold = true })
+  hi('MiniClueDescGroup', { fg = p.orange, bg = p.bg_edge })
 end
 Config.new_autocmd('ColorScheme', 'minihues-ayu-mirage', set, 'Hi for minihues-ayu-mirage')
 
