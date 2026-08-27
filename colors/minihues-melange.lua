@@ -20,28 +20,26 @@ local generated = {
 }
 -- stylua: ignore
 local palette_b_bright_fg = {
-  blue = '#A3A9CE', cyan = '#89B3B6', green = '#85B695',
-  magenta = '#CF9BC2', red = '#D47766', yellow = '#EBC06D',
+  blue = '#A3A9CE', cyan = '#89B3B6', green = '#85B695', red = '#D47766', yellow = '#EBC06D',
 }
 -- stylua: ignore
 local palette_c_fg = {
-  blue = '#7F91B2', cyan = '#7B9695', green = '#78997A',
-  magenta = '#B380B0', red = '#BD8183', yellow = '#E49B5D',
+  blue = '#7F91B2', cyan = '#7B9695', green = '#78997A', red = '#BD8183', yellow = '#E49B5D',
 }
 -- stylua: ignore
 local palette_d_bg = {
-  blue_bg = '#273142', cyan_bg = '#253333', green_bg = '#233524',
-  magenta_bg = '#422741', red_bg = '#7D2A2F', yellow_bg = '#8B7449',
+  blue_bg = '#273142', cyan_bg = '#253333', green_bg = '#233524', red_bg = '#7D2A2F', yellow_bg = '#8B7449',
 }
 
 local use_bright = true
 local palette_fg = use_bright and palette_b_bright_fg or palette_c_fg
 
--- No orange. Melange uses yellow from either c or d
-palette_fg.orange = use_bright and '#E49B5D' or '8B7449'
--- No purple. MiniHues does not have magenta. Use magenta for hues-purple
-palette_fg.purple = palette_fg.magenta
-palette_d_bg.purple_bg = palette_d_bg.magenta_bg
+-- Melange does not define orange. Use yellow
+palette_fg.orange = '#E49B5D'
+palette_d_bg.orange_bg = '8B7449'
+-- Melange does not define purple, MiniHues does not have magenta. Use melange magenta for purple
+palette_fg.purple = use_bright and '#CF9BC2' or '#B380B0'
+palette_d_bg.purple_bg = '#422741'
 
 require('mini.hues').apply_palette(vim.tbl_deep_extend('force', generated, palette_d_bg, palette_fg))
 vim.g.colors_name = 'minihues-melange'

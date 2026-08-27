@@ -25,7 +25,7 @@
       "src": "https://github.com/edeneast/nightfox.nvim"
     },
     "colors_thorn": {
-      "rev": "3653d1508e605fe87ec174e8c2ad0f36ce9844f3",
+      "rev": "e7074d253db38d76c5b709ac29f22c5e508da9d3",
       "src": "https://github.com/jpwol/thorn.nvim"
     },
     "conform.nvim": {
