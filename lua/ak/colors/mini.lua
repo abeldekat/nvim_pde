@@ -86,3 +86,11 @@ Config.new_autocmd('ColorScheme', all_hues_variants, function()
   -- Area for messages and cmdline, changed from Normal to Comment.fg
   hi('MsgArea', { fg = p.fg_mid2 })
 end, 'Mini hues on colorscheme')
+
+-- Skip support for plugins other than mini
+local hues = require('mini.hues')
+local apply = hues.apply_palette
+hues.apply_palette = function(palette, plugins, opts)
+  plugins = { default = false, ['nvim-mini/mini.nvim'] = true }
+  apply(palette, plugins, opts)
+end

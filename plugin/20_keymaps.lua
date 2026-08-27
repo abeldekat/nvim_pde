@@ -136,8 +136,8 @@ nmap_leader('fP', '<Cmd>Pick hipatterns scope="current"<CR>',          'Hipatter
 nmap_leader('fr', '<Cmd>Pick lsp_hinted scope="references"<CR>',       'References (LSP)') -- changed from R
 nmap_leader('fs', pick_workspace_symbols_live,                         'Symbols workspace (live)')
 nmap_leader('fS', '<Cmd>Pick lsp_hinted scope="document_symbol"<CR>',  'Symbols document')
-nmap_leader('ft', '<Cmd>Pick grep_todo_keywords<CR>',                  'Grep todos') -- added
-nmap_leader('fT', pick_colorschemes,                                   'Colorschemes') -- added
+nmap_leader('ft', pick_colorschemes,                                   'Colorschemes') -- added
+nmap_leader('fT', '<Cmd>Pick grep_todo_keywords<CR>',                  'Grep todos') -- added
 nmap_leader('fu', '<Cmd>Pick resume<CR>',                              'Resume') -- changed from r
 nmap_leader("f'", '<Cmd>Pick marks<CR>',                               'Marks') -- added
 
