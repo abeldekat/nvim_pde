@@ -19,7 +19,7 @@ local generated = {
   yellow = '#fce0a6', yellow_bg = '#493400',
 }
 -- stylua: ignore
-local palette_b_bright_fg = {
+local palette_b_fg_bright = {
   blue = '#A3A9CE', cyan = '#89B3B6', green = '#85B695', red = '#D47766', yellow = '#EBC06D',
 }
 -- stylua: ignore
@@ -32,11 +32,11 @@ local palette_d_bg = {
 }
 
 local use_bright = true
-local palette_fg = use_bright and palette_b_bright_fg or palette_c_fg
+local palette_fg = use_bright and palette_b_fg_bright or palette_c_fg
 
 -- Melange does not define orange. Use yellow
-palette_fg.orange = '#E49B5D'
-palette_d_bg.orange_bg = '8B7449'
+palette_fg.orange = palette_c_fg.yellow
+palette_d_bg.orange_bg = palette_d_bg.yellow_bg
 -- Melange does not define purple, MiniHues does not have magenta. Use melange magenta for purple
 palette_fg.purple = use_bright and '#CF9BC2' or '#B380B0'
 palette_d_bg.purple_bg = '#422741'
