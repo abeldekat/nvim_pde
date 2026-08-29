@@ -1,8 +1,32 @@
-local add = vim.pack.add
 local now, later = Config.now, Config.later
-local all_colors_setup = false
-local Color = require('ak.color') -- contains color info set by shell script and rofi. See colors.txt
+local add = vim.pack.add
 
+-- Traverse the variants of a colorscheme
+local cmd_colorscheme = function(variant) vim.cmd.colorscheme(variant) end
+local cache = {}
+Config.add_theme_info = function(pattern, info, desc) -- see lua.ak.colors
+  local set = function()
+    if cache.name == info.name then return end
+
+    cache.name = info.name
+    cache.variants = info.variants
+    cache.idx = 1
+    cache.cb = info.cb and info.cb or cmd_colorscheme
+  end
+  Config.new_autocmd('ColorScheme', pattern, set, desc)
+end
+Config.next_theme_variant = function() -- see plugin.20_keymaps
+  if not cache.idx then return end
+
+  cache.idx = cache.idx == #cache.variants and 1 or (cache.idx + 1)
+  local variant = cache.variants[cache.idx]
+
+  -- Activate colorscheme:
+  cache.cb(variant)
+  vim.notify(string.format('Using %s[%s]', cache.name, vim.inspect(variant)))
+end
+
+-- Extra colorscheme plugins to install
 local specs = {
   catppuccin = { src = 'https://github.com/catppuccin/nvim', name = 'colors_catppuccin' },
   everforest = { src = 'https://github.com/sainnhe/everforest', name = 'colors_everforest' },
@@ -11,9 +35,7 @@ local specs = {
   thorn = { src = 'https://github.com/jpwol/thorn.nvim', name = 'colors_thorn' },
 }
 
--- Given the name of a color, returns a table containing:
--- spec_name: The name of the spec, or nil
--- config_name: The full path of the config to require
+-- Return the name of the config to require
 local to_config_name = function(color_name) -- color names: ak.colors.txt
   local config_name = color_name
   if vim.tbl_contains({ 'minischeme', 'minicyan' }, config_name) then
@@ -28,48 +50,31 @@ local to_config_name = function(color_name) -- color names: ak.colors.txt
   return config_name
 end
 
--- Traverse the variants of a theme
-local theme_info = {} -- contains name, variants and possible callback
-local add_theme_info = function(pattern, new_info, desc)
-  local theme_info_default_cb = function(variant) vim.cmd.colorscheme(variant) end
-  local new_theme = function(info)
-    if theme_info.name and theme_info.name == info.name then return end
-    theme_info = info
-    theme_info.idx = 1
-    theme_info.cb = theme_info.cb and theme_info.cb or theme_info_default_cb
-  end
-  Config.new_autocmd('ColorScheme', pattern, function() new_theme(new_info) end, desc)
-end
-local next_variant = function()
-  theme_info.idx = theme_info.idx == #theme_info.variants and 1 or (theme_info.idx + 1)
-  local variant = theme_info.variants[theme_info.idx]
-  theme_info.cb(variant)
-  vim.defer_fn(function()
-    local msg = string.format('Using %s[%s]', theme_info.name, vim.inspect(variant))
-    vim.api.nvim_echo({ { msg, 'InfoMsg' } }, true, {})
-  end, 250)
-end
-Config.add_theme_info = add_theme_info -- see ak.colors
-Config.next_theme_variant = next_variant -- see 20_keymaps
-
+-- Set startup colorscheme
 now(function()
-  local config_name = to_config_name(Color.color)
+  -- Colors.txt contains available color names.
+  local color_name = require('ak.color').color
+  local config_name = to_config_name(color_name)
 
-  -- Add plugins other than mini
+  -- Add the plugin if not from mini.nvim
   local spec = specs[config_name]
   if spec then add({ spec }) end
 
   -- Setup and apply
   require('ak.colors.' .. config_name)
-  vim.cmd.colorscheme(Color.color)
+  vim.cmd.colorscheme(color_name)
 end)
 
+-- Defer acting on other colorschemes
 later(function()
+  -- Add all colorschemes plugins
   add(vim.tbl_values(specs))
 
-  local setup_all_colors = function() -- See pick colorschemes
+  -- Require configs for all colorschemes(see pick colorschemes)
+  local all_colors_setup = false
+  local setup_all_colors = function()
     if all_colors_setup then return end
-    for config_name, _ in pairs(specs) do -- Load all specs and their configs
+    for config_name, _ in pairs(specs) do
       require('ak.colors.' .. config_name)
     end
     require('ak.colors.base16') -- mini
