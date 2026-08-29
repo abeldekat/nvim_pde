@@ -7,6 +7,13 @@ local hi = function(name, data) vim.api.nvim_set_hl(0, name, data) end
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                         base16                          │
 --          ╰─────────────────────────────────────────────────────────╯
+
+-- Restrict number of supported plugins
+local restrict_plugins = { plugins = { default = false, ['nvim-mini/mini.nvim'] = true } }
+local base16 = require('mini.base16')
+local setup_base16 = base16.setup
+base16.setup = function(config) setup_base16(vim.tbl_deep_extend('force', config or {}, restrict_plugins)) end
+
 local base16_variants = { 'minischeme', 'minicyan' }
 local base16_info = {
   name = 'mini_base16',
@@ -49,6 +56,14 @@ end, 'Mini base16 on colorscheme')
 --          ╭─────────────────────────────────────────────────────────╮
 --          │                          hues                           │
 --          ╰─────────────────────────────────────────────────────────╯
+
+local hues = require('mini.hues')
+-- Restrict number of supported plugins via setup(see randomhue)
+local setup_hues = hues.setup
+hues.setup = function(config) setup_hues(vim.tbl_deep_extend('force', config or {}, restrict_plugins)) end
+-- Restrict number of supported plugins via direct 'apply_palette' call(ie miniwinter)
+hues.config.plugins = restrict_plugins.plugins
+
 local randomhue = 'randomhue'
 local randomhue_info = { -- toggle randoms
   name = 'mini_randomhue',
@@ -86,11 +101,3 @@ Config.new_autocmd('ColorScheme', all_hues_variants, function()
   -- Area for messages and cmdline, changed from Normal to Comment.fg
   hi('MsgArea', { fg = p.fg_mid2 })
 end, 'Mini hues on colorscheme')
-
--- Skip support for plugins other than mini
-local hues = require('mini.hues')
-local apply = hues.apply_palette
-hues.apply_palette = function(palette, plugins, opts)
-  plugins = { default = false, ['nvim-mini/mini.nvim'] = true }
-  apply(palette, plugins, opts)
-end
