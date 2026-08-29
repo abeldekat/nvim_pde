@@ -59,4 +59,4 @@ end
 Config.new_autocmd('ColorScheme', 'minihues-melange', set, 'Hi for minihues-melange')
 
 require('mini.hues').apply_palette(vim.tbl_deep_extend('force', generated, palette_d_bg, palette_b_fg))
-vim.g.colors_name = 'minihues-melange'
+vim.g.colors_name = 'minimelange'

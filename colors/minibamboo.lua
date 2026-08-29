@@ -20,4 +20,4 @@ local palette_fg = {
 palette_fg.azure = palette_fg.blue
 
 require('mini.hues').apply_palette(vim.tbl_deep_extend('force', generated, palette_bg, palette_fg))
-vim.g.colors_name = 'minihues-bamboo'
+vim.g.colors_name = 'minibamboo'

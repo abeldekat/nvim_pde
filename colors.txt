@@ -9,10 +9,10 @@ dayfox
 duskfox
 everforest
 gruvbox-material
+miniayu
+minibamboo
 minicyan
-minihues-ayu-mirage
-minihues-bamboo
-minihues-melange
+minimelange
 minischeme
 minispring
 minisummer

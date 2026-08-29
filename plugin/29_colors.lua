@@ -1,47 +1,32 @@
 local add = vim.pack.add
 local now, later = Config.now, Config.later
-
+local all_colors_setup = false
 local Color = require('ak.color') -- contains color info set by shell script and rofi. See colors.txt
-local all_colors_loaded = false
 
 local specs = {
-  { src = 'https://github.com/catppuccin/nvim', name = 'colors_catppuccin' },
-  { src = 'https://github.com/sainnhe/everforest', name = 'colors_everforest' },
-  { src = 'https://github.com/sainnhe/gruvbox-material', name = 'colors_gruvbox-material' },
-  { src = 'https://github.com/edeneast/nightfox.nvim', name = 'colors_nightfox' },
-  { src = 'https://github.com/jpwol/thorn.nvim', name = 'colors_thorn' },
+  catppuccin = { src = 'https://github.com/catppuccin/nvim', name = 'colors_catppuccin' },
+  everforest = { src = 'https://github.com/sainnhe/everforest', name = 'colors_everforest' },
+  ['gruvbox-material'] = { src = 'https://github.com/sainnhe/gruvbox-material', name = 'colors_gruvbox-material' },
+  nightfox = { src = 'https://github.com/edeneast/nightfox.nvim', name = 'colors_nightfox' },
+  thorn = { src = 'https://github.com/jpwol/thorn.nvim', name = 'colors_thorn' },
 }
-
-local find_spec = function(spec_name)
-  return vim.iter(specs):filter(function(s) return s.name == spec_name end):totable()[1]
-end
 
 -- Given the name of a color, returns a table containing:
 -- spec_name: The name of the spec, or nil
 -- config_name: The full path of the config to require
-local from_color_name = function(color_name) -- color names: ak.colors.txt
-  local tmp = color_name
-  local is_mini = false
-  if tmp:find('catppuccin', 1, true) then
-    tmp = 'catppuccin'
-  elseif tmp:find('fox', 1, true) then
-    tmp = 'nightfox' -- ie nordfox becomes nightfox
-  elseif tmp:find('hue', 1, true) then
-    tmp = 'mini'
-    is_mini = true
-  elseif tmp:find('mini', 1, true) then
-    tmp = 'mini'
-    is_mini = true
+local to_config_name = function(color_name) -- color names: ak.colors.txt
+  local config_name = color_name
+  if vim.tbl_contains({ 'minischeme', 'minicyan' }, config_name) then
+    config_name = 'base16'
+  elseif config_name:find('mini', 1, true) or config_name == 'randomhue' then
+    config_name = 'hues'
+  elseif config_name:find('catppuccin', 1, true) then
+    config_name = 'catppuccin'
+  elseif config_name:find('fox', 1, true) then
+    config_name = 'nightfox' -- ie nordfox becomes nightfox
   end
-
-  return {
-    spec_name = not is_mini and ('colors_' .. tmp) or nil, -- startup plugin
-    config_name = 'ak.colors.' .. tmp,
-  }
+  return config_name
 end
-
--- Given the name of a spec, return the name of the config to require
-local to_config_name = function(spec_name) return 'ak.colors.' .. spec_name:gsub('colors_', '') end
 
 -- Traverse the variants of a theme
 local theme_info = {} -- contains name, variants and possible callback
@@ -65,27 +50,31 @@ local next_variant = function()
   end, 250)
 end
 Config.add_theme_info = add_theme_info -- see ak.colors
-Config.next_theme_variant = next_variant -- see keymaps
+Config.next_theme_variant = next_variant -- see 20_keymaps
 
 now(function()
-  local colorinfo = from_color_name(Color.color)
-  local spec = colorinfo.spec_name and find_spec(colorinfo.spec_name)
+  local config_name = to_config_name(Color.color)
 
+  -- Add plugins other than mini
+  local spec = specs[config_name]
   if spec then add({ spec }) end
-  require(colorinfo.config_name)
+
+  -- Setup and apply
+  require('ak.colors.' .. config_name)
   vim.cmd.colorscheme(Color.color)
 end)
 
 later(function()
-  add(specs)
+  add(vim.tbl_values(specs))
 
   local setup_all_colors = function() -- See pick colorschemes
-    if all_colors_loaded then return end
-    for _, spec in ipairs(specs) do -- Load all specs and their configs
-      require(to_config_name(spec.name))
+    if all_colors_setup then return end
+    for config_name, _ in pairs(specs) do -- Load all specs and their configs
+      require('ak.colors.' .. config_name)
     end
-    require(from_color_name('mini').config_name) -- Mini collection
-    all_colors_loaded = true
+    require('ak.colors.base16') -- mini
+    require('ak.colors.hues') -- mini
+    all_colors_setup = true
   end
   Config.setup_all_colors = setup_all_colors
 end)

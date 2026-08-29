@@ -35,4 +35,4 @@ end
 Config.new_autocmd('ColorScheme', 'minihues-ayu-mirage', set, 'Hi for minihues-ayu-mirage')
 
 require('mini.hues').apply_palette(vim.tbl_deep_extend('force', generated, palette_fg))
-vim.g.colors_name = 'minihues-ayu-mirage'
+vim.g.colors_name = 'miniayu'
