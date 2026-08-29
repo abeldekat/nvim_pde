@@ -56,7 +56,7 @@ local set = function()
   hi('@lsp.type.struct', { fg = p.green })
   hi('@lsp.typemod.enum', { fg = palette_c.cyan })
 end
-Config.new_autocmd('ColorScheme', 'minihues-melange', set, 'Hi for minihues-melange')
+Config.new_autocmd('ColorScheme', 'minimelange', set, 'Hi for minimelange')
 
 require('mini.hues').apply_palette(vim.tbl_deep_extend('force', generated, palette_d_bg, palette_b_fg))
 vim.g.colors_name = 'minimelange'

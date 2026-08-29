@@ -32,7 +32,7 @@ local set = function()
   hi('@lsp.type.property', { fg = p.azure })
   hi('@lsp.typemod.function.defaultLibrary', { fg = p.accent })
 end
-Config.new_autocmd('ColorScheme', 'minihues-ayu-mirage', set, 'Hi for minihues-ayu-mirage')
+Config.new_autocmd('ColorScheme', 'miniayu', set, 'Hi for miniayu')
 
 require('mini.hues').apply_palette(vim.tbl_deep_extend('force', generated, palette_fg))
 vim.g.colors_name = 'miniayu'
