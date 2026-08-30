@@ -4,7 +4,7 @@ local add = vim.pack.add
 -- Traverse the variants of a colorscheme
 local cmd_colorscheme = function(variant) vim.cmd.colorscheme(variant) end
 local cache = {}
-Config.add_theme_info = function(pattern, info, desc) -- see lua.ak.colors
+Config.add_theme_info = function(pattern, info, desc) -- see lua.ak.colors.*
   local set = function()
     if cache.name == info.name then return end
 
@@ -36,7 +36,7 @@ local specs = {
 }
 
 -- Return the name of the config to require
-local to_config_name = function(color_name) -- color names: ak.colors.txt
+local to_config_name = function(color_name)
   local config_name = color_name
   if vim.tbl_contains({ 'minischeme', 'minicyan' }, config_name) then
     config_name = 'base16'
@@ -45,14 +45,14 @@ local to_config_name = function(color_name) -- color names: ak.colors.txt
   elseif config_name:find('catppuccin', 1, true) then
     config_name = 'catppuccin'
   elseif config_name:find('fox', 1, true) then
-    config_name = 'nightfox' -- ie nordfox becomes nightfox
+    config_name = 'nightfox'
   end
   return config_name
 end
 
 -- Set startup colorscheme
 now(function()
-  -- Colors.txt contains available color names.
+  -- Colors.txt contains available color names
   local color_name = require('ak.color').color
   local config_name = to_config_name(color_name)
 
@@ -70,13 +70,12 @@ later(function()
   -- Add all colorschemes plugins
   add(vim.tbl_values(specs))
 
-  -- Require configs for all colorschemes(see pick colorschemes)
+  -- Function ensuring all colorschemes have been configured(see pick colorschemes)
   local all_colors_setup = false
   local setup_all_colors = function()
     if all_colors_setup then return end
-    for config_name, _ in pairs(specs) do
-      require('ak.colors.' .. config_name)
-    end
+
+    vim.iter(specs):each(function(config_name, _) require('ak.colors.' .. config_name) end)
     require('ak.colors.base16') -- mini
     require('ak.colors.hues') -- mini
     all_colors_setup = true

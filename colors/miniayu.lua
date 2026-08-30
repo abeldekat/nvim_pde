@@ -12,7 +12,7 @@ local generated = {
   orange_bg = '#430f10', purple_bg = '#271a47', red_bg = '#3c1131', yellow_bg = '#4a2b00'
 }
 -- stylua: ignore
-local palette_fg = {
+local fg = {
   accent = '#FFCC66', -- colors.accent
 
   -- Using colors set for MiniIcons*...
@@ -21,18 +21,29 @@ local palette_fg = {
   -- colors.keyword   colors.lsp_parameter colors.error    colors.special
   orange = '#FFAD66', purple = '#D3B8F9', red = '#FF6666', yellow = '#FFDFB3',
 }
+local colors_func = '#FFD173'
+local colors_operator = '#F29E74'
 
 local hi = function(name, data) vim.api.nvim_set_hl(0, name, data) end
 local set = function()
   local p = require('mini.hues').get_palette()
-  hi('Function', { fg = '#FFD173', bg = nil }) -- colors.func
-  hi('Keyword', { fg = p.orange, bg = nil, bold = true })
-  hi('MiniClueDescGroup', { fg = p.orange, bg = p.bg_edge })
+  hi('Constant', { fg = p.purple })
+  hi('Delimiter', { fg = p.yellow })
+  hi('Function', { fg = colors_func })
+  hi('Keyword', { fg = p.orange, bold = true })
+  hi('Operator', { fg = colors_operator })
+  hi('PreProc', { fg = colors_func })
+  hi('Special', { fg = p.accent })
+  hi('Type', { fg = p.blue })
+  hi('@variable.builtin', { fg = colors_func })
+  hi('@lsp.mod.defaultLibrary', { link = '@lsp' }) -- unset
   hi('@lsp.type.parameter', { fg = p.purple })
   hi('@lsp.type.property', { fg = p.azure })
   hi('@lsp.typemod.function.defaultLibrary', { fg = p.accent })
+  hi('@lsp.typemod.variable.defaultLibrary', { fg = p.fg })
+  hi('MiniClueDescGroup', { fg = p.orange, bg = p.bg_edge })
 end
 Config.new_autocmd('ColorScheme', 'miniayu', set, 'Hi for miniayu')
 
-require('mini.hues').apply_palette(vim.tbl_deep_extend('force', generated, palette_fg))
+require('mini.hues').apply_palette(vim.tbl_deep_extend('force', generated, fg))
 vim.g.colors_name = 'miniayu'
