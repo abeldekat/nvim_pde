@@ -31,6 +31,7 @@ local specs = {
   catppuccin = { src = 'https://github.com/catppuccin/nvim', name = 'colors_catppuccin' },
   everforest = { src = 'https://github.com/sainnhe/everforest', name = 'colors_everforest' },
   ['gruvbox-material'] = { src = 'https://github.com/sainnhe/gruvbox-material', name = 'colors_gruvbox-material' },
+  melange = { src = 'https://github.com/savq/melange-nvim', name = 'colors_melange' },
   nightfox = { src = 'https://github.com/edeneast/nightfox.nvim', name = 'colors_nightfox' },
   thorn = { src = 'https://github.com/jpwol/thorn.nvim', name = 'colors_thorn' },
 }

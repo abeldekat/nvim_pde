@@ -9,6 +9,7 @@ dayfox
 duskfox
 everforest
 gruvbox-material
+melange
 miniayu
 minibamboo
 minicyan
