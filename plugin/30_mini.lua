@@ -26,7 +26,7 @@ later(function() require('mini.extra').setup() end)
 later(function() require('ak.mini.ai') end)
 -- later(function() require('mini.align').setup() end) -- see 20_keymaps
 -- later(function() require('mini.animate').setup() end) -- not used
-later(function() require('mini.bracketed').setup() end)
+later(function() require('ak.mini.bracketed') end)
 later(function() require('mini.bufremove').setup() end)
 -- later(function() require('ak.mini.clue') end) -- TODO: multicursor and clue Q override
 later(function() require('mini.cmdline').setup() end)
