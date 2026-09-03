@@ -28,7 +28,7 @@ later(function() require('ak.mini.ai') end)
 -- later(function() require('mini.animate').setup() end) -- not used
 later(function() require('ak.mini.bracketed') end)
 later(function() require('mini.bufremove').setup() end)
--- later(function() require('ak.mini.clue') end) -- TODO: multicursor and clue Q override
+later(function() require('ak.mini.clue') end)
 later(function() require('mini.cmdline').setup() end)
 -- later(function() require('mini.comment').setup() end) -- not used
 later(function() require('mini.cursorword').setup() end)

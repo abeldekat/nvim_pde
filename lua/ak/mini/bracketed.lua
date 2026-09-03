@@ -1,6 +1,6 @@
 ---@diagnostic disable: undefined-global
 
--- Do not overwrite builtin [C and C], used by multicursor(nvim-0.13+)
+-- TODO: Do not overwrite builtin [C and C], used by multicursor(nvim-0.13+)
 -- I never navigate to first or last comment...
 -- Use gg and forward, or G and backward
 require('mini.bracketed').setup({

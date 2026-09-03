@@ -57,7 +57,7 @@ require('vim._core.ui2').enable() -- enter window with g<. See also option cmdhe
 vim.o.autoindent    = true    -- Use auto indent
 vim.o.expandtab     = true    -- Convert tabs to spaces
 vim.o.formatoptions = 'rqnl1j'-- Improve comment editing
-vim.o.hlsearch      = false   -- ...added...: Cursorword is mostly sufficient
+vim.o.hlsearch      = true
 vim.o.ignorecase    = true    -- Ignore case during search
 vim.o.incsearch     = true    -- Show search matches while typing
 vim.o.infercase     = true    -- Infer case in built-in completion

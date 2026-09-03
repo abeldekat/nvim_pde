@@ -39,3 +39,6 @@ miniclue.setup({
     { mode = { 'n', 'x' }, keys = 'z' },        -- `z` key
   },
 })
+
+-- TODO: miniclues and multicursor
+Config.new_autocmd('BufWinEnter', '*', function() pcall(vim.keymap.del, 'n', 'Q') end, 'MiniClues remove Q')
