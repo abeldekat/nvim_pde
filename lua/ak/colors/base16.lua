@@ -36,10 +36,10 @@ Config.new_autocmd('ColorScheme', variants, function()
   hi('DiagnosticSignOk', { fg = p.base0B, bg = p.base00 })
   hi('DiagnosticSignWarn', { fg = p.base0E, bg = p.base00 })
 
-  hi('MiniStatuscolumnDim', { fg = p.base02, bg = p.base00, attr = nil, sp = nil })
-  hi('MiniStatuscolumnDimCursor', { link = 'CursorLineNr' })
-  hi('MiniStatuscolumnSep', { link = 'LineNr' })
-  hi('MiniStatuscolumnSepCursor', { link = 'CursorLineNr' })
+  -- Avoid bg=base01 by linking explicitly to the new LineNr hl.
+  -- It will be overwritten by the calculated 'dim' from MiniStatuscolumn
+  -- if its setup runs *after* the code in this module.
+  hi('MiniStatuscolumnDim', { link = 'LineNr' })
 
   -- Also need to change NormalFloat because of statuscolumn change:
   hi('NormalFloat', { fg = p.base05, bg = p.base00 })
