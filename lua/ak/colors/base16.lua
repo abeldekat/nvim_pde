@@ -36,6 +36,11 @@ Config.new_autocmd('ColorScheme', variants, function()
   hi('DiagnosticSignOk', { fg = p.base0B, bg = p.base00 })
   hi('DiagnosticSignWarn', { fg = p.base0E, bg = p.base00 })
 
+  hi('MiniStatuscolumnDim', { fg = p.base02, bg = p.base00, attr = nil, sp = nil })
+  hi('MiniStatuscolumnDimCursor', { link = 'CursorLineNr' })
+  hi('MiniStatuscolumnSep', { link = 'LineNr' })
+  hi('MiniStatuscolumnSepCursor', { link = 'CursorLineNr' })
+
   -- Also need to change NormalFloat because of statuscolumn change:
   hi('NormalFloat', { fg = p.base05, bg = p.base00 })
   -- Is a link to DiagnosticFloatingHint, change to bold orange:

@@ -25,7 +25,7 @@ b_fg.azure = b_fg.blue
 b_fg.orange = c.yellow
 d_bg.orange_bg = d_bg.yellow_bg
 -- No purple. MiniHues does not have magenta. Use melange magenta for purple
-local b_magenta, c_magenta, d_magenta = '#CF9BC2', '#B380b0', '#422741'
+local b_magenta, d_magenta = '#CF9BC2', '#422741' -- local c_magenta = '#B380b0'
 b_fg.purple = b_magenta
 d_bg.purple_bg = d_magenta
 
