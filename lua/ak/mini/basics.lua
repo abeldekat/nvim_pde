@@ -10,7 +10,7 @@ require('mini.basics').setup({
   options = { basic = false },
   mappings = {
     -- Create `<C-hjkl>` mappings for window navigation
-    windows = false, -- NOTE: using builtin ctrl-l for multicursor and to clear hl
+    windows = true,
     -- Create `<M-hjkl>` mappings for navigation in Insert and Command modes
     move_with_alt = true,
   },
