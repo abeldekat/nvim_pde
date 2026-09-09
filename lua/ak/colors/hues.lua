@@ -15,20 +15,20 @@ hues.config.plugins = restrict_plugins.plugins
 local randoms = { 'randomhue' }
 Config.add_theme_info(randoms, { name = 'mini_randomhue', variants = randoms }, 'Mini randomhue variants')
 
--- Next theme variant -> another season
-local seasons = { 'miniwinter', 'minispring', 'minisummer', 'miniautumn' }
-Config.add_theme_info(seasons, { name = 'mini_seasons', variants = seasons }, 'Mini hues season variants')
+-- Next theme variant -> another builtin
+local builtin = { 'minischeme2', 'minispring', 'minisummer', 'miniautumn', 'miniwinter' }
+Config.add_theme_info(builtin, { name = 'mini_builtin', variants = builtin }, 'Mini hues variants')
 
 -- Next theme variant -> another custom
-local ak = { 'miniayu', 'minibamboo', 'minimelange', 'minirosepine' }
-Config.add_theme_info(ak, { name = 'my_variants', variants = ak }, 'Ak hues variants')
+local my = { 'miniayu', 'minibamboo', 'minimelange', 'minirosepine' }
+Config.add_theme_info(my, { name = 'my_variants', variants = my }, 'My hues variants')
 
 local hi = function(name, data) vim.api.nvim_set_hl(0, name, data) end
-local all_hues_variants = vim.iter({ randoms, seasons, ak }):flatten(1):totable()
+local all_hues_variants = vim.iter({ randoms, builtin, my }):flatten(1):totable()
 Config.new_autocmd('ColorScheme', all_hues_variants, function()
   local p = hues.get_palette()
 
-  hi('MiniJump2dSpot', { fg = p.orange, bg = nil, bold = true, nocombine = true }) -- yellow
+  hi('MiniJump2dSpot', { fg = p.orange, bg = nil, bold = true, nocombine = true })
   -- Is a link to DiagnosticFloatingHint, change to bold orange:
   hi('MiniPickMatchRanges', { fg = p.orange, bold = true })
   -- Area for messages and cmdline, changed from Normal to Comment.fg
