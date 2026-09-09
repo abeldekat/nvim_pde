@@ -10,14 +10,15 @@ duskfox
 everforest
 gruvbox-material
 melange
+miniautumn
 miniayu
 minibamboo
 minicyan
 minimelange
+minirosepine
 minischeme
 minispring
 minisummer
-miniautumn
 miniwinter
 nightfox
 nordfox

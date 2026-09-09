@@ -20,7 +20,7 @@ local seasons = { 'miniwinter', 'minispring', 'minisummer', 'miniautumn' }
 Config.add_theme_info(seasons, { name = 'mini_seasons', variants = seasons }, 'Mini hues season variants')
 
 -- Next theme variant -> another custom
-local ak = { 'miniayu', 'minibamboo', 'minimelange' }
+local ak = { 'miniayu', 'minibamboo', 'minimelange', 'minirosepine' }
 Config.add_theme_info(ak, { name = 'my_variants', variants = ak }, 'Ak hues variants')
 
 local hi = function(name, data) vim.api.nvim_set_hl(0, name, data) end
