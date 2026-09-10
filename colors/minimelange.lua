@@ -21,20 +21,26 @@ local generated = {
 }
 
 -- Melange's palette has sections "a"(grays), "b"(fg bright), "c"(fg) and "d"(bg)
+local yellow, yellow_bg = '#EBC06D', '#8B7449'
+local yellow_from_c = '#E49B5D'
+
 -- No azure, orange and purple colors. MiniHues does not use magenta
 -- stylua: ignore
 local palette = { -- b and d sections
+  accent = yellow,
+
+  -- MiniHues: The generated azure is very light in this context
+  -- Set yellow(much darker) to azure. MiniHues uses azure for 'Function' hl
+  -- azure = yellow,
+
   blue = '#A3A9CE', blue_bg = '#273142',
   cyan = '#89B3B6', cyan_bg = '#253333',
-  -- Melange green is not bright enough for mini.hues. Use generated
-  -- green = '#85B695', green_bg = '#233524',
+  -- green = '#85B695', green_bg = '#233524', -- too dim
+  orange = yellow_from_c, orange_bg = yellow_bg,
+  -- purple = -- no purple, use generated
   red = '#D47766', red_bg = '#7D2A2F',
-  yellow = '#EBC06D', yellow_bg = '#8B7449',
+  yellow = yellow, yellow_bg = yellow_bg
 }
-
--- Use yellow from c section
-palette.orange = '#E49B5D'
-palette.orange_bg = palette.yellow_bg
 
 require('mini.hues').apply_palette(vim.tbl_deep_extend('force', generated, palette))
 vim.g.colors_name = 'minimelange'

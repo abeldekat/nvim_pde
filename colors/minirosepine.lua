@@ -18,13 +18,20 @@ local generated = {
   yellow = "#f7dfa4", yellow_bg = "#423100"
 }
 
-local rose_from_moon_variant = '#ea9a97'
+local rose_from_moon_variant = '#ea9a97' -- main is too light
+local pine_from_moon_variant = '#3e8fb0' -- main is too dark
 local palette = {
   accent = rose_from_moon_variant,
 
   -- azure blue cyan green: colors are too dim
   -- pine = '#31748f', foam = '#9ccfd8', leaf = '#95b1ac'
   -- azure = foam, blue = pine, cyan = foam, green = leaf,
+
+  -- MiniHues: The generated azure is too light in this context
+  -- Set rose(much darker) to azure. MiniHues uses azure for 'Function' hl
+  azure = rose_from_moon_variant,
+  green = pine_from_moon_variant,
+
   orange = rose_from_moon_variant,
   purple = '#c4a7e7', -- iris
   red = '#eb6f92', -- love
