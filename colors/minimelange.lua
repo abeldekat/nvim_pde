@@ -24,7 +24,7 @@ local generated = {
 local yellow, yellow_bg = '#EBC06D', '#8B7449'
 local yellow_from_c = '#E49B5D'
 
--- No azure, orange and purple colors. MiniHues does not use magenta
+-- No azure, orange and purple colors. Melange defines magenta which is not used by MiniHues
 -- stylua: ignore
 local palette = { -- b and d sections
   accent = yellow,
@@ -37,7 +37,7 @@ local palette = { -- b and d sections
   cyan = '#89B3B6', cyan_bg = '#253333',
   -- green = '#85B695', green_bg = '#233524', -- too dim
   orange = yellow_from_c, orange_bg = yellow_bg,
-  -- purple = -- no purple, use generated
+  -- purple = -- no purple
   red = '#D47766', red_bg = '#7D2A2F',
   yellow = yellow, yellow_bg = yellow_bg
 }
