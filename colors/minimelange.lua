@@ -23,6 +23,9 @@ local generated = {
 -- Melange's palette has sections "a"(grays), "b"(fg bright), "c"(fg) and "d"(bg)
 local yellow, yellow_bg = '#EBC06D', '#8B7449'
 local yellow_from_c = '#E49B5D'
+-- No purple. MiniHues does not have magenta. Use melange magenta for purple
+local magenta, magenta_bg = '#CF9BC2', '#422741'
+-- local magenta_from_c = '#B380b0'
 
 -- No azure, orange and purple colors. Melange defines magenta which is not used by MiniHues
 -- stylua: ignore
@@ -31,13 +34,13 @@ local palette = { -- b and d sections
 
   -- MiniHues: The generated azure is very light in this context
   -- Set yellow(much darker) to azure. MiniHues uses azure for 'Function' hl
-  -- azure = yellow,
+  -- azure = yellow, azure_bg = yellow_bg,
 
   blue = '#A3A9CE', blue_bg = '#273142',
   cyan = '#89B3B6', cyan_bg = '#253333',
   -- green = '#85B695', green_bg = '#233524', -- too dim
   orange = yellow_from_c, orange_bg = yellow_bg,
-  -- purple = -- no purple
+  purple = magenta, purple_bg = magenta_bg,
   red = '#D47766', red_bg = '#7D2A2F',
   yellow = yellow, yellow_bg = yellow_bg
 }

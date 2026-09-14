@@ -13,23 +13,22 @@ nmap([[\H]], '<Cmd>lua Config.toggle_hints()<CR>', 'Toggle inlay hints')
 nmap([[\L]], '<Cmd>lua Config.toggle_lint()<CR>', 'Toggle auto-lint')
 
 -- Visits iterate based on recency
-local make_iterate_label = function(direction) -- see map_iterate_core from the help
+local make_iterate_label = function(direction, n_times) -- see map_iterate_core from help
   return function()
-    local current = Config.visits_label
+    local label = Config.visits_label
     local sort_latest = MiniVisits.gen_sort.default({ recency_weight = 1 })
-    local opts = { filter = current, sort = sort_latest, wrap = true }
+    local opts = { filter = label, n_times = n_times, sort = sort_latest, wrap = true }
     MiniVisits.iterate_paths(direction, vim.fn.getcwd(), opts)
   end
 end
-
-local earliest = make_iterate_label('last')
-local latest = make_iterate_label('first')
-nmap('[{', earliest, 'Current label (earliest)')
-nmap('[.', earliest, 'Current label (earliest)') -- also using leader dot...
-nmap('[[', make_iterate_label('forward'), 'Current label (earlier)')
+nmap(']}', make_iterate_label('first'), 'Current label (latest)')
 nmap(']]', make_iterate_label('backward'), 'Current label (later)')
-nmap(']}', latest, 'Current label (latest)')
-nmap('].', latest, 'Current label (latest)') -- also using leader dot...
+nmap('[[', make_iterate_label('forward'), 'Current label (earlier)')
+nmap('[{', make_iterate_label('last'), 'Current label (earliest)')
+nmap('<C-j>', make_iterate_label('first', 1), 'Current label(first)')
+nmap('<C-k>', make_iterate_label('first', 2), 'Current label(second)')
+nmap('<C-l>', make_iterate_label('first', 3), 'Current label(third)')
+nmap('<C-h>', make_iterate_label('first', 4), 'Current label(fourth)')
 
 -- Many general mappings are created by 'mini.basics'. See 'plugin/30_mini.lua'
 
@@ -168,6 +167,12 @@ xmap_leader('gs', '<Cmd>lua MiniGit.show_at_cursor()<CR>', 'Show at selection')
 -- - Using a separate "visit index" for each cwd Neovim is started in
 -- - Most mappings have been changed
 local pick_from_label = function() -- see make_pick_core in MiniMax
+  local stop_without_visit = function(_, _)
+    local cache_disabled = vim.g.minivisits_disable
+    vim.g.minivisits_disable = true
+    vim.schedule(function() vim.g.minivisits_disable = cache_disabled end )
+    return true
+  end
   local choose_marked = function(items)
     vim.iter(items):each(function(item) MiniVisits.remove_label(Config.visits_label, item) end)
   end
@@ -176,7 +181,8 @@ local pick_from_label = function() -- see make_pick_core in MiniMax
   local local_opts = { cwd = '', filter = Config.visits_label, sort = sort_latest }
   local source = {  choose_marked = choose_marked, name = name }
   local hinted = { enable = true, use_autosubmit = true } -- see akextra.pick_hinted
-  MiniExtra.pickers.visit_paths(local_opts, { source = source, hinted = hinted })
+  local mappings = { stop = '', custom_stop = { char = '<Esc>', func = stop_without_visit }}
+  MiniExtra.pickers.visit_paths(local_opts, { source = source, hinted = hinted , mappings = mappings})
 end
 local make_addremove_current = function(call)
   return string.format('<Cmd>lua MiniVisits.%s(%s)<CR>', call, 'Config.visits_label')
