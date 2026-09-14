@@ -1,5 +1,5 @@
 ---@diagnostic disable: undefined-global
--- Generate hues for shatur/neovim-ayu(mirage) using its bg and fg, with default MiniHues setup
+-- Generate hues for shatur/neovim-ayu(mirage) using its bg and fg
 -- local opts = { background = '#1F2430', foreground = '#CCCAC2' }
 -- require('mini.hues').setup(opts)
 

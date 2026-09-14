@@ -1,4 +1,4 @@
--- Generate hues for rose-pine/neovim(main) using its base and text, with default MiniHues setup
+-- Generate hues for rose-pine/neovim(main) using its base and text
 -- local opts = { background = '#191724', foreground = '#e0def4' }
 -- require('mini.hues').setup(opts)
 

@@ -1,4 +1,4 @@
--- Generate hues for ribru17/bamboo(vulgaris) using its bg0 and fg, with default MiniHues setup
+-- Generate hues for ribru17/bamboo(vulgaris) using its bg0 and fg
 -- local opts = { background = '#252623', foreground = '#f1e9d2' }
 -- require('mini.hues').setup(opts)
 
