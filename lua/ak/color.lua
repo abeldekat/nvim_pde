@@ -2,7 +2,7 @@
 -- See: colors.txt
 
 -- using sed for color and prefer_light:
-local color = "miniwinter"
+local color = 'miniwinter'
 local prefer_light = false
 -- end using sed
 

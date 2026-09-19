@@ -1,7 +1,7 @@
 {
   "plugins": {
     "SchemaStore.nvim": {
-      "rev": "71cd0300fcf13179978e6a6b1f2fc2db677f9c94",
+      "rev": "460358f4de896230269a76c23ab558069f6e1e43",
       "src": "https://github.com/b0o/SchemaStore.nvim"
     },
     "colors_catppuccin": {
@@ -50,7 +50,7 @@
       "src": "https://github.com/mfussenegger/nvim-lint.git"
     },
     "nvim-lspconfig": {
-      "rev": "ac9d2f7c4757db6320cab6697fe73e5e8adb2457",
+      "rev": "ffd261c09c3dabd0bf1a438f47a8ae3b22f3c3ff",
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {
@@ -70,7 +70,7 @@
       "src": "https://github.com/stevearc/quicker.nvim"
     },
     "vimtex": {
-      "rev": "06d31c8c3c74614e19e12fd1974dfc504e2bbce2",
+      "rev": "819b98b465d58347f6dc8134cc61db03f18691ad",
       "src": "https://github.com/lervag/vimtex"
     }
   }

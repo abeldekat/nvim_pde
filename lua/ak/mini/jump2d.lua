@@ -2,8 +2,8 @@
 local jump2d = require('mini.jump2d')
 jump2d.setup({
   spotter = jump2d.gen_spotter.pattern('[^%s%p]+'),
-  -- hand restriction, remove afg, add eui
-  labels = 'sdehjkl;ui',
+  -- hand restriction
+  labels = 'jkl;swdeih',
   mappings = { start_jumping = '' },
   view = { dim = true, n_steps_ahead = 2 },
 })

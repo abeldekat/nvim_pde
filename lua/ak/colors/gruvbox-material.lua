@@ -5,8 +5,8 @@ local info = {
   name = name,
   -- stylua: ignore
   variants = {
-    { "dark", "soft" }, { "dark", "medium" }, { "dark", "hard" },
-    { "light", "soft" }, { "light", "medium" }, { "light", "hard" },
+    { 'dark', 'soft' }, { 'dark', 'medium' }, { 'dark', 'hard' },
+    { 'light', 'soft' }, { 'light', 'medium' }, { 'light', 'hard' },
   },
   cb = function(variant)
     vim.o.background = variant[1]

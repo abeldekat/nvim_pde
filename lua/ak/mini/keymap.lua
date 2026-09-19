@@ -1,16 +1,16 @@
 ---@diagnostic disable: undefined-global
-require("mini.keymap").setup()
+require('mini.keymap').setup()
 
 -- On `<CR>` try to accept current completion item, fall back to accounting
 -- for pairs from 'mini.pairs'
-MiniKeymap.map_multistep("i", "<CR>", { "pmenu_accept", "minipairs_cr" })
+MiniKeymap.map_multistep('i', '<CR>', { 'pmenu_accept', 'minipairs_cr' })
 -- On `<BS>` just try to account for pairs from 'mini.pairs'
-MiniKeymap.map_multistep("i", "<BS>", { "minipairs_bs" })
+MiniKeymap.map_multistep('i', '<BS>', { 'minipairs_bs' })
 
-local steps_ctrl_l = { "minisnippets_next", "jump_after_tsnode", "jump_after_close" }
-MiniKeymap.map_multistep("i", "<C-l>", steps_ctrl_l)
-local steps_ctrl_h = { "minisnippets_prev", "jump_before_tsnode", "jump_before_open" }
-MiniKeymap.map_multistep("i", "<C-h>", steps_ctrl_h)
+local steps_ctrl_l = { 'minisnippets_next', 'jump_after_tsnode', 'jump_after_close' }
+MiniKeymap.map_multistep('i', '<C-l>', steps_ctrl_l)
+local steps_ctrl_h = { 'minisnippets_prev', 'jump_before_tsnode', 'jump_before_open' }
+MiniKeymap.map_multistep('i', '<C-h>', steps_ctrl_h)
 
 -- Lessons learned from m4xshen/hardtime.nvim:
 -- 1. Use a instead of li

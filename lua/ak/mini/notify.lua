@@ -3,7 +3,7 @@
 Use a notification window like fidget.nvim for messages from the lsp,
 and a regular window otherwise.
 
-Do note that when the lsp emits messages, 
+Do note that when the lsp emits messages,
 any regular message from vim.notify will be displayed in the same lsp window.
 This is acceptable.
 --]]
@@ -17,16 +17,16 @@ local n_progress = 0
 local in_lsp_progress = function() return n_progress > 0 end
 
 local lsp_progress_plus = function() n_progress = n_progress + 1 end
-vim.api.nvim_create_autocmd("LspProgress", { pattern = "begin", callback = lsp_progress_plus })
+vim.api.nvim_create_autocmd('LspProgress', { pattern = 'begin', callback = lsp_progress_plus })
 local lsp_progress_minus = function()
   vim.defer_fn(function() n_progress = n_progress - 1 end, MiniNotify.config.lsp_progress.duration_last + 1)
 end
-vim.api.nvim_create_autocmd("LspProgress", { pattern = "end", callback = lsp_progress_minus })
+vim.api.nvim_create_autocmd('LspProgress', { pattern = 'end', callback = lsp_progress_minus })
 
 local format = function(notif)
-  return notif.data.source == "lsp_progress" and notif.msg or MiniNotify.default_format(notif)
+  return notif.data.source == 'lsp_progress' and notif.msg or MiniNotify.default_format(notif)
 end
-vim.api.nvim_set_hl(0, "MiniNotifyLspProgress", { link = "Comment" })
+vim.api.nvim_set_hl(0, 'MiniNotifyLspProgress', { link = 'Comment' })
 
 --- The window config differs between "vim.notify"  and "in lsp progress"
 local window_config = function()
@@ -34,10 +34,10 @@ local window_config = function()
 
   -- Customize window to be more "fidget" like
   local pad = vim.o.cmdheight + (vim.o.laststatus > 0 and 2 or 0) -- 2 looks better than 1
-  return { anchor = "SE", col = vim.o.columns, row = vim.o.lines - pad, border = "none" }
+  return { anchor = 'SE', col = vim.o.columns, row = vim.o.lines - pad, border = 'none' }
 end
 
-require("mini.notify").setup({
+require('mini.notify').setup({
   lsp_progress = { duration_last = 500 }, -- default duration: 1000
   content = { format = format }, -- sort = H.filterout_lua_diagnosing
   window = { winblend = 95, config = window_config },

@@ -16,7 +16,7 @@ local section_fileinfo = function(args)
 
   if MiniStatusline.is_truncated(args.trunc_width) or vim.bo.buftype ~= '' then return filetype end
 
-  local encoding, format = vim.bo.fileencoding or vim.bo.encoding, vim.bo.fileformat
+  local encoding, format = vim.bo.fileencoding or vim.o.encoding, vim.bo.fileformat
   local info = ''
   if not (encoding == 'utf-8' and format == 'unix') then info = string.format(' %s[%s]', encoding, format) end
 
