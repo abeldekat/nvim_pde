@@ -10,6 +10,7 @@ end
 
 _G.nvim_open_win_orig = vim.api.nvim_open_win
 
+---@diagnostic disable-next-line: duplicate-set-field
 vim.api.nvim_open_win = function(buf_id, enter, config)
   config.title = mock_title(config.title)
   return nvim_open_win_orig(buf_id, enter, config)
@@ -17,6 +18,7 @@ end
 
 _G.nvim_win_set_config_orig = vim.api.nvim_win_set_config
 
+---@diagnostic disable-next-line: duplicate-set-field
 vim.api.nvim_win_set_config = function(win_id, config)
   config.title = mock_title(config.title)
   return nvim_win_set_config_orig(win_id, config)
