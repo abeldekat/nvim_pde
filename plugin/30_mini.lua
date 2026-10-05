@@ -13,14 +13,14 @@ now(function() -- MiniMax always loads starter
   if vim.fn.argc(-1) == 0 then require('ak.mini.starter') end
   vim.o.statusline = ' ' -- added: statusline loads 'later'
 end)
-later(function() require('ak.mini.statusline') end) -- MiniMax uses now
+later(function() require('ak.mini.statusline') end) -- MiniMax now
 -- now(function() require('mini.tabline').setup() end) -- not used
 
 now_if_args(function() require('ak.mini.completion') end)
 now_if_args(function() require('ak.mini.files') end)
 ---@diagnostic disable-next-line: different-requires
 now_if_args(function() require('ak.mini.misc') end)
-now_if_args(function() require('mini.statuscolumn').setup() end)
+now_if_args(function() require('mini.statuscolumn').setup() end) -- MiniMax now
 
 later(function() require('mini.extra').setup() end)
 later(function() require('ak.mini.ai') end)
