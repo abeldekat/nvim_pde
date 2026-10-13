@@ -13,11 +13,11 @@ melange
 miniautumn
 miniayu
 minibamboo
+miniblue
 minicyan
 minimelange
 minirosepine
 minischeme
-minischeme2
 minispring
 minisummer
 miniwinter

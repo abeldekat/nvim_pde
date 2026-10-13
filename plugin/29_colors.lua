@@ -39,7 +39,7 @@ local specs = {
 -- Return the name of the config to require
 local to_config_name = function(color_name)
   local config_name = color_name
-  if vim.tbl_contains({ 'minischeme', 'minicyan' }, config_name) then
+  if vim.tbl_contains({ 'miniblue', 'minicyan' }, config_name) then
     config_name = 'base16'
   elseif config_name:find('mini', 1, true) or config_name == 'randomhue' then
     config_name = 'hues'

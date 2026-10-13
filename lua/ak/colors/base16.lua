@@ -11,7 +11,7 @@ local restrict_plugins = { plugins = { default = false, ['nvim-mini/mini.nvim'] 
 local setup_base16 = base16.setup
 base16.setup = function(config) setup_base16(vim.tbl_deep_extend('force', config or {}, restrict_plugins)) end
 
-local variants = { 'minischeme', 'minicyan' }
+local variants = { 'miniblue', 'minicyan' }
 Config.add_theme_info(variants, { name = 'mini_base16', variants = variants }, 'Mini base16 variants')
 
 Config.new_autocmd('ColorScheme', variants, function()

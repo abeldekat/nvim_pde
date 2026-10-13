@@ -16,7 +16,7 @@ local randoms = { 'randomhue' }
 Config.add_theme_info(randoms, { name = 'mini_randomhue', variants = randoms }, 'Mini randomhue variants')
 
 -- Next theme variant -> another builtin
-local builtin = { 'minischeme2', 'minispring', 'minisummer', 'miniautumn', 'miniwinter' }
+local builtin = { 'minischeme', 'minispring', 'minisummer', 'miniautumn', 'miniwinter' }
 Config.add_theme_info(builtin, { name = 'mini_builtin', variants = builtin }, 'Mini hues variants')
 
 -- Next theme variant -> another custom
