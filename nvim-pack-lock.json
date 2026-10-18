@@ -42,7 +42,7 @@
       "version": "'a923f5fc5ba36a3b17e289dc35dc17f66d0548ee'"
     },
     "mini.nvim": {
-      "rev": "ec1d7d896630296da4636d4fdf8a6656eb626b08",
+      "rev": "66b9e643b6dabe15079be7197ee4b4d59ff98c61",
       "src": "https://github.com/nvim-mini/mini.nvim"
     },
     "nvim-lint": {
@@ -54,7 +54,7 @@
       "src": "https://github.com/neovim/nvim-lspconfig"
     },
     "nvim-treesitter": {
-      "rev": "ca581c3436fc2b236847f5b739ebc263739e5ca6",
+      "rev": "d3e4a28b63961ba972b0945d66c73b6eec969953",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter"
     },
     "nvim-treesitter-context": {
@@ -70,7 +70,7 @@
       "src": "https://github.com/stevearc/quicker.nvim"
     },
     "vimtex": {
-      "rev": "bd0788f13c23337dae815e21f1f283cb79753ac7",
+      "rev": "79a5fb444147f94a5284b6800030e17eecd18a06",
       "src": "https://github.com/lervag/vimtex"
     }
   }
