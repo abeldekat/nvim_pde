@@ -33,4 +33,6 @@ Config.new_autocmd('ColorScheme', all_hues_variants, function()
   hi('MiniPickMatchRanges', { fg = p.orange, bold = true })
   -- Area for messages and cmdline, changed from Normal to Comment.fg
   hi('MsgArea', { fg = p.fg_mid2 })
+  -- Use same color as inactive status bar
+  hi('WinSeparator', { fg = p.bg_edge, bg = nil })
 end, 'Mini hues on colorscheme')

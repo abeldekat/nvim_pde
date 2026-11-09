@@ -1,6 +1,8 @@
 ---@diagnostic disable: undefined-global
 local group_default_hl = 'MiniStatuslineDevinfo' -- not using MiniStatuslineFileInfo
-local ignored_ft = { ministarter = true, minifiles = true, minipick = true }
+
+-- Only important when laststatus=3
+local ignored_ft = {} -- { ministarter = true, minifiles = true, minipick = true }
 
 -- Overridden: Return early when ft should not be displayed because of laststatus=3
 local section_filename = function(...)
