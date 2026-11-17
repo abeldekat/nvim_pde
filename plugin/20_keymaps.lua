@@ -280,8 +280,8 @@ nmap_leader('tf', '<Cmd>lua MiniTest.run_file()<CR>',                  'Test run
 nmap_leader('tl', '<Cmd>lua MiniTest.run_at_location()<CR>',           'Test run location')
 nmap_leader('ts', '<Cmd>lua Config.minitest_screenshots.browse()<CR>', 'Test show screenshot')
 -- NOTE: Vertical term, reflow not handled well when width of other window is maximized...
-nmap_leader('tT', '<Cmd>vertical term<CR>',                            'Terminal (vertical)') -- t
-nmap_leader('tt', '<Cmd>horizontal term<CR>',                          'Terminal (horizontal)') -- T
+nmap_leader('tt', '<Cmd>vertical term<CR>',                            'Terminal (vertical)')
+nmap_leader('tT', '<Cmd>horizontal term<CR>',                          'Terminal (horizontal)')
 
 local function on_termopen() -- ...added...
   local opts = { buf = 0 }
