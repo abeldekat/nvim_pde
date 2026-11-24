@@ -66,6 +66,9 @@ end
 local xmap_leader = function(suffix, rhs, desc)
   vim.keymap.set('x', '<Leader>' .. suffix, rhs, { desc = desc })
 end
+local tmap_leader = function(suffix, rhs, desc)
+  vim.keymap.set('t', '<Leader>' .. suffix, rhs, { desc = desc })
+end
 
 -- b is for 'Buffer'.
 local new_scratch_buffer = function()
@@ -166,8 +169,7 @@ nmap_leader('gl', '<Cmd>' .. git_log_cmd .. '<CR>',         'Log')
 nmap_leader('gL', '<Cmd>' .. git_log_buf_cmd .. '<CR>',     'Log buffer')
 nmap_leader('go', '<Cmd>lua MiniDiff.toggle_overlay()<CR>', 'Toggle overlay')
 nmap_leader('gs', '<Cmd>lua MiniGit.show_at_cursor()<CR>',  'Show at cursor')
-
-xmap_leader('gs', '<Cmd>lua MiniGit.show_at_cursor()<CR>', 'Show at selection')
+xmap_leader('gs', '<Cmd>lua MiniGit.show_at_cursor()<CR>',  'Show at selection')
 
 -- i is for 'Visits'. MiniMax uses 'v' which is harder to type
 -- - Added variable current_label, starting with 'core'
@@ -213,14 +215,13 @@ nmap_leader('lf', '<Cmd>lua require("conform").format()<CR>',   'Format')
 nmap_leader('li', '<Cmd>lua vim.lsp.buf.implementation()<CR>',  'Implementation')
 nmap_leader('lh', '<Cmd>lua vim.lsp.buf.hover()<CR>',           'Hover')
 nmap_leader('ll', '<Cmd>lua vim.lsp.codelens.run()<CR>',        'Lens')
-nmap_leader('ln', '<Cmd>lua vim.lsp.buf.rename()<CR>',          'Re[n]ame')
 -- nmap_leader('lr', '<Cmd>lua vim.lsp.buf.rename()<CR>',          'Rename') -- n like grn
 -- nmap_leader('lR', '<Cmd>lua vim.lsp.buf.references()<CR>',      'References')
+nmap_leader('ln', '<Cmd>lua vim.lsp.buf.rename()<CR>',          'Re[n]ame')
 nmap_leader('lr', '<Cmd>lua vim.lsp.buf.references()<CR>',      'References') -- r like grr
 nmap_leader('ls', '<Cmd>lua vim.lsp.buf.definition()<CR>',      'Source definition')
 nmap_leader('lt', '<Cmd>lua vim.lsp.buf.type_definition()<CR>', 'Type definition')
-
-xmap_leader('lf', '<Cmd>lua require("conform").format()<CR>', 'Format selection')
+xmap_leader('lf', '<Cmd>lua require("conform").format()<CR>',   'Format selection')
 
 -- Added: alternative "Incremental selection" mappings (treesitter + LSP fallback).
 -- See `:h MiniAi.config`, `:h treesitter-incremental-selection` and Neovim's defaults.lua
@@ -275,19 +276,23 @@ nmap_leader('sr', '<Cmd>lua MiniSessions.restart()<CR>',        'Restart') -- sR
 nmap_leader('sw', '<Cmd>lua MiniSessions.write()<CR>',          'Write current')
 
 -- t is for 'Terminal' and 'minitest'(added)
+local toggle_vertical = '<Cmd>lua Config.toggleterm_vertical()<CR>'
+local toggle_horizontal = '<Cmd>lua Config.toggleterm_horizontal()<CR>'
 nmap_leader('ta', '<Cmd>lua MiniTest.run()<CR>',                       'Test run all')
 nmap_leader('tf', '<Cmd>lua MiniTest.run_file()<CR>',                  'Test run file')
 nmap_leader('tl', '<Cmd>lua MiniTest.run_at_location()<CR>',           'Test run location')
 nmap_leader('ts', '<Cmd>lua Config.minitest_screenshots.browse()<CR>', 'Test show screenshot')
--- NOTE: Vertical term, reflow not handled well when width of other window is maximized...
-nmap_leader('tt', '<Cmd>vertical term<CR>',                            'Terminal (vertical)')
-nmap_leader('tT', '<Cmd>horizontal term<CR>',                          'Terminal (horizontal)')
+-- nmap_leader('tt', '<Cmd>vertical term<CR>',                            'Terminal (vertical)')
+nmap_leader('tt', toggle_vertical,                                     'Terminal (vertical)')
+tmap_leader('tt', toggle_vertical,                                     'Terminal (vertical)')
+-- nmap_leader('tT', '<Cmd>horizontal term<CR>',                          'Terminal (horizontal)')
+nmap_leader('tT', toggle_horizontal,                                   'Terminal (vertical)')
+tmap_leader('tT', toggle_horizontal,                                   'Terminal (vertical)')
 
 local function on_termopen() -- ...added...
   local opts = { buf = 0 }
-  vim.keymap.set('t', 'jk', [[<C-\><C-n>]], opts)
-  vim.keymap.set('t', '<C-w>', [[<C-\><C-n><C-w>]], opts)
-  vim.keymap.set('t', '<C-h>', [[<C-\><C-N><C-w>p]], opts)
+  vim.keymap.set('t', 'jk', [[<C-\><C-N>]], opts)
+  vim.keymap.set('t', '<C-w>', [[<C-\><C-N><C-w>]], opts)
 end
 Config.new_autocmd('TermOpen', nil, on_termopen, 'Terminal mappings')
 

@@ -11,6 +11,7 @@
 --       - reverse
 --
 -- Copied from nvim echasnovski and modified
+
 Config.open_lazygit = function()
   vim.cmd('tabedit')
   vim.cmd('setlocal nonumber signcolumn=no')
