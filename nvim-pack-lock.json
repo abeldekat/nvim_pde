@@ -1,7 +1,7 @@
 {
   "plugins": {
     "SchemaStore.nvim": {
-      "rev": "6ea42941864e28f59368480e071a84b16ae95bb4",
+      "rev": "5926c7899b2e36cd0f944ef3a933abd68c0fcdb8",
       "src": "https://github.com/b0o/SchemaStore.nvim"
     },
     "colors_catppuccin": {
