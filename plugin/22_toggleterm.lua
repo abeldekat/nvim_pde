@@ -8,7 +8,7 @@
 -- -- toggle.win is current(ensure toggle on)
 -- -- and/or toggle.buf is current(ensure alternative edit)
 --
--- In Neovim, in terminal mode, any terminal can be closed with ctrl-d.
+-- In Neovim, in terminal mode, any terminal can be closed with ctrl-d("exit").
 -- Its buffer will be gone and if possible its window will be closed.
 -- This also prevents a buffer picker from being cluttered with buffer terminals.
 --
@@ -36,22 +36,18 @@ local edit_alternative = function()
 end
 
 local toggle = function(direction)
-  -- Edge cases to handle if tab has only one window
+  -- Ensure "toggle activates" when there is only one window in tab
   if vim.fn.winnr('$') == 1 then
-    -- Force alternative edit when state.toggle.buf is current
-    -- This can happen if the user manually selected that buffer(via picker for example)
-    if vim.api.nvim_get_current_buf() == state.toggle.buf then edit_alternative() end
-
-    -- Force toggle "on" by invalidating state.toggle.win if it is current
-    -- This can happen with "CTRL-W_o" from inside the toggle window
     if vim.api.nvim_get_current_win() == state.toggle.win then state.toggle.win = -1 end
+    if vim.api.nvim_get_current_buf() == state.toggle.buf then edit_alternative() end
   end
 
   -- Toggle
-  if vim.api.nvim_win_is_valid(state.toggle.win) then
-    vim.api.nvim_win_hide(state.toggle.win)
+  local win, buf = state.toggle.win, state.toggle.buf
+  if vim.api.nvim_win_is_valid(win) and vim.api.nvim_win_get_buf(win) == buf then
+    vim.api.nvim_win_hide(win)
   else
-    state.toggle = create({ buf = state.toggle.buf, direction = direction })
+    state.toggle = create({ buf = buf, direction = direction })
     if vim.bo[state.toggle.buf].buftype ~= 'terminal' then vim.cmd.terminal() end
   end
 end
