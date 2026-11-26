@@ -1,5 +1,5 @@
 ---@diagnostic disable: undefined-global
--- A very simple toggle terminal, caching a single terminal buffer.
+-- A simple toggle terminal, caching a single terminal buffer.
 -- Only splits horizontally or vertically.
 -- To be used as a dropin replacement for MiniMax <leader>tt and <leader>tT.
 --
@@ -7,7 +7,23 @@
 -- Its buffer will be gone and if possible its window will be closed.
 -- This also prevents a buffer picker from being cluttered with buffer terminals.
 --
--- A new buffer will be added to the cache after closing a toggle with ctrl-d.
+-- Here, the cached buffer will be replaced when toggle is closed with ctrl-d.
+
+-- Example usage:
+--[[
+  Save this file as <path_to_config>/plugin/21_toggleterm.lua
+  In plugin/20_keymaps.lua, modify <leader>tt and <leader>tT as follows:
+
+  local tmap_leader = function(suffix, rhs, desc)
+    vim.keymap.set('t', '<Leader>' .. suffix, rhs, { desc = desc })
+  end
+  local toggle_vertical = '<Cmd>lua Config.toggleterm_vertical()<CR>'
+  local toggle_horizontal = '<Cmd>lua Config.toggleterm_horizontal()<CR>'
+  nmap_leader('tt', toggle_vertical,   'ToggleTerminal (vertical)')
+  tmap_leader('tt', toggle_vertical,   'ToggleTerminal (vertical)')
+  nmap_leader('tT', toggle_horizontal, 'ToggleTerminal (horizontal)')
+  tmap_leader('tT', toggle_horizontal, 'ToggleTerminal (horizontal)')
+--]]
 
 local state = { toggle = { win = -1, buf = -1 } }
 
@@ -59,7 +75,7 @@ local toggle = function(direction)
   end
 
   -- Toggle "off", but don't try to nvim_win_hide a single window
-  -- Happens for example on "CTRL_W-o" from inside toggle window
+  -- For example, after "CTRL_W-o" from inside toggle window
   edit_alternative()
 end
 

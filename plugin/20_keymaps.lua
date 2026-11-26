@@ -281,13 +281,13 @@ local toggle_horizontal = '<Cmd>lua Config.toggleterm_horizontal()<CR>'
 nmap_leader('ta', '<Cmd>lua MiniTest.run()<CR>',                       'Test run all')
 nmap_leader('tf', '<Cmd>lua MiniTest.run_file()<CR>',                  'Test run file')
 nmap_leader('tl', '<Cmd>lua MiniTest.run_at_location()<CR>',           'Test run location')
+nmap_leader('tn', '<Cmd>vertical term<CR>',                            'Terminal (vertical)') -- tt
+nmap_leader('tN', '<Cmd>horizontal term<CR>',                          'Terminal (horizontal)') -- tT
 nmap_leader('ts', '<Cmd>lua Config.minitest_screenshots.browse()<CR>', 'Test show screenshot')
--- nmap_leader('tt', '<Cmd>vertical term<CR>',                            'Terminal (vertical)')
-nmap_leader('tt', toggle_vertical,                                     'Terminal (vertical)')
-tmap_leader('tt', toggle_vertical,                                     'Terminal (vertical)')
--- nmap_leader('tT', '<Cmd>horizontal term<CR>',                          'Terminal (horizontal)')
-nmap_leader('tT', toggle_horizontal,                                   'Terminal (vertical)')
-tmap_leader('tT', toggle_horizontal,                                   'Terminal (vertical)')
+nmap_leader('tt', toggle_vertical,                                     'ToggleTerminal (vertical)')
+tmap_leader('tt', toggle_vertical,                                     'ToggleTerminal (vertical)')
+nmap_leader('tT', toggle_horizontal,                                   'ToggleTerminal (horizontal)')
+tmap_leader('tT', toggle_horizontal,                                   'ToggleTerminal (horizontal)')
 
 local function on_termopen() -- ...added...
   local opts = { buf = 0 }
