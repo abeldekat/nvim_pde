@@ -49,8 +49,9 @@ local toggle_on = function(direction)
   if not vim.api.nvim_buf_is_valid(t.buf) then t.buf = vim.api.nvim_create_buf(false, true) end
   -- Split
   vim.cmd((direction and direction .. ' ' or '') .. 'sbuffer ' .. t.buf)
-  -- Ensure terminal in insert mode
+  -- Ensure terminal
   if vim.bo[t.buf].buftype ~= 'terminal' then vim.cmd.terminal() end
+  -- Ensure insert mode
   vim.cmd.startinsert()
 
   return { win = vim.api.nvim_get_current_win(), buf = t.buf }
