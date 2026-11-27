@@ -17,12 +17,10 @@
   local tmap_leader = function(suffix, rhs, desc)
     vim.keymap.set('t', '<Leader>' .. suffix, rhs, { desc = desc })
   end
-  local toggle_vertical = '<Cmd>lua Config.toggleterm_vertical()<CR>'
-  local toggle_horizontal = '<Cmd>lua Config.toggleterm_horizontal()<CR>'
-  nmap_leader('tt', toggle_vertical,   'ToggleTerminal (vertical)')
-  tmap_leader('tt', toggle_vertical,   'ToggleTerminal (vertical)')
-  nmap_leader('tT', toggle_horizontal, 'ToggleTerminal (horizontal)')
-  tmap_leader('tT', toggle_horizontal, 'ToggleTerminal (horizontal)')
+  nmap_leader('tt', '<Cmd>lua Config.toggleterm_vertical()<CR>',   'ToggleTerminal (vertical)')
+  tmap_leader('tt', '<Cmd>lua Config.toggleterm_vertical()<CR>',   'ToggleTerminal (vertical)')
+  nmap_leader('tT', '<Cmd>lua Config.toggleterm_horizontal()<CR>', 'ToggleTerminal (horizontal)')
+  tmap_leader('tT', '<Cmd>lua Config.toggleterm_horizontal()<CR>', 'ToggleTerminal (horizontal)')
 --]]
 
 local state = { toggle = { win = -1, buf = -1 } }
@@ -47,8 +45,8 @@ local toggle_on = function(direction)
 
   -- Ensure unlisted scratch buffer
   if not vim.api.nvim_buf_is_valid(t.buf) then t.buf = vim.api.nvim_create_buf(false, true) end
-  -- Split
-  vim.cmd((direction and direction .. ' ' or '') .. 'sbuffer ' .. t.buf)
+  -- Split. Not using 'sbuffer' because it respects 'switchbuf'
+  vim.cmd((direction and direction .. ' ' or '') .. 'split | buffer ' .. t.buf)
   -- Ensure terminal
   if vim.bo[t.buf].buftype ~= 'terminal' then vim.cmd.terminal() end
   -- Ensure insert mode
@@ -63,22 +61,22 @@ local toggle = function(direction)
   -- First toggle "off" if toggle is "on" in another tabpage
   if is_on() and vim.api.nvim_win_get_tabpage(t.win) ~= vim.api.nvim_get_current_tabpage() then toggle_off() end
 
-  -- Toggle "on"
+  -- Do toggle "on"
   if not is_on() then
     state.toggle = toggle_on(direction)
     return
   end
 
-  -- Toggle "off"
+  -- Do toggle "off"
   if vim.fn.winnr('$') > 1 then
     toggle_off()
     return
   end
 
-  -- Toggle "off", but don't try to nvim_win_hide a single window
-  -- For example, after "CTRL_W-o" from inside toggle window
+  -- Do toggle "off", but don't try to nvim_win_hide a single window
+  -- Can occur when toggle is on, after "CTRL_W-o" from inside toggle window
   edit_alternative()
 end
 
-Config.toggleterm_horizontal = toggle
-Config.toggleterm_vertical = function() toggle('vertical') end
+Config.toggleterm_horizontal = function() toggle('botright') end
+Config.toggleterm_vertical = function() toggle('botright vertical') end

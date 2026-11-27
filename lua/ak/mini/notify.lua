@@ -8,11 +8,6 @@ any regular message from vim.notify will be displayed in the same lsp window.
 This is acceptable.
 --]]
 
--- Notifications provider. Shows all kinds of notifications in the upper right
--- corner (by default). Example usage:
--- - `:h vim.notify()` - show notification (hides automatically)
--- - `<Leader>en` - show notification history
-
 local n_progress = 0
 local in_lsp_progress = function() return n_progress > 0 end
 
